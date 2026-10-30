@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-26 16:58\n"
+"PO-Revision-Date: 2026-10-30 11:05\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "MIME-Version: 1.0\n"
@@ -379,7 +379,7 @@ msgid "Change category and/or content group..."
 msgstr "Alterar categoria e/ou grupo de conteúdo..."
 
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:543
-#: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:147
+#: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:152
 msgid "Changed configuration."
 msgstr "Configuração alterada."
 
@@ -470,7 +470,7 @@ msgstr "Grupo de conteúdo"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:16
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:166
-#: zotonic_mod_content_groups/src/mod_content_groups.erl:226
+#: zotonic_mod_content_groups/src/mod_content_groups.erl:231
 msgid "Content groups"
 msgstr "Grupos de conteúdo"
 
@@ -1867,7 +1867,7 @@ msgid "Error checking the website."
 msgstr "Erro ao verificar o site."
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:224
-#: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:132
+#: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:137
 msgid "Error creating the page."
 msgstr "Erro ao criar a página."
 
@@ -1915,7 +1915,7 @@ msgstr "Páginas existentes"
 #: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:222
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:210
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:170
-#: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:118
+#: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:123
 msgid "Failed to download the file."
 msgstr "Falha ao baixar o arquivo."
 
@@ -2015,10 +2015,13 @@ msgstr "Finalizado"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:29
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:15
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:16
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:46
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:31
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:34
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:14
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:15
-msgid "First"
-msgstr "Primeiro"
+msgid "First name"
+msgstr "Primeiro nome"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:82
 msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
@@ -2347,8 +2350,8 @@ msgstr "Memória"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:32
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:33
-msgid "Middle"
-msgstr "Meio"
+msgid "Middle name"
+msgstr "Nome do meio"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:156
 msgid "Mine"
@@ -3468,7 +3471,7 @@ msgid "There are no tasks in the task queue."
 msgstr "Não há tarefas na fila de tarefas."
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:204
-#: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:112
+#: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:117
 msgid "There is already a page with this name."
 msgstr "Já existe uma página com este nome."
 
@@ -3495,7 +3498,7 @@ msgstr "Esta conexão já existe."
 #: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:226
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:214
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:174
-#: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:122
+#: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:127
 msgid "This file contains links to other files or locations."
 msgstr "Este arquivo contém links para outros arquivos ou locais."
 
@@ -3514,14 +3517,14 @@ msgstr "Este arquivo não foi verificado quanto a vírus."
 #: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:224
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:212
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:172
-#: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:120
+#: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:125
 msgid "This file is infected with a virus."
 msgstr "Este arquivo está infectado com um vírus."
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:228
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:216
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:176
-#: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:124
+#: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:129
 msgid "This file is too large."
 msgstr "Este arquivo é muito grande."
 
@@ -3930,7 +3933,7 @@ msgid "You don't have permission to change this media item."
 msgstr "Você não tem permissão para alterar este item de mídia."
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:206
-#: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:114
+#: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:119
 msgid "You don't have permission to create this page."
 msgstr "Você não tem permissão para criar esta página."
 
@@ -3942,7 +3945,7 @@ msgstr "Você não tem permissão para editar esta página."
 #: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:220
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:208
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:168
-#: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:116
+#: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:121
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "Você não tem as permissões adequadas para fazer upload desse tipo de arquivo."
 
@@ -4138,7 +4141,7 @@ msgid "Are you sure you want to delete the following categories:"
 msgstr "Tem certeza de que deseja excluir as seguintes categorias:"
 
 #: zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:10
-#: zotonic_mod_admin_category/src/mod_admin_category.erl:241
+#: zotonic_mod_admin_category/src/mod_admin_category.erl:246
 msgid "Categories"
 msgstr "Categorias"
 
@@ -7467,7 +7470,7 @@ msgstr "Selecione o arquivo de backup que você deseja carregar. O arquivo deve 
 msgid "Show import/export panel on the edit pages in the admin."
 msgstr "Mostrar painel de importação/exportação nas páginas de edição do admin."
 
-#: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:138
+#: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:143
 msgid "Sorry, a global Zotonic configuration is set and cannot be changed."
 msgstr "Desculpe, uma configuração global do Zotonic está definida e não pode ser alterada."
 
@@ -7475,11 +7478,11 @@ msgstr "Desculpe, uma configuração global do Zotonic está definida e não pod
 msgid "Sorry, manual backups are disabled"
 msgstr "Desculpe, os backups manuais estão desabilitados"
 
-#: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:98
+#: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:103
 msgid "Sorry, there is no module that can import this."
 msgstr "Desculpe, não há módulo que possa importar isso."
 
-#: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:105
+#: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:110
 #: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:125
 msgid "Sorry, there was an error replacing your page."
 msgstr "Desculpe, ocorreu um erro ao substituir sua página."
@@ -7488,15 +7491,15 @@ msgstr "Desculpe, ocorreu um erro ao substituir sua página."
 msgid "Sorry, this backup has been deleted."
 msgstr "Desculpe, este backup foi excluído."
 
-#: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:100
+#: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:105
 msgid "Sorry, this is not a backup file or it is corrupted."
 msgstr "Desculpe, este não é um arquivo de backup ou está corrompido."
 
-#: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:108
+#: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:113
 msgid "Sorry, you don't have permission to change this page."
 msgstr "Desculpe, você não tem permissão para alterar esta página."
 
-#: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:149
+#: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:154
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "Desculpe, você não tem permissão para alterar a configuração."
 
@@ -12384,12 +12387,6 @@ msgstr "Idioma alternativo:"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:10
 msgid "Finished — some emails could not be sent"
 msgstr "Concluído — alguns e-mails não puderam ser enviados"
-
-#: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:46
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:31
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:34
-msgid "First name"
-msgstr "Primeiro nome"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:42
