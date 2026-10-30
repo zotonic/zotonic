@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-06-30 09:59\n"
+"PO-Revision-Date: 2026-10-30 17:07\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -326,7 +326,7 @@ msgid "Dangaura Tharu"
 msgstr "دانغورا ثارو"
 
 msgid "Danish"
-msgstr "دانماركي"
+msgstr "الدنماركية"
 
 msgid "Dari"
 msgstr "داري"
@@ -383,7 +383,7 @@ msgid "Duruma"
 msgstr "دوروما"
 
 msgid "Dutch"
-msgstr "هولندي"
+msgstr "الهولندية"
 
 msgid "Dutch - Netherlands"
 msgstr "الهولندية - هولندا"
@@ -542,7 +542,7 @@ msgid "Fon"
 msgstr "فون"
 
 msgid "French"
-msgstr "فرنسي"
+msgstr "الفرنسية"
 
 msgid "French - Belgium"
 msgstr "الفرنسية - بلجيكا"
@@ -887,7 +887,7 @@ msgid "Isoko"
 msgstr "إيسوكو"
 
 msgid "Italian"
-msgstr "إيطالي"
+msgstr "الإيطالية"
 
 msgid "Italian - Italy"
 msgstr "الإيطالية - إيطاليا"
@@ -2009,7 +2009,7 @@ msgid "Romagnol"
 msgstr "رومانيول"
 
 msgid "Romanian"
-msgstr "روماني"
+msgstr "الرومانية"
 
 msgid "Romany"
 msgstr "روماني"

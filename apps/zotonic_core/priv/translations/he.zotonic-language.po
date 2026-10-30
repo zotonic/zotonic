@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-30 09:54\n"
+"PO-Revision-Date: 2026-10-30 17:07\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -326,7 +326,7 @@ msgid "Dangaura Tharu"
 msgstr "דנגאורה ת'ארו"
 
 msgid "Danish"
-msgstr "דַנִי"
+msgstr "דנית"
 
 msgid "Dari"
 msgstr "דארי"
@@ -383,7 +383,7 @@ msgid "Duruma"
 msgstr "דורומה"
 
 msgid "Dutch"
-msgstr "הוֹלַנדִי"
+msgstr "הולנדית"
 
 msgid "Dutch - Netherlands"
 msgstr "הולנדית - הולנד"
@@ -815,7 +815,7 @@ msgid "Huizhou Chinese"
 msgstr "הויז'ו סינית"
 
 msgid "Hungarian"
-msgstr "הוּנגָרִי"
+msgstr "הונגרית"
 
 msgid "Hunsrik"
 msgstr "הונסריק"
@@ -2024,7 +2024,7 @@ msgid "Rundi"
 msgstr "רונדי"
 
 msgid "Russian"
-msgstr "רוּסִי"
+msgstr "רוסית"
 
 msgid "Ruund"
 msgstr "Ruund"
@@ -2528,7 +2528,7 @@ msgid "Turkana"
 msgstr "טורקנה"
 
 msgid "Turkish"
-msgstr "טורקי"
+msgstr "טורקית"
 
 msgid "Tuvinian"
 msgstr "טובין"

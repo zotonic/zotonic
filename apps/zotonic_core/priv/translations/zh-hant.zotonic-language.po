@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-06-30 10:00\n"
+"PO-Revision-Date: 2026-10-30 17:07\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -326,7 +326,7 @@ msgid "Dangaura Tharu"
 msgstr "Dangaura Tharu"
 
 msgid "Danish"
-msgstr "丹麦语"
+msgstr "丹麥語"
 
 msgid "Dari"
 msgstr "達里語"
@@ -383,7 +383,7 @@ msgid "Duruma"
 msgstr "Duruma"
 
 msgid "Dutch"
-msgstr "荷兰语"
+msgstr "荷蘭語"
 
 msgid "Dutch - Netherlands"
 msgstr "荷蘭語 - 荷蘭"
@@ -533,7 +533,7 @@ msgid "Fijian"
 msgstr "斐濟語"
 
 msgid "Finnish"
-msgstr "芬兰"
+msgstr "芬蘭語"
 
 msgid "Flemish - Belgium"
 msgstr "佛蘭芒語 - 比利時"
@@ -542,7 +542,7 @@ msgid "Fon"
 msgstr "方塊"
 
 msgid "French"
-msgstr "法国人"
+msgstr "法語"
 
 msgid "French - Belgium"
 msgstr "法語 - 比利時"
@@ -626,7 +626,7 @@ msgid "Georgian"
 msgstr "喬治亞語"
 
 msgid "German"
-msgstr "德国"
+msgstr "德語"
 
 msgid "German - Austria"
 msgstr "德語 - 奧地利"
@@ -815,7 +815,7 @@ msgid "Huizhou Chinese"
 msgstr "惠州中文"
 
 msgid "Hungarian"
-msgstr "匈牙利语"
+msgstr "匈牙利語"
 
 msgid "Hunsrik"
 msgstr "Hunsrik"
@@ -887,7 +887,7 @@ msgid "Isoko"
 msgstr "Isoko"
 
 msgid "Italian"
-msgstr "意大利"
+msgstr "義大利語"
 
 msgid "Italian - Italy"
 msgstr "義大利語 - 意大利"
@@ -1754,7 +1754,7 @@ msgid "Northwest Gbaya"
 msgstr "西北 Gbaya"
 
 msgid "Norwegian"
-msgstr "挪威人"
+msgstr "挪威語"
 
 msgid "Norwegian Nynorsk"
 msgstr "挪威語"
@@ -2009,7 +2009,7 @@ msgid "Romagnol"
 msgstr "羅馬尼諾"
 
 msgid "Romanian"
-msgstr "罗马尼亚语"
+msgstr "羅馬尼亞語"
 
 msgid "Romany"
 msgstr "吉普賽人"
@@ -2024,7 +2024,7 @@ msgid "Rundi"
 msgstr "隆迪文"
 
 msgid "Russian"
-msgstr "俄语"
+msgstr "俄語"
 
 msgid "Ruund"
 msgstr "Ruund"
@@ -2255,7 +2255,7 @@ msgid "Southwestern Dinka"
 msgstr "西南丁卡族"
 
 msgid "Spanish"
-msgstr "西班牙语"
+msgstr "西班牙語"
 
 msgid "Spanish - Argentina"
 msgstr "西班牙語 - 阿根廷"
@@ -2363,7 +2363,7 @@ msgid "Swati"
 msgstr "Swati"
 
 msgid "Swedish"
-msgstr "瑞典语"
+msgstr "瑞典語"
 
 msgid "Swiss German"
 msgstr "瑞士德語"
@@ -2528,7 +2528,7 @@ msgid "Turkana"
 msgstr "圖爾卡納"
 
 msgid "Turkish"
-msgstr "土耳其人"
+msgstr "土耳其語"
 
 msgid "Tuvinian"
 msgstr "圖維尼亞語"

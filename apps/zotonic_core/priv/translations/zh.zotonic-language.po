@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-06-30 10:00\n"
+"PO-Revision-Date: 2026-10-30 17:07\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -533,7 +533,7 @@ msgid "Fijian"
 msgstr "斐济语"
 
 msgid "Finnish"
-msgstr "芬兰"
+msgstr "芬兰语"
 
 msgid "Flemish - Belgium"
 msgstr "弗拉芒语 - 比利时"
@@ -542,7 +542,7 @@ msgid "Fon"
 msgstr "冯"
 
 msgid "French"
-msgstr "法国人"
+msgstr "法语"
 
 msgid "French - Belgium"
 msgstr "法语 - 比利时"
@@ -626,7 +626,7 @@ msgid "Georgian"
 msgstr "格鲁吉亚语"
 
 msgid "German"
-msgstr "德国"
+msgstr "德语"
 
 msgid "German - Austria"
 msgstr "德语 - 奥地利"
@@ -887,7 +887,7 @@ msgid "Isoko"
 msgstr "伊索科"
 
 msgid "Italian"
-msgstr "意大利"
+msgstr "意大利语"
 
 msgid "Italian - Italy"
 msgstr "意大利语 - 意大利"
@@ -1754,7 +1754,7 @@ msgid "Northwest Gbaya"
 msgstr "西北戈巴亚"
 
 msgid "Norwegian"
-msgstr "挪威人"
+msgstr "挪威语"
 
 msgid "Norwegian Nynorsk"
 msgstr "挪威语"
@@ -2528,7 +2528,7 @@ msgid "Turkana"
 msgstr "图尔卡纳"
 
 msgid "Turkish"
-msgstr "土耳其人"
+msgstr "土耳其语"
 
 msgid "Tuvinian"
 msgstr "图维尼亚语"
