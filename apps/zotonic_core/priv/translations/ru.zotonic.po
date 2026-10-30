@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-30 13:15\n"
+"PO-Revision-Date: 2026-10-30 14:38\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -93,7 +93,7 @@ msgstr "часов"
 #: zotonic_core/src/support/z_datetime.erl:317
 #: zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
 msgid "in"
-msgstr "в"
+msgstr "через"
 
 #: zotonic_core/src/support/z_datetime.erl:371
 #: zotonic_core/src/support/z_datetime.erl:374
@@ -233,11 +233,11 @@ msgstr "Все группы сотрудничества"
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:17
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:15
 msgid "All normal content groups"
-msgstr "Все нормальные группы контента"
+msgstr "Все обычные группы контента"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:28
 msgid "Allowed file and mime types, separate with ',' — type 'none' if no extra types allowed, leave empty for the default"
-msgstr "Разрешёные типы файлов и типы MIME, через запятую. Если дополнительные типы не разрешены - введите 'none'. Чтобы оставить значение по умолчанию - оставьте пустым."
+msgstr "Разрешённые типы файлов и типы MIME, разделённые запятыми — введите 'none', если дополнительные типы не разрешены; оставьте поле пустым для значения по умолчанию"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:13
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:44
@@ -251,11 +251,11 @@ msgstr "Вы уверены, что хотите удалить следующи
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:7
 msgid "Are you sure you want to make all rules permanent?"
-msgstr "Ты уверен, что хочешь сделать все правила постоянными?"
+msgstr "Вы уверены, что хотите сделать все правила постоянными?"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:38
 msgid "Are you sure you want to restore all ACL rules to their currently published version?"
-msgstr "Вы уверены, что хотите восстановить все правила ACL до их версии, опубикованной на данный момент?"
+msgstr "Вы уверены, что хотите восстановить текущую опубликованную версию всех правил ACL?"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:16
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36
@@ -480,7 +480,7 @@ msgstr "Правила контента для членов и менеджер�
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:43
 msgid "Could not move to collaboration group."
-msgstr "Не смог перейти в группу по сотрудничеству."
+msgstr "Не удалось переместить в группу сотрудничества."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:40
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:51
@@ -528,7 +528,7 @@ msgstr "Удалить"
 
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:531
 msgid "Delete is canceled, there are users in the user groups."
-msgstr "Удаление отменяется, есть пользователи в группах пользователей."
+msgstr "Удаление отменено: в группах пользователей есть пользователи."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:37
 msgid "Delete user group and move users"
@@ -572,7 +572,7 @@ msgstr "Именно эта категория, без подкатегорий"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:22
 msgid "Export edit rules"
-msgstr "Экспорт изменённых правил"
+msgstr "Экспортировать рабочую версию правил"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:10
 msgid "File types follow the group hierarchy. Derived groups inherit the mime settings from their ancestor."
@@ -698,7 +698,7 @@ msgstr "Нет правил ACL"
 
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:569
 msgid "Not all user groups could be deleted."
-msgstr "Не все группы пользователей могли быть удалены"
+msgstr "Не удалось удалить все группы пользователей."
 
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:549
 msgid "Not allowed to change ACL options."
@@ -860,11 +860,11 @@ msgstr "Сначала показать эту группу пользовате
 #: zotonic_mod_content_groups/src/mod_content_groups.erl:98
 #: zotonic_mod_menu/src/mod_menu.erl:280
 msgid "Sorry, you are not allowed to delete this."
-msgstr "Извините, вам не разрешено это удалять."
+msgstr "Извините, Вам не разрешено это удалять."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:46
 msgid "Sorry, you are not allowed to insert pages of this category into the selected content group."
-msgstr "Извините, вам не разрешено вставлять страницы этой категории в выбранную группу контента."
+msgstr "Извините, Вам не разрешено добавлять страницы этой категории в выбранную группу контента."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:33
 msgid "System content groups"
@@ -941,7 +941,7 @@ msgstr "Настройки загрузки сохранены"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:2
 msgid "Upload the ACL rules file that you previously exported. Note: all current rules will be <b>replaced</b> by the rule definition file that is uploaded."
-msgstr "Загрузите файл правил ACL, который вы ранее экспортировали. Замечание: все текущие правила будут <b>заменены</b> правилами из загруженного файла с определениями."
+msgstr "Загрузите файл правил ACL, который Вы ранее экспортировали. Примечание: все текущие правила будут <b>заменены</b> правилами из загруженного файла."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:2
 msgid "Use the following URL to test the access control rules before publishing them."
@@ -961,7 +961,7 @@ msgstr "Видимость"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:41
 msgid "You are not allowed to move to this collaboration group."
-msgstr "Вы не имеете права переходить в эту группу сотрудничества."
+msgstr "Вам не разрешено перемещать в эту группу сотрудничества."
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:58
 msgid "You are not allowed to perform this action"
@@ -1007,7 +1007,7 @@ msgstr "ссылка (действие в acl)"
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:27
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:29
 msgid "manage own"
-msgstr "самостоятельно управлять"
+msgstr "управлять собственным контентом"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:9
 msgid "send this URL to somebody else for testing"
@@ -1023,7 +1023,7 @@ msgstr "используйте приватное окно или окно ин�
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:8
 msgid "use another browser (eg. Chrome if you are now using Firefox)"
-msgstr "используйте другой браузер (например, Chrome, если сейчас вы используете Firefox)"
+msgstr "используйте другой браузер (например, Chrome, если сейчас Вы используете Firefox)"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:294
@@ -1106,7 +1106,7 @@ msgstr "Добавить подключение"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:53
 #: zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:24
 msgid "Add a connection:"
-msgstr "Добавьте соединение:"
+msgstr "Добавить связь:"
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:91
 #: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:137
@@ -1115,7 +1115,7 @@ msgstr "Добавить новый медиа-файл"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:19
 msgid "Add a new media item"
-msgstr "Добавить новый материал"
+msgstr "Добавить новый медиаобъект"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:32
 msgid "Add a note about this page."
@@ -1149,7 +1149,7 @@ msgstr "Добавить медиа-контент"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:14
 msgid "Add media to body"
-msgstr "Добавить материал в тело"
+msgstr "Добавить медиафайлы в текст"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:35
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:39
@@ -1409,7 +1409,7 @@ msgstr "Город"
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_connection.tpl:34
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:37
 msgid "Clear"
-msgstr "Чисто"
+msgstr "Очистить"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:10
 msgid "Click \"Save\" to see your changes."
@@ -1654,7 +1654,7 @@ msgstr "Удалить эту страницу..."
 
 #: zotonic_mod_admin/src/mod_admin.erl:957
 msgid "Deleted tasks."
-msgstr "Удаленные задачи."
+msgstr "Задачи удалены."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:31
 msgid "Deleted."
@@ -1946,7 +1946,7 @@ msgstr "Получить новую версию"
 
 #: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:5
 msgid "Fetch the latest version from the original website using these import options."
-msgstr "Загрузите последнюю версию с официального сайта, воспользовавшись этими параметрами импорта."
+msgstr "Загрузите последнюю версию с исходного сайта, используя эти параметры импорта."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_media.tpl:6
 msgid "File / media content"
@@ -3954,7 +3954,7 @@ msgstr "Вы должны задать описание файла, чтобы �
 
 #: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:188
 msgid "Your search query is invalid. Please correct it before saving."
-msgstr "Ваш поисковый запрос недействителен. Пожалуйста, исправьте это перед сохранением."
+msgstr "Ваш поисковый запрос некорректен. Исправьте его перед сохранением."
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:21
 msgid "Zotonic Version"
@@ -5427,7 +5427,7 @@ msgstr "Ранжированные пары"
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:135
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:61
 msgid "Reset"
-msgstr "Сброс настроек"
+msgstr "Сбросить"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:214
 msgid "Scrollable keyword overlap matrix"
@@ -5516,7 +5516,7 @@ msgstr "Слева"
 #: zotonic_mod_admin_merge/priv/templates/admin_merge.tpl:3
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:3
 msgid "Merge"
-msgstr "Слияние"
+msgstr "Объединить"
 
 #: zotonic_mod_admin_merge/priv/templates/_admin_edit_sidebar.tpl:8
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:28
@@ -5750,7 +5750,7 @@ msgstr "Есть модули, зависящие от"
 
 #: zotonic_mod_admin_modules/src/controllers/controller_admin_module_manager.erl:79
 msgid "This module does not have a <tt>manage_schema/2</tt> function."
-msgstr "В этом модуле нет функции <tt>Manage_schema/2</tt>."
+msgstr "В этом модуле нет функции <tt>manage_schema/2</tt>."
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:67
 msgid "Topic"
@@ -9219,7 +9219,7 @@ msgstr "Выбранный редактор на платформе Zotonic"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:114
 msgid "Set the class <tt>environment-development</tt> on the <tt>&lt;html&gt;</tt> element of your pages to see the server log in the browser console.<br>In development, admin pages always show the server log in the javascript console."
-msgstr "Установите класс <tt>Environment-development</tt> в элементе <tt>&lt;html&gt;</tt> ваших страниц, чтобы увидеть журнал сервера в консоли браузера.<br>В процессе разработки на страницах администрирования всегда отображается журнал сервера в консоли JavaScript."
+msgstr "Установите класс <tt>environment-development</tt> в элементе <tt>&lt;html&gt;</tt> Ваших страниц, чтобы увидеть журнал сервера в консоли браузера.<br>В процессе разработки на страницах администрирования всегда отображается журнал сервера в консоли JavaScript."
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:272
 msgid "Show an overview of all observers"
@@ -10898,7 +10898,7 @@ msgstr "Основной текст страницы в формате HTML."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:36
 msgid "The category of the page. Examples: <code>article</code> or <code>text</code>."
-msgstr "Категория страницы. Примеры: <code>статья</code> или <code>текст</code>."
+msgstr "Категория страницы. Примеры: <code>article</code> или <code>text</code>."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:72
 msgid "The custom path for the URL of the page, for example <code>/my/page</code>"
@@ -13994,7 +13994,7 @@ msgstr "Связаться с Microsoft"
 
 #: zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:36
 msgid "Control who can log in. Allowed values are: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt>, and tenant identifiers."
-msgstr "Управляйте тем, кто может входить в систему. Допустимые значения: <tt>общие</tt>, <tt>организации</tt>, <tt>потребители</tt>и идентификаторы арендаторов."
+msgstr "Управляйте тем, кто может входить в систему. Допустимые значения: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt> и идентификаторы арендаторов."
 
 #: zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:3
 #: zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:6
@@ -14035,7 +14035,7 @@ msgstr "Сохранил настройки Microsoft."
 
 #: zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:27
 msgid "Space separated list of scopes that you want the user to consent to. Examples are: <tt>User.Read</tt>, <tt>email</tt>, <tt>offline_access</tt> and <tt>profile</tt>. The <tt>openid</tt> scope is always added automatically."
-msgstr "Разделенный пробелами список областей, на которые вы хотите дать согласие пользователю. Примеры: <tt>User.Read</tt>, <tt>электронная почта</tt>, <tt>offline_access</tt> и <tt>профиль</tt>. Область <tt>openid</tt> всегда добавляется автоматически."
+msgstr "Список областей доступа, разделённых пробелами, на которые Вы хотите получить согласие пользователя. Примеры: <tt>User.Read</tt>, <tt>email</tt>, <tt>offline_access</tt> и <tt>profile</tt>. Область <tt>openid</tt> всегда добавляется автоматически."
 
 #: zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:33
 #: zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:34
@@ -14559,7 +14559,7 @@ msgstr "Это должны быть полные URL-адреса, но без 
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:19
 msgid "This must be an unique name to identify the remote service. This can not be changed. Only <tt>A-Z</tt>, <tt>a-z</tt>, <tt>0-9</tt>, <tt>-</tt> and <tt>_</tt> characters are allowed."
-msgstr "Это должно быть уникальное имя для идентификации удаленной службы. Его нельзя изменить. Разрешены только символы <tt>AZ</tt>, <tt>az</tt>, <tt>0-9</tt>, <tt>-</tt> и <tt>_</tt> ."
+msgstr "Это должно быть уникальное имя для идентификации удаленной службы. Его нельзя изменить. Разрешены только символы <tt>A-Z</tt>, <tt>a-z</tt>, <tt>0-9</tt>, <tt>-</tt> и <tt>_</tt> ."
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:14
 msgid "This user will be able to use the token."
@@ -15548,7 +15548,7 @@ msgstr "Это может занять некоторое время, подож
 
 #: zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:68
 msgid "You can change this by setting <tt>port</tt> in the <tt>zotonic.config</tt> configuration file."
-msgstr "Вы можете изменить это, установив <tt>порт</tt> в конфигурационном файле <tt>zotonic.config</tt> ."
+msgstr "Вы можете изменить это, установив <tt>port</tt> в конфигурационном файле <tt>zotonic.config</tt> ."
 
 #: zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:75
 msgid "You can change this by setting <tt>ssl_port</tt> in the <tt>zotonic.config</tt> configuration file."
@@ -16006,7 +16006,7 @@ msgstr "Первая страница в категории"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:76
 msgid "For date ranges you can also use relative dates, like <code>-5 year</code>."
-msgstr "Для диапазонов дат вы также можете использовать относительные даты, например <code>-5 лет</code>."
+msgstr "Для диапазонов дат Вы также можете использовать относительные даты, например <code>-5 year</code>."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:260
 msgid "Forms can be handled by special code, for example a form that is forwarded to a back office system. Depending on the handler the results are stored in the database or not."
