@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-30 13:15\n"
+"PO-Revision-Date: 2026-10-30 14:38\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -165,33 +165,33 @@ msgstr "(公开)"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:3
 msgid "ACL rules"
-msgstr "控制允許流覽的用戶 (ACL) 的規則"
+msgstr "ACL 規則"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:9
 msgid "ACL rules file"
-msgstr "控制允許流覽的用戶的規則的記錄文件"
+msgstr "ACL 規則檔案"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:4
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:12
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:41
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:22
 msgid "ACL user group"
-msgstr "控制允許流覽的用戶組"
+msgstr "ACL 使用者群組"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7
 #: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:18
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:989
 msgid "Access control rules"
-msgstr "允許流覽的控制規則"
+msgstr "存取控制規則"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list.tpl:22
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list.tpl:25
 msgid "Add Rule"
-msgstr "增加规则"
+msgstr "新增規則"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:55
 msgid "Add links to the collaboration group"
-msgstr "添加聯結(links)到合作夥伴群"
+msgstr "新增連結至協作群組"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:91
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:141
@@ -218,26 +218,26 @@ msgstr "所有分類"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_module.tpl:17
 msgid "All Modules"
-msgstr "所有模塊"
+msgstr "所有模組"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_module.tpl:9
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:9
 msgid "All User Groups"
-msgstr "所有用戶組"
+msgstr "所有使用者群組"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:29
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:18
 msgid "All collaboration groups"
-msgstr "所有合作夥伴群"
+msgstr "所有協作群組"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:17
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:15
 msgid "All normal content groups"
-msgstr "所有標準内容組"
+msgstr "所有一般內容群組"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:28
 msgid "Allowed file and mime types, separate with ',' — type 'none' if no extra types allowed, leave empty for the default"
-msgstr "允許的文件以及 mime 種類，用'，'分開 - 輸入'無'，如果沒有附加的輸入 '允許'，如果是默許的則留下空白"
+msgstr "允許的檔案類型及 MIME 類型，以 ',' 分隔 — 若不允許其他類型，請輸入 'none'；留空則使用預設值"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:13
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:44
@@ -247,15 +247,15 @@ msgstr "任何可見度"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:1
 msgid "Are you sure you want to delete the following user groups:"
-msgstr "您確定要刪除以下用戶組嗎："
+msgstr "確定要刪除以下使用者群組嗎？"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:7
 msgid "Are you sure you want to make all rules permanent?"
-msgstr "您確定要使所有規則永久化嗎？"
+msgstr "確定要讓所有規則永久生效嗎？"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:38
 msgid "Are you sure you want to restore all ACL rules to their currently published version?"
-msgstr "您確定要將所有ACL規則還原到其當前發布的版本嗎？"
+msgstr "確定要將所有 ACL 規則還原為目前已發佈的版本嗎？"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:16
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36
@@ -372,11 +372,11 @@ msgstr "分類"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:17
 msgid "Category &amp; Content group"
-msgstr "分類 & 内容組"
+msgstr "分類 &amp; 內容群組"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:14
 msgid "Change category and/or content group..."
-msgstr "改變分類 以及/或 内容組..."
+msgstr "變更分類及／或內容群組…"
 
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:543
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:152
@@ -423,25 +423,25 @@ msgstr "關閉"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:33
 msgid "Collaboration group managers"
-msgstr "合作夥伴群經理"
+msgstr "協作群組管理員"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:32
 msgid "Collaboration group members"
-msgstr "合作夥伴群成員"
+msgstr "協作群組成員"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:985
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:158
 msgid "Collaboration groups"
-msgstr "合作夥伴群"
+msgstr "協作群組"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:32
 msgid "Collaboration groups are added by creating a new page in the category:"
-msgstr "經由在這個分类中開設新的網頁來添加合作夥伴群"
+msgstr "在以下分類中建立新頁面，即可新增協作群組："
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:30
 msgid "Collaboration groups are user groups where all content belongs to the group."
-msgstr "合作夥伴群如同用戶群，所有的内容屬於這個群體"
+msgstr "協作群組是所有內容都屬於該群組的使用者群組。"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_options.tpl:12
 msgid "Consider resource authors to be owner."
@@ -453,7 +453,7 @@ msgstr "將資源作者視為所有者。"
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:70
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 msgid "Content"
-msgstr "内容"
+msgstr "內容"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:5
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:16
@@ -466,21 +466,21 @@ msgstr "内容"
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:62
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:13
 msgid "Content group"
-msgstr "内容群組"
+msgstr "內容群組"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:16
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:166
 #: zotonic_mod_content_groups/src/mod_content_groups.erl:231
 msgid "Content groups"
-msgstr "内容群組"
+msgstr "內容群組"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:76
 msgid "Content rules for collaboration group members and managers"
-msgstr "合作夥伴群成員以及經理處理内容的規則"
+msgstr "適用於協作群組成員和管理員的內容規則"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:43
 msgid "Could not move to collaboration group."
-msgstr "無法轉移去合作夥伴群"
+msgstr "無法移至協作群組。"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:40
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:51
@@ -524,15 +524,15 @@ msgstr "無法轉移去合作夥伴群"
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:12
 msgid "Delete"
-msgstr "删除"
+msgstr "刪除"
 
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:531
 msgid "Delete is canceled, there are users in the user groups."
-msgstr "取消删除, 用戶組裏還有用戶"
+msgstr "已取消刪除，因為這些使用者群組中仍有使用者。"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:37
 msgid "Delete user group and move users"
-msgstr "删除用戶組並轉移用戶們"
+msgstr "刪除使用者群組並移動使用者"
 
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:576
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:116
@@ -542,7 +542,7 @@ msgstr "删除用戶組並轉移用戶們"
 #: zotonic_mod_content_groups/src/mod_content_groups.erl:105
 #: zotonic_mod_content_groups/src/mod_content_groups.erl:133
 msgid "Deleting..."
-msgstr "删除中..."
+msgstr "正在刪除…"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:33
 msgid "Deny"
@@ -550,21 +550,21 @@ msgstr "否定"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:43
 msgid "Edit &amp; link rights on the collaboration groups"
-msgstr "修改合作夥伴群的聯結的權利"
+msgstr "協作群組的編輯與連結權限"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:5
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:43
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:47
 msgid "Edit Rule"
-msgstr "編輯修改規則"
+msgstr "編輯規則"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:47
 msgid "Edit the collaboration group"
-msgstr "修改合作夥伴群"
+msgstr "編輯協作群組"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:11
 msgid "Enter extensions (like <tt>.png</tt>), mime types (like <tt>image/png</tt>) or one of:"
-msgstr "輸入擴展名單 (例如 <tt>.png</tt>), mime types (例如 <tt>image/png</tt>) 或是以下之一:"
+msgstr "輸入副檔名（例如 <tt>.png</tt>）、MIME 類型（例如 <tt>image/png</tt>），或以下其中一項："
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:106
 msgid "Exactly this category, no sub-categories"
@@ -572,19 +572,19 @@ msgstr "就是這個類別，沒有子類別"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:22
 msgid "Export edit rules"
-msgstr "輸出修改規則"
+msgstr "匯出規則草稿"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:10
 msgid "File types follow the group hierarchy. Derived groups inherit the mime settings from their ancestor."
-msgstr "文件種類依照群組的層次，衍生群組繼承原生階層的 mime 設定"
+msgstr "檔案類型依循群組階層。衍生群組會繼承上層群組的 MIME 設定。"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:28
 msgid "File uploads"
-msgstr "文件上傳"
+msgstr "檔案上傳"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:70
 msgid "Find collaboration group"
-msgstr "尋找合作夥伴群組"
+msgstr "尋找協作群組"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_content_group_dropdown.tpl:148
 msgid "First select a category"
@@ -592,19 +592,19 @@ msgstr "首先選擇類別"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:50
 msgid "Group managers can edit"
-msgstr "群組經理允許修改"
+msgstr "群組管理員可以編輯"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:58
 msgid "Group managers can link"
-msgstr "群組經理允許加聯結"
+msgstr "群組管理員可以新增連結"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:51
 msgid "Group members and managers can edit"
-msgstr "群組用戶以及經理允許修改"
+msgstr "群組成員和管理員可以編輯"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:59
 msgid "Group members and managers can link"
-msgstr "群組用戶以及經理允許加聯結"
+msgstr "群組成員和管理員可以新增連結"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_options.tpl:19
 msgid "If checked then users connected with an <em>author</em> predicate are considered resource owners for the ACL rule evaluation. This ensures that ACL rules marked as <em>manage own</em> are applicable to authors."
@@ -613,19 +613,19 @@ msgstr "如果選中，則與 <em>作者</em> 謂詞連接的使用者將被視�
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:18
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:42
 msgid "Import"
-msgstr "輸入"
+msgstr "匯入"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:27
 msgid "Import edit rules..."
-msgstr "輸入修改規則..."
+msgstr "匯入規則草稿…"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:30
 msgid "Import edit version of ACL rules"
-msgstr "輸入ACL规則的编輯版本"
+msgstr "匯入 ACL 規則草稿"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:137
 msgid "Importing, the list of rules will refresh after importing."
-msgstr "輸入中, 規則列表將會在輸入後更新."
+msgstr "正在匯入，完成後會重新整理規則清單。"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:40
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:17
@@ -638,7 +638,7 @@ msgstr "管理自己的"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:6
 msgid "Maximum file upload size per user group. This restricts file uploads for users."
-msgstr "每一個用戶組可以上傳的文件大小. 這限制用戶可以上傳的文件大小"
+msgstr "每個使用者群組允許上傳的最大檔案大小。這會限制使用者的檔案上傳。"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:25
 msgid "Maximum upload size"
@@ -646,11 +646,11 @@ msgstr "最大的上傳文件大小"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:28
 msgid "Members"
-msgstr "成员"
+msgstr "成員"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:30
 msgid "Members of same user group"
-msgstr "同一用戶組的成員們"
+msgstr "同一使用者群組的成員"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:13
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:137
@@ -673,7 +673,7 @@ msgstr "同一用戶組的成員們"
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:54
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:25
 msgid "Module"
-msgstr "組件"
+msgstr "模組"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:25
 #: zotonic_mod_admin/src/mod_admin.erl:517
@@ -681,11 +681,11 @@ msgstr "組件"
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:7
 #: zotonic_mod_admin_modules/src/mod_admin_modules.erl:133
 msgid "Modules"
-msgstr "組件"
+msgstr "模組"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:15
 msgid "Move all users within these user groups to:"
-msgstr "轉移這些用戶組內全部的用戶們到:"
+msgstr "將這些使用者群組中的所有使用者移至："
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:24
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_visible_for.tpl:29
@@ -694,11 +694,11 @@ msgstr "移至 {title}…"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list.tpl:15
 msgid "No ACL rules"
-msgstr "無允許流覽的用戶 (ACL) 的控制規則"
+msgstr "沒有 ACL 規則"
 
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:569
 msgid "Not all user groups could be deleted."
-msgstr "並非所有的用戶組都可以被刪除."
+msgstr "無法刪除所有使用者群組。"
 
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:549
 msgid "Not allowed to change ACL options."
@@ -732,20 +732,20 @@ msgstr "或按一下<strong>刪除</strong>，中斷所有使用者的連線，�
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:154
 msgid "Own content"
-msgstr "自己的内容"
+msgstr "自己的內容"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:27
 msgid "People who can view this page"
-msgstr "可以浏览此页面的人"
+msgstr "可以檢視此頁面的人"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:15
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:167
 msgid "Permissions"
-msgstr "允許的權限"
+msgstr "權限"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:46
 msgid "Please select a collaboration_group"
-msgstr "請選擇一個合作夥伴群"
+msgstr "請選擇協作群組"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:34
 msgid "Private"
@@ -753,7 +753,7 @@ msgstr "私人的"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:38
 msgid "Private properties are email, phone, visiting address, and date range."
-msgstr "電子郵件，電話號碼，流覽器的地址，以及日期範圍 是私人的屬性"
+msgstr "私人屬性包括電子郵件、電話、到訪地址和日期範圍。"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:4
 msgid "Publish"
@@ -783,7 +783,7 @@ msgstr "恢復為已發布的版本"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:101
 msgid "Reverted rules"
-msgstr "還原規則"
+msgstr "已還原規則"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:183
@@ -813,15 +813,15 @@ msgstr "還原規則"
 #: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:95
 #: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:44
 msgid "Save"
-msgstr "保存"
+msgstr "儲存"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:79
 msgid "Save Upload Permissions"
-msgstr "保存上傳權限"
+msgstr "儲存上傳權限"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:144
 msgid "Saved collaboration group settings"
-msgstr "保存的協作組設置"
+msgstr "已儲存協作群組設定"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:32
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_visible_for.tpl:38
@@ -844,11 +844,11 @@ msgstr "顯示"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:23
 msgid "Show private properties to"
-msgstr "显示私人的屬性於"
+msgstr "向以下人員顯示私人屬性"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:96
 msgid "Show this ACL user group first:"
-msgstr "先显示這個 ACL 用戶組:"
+msgstr "優先顯示此 ACL 使用者群組："
 
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:510
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:526
@@ -860,7 +860,7 @@ msgstr "先显示這個 ACL 用戶組:"
 #: zotonic_mod_content_groups/src/mod_content_groups.erl:98
 #: zotonic_mod_menu/src/mod_menu.erl:280
 msgid "Sorry, you are not allowed to delete this."
-msgstr "对不起，你不允許删除这个。"
+msgstr "抱歉，你沒有權限刪除此項目。"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:46
 msgid "Sorry, you are not allowed to insert pages of this category into the selected content group."
@@ -1085,7 +1085,7 @@ msgstr "找到大約 {n} 項目。"
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:122
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_edit_basics.person.tpl:7
 msgid "Access control"
-msgstr "允許流覽的控制管理"
+msgstr "存取控制"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:12
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:66
@@ -1149,7 +1149,7 @@ msgstr "添加媒體內容"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:14
 msgid "Add media to body"
-msgstr "添加媒体到正文"
+msgstr "將媒體加入內文"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:35
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:39
@@ -1236,7 +1236,7 @@ msgstr "還有 {n} 個。"
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:131
 #: zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:14
 msgid "Any category"
-msgstr "任何分类"
+msgstr "所有分類"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:155
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:164
@@ -1468,7 +1468,7 @@ msgstr "確認刪除"
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:47
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:45
 msgid "Connect"
-msgstr "连接"
+msgstr "連結"
 
 #: zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_page.tpl:9
 msgid "Connect a page"
@@ -1501,7 +1501,7 @@ msgstr "內容類型"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:42
 msgid "Copied download link to clipboard"
-msgstr "将下载链接复制到剪贴板"
+msgstr "下載連結已複製到剪貼簿"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:73
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:21
@@ -1522,7 +1522,7 @@ msgstr "将下载链接复制到剪贴板"
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:78
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:94
 msgid "Copy"
-msgstr "复制"
+msgstr "複製"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:35
 msgid "Copy download link"
@@ -1564,7 +1564,7 @@ msgstr "国家"
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:261
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:119
 msgid "Create"
-msgstr "创建"
+msgstr "建立"
 
 #: zotonic_mod_admin/priv/templates/_rsc_preview.tpl:3
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:40
@@ -1654,7 +1654,7 @@ msgstr "刪除此頁..."
 
 #: zotonic_mod_admin/src/mod_admin.erl:957
 msgid "Deleted tasks."
-msgstr "已刪除的任務。"
+msgstr "工作已刪除。"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:31
 msgid "Deleted."
@@ -1692,7 +1692,7 @@ msgstr "已停用"
 #: zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:15
 #: zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:17
 msgid "Disconnect"
-msgstr "取消连接"
+msgstr "取消連結"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:36
 msgid "Discover media"
@@ -1727,7 +1727,7 @@ msgstr "您想刪除該頁面區塊嗎？"
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:33
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:45
 msgid "Download"
-msgstr "下载"
+msgstr "下載"
 
 #: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:30
 msgid "Download media from the original website."
@@ -1740,7 +1740,7 @@ msgstr "拖动来改变位置"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:33
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:38
 msgid "Duplicate"
-msgstr "复制"
+msgstr "複製"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:8
 #: zotonic_mod_admin/src/actions/action_admin_dialog_duplicate_rsc.erl:59
@@ -1794,7 +1794,7 @@ msgstr "电子邮件地址"
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:14
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:16
 msgid "Edit"
-msgstr "编辑"
+msgstr "編輯"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:12
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:16
@@ -1960,7 +1960,7 @@ msgstr "文件大小"
 
 #: zotonic_mod_admin/src/mod_admin.erl:882
 msgid "File uploaded to the drop folder, will be handled shortly."
-msgstr "上傳到拖放文件夾的文件將很快處理。"
+msgstr "檔案已上傳至接收資料夾，稍後將進行處理。"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:39
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:54
@@ -2034,7 +2034,7 @@ msgstr "刷新所有的 URL 调度规则，模版以及缓存数据。"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:81
 msgid "Flush system caches"
-msgstr "清理系统缓存"
+msgstr "清除系統快取"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:145
 #: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:23
@@ -2886,7 +2886,7 @@ msgstr "各執行器的儀表板上可查看遠端沙盒隔離及佇列的詳細
 #: zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:7
 #: zotonic_mod_translation/priv/templates/_translation_language_status.tpl:34
 msgid "Remove"
-msgstr "删除"
+msgstr "移除"
 
 #: zotonic_mod_admin/src/mod_admin.erl:1128
 msgid "Removed the connection to"
@@ -3009,7 +3009,7 @@ msgstr "安排後台任務來檢查所有引用的連線。"
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:294
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user_dialog.tpl:9
 msgid "Search"
-msgstr "搜索"
+msgstr "搜尋"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:55
 msgid "Search indices rebuilt."
@@ -3030,7 +3030,7 @@ msgstr "搜索結果"
 
 #: zotonic_mod_admin/priv/templates/_admin_menu.tpl:85
 msgid "Search..."
-msgstr "搜索..."
+msgstr "搜尋..."
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:56
 msgid "Security Directory"
@@ -3741,7 +3741,7 @@ msgstr "已更新"
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:161
 msgid "Upload"
-msgstr "上載"
+msgstr "上傳"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:20
 msgid "Upload File"
@@ -3954,7 +3954,7 @@ msgstr "请指定文件的描述信息，让查找和共享更方便。"
 
 #: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:188
 msgid "Your search query is invalid. Please correct it before saving."
-msgstr "您的搜索查詢無效。保存前請更正。"
+msgstr "你的搜尋查詢無效。請修正後再儲存。"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:21
 msgid "Zotonic Version"
@@ -4797,7 +4797,7 @@ msgstr "预先填好安全密码，需要时更换。"
 #: zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:26
 #: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:25
 msgid "Add"
-msgstr "添加"
+msgstr "新增"
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:63
 msgid "Add a new user"
@@ -5427,7 +5427,7 @@ msgstr "有序對"
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:135
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:61
 msgid "Reset"
-msgstr "重啟"
+msgstr "重設"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:214
 msgid "Scrollable keyword overlap matrix"
@@ -5516,7 +5516,7 @@ msgstr "左边"
 #: zotonic_mod_admin_merge/priv/templates/admin_merge.tpl:3
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:3
 msgid "Merge"
-msgstr "合并"
+msgstr "合併"
 
 #: zotonic_mod_admin_merge/priv/templates/_admin_edit_sidebar.tpl:8
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:28
@@ -6510,7 +6510,7 @@ msgstr "如果您已經是 {site}的用戶，請關閉此窗口並登錄。"
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:18
 #: zotonic_mod_wires/src/actions/action_wires_confirm.erl:82
 msgid "Confirm"
-msgstr "确认"
+msgstr "確認"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_title.tpl:4
 msgid "Confirm to connect"
@@ -9219,7 +9219,7 @@ msgstr "Zotonic 系統中的指定編輯器"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:114
 msgid "Set the class <tt>environment-development</tt> on the <tt>&lt;html&gt;</tt> element of your pages to see the server log in the browser console.<br>In development, admin pages always show the server log in the javascript console."
-msgstr "在頁面的 <tt>&lt;html&gt;</tt> 元素上設定類別 <tt>環境開發</tt> 以在瀏覽器控制台中查看伺服器日誌。<br>在開發中，管理頁面總是在 javascript 控制台中顯示伺服器日誌。"
+msgstr "在頁面的 <tt>&lt;html&gt;</tt> 元素上設定類別 <tt>environment-development</tt> 以在瀏覽器控制台中查看伺服器日誌。<br>在開發中，管理頁面總是在 javascript 控制台中顯示伺服器日誌。"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:272
 msgid "Show an overview of all observers"
@@ -9857,7 +9857,7 @@ msgstr "底線"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:31
 msgid "Undo"
-msgstr "撤銷"
+msgstr "復原"
 
 #: zotonic_mod_editor_tiptap/src/mod_editor_tiptap.erl:248
 msgid "You are not allowed to view this media."
@@ -10397,7 +10397,7 @@ msgstr "无法访问服务，请仔细检查您的设置并再次尝试。"
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:204
 msgid "Could not access the service, double check your settings and try again. Make sure that API key has access rights to create and remove a (temporary) <code>-zotonic-filestore-test-file-</code> file."
-msgstr "无法访问服务，请仔细检查您的设置并再次尝试。确保API密钥具有创建和删除（临时） <code>-zotonic-filetore-test-file-</code> 文件的访问权限。"
+msgstr "無法存取服務，請仔細檢查你的設定並重試。請確認 API 金鑰具有建立及刪除暫存檔案 <code>-zotonic-filestore-test-file-</code> 的權限。"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:16
 msgid "Currently Zotonic supports FTP, WebDAV and services that are compatible with the S3 file services API. These include:"
@@ -10699,7 +10699,7 @@ msgstr "使用 FTP 和 WebDAV，目錄總是自動創建的。"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:24
 msgid "With WebDAV the username and password are transfered in the clear, so ensure that you use <tt>webdavs:</tt> URLs (which makes use of https)."
-msgstr "使用 WebDAV，用戶名和密碼以明文形式傳輸，因此請確保您使用 <tt>個 webdav：</tt> URL（使用 https）。"
+msgstr "WebDAV 以明文傳輸使用者名稱和密碼，因此請確保使用 <tt>webdavs:</tt> URL（透過 HTTPS 傳輸）。"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:62
 msgid "Yes, keep local files after upload"
@@ -10898,7 +10898,7 @@ msgstr "頁面的 HTML 主文字。"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:36
 msgid "The category of the page. Examples: <code>article</code> or <code>text</code>."
-msgstr "頁面的類別。例如：<code>文章</code>或<code>文字</code>。"
+msgstr "頁面的類別。例如：<code>article</code>或<code>text</code>。"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:72
 msgid "The custom path for the URL of the page, for example <code>/my/page</code>"
@@ -13994,7 +13994,7 @@ msgstr "與微軟聯繫"
 
 #: zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:36
 msgid "Control who can log in. Allowed values are: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt>, and tenant identifiers."
-msgstr "控制誰可以登入。允許的值為： <tt>公共</tt>、 <tt>組織</tt>、 <tt>消費者</tt>和租戶識別碼。"
+msgstr "控制誰可以登入。允許的值為： <tt>common</tt>、 <tt>organizations</tt>、 <tt>consumers</tt>和租戶識別碼。"
 
 #: zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:3
 #: zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:6
@@ -14035,7 +14035,7 @@ msgstr "保存了Microsoft設置。"
 
 #: zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:27
 msgid "Space separated list of scopes that you want the user to consent to. Examples are: <tt>User.Read</tt>, <tt>email</tt>, <tt>offline_access</tt> and <tt>profile</tt>. The <tt>openid</tt> scope is always added automatically."
-msgstr "您希望用戶同意的範圍的空格分隔列表。例如</tt><tt> <tt></tt></tt>offline_access <tt>和</tt> profile <tt>。 <tt>openid</tt> 範圍總是自動添加的。"
+msgstr "以空格分隔你希望使用者授權的權限範圍。例如：<tt>User.Read</tt>、<tt>email</tt>、<tt>offline_access</tt> 和 <tt>profile</tt>。<tt>openid</tt> 範圍一律會自動加入。"
 
 #: zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:33
 #: zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:34
@@ -14559,7 +14559,7 @@ msgstr "這些必須是完整的 URL，但沒有查詢 (?..) 或哈希 (#...) �
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:19
 msgid "This must be an unique name to identify the remote service. This can not be changed. Only <tt>A-Z</tt>, <tt>a-z</tt>, <tt>0-9</tt>, <tt>-</tt> and <tt>_</tt> characters are allowed."
-msgstr "這必須是唯一的名稱，以識別遠端服務。此名稱不可變更。只允許使用<tt>A</tt> <tt>-</tt> <tt>Z</tt>、<tt>a-z</tt>、<tt>0-9</tt>、<tt>-</tt>和<tt>_</tt>字元。"
+msgstr "這必須是用於識別遠端服務的唯一名稱。名稱無法變更。只允許使用 <tt>A-Z</tt>、<tt>a-z</tt>、<tt>0-9</tt>、<tt>-</tt> 和 <tt>_</tt> 字元。"
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:14
 msgid "This user will be able to use the token."
@@ -15548,7 +15548,7 @@ msgstr "这可能要花点时间，等一下！"
 
 #: zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:68
 msgid "You can change this by setting <tt>port</tt> in the <tt>zotonic.config</tt> configuration file."
-msgstr "您可以通过在 <tt>zotonic.config</tt> 配置文件中设置 <tt>端口</tt> 来改变。"
+msgstr "你可以在 <tt>zotonic.config</tt> 設定檔中設定 <tt>port</tt> 來變更此項目。"
 
 #: zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:75
 msgid "You can change this by setting <tt>ssl_port</tt> in the <tt>zotonic.config</tt> configuration file."
@@ -16006,7 +16006,7 @@ msgstr "类别的第一页"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:76
 msgid "For date ranges you can also use relative dates, like <code>-5 year</code>."
-msgstr "對於日期範圍，您也可以使用相對日期，例如 <code>-5 年</code>。"
+msgstr "對於日期範圍，你也可以使用相對日期，例如 <code>-5 year</code>。"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:260
 msgid "Forms can be handled by special code, for example a form that is forwarded to a back office system. Depending on the handler the results are stored in the database or not."
