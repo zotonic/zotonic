@@ -151,12 +151,14 @@ function z_set_page_id( page_id, user_id )
 
         // Keep the connection open, but because the unloading flag is set
         // the connection will not be automatically restored if it is dropped.
-        
+
         setTimeout(function() {
             z_page_unloading = false;
         }, 10000);
     });
-    $(window).bind('unload', function() {
+    $(window).bind('pagehide', function() {
+        // Note: console.log does not show anything here on chrome browsers,
+        // but the event triggers.
         var msg = {
             "_record": "unload_beacon",
             "page_id": z_pageid,
@@ -528,7 +530,7 @@ function z_is_active(period)
 
     /* Return true when we are ignoring activity monitoring */
     if(z_last_active === null) return true;
-    
+
 
     return z_last_active > now - period;
 }
@@ -1334,7 +1336,7 @@ function z_transport_handle_push_data(data)
 function z_websocket_start()
 {
     // Do not start a new websocket when there is already a websocket.
-    if(z_ws) return; 
+    if(z_ws) return;
 
     var protocol = "ws:";
     if (window.location.protocol == "https:") {
@@ -1776,7 +1778,7 @@ function z_init_postback_forms()
             var files        = $('input:file', theForm).fieldValue();
             var is_file_form = false;
             var args;
-            
+
             if (!postback) {
                 postback = z_default_form_postback;
             }
