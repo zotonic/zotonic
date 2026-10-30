@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-30 14:38\n"
+"PO-Revision-Date: 2026-10-30 15:38\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -550,7 +550,7 @@ msgstr "Denegar"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:43
 msgid "Edit &amp; link rights on the collaboration groups"
-msgstr "Editar&amp; derechos de enlaces en los grupos de colaboración"
+msgstr "Permisos de edición y de creación de enlaces en los grupos de colaboración"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:5
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:43
@@ -564,7 +564,7 @@ msgstr "Editar el grupo de colaboración"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:11
 msgid "Enter extensions (like <tt>.png</tt>), mime types (like <tt>image/png</tt>) or one of:"
-msgstr "Introduce extensiones (como <tt>.png</tt>), tipos de mímica (como <tt>image/png</tt>) o uno de:"
+msgstr "Introduce extensiones (como <tt>.png</tt>), tipos MIME (como <tt>image/png</tt>) o uno de los siguientes valores:"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:106
 msgid "Exactly this category, no sub-categories"
@@ -572,11 +572,11 @@ msgstr "Exactamente esta categoría, no hay subcategorías"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:22
 msgid "Export edit rules"
-msgstr "Reglas de edición de exportación"
+msgstr "Exportar reglas en edición"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:10
 msgid "File types follow the group hierarchy. Derived groups inherit the mime settings from their ancestor."
-msgstr "Los tipos de archivo siguen la jerarquía del grupo. Los grupos derivados heredan la configuración de mímica de su ancestro."
+msgstr "Los tipos de archivo siguen la jerarquía de grupos. Los grupos derivados heredan la configuración MIME de sus antecesores."
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:28
 msgid "File uploads"
@@ -625,7 +625,7 @@ msgstr "Importar la versión de edición de las reglas de ACL"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:137
 msgid "Importing, the list of rules will refresh after importing."
-msgstr "Importando, se refrescara o actualizara la lista de reglas después de la importación."
+msgstr "Importando. La lista de reglas se actualizará al finalizar la importación."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:40
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:17
@@ -694,11 +694,11 @@ msgstr "Pase a {title}…"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list.tpl:15
 msgid "No ACL rules"
-msgstr "Sin las reglas ACL"
+msgstr "No hay reglas ACL"
 
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:569
 msgid "Not all user groups could be deleted."
-msgstr "No todos los grupos de usuarios podrían ser eliminados."
+msgstr "No se pudieron eliminar todos los grupos de usuarios."
 
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:549
 msgid "Not allowed to change ACL options."
@@ -711,7 +711,7 @@ msgstr "No se permite cambiar las opciones de ACL."
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:80
 #: zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:88
 msgid "Not allowed."
-msgstr "No esta permitido."
+msgstr "No está permitido."
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:31
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:60
@@ -745,7 +745,7 @@ msgstr "Permisos"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:46
 msgid "Please select a collaboration_group"
-msgstr "Por favor selecciona un collaboration_group"
+msgstr "Selecciona un grupo de colaboración"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:34
 msgid "Private"
@@ -783,7 +783,7 @@ msgstr "Revertir a la versión publicada"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:101
 msgid "Reverted rules"
-msgstr "Revertir reglas"
+msgstr "Reglas restauradas"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:183
@@ -836,7 +836,7 @@ msgstr "Seleccionar"
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_category_dropdown.tpl:3
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:203
 msgid "Select category"
-msgstr "Seleccione la categoría..."
+msgstr "Selecciona una categoría"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:84
 msgid "Show"
@@ -848,7 +848,7 @@ msgstr "Mostrar propiedades privadas a"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:96
 msgid "Show this ACL user group first:"
-msgstr "Mostrar este primer grupo de usuario ACL:"
+msgstr "Mostrar primero este grupo de usuarios ACL:"
 
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:510
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:526
@@ -860,11 +860,11 @@ msgstr "Mostrar este primer grupo de usuario ACL:"
 #: zotonic_mod_content_groups/src/mod_content_groups.erl:98
 #: zotonic_mod_menu/src/mod_menu.erl:280
 msgid "Sorry, you are not allowed to delete this."
-msgstr "Lo sentimos, no tiene permitido eliminar esto."
+msgstr "Lo sentimos, no tienes permiso para eliminar esto."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:46
 msgid "Sorry, you are not allowed to insert pages of this category into the selected content group."
-msgstr "Lo sentimos, no tiene permitido insertar paginas de esta categoría en el contenido del grupo seleccionado."
+msgstr "Lo sentimos, no tienes permiso para añadir páginas de esta categoría al grupo de contenido seleccionado."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:33
 msgid "System content groups"
@@ -904,11 +904,11 @@ msgstr "Son administrados por su propio administrador y usan las reglas de acces
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:27
 #: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:33
 msgid "This can not be undone."
-msgstr "Esto no puede ser desechado."
+msgstr "Esto no se puede deshacer."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:7
 msgid "This page is a"
-msgstr "Esta página es un"
+msgstr "Esta página pertenece a la categoría"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:18
 msgid "This rule is managed by module"
@@ -929,7 +929,7 @@ msgstr "Probar las reglas de ACL"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:47
 msgid "Try a different combination of category and content group."
-msgstr "Intenta una combinación diferente de categoría y contenido de grupo."
+msgstr "Prueba otra combinación de categoría y grupo de contenido."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:14
 msgid "Try rules..."
@@ -937,11 +937,11 @@ msgstr "Probar reglas..."
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:127
 msgid "Upload settings saved"
-msgstr "Se guardan las configuraciones de carga"
+msgstr "Configuración de carga guardada"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:2
 msgid "Upload the ACL rules file that you previously exported. Note: all current rules will be <b>replaced</b> by the rule definition file that is uploaded."
-msgstr "Cargue el archivo de reglas de ACL que exportó previamente. Nota: todas las reglas actuales serán <b> reemplazadas </b> por el archivo de definición de regla que se cargue."
+msgstr "Carga el archivo de reglas ACL que exportaste anteriormente. Nota: todas las reglas actuales se <b>reemplazarán</b> por las definidas en el archivo que cargues."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:2
 msgid "Use the following URL to test the access control rules before publishing them."
@@ -961,19 +961,19 @@ msgstr "Visibilidad"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:41
 msgid "You are not allowed to move to this collaboration group."
-msgstr "No está permitido mudarse a este grupo de colaboración."
+msgstr "No tienes permiso para mover contenido a este grupo de colaboración."
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:58
 msgid "You are not allowed to perform this action"
-msgstr "No está permitido realizar esta acción"
+msgstr "No tienes permiso para realizar esta acción"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:51
 msgid "You are not allowed to view this page."
-msgstr "No tiene permitido ver esta página."
+msgstr "No tienes permiso para ver esta página."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:4
 msgid "You can:"
-msgstr "Tu puedes:"
+msgstr "Puedes:"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:88
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
@@ -983,12 +983,12 @@ msgstr "todo"
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:297
 msgid "delete (acl action)"
-msgstr "eliminar (acción de acl)"
+msgstr "eliminar"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:296
 msgid "edit (acl action)"
-msgstr "editar (acción de acl)"
+msgstr "editar"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:9
 msgid "in the group"
@@ -997,17 +997,17 @@ msgstr "en el grupo"
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:295
 msgid "insert (acl action)"
-msgstr "insertar(acción acl)"
+msgstr "insertar"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:298
 msgid "link (acl action)"
-msgstr "enlace (acción acl)"
+msgstr "vincular"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:27
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:29
 msgid "manage own"
-msgstr "Administrar por tu cuenta"
+msgstr "gestionar contenido propio"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:9
 msgid "send this URL to somebody else for testing"
@@ -1015,7 +1015,7 @@ msgstr "envía esta URL a alguien más para probar"
 
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:302
 msgid "use (acl action)"
-msgstr "uso (acción acl)"
+msgstr "usar"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:7
 msgid "use a private or incognito window in your browser"
@@ -1023,12 +1023,12 @@ msgstr "use una ventana privada o de incógnito en su navegador"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:8
 msgid "use another browser (eg. Chrome if you are now using Firefox)"
-msgstr "use otro navegador (p. Ej., Chrome si está usando Firefox ahora)"
+msgstr "usa otro navegador (por ejemplo, Chrome si ahora estás usando Firefox)"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:294
 msgid "view (acl action)"
-msgstr "ver (acción de acl)"
+msgstr "ver"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:219
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:221
@@ -1057,7 +1057,7 @@ msgstr "<em>Sin título</em>"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:14
 msgid "<strong>First</strong> also known as given name, forename or Christen name.<br/><strong>Middle</strong> often shortened to an initial like in <em>John D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch <em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family name or last name."
-msgstr "<strong> Primero </strong> también conocido como nombre de pila, nombre o nombre de bautizo. <br/><strong> Medio</strong> a menudo abreviado a una inicial como en <em>John D. Rockefeller</em><br/><strong> Prefijo del apellido </strong> como el holandés <em>van, van de, der</em>.<br/><strong>Apellido</strong> también conocido como nombre familiar o apellido."
+msgstr "<strong>Nombre</strong>, también conocido como nombre de pila o de bautismo.<br/><strong>Segundo nombre</strong>, a menudo abreviado a una inicial, como en <em>John D. Rockefeller</em>.<br/><strong>Prefijo del apellido</strong>, como los neerlandeses <em>van, van de, der</em>.<br/><strong>Apellido</strong>, también conocido como nombre de familia."
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:123
 msgid "A copy that will remain connected so that a new version can be fetched."
@@ -1197,11 +1197,11 @@ msgstr "Todos los medios"
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:111
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:82
 msgid "All pages"
-msgstr "Toda las páginas"
+msgstr "Todas las páginas"
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:38
 msgid "All sites have been flushed."
-msgstr "Todos los sitios han sido limpiados."
+msgstr "Se han vaciado las cachés de todos los sitios."
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:7
 msgid "Allocated"
@@ -1265,7 +1265,7 @@ msgstr "¿Está seguro de que desea eliminar los medios de esta página?"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:2
 msgid "Are you sure you want to delete the page"
-msgstr "¿Está seguro de que quiere borrar la página"
+msgstr "¿Seguro que quieres eliminar la página"
 
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:2
 msgid "Are you sure you want to delete these {n} pages?"
@@ -1277,12 +1277,12 @@ msgstr "¿Estás seguro que quieres eliminar esta nota?"
 
 #: zotonic_mod_admin/priv/templates/_admin_menu.tpl:72
 msgid "Are you sure you want to exit the admin interface?"
-msgstr "¿Estas seguro que quieres salir de la interfaz del administrador?"
+msgstr "¿Seguro que quieres salir de la interfaz de administración?"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_show_as.tpl:11
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:42
 msgid "Aside"
-msgstr "Al lado"
+msgstr "Recuadro"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:70
 #: zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
@@ -1364,7 +1364,7 @@ msgstr "El caché ha sido vaciado."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:8
 msgid "Category name:"
-msgstr "Nombre de la categoriía:"
+msgstr "Nombre de la categoría:"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:43
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:59
@@ -1373,11 +1373,11 @@ msgstr "Categoría:"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:42
 msgid "Change category"
-msgstr "Cambiar categoria"
+msgstr "Cambiar categoría"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:34
 msgid "Change the category of this page"
-msgstr "Cambiar la categoría de esta pagina"
+msgstr "Cambiar la categoría de esta página"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:139
 msgid "Check all pages for embedded page references and add a <i>refers</i> connection for all of those references."
@@ -1393,7 +1393,7 @@ msgstr "Marque las páginas que desea actualizar."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:10
 msgid "Choose a media item from this page to insert in the body text."
-msgstr "Elija un ítem de medios de esta página para insertar en el texto del cuerpo."
+msgstr "Elige un elemento multimedia de esta página para insertarlo en el cuerpo del texto."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:108
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:109
@@ -1417,11 +1417,11 @@ msgstr "Haz clic en «Guardar» para ver los cambios."
 
 #: zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:11
 msgid "Click here for more information"
-msgstr "Haga clic aquí para más información"
+msgstr "Haz clic aquí para obtener más información"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:287
 msgid "Click to preview."
-msgstr "Haga clic para ver la vista previa."
+msgstr "Haz clic para ver la vista previa."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
 msgid "Close Live view"
@@ -1429,11 +1429,11 @@ msgstr "Cerrar vista en directo"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:133
 msgid "Close Sockets"
-msgstr "Cerrar los enchufes"
+msgstr "Cerrar sockets"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:134
 msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets."
-msgstr "Cierre todos los sockets de las direcciones IP que tengan más de &gt; 250 sockets abiertos."
+msgstr "Cierra todos los sockets de las direcciones IP que tengan más de 250 sockets abiertos."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:4
 msgid "Close panel"
@@ -1631,7 +1631,7 @@ msgstr "Defina la consulta utilizando los argumentos de consulta o JSON."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:23
 msgid "Delete if no other page is connected to this page."
-msgstr "Eliminar si no hay ninguna otra pagina conectada a esta página."
+msgstr "Eliminar si ninguna otra página está conectada a esta página."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:51
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:239
@@ -1658,7 +1658,7 @@ msgstr "Tareas eliminadas."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:31
 msgid "Deleted."
-msgstr "Eliminar."
+msgstr "Eliminado."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:38
 #: zotonic_mod_admin_merge/priv/templates/_confirm_merge.tpl:83
@@ -1735,7 +1735,7 @@ msgstr "Descarga los archivos multimedia desde la página web original."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:11
 msgid "Drag to change position"
-msgstr "Arrastre para cambiar de posición"
+msgstr "Arrastra para cambiar de posición"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:33
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:38
@@ -1826,7 +1826,7 @@ msgstr "Incorporar"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:31
 msgid "Embed code will be sanitized for allowed sites and html."
-msgstr "El código de incrustación será desinfectado para los sitios permitidos y el html."
+msgstr "El código de inserción se filtrará para conservar únicamente los sitios y el HTML permitidos."
 
 #: zotonic_mod_admin/src/mod_admin.erl:590
 msgid "Embed page | a citation, popup, or link to another page"
@@ -1852,7 +1852,7 @@ msgstr "Asegúrese de que <i>se refiera a</i> conexiones"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:21
 msgid "Enter a URL or embed code. It will be analyzed and you can choose how to import the data."
-msgstr "Ingrese una URL o un código de inserción. Se analizará y puede elegir como importar los datos."
+msgstr "Introduce una URL o un código de inserción. Se analizará y podrás elegir cómo importar los datos."
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:53
 msgid "Erlang Init Files"
@@ -1931,7 +1931,7 @@ msgstr "Familia"
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:178
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:182
 msgid "Featured"
-msgstr "Presentados"
+msgstr "Destacados"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_meta_features.tpl:4
 #: zotonic_mod_admin/priv/templates/_admin_edit_meta_features.tpl:8
@@ -1979,7 +1979,7 @@ msgstr "Nombre del archivo"
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:59
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:60
 msgid "Filter"
-msgstr "Filtro"
+msgstr "Filtrar"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:64
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:61
@@ -1997,12 +1997,12 @@ msgstr "Encontrar medios"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:77
 msgid "Find Page"
-msgstr "Conseguir pagina"
+msgstr "Buscar página"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:149
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:217
 msgid "Find page"
-msgstr "Conseguir pagina"
+msgstr "Buscar página"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:189
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:193
@@ -2030,7 +2030,7 @@ msgstr "Nombre"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:82
 msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
-msgstr "Vacié todas las reglas de despacho de URL, cachés de plantilla y biblioteca y otros datos almacenados en memoria caché."
+msgstr "Vacía todas las reglas de enrutamiento de URL, las cachés de plantillas y bibliotecas y los demás datos almacenados en caché en memoria."
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:81
 msgid "Flush system caches"
@@ -2091,7 +2091,7 @@ msgstr "Ocultar página de búsquedas (depende de la consulta de búsqueda)"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:59
 msgid "Home Directory"
-msgstr "Directorio de casas..."
+msgstr "Directorio personal"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:111
 #: zotonic_mod_authentication/priv/templates/sessions.tpl:48
@@ -2155,7 +2155,7 @@ msgstr "Bloque en línea"
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:74
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:41
 msgid "Items per page"
-msgstr "Artículos por pagina"
+msgstr "Elementos por página"
 
 #: zotonic_mod_admin/priv/templates/_edit_medium_language.tpl:14
 msgid "Language independent"
@@ -2235,7 +2235,7 @@ msgstr "Tipo MIME"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:131
 msgid "Mailing address"
-msgstr "Dirección de correo"
+msgstr "Dirección postal"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:17
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_edit_basics.person.tpl:5
@@ -2352,7 +2352,7 @@ msgstr "Segundo nombre"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:156
 msgid "Mine"
-msgstr "Mina"
+msgstr "Mis contenidos"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:20
 msgid "Mirrored horizontally"
@@ -2460,7 +2460,7 @@ msgstr "Nombre para facturas"
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:13
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:24
 msgid "Need more help?"
-msgstr "¿Necesita más ayuda?"
+msgstr "¿Necesitas más ayuda?"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:105
 msgid "Network Connections"
@@ -2494,7 +2494,7 @@ msgstr "Siguiente en la categoría:"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_depictions.tpl:21
 msgid "No connected images."
-msgstr "Imágenes sin conexión."
+msgstr "No hay imágenes conectadas."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_meta_features.tpl:23
 msgid "No features are enabled for this meta-resource."
@@ -2715,7 +2715,7 @@ msgstr "Anterior en la categoría:"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:2
 msgid "Proceed with care:"
-msgstr "Proceda con cuidado:"
+msgstr "Procede con cuidado:"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:20
 msgid "Protect"
@@ -2743,7 +2743,7 @@ msgstr "Fecha de publicación del artículo original"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:10
 msgid "Publication date range"
-msgstr "De rangos de fechas de publicación"
+msgstr "Rango de fechas de publicación"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:6
 msgid "Publication period"
@@ -2820,11 +2820,11 @@ msgstr "Remitentes recientes"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:27
 msgid "Redirect to above website on page view"
-msgstr "Redireccionar hacia la página web de encima en la vista de las páginas"
+msgstr "Redirigir al sitio web indicado arriba al visitar la página"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:52
 msgid "Redirect to website on page view"
-msgstr "Redireccionar a la página web en la vista de la página"
+msgstr "Redirigir al sitio web al visitar la página"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:75
 msgid "Referrers"
@@ -2916,7 +2916,7 @@ msgstr "Los recursos en la categoría <i>meta</i> pueden tener 'funcionalidades'
 
 #: zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:85
 msgid "Retrieving status..."
-msgstr "Recuperar el estado..."
+msgstr "Recuperando el estado..."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:22
 msgid "Rotated 180 degrees"
@@ -2942,7 +2942,7 @@ msgstr "Funcionamiento"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:113
 msgid "Runs the schema install command from the site's module again."
-msgstr "Ejecuta el esquema con el comando de instalación desde el modulo de el sitio nuevamente."
+msgstr "Vuelve a ejecutar el comando de instalación del esquema del módulo del sitio."
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:118
 msgid "Runs the schema install for Zotonic core again."
@@ -2959,7 +2959,7 @@ msgstr "Suma de comprobación SHA-256"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:5
 msgid "SSL Application uses Erlang defaults, it is recommended to change this configuration in your <tt>erlang.config</tt>."
-msgstr "La aplicación SSL utiliza los valores por defecto de Erlang, se recomienda cambiar esta configuración en su <tt>erlang.config</tt>."
+msgstr "La aplicación SSL utiliza los valores predeterminados de Erlang. Se recomienda cambiar esta configuración en tu archivo <tt>erlang.config</tt>."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:35
 msgid "Sandbox isolation cannot be used on this system and is disabled. Media processing commands run without isolation, reducing protection against malicious media files."
@@ -2986,7 +2986,7 @@ msgstr "El aislamiento de Sandbox no es compatible con este sistema. Los comando
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:144
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88
 msgid "Save &amp; view"
-msgstr "Guardar &amp; vista"
+msgstr "Guardar y ver"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:4
@@ -3013,7 +3013,7 @@ msgstr "Buscar"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:55
 msgid "Search indices rebuilt."
-msgstr "Buscar indices que se volvieron a generar."
+msgstr "Índices de búsqueda reconstruidos."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:5
 msgid "Search other media"
@@ -3194,15 +3194,15 @@ msgstr "Lo sentimos, no puede cargar archivos de carpetas de entrega."
 
 #: zotonic_mod_admin/src/actions/action_admin_link.erl:117
 msgid "Sorry, you don't have permission to add the connection."
-msgstr "Disculpe, no tiene permiso para agregar la conexión."
+msgstr "Lo sentimos, no tienes permiso para añadir la conexión."
 
 #: zotonic_mod_admin/src/mod_admin.erl:1110
 msgid "Sorry, you have no permission to add the connection."
-msgstr "Disculpe, no tiene permiso para agregar la conexión."
+msgstr "Lo sentimos, no tienes permiso para añadir la conexión."
 
 #: zotonic_mod_admin/src/mod_admin.erl:1112
 msgid "Sorry, you have no permission to delete the connection."
-msgstr "Disculpe, no tiene permiso para eliminar la conexión."
+msgstr "Lo sentimos, no tienes permiso para eliminar la conexión."
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:256
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:49
@@ -3266,7 +3266,7 @@ msgstr "Estado"
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:58
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:59
 msgid "Street Line 1"
-msgstr "Calle 1"
+msgstr "Dirección, línea 1"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:102
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:103
@@ -3277,7 +3277,7 @@ msgstr "Calle 1"
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:63
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:64
 msgid "Street Line 2"
-msgstr "Calle 2"
+msgstr "Dirección, línea 2"
 
 #: zotonic_mod_admin/src/mod_admin.erl:512
 msgid "Structure"
@@ -3374,7 +3374,7 @@ msgstr "Las plantillas serán recompiladas."
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:31
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:116
 msgid "Test query"
-msgstr "Consulta de prueba"
+msgstr "Probar consulta"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:41
 msgid "Text"
@@ -3398,7 +3398,7 @@ msgstr "La dirección de facturación solo es visible para las personas que pued
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:77
 msgid "The category tree is rebuilding. This can take a long time."
-msgstr "El árbol de categorías está reconstruyendo. Esto puede llevar mucho tiempo."
+msgstr "Se está reconstruyendo el árbol de categorías. Esto puede llevar mucho tiempo."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:7
 msgid "The media runner configuration is invalid."
@@ -3438,7 +3438,7 @@ msgstr "El texto de la consulta está vacío."
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:59
 msgid "The search index is rebuilding. Depending on the database size, this can take a long time."
-msgstr "El índice de búsqueda está reconstruyendo. Dependiendo del tamaño de la base de datos, esto."
+msgstr "Se está reconstruyendo el índice de búsqueda. Según el tamaño de la base de datos, esto puede llevar mucho tiempo."
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:86
 msgid "The site configuration has been reloaded."
@@ -3483,7 +3483,7 @@ msgstr "Este bloque contiene contenido en otro idioma. Si lo eliminas, se borrar
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:5
 msgid "This can't be undone. Your page will be lost forever."
-msgstr "Esto no se puede deshacer. Su página se perderá para siempre."
+msgstr "Esto no se puede deshacer. Tu página se perderá para siempre."
 
 #: zotonic_mod_admin/src/actions/action_admin_link.erl:114
 msgid "This connection already exists."
@@ -3565,7 +3565,7 @@ msgstr "Esta página contiene una colección de opciones administrativas para re
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:11
 msgid "This page is able to connect to others. For example you can connect it to an actor or a brand."
-msgstr "Esta página puede conectarse con otras. Por ejemplo, puede conectarla a un actor o una marca."
+msgstr "Esta página puede conectarse con otras. Por ejemplo, puedes conectarla con un actor o una marca."
 
 #: zotonic_mod_admin/priv/templates/_admin_authoritative_info.tpl:4
 msgid "This page is from another website. The original can be found at"
@@ -3608,13 +3608,13 @@ msgstr "Título"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish_view.tpl:9
 msgid "Toggle dropdown"
-msgstr "Activar despleglable"
+msgstr "Mostrar u ocultar el menú desplegable"
 
 #: zotonic_mod_admin/priv/templates/_admin_menu.tpl:6
 #: zotonic_mod_authentication/priv/templates/sessions.tpl:12
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:18
 msgid "Toggle navigation"
-msgstr "Activar navegación"
+msgstr "Mostrar u ocultar la navegación"
 
 #: zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:26
 msgid "Too many connections, only the first and last are shown."
@@ -3632,7 +3632,7 @@ msgstr "El recuento total de conexiones se refiere a las conexiones registradas 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:119
 #: zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:9
 msgid "Type text to search"
-msgstr "Tipo de texto que se va a buscar"
+msgstr "Escribe texto para buscar"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:11
 msgid "Type to filter the list below."
@@ -3749,7 +3749,7 @@ msgstr "Subir archivo"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:4
 msgid "Upload a file from your computer."
-msgstr "Subir un archivo de su computadora."
+msgstr "Sube un archivo desde tu ordenador."
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:151
 msgid "Upload a file to the drop folder. This file will be handled in the background by the mailinglists for recipient import and other modules."
@@ -3784,7 +3784,7 @@ msgstr "Usar el servicio de autocompletar para buscar los medios en este sitio."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:12
 msgid "Use the title of the base content for the display name of this person."
-msgstr "Use el título del contenido base para el nombre que se mostrará  en pantalla."
+msgstr "Usa el título del contenido base como nombre visible de esta persona."
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:8
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:34
@@ -3857,7 +3857,7 @@ msgstr "Visitar página de edición completa"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73
 msgid "Visiting address"
-msgstr "Dirección visitada"
+msgstr "Dirección física"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:4
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:14
@@ -3899,32 +3899,32 @@ msgstr "Estás editando un:"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:4
 msgid "You are editing the <b>Site Administrator Account</b>."
-msgstr "Usted está editando la <b>cuenta del administrador del sitio</b>."
+msgstr "Estás editando la <b>cuenta del administrador del sitio</b>."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:1
 msgid "You are going to duplicate the page"
-msgstr "Va a duplicar esta página"
+msgstr "Vas a duplicar la página"
 
 #: zotonic_mod_admin/src/actions/action_admin_delete_media.erl:71
 msgid "You are not allowed to delete this media."
-msgstr "No se le permite eliminar este medio."
+msgstr "No tienes permiso para eliminar este elemento multimedia."
 
 #: zotonic_mod_admin/src/actions/action_admin_delete_rsc.erl:66
 #: zotonic_mod_admin/src/actions/action_admin_dialog_delete_rsc.erl:68
 msgid "You are not allowed to delete this page."
-msgstr "No tiene permitido eliminar esta página."
+msgstr "No tienes permiso para eliminar esta página."
 
 #: zotonic_mod_admin/priv/templates/admin_edit.tpl:16
 #: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:33
 #: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:45
 #: zotonic_mod_admin_merge/priv/templates/admin_merge.tpl:26
 msgid "You are not allowed to edit this page."
-msgstr "No tiene permitido editar esta página."
+msgstr "No tienes permiso para editar esta página."
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:218
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:166
 msgid "You don't have permission to change this media item."
-msgstr "No se le permite cambiar este elemento multimedia."
+msgstr "No tienes permiso para modificar este elemento multimedia."
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:206
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:119
@@ -3941,16 +3941,16 @@ msgstr "No tienes permiso para editar esta página."
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:168
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:121
 msgid "You don't have the proper permissions to upload this type of file."
-msgstr "No tiene los permisos adecuados para subir este tipo de archivo."
+msgstr "No tienes los permisos necesarios para subir este tipo de archivo."
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:91
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:100
 msgid "You don’t have permission to perform this action."
-msgstr "No tiene permiso para realizar esta acción."
+msgstr "No tienes permiso para realizar esta acción."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:6
 msgid "You have to specify a description of the file to make it easier to find and share."
-msgstr "Tiene que especificar una descripción del archivo para que sea más fácil de encontrar y compartir."
+msgstr "Debes especificar una descripción del archivo para facilitar su búsqueda y uso compartido."
 
 #: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:188
 msgid "Your search query is invalid. Please correct it before saving."
@@ -3958,7 +3958,7 @@ msgstr "Tu consulta de búsqueda no es válida. Corrígela antes de guardar."
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:21
 msgid "Zotonic Version"
-msgstr "Versión zotónica"
+msgstr "Versión de Zotonic"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:30
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:27
@@ -4132,20 +4132,20 @@ msgstr "{n} elementos encontrados."
 
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:1
 msgid "Are you sure you want to delete the following categories:"
-msgstr "Estas seguro que quieres eliminar las siguientes categorías:"
+msgstr "¿Seguro que quieres eliminar las siguientes categorías?"
 
 #: zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:10
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:246
 msgid "Categories"
-msgstr "Categorias"
+msgstr "Categorías"
 
 #: zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:12
 msgid "Categories are used to categorize all pages. Every page belongs to exactly one category.<br/>The categories are defined in a hierarchy. Here you can change that hierarchy."
-msgstr "Las categorías son usadas para clasificar todas las paginas. Cualquier pagina pertenece exactamente a una categoría.<br/> Las categorías son definidas en una jerarquía. Aquí tu puedes cambiar la jerarquía."
+msgstr "Las categorías se usan para clasificar todas las páginas. Cada página pertenece exactamente a una categoría.<br/>Las categorías se organizan en una jerarquía que puedes modificar aquí."
 
 #: zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:3
 msgid "Category Hierarchy"
-msgstr "Jerarquía por categoría"
+msgstr "Jerarquía de categorías"
 
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:39
 #: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:37
@@ -4163,16 +4163,16 @@ msgstr "La eliminación se cancela, hay páginas en la categoría."
 
 #: zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:27
 msgid "Drag categories to the place where you want them in the hierarchy."
-msgstr "Arrastrar categorías de el lugar donde tu quieras en la jerarquía."
+msgstr "Arrastra las categorías a la posición que quieras dentro de la jerarquía."
 
 #: zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:21
 #: zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:45
 msgid "How does this work?"
-msgstr "¿Como funciona esto?"
+msgstr "¿Cómo funciona esto?"
 
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:17
 msgid "Move all pages in these categories to:"
-msgstr "Trasladar todas las paginas en estas categorías a:"
+msgstr "Mover todas las páginas de estas categorías a:"
 
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:128
 #: zotonic_mod_content_groups/src/mod_content_groups.erl:119
@@ -4181,7 +4181,7 @@ msgstr "No todos los recursos pudieron ser eliminados."
 
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:33
 msgid "Or click <strong>Delete All Pages</strong> to delete all pages in the categories."
-msgstr "O has click en <strong>Eliminar todas las páginas</strong> para eliminar todas las páginas en las categorías."
+msgstr "O haz clic en <strong>Eliminar todas las páginas</strong> para eliminar todas las páginas de estas categorías."
 
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:49
 msgid "There are no pages in these categories."
@@ -4231,7 +4231,7 @@ msgstr "Android"
 
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:2
 msgid "Are you sure you want to delete the configuration key"
-msgstr "Está seguro de que quiere eliminar la clave de configuración"
+msgstr "¿Seguro que quieres eliminar la clave de configuración"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:39
 msgid "Authenticate when prompted, then restart the browser."
@@ -4434,7 +4434,7 @@ msgstr "En la pestaña «Entidades de certificación», importa el archivo del c
 
 #: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:88
 msgid "Only administrators can change the configuration."
-msgstr "Solo los administradores puede cambiar la configuración."
+msgstr "Solo los administradores pueden cambiar la configuración."
 
 #: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_delete.erl:64
 msgid "Only administrators can delete configurations."
@@ -4474,7 +4474,7 @@ msgstr "Abre el certificado importado, despliega la opción «Confianza» y sele
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:97
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:202
 msgid "Password"
-msgstr "Clave"
+msgstr "Contraseña"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:157
 msgid "Per default images smaller than 1MB are embedded in email messages. Using a separate download for images results in a smaller message size but non-public images will not be visible. Leave this disabled if you are sending non-public images."
@@ -4482,7 +4482,7 @@ msgstr "Por defecto, las imágenes de menos de 1 MB están incrustadas en los me
 
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:1
 msgid "Please fill in the module, key and value for the new configuration key."
-msgstr "Por favor ingrese el módulo, clave y valor para la nueva clave de configuración."
+msgstr "Introduce el módulo, la clave y el valor de la nueva clave de configuración."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:29
 msgid "Regenerate certificate"
@@ -4530,7 +4530,7 @@ msgstr "Nombre de host SMTP"
 #: zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:3
 #: zotonic_mod_admin_config/src/mod_admin_config.erl:100
 msgid "SSL Certificates"
-msgstr "Certificado SSL"
+msgstr "Certificados SSL"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:45
 msgid "Select Local Machine, then place the certificate in Trusted Root Certification Authorities."
@@ -4584,7 +4584,7 @@ msgstr "La configuración del sistema Zotonic está configurada para utilizar un
 
 #: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_new.erl:76
 msgid "The config key already exists, please choose another key name."
-msgstr "La clave de configuración ya existe, por favor elija otro nombre para la clave."
+msgstr "La clave de configuración ya existe. Elige otro nombre."
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:148
 msgid "The default FROM address for emails. Defaults to"
@@ -4600,11 +4600,11 @@ msgstr "El nombre de host que se utilizará como cliente al enviar correo electr
 
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:4
 msgid "This can't be undone. The configuration key will be lost forever."
-msgstr "Esto no se puede deshacer. La clave de configuración de perderá para siempre."
+msgstr "Esto no se puede deshacer. La clave de configuración se perderá para siempre."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:13
 msgid "This certificate is generated and signed by Zotonic. It will be used if no other certificates are available."
-msgstr "El certificado es generado y firmado por Zotonic. Sera usado si otros certificados no están disponibles."
+msgstr "Este certificado lo genera y firma Zotonic. Se usará si no hay otros certificados disponibles."
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:10
 msgid "This is a list of the certificates provided by modules and the system. The first certificate will be used."
@@ -4787,11 +4787,11 @@ msgstr "hasta"
 
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:72
 msgid "(that's you)"
-msgstr "(eso es usted)"
+msgstr "(eres tú)"
 
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:13
 msgid "A secure password is prefilled, replace if needed."
-msgstr "Una contraseña segura está precargada, reemplácela si es necesario."
+msgstr "Ya se ha rellenado una contraseña segura; sustitúyela si es necesario."
 
 #: zotonic_mod_admin_identity/priv/templates/_admin_identity_email.tpl:11
 #: zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:26
@@ -4817,11 +4817,11 @@ msgstr "Además muestra personas sin cuenta de usuario"
 
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_delete_username.tpl:2
 msgid "Are you sure you want to delete the username from"
-msgstr "Está seguro de que quiere borrar el nombre de usuario de"
+msgstr "¿Seguro que quieres eliminar el nombre de usuario de"
 
 #: zotonic_mod_admin_identity/src/mod_admin_identity.erl:329
 msgid "Are you sure you want to delete this entry?"
-msgstr "¿Estas seguro de querer eliminar esta entrada?"
+msgstr "¿Seguro que quieres eliminar esta entrada?"
 
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:19
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:45
@@ -4833,12 +4833,12 @@ msgstr "Bloqueado"
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:129
 msgid "Changed the username."
-msgstr "Cambiar el nombre de usuario."
+msgstr "Nombre de usuario cambiado."
 
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_basics_user.tpl:14
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:12
 msgid "Click OK to log on as this user. You will be redirected to the home page if this user has no rights to access the admin system."
-msgstr "Has click en OK para iniciar sesión como este usuario. Sera redireccionado a la pagina de inicio si este usuario no cuenta con el permiso de acceso al sistema del administrador."
+msgstr "Haz clic en OK para iniciar sesión como este usuario. Se te redirigirá a la página de inicio si este usuario no tiene permiso para acceder a la administración."
 
 #: zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:16
 msgid "Click on the link to confirm your email address. Copy the whole link and paste it in your browser if this doesn't work."
@@ -4846,7 +4846,7 @@ msgstr "Haga clic en el enlace para confirmar su dirección de correo electróni
 
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:9
 msgid "Click “delete” to remove any existing username/password from the person; this person will no longer be a user."
-msgstr "Has click en \"eliminar\" para remover algún nombre de usuario/contraseña existente de la persona; esta persona ya no será mas un usuario."
+msgstr "Haz clic en «eliminar» para quitar el nombre de usuario y la contraseña de esta persona; dejará de ser un usuario."
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_delete_username.erl:68
 msgid "Confirm user deletion"
@@ -4876,7 +4876,7 @@ msgstr "Eliminó la cuenta de usuario."
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:124
 msgid "Duplicate username, please choose another username."
-msgstr "El nombre de usuario esta duplicado, por favor escoja otro nombre de usuario."
+msgstr "Ese nombre de usuario ya existe. Elige otro."
 
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:36
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:38
@@ -4911,7 +4911,7 @@ msgstr "Estado del correo electrónico"
 
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:7
 msgid "Enter a unique username and password. Usernames and passwords are case sensitive, so be careful when entering them."
-msgstr "Introduce un único nombre de usuario y contraseña. Nombres de usuarios y contraseñas son sensibles a las mayúsculas, así que debe ser cuidadoso cuando introduzcas estos datos."
+msgstr "Introduce un nombre de usuario único y una contraseña. Ambos distinguen entre mayúsculas y minúsculas, así que presta atención al escribirlos."
 
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:21
 msgid "Every page/person can be made into a user on the edit page. The difference between a user and a normal page is only that the former has logon credentials attached to its page record."
@@ -4919,7 +4919,7 @@ msgstr "Cada página o persona puede hacerse usuario en la página de edición. 
 
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:9
 msgid "Give the name and the e-mail address of the new user. A <em>person</em> page will be created for this user."
-msgstr "Proporcionar el nombre y la dirección de correo electrónico del nuevo usuario. Una página <em>person</em> será creada para este usuario."
+msgstr "Indica el nombre y la dirección de correo electrónico del nuevo usuario. Se creará una página de tipo <em>persona</em> para él."
 
 #: zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:6
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:7
@@ -4986,7 +4986,7 @@ msgstr "Nombre y dirección de correo electrónico"
 #: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:17
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:3
 msgid "New password"
-msgstr "Nueva clave"
+msgstr "Nueva contraseña"
 
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:96
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user_results.tpl:12
@@ -4999,7 +4999,7 @@ msgstr "No hay direcciones de correo electrónico verificadas."
 
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:66
 msgid "No verified e-mail addresses. Please add one below."
-msgstr "No hay direcciones de correo electrónico verificadas. Por favor, añada una más abajo."
+msgstr "No hay direcciones de correo electrónico verificadas. Añade una a continuación."
 
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:12
 #: zotonic_mod_signup/priv/templates/signup_confirm.tpl:9
@@ -5050,13 +5050,13 @@ msgstr "Enviar un correo electrónico de bienvenida"
 #: zotonic_mod_admin_identity/src/mod_admin_identity.erl:269
 #: zotonic_mod_admin_identity/src/mod_admin_identity.erl:280
 msgid "Sent verification e-mail."
-msgstr "Enviar un correo electrónico de verificación."
+msgstr "Correo electrónico de verificación enviado."
 
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_basics_user.tpl:9
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:7
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:89
 msgid "Set username / password"
-msgstr "Asignar usuario / clave"
+msgstr "Establecer nombre de usuario y contraseña"
 
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:97
@@ -5069,7 +5069,7 @@ msgstr "Lo sentimos"
 
 #: zotonic_mod_admin_identity/src/validators/validator_admin_identity_username_unique.erl:59
 msgid "Sorry, this username is already in use. Please try another one."
-msgstr "Disculpe, este nombre de usuario ya está siendo usado. Por favor use uno distinto."
+msgstr "Lo sentimos, ese nombre de usuario ya está en uso. Prueba con otro."
 
 #: zotonic_mod_admin_identity/src/mod_admin_identity.erl:289
 msgid "Sorry, you are not allowed to verify this email address."
@@ -5087,7 +5087,7 @@ msgstr "Gracias"
 
 #: zotonic_mod_admin_identity/src/mod_admin_identity.erl:377
 msgid "The address is invalid."
-msgstr "La dirección es invalida."
+msgstr "La dirección no es válida."
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:99
 msgid "The admin user cannot be removed."
@@ -5108,11 +5108,11 @@ msgstr "La contraseña del usuario administrador no se puede cambiar en la base 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:132
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:138
 msgid "The username is already in use, please try another."
-msgstr "El nombre de usuario ya está en uso, por favor utilice otro."
+msgstr "Ese nombre de usuario ya está en uso. Prueba con otro."
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_delete_username.erl:61
 msgid "There is no username coupled to this person."
-msgstr "No hay un nombre de usuario emparejada con esta persona."
+msgstr "No hay ningún nombre de usuario asociado a esta persona."
 
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_delete_username.tpl:4
 msgid "This can't be undone. The username and password will be lost forever."
@@ -5149,7 +5149,7 @@ msgstr "Zona horaria"
 
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:26
 msgid "Type password to change password"
-msgstr "Escriba la contraseña para cambiar la contraseña"
+msgstr "Escribe una contraseña para cambiarla"
 
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:30
 msgid "Use this password"
@@ -5165,7 +5165,7 @@ msgstr "Acciones del usuario"
 
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity.tpl:8
 msgid "Username / password"
-msgstr "Usuario / clave"
+msgstr "Nombre de usuario / contraseña"
 
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:52
 msgid "Username <b>{username}</b>, last logon at {date}."
@@ -5173,7 +5173,7 @@ msgstr "Nombre de usuario <b>{username}</b>, último inicio de sesión a las {da
 
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:64
 msgid "Username and password"
-msgstr "Usuario y clave"
+msgstr "Nombre de usuario y contraseña"
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_delete_username.erl:60
 msgid "Username has been deleted."
@@ -5201,7 +5201,7 @@ msgstr "Verificar"
 
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:3
 msgid "Verify Address |"
-msgstr "Verificar dirección"
+msgstr "Verificar dirección |"
 
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:10
 msgid "Verifying..."
@@ -5213,21 +5213,21 @@ msgstr "Cuando agrega credenciales a una persona, la persona se convierte en usu
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:126
 msgid "You are not allowed to create the person page."
-msgstr "No tiene permitido crear la página de persona."
+msgstr "No tienes permiso para crear la página de persona."
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:106
 msgid "You are not allowed to delete this user account."
-msgstr "No está permitido eliminar esta cuenta de usuario."
+msgstr "No tienes permiso para eliminar esta cuenta de usuario."
 
 #: zotonic_mod_admin_identity/src/mod_admin_identity.erl:323
 #: zotonic_mod_admin_identity/src/mod_admin_identity.erl:350
 #: zotonic_mod_admin_identity/src/mod_admin_identity.erl:384
 msgid "You are not allowed to edit identities."
-msgstr "No tiene permitido editar identidades."
+msgstr "No tienes permiso para editar identidades."
 
 #: zotonic_mod_admin_identity/src/mod_admin_identity.erl:401
 msgid "You are not allowed to switch users."
-msgstr "No tiene permitido cambiar los usuarios."
+msgstr "No tienes permiso para cambiar de usuario."
 
 #: zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:16
 msgid "You can now login on the following URL:"
@@ -5235,16 +5235,16 @@ msgstr "Ahora puede iniciar sesión en la siguiente URL:"
 
 #: zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:12
 msgid "You can now login to the admin, on the following URL:"
-msgstr "Puede iniciar sesión en la administación en el siguiente URL:"
+msgstr "Ahora puedes iniciar sesión en la administración desde esta URL:"
 
 #: zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:11
 #: zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:15
 msgid "You have been granted access to"
-msgstr "Se le ha otorgado el acceso a"
+msgstr "Se te ha concedido acceso a"
 
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:30
 msgid "You need to be an administrator to add users."
-msgstr "Tiene que ser administrador para agregar usuarios."
+msgstr "Debes ser administrador para añadir usuarios."
 
 #: zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:25
 msgid "You received this email because you verified your email address. You will not receive any additional emails because of this request."
@@ -5252,19 +5252,19 @@ msgstr "Recibió este correo electrónico porque verificó su dirección de corr
 
 #: zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:12
 msgid "Your account name is"
-msgstr "Su cuenta es"
+msgstr "El nombre de tu cuenta es"
 
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:18
 msgid "Your address is now verified."
-msgstr "Su dirección ha sido verificada."
+msgstr "Tu dirección ya está verificada."
 
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:18
 msgid "Your e-mail address is now verified."
-msgstr "Su dirección de correo ha sido verificada."
+msgstr "Tu dirección de correo electrónico ya está verificada."
 
 #: zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:4
 msgid "Your login details for"
-msgstr "Sus datos de acceso para"
+msgstr "Tus datos de acceso para"
 
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:19
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:42
@@ -5533,7 +5533,7 @@ msgstr "Combinar con otra página…"
 
 #: zotonic_mod_admin_merge/src/mod_admin_merge.erl:144
 msgid "Merging the two pages ..."
-msgstr "Combinar las dos páginas ..."
+msgstr "Combinando las dos páginas..."
 
 #: zotonic_mod_admin_merge/src/mod_admin_merge.erl:149
 msgid "No merge action specified."
@@ -5561,24 +5561,24 @@ msgstr "Seleccionar la página ganadora"
 
 #: zotonic_mod_admin_merge/src/mod_admin_merge.erl:85
 msgid "Sorry, you have no permission to edit this page."
-msgstr "Lo siento, no tiene permiso para editar esta página."
+msgstr "Lo sentimos, no tienes permiso para editar esta página."
 
 #: zotonic_mod_admin_merge/src/mod_admin_merge.erl:128
 msgid "The loser is protected, unprotect the loser before merging."
-msgstr "El perdedor está protegido. Desproteja el perdedor antes de la combinación."
+msgstr "La página que se va a eliminar está protegida. Quita su protección antes de combinarla."
 
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:58
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:66
 msgid "You are not allowed to edit this page"
-msgstr "No tiene permitido editar esta página"
+msgstr "No tienes permiso para editar esta página"
 
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:69
 msgid "You are not allowed to select this page and thereby deleting page Left."
-msgstr "No tiene permitido seleccionar esta página y de este modo eliminar la página izquierda."
+msgstr "No tienes permiso para seleccionar esta página y eliminar la página de la izquierda."
 
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:61
 msgid "You are not allowed to select this page and thereby deleting page Right."
-msgstr "No tiene permitido seleccionar esta página y de este modo eliminar la página derecha."
+msgstr "No tienes permiso para seleccionar esta página y eliminar la página de la derecha."
 
 #: zotonic_mod_admin_merge/src/mod_admin_merge.erl:104
 msgid "You cannot remove the admin user."
@@ -5586,12 +5586,12 @@ msgstr "No se puede eliminar el usuario de administrador."
 
 #: zotonic_mod_admin_merge/src/mod_admin_merge.erl:130
 msgid "You do not have permission to delete the loser."
-msgstr "No tiene permitido eliminar el perdedor."
+msgstr "No tienes permiso para eliminar la página que se va a combinar."
 
 #: zotonic_mod_admin_merge/src/mod_admin_merge.erl:108
 #: zotonic_mod_admin_merge/src/mod_admin_merge.erl:132
 msgid "You do not have permission to edit the winner."
-msgstr "No tiene permitido editar el ganador."
+msgstr "No tienes permiso para editar la página que se va a conservar."
 
 #: zotonic_mod_admin_merge/src/mod_admin_merge.erl:118
 msgid "not implemented yet"
@@ -5713,7 +5713,7 @@ msgstr "Reexaminar módulos"
 
 #: zotonic_mod_admin_modules/priv/templates/_admin_status.tpl:4
 msgid "Rescanning will rebuild the index of all modules, actions, templates etc. It will also reload all dispatch rules."
-msgstr "Analizar de nuevo generará una vez más el índice de todos los módulos, acciones, plantillas, etc. También volverá a cargar todas las reglas de envío."
+msgstr "Volver a examinar los módulos reconstruirá el índice de todos los módulos, acciones, plantillas, etc. También recargará todas las reglas de enrutamiento."
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:59
 msgid "Runtime"
@@ -5738,7 +5738,7 @@ msgstr "Lo siento, no tienes permitido hacer esto."
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:3
 msgid "The following modules will not start because they miss dependencies:"
-msgstr "Los siguientes módulos no se iniciarán porque no tienen dependencias:"
+msgstr "Los siguientes módulos no se iniciarán porque les faltan dependencias:"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:16
 msgid "The modules below are activated but could not be found."
@@ -5758,7 +5758,7 @@ msgstr "Tema"
 
 #: zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:71
 msgid "You are not allowed to activate or deactivate modules."
-msgstr "No se le permite activar o desactivar los módulos."
+msgstr "No tienes permiso para activar o desactivar módulos."
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:8
 msgid "Zotonic is a modular web development framework. Most functionality is encapsulated inside modules. A set of basic modules are shipped with the Zotonic distribution,\n"
@@ -5773,8 +5773,8 @@ msgstr "módulos mostrados"
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:14
 msgid "A predicate denotes traits or aspects of a page and expresses a relationship between two pages.\n"
 "    The relation is always directed, from the subject to the object.<br/>Predicates are defined in ontologies like <a href=\"http://sioc-project.org/\">SIOC</a>.  On this page you can define the predicates known to Zotonic."
-msgstr "Un predicado denota rasgos o aspectos de una página y expresa una relación entre dos páginas.\n"
-"    Las relación siempre es dirigida, desde el sujeto al objeto.<br/>Los predicados se definen en ontologías como <a href=\"http://sioc-project.org/\">SIOC</a>. En esta página puede definir los predicados conocidos como Zotonic."
+msgstr "Un predicado describe características o aspectos de una página y expresa una relación entre dos páginas.\n"
+"La relación siempre tiene una dirección, del sujeto al objeto.<br/>Los predicados se definen en ontologías como <a href=\"http://sioc-project.org/\">SIOC</a>. En esta página puedes definir los predicados que conoce Zotonic."
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:25
 msgid "All Predicates"
@@ -5787,7 +5787,7 @@ msgstr "Todas las conexiones de la página"
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:7
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:41
 msgid "Are you sure you want to delete"
-msgstr "¿Está seguro de que quiere eliminar"
+msgstr "¿Seguro que quieres eliminar"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edge_action.tpl:2
 msgid "Are you sure you want to remove the <strong>{{ predicate }}</strong>\n"
@@ -5831,7 +5831,7 @@ msgstr "No mostrar en la lista de conexiones en la página de edición de recurs
 
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:1
 msgid "Enter the title of the new predicate:"
-msgstr "Introduzca el título del nuevo predicado:"
+msgstr "Introduce el título del nuevo predicado:"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:28
 msgid "Filter on predicate"
@@ -5917,7 +5917,7 @@ msgstr "Las ontologías definen predicados para un conjunto definido de categor�
 
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:25
 msgid "Or click <strong>Delete All Connections</strong> to delete all connections with this predicate."
-msgstr "O has click aquí <strong>Eliminar todas las conexiones</strong>para borrar todas las conexiones con los predicados."
+msgstr "O haz clic en <strong>Eliminar todas las conexiones</strong> para eliminar todas las conexiones con este predicado."
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:3
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:51
@@ -5982,7 +5982,7 @@ msgstr "Algunos predicados tienen principalmente fines internos. Marque esto si 
 
 #: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:96
 msgid "Sorry, you are not allowed to insert connections with this predicate."
-msgstr "Disculpe, usted no tiene permitido insertar conexiones con este predicado."
+msgstr "No tienes permiso para añadir conexiones con este predicado."
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:26
 msgid "Step back"
@@ -5990,15 +5990,15 @@ msgstr "Paso atrás"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:5
 msgid "Subject"
-msgstr "Asunto"
+msgstr "Sujeto"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:105
 msgid "The direction (from/to) of this predicate is reversed from the normal definition."
-msgstr "La dirección (desde/a) de los predicados es invertido desde la definición normal."
+msgstr "La dirección (de/a) de este predicado está invertida respecto a su definición normal."
 
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:43
 msgid "There are no page connections with this predicate."
-msgstr "Esta pagina no tiene conexiones con este predicado."
+msgstr "No hay conexiones entre páginas con este predicado."
 
 #: zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:84
 msgid "There is already a predicate with this name."
@@ -6058,7 +6058,7 @@ msgstr "Ver {predicate} referencias de {subject} a {object}."
 
 #: zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:86
 msgid "You are not allowed to create this predicate."
-msgstr "No se le permite crear este predicado."
+msgstr "No tienes permiso para crear este predicado."
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:9
 msgid "You can define for which categories the predicate is shown on the edit page.  You can also define which categories of objects will be found when searching for a page to connect to. When you don’t check anything then all categories are valid."
@@ -6110,7 +6110,7 @@ msgstr "Uso de memoria"
 #: zotonic_site_status/priv/templates/stats.tpl:3
 #: zotonic_site_status/priv/templates/stats.tpl:8
 msgid "Statistics"
-msgstr "Estadisticas"
+msgstr "Estadísticas"
 
 #: zotonic_mod_admin_statistics/priv/templates/stat_panel/system_usage.tpl:3
 msgid "System Usage"
@@ -6165,7 +6165,7 @@ msgstr "Género"
 
 #: zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:4
 msgid "Media tags"
-msgstr "Etiquetas de medios de comunicación"
+msgstr "Etiquetas multimedia"
 
 #: zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:42
 #: zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:43
@@ -6223,7 +6223,7 @@ msgstr "Habilitar la autenticación de dos factores..."
 #: zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:66
 #: zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:88
 msgid "Force two-factor authentication"
-msgstr "Autenticación de dos factores de fuerza"
+msgstr "Exigir autenticación de dos factores"
 
 #: zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:10
 msgid "Help about two-factor authentication"
@@ -6231,7 +6231,7 @@ msgstr "Ayuda sobre la autenticación de dos factores"
 
 #: zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:14
 msgid "Here you can define which users need or should use two-factor authentication when signing in."
-msgstr "Aquí puede definir qué usuarios necesitan o deberían utilizar la autenticación de dos factores al iniciar la sesión."
+msgstr "Aquí puedes definir qué usuarios deben utilizar la autenticación de dos factores al iniciar sesión."
 
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:4
 msgid "If you are not able to scan the QR code then copy the code manually to your authentication App."
@@ -6284,7 +6284,7 @@ msgstr "Eliminar la autenticación de dos factores"
 
 #: zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:7
 msgid "Remove two-factor..."
-msgstr "Eliminar el factor dos..."
+msgstr "Eliminar la autenticación de dos factores..."
 
 #: zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:2
 msgid "Scan the two-factor authentication QR code with an app such as <a href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
@@ -6300,12 +6300,12 @@ msgstr "Código de acceso establecido"
 
 #: zotonic_mod_auth2fa/src/mod_auth2fa.erl:79
 msgid "Sorry, you are not allowed to change the 2FA settings."
-msgstr "Lo siento, no se le permite cambiar la configuración de 2FA."
+msgstr "Lo sentimos, no tienes permiso para cambiar la configuración de 2FA."
 
 #: zotonic_mod_auth2fa/src/mod_auth2fa.erl:94
 #: zotonic_mod_auth2fa/src/mod_auth2fa.erl:122
 msgid "Sorry, you are not allowed to remove the 2FA."
-msgstr "Lo siento, no se le permite quitar el 2FA."
+msgstr "Lo sentimos, no tienes permiso para eliminar la autenticación de dos factores."
 
 #: zotonic_mod_auth2fa/src/mod_auth2fa.erl:168
 msgid "Sorry, you are not allowed to set the 2FA."
@@ -6377,7 +6377,7 @@ msgstr "La autenticación de dos factores no está habilitada para esta cuenta."
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:29
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:83
 msgid "Two-factor passcode"
-msgstr "Contraseña de dos factores"
+msgstr "Código de verificación de dos factores"
 
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:46
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:47
@@ -6409,7 +6409,7 @@ msgstr "Debes configurar tu contraseña de autenticación de dos factores ahora.
 
 #: zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:11
 msgid "You need to be allowed to edit the system configuration to view or change the two-factor authentication configuration."
-msgstr "Es necesario que se le permita editar la configuración del sistema para ver o cambiar la configuración de la autenticación de dos factores."
+msgstr "Necesitas permiso para editar la configuración del sistema para consultar o cambiar la configuración de la autenticación de dos factores."
 
 #: zotonic_mod_authentication/src/actions/action_authentication_auth_disconnect.erl:63
 #: zotonic_mod_authentication/src/actions/action_authentication_auth_disconnect.erl:71
@@ -6490,7 +6490,7 @@ msgstr "Cambiar tus permisos"
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:109
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:28
 msgid "Check your email"
-msgstr "Revise su correo electrónico!"
+msgstr "Revisa tu correo electrónico"
 
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:56
 msgid "Checking the reset code…"
@@ -6615,12 +6615,12 @@ msgstr "Forzar el cierre de todas las sesiones activas"
 #: zotonic_mod_authentication/priv/templates/logon_error/message.passcode.tpl:8
 #: zotonic_mod_authentication/priv/templates/logon_error/message.pw.tpl:2
 msgid "Forgot your password?"
-msgstr "¿Olvidó su contraseña?"
+msgstr "¿Has olvidado tu contraseña?"
 
 #: zotonic_mod_authentication/priv/templates/error.403.tpl:10
 #: zotonic_mod_base/priv/templates/error.403.tpl:13
 msgid "Go back"
-msgstr "Volver atras"
+msgstr "Volver atrás"
 
 #: zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:23
 #: zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:37
@@ -6652,11 +6652,11 @@ msgstr "Su"
 
 #: zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:14
 msgid "Here you can set all the application keys, secrets and other configurations to integrate with external services like Facebook and Twitter."
-msgstr "Aquí puede configurar todas las claves de la aplicación, secretos y otras configuraciones para ser integradas con servicios externos como Facebook y Twitter."
+msgstr "Aquí puedes configurar las claves de aplicación, los secretos y otros ajustes para integrar servicios externos como Facebook y Twitter."
 
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:3
 msgid "How to reset your password"
-msgstr "Cómo cambiar su clave"
+msgstr "Cómo restablecer tu contraseña"
 
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:11
 msgid "However this email address does not belong to one of our users or you have simply not added a password yet so that you will not be able to change it."
@@ -6682,7 +6682,7 @@ msgstr "Si ya es un usuario de {site} entonces <a href=\"{logon_url}\">inicie se
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:95
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:111
 msgid "If you do not receive the email within a few minutes, please check your spam folder."
-msgstr "Si no recibe el correo dentro de unos minutos, por favor revise su carpeta de spam."
+msgstr "Si no recibes el correo en unos minutos, revisa la carpeta de spam."
 
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:33
 msgid "If you don't want to reset your password, you can ignore this email. Maybe someone made an error typing his or her email address."
@@ -6694,7 +6694,7 @@ msgstr "Si cree que tiene una cuenta, inténtelo nuevamente utilizando la direcc
 
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:110
 msgid "In the email you will find instructions on how to confirm your account."
-msgstr "En el mismo encontrará instrucciones de cómo confirmar su cuenta."
+msgstr "En el correo encontrarás instrucciones para confirmar tu cuenta."
 
 #: zotonic_mod_authentication/priv/templates/sessions.tpl:58
 msgid "Interrupt all active sessions"
@@ -6809,7 +6809,7 @@ msgstr "Un momento por favor"
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:26
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:79
 msgid "Passcode"
-msgstr "Contraseña"
+msgstr "Código de verificación"
 
 #: zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:1
 msgid "Please choose a different password as this password has been found in a public list of passwords that have appeared in a data breach."
@@ -6829,12 +6829,12 @@ msgstr "Por favor ingrese una nueva contraseña para su cuenta"
 
 #: zotonic_mod_authentication/priv/templates/logon_error/message.need_passcode.tpl:1
 msgid "Please enter the two-factor authentication passcode."
-msgstr "Por favor, introduzca el código de autenticación de dos factores."
+msgstr "Introduce el código de verificación de la autenticación de dos factores."
 
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:16
 #: zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:3
 msgid "Please try again in"
-msgstr "Por favor, inténtelo de nuevo en"
+msgstr "Vuelve a intentarlo en"
 
 #: zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:12
 msgid "Please try again in an hour"
@@ -6873,7 +6873,7 @@ msgstr "Redirigiendo..."
 #: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:29
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:14
 msgid "Repeat password"
-msgstr "Repita la clave"
+msgstr "Repite la contraseña"
 
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:51
 msgid "Reset password and log in"
@@ -6883,11 +6883,11 @@ msgstr "Restablecer contraseña e iniciar sesión"
 #: zotonic_mod_authentication/priv/templates/_logon_reminder_title.tpl:1
 #: zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:11
 msgid "Reset your password"
-msgstr "Restablecer su clave"
+msgstr "Restablecer tu contraseña"
 
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:104
 msgid "Send Verification Message"
-msgstr "Enviar Mensaje de Verificación"
+msgstr "Enviar mensaje de verificación"
 
 #: zotonic_mod_authentication/priv/templates/sessions.tpl:3
 #: zotonic_mod_authentication/priv/templates/sessions.tpl:24
@@ -6904,7 +6904,7 @@ msgstr "Mostrar contraseña"
 
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:27
 msgid "Simply try again:"
-msgstr "Simplemente inténtelo de nuevo:"
+msgstr "Simplemente inténtalo de nuevo:"
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:109
 msgid "Somebody else is already connected with this account on {service}."
@@ -6912,11 +6912,11 @@ msgstr "Alguien más ya está conectado con esta cuenta el {service}."
 
 #: zotonic_mod_authentication/priv/templates/logon_error/message.tpl:3
 msgid "Something went wrong, please try again later."
-msgstr "Algo salió mal, por favor, inténtelo de nuevo más tarde."
+msgstr "Algo salió mal. Vuelve a intentarlo más tarde."
 
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:115
 msgid "Sorry, could not send the verification message."
-msgstr "Disculpe, no hemos podido enviar el mensaje de verificación."
+msgstr "Lo sentimos, no se ha podido enviar el mensaje de verificación."
 
 #: zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:7
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:13
@@ -6925,7 +6925,7 @@ msgstr "Lo siento, demasiados intentos"
 
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:25
 msgid "Sorry, your password reset code is unknown or expired"
-msgstr "Disculpe, el código para restablecer su clave es incorrecto o ya ha expirado."
+msgstr "Lo sentimos, el código para restablecer tu contraseña es desconocido o ha caducado"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:179
 msgid "Stay logged on unless I log off."
@@ -7012,11 +7012,11 @@ msgstr "No podemos conectarlo a la cuenta correcta. Comuníquese con el soporte 
 
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:116
 msgid "We don’t seem to have any valid email address or other electronic communication address of you."
-msgstr "No parece que tengamos ninguna dirección de correo electrónico valida, u otra dirección que nos comunique con usted."
+msgstr "Parece que no tenemos ninguna dirección de correo electrónico válida ni otra dirección de comunicación electrónica tuya."
 
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:94
 msgid "We have sent an email with a link to reset your password to"
-msgstr "Hemos enviado un correo electrónico con un enlace para restablecer su contraseña a"
+msgstr "Hemos enviado un correo electrónico con un enlace para restablecer tu contraseña a"
 
 #: zotonic_mod_authentication/priv/templates/sessions.tpl:103
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:32
@@ -7026,7 +7026,7 @@ msgstr "Ymd"
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:6
 msgid "You are about to create a new account."
-msgstr "Está a punto de crear una nueva cuenta."
+msgstr "Estás a punto de crear una nueva cuenta."
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:58
 msgid "You are about to log on."
@@ -7076,7 +7076,7 @@ msgstr "Puede intentar iniciar sesión como un usuario diferente."
 
 #: zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:11
 msgid "You need to be allowed to edit the system configuration to view or change the configured App Keys."
-msgstr "Necesita tener permitido editar la configuración del sistema para ver o cambiar las Claves de la Aplicación configurada."
+msgstr "Necesitas permiso para editar la configuración del sistema para ver o cambiar las claves de aplicación configuradas."
 
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:39
 msgid "You received this email as you entered your username or email address to reset your password. You will not receive any other emails because of this request."
@@ -7088,7 +7088,7 @@ msgstr "Usaste otra cuenta el {service} de lo esperado."
 
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:101
 msgid "You're almost done! To make sure you are really you, we ask you to confirm your account from your email address."
-msgstr "¡Estamos casi listos! Para asegurarse de que usted es realmente usted, le pedimos que confirme su cuenta desde su correo electrónico."
+msgstr "¡Ya casi has terminado! Para verificar tu identidad, te pedimos que confirmes tu cuenta desde tu dirección de correo electrónico."
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:145
 msgid "Your account on {site} is disabled."
@@ -7100,11 +7100,11 @@ msgstr "Su contraseña actual ha caducado, no es lo suficientemente segura o se 
 
 #: zotonic_mod_authentication/priv/templates/_logon_reminder_form_fields.tpl:2
 msgid "Your email"
-msgstr "Su correo electrónico"
+msgstr "Tu correo electrónico"
 
 #: zotonic_mod_authentication/priv/templates/_logon_reminder_admin_form_fields.tpl:2
 msgid "Your email or username"
-msgstr "Su correo o nombre de usuario"
+msgstr "Tu correo electrónico o nombre de usuario"
 
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:33
 msgid "Your password has been changed"
@@ -7112,7 +7112,7 @@ msgstr "Tu contraseña ha sido cambiada"
 
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:71
 msgid "Your password has been reset"
-msgstr "Su contraseña ha sido restablecida"
+msgstr "Tu contraseña se ha restablecido"
 
 #: zotonic_mod_authentication/priv/templates/logon.tpl:34
 msgid "Your username is"
@@ -7161,11 +7161,11 @@ msgstr "¿Estás seguro de que quieres recuperar esta página eliminada utilizan
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:10
 msgid "Are you sure you want to revert to this version?"
-msgstr "¿Estas seguro de volver a esta versión?"
+msgstr "¿Estás seguro de que quieres volver a esta versión?"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:4
 msgid "At any moment you can make a backup of your system."
-msgstr "En cualquier momento puedes hacer una copia de seguridad de su sistema."
+msgstr "Puedes hacer una copia de seguridad de tu sistema en cualquier momento."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:3
 msgid "Automatic daily backups of the database and uploaded files can be enabled. The backup is done at night and the last 7 backups are kept."
@@ -7185,7 +7185,7 @@ msgstr "Copia de seguridad &amp; Restauración"
 
 #: zotonic_mod_backup/priv/templates/admin_backup.tpl:12
 msgid "Backup and restore options for your content."
-msgstr "Opciones de Copia de seguridad y Restauración para su contenido."
+msgstr "Opciones de copia de seguridad y restauración de tu contenido."
 
 #: zotonic_mod_backup/priv/templates/admin_backup.tpl:9
 msgid "Backups"
@@ -7205,11 +7205,11 @@ msgstr "Cambios desde"
 
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:51
 msgid "Check and possibly restore an earlier version of your page."
-msgstr "Compruebe y posiblemente restaure una versión anterior para su pagina."
+msgstr "Comprueba y, si lo deseas, restaura una versión anterior de tu página."
 
 #: zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:16
 msgid "Click on <b>List and restore an earlier version</b> to get an overview of earlier saved versions of this page.<br/>You can also save the complete contents of a page to a file. Later you can reload this file, replacing the current page contents. Note that the file does not contain your unsaved changes. Connections and media are not saved as well."
-msgstr "Haga click en <b>Lista y restaure a una versión anterior</b> para ver un resumen de las versiones anteriores guardadas en esta página.<br/>También puede guardar todos los contenidos de una página a un archivo. Después puede subir este archivo, reemplazando la página de contenidos actual. Recuerde que el archivo no contiene sus cambios no guardados. Las conexiones y los videos/imágenes tampoco están guardados."
+msgstr "Haz clic en <b>Listar y restaurar una versión anterior</b> para ver un resumen de las versiones guardadas anteriormente de esta página.<br/>También puedes guardar todo el contenido de una página en un archivo. Más adelante puedes volver a cargar este archivo para reemplazar el contenido actual de la página. Ten en cuenta que el archivo no contiene los cambios sin guardar. Tampoco se guardan las conexiones ni los archivos multimedia."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:24
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:46
@@ -7239,7 +7239,7 @@ msgstr "Fecha"
 
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:60
 msgid "Deleted"
-msgstr "Eliminar"
+msgstr "Eliminado"
 
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:37
 msgid "Deleted by"
@@ -7301,7 +7301,7 @@ msgstr "El cifrado está habilitado, pero no hay contraseña de cifrado. Por fav
 
 #: zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:15
 msgid "Help about backup &amp; restore"
-msgstr "Ayuda acerca de la copia de seguridad &amp; y restauración"
+msgstr "Ayuda sobre la copia de seguridad &amp; la restauración"
 
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:15
 msgid "If the Cloud File Store module is used, then deleted files can be retained indefinitely."
@@ -7317,13 +7317,13 @@ msgstr "Podría ser que una página dependiente conectada se haya eliminado debi
 
 #: zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:29
 msgid "List and restore an earlier version"
-msgstr "Lista y restauración en la versión anterior"
+msgstr "Listar y restaurar una versión anterior"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:15
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:39
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:60
 msgid "Make a daily backup of the database and uploaded files."
-msgstr "Hacer un respaldo diario de la base de datos y de la carga de archivos."
+msgstr "Hacer una copia de seguridad diaria de la base de datos y de los archivos subidos."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:13
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:35
@@ -7337,7 +7337,7 @@ msgstr "Los archivos multimedia solo se pueden recuperar si aún no se han elimi
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:66
 msgid "No backups present."
-msgstr "No hay copias de seguridad presente."
+msgstr "No hay copias de seguridad."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:57
 msgid "Not uploaded to filestore"
@@ -7479,7 +7479,7 @@ msgstr "Lo sentimos, no hay ningún módulo que pueda importar esto."
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:110
 #: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:125
 msgid "Sorry, there was an error replacing your page."
-msgstr "Lo sentimos, hubo un error al reemplazar su página."
+msgstr "Lo sentimos, se ha producido un error al reemplazar tu página."
 
 #: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:123
 msgid "Sorry, this backup has been deleted."
@@ -7491,11 +7491,11 @@ msgstr "Lo sentimos, este no es un archivo de copia de seguridad o el archivo es
 
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:113
 msgid "Sorry, you don't have permission to change this page."
-msgstr "Lo sentimos, no tiene permitido cambiar esta página."
+msgstr "Lo sentimos, no tienes permiso para modificar esta página."
 
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:154
 msgid "Sorry, you have no permission to change the configuration."
-msgstr "Lo sentimos, no tiene permitido cambiar la configuración."
+msgstr "Lo sentimos, no tienes permiso para cambiar la configuración."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:14
 msgid "Start backup now"
@@ -7546,7 +7546,7 @@ msgstr "Esta es la versión guardada en"
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:10
 msgid "This will overwrite your page with the contents of the backup file."
-msgstr "Esto sobrescribirá su página con el contenido del archivo de la copia de seguridad."
+msgstr "Esto sobrescribirá tu página con el contenido del archivo de copia de seguridad."
 
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:65
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:35
@@ -7580,7 +7580,7 @@ msgstr "No tienes permiso para recuperar esta página."
 #: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:79
 #: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:110
 msgid "You are not allowed to see the revisions"
-msgstr "No tiene permitido ver las revisiones"
+msgstr "No tienes permiso para ver las revisiones"
 
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:32
 msgid "You are not allowed to see the revisions."
@@ -7787,7 +7787,7 @@ msgstr "Velocidad y calidad de conexión general, para lo cual probamos con un s
 
 #: zotonic_mod_base/priv/templates/error.tpl:10
 msgid "Gone"
-msgstr "Ir"
+msgstr "Recurso eliminado"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:63
 msgid "Good"
@@ -8052,7 +8052,7 @@ msgstr "Lo sentimos, esta página ha sido eliminada."
 
 #: zotonic_mod_base/priv/templates/error.tpl:8
 msgid "Sorry, you don’t have access to this page."
-msgstr "Lo sentimos, no tienes acceso a está página."
+msgstr "Lo sentimos, no tienes acceso a esta página."
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
 msgid "South"
@@ -8192,7 +8192,7 @@ msgstr "no"
 
 #: zotonic_mod_base/src/filters/filter_yesno.erl:63
 msgid "yes"
-msgstr "si"
+msgstr "sí"
 
 #: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:5
 msgid "ClamAV could not be reached. Files cannot be uploaded until the virus scanner is available again."
@@ -8212,7 +8212,7 @@ msgstr "Agregado el"
 
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:40
 msgid "Are you sure you wish to delete that comment?"
-msgstr "¿Estas seguro de querer eliminar este comentario?"
+msgstr "¿Estás seguro de que quieres eliminar este comentario?"
 
 #: zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:3
 #: zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:16
@@ -8231,11 +8231,11 @@ msgstr "Comentarios"
 
 #: zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:21
 msgid "General Comment Form Settings"
-msgstr "Configuración del formulario de comentarios generales"
+msgstr "Configuración general del formulario de comentarios"
 
 #: zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:17
 msgid "Here you find settings to configure the comment module to suit your needs."
-msgstr "Aquí encontrará las opciones para configurar el módulo de comentarios que más se ajuste a sus necesidades."
+msgstr "Aquí encontrarás las opciones para configurar el módulo de comentarios según tus necesidades."
 
 #: zotonic_mod_comment/priv/templates/_comments_form.tpl:62
 msgid "Log on or sign up to comment"
@@ -8281,7 +8281,7 @@ msgstr "Comentarios recientes"
 
 #: zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:26
 msgid "Require all comments to be reviewed by a moderator before displaying them on the public website"
-msgstr "Requerir que todos los comentarios sean revisador por un moderador antes de mostrarlos en el sitio web público"
+msgstr "Exigir que un moderador revise todos los comentarios antes de mostrarlos en el sitio web público"
 
 #: zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:33
 msgid "Save Comment Form settings"
@@ -8306,16 +8306,16 @@ msgstr "No hay comentarios."
 
 #: zotonic_mod_comment/src/controllers/controller_admin_comments.erl:67
 msgid "You are not allowed to delete the comment."
-msgstr "No tiene permitido eliminar el comentario."
+msgstr "No tienes permiso para eliminar el comentario."
 
 #: zotonic_mod_comment/src/controllers/controller_admin_comments.erl:99
 msgid "You are not allowed to toggle the comment."
-msgstr "No tiene permitido activar el comentario."
+msgstr "No tienes permiso para cambiar el estado de publicación del comentario."
 
 #: zotonic_mod_comment/priv/templates/_comments_form.tpl:7
 #: zotonic_mod_comment/priv/templates/_comments_moderation.tpl:1
 msgid "Your comment has been saved and will be subject to moderation before it is displayed on the website"
-msgstr "Su comentario ha sido guardado y estará sujeto a moderación antes de que se muestre en el sitio web"
+msgstr "Tu comentario se ha guardado y se someterá a moderación antes de publicarse en el sitio web"
 
 #: zotonic_mod_comment/priv/templates/_admin_comments_toggledisplay.tpl:4
 #: zotonic_mod_comment/priv/templates/_admin_comments_toggledisplay.tpl:15
@@ -8325,7 +8325,7 @@ msgstr "publicar"
 #: zotonic_mod_comment/priv/templates/_admin_comments_toggledisplay.tpl:9
 #: zotonic_mod_comment/priv/templates/_admin_comments_toggledisplay.tpl:20
 msgid "unpublish"
-msgstr "anular la publicación de"
+msgstr "retirar de la publicación"
 
 #: zotonic_mod_contact/priv/templates/email_contact.tpl:6
 msgid "Hello, the contact form of"
@@ -8337,7 +8337,7 @@ msgstr "¡Gracias!"
 
 #: zotonic_mod_contact/priv/templates/contact.tpl:33
 msgid "Your message has been submitted! We’ll get in touch soon."
-msgstr "¡Su mensaje ha sido enviado! Pronto le contactaremos."
+msgstr "¡Tu mensaje se ha enviado! Nos pondremos en contacto contigo pronto."
 
 #: zotonic_mod_contact/priv/templates/email_contact.tpl:3
 msgid "contact form on"
@@ -8349,7 +8349,7 @@ msgstr "ha sido enviado."
 
 #: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:1
 msgid "Are you sure you want to delete the following content groups:"
-msgstr "Está seguro de que desea eliminar los siguientes grupos de contenidos:"
+msgstr "¿Estás seguro de que quieres eliminar los siguientes grupos de contenido?"
 
 #: zotonic_mod_content_groups/priv/templates/_admin_edit_sidebar_content_group.tpl:4
 msgid "Content Group"
@@ -8564,7 +8564,7 @@ msgstr "La nueva ubicación puede ser una ruta local o un URL completo. Dejar el
 
 #: zotonic_mod_custom_redirect/src/mod_custom_redirect.erl:139
 msgid "You are not allowed to change this."
-msgstr "No tiene permitido cambiar esto."
+msgstr "No tienes permiso para cambiar esto."
 
 #: zotonic_mod_development/src/mod_development.erl:693
 msgid "<i>Function name does not exist.</i>"
@@ -8796,11 +8796,11 @@ msgstr "Nombre de envío"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:230
 msgid "Dispatch rule debugging"
-msgstr "Depuración de las reglas de envió"
+msgstr "Depuración de las reglas de enrutamiento"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:64
 msgid "Download CSS and JavaScript files as separate files. Don’t combine them in one URL."
-msgstr "Descargar los archivos CSS y JavaScript como archivos separados. No los combine en un solo URL."
+msgstr "Descargar los archivos CSS y JavaScript por separado. No combinarlos en una sola URL."
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:963
 msgid "Edit action"
@@ -8924,7 +8924,7 @@ msgstr "Se extiende"
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:40
 msgid "Final dispatch"
-msgstr "Envío final"
+msgstr "Enrutamiento final"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:181
 msgid "Find"
@@ -8932,7 +8932,7 @@ msgstr "Encontrar"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:162
 msgid "Find a template, check which template will be selected"
-msgstr "Encontrar una plantilla. Comprobar cual plantilla será seleccionada"
+msgstr "Buscar una plantilla y comprobar cuál se seleccionará"
 
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:19
 msgid "For more information see: { url }"
@@ -8948,7 +8948,7 @@ msgstr "Cambio forzado de protocolo a"
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:27
 msgid "Found matching dispatch rule"
-msgstr "Se encontró una regla de despacho que coincide con la regla"
+msgstr "Se ha encontrado una regla de enrutamiento coincidente"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:279
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:8
@@ -9008,7 +9008,7 @@ msgstr "Gráfico de dependencia en vivo de plantillas"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:76
 msgid "Live reload of changed CSS files. Reload page on change of templates or JavaScript."
-msgstr "Recarga en vivo de los archivos CSS cambiados. Recarga de la página de cambio de plantillas o JavaScript."
+msgstr "Recargar al instante los archivos CSS modificados. Recargar la página al cambiar las plantillas o el JavaScript."
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:282
 msgid "Live trace of function calls on the server (only for the admin user)."
@@ -9052,7 +9052,7 @@ msgstr "Inicie sesión como administrador para habilitar el inicio de sesión en
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:240
 msgid "Match a request URL, display matched dispatch rule."
-msgstr "Relacione a una petición de URL, mostrar la relaciones de las reglas de envió."
+msgstr "Comprobar una URL de solicitud y mostrar la regla de enrutamiento coincidente."
 
 #: zotonic_mod_development/priv/templates/_development_template_matches.tpl:5
 msgid "Matches with the same name are listed in module priority order."
@@ -9099,7 +9099,7 @@ msgstr "Sin datos."
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:55
 msgid "No matching dispatch rule found"
-msgstr "No se encuentra ninguna relación a las reglas de envió"
+msgstr "No se ha encontrado ninguna regla de enrutamiento coincidente"
 
 #: zotonic_mod_development/priv/templates/_development_template_matches.tpl:21
 msgid "No matching templates found."
@@ -9191,7 +9191,7 @@ msgstr "Recompilar plantillas"
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:88
 msgid "Redirect"
-msgstr "Redireccionar"
+msgstr "Redirección"
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:34
 msgid "Reload the page"
@@ -9282,7 +9282,7 @@ msgstr "Iniciar rastreo"
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:25
 msgid "Start matching dispatch rules"
-msgstr "Empieza a emparejar las reglas de envío"
+msgstr "Iniciar la búsqueda de reglas de enrutamiento coincidentes"
 
 #: zotonic_mod_development/src/mod_development.erl:659
 msgid "Started logging to the console of your browser tab."
@@ -9343,7 +9343,7 @@ msgstr "Errores de sintaxis"
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:223
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:135
 msgid "Template"
-msgstr "Modelo"
+msgstr "Plantilla"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:159
 msgid "Template debugging"
@@ -9403,7 +9403,7 @@ msgstr "Esto verifica todas las plantillas para ver si hay plantillas incluidas 
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:66
 msgid "This resource is unknown or does not have a URI"
-msgstr "Se desconoce este recurso o no es un URI"
+msgstr "Este recurso es desconocido o no tiene un URI"
 
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:12
 msgid "This server uses browser launches only. Configure your host editor and path mapping below."
@@ -9419,7 +9419,7 @@ msgstr "Las herramientas y opciones que son útiles para el desarrollo del sitio
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:94
 msgid "Trace all database queries for the current session"
-msgstr "Rastrear todas las consultas a la base de datos del actual período de sesiones"
+msgstr "Rastrear todas las consultas a la base de datos de la sesión actual"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:286
 msgid "Trace function calls"
@@ -9489,13 +9489,13 @@ msgstr "Esperando datos de depuración..."
 
 #: zotonic_mod_development/src/support/z_development_dispatch.erl:49
 msgid "You are not allowed to use the dispatch debugging."
-msgstr "No tiene permitido utilizar la depuración de envío."
+msgstr "No tienes permiso para usar la depuración del enrutamiento."
 
 #: zotonic_mod_development/src/support/z_development_template.erl:48
 #: zotonic_mod_development/src/support/z_development_template.erl:71
 #: zotonic_mod_development/src/support/z_development_template.erl:88
 msgid "You are not allowed to use the template debugging."
-msgstr "No tiene permitido utilizar la depuración de plantilla."
+msgstr "No tienes permiso para usar la depuración de plantillas."
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:298
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:109
@@ -9509,7 +9509,7 @@ msgstr "No tiene permiso para acceder a las herramientas de desarrollo."
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:69
 msgid "found dispatch rule"
-msgstr "se encontró la regla de envío"
+msgstr "se ha encontrado una regla de enrutamiento"
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:80
 msgid "found no match"
@@ -9574,7 +9574,7 @@ msgstr "Cortar imagen"
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:16
 #: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:9
 msgid "Defaults to the summary of the media. Enter a single “-” to not display a caption."
-msgstr "Por defecto el resumen de los archivos multimedia. Introduzca un solo \"-\" para no mostrar un título."
+msgstr "Se usa el resumen del archivo multimedia de forma predeterminada. Introduce solo «-» para no mostrar ningún pie."
 
 #: zotonic_mod_editor_tinymce/priv/templates/_admin_configure_module.tpl:3
 msgid "Editor version"
@@ -9632,7 +9632,7 @@ msgstr "Pequeño"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:109
 msgid "Website. Leave empty for media link"
-msgstr "Sitio web. Deje vacío para enlace multimedia"
+msgstr "Sitio web. Deja el campo vacío para enlazar al archivo multimedia"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_admin_configure_module.tpl:6
 msgid "always use newest available"
@@ -9812,7 +9812,7 @@ msgstr "De derecha a izquierda"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:61
 msgid "Save and View"
-msgstr "Guardado y Vista"
+msgstr "Guardar y ver"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:56
 msgid "Split cell"
@@ -9877,7 +9877,7 @@ msgstr "Copia el nombre DNS en el portapapeles."
 
 #: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:7
 msgid "DKIM e-mail signing setup"
-msgstr "Configuración del registro del correo electrónico DKIM"
+msgstr "Configuración de la firma de correo electrónico DKIM"
 
 #: zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:16
 msgid "To complete the DKIM setup, add a TXT record to your domain’s DNS settings using the name and value below."
@@ -10056,11 +10056,11 @@ msgstr "Enviados a esta dirección"
 
 #: zotonic_mod_email_status/src/mod_email_status.erl:105
 msgid "Sorry, you are not allowed to block this email address."
-msgstr "Lo sentimos, no tiene permitido bloquear esta dirección de correo electrónico."
+msgstr "Lo sentimos, no tienes permiso para bloquear esta dirección de correo electrónico."
 
 #: zotonic_mod_email_status/src/mod_email_status.erl:91
 msgid "Sorry, you are not allowed to reset this email address."
-msgstr "Lo sentimos, no tiene permitido restablecer esta dirección de correo electronico."
+msgstr "Lo sentimos, no tienes permiso para restablecer esta dirección de correo electrónico."
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:79
 msgid "The block has been cleared and emails are being sent and received."
@@ -10068,7 +10068,7 @@ msgstr "Se ha eliminado el bloqueo y se están enviando y recibiendo correos ele
 
 #: zotonic_mod_email_status/src/mod_email_status.erl:100
 msgid "The email address has been blocked."
-msgstr "Esta dirección de correo electrónico ha sido bloqueda."
+msgstr "La dirección de correo electrónico se ha bloqueado."
 
 #: zotonic_mod_email_status/src/mod_email_status.erl:86
 msgid "The email error flag has been cleared."
@@ -10118,7 +10118,7 @@ msgstr "Esta dirección de correo electrónico es válida."
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:185
 msgid "Total send errors"
-msgstr "Errores enviados totales"
+msgstr "Total de errores de envío"
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:166
 msgid "Total/Status"
@@ -10187,7 +10187,7 @@ msgstr "Descargar todas las páginas en la colección"
 
 #: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:21
 msgid "Download all the pages matching the query"
-msgstr "Descargar todas las páginas que coinciden con los de la consulta"
+msgstr "Descargar todas las páginas que coinciden con la consulta"
 
 #: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:31
 msgid "Download as Event if the query returns events and you want to export for a calendar program."
@@ -10244,7 +10244,7 @@ msgstr "Desconectar de Facebook"
 
 #: zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:7
 msgid "Do you want to disconnect your Facebook account?"
-msgstr "¿Desea desconectar su cuenta de Facebook?"
+msgstr "¿Quieres desconectar tu cuenta de Facebook?"
 
 #: zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:20
 msgid "Log in with Facebook"
@@ -10256,7 +10256,7 @@ msgstr "Entra con Facebook"
 
 #: zotonic_mod_facebook/priv/templates/_logon_service.facebook.tpl:2
 msgid "Redirecting to Facebook."
-msgstr "Redireccionar a Facebook."
+msgstr "Redirigiendo a Facebook."
 
 #: zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:36
 msgid "Save Facebook Settings"
@@ -10283,11 +10283,11 @@ msgstr "No tienes permiso para cambiar la configuración de Facebook."
 
 #: zotonic_mod_facebook/priv/templates/_logon_extra_email_reset.tpl:2
 msgid "You have coupled your <strong>Facebook</strong> account."
-msgstr "Ha juntado su cuenta de <strong>Facebook</strong>."
+msgstr "Has vinculado tu cuenta de <strong>Facebook</strong>."
 
 #: zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:9
 msgid "Your Facebook Developer Dashboard"
-msgstr "Su tablero de desarrollador de Facebook"
+msgstr "Tu panel de desarrollador de Facebook"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:190
 msgid "After 1 month"
@@ -10307,7 +10307,7 @@ msgstr "Todos los archivos de nubes pueden ser movidos de vuelta al sistema de a
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:322
 msgid "All cloud files will be queued for download."
-msgstr "Todos los archivos de nube han sido agregados a la cola para descargar."
+msgstr "Todos los archivos de la nube se añadirán a la cola de descarga."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:279
 msgid "All files will be queued, uploads will start in the background within 10 minutes."
@@ -10347,12 +10347,12 @@ msgstr "Comprueba el servicio de almacenamiento y sus permisos de acceso. Las le
 
 #: zotonic_mod_filestore/src/mod_filestore.erl:584
 msgid "Cloud File Store"
-msgstr "Tienda de archivos en la nube"
+msgstr "Almacenamiento de archivos en la nube"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:3
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:12
 msgid "Cloud File Store Configuration"
-msgstr "Configuración de la tienda de archivos en la nube"
+msgstr "Configuración del almacenamiento de archivos en la nube"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:219
 msgid "Cloud File Store Utilities and Statistics"
@@ -10392,12 +10392,12 @@ msgstr "Copiar archivos al disco del servidor"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:278
 msgid "Could not access the service, double check your settings and try again."
-msgstr "No se puede acceder al servicio, verifique doblemente su configuración e intente nuevamente."
+msgstr "No se ha podido acceder al servicio. Revisa la configuración y vuelve a intentarlo."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:204
 msgid "Could not access the service, double check your settings and try again. Make sure that API key has access rights to create and remove a (temporary) <code>-zotonic-filestore-test-file-</code> file."
-msgstr "No se puede acceder al servidor, verifique doblemente su configuración e intente nuevamente. Asegúrate de que la clave API tiene los derechos para crear y eliminar un archivo (temporal) <code>-zotonic-filestore-test-file-</code> file."
+msgstr "No se ha podido acceder al servicio. Revisa la configuración y vuelve a intentarlo. Asegúrate de que la clave API tiene permiso para crear y eliminar un archivo temporal llamado <code>-zotonic-filestore-test-file-</code>."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:16
 msgid "Currently Zotonic supports FTP, WebDAV and services that are compatible with the S3 file services API. These include:"
@@ -10405,11 +10405,11 @@ msgstr "Actualmente, Zotonic admite FTP, WebDAV y servicios compatibles con la A
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:251
 msgid "Delete Queue"
-msgstr "Eliminar cola"
+msgstr "Cola de eliminación"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:185
 msgid "Delete files from the cloud file store"
-msgstr "Eliminar archivos de la tienda de archivos en la nube"
+msgstr "Eliminar archivos del almacenamiento en la nube"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:70
 msgid "Delete interval"
@@ -10417,7 +10417,7 @@ msgstr "Eliminar intervalo"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:250
 msgid "Download Queue"
-msgstr "Descargar cola"
+msgstr "Cola de descarga"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:170
 msgid "Enable this to let the filestore act as a backup of  your local media files."
@@ -10507,7 +10507,7 @@ msgstr "Marcar como irrecuperable"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:226
 msgid "Media Resources"
-msgstr "Recursos para los medios de comunicación"
+msgstr "Recursos multimedia"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:296
 msgid "Move all local files to the remote storage"
@@ -10683,7 +10683,7 @@ msgstr "Los archivos sin resolver aparecen ordenados de mayor a menor antigüeda
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:249
 msgid "Upload Queue"
-msgstr "Cargar Cola"
+msgstr "Cola de subida"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:159
 msgid "Upload new media files to the cloud file store"
@@ -10710,7 +10710,7 @@ msgstr "Sí, conservar los archivos locales después de cargarlos"
 #: zotonic_mod_filestore/src/support/filestore_admin.erl:95
 #: zotonic_mod_filestore/src/support/filestore_admin.erl:102
 msgid "You are not allowed to change these settings."
-msgstr "No tiene permitido cambiar estas configuraciones."
+msgstr "No tienes permiso para cambiar estos ajustes."
 
 #: zotonic_mod_filestore/src/support/filestore_admin.erl:126
 msgid "You are not allowed to use this."
@@ -10718,7 +10718,7 @@ msgstr "No está permitido usar esto."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:14
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
-msgstr "Zotonic puede almacenar archivos cargados y redimensionados en la nube. Aquí puede configurar la ubicación y las claves de accecso para el servicio en la nube."
+msgstr "Zotonic puede almacenar archivos subidos y redimensionados en la nube. Aquí puedes configurar la ubicación y las claves de acceso al servicio en la nube."
 
 #: zotonic_mod_fileuploader/src/mod_fileuploader.erl:150
 #: zotonic_mod_fileuploader/src/mod_fileuploader.erl:180
@@ -10735,7 +10735,7 @@ msgstr "Cambie la rotación, el recorte y el contraste de la imagen."
 
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:39
 msgid "Click the image to set the cropping center."
-msgstr "Click en la imagen para establecer el centro de cultivo."
+msgstr "Haz clic en la imagen para establecer el centro del recorte."
 
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:89
 msgid "Contrast"
@@ -10870,7 +10870,7 @@ msgstr "Solo los administradores pueden importar archivos CSV."
 
 #: zotonic_mod_import_csv/src/mod_import_csv.erl:187
 msgid "Please hold on while the file is importing. You will get a notification when it is ready."
-msgstr "Por favor espere mientras se importa el archivo. Recibirá una notificación cuando esté listo."
+msgstr "Espera mientras se importa el archivo. Recibirás una notificación cuando termine."
 
 #: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:24
 msgid "Progress will be reported in the <a href=\"{url}\">admin log</a> and with notifications in the admin."
@@ -11546,7 +11546,7 @@ msgstr "Recurso Zotonic: utiliza el importador de recursos nativo."
 
 #: zotonic_mod_import_wordpress/priv/templates/_admin_status.tpl:4
 msgid "Import WXR file"
-msgstr "Importe un archivo WXR"
+msgstr "Importar archivo WXR"
 
 #: zotonic_mod_import_wordpress/priv/templates/_admin_status.tpl:5
 msgid "Import a WordPress WXR export file into Zotonic."
@@ -11574,11 +11574,11 @@ msgstr "Todas las fechas se almacenan en UTC."
 
 #: zotonic_mod_l10n/src/support/l10n_date.erl:57
 msgid "Apr"
-msgstr "Abril"
+msgstr "abr."
 
 #: zotonic_mod_l10n/src/support/l10n_date.erl:61
 msgid "Aug"
-msgstr "Agosto"
+msgstr "ago."
 
 #: zotonic_mod_l10n/src/support/l10n_date.erl:24
 msgid "BCE"
@@ -11594,11 +11594,11 @@ msgstr "Cambiar la zona horaria cambiará en efecto el período de publicación 
 
 #: zotonic_mod_l10n/src/support/l10n_date.erl:65
 msgid "Dec"
-msgstr "Dec"
+msgstr "dic."
 
 #: zotonic_mod_l10n/src/support/l10n_date.erl:55
 msgid "Feb"
-msgstr "Febrero"
+msgstr "feb."
 
 #: zotonic_mod_l10n/priv/templates/_admin_l10n_config.tpl:24
 msgid "Fix timezone, show all dates in the above timezone."
@@ -11610,19 +11610,19 @@ msgstr "Viernes"
 
 #: zotonic_mod_l10n/priv/templates/admin_l10n.tpl:8
 msgid "Here you can set the default localization configurations."
-msgstr "Aquí puede establecer las configuraciones de localización por defecto."
+msgstr "Aquí puedes establecer la configuración regional predeterminada."
 
 #: zotonic_mod_l10n/src/support/l10n_date.erl:54
 msgid "Jan"
-msgstr "Enero"
+msgstr "ene."
 
 #: zotonic_mod_l10n/src/support/l10n_date.erl:60
 msgid "Jul"
-msgstr "Julio"
+msgstr "jul."
 
 #: zotonic_mod_l10n/src/support/l10n_date.erl:59
 msgid "Jun"
-msgstr "Junio"
+msgstr "jun."
 
 #: zotonic_mod_l10n/priv/templates/admin_l10n.tpl:3
 msgid "L10N Configuration"
@@ -11635,7 +11635,7 @@ msgstr "Localización"
 
 #: zotonic_mod_l10n/src/support/l10n_date.erl:56
 msgid "Mar"
-msgstr "Marzo"
+msgstr "mar."
 
 #: zotonic_mod_l10n/src/support/l10n_date.erl:29
 msgid "Monday"
@@ -11643,11 +11643,11 @@ msgstr "Lunes"
 
 #: zotonic_mod_l10n/src/support/l10n_date.erl:64
 msgid "Nov"
-msgstr "Noviembre"
+msgstr "nov."
 
 #: zotonic_mod_l10n/src/support/l10n_date.erl:63
 msgid "Oct"
-msgstr "Octubre"
+msgstr "oct."
 
 #: zotonic_mod_l10n/src/support/l10n_date.erl:34
 msgid "Saturday"
@@ -11655,7 +11655,7 @@ msgstr "Sábado"
 
 #: zotonic_mod_l10n/src/support/l10n_date.erl:62
 msgid "Sep"
-msgstr "Septiembre"
+msgstr "sept."
 
 #: zotonic_mod_l10n/src/support/l10n_date.erl:35
 msgid "Sunday"
@@ -11724,7 +11724,7 @@ msgstr "Desconectar de LinkedIn"
 
 #: zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:7
 msgid "Do you want to disconnect your LinkedIn account?"
-msgstr "¿Desea desconectar su cuenta de LinkedIn?"
+msgstr "¿Quieres desconectar tu cuenta de LinkedIn?"
 
 #: zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:20
 msgid "Log in with LinkedIn"
@@ -11740,7 +11740,7 @@ msgstr "Guardar configuración de LinkedIn"
 
 #: zotonic_mod_linkedin/src/mod_linkedin.erl:90
 msgid "Saved the LinkedIn settings."
-msgstr "Guardé la configuración de LinkedIn."
+msgstr "Se ha guardado la configuración de LinkedIn."
 
 #: zotonic_mod_linkedin/priv/templates/_admin_authentication_service.tpl:19
 #: zotonic_mod_linkedin/priv/templates/_admin_authentication_service.tpl:20
@@ -11749,23 +11749,23 @@ msgstr "Clave secreta"
 
 #: zotonic_mod_linkedin/priv/templates/_admin_authentication_service.tpl:26
 msgid "Use LinkedIn authentication"
-msgstr "Utilizar la autenticación de linkedIn"
+msgstr "Usar la autenticación de LinkedIn"
 
 #: zotonic_mod_linkedin/priv/templates/_admin_authentication_service.tpl:10
 msgid "You can find the application keys in"
-msgstr "Puede encontrar las claves de la aplicación en"
+msgstr "Puedes encontrar las claves de la aplicación en"
 
 #: zotonic_mod_linkedin/src/mod_linkedin.erl:92
 msgid "You don't have permission to change the LinkedIn settings."
-msgstr "No tiene permisos para cambiar la configuración de LinkedIn."
+msgstr "No tienes permiso para cambiar la configuración de LinkedIn."
 
 #: zotonic_mod_linkedin/priv/templates/_logon_extra_email_reset.tpl:2
 msgid "You have coupled your <strong>LinkedIn</strong> account."
-msgstr "Ha emparejado su cuenta <strong>LinkedIn</strong>."
+msgstr "Has vinculado tu cuenta de <strong>LinkedIn</strong>."
 
 #: zotonic_mod_linkedin/priv/templates/_admin_authentication_service.tpl:10
 msgid "Your LinkedIn Developer Network"
-msgstr "Su Red de Desarrollador LinkedIn"
+msgstr "Tu red de desarrolladores de LinkedIn"
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:116
 msgid "<ul>\n"
@@ -11791,7 +11791,7 @@ msgstr "<ul>\n"
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:156
 msgid "Bounce"
-msgstr "Reiniciar"
+msgstr "Mensaje devuelto"
 
 #: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:14
 msgid "Clear log"
@@ -11816,7 +11816,7 @@ msgstr "Las violaciones de Content-Security-Policy se comunican a un endpoint ab
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:146
 msgid "Debug"
-msgstr "Depurar"
+msgstr "Depuración"
 
 #: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:35
 msgid "Directive"
@@ -11873,7 +11873,7 @@ msgstr "Última política de seguridad comunicada:"
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:3
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:10
 msgid "Log messages"
-msgstr "Registrar mensajes"
+msgstr "Mensajes del registro"
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:32
 msgid "Log of all outgoing and incoming email. For every email we log different states."
@@ -11904,7 +11904,7 @@ msgstr "Mensajes registrados por el sistema y los módulos."
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:200
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:61
 msgid "No log messages."
-msgstr "No hay mensajes."
+msgstr "No hay mensajes de registro."
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:160
 msgid "Received"
@@ -11999,7 +11999,7 @@ msgstr "A"
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:70
 msgid "Toggle non people"
-msgstr "Cambiar a las personas que no son de la familia..."
+msgstr "Mostrar u ocultar recursos que no sean personas"
 
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:43
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:43
@@ -15144,7 +15144,7 @@ msgstr "La dirección de correo electrónico no coincide"
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:106
 msgid "Enter a password"
-msgstr "Ingrese contraseña"
+msgstr "Introduce una contraseña"
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:82
 msgid "Enter a username"
