@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-30 14:38\n"
+"PO-Revision-Date: 2026-10-30 15:39\n"
 "Last-Translator: \n"
 "Language-Team: English\n"
 "MIME-Version: 1.0\n"
@@ -572,7 +572,7 @@ msgstr "Exactly this category, no sub-categories"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:22
 msgid "Export edit rules"
-msgstr "Export edit rules"
+msgstr "Export draft rules"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:10
 msgid "File types follow the group hierarchy. Derived groups inherit the mime settings from their ancestor."
@@ -617,11 +617,11 @@ msgstr "Import"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:27
 msgid "Import edit rules..."
-msgstr "Import edit rules..."
+msgstr "Import draft rules..."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:30
 msgid "Import edit version of ACL rules"
-msgstr "Import edit version of ACL rules"
+msgstr "Import draft ACL rules"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:137
 msgid "Importing, the list of rules will refresh after importing."
@@ -745,7 +745,7 @@ msgstr "Permissions"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:46
 msgid "Please select a collaboration_group"
-msgstr "Please select a collaboration_group"
+msgstr "Please select a collaboration group"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:34
 msgid "Private"
@@ -908,7 +908,7 @@ msgstr "This can not be undone."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:7
 msgid "This page is a"
-msgstr "This page is a"
+msgstr "This page belongs to category"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:18
 msgid "This rule is managed by module"
@@ -1057,7 +1057,7 @@ msgstr "<em>Untitled</em>"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:14
 msgid "<strong>First</strong> also known as given name, forename or Christen name.<br/><strong>Middle</strong> often shortened to an initial like in <em>John D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch <em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family name or last name."
-msgstr "<strong>First</strong> also known as given name, forename or Christen name.<br/><strong>Middle</strong> often shortened to an initial like in <em>John D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch <em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family name or last name."
+msgstr "<strong>First name</strong>, also known as given name, forename or Christian name.<br/><strong>Middle name</strong>, often shortened to an initial, as in <em>John D. Rockefeller</em>.<br/><strong>Surname prefix</strong>, such as the Dutch <em>van, van de, der</em>.<br/><strong>Surname</strong>, also known as family name or last name."
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:123
 msgid "A copy that will remain connected so that a new version can be fetched."
@@ -1201,7 +1201,7 @@ msgstr "All pages"
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:38
 msgid "All sites have been flushed."
-msgstr "All sites have been flushed."
+msgstr "The caches of all sites have been cleared."
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:7
 msgid "Allocated"
@@ -1433,7 +1433,7 @@ msgstr "Close Sockets"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:134
 msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets."
-msgstr "Close all sockets from ip addresses which have over &gt; 250 open sockets."
+msgstr "Close all sockets from IP addresses with more than 250 open sockets."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:4
 msgid "Close panel"
@@ -6644,7 +6644,7 @@ msgstr "Go to the home page"
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:81
 #: zotonic_mod_authentication/priv/templates/logon.tpl:44
 msgid "Go to the your profile page"
-msgstr "Go to the your profile page"
+msgstr "Go to your profile page"
 
 #: zotonic_mod_authentication/priv/templates/sessions.tpl:104
 msgid "H:i:s"
@@ -10094,7 +10094,7 @@ msgstr "There are problems with this email address."
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:109
 msgid "There have been some problems but they have been cleared. This message will disappear as soon as an email has been received succesfully."
-msgstr "There have been some problems but they have been cleared. This message will disappear as soon as an email has been received succesfully."
+msgstr "There have been some problems but they have been cleared. This message will disappear as soon as an email has been received successfully."
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:47
 msgid "This email address has been blocked, no emails will be sent or received from this address."
