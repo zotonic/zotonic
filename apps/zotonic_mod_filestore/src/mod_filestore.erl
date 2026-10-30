@@ -342,7 +342,7 @@ for the configuration and statistics model. Storage requests use `s3filez`,
 -mod_title("File Storage").
 -mod_description("Store files on cloud storage services using FTP, S3 and WebDAV").
 -mod_prio(500).
--mod_schema(14).
+-mod_schema(15).
 -mod_provides([filestore]).
 -mod_depends([cron]).
 -mod_config([
