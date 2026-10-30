@@ -40,7 +40,7 @@
         {% endif %}
 
         {% if intent == "select" %}
-            <a href="#" class="btn btn-primary action-connect">{_ Link _}</a>
+            <a href="#" class="btn btn-primary action-connect">{_ Link selected page _}</a>
         {% elseif intent == "connect" and is_linkable %}
             <a href="#" class="btn btn-primary action-connect">{_ Connect _}</a>
         {% endif %}

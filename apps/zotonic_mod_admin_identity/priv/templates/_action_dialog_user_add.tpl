@@ -19,8 +19,8 @@
         </div>
         <div class="col-md-2">
             <div class="form-group label-floating">
-                <input class="form-control" type="text" id="{{ #name_surname_prefix }}" name="name_surname_prefix" value="" tabindex="2" autocomplete="additional-name" placeholder="{_ Sur. prefix _}">
-                <label class="control-label" for="{{ #name_surname_prefix }}">{_ Sur. prefix _}</label>
+                <input class="form-control" type="text" id="{{ #name_surname_prefix }}" name="name_surname_prefix" value="" tabindex="2" autocomplete="additional-name" placeholder="{_ Surname prefix _}">
+                <label class="control-label" for="{{ #name_surname_prefix }}">{_ Surname prefix _}</label>
             </div>
         </div>
         <div class="col-md-6">

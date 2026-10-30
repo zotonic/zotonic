@@ -44,7 +44,7 @@
 
                     {% if show_signup_name_prefix|default_if_none:true %}
                         <div class="form-group" id="signup_surname_prefix">
-                            <label for="surprefix" class="control-label">{_ Prefix _}</label>
+                            <label for="surprefix" class="control-label">{_ Surname prefix _}</label>
 
                             <input class="form-control" id="surprefix" name="surprefix" type="text" value="{{ props.name_surname_prefix|escape }}" autocomplete="additional-name">
                         </div>

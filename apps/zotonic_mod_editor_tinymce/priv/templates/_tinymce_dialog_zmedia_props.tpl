@@ -64,7 +64,7 @@
                     <div class="col-md-6">
                          {% block size %}
                          <div class="form-group">
-                              <label class="control-label">{_ Size _}</label>
+                              <label class="control-label">{_ Image display size _}</label>
                               <div class="controls">
                                    <div class="radio">
                                         <label>
@@ -92,7 +92,7 @@
                     <div class="col-md-12">
                          {% block link %}
                          <div class="form-group">
-                              <label class="control-label">{_ Link _}</label>
+                              <label class="control-label">{_ Link settings _}</label>
                               <div class="checkbox">
                                    <label>
                                         <input type="checkbox" name="link" {% if options.link %}checked{% endif %} value="link" id="a-link">

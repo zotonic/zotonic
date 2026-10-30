@@ -15,8 +15,8 @@
                 <label class="control-label" for="name_first">{_ First name _}</label>
             </div>
             <div class="form-group col-lg-2 col-md-2 label-floating">
-                <input class="form-control" id="name_surname_prefix" type="text" name="name_surname_prefix" value="{{ person.name_surname_prefix|escape }}" placeholder="{_ Sur. prefix _}">
-                <label class="control-label" for="name_surname_prefix">{_ Sur. prefix _}</label>
+                <input class="form-control" id="name_surname_prefix" type="text" name="name_surname_prefix" value="{{ person.name_surname_prefix|escape }}" placeholder="{_ Surname prefix _}">
+                <label class="control-label" for="name_surname_prefix">{_ Surname prefix _}</label>
             </div>
             <div class="form-group col-lg-5 col-md-5 label-floating">
                 <input class="form-control" id="name_surname" type="text" name="name_surname" value="{{ person.name_surname|escape }}" placeholder="{_ Surname _}">
@@ -78,8 +78,8 @@
 
         <div class="row">
             <div class="form-group col-lg-6 col-md-6 label-floating">
-                <input class="form-control" id="address_state" type="text" name="address_state" value="{{ person.address_state|escape }}" placeholder="{_ State _}">
-                <label class="control-label" for="address_state">{_ State _}</label>
+                <input class="form-control" id="address_state" type="text" name="address_state" value="{{ person.address_state|escape }}" placeholder="{_ State or province _}">
+                <label class="control-label" for="address_state">{_ State or province _}</label>
             </div>
         </div>
     </div>

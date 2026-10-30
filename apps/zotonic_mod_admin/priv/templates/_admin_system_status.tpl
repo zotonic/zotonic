@@ -73,7 +73,7 @@
                 <thead>
                     <tr>
                         <th>{_ Path _}</th>
-                        <th>{_ Size _}</th>
+                        <th>{_ Disk capacity _}</th>
                         <th>{_ Usage _}</th>
                     </tr>
                 </thead>
