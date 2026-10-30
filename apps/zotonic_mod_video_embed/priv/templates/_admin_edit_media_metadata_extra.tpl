@@ -28,7 +28,7 @@
     {% endif %}
     {% if medium.video_embed_published %}
         <tr>
-            <th>{_ Published _}</th>
+            <th>{_ Publication date _}</th>
             <td>{{ medium.video_embed_published|escape }}</td>
         </tr>
     {% endif %}

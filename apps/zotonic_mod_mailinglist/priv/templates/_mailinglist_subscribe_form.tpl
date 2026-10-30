@@ -50,7 +50,7 @@
 				</div>
 
 				<div class="form-group col-lg-2 col-md-2">
-					<label class="control-label" for="{{ #name_surname_prefix }}">{_ Prefix _}</label>
+					<label class="control-label" for="{{ #name_surname_prefix }}">{_ Surname prefix _}</label>
 					<div>
 						<input class="form-control" id="{{ #name_surname_prefix }}" type="text" name="name_surname_prefix" value="{{ rcpt.props.name_surname_prefix|default:id.name_surname_prefix|default:q.name_surname_prefix }}" />
 					</div>

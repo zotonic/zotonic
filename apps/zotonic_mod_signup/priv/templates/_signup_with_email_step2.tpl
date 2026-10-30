@@ -38,7 +38,7 @@
 
         <form id="signup_form_step2" action="postback">
             <div class="form-group">
-                <label for="signup-code-input" class="control-label">{_ Code _}</label>
+                <label for="signup-code-input" class="control-label">{_ Verification code _}</label>
                 
                 <input id="signup-code-input" class="form-control" autofocus type="text" name="code" autocomplete="one-time-code" placeholder="{_ Enter code _}" required>
             </div>

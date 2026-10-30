@@ -56,7 +56,7 @@
         {% endjavascript %}
         <div class="row">
             <div class="col-sm-6">
-                <label class="control-label">{_ From _}</label>
+                <label class="control-label">{_ Start date _}</label>
                 <div>
                     {% include "_edit_date.tpl" date=id.date_start name="date_start" is_end=0 date_is_all_day=id.date_is_all_day is_editable=id.is_editable timezone=id.tz %}
                 </div>

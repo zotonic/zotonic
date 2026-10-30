@@ -12,7 +12,7 @@
 		{% if not status.is_blocked %}
 			<a href="#" class="btn btn-danger btn-small pull-right" id="{{ #doblock }}"
 			   title="{_ Prevent sending email to, and receiving email from this address. _}">
-				{_ Block _}
+				{_ Block email address _}
 			</a>
 			{% if panel_id %}
 				{% wire id=#doblock
@@ -222,7 +222,7 @@
 								{% if is_allow_details %}
 									<th>{_ Template _}</th>
 								{% endif %}
-								<th>{_ From _}</th>
+								<th>{_ Sender _}</th>
 								<th>{_ Date _}</th>
 							</tr>
 						</thead>

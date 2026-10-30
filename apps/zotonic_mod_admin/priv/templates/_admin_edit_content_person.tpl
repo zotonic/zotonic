@@ -33,8 +33,8 @@
             <label class="control-label" for="name_middle">{_ Middle name _}</label>
         </div>
         <div class="form-group col-lg-2 col-md-2 label-floating">
-            <input class="form-control" id="name_surname_prefix" type="text" name="name_surname_prefix" value="{{ id.name_surname_prefix }}" placeholder="{_ Sur. prefix _}">
-            <label class="control-label" for="name_surname_prefix">{_ Sur. prefix _}</label>
+            <input class="form-control" id="name_surname_prefix" type="text" name="name_surname_prefix" value="{{ id.name_surname_prefix }}" placeholder="{_ Surname prefix _}">
+            <label class="control-label" for="name_surname_prefix">{_ Surname prefix _}</label>
         </div>
         <div class="form-group col-lg-4 col-md-4 label-floating">
             <input class="form-control" id="name_surname" type="text" name="name_surname" value="{{ id.name_surname }}" placeholder="{_ Surname _}">

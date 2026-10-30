@@ -117,8 +117,8 @@
 
 			<div class="row">
 				<div class="form-group col-lg-6 col-md-6 label-floating">
-					<input class="form-control" id="address_state" type="text" name="address_state" value="{{ id.address_state }}" placeholder="{_ State _}">
-					<label class="control-label" for="address_state">{_ State _}</label>
+					<input class="form-control" id="address_state" type="text" name="address_state" value="{{ id.address_state }}" placeholder="{_ State or province _}">
+					<label class="control-label" for="address_state">{_ State or province _}</label>
 				</div>
 			</div>
 		</div>
@@ -184,8 +184,8 @@
 
 			<div class="row">
 				<div class="form-group col-lg-6 col-md-6 label-floating">
-					<input class="form-control" id="mail_state" type="text" name="mail_state" value="{{ id.mail_state }}" placeholder="{_ State _}">
-					<label class="control-label" for="mail_state">{_ State _}</label>
+					<input class="form-control" id="mail_state" type="text" name="mail_state" value="{{ id.mail_state }}" placeholder="{_ State or province _}">
+					<label class="control-label" for="mail_state">{_ State or province _}</label>
 				</div>
 			</div>
 		</div>
@@ -262,8 +262,8 @@
 
 				<div class="row">
 					<div class="form-group col-lg-6 col-md-6 label-floating">
-						<input class="form-control" id="billing_state" type="text" name="billing_state" value="{{ id.billing_state }}" placeholder="{_ State _}">
-						<label class="control-label" for="billing_state">{_ State _}</label>
+						<input class="form-control" id="billing_state" type="text" name="billing_state" value="{{ id.billing_state }}" placeholder="{_ State or province _}">
+						<label class="control-label" for="billing_state">{_ State or province _}</label>
 					</div>
 				</div>
 			</div>

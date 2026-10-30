@@ -129,7 +129,7 @@
                 </th>
                 <th width="8%">{_ Message nr _}</th>
                 <th width="15%">{_ To _}</th>
-                <th width="15%">{_ From _}</th>
+                <th width="15%">{_ Sender _}</th>
                 <th width="5%">{_ Content _}</th>
                 <th width="5%">{_ Other _}</th>
                 <th width="15%">{_ Template _}</th>

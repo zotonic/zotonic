@@ -39,7 +39,7 @@
                         <th width="5%">{_ Editable _}</th>
                         <th width="5%">{_ Off _}</th>
                         <th width="20%">{_ Language _}</th>
-                        <th width="10%">{_ Code _}</th>
+                        <th width="10%">{_ Language code _}</th>
                         <th width="10%">{_ Region _}</th>
                         <th width="10%">{_ Script _}</th>
                         <th></th>

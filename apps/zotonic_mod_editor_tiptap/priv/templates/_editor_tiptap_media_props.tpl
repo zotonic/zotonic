@@ -23,7 +23,7 @@
             {% endblock %}
             {% block size %}
                 <div class="form-group">
-                    <label for="{{ #size }}">{_ Size _}</label>
+                    <label for="{{ #size }}">{_ Image display size _}</label>
                     <select id="{{ #size }}" class="form-control" name="size">
                         <option value="small" {% if options.size == 'small' %}selected{% endif %}>{_ Small _}</option>
                         <option value="middle" {% if options.size == 'middle' %}selected{% endif %}>{_ Medium _}</option>
