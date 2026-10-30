@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-30 17:20\n"
+"PO-Revision-Date: 2026-10-30 17:52\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -3770,7 +3770,7 @@ msgstr "Сторінка користувача"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:178
 msgid "Uses the Connections setting. Connected resources keep their subscriptions when disconnected from this page."
-msgstr ""
+msgstr "Використовує налаштування «З’єднання». Підключені ресурси зберігають свої підписки навіть після від’єднання від цієї сторінки."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:129
 msgid "Valid for:"
@@ -3810,7 +3810,7 @@ msgstr "Переглянути граф зв’язків"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:81
 msgid "View format (opens in a new tab)"
-msgstr ""
+msgstr "Формат перегляду (відкриється в новій вкладці)"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:17
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:28
@@ -4023,7 +4023,7 @@ msgstr "id:"
 
 #: zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
 msgid "in content group"
-msgstr ""
+msgstr "у групі матеріалів"
 
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:84
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:15
@@ -4131,7 +4131,7 @@ msgstr "Видалити всі сторінки"
 
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:39
 msgid "Delete categories and move their pages"
-msgstr ""
+msgstr "Видалити категорії та перемістити їхні сторінки"
 
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:112
 msgid "Delete is canceled, there are pages in the category."
@@ -4242,7 +4242,7 @@ msgstr "Скопіюйте шлях до файлу сертифіката в б
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:51
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:57
 msgid "Copy the certificate file to <code>{path}</code>."
-msgstr ""
+msgstr "Скопіюйте файл сертифіката в <code>{path}</code>."
 
 #: zotonic_mod_admin_config/src/mod_admin_config.erl:176
 msgid "Could not generate a new self-signed certificate."
@@ -4496,7 +4496,7 @@ msgstr "Перезапустіть браузер. Деякі програми �
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:52
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:58
 msgid "Run <code>{command}</code> and restart the browser."
-msgstr ""
+msgstr "Запустіть <code>{command}</code> і перезапустіть браузер."
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:125
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:126
@@ -4846,7 +4846,7 @@ msgstr "Обліковий запис користувача видалено."
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:9
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:52
 msgid "Display name"
-msgstr ""
+msgstr "Ім'я для відображення"
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:124
 msgid "Duplicate username, please choose another username."
@@ -5073,7 +5073,7 @@ msgstr "Адреса електронної пошти була перевіре
 
 #: zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:8
 msgid "The email address {email} was added to your personal information on {site}."
-msgstr ""
+msgstr "Адреса електронної пошти {email} була додана до ваших особистих даних на сайті {site}."
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:150
 msgid "The new username/ password has been set."
@@ -5222,7 +5222,7 @@ msgstr "Щоб додавати користувачів, потрібно бу�
 
 #: zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:25
 msgid "You received this email because verification of your email address was requested. You will not receive any additional emails because of this request."
-msgstr ""
+msgstr "Ви отримали цей лист, оскільки було подано запит на підтвердження вашої електронної адреси. Ви більше не отримаєте жодних листів у зв’язку з цим запитом."
 
 #: zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:12
 msgid "Your account name is"
@@ -5257,7 +5257,7 @@ msgstr "встановити ім'я користувача / пароль"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:307
 msgid "<em>Jaccard similarity</em> divides the number of content items using both keywords by the number using either keyword, counting each item once. <em>Smaller-set overlap</em> divides the shared content count by the content count for the less-used keyword. This helps reveal keywords that may be redundant or nested. Keywords used on very few content items can score highly, so use the minimum-uses filter when looking for meaningful patterns."
-msgstr ""
+msgstr "<em>Показник схожості Жаккарда</em> обчислюється шляхом ділення кількості елементів контенту, в яких використовуються обидва ключові слова, на кількість елементів, в яких використовується хоча б одне з них, причому кожен елемент враховується лише один раз. <em>Перекриття меншого набору</em> — це відношення кількості спільного контенту до кількості контенту для менш вживаного ключового слова. Це допомагає виявити ключові слова, які можуть бути надлишковими або вкладеними. Ключові слова, що використовуються у дуже невеликій кількості елементів контенту, можуть отримати високий бал, тому під час пошуку значущих закономірностей слід застосовувати фільтр мінімальної кількості вживань."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:68
 msgid "All content"
@@ -5289,11 +5289,11 @@ msgstr "У комірках вказано кількість елементів
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:208
 msgid "Cells show the shared content count as a percentage of all distinct content using either keyword."
-msgstr ""
+msgstr "У комірках відображається кількість спільного контенту у відсотках від усього унікального контенту, що містить будь-яке з цих ключових слів."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:206
 msgid "Cells show the shared content count as a percentage of the content count for the less-used keyword."
-msgstr ""
+msgstr "У комірках вказано кількість спільного контенту у відсотках від кількості контенту за менш вживаним ключовим словом."
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:54
 msgid "Content category"
@@ -5406,7 +5406,7 @@ msgstr "Дізнайтеся, які ключові слова використ�
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:97
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:273
 msgid "Shared content count"
-msgstr ""
+msgstr "Кількість спільного контенту"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:162
 msgid "Showing {shown} of {matched} keywords"
@@ -5634,11 +5634,11 @@ msgstr "Залежить"
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:28
 msgid "Do you still want to activate the module <b>{module}</b>?"
-msgstr ""
+msgstr "Ви все ще хочете активувати цей модуль <b>{module}</b>?"
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:11
 msgid "Do you still want to deactivate the module <b>{module}</b>?"
-msgstr ""
+msgstr "Ви все ще хочете деактивувати модуль <b>{module}</b>?"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:17
 msgid "Either they are not installed, or they are not compiled."
@@ -5646,7 +5646,7 @@ msgstr "Або вони не встановлені, або вони не ско
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:59
 msgid "Execution status"
-msgstr ""
+msgstr "Статус виконання"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:140
 msgid "Install the module’s model and data."
@@ -5663,7 +5663,7 @@ msgstr "У модулях відсутні залежності"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:74
 msgid "Modules shown:"
-msgstr ""
+msgstr "Показані модулі:"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:171
 msgid "No modules found"
@@ -5756,7 +5756,7 @@ msgstr "Всі підключення сторінок"
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:7
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:41
 msgid "Are you sure you want to delete the predicate “{title}”?"
-msgstr ""
+msgstr "Ви впевнені, що хочете видалити предикат «{title}»?"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edge_action.tpl:2
 msgid "Are you sure you want to remove the <strong>{{ predicate }}</strong>\n"
@@ -5786,7 +5786,7 @@ msgstr "Видалення скасовано: існують зв’язки з
 
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:31
 msgid "Delete predicate and update connections"
-msgstr ""
+msgstr "Видалити предикат та оновити з’єднання"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:85
 msgid "Do not find subjects using this predicate’s object titles."
@@ -5842,7 +5842,7 @@ msgstr "Вставте нові з’єднання перед наявними.
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:68
 msgid "Instead of a search box, this will show a list of all pages in the target categories selected above. At least one category must be selected."
-msgstr ""
+msgstr "Замість поля пошуку тут відобразиться список усіх сторінок у цільових категоріях, обраних вище. Необхідно вибрати принаймні одну категорію."
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:20
 #: zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:66
@@ -6185,7 +6185,7 @@ msgstr "Визначте, хто має використовувати двоф�
 
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:69
 msgid "Enable two-factor authentication"
-msgstr ""
+msgstr "Увімкнути двофакторну автентифікацію"
 
 #: zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:21
 msgid "Enable two-factor authentication..."
@@ -6372,7 +6372,7 @@ msgstr "Ви можете використовувати програми дво
 
 #: zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:1
 msgid "You must enable two-factor authentication now. Next time you sign in, you will need to enter a code generated by your authentication app."
-msgstr ""
+msgstr "Вам необхідно увімкнути двофакторну автентифікацію прямо зараз. Під час наступного входу в систему вам потрібно буде ввести код, згенерований вашим додатком для автентифікації."
 
 #: zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:11
 msgid "You need to be allowed to edit the system configuration to view or change the two-factor authentication configuration."
@@ -6698,7 +6698,7 @@ msgstr "Увійти"
 #: zotonic_mod_authentication/priv/templates/_logon_login_title.tpl:16
 #: zotonic_mod_authentication/priv/templates/logon.tpl:14
 msgid "Log in to {site}"
-msgstr ""
+msgstr "Увійти в {site}"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_title.tpl:6
 msgid "Log in with your existing {site} account to connect the accounts. You only have to do this once."
@@ -6784,7 +6784,7 @@ msgstr "Будь ласка, виберіть інший пароль, оскі�
 
 #: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:8
 msgid "Please confirm your password for <span>{site}</span>."
-msgstr ""
+msgstr "Будь ласка, підтвердьте свій пароль для <span>{site}</span>."
 
 #: zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:7
 msgid "Please enter a new password"
@@ -7014,7 +7014,7 @@ msgstr "Ви можете зв’язати обліковий запис на {
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:113
 msgid "You can enter the password that you have for {site}."
-msgstr ""
+msgstr "Ви можете ввести пароль, який у вас є для сайту {site}."
 
 #: zotonic_mod_authentication/priv/templates/logon_error/message.need_passcode.tpl:2
 msgid "You can find the code in your authentication App."
@@ -7032,7 +7032,7 @@ msgstr "Ви можете прочитати їх тут:"
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:9
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:18
 msgid "You have requested a new password for <a href=\"https://{hostname}/\">{hostname}</a>."
-msgstr ""
+msgstr "Ви подали запит на отримання нового пароля для <a href=\"https://{hostname}/\">{hostname}</a>."
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:99
 msgid "You have to share your email address to be able to log in."
@@ -7162,7 +7162,7 @@ msgstr "За замовчуванням резервні копії бази д�
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:12
 msgid "Changes from <strong>{from}</strong> to <strong>{to}</strong>."
-msgstr ""
+msgstr "Зміни від <strong>{from}</strong> до <strong>{to}</strong>."
 
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:51
 msgid "Check and possibly restore an earlier version of your page."
@@ -7323,7 +7323,7 @@ msgstr "Обов’язково збережіть пароль шифруван
 
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:75
 msgid "Previous versions"
-msgstr ""
+msgstr "Попередні версії"
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:54
 msgid "Recover incoming connections from other pages"
@@ -7497,7 +7497,7 @@ msgstr "Початкова категорія або група вмісту б�
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:5
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:19
 msgid "This version was saved on <strong>{date}</strong> by <strong>{author}</strong>."
-msgstr ""
+msgstr "Цю версію збережено <strong>{date}</strong>. Автор: <strong>{author}</strong>."
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:10
 msgid "This will overwrite your page with the contents of the backup file."
@@ -7543,7 +7543,7 @@ msgstr "Ви не маєте дозволу переглядати версії.
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:101
 msgid "You can find it in <a href=\"{url}\">System Configuration</a> or in the Zotonic configuration files."
-msgstr ""
+msgstr "Ви можете знайти це в розділі <a href=\"{url}\">«Конфігурація системи»</a> або у файлах конфігурації Zotonic."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:9
 msgid "You can have one backup per day of the week, older ones will be overwritten."
@@ -7661,7 +7661,7 @@ msgstr "Теги сумісності"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:130
 msgid "Completed"
-msgstr ""
+msgstr "Завершено"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:130
 msgid "Completion"
@@ -7696,7 +7696,7 @@ msgstr "Псевдонім типу donut"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:44
 msgid "Donut chart with data from an Erlang map"
-msgstr ""
+msgstr "Кільцева діаграма з даними зі структури map в Erlang"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:81
 msgid "East"
@@ -7835,7 +7835,7 @@ msgstr "Березень"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:153
 msgid "Market share"
-msgstr ""
+msgstr "Частка ринку"
 
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:114
 #: zotonic_mod_l10n/src/support/l10n_date.erl:43
@@ -8292,11 +8292,11 @@ msgstr "скасувати публікацію"
 
 #: zotonic_mod_contact/priv/templates/email_contact.tpl:3
 msgid "Contact form on {site}"
-msgstr ""
+msgstr "Контактна форма на {site}"
 
 #: zotonic_mod_contact/priv/templates/email_contact.tpl:6
 msgid "Hello, the contact form on “{site}” has been submitted."
-msgstr ""
+msgstr "Вітаємо, контактна форма на сайті «{site}» була надіслана."
 
 #: zotonic_mod_contact/priv/templates/contact.tpl:32
 msgid "Thank you!"
@@ -8316,7 +8316,7 @@ msgstr "Група контенту"
 
 #: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:37
 msgid "Delete content groups and move their pages"
-msgstr ""
+msgstr "Видалити групи вмісту та перемістити їхні сторінки"
 
 #: zotonic_mod_content_groups/src/mod_content_groups.erl:101
 msgid "Delete is canceled, there are pages in this content group."
@@ -8632,7 +8632,7 @@ msgstr "Натисніть, щоб перезапустити"
 
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:30
 msgid "Code editor"
-msgstr ""
+msgstr "Редактор коду"
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:13
 msgid "Column"
@@ -9090,7 +9090,7 @@ msgstr "У контексті не знайдено жодного шаблон�
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:44
 msgid "No template syntax errors found."
-msgstr ""
+msgstr "Помилок у синтаксисі шаблону не виявлено."
 
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:422
 msgid "No traced parent templates"
@@ -9623,7 +9623,7 @@ msgstr "Вирівняти праворуч"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:58
 msgid "Apply changes"
-msgstr ""
+msgstr "Застосувати зміни"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:36
 msgid "Bold"
@@ -9965,7 +9965,7 @@ msgstr "Статус останньої помилки"
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:260
 msgid "Mail server message"
-msgstr ""
+msgstr "Повідомлення поштового сервера"
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:167
 msgid "Most Recent"
@@ -10065,7 +10065,7 @@ msgstr "Цю адресу електронної пошти заблокован
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:47
 msgid "This email address has been blocked. No emails will be sent to or received from this address."
-msgstr ""
+msgstr "Цю електронну адресу заблоковано. На неї не надсилатимуться листи, і листи з неї не прийматимуться."
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:93
 msgid "This email address is not valid."
@@ -10168,7 +10168,7 @@ msgstr "Експорт"
 #: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:65
 #: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:66
 msgid "Fields to export"
-msgstr ""
+msgstr "Поля для експорту"
 
 #: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:8
 msgid "Help about export"
@@ -10372,7 +10372,7 @@ msgstr "Видаліть файли з хмарного сховища файл�
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:251
 msgid "Deletion queue"
-msgstr ""
+msgstr "Черга видалення"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:250
 msgid "Download Queue"
@@ -10396,7 +10396,7 @@ msgstr "Сторінки зі списком помилок"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:70
 msgid "Extra deletion delay"
-msgstr ""
+msgstr "Додаткова затримка видалення"
 
 #: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:8
 msgid "Failed reads in the last 15 minutes:"
@@ -10986,7 +10986,7 @@ msgstr "Змінити користувача"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:32
 msgid "Check feed now"
-msgstr ""
+msgstr "Перевірити стрічку зараз"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:30
 msgid "Checking website for feeds…"
@@ -11133,7 +11133,7 @@ msgstr "Журнал активності каналу"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:44
 msgid "Feed checks"
-msgstr ""
+msgstr "Перевірки стрічки"
 
 #: zotonic_mod_import_feed/src/mod_import_feed.erl:569
 msgid "Feed deleted"
@@ -11220,7 +11220,7 @@ msgstr "Імпорт виконується з правами доступу ц�
 
 #: zotonic_mod_import_feed/src/models/m_import_feed.erl:476
 msgid "Invalid removal regexp on line {line}: {reason}"
-msgstr ""
+msgstr "Неправильний регулярний вираз для видалення у рядку {line}: {reason}"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_result.tpl:9
 msgid "Kept:"
@@ -11232,7 +11232,7 @@ msgstr "Тип"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:47
 msgid "Last feed check"
-msgstr ""
+msgstr "Остання перевірка стрічки"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:51
 msgid "Last processed"
@@ -11278,7 +11278,7 @@ msgstr "Нові події відображаються у верхній ча�
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:48
 msgid "Next feed check"
-msgstr ""
+msgstr "Наступна перевірка стрічки"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:21
 msgid "No activity for this feed, or access denied."
@@ -11310,7 +11310,7 @@ msgstr "Призупинити автоматичне імпортування"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:22
 msgid "Pause imports"
-msgstr ""
+msgstr "Призупинити імпорт"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:62
 msgid "Paused"
@@ -11326,7 +11326,7 @@ msgstr "Захищені ресурси та ресурси, які неможл
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_dialog.tpl:20
 msgid "Protected resources and resources you cannot delete will be kept. Deletable content shared with other feeds will also be deleted."
-msgstr ""
+msgstr "Захищені ресурси та ресурси, які неможливо видалити, будуть збережені. Вміст, який можна видалити та який було опубліковано в інших стрічках, також буде видалено."
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:33
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:39
@@ -11354,7 +11354,7 @@ msgstr "Ресурс"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:20
 msgid "Resume imports"
-msgstr ""
+msgstr "Відновити імпорт"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:167
 msgid "Save & refetch deleted"
@@ -11390,7 +11390,7 @@ msgstr "Вибрати користувача"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:7
 msgid "Settings for importing"
-msgstr ""
+msgstr "Налаштування імпорту"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:48
 msgid "Source identity"
@@ -11402,7 +11402,7 @@ msgstr "Підпишіться на оновлення імпортованих 
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:123
 msgid "Subscriptions require non-authoritative imports and a source that supports updates."
-msgstr ""
+msgstr "Для підписок потрібно, щоб імпортовані матеріали не були позначені як оригінальні, а джерело підтримувало оновлення."
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:37
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:101
@@ -11482,7 +11482,7 @@ msgstr "Користувач"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:15
 msgid "User account for imports"
-msgstr ""
+msgstr "Обліковий запис користувача для імпорту"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:32
 msgid "Uses credentials registered for the import user and destination host. Credentials are only sent over HTTPS."
@@ -11746,7 +11746,16 @@ msgid "<ul>\n"
 "        <li><b>Blocked</b>: the recipient’s email address is blocked, check the email address status</li>\n"
 "                                            <li><b>Received</b>: a remote mailer sent email to us</li>\n"
 "              </ul>"
-msgstr ""
+msgstr "<ul>\n"
+"                                            <li><b>Відправлення</b>: електронний лист надсилається до віддаленого поштового сервера</li>\n"
+"                           <li><b>Надісланий</b>: електронний лист надіслано до віддаленого поштового сервера</li>\n"
+"      <li><b>Передано через ретранслятор</b>: віддалений поштовий сервер повідомляє, що електронний лист передано на наступний сервер</li>\n"
+"                                            <li><b>Повернення листа</b>: електронний лист повернувся з віддаленого поштового сервера, це фатальна помилка</li>\n"
+"                                            <li><b>Не вдалося</b>: віддалений поштовий сервер не прийняв наш лист, подальші спроби не здійснюватимуться</li>\n"
+"                                            <li><b>Повторна спроба доставки</b>: нам не вдалося надіслати електронний лист, спробуємо пізніше</li>\n"
+"        <li><b>Заблоковано</b>: адреса електронної пошти одержувача заблокована, перевірте статус адреси</li>\n"
+"                                            <li><b>Отримано</b>: віддалений поштовий сервер надіслав нам електронний лист</li>\n"
+"              </ul>"
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:156
 msgid "Bounce"
@@ -11779,7 +11788,7 @@ msgstr "Налагодження"
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:158
 msgid "Delivery retry"
-msgstr ""
+msgstr "Повторна спроба доставки"
 
 #: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:35
 msgid "Directive"
@@ -12070,7 +12079,7 @@ msgstr "Усі статуси"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:56
 msgid "Already queued: {count};"
-msgstr ""
+msgstr "Вже додано до черги: {count};"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:9
 msgid "Any page can be sent as a mailing. You can send a mailing from any edit page. On this page you can add or remove mailing lists and their recipients."
@@ -12078,11 +12087,11 @@ msgstr "Будь-яку сторінку можна надіслати як ро
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_cancel_confirm.tpl:1
 msgid "Are you sure you want to cancel the mailing to “{list}”?"
-msgstr ""
+msgstr "Ви впевнені, що хочете скасувати розсилку за списком «{list}»?"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:2
 msgid "Are you sure you want to delete the mailing list “{list}”?"
-msgstr ""
+msgstr "Ви впевнені, що хочете видалити список розсилки «{list}»?"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_test_public_alert.tpl:9
 msgid "Ask an administrator to change the test mailing list’s access settings."
@@ -12094,7 +12103,7 @@ msgstr "Стане доступним після завершення відпр
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:58
 msgid "Awaiting confirmation: {count};"
-msgstr ""
+msgstr "Очікується підтвердження: {count};"
 
 #: zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:13
 msgid "Before you will receive any further mail you need to confirm your subscription."
@@ -12175,7 +12184,7 @@ msgstr "Не вдалося додати одержувача."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:4
 msgid "Could not be sent: {count}"
-msgstr ""
+msgstr "Не вдалося надіслати: {count}"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_count_error.tpl:9
 msgid "Could not count the eligible recipients. The list query may have taken too long. Go back and try again, or ask an administrator to check the mailing list."
@@ -12298,7 +12307,7 @@ msgstr "Редагувати одержувача"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:64
 msgid "Eligible for delivery"
-msgstr ""
+msgstr "Може отримувати розсилку"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:9
 msgid "Eligible recipients will be counted in the review step."
@@ -12320,11 +12329,11 @@ msgstr "Підписка на розсилку електронною пошто
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:9
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_summary.tpl:10
 msgid "Emails processed: {processed} / {selected}"
-msgstr ""
+msgstr "Оброблені електронні листи: {processed} / {selected}"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:150
 msgid "Emails waiting to be sent: {count}."
-msgstr ""
+msgstr "Листи, що чекають на відправлення: {count}."
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:60
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:85
@@ -12356,7 +12365,7 @@ msgstr "Виключено"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:5
 msgid "Excluded: {count}"
-msgstr ""
+msgstr "Не включено: {count}"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:44
 msgid "Externally managed list &mdash; no unsubscribe/subscribe links"
@@ -12424,7 +12433,7 @@ msgstr "Тут ви можете редагувати аргументи пош�
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:28
 msgid "If their preferred language is unavailable or not set, use <strong>{language}</strong>."
-msgstr ""
+msgstr "Якщо бажана мова недоступна або не вказана, використовуйте <strong>{language}</strong>."
 
 #: zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:24
 msgid "If you don’t want to receive any mail then please ignore this message."
@@ -12511,7 +12520,7 @@ msgstr "Список адресатів"
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:8
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:12
 msgid "Mailing list recipients: {title}"
-msgstr ""
+msgstr "Адресати списку розсилки: {title}"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:12
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7
@@ -12566,7 +12575,7 @@ msgstr "Листи надсилаються на адресу:"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:13
 msgid "Mailings of page: <strong>{title}</strong>"
-msgstr ""
+msgstr "Розсилки зі сторінки: <strong>{title}</strong>"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:9
 msgid "Manage mailing lists"
@@ -13013,7 +13022,7 @@ msgstr "Виберіть..."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:16
 msgid "Selected recipients: {count}."
-msgstr ""
+msgstr "Вибрані одержувачі: {count}."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:55
 msgid "Selection"
@@ -13111,7 +13120,7 @@ msgstr "Відправте розсилку прямо зараз."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:18
 msgid "Send the {language} version."
-msgstr ""
+msgstr "Надішліть мовну версію: {language}."
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:31
 msgid "Send this page immediately to the test mailing list. The page does not need to be published."
@@ -13204,11 +13213,11 @@ msgstr "«Надіслано» означає, що повідомлення п�
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:2
 msgid "Sent: <strong>{count}</strong>"
-msgstr ""
+msgstr "Надіслано: <strong>{count}</strong>"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:55
 msgid "Sent: {count};"
-msgstr ""
+msgstr "Надіслано: {count};"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:14
 msgid "Show all pages"
@@ -13282,7 +13291,7 @@ msgstr "Стан та хід виконання"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:57
 msgid "Still being retried: {count};"
-msgstr ""
+msgstr "Повторні спроби доставки тривають: {count};"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:131
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:135
@@ -13327,7 +13336,7 @@ msgstr "Передплатники, додані через форму підп�
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:45
 msgid "Subscription email: <b>{email}</b>"
-msgstr ""
+msgstr "Електронна адреса для підписки: <b>{email}</b>"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:33
 msgid "Target mailing list"
@@ -13351,11 +13360,11 @@ msgstr "Адреса електронної пошти для тестуванн
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:151
 msgid "Test email queued for {email}."
-msgstr ""
+msgstr "Тестовий лист у черзі для {email}."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_mailing_runs_panel.tpl:8
 msgid "Test email:"
-msgstr ""
+msgstr "Тестовий електронний лист:"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:163
 msgid "Test language"
@@ -13505,7 +13514,7 @@ msgstr "Установіть прапорець, якщо ви хочете, щ�
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:2
 msgid "Times shown in {timezone}."
-msgstr ""
+msgstr "Час вказано в часовому поясі {timezone}."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_task_language.tpl:4
 msgid "Unknown language"
@@ -13616,7 +13625,7 @@ msgstr "Очікування початку процесу відправлен�
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:3
 msgid "Waiting: {count}"
-msgstr ""
+msgstr "Очікування: {count}"
 
 #: zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:3
 msgid "Welcome to"
@@ -13640,7 +13649,7 @@ msgstr "Чому деякі одержувачі не відбираються"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:59
 msgid "Will not be sent: {count}."
-msgstr ""
+msgstr "Не буде надіслано: {count}."
 
 #: zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:113
 msgid "You are not allowed to add or enable recipients."
@@ -13829,7 +13838,7 @@ msgstr "Додати вгорі"
 
 #: zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:274
 msgid "Are you sure you want to remove <b>{title}</b> and all indented items below it?"
-msgstr ""
+msgstr "Ви впевнені, що хочете видалити <b>{title}</b> та всі розташовані нижче пункти з відступом?"
 
 #: zotonic_mod_menu/priv/templates/_admin_status.tpl:7
 msgid "Check all menu pages and add <i>hasmenupart</i> connections for all of the \n"
@@ -14123,7 +14132,7 @@ msgstr "Аутентифікація..."
 #: zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:88
 #: zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:89
 msgid "Authorization URL"
-msgstr ""
+msgstr "URL-адреса авторизації"
 
 #: zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:11
 msgid "Authorize"
@@ -14159,7 +14168,7 @@ msgstr "Клієнтський застосунок не знайдено або
 
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:42
 msgid "Content import"
-msgstr ""
+msgstr "Імпорт вмісту"
 
 #: zotonic_mod_oauth2/src/mod_oauth2.erl:165
 #: zotonic_mod_oauth2/src/mod_oauth2.erl:276
@@ -14926,11 +14935,11 @@ msgstr "Ідентифікатор перевірки Яндекс для веб
 
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:83
 msgid "You can find this ID in the tracking script. Its format is <strong>{format}</strong>."
-msgstr ""
+msgstr "Цей ідентифікатор можна знайти у скрипті відстеження. Його формат такий: <strong>{format}</strong>."
 
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:92
 msgid "You can find this ID on your <a href='{url}' rel='noopener noreferrer' target='_blank'>Google Tag Manager account page</a>. Its format is <strong>{format}</strong>."
-msgstr ""
+msgstr "Цей ідентифікатор можна знайти на <a href='{url}' rel='noopener noreferrer' target='_blank'>сторінці вашого облікового запису Google Tag Manager</a>. Його формат: <strong>{format}</strong>."
 
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:138
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:170
@@ -14959,11 +14968,11 @@ msgstr "Щомісячно"
 
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:48
 msgid "Page change frequency defined for category"
-msgstr ""
+msgstr "Частота оновлення сторінки, визначена для категорії"
 
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:43
 msgid "Page change frequency for sitemap"
-msgstr ""
+msgstr "Частота оновлення сторінок у карті сайту"
 
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:19
 msgid "Priority defined for category"
@@ -15997,7 +16006,7 @@ msgstr "Мені [age] років. Мені подобається [icecream=в�
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:98
 msgid "I am {age} years old. I like {flavor} ice cream and my favorite color is {color}."
-msgstr ""
+msgstr "Мені {age} років. Я люблю {flavor} морозиво, а мій улюблений колір — {color}."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:211
 msgid "If checked, then a confirmation email with the submitted answers can be sent to the respondent. For logged-in respondents, the known email address is used. For anonymous respondents, add a short text field with the label “email” and the validation set to “must be an email address”."
@@ -16394,11 +16403,11 @@ msgstr "Результат видалено."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:33
 msgid "Result downloads"
-msgstr ""
+msgstr "Завантаження результатів"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:20
 msgid "Result views"
-msgstr ""
+msgstr "Перегляд результатів"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:22
 #: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:19
@@ -17110,7 +17119,7 @@ msgstr "Ви переглянули всі тексти та виправили 
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:23
 msgid "Drag languages to define the preferred order. The first language that is visible to visitors will be the default language."
-msgstr ""
+msgstr "Перетягніть мови, щоб визначити бажаний порядок. Перша мова, яку бачать відвідувачі, стане мовою за замовчуванням."
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:146
 msgid "Dutch"
@@ -17416,7 +17425,7 @@ msgstr "Шведська"
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:24
 msgid "Texts can be edited in the admin for languages set to 'Visible to visitors' or 'Editable'."
-msgstr ""
+msgstr "Тексти можна редагувати в панелі адміністратора для мов зі статусом «Видно для відвідувачів» або «Можливість редагування»."
 
 #: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_sublanguage_note.tpl:3
 msgid "The golden rule when choosing a language is simplicity. Stick to the main language if you can; use a sub-language (adding region or script) when it adds useful distinguishing information."
@@ -17527,7 +17536,7 @@ msgstr "Використовувати мову за замовчуванням 
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:38
 msgid "Visible to visitors"
-msgstr ""
+msgstr "Видно для відвідувачів"
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:126
 msgid "When a text has no translation in the selected language, try the site default language before the other fallback languages."
@@ -17544,7 +17553,7 @@ msgstr "Без мови"
 #: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:44
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:44
 msgid "Writing system"
-msgstr ""
+msgstr "Система письма"
 
 #: zotonic_mod_translation/src/models/m_translation_tree.erl:152
 #: zotonic_mod_translation/src/models/m_translation_tree.erl:155
@@ -17764,7 +17773,7 @@ msgstr "Підписаний на наші сторінки"
 
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:78
 msgid "Subscription lease expires"
-msgstr ""
+msgstr "Термін дії підписки спливає"
 
 #: zotonic_mod_websub/src/filters/filter_websub_error.erl:44
 msgid "Subscription or unsubscription attempts stopped because the retry time limit was reached. Check the remote website and retry the subscription if needed."
@@ -18143,11 +18152,11 @@ msgstr "Ваш сайт готовий"
 
 #: zotonic_site_status/priv/templates/_site_action_confirm.tpl:2
 msgid "Are you sure you want to restart the site <b>{site}</b>?"
-msgstr ""
+msgstr "Ви впевнені, що хочете перезапустити сайт <b>{site}</b>?"
 
 #: zotonic_site_status/priv/templates/_site_action_confirm.tpl:4
 msgid "Are you sure you want to stop the site <b>{site}</b>?"
-msgstr ""
+msgstr "Ви впевнені, що хочете зупинити сайт <b>{site}</b>?"
 
 #: zotonic_site_status/priv/templates/status.tpl:25
 msgid "Commands"
