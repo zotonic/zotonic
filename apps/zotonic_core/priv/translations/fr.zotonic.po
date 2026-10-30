@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-30 11:05\n"
+"PO-Revision-Date: 2026-10-30 13:14\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -1698,6 +1698,10 @@ msgstr "Déconnecter"
 msgid "Discover media"
 msgstr "Découvrir un media"
 
+#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:76
+msgid "Disk capacity"
+msgstr "Capacité du disque"
+
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:69
 msgid "Disks"
 msgstr "Disques"
@@ -1950,6 +1954,7 @@ msgstr "Dossier"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:35
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:48
+#: zotonic_mod_base/priv/templates/directory_index.tpl:17
 msgid "File size"
 msgstr "Taille du fichier"
 
@@ -2040,12 +2045,6 @@ msgstr "Suivez les connexions et importez tout (copie complète)."
 #: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:18
 msgid "Follows the Connections option. Connected resources keep their subscriptions when disconnected from this page."
 msgstr "L'option « Connexions » apparaît ensuite. Les ressources connectées conservent leurs abonnements lorsqu'elles sont déconnectées de cette page."
-
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:59
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:225
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:132
-msgid "From"
-msgstr "De"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:5
 msgid "Function"
@@ -2188,10 +2187,8 @@ msgid "Latest modified texts"
 msgstr "Derniers textes modifiés"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:43
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:95
-#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:48
-msgid "Link"
-msgstr "Lien"
+msgid "Link selected page"
+msgstr "Lien vers la page sélectionnée"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:38
 msgid "Live query, send notifications when matching items are updated or inserted."
@@ -2767,9 +2764,7 @@ msgstr "Publier cette page"
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:21
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:52
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:69
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:33
 #: zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:44
-#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:31
 msgid "Published"
 msgstr "Publié"
 
@@ -3149,13 +3144,6 @@ msgstr "Affichage des pages auxquelles vous pouvez vous connecter en utilisant <
 msgid "Site Files Directory"
 msgstr "Répertoire des fichiers du site"
 
-#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:76
-#: zotonic_mod_base/priv/templates/directory_index.tpl:17
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:67
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:26
-msgid "Size"
-msgstr "Taille"
-
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:15
 msgid "Some disks are almost full."
 msgstr "Certains disques sont presque pleins."
@@ -3225,6 +3213,10 @@ msgstr "Trier par"
 msgid "Standard page block types"
 msgstr "Types de blocs de pages standard"
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:59
+msgid "Start date"
+msgstr "Date de début"
+
 #: zotonic_mod_admin/priv/templates/_admin_sort_header.event.tpl:2
 msgid "Starts"
 msgstr "Début"
@@ -3237,8 +3229,8 @@ msgstr "Début"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:266
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:81
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:82
-msgid "State"
-msgstr "Etat"
+msgid "State or province"
+msgstr "État ou province"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:11
 #: zotonic_mod_admin/src/mod_admin.erl:531
@@ -3315,15 +3307,6 @@ msgstr "Page importée avec succès depuis le serveur distant."
 msgid "Summary"
 msgstr "Résumé"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:36
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:37
-#: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:22
-#: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:23
-#: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:18
-#: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:19
-msgid "Sur. prefix"
-msgstr "Préfixe sur."
-
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:40
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:41
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:28
@@ -3333,6 +3316,17 @@ msgstr "Préfixe sur."
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:23
 msgid "Surname"
 msgstr "Nom de famille"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:36
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:37
+#: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:22
+#: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:23
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:53
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:47
+#: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:18
+#: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:19
+msgid "Surname prefix"
+msgstr "Préfixe du nom de famille"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:31
 msgid "Suspended"
@@ -9586,6 +9580,11 @@ msgstr "Résumé du média par défaut. Entrez un simple “-” pour ne pas aff
 msgid "Editor version"
 msgstr "Version éditeur"
 
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:67
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:26
+msgid "Image display size"
+msgstr "Taille d'affichage de l'image"
+
 #: zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:19
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:13
 msgid "Insert media"
@@ -9595,6 +9594,10 @@ msgstr "Insérer un média"
 #: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:30
 msgid "Large"
 msgstr "Grand"
+
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:95
+msgid "Link settings"
+msgstr "Paramètres des liens"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:99
 #: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:39
@@ -9735,6 +9738,10 @@ msgstr "Retrait"
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:49
 msgid "Insert internal link"
 msgstr "Insérer un lien interne"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:48
+msgid "Insert or edit link"
+msgstr "Insérer ou modifier un lien"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:49
 msgid "Insert or edit media"
@@ -9961,22 +9968,8 @@ msgid "Being sent"
 msgstr "Être envoyé"
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:15
-#: zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_hidden.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:4
-msgid "Block"
-msgstr "Bloc"
+msgid "Block email address"
+msgstr "Bloquer une adresse e-mail"
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:194
 msgid "Bounces"
@@ -10043,6 +10036,11 @@ msgstr "Activité récente des e-mails pour &lt;{email}&gt;"
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:241
 msgid "Returned by recipient"
 msgstr "Renvoyé par le destinataire"
+
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:225
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:132
+msgid "Sender"
+msgstr "Expéditeur"
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:244
 msgid "Sending blocked"
@@ -11369,6 +11367,12 @@ msgstr "Les ressources protégées et celles que vous ne pouvez pas supprimer so
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_dialog.tpl:20
 msgid "Protected resources and resources you cannot delete will be kept. Content shared with other feeds is included."
 msgstr "Les ressources protégées et celles que vous ne pouvez pas supprimer seront conservées. Cela inclut le contenu partagé avec d'autres flux."
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:33
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:39
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:31
+msgid "Publication date"
+msgstr "Date de publication"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:144
 msgid "Publisher refresh hints and retries after failures can extend this interval. Successful fetches reset failure backoff."
@@ -12798,11 +12802,6 @@ msgstr "Veuillez suivre <a href=\"{url}\">ce lien pour confirmer</a>, ou copiez 
 msgid "Please unsubscribe"
 msgstr "Veuillez vous désabonner"
 
-#: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:53
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:47
-msgid "Prefix"
-msgstr "Préfixe"
-
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:31
 msgid "Prepare recipients"
 msgstr "Préparer les destinataires"
@@ -12832,10 +12831,6 @@ msgstr "Livraisons précédentes"
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:149
 msgid "Progress"
 msgstr "Progression"
-
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:39
-msgid "Publication date"
-msgstr "Date de publication"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:23
 msgid "Publication start"
@@ -15110,11 +15105,6 @@ msgstr "pas dans le plan du site"
 msgid "A new verification code has been sent to your email address. Please check your inbox and spam folder."
 msgstr "Un nouveau code de vérification vous a été envoyé à votre adresse e-mail. Veuillez vérifier votre boîte de réception et votre dossier « Courrier indésirable »."
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:41
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:42
-msgid "Code"
-msgstr "Code"
-
 #: zotonic_mod_signup/priv/templates/signup_confirm.tpl:3
 #: zotonic_mod_signup/priv/templates/signup_confirm.tpl:21
 msgid "Confirm my account"
@@ -15283,6 +15273,10 @@ msgstr "Pour vous inscrire, vous devez accepter les conditions d'utilisation et 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:51
 msgid "Too many tries, you can try to signup again in an hour."
 msgstr "Vous avez effectué trop de tentatives. Vous pouvez réessayer de vous inscrire dans une heure."
+
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:41
+msgid "Verification code"
+msgstr "Code de vérification"
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:30
 msgid "We have sent a code to <strong>{email}</strong> to confirm your email address."
@@ -15803,6 +15797,23 @@ msgstr "Réponses aux questions fermées pour les répondants anonymes et connec
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:241
 msgid "Closed-question answers for anonymous respondents; all answers for logged-in respondents"
 msgstr "Réponses aux questions fermées pour les répondants anonymes ; toutes les réponses pour les répondants connectés."
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_hidden.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:4
+msgid "Content block"
+msgstr "Bloc de contenu"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:163
 msgid "Continue later"
@@ -17254,6 +17265,10 @@ msgstr "Traduction incomplète"
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:151
 msgid "Italian"
 msgstr "Italien"
+
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:42
+msgid "Language code"
+msgstr "Code de langue"
 
 #: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:75
 msgid "Language in URL"

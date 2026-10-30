@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-30 11:06\n"
+"PO-Revision-Date: 2026-10-30 13:15\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -1698,6 +1698,10 @@ msgstr "ยกเลิกการเชื่อมต่อ"
 msgid "Discover media"
 msgstr "ค้นพบสื่อ"
 
+#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:76
+msgid "Disk capacity"
+msgstr "ความจุของดิสก์"
+
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:69
 msgid "Disks"
 msgstr "ดิสก์"
@@ -1950,6 +1954,7 @@ msgstr "ไฟล์ / เนื้อหาสื่อ"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:35
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:48
+#: zotonic_mod_base/priv/templates/directory_index.tpl:17
 msgid "File size"
 msgstr "ขนาดไฟล์"
 
@@ -2040,12 +2045,6 @@ msgstr "ติดตามการเชื่อมต่อและนำเ
 #: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:18
 msgid "Follows the Connections option. Connected resources keep their subscriptions when disconnected from this page."
 msgstr "ตามตัวเลือก \"Connections\" ทรัพยากรที่เชื่อมต่อจะยังคงรักษาการสมัครสมาชิกไว้แม้เมื่อถูกตัดการเชื่อมต่อจากหน้านี้"
-
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:59
-#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:225
-#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:132
-msgid "From"
-msgstr "จาก"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:5
 msgid "Function"
@@ -2188,10 +2187,8 @@ msgid "Latest modified texts"
 msgstr "ข้อความที่แก้ไขล่าสุด"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:43
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:95
-#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:48
-msgid "Link"
-msgstr "ลิงค์"
+msgid "Link selected page"
+msgstr "ลิงก์ไปยังหน้าที่เลือก"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:38
 msgid "Live query, send notifications when matching items are updated or inserted."
@@ -2767,9 +2764,7 @@ msgstr "เผยแพร่หน้านี้"
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:21
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:52
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:69
-#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:33
 #: zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:44
-#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:31
 msgid "Published"
 msgstr "เผยแพร่แล้ว"
 
@@ -3149,13 +3144,6 @@ msgstr "การแสดงหน้าเว็บที่คุณสาม
 msgid "Site Files Directory"
 msgstr "ไดเรกทอรีไฟล์ไซต์"
 
-#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:76
-#: zotonic_mod_base/priv/templates/directory_index.tpl:17
-#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:67
-#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:26
-msgid "Size"
-msgstr "ขนาด"
-
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:15
 msgid "Some disks are almost full."
 msgstr "ดิสก์บางแผ่นใกล้เต็มแล้ว"
@@ -3225,6 +3213,10 @@ msgstr "เรียงตาม"
 msgid "Standard page block types"
 msgstr "ประเภทบล็อกหน้ามาตรฐาน"
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:59
+msgid "Start date"
+msgstr "วันที่เริ่ม"
+
 #: zotonic_mod_admin/priv/templates/_admin_sort_header.event.tpl:2
 msgid "Starts"
 msgstr "เริ่ม"
@@ -3237,8 +3229,8 @@ msgstr "เริ่ม"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:266
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:81
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:82
-msgid "State"
-msgstr "สถานะ"
+msgid "State or province"
+msgstr "รัฐหรือจังหวัด"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:11
 #: zotonic_mod_admin/src/mod_admin.erl:531
@@ -3315,15 +3307,6 @@ msgstr "นำเข้าเพจจากเซิร์ฟเวอร์ร
 msgid "Summary"
 msgstr "สรุป"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:36
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:37
-#: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:22
-#: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:23
-#: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:18
-#: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:19
-msgid "Sur. prefix"
-msgstr "สุร. คำนำหน้า"
-
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:40
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:41
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:28
@@ -3333,6 +3316,17 @@ msgstr "สุร. คำนำหน้า"
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:23
 msgid "Surname"
 msgstr "นามสกุล"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:36
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:37
+#: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:22
+#: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:23
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:53
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:47
+#: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:18
+#: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:19
+msgid "Surname prefix"
+msgstr "คำนำหน้าชื่อสกุล"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:31
 msgid "Suspended"
@@ -9586,6 +9580,11 @@ msgstr "ค่าเริ่มต้นของข้อมูลสรุป
 msgid "Editor version"
 msgstr "เวอร์ชันบรรณาธิการ"
 
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:67
+#: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:26
+msgid "Image display size"
+msgstr "ขนาดการแสดงภาพ"
+
 #: zotonic_mod_editor_tinymce/priv/templates/_editor.tpl:19
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:13
 msgid "Insert media"
@@ -9595,6 +9594,10 @@ msgstr "ใส่สื่อ"
 #: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:30
 msgid "Large"
 msgstr "ใหญ่"
+
+#: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:95
+msgid "Link settings"
+msgstr "การตั้งค่าลิงก์"
 
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:99
 #: zotonic_mod_editor_tiptap/priv/templates/_editor_tiptap_media_props.tpl:39
@@ -9735,6 +9738,10 @@ msgstr "ย่อหน้า"
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:49
 msgid "Insert internal link"
 msgstr "ใส่ลิงก์ภายใน"
+
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:48
+msgid "Insert or edit link"
+msgstr "เพิ่มหรือแก้ไขลิงก์"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:49
 msgid "Insert or edit media"
@@ -9961,22 +9968,8 @@ msgid "Being sent"
 msgstr "ถูกส่งไป"
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:15
-#: zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_hidden.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:4
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:4
-msgid "Block"
-msgstr "บล็อก"
+msgid "Block email address"
+msgstr "บล็อกที่อยู่อีเมล"
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:194
 msgid "Bounces"
@@ -10043,6 +10036,11 @@ msgstr "กิจกรรมอีเมลล่าสุดสำหรับ
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:241
 msgid "Returned by recipient"
 msgstr "ผู้รับคืน"
+
+#: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:225
+#: zotonic_mod_logging/priv/templates/admin_log_email.tpl:132
+msgid "Sender"
+msgstr "ผู้ส่ง"
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:244
 msgid "Sending blocked"
@@ -11369,6 +11367,12 @@ msgstr "ทรัพยากรที่ได้รับการคุ้ม
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_delete_dialog.tpl:20
 msgid "Protected resources and resources you cannot delete will be kept. Content shared with other feeds is included."
 msgstr "ทรัพยากรที่ได้รับการคุ้มครองและทรัพยากรที่คุณไม่สามารถลบได้จะยังคงอยู่ รวมถึงเนื้อหาที่แชร์ไปยังฟีดอื่นด้วย"
+
+#: zotonic_mod_import_feed/priv/templates/_admin_import_feed_preview.tpl:33
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:39
+#: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:31
+msgid "Publication date"
+msgstr "วันที่เผยแพร่"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:144
 msgid "Publisher refresh hints and retries after failures can extend this interval. Successful fetches reset failure backoff."
@@ -12798,11 +12802,6 @@ msgstr "โปรดทำตาม <a href=\"{url}\">ลิงก์นี้�
 msgid "Please unsubscribe"
 msgstr "กรุณายกเลิกการสมัคร"
 
-#: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:53
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:47
-msgid "Prefix"
-msgstr "คำนำหน้า"
-
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:31
 msgid "Prepare recipients"
 msgstr "เตรียมผู้รับ"
@@ -12832,10 +12831,6 @@ msgstr "การจัดส่งก่อนหน้านี้"
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:149
 msgid "Progress"
 msgstr "ความคืบหน้า"
-
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:39
-msgid "Publication date"
-msgstr "วันที่เผยแพร่"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:23
 msgid "Publication start"
@@ -15110,11 +15105,6 @@ msgstr "ไม่อยู่ในแผนผังเว็บไซต์"
 msgid "A new verification code has been sent to your email address. Please check your inbox and spam folder."
 msgstr "รหัสยืนยันใหม่ได้ถูกส่งไปยังที่อยู่อีเมลของคุณแล้ว กรุณาตรวจสอบในกล่องจดหมายเข้าและโฟลเดอร์สแปม"
 
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:41
-#: zotonic_mod_translation/priv/templates/admin_translation.tpl:42
-msgid "Code"
-msgstr "รหัส"
-
 #: zotonic_mod_signup/priv/templates/signup_confirm.tpl:3
 #: zotonic_mod_signup/priv/templates/signup_confirm.tpl:21
 msgid "Confirm my account"
@@ -15283,6 +15273,10 @@ msgstr "ในการลงทะเบียนคุณต้องยอม
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:51
 msgid "Too many tries, you can try to signup again in an hour."
 msgstr "พยายามมากเกินไป คุณสามารถลองสมัครใหม่ได้ในอีก 1 ชั่วโมง"
+
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:41
+msgid "Verification code"
+msgstr "รหัสยืนยัน"
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:30
 msgid "We have sent a code to <strong>{email}</strong> to confirm your email address."
@@ -15803,6 +15797,23 @@ msgstr "คำตอบสำหรับคำถามปิดสำหรั
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:241
 msgid "Closed-question answers for anonymous respondents; all answers for logged-in respondents"
 msgstr "คำตอบสำหรับคำถามแบบปิดของผู้ตอบแบบไม่ระบุตัวตน; คำตอบทั้งหมดสำหรับผู้ตอบที่เข้าสู่ระบบ"
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_hidden.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:4
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:4
+msgid "Content block"
+msgstr "บล็อกเนื้อหา"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:163
 msgid "Continue later"
@@ -17254,6 +17265,10 @@ msgstr "การแปลไม่สมบูรณ์"
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:151
 msgid "Italian"
 msgstr "อิตาลี"
+
+#: zotonic_mod_translation/priv/templates/admin_translation.tpl:42
+msgid "Language code"
+msgstr "รหัสภาษา"
 
 #: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:75
 msgid "Language in URL"
