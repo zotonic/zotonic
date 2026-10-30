@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-30 14:38\n"
+"PO-Revision-Date: 2026-10-30 15:39\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -933,7 +933,7 @@ msgstr "Cobalah sebuah kombinasi berbeda dari kategori dan kelompok konten."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:14
 msgid "Try rules..."
-msgstr "Mencoba aturan..."
+msgstr "Coba aturan..."
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:127
 msgid "Upload settings saved"
@@ -941,17 +941,17 @@ msgstr "Pengaturan unggahan disimpan"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:2
 msgid "Upload the ACL rules file that you previously exported. Note: all current rules will be <b>replaced</b> by the rule definition file that is uploaded."
-msgstr "Unggah berkas aturan ACL yang sebelumnya Anda mengekspor. Catatan: semua aturan saat ini akan <b>diganti</b> oleh berkas penentuan aturan yang diunggah."
+msgstr "Unggah berkas aturan ACL yang telah Anda ekspor sebelumnya. Catatan: semua aturan saat ini akan <b>diganti</b> dengan definisi aturan dalam berkas yang diunggah."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:2
 msgid "Use the following URL to test the access control rules before publishing them."
-msgstr "Menggunakan URL berikut untuk menguji aturan kontrol akses sebelum mempublikasikannya."
+msgstr "Gunakan URL berikut untuk menguji aturan kontrol akses sebelum menerbitkannya."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:980
 msgid "User groups"
-msgstr "Pengguna kelompok"
+msgstr "Grup pengguna"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:7
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:10
@@ -961,7 +961,7 @@ msgstr "Visibilitas"
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:41
 msgid "You are not allowed to move to this collaboration group."
-msgstr "Anda tidak diperbolehkan untuk pindah kedalam kolaborasi kelompok ini."
+msgstr "Anda tidak diizinkan memindahkan ke grup kolaborasi ini."
 
 #: zotonic_mod_acl_user_groups/src/support/admin_acl_rules.erl:58
 msgid "You are not allowed to perform this action"
@@ -973,22 +973,22 @@ msgstr "Anda tidak diizinkan untuk melihat halaman ini."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:4
 msgid "You can:"
-msgstr "Kamu dapat:"
+msgstr "Anda dapat:"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:88
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
 msgid "all"
-msgstr "sekalian"
+msgstr "semua"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:297
 msgid "delete (acl action)"
-msgstr "hapus (tindakan acl)"
+msgstr "hapus"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:296
 msgid "edit (acl action)"
-msgstr "ubah (tindakan acl)"
+msgstr "sunting"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:9
 msgid "in the group"
@@ -997,17 +997,17 @@ msgstr "dalam kelompok"
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:295
 msgid "insert (acl action)"
-msgstr "masukkan (tindakan acl)"
+msgstr "tambahkan"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:298
 msgid "link (acl action)"
-msgstr "tauntan (tindakan acl)"
+msgstr "tautkan"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:27
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:29
 msgid "manage own"
-msgstr "mengelola sendiri"
+msgstr "kelola konten sendiri"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:9
 msgid "send this URL to somebody else for testing"
@@ -1015,7 +1015,7 @@ msgstr "kirimkan URL ini ke orang lain untuk pengujian"
 
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:302
 msgid "use (acl action)"
-msgstr "gunakan (tindakan acl)"
+msgstr "gunakan"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:7
 msgid "use a private or incognito window in your browser"
@@ -1028,7 +1028,7 @@ msgstr "gunakan peramban lain (misalnya Chrome jika Anda sedang menggunakan Fire
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
 #: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:294
 msgid "view (acl action)"
-msgstr "lihat (tindakan acl)"
+msgstr "lihat"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:219
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:221
@@ -1057,7 +1057,7 @@ msgstr "<em>Tanpa Judul</em>"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:14
 msgid "<strong>First</strong> also known as given name, forename or Christen name.<br/><strong>Middle</strong> often shortened to an initial like in <em>John D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch <em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family name or last name."
-msgstr "<strong>Pertama</strong> juga dikenal sebagai nama, nama kecil atau nama Christen.<br/><strong>Tengah</strong> sering disingkat menjadi awal yang seperti di <em>John D. Rockefeller</em>.<br/><strong>Awalan nama belakang</strong> seperti belanda <em>van, van de, der</em>.<br/><strong>Nama keluarga</strong> juga dikenal sebagai nama keluarga atau nama terakhir."
+msgstr "<strong>Nama depan</strong> juga dikenal sebagai nama pemberian, nama kecil, atau nama baptis.<br/><strong>Nama tengah</strong> sering disingkat menjadi inisial, seperti pada <em>John D. Rockefeller</em>.<br/><strong>Awalan nama keluarga</strong> misalnya dalam bahasa Belanda <em>van, van de, der</em>.<br/><strong>Nama keluarga</strong> juga dikenal sebagai nama belakang."
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:123
 msgid "A copy that will remain connected so that a new version can be fetched."
@@ -1158,7 +1158,7 @@ msgstr "Menambahkan catatan"
 
 #: zotonic_mod_admin/src/mod_admin.erl:1124
 msgid "Added the connection to"
-msgstr "Menambahkan koneksi ke"
+msgstr "Koneksi telah ditambahkan ke"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:6
 msgid "Address"
@@ -1201,7 +1201,7 @@ msgstr "Semua Halaman"
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:38
 msgid "All sites have been flushed."
-msgstr "Semua situs telah dibilas."
+msgstr "Cache semua situs telah dikosongkan."
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:7
 msgid "Allocated"
@@ -1249,7 +1249,7 @@ msgstr "Predikat apa pun"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:155
 msgid "Anybody’s"
-msgstr "siapa pun"
+msgstr "Milik siapa pun"
 
 #: zotonic_mod_admin/priv/templates/_rsc_import_deleted_options.tpl:10
 msgid "Applies to the selected connection depth, including future updates. By default, manually deleted resources stay deleted; automatically removed dependent resources can be imported again."
@@ -1282,7 +1282,7 @@ msgstr "Apakah Anda yakin ingin keluar dari antarmuka admin?"
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_show_as.tpl:11
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:42
 msgid "Aside"
-msgstr "Selain"
+msgstr "Konten samping"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:70
 #: zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:4
@@ -1292,7 +1292,7 @@ msgstr "Media terlampir"
 #: zotonic_mod_admin/src/mod_admin.erl:522
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:41
 msgid "Auth"
-msgstr "Auth"
+msgstr "Autentikasi"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:222
 msgid "Authoritative"
@@ -1344,11 +1344,11 @@ msgstr "Alamat pengikatan"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:19
 msgid "Block name"
-msgstr "Blokir nama"
+msgstr "Nama blok"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_show_as.tpl:10
 msgid "Block quote"
-msgstr "Blokir kutipan"
+msgstr "Blok kutipan"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:36
 msgid "Buffered"
@@ -1360,7 +1360,7 @@ msgstr "Disimpan dalam cache"
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:47
 msgid "Caches have been flushed."
-msgstr "Cache telah memerah."
+msgstr "Cache telah dikosongkan."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:8
 msgid "Category name:"
@@ -1377,7 +1377,7 @@ msgstr "Ganti kategori"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:34
 msgid "Change the category of this page"
-msgstr "Mengubah kategori pada halaman ini"
+msgstr "Ubah kategori halaman ini"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:139
 msgid "Check all pages for embedded page references and add a <i>refers</i> connection for all of those references."
@@ -1393,7 +1393,7 @@ msgstr "Periksa halaman yang ingin Anda perbarui."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:10
 msgid "Choose a media item from this page to insert in the body text."
-msgstr "Memilih media item dari halaman ini untuk menyisipkan dalam tubuh teks."
+msgstr "Pilih item media dari halaman ini untuk disisipkan ke dalam isi teks."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:108
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:109
@@ -1472,7 +1472,7 @@ msgstr "Hubungkan"
 
 #: zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_page.tpl:9
 msgid "Connect a page"
-msgstr "Menghubungkan sebuah halaman"
+msgstr "Hubungkan halaman"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_sidebar_parts.tpl:27
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:162
@@ -1538,7 +1538,7 @@ msgstr "Tidak dapat terhubung ke situs web."
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:11
 msgid "Could not detect anything to import on that URL or embed code."
-msgstr "Tidak dapat mendeteksi apapun untuk mengimpor pada URL tersebut atau menanamkan kode."
+msgstr "Tidak ditemukan konten yang dapat diimpor pada URL atau kode sematan tersebut."
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:88
 msgid "Could not reload the site configuration, check the logs."
@@ -1658,7 +1658,7 @@ msgstr "Tugas telah dihapus."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:31
 msgid "Deleted."
-msgstr "Hapus."
+msgstr "Dihapus."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:38
 #: zotonic_mod_admin_merge/priv/templates/_confirm_merge.tpl:83
@@ -1745,7 +1745,7 @@ msgstr "Duplikat"
 #: zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:8
 #: zotonic_mod_admin/src/actions/action_admin_dialog_duplicate_rsc.erl:59
 msgid "Duplicate page"
-msgstr "Halaman duplikat"
+msgstr "Gandakan halaman"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:34
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:40
@@ -1822,7 +1822,7 @@ msgstr "Alamat surel untuk tampilan umum"
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:5
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media.tpl:13
 msgid "Embed"
-msgstr "Menanamkan"
+msgstr "Sematan"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:31
 msgid "Embed code will be sanitized for allowed sites and html."
@@ -1989,7 +1989,7 @@ msgstr "Filter pada kategori"
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:47
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:44
 msgid "Filter on content group"
-msgstr "Menyaring pada kelompok konten"
+msgstr "Filter berdasarkan grup konten"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:76
 msgid "Find Media"
@@ -2030,7 +2030,7 @@ msgstr "Nama depan"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:82
 msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
-msgstr "Siram semua aturan pengiriman URL, template - dan perpustakaan cache dan lainnya di memori cache data."
+msgstr "Bersihkan semua aturan perutean URL, cache templat dan pustaka, serta data lain yang disimpan dalam cache memori."
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:81
 msgid "Flush system caches"
@@ -2168,11 +2168,11 @@ msgstr "Bahasa konten media"
 
 #: zotonic_mod_admin/priv/templates/_admin_dashboard_events.tpl:3
 msgid "Latest modified events"
-msgstr "Peristiwa modifikasi perihal"
+msgstr "Acara yang terakhir diubah"
 
 #: zotonic_mod_admin/priv/templates/_admin_dashboard_locations.tpl:3
 msgid "Latest modified locations"
-msgstr "Modifikasi lokasi terbaru"
+msgstr "Lokasi yang terakhir diubah"
 
 #: zotonic_mod_admin/priv/templates/_admin_dashboard_media.tpl:2
 msgid "Latest modified media items"
@@ -2180,11 +2180,11 @@ msgstr "Butir media terbaru yang dimodifikasi"
 
 #: zotonic_mod_admin/priv/templates/_admin_dashboard_persons.tpl:2
 msgid "Latest modified persons"
-msgstr "Modifikasi orang terbaru"
+msgstr "Halaman orang yang terakhir diubah"
 
 #: zotonic_mod_admin/priv/templates/_admin_dashboard_texts.tpl:2
 msgid "Latest modified texts"
-msgstr "Modifikasi teks terbaru"
+msgstr "Teks yang terakhir diubah"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:43
 msgid "Link selected page"
@@ -2192,7 +2192,7 @@ msgstr "Tautan ke halaman yang dipilih"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:38
 msgid "Live query, send notifications when matching items are updated or inserted."
-msgstr "Tinggal query, mengirim pemberitahuan ketika item yang sesuai diperbarui atau dimasukkan."
+msgstr "Kueri langsung, kirim pemberitahuan saat item yang cocok diperbarui atau ditambahkan."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:2
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:17
@@ -2244,7 +2244,7 @@ msgstr "Utama"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:232
 msgid "Make"
-msgstr "Membuat"
+msgstr "Buat"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:64
 msgid "Make a duplicate of this page."
@@ -2252,7 +2252,7 @@ msgstr "Buatlah duplikat dari halaman ini."
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:98
 msgid "Make a new media item"
-msgstr "Membuat sebuah item media baru"
+msgstr "Buat item media baru"
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:124
 msgid "Make a new page"
@@ -2262,7 +2262,7 @@ msgstr "Buat sebuah halaman baru"
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:101
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:72
 msgid "Make a new page or media"
-msgstr "Membuat sebuah halaman baru atau media"
+msgstr "Buat halaman atau media baru"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:6
 #: zotonic_mod_survey/src/mod_survey.erl:657
@@ -2343,7 +2343,7 @@ msgstr "Media diperbarui."
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:2
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:43
 msgid "Memory"
-msgstr "Penyimpanan"
+msgstr "Memori"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:32
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:33
@@ -2352,7 +2352,7 @@ msgstr "Nama tengah"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:156
 msgid "Mine"
-msgstr "Tambang"
+msgstr "Milik saya"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:20
 msgid "Mirrored horizontally"
@@ -2373,7 +2373,7 @@ msgstr "Dipantulkan secara vertikal"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:21
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:22
 msgid "Mobile"
-msgstr "Mobile"
+msgstr "Telepon seluler"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:263
 msgid "Modification date, newest first"
@@ -2607,13 +2607,13 @@ msgstr "Halaman yang terkait dengan"
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:3
 #: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:231
 msgid "Page connections"
-msgstr "Halaman koneksi"
+msgstr "Koneksi halaman"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:26
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:47
 msgid "Page path"
-msgstr "Halaman path"
+msgstr "Jalur halaman"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:10
 msgid "Page referrers"
@@ -2670,7 +2670,7 @@ msgstr "Nomor telepon untuk faktur"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:8
 msgid "Pivot queue count size:"
-msgstr "Pivot antrian menghitung ukuran:"
+msgstr "Jumlah item dalam antrean pivot:"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:10
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:169
@@ -2707,7 +2707,7 @@ msgstr "Predikat"
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:28
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:131
 msgid "Preview"
-msgstr "Tinjauan"
+msgstr "Pratinjau"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:30
 msgid "Previous in category:"
@@ -2719,7 +2719,7 @@ msgstr "Lanjutkan dengan hati-hati:"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:20
 msgid "Protect"
-msgstr "Melindungi"
+msgstr "Lindungi"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:18
 msgid "Protect from deletion"
@@ -2791,7 +2791,7 @@ msgstr "Diterbitkan pada, terlama dulu"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:24
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:19
 msgid "Query"
-msgstr "Pertanyaan"
+msgstr "Kueri"
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:19
 msgid "Query results"
@@ -2803,16 +2803,16 @@ msgstr "Batas peternakan"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:94
 msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
-msgstr "Membangun kembali semua pencarian-indeks dengan menempatkan semua halaman dan data dari database di pengindeks antrian. Ini dapat mengambil waktu yang lama!"
+msgstr "Bangun ulang semua indeks pencarian dengan memasukkan semua halaman dan data dari basis data ke dalam antrean pengindeks. Proses ini dapat memakan waktu lama!"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:89
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:169
 msgid "Rebuild search indices"
-msgstr "Membangun kembali indeks pencarian"
+msgstr "Bangun ulang indeks pencarian"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:103
 msgid "Recalculate the numbering of the category tree. This can take a long time."
-msgstr "Menghitung ulang penomoran dari kategori pohon. Hal ini dapat memakan waktu yang lama."
+msgstr "Hitung ulang penomoran pohon kategori. Proses ini dapat memakan waktu lama."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:6
 msgid "Recent referrers"
@@ -2820,11 +2820,11 @@ msgstr "Perujuk terbaru"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:27
 msgid "Redirect to above website on page view"
-msgstr "Pengalihan ke atas website pada tampilan halaman"
+msgstr "Alihkan ke situs web di atas saat halaman dilihat"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:52
 msgid "Redirect to website on page view"
-msgstr "Arahkan ulang ke situs web pada tampilan halaman"
+msgstr "Alihkan ke situs web saat halaman dilihat"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:75
 msgid "Referrers"
@@ -2873,7 +2873,7 @@ msgstr "Memuat ulang akan menghapus semua perubahan yang belum disimpan di formu
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:27
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:29
 msgid "Remarks"
-msgstr "Menandai ulang"
+msgstr "Catatan"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:70
 msgid "Remote sandbox isolation and queue details are available on each runner’s dashboard."
@@ -2890,17 +2890,17 @@ msgstr "Hapus"
 
 #: zotonic_mod_admin/src/mod_admin.erl:1128
 msgid "Removed the connection to"
-msgstr "Menghapus koneksi ke"
+msgstr "Tujuan koneksi yang dihapus:"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:102
 msgid "Renumber category tree"
-msgstr "Memberi nomor kategori pohon"
+msgstr "Nomori ulang pohon kategori"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:67
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:95
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:232
 msgid "Replace"
-msgstr "Menggantikan"
+msgstr "Ganti"
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:92
 msgid "Replace current medium"
@@ -2912,7 +2912,7 @@ msgstr "Ubah Ukuran Tampilan Langsung"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_meta_features.tpl:9
 msgid "Resources in the <i>meta</i> category can have 'features': certain resource properties that decide what to show or hide on certain pages in the admin. If this box is empty, no features are enabled for this meta-resource."
-msgstr "Sumber daya dalam <i>meta</i> kategori dapat memiliki 'fitur': sumber daya yang tertentu yang sifat-sifat yang memutuskan apa untuk menyembunyikan atau menampilkan pada halaman tertentu di admin. Jika kotak ini kosong, tidak ada fitur yang diaktifkan untuk meta-sumber daya."
+msgstr "Sumber daya dalam kategori <i>meta</i> dapat memiliki 'fitur': properti sumber daya tertentu yang menentukan apa yang ditampilkan atau disembunyikan pada halaman tertentu di antarmuka admin. Jika kotak ini kosong, tidak ada fitur yang diaktifkan untuk sumber daya meta ini."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:85
 msgid "Retrieving status..."
@@ -2942,7 +2942,7 @@ msgstr "Berjalan"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:113
 msgid "Runs the schema install command from the site's module again."
-msgstr "Menjalankan skema menginstal perintah dari situs ini modul lagi."
+msgstr "Jalankan kembali perintah pemasangan skema dari modul situs."
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:118
 msgid "Runs the schema install for Zotonic core again."
@@ -2986,7 +2986,7 @@ msgstr "Isolasi sandbox tidak didukung pada sistem ini. Perintah media lokal dij
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:144
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88
 msgid "Save &amp; view"
-msgstr "Simpan &amp; tampikan"
+msgstr "Simpan dan lihat"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:4
@@ -3013,7 +3013,7 @@ msgstr "Cari"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:55
 msgid "Search indices rebuilt."
-msgstr "Pencarian indeks dibangun kembali."
+msgstr "Indeks pencarian telah dibangun ulang."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:5
 msgid "Search other media"
@@ -3021,7 +3021,7 @@ msgstr "Cari media lainnya"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:7
 msgid "Search query"
-msgstr "Pertanyaan penelusuran"
+msgstr "Kueri pencarian"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:44
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:77
@@ -3042,7 +3042,7 @@ msgstr "Lihat juga: <a href=\"https://zotonic.com/en/stable/ref/configuration/zo
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_depictions.tpl:2
 msgid "Select a connected image"
-msgstr "Pilih yang terhubung gambar"
+msgstr "Pilih gambar yang terhubung"
 
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:93
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:102
@@ -3162,7 +3162,7 @@ msgstr "Beberapa tugas sedang mencoba lagi.<br>Total kesalahan: {total}<br>Terti
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:194
 msgid "Something went wrong. Sorry."
-msgstr "Sesuatu yang salah. Maaf."
+msgstr "Maaf, terjadi kesalahan."
 
 #: zotonic_mod_admin/src/mod_admin.erl:855
 msgid "Sorry, could not handle this filename."
@@ -3266,7 +3266,7 @@ msgstr "Status"
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:58
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:59
 msgid "Street Line 1"
-msgstr "Jalan jalur 1"
+msgstr "Alamat jalan, baris 1"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:102
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:103
@@ -3277,7 +3277,7 @@ msgstr "Jalan jalur 1"
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:63
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:64
 msgid "Street Line 2"
-msgstr "Jalan Jalur 2"
+msgstr "Alamat jalan, baris 2"
 
 #: zotonic_mod_admin/src/mod_admin.erl:512
 msgid "Structure"
@@ -3346,7 +3346,7 @@ msgstr "Status sistem"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:8
 msgid "System administration"
-msgstr "Sistem administrasi"
+msgstr "Administrasi sistem"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:169
 msgid "Task queue"
@@ -3374,7 +3374,7 @@ msgstr "Template akan dikompilasi ulang."
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:31
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:116
 msgid "Test query"
-msgstr "Tes pertanyaan"
+msgstr "Uji kueri"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:41
 msgid "Text"
@@ -3398,7 +3398,7 @@ msgstr "Alamat penagihan hanya dapat dilihat oleh orang yang dapat mengedit hala
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:77
 msgid "The category tree is rebuilding. This can take a long time."
-msgstr "Kategori pohon adalah membangun kembali. Hal ini dapat memakan waktu yang lama."
+msgstr "Pohon kategori sedang dibangun ulang. Proses ini dapat memakan waktu lama."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:7
 msgid "The media runner configuration is invalid."
@@ -3438,7 +3438,7 @@ msgstr "Teks kueri kosong."
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:59
 msgid "The search index is rebuilding. Depending on the database size, this can take a long time."
-msgstr "Pencarian indeks pembangunan kembali. Tergantung pada ukuran database, hal ini dapat memakan waktu yang lama."
+msgstr "Indeks pencarian sedang dibangun ulang. Bergantung pada ukuran basis data, proses ini dapat memakan waktu lama."
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:86
 msgid "The site configuration has been reloaded."
@@ -3446,7 +3446,7 @@ msgstr "Konfigurasi situs telah dimuat ulang."
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:65
 msgid "The site’s data is being reinstalled. Watch the console for messages"
-msgstr "Situs data ini sedang diinstal ulang. Lihat konsol untuk pesan"
+msgstr "Data situs sedang dipasang ulang. Pantau konsol untuk melihat pesan."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:26
 msgid "The system has allocated more than the specified threshold of available memory, as reported by the underlying operating system."
@@ -3561,7 +3561,7 @@ msgstr "Halaman ini telah berubah. Perubahan yang Anda lakukan belum disimpan. S
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:9
 msgid "This page holds a collection of administrative options to perform certain tasks on this Zotonic installation."
-msgstr "Halaman ini memegang koleksi dari administratif pilihan untuk melakukan tugas-tugas tertentu pada instalasi Zotonic ini."
+msgstr "Halaman ini menyediakan opsi administrasi untuk menjalankan tugas tertentu pada instalasi Zotonic ini."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:11
 msgid "This page is able to connect to others. For example you can connect it to an actor or a brand."
@@ -3608,13 +3608,13 @@ msgstr "Judul"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish_view.tpl:9
 msgid "Toggle dropdown"
-msgstr "Beralih dropdown"
+msgstr "Buka/tutup menu tarik-turun"
 
 #: zotonic_mod_admin/priv/templates/_admin_menu.tpl:6
 #: zotonic_mod_authentication/priv/templates/sessions.tpl:12
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:18
 msgid "Toggle navigation"
-msgstr "Beralih navigasi"
+msgstr "Buka/tutup navigasi"
 
 #: zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:26
 msgid "Too many connections, only the first and last are shown."
@@ -3658,7 +3658,7 @@ msgstr "Nama yang unik"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:97
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:101
 msgid "Unique uri"
-msgstr "Unik uri"
+msgstr "URI unik"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:43
 msgid "Unlimited"
@@ -3784,12 +3784,12 @@ msgstr "Gunakan autocompleter untuk mencari media di situs ini."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:12
 msgid "Use the title of the base content for the display name of this person."
-msgstr "Gunakan judul dari isi dasar untuk menampilkan nama dari orang ini."
+msgstr "Gunakan judul konten dasar sebagai nama tampilan orang ini."
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:8
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:34
 msgid "Used"
-msgstr "Bekas"
+msgstr "Digunakan"
 
 #: zotonic_mod_admin/priv/templates/_admin_menu.tpl:68
 msgid "User page"
@@ -3868,13 +3868,13 @@ msgstr "Peringatan!"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_website.tpl:16
 msgid "Website for clicks on image"
-msgstr "Situs web untuk klik pada gambar"
+msgstr "Situs web yang dibuka saat gambar diklik"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:94
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload.tpl:25
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:22
 msgid "Website or Embed"
-msgstr "Situ web atau Embed"
+msgstr "Situs web atau sematan"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:62
 msgid "Work Directory"
@@ -3958,7 +3958,7 @@ msgstr "Kueri penelusuran Anda tidak valid. Harap perbaiki sebelum menyimpan."
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:21
 msgid "Zotonic Version"
-msgstr "Versi Zotonik"
+msgstr "Versi Zotonic"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:30
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:27
@@ -4091,7 +4091,7 @@ msgstr "konten sistem"
 
 #: zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:3
 msgid "undo"
-msgstr "membatalkan"
+msgstr "urungkan"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:35
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:59
@@ -4145,7 +4145,7 @@ msgstr "Kategori digunakan untuk mengelompokkan semua halaman. Setiap halaman te
 
 #: zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:3
 msgid "Category Hierarchy"
-msgstr "Kategori hirarki"
+msgstr "Hierarki kategori"
 
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:39
 #: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:37
@@ -4155,11 +4155,11 @@ msgstr "Hapus &amp; Pindah Halaman"
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:42
 #: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:40
 msgid "Delete All Pages"
-msgstr "Menghapus semua halaman"
+msgstr "Hapus semua halaman"
 
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:112
 msgid "Delete is canceled, there are pages in the category."
-msgstr "Menghapus dibatalkan, disana ada halaman-halaman di kategori ini."
+msgstr "Penghapusan dibatalkan karena masih ada halaman dalam kategori ini."
 
 #: zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:27
 msgid "Drag categories to the place where you want them in the hierarchy."
@@ -4168,11 +4168,11 @@ msgstr "Seret kategori ke posisi yang Anda inginkan dalam hierarki."
 #: zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:21
 #: zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:45
 msgid "How does this work?"
-msgstr "Bagaimana ini berkerja?"
+msgstr "Bagaimana cara kerjanya?"
 
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:17
 msgid "Move all pages in these categories to:"
-msgstr "Memindahkan semua halaman di kategori ini:"
+msgstr "Pindahkan semua halaman dalam kategori ini ke:"
 
 #: zotonic_mod_admin_category/src/mod_admin_category.erl:128
 #: zotonic_mod_content_groups/src/mod_content_groups.erl:119
@@ -4189,7 +4189,7 @@ msgstr "Tidak ada halaman dalam kategori ini."
 
 #: zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:24
 msgid "Use the <i class=\"glyphicon glyphicon-cog\"></i> button to add or remove categories."
-msgstr "Menggunakan <i class=\"glyphicon glyphicon-cog\"></i> tombol untuk menambah atau menghapus kategori."
+msgstr "Gunakan tombol <i class=\"glyphicon glyphicon-cog\"></i> untuk menambah atau menghapus kategori."
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:24
 msgid "A copy of all email is sent to"
@@ -4434,11 +4434,11 @@ msgstr "Di tab \"Otoritas\", impor berkas sertifikat dan tetapkan sebagai teperc
 
 #: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:88
 msgid "Only administrators can change the configuration."
-msgstr "Hanya administrasi yang dapat mengubah konfigurasi."
+msgstr "Hanya administrator yang dapat mengubah konfigurasi."
 
 #: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_delete.erl:64
 msgid "Only administrators can delete configurations."
-msgstr "Hanya administrasi yang dapat menghapus konfigurasi."
+msgstr "Hanya administrator yang dapat menghapus konfigurasi."
 
 #: zotonic_mod_admin_config/src/mod_admin_config.erl:181
 msgid "Only administrators can regenerate the self-signed certificate."
@@ -4446,7 +4446,7 @@ msgstr "Hanya administrator yang dapat membuat ulang sertifikat yang ditandatang
 
 #: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_new.erl:79
 msgid "Only an administrator can add configuration keys."
-msgstr "Hanya administrator yang dapat menambahkan tombol konfigurasi."
+msgstr "Hanya administrator yang dapat menambahkan kunci konfigurasi."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:63
 msgid "Open Settings, Privacy &amp; Security, Certificates, then View Certificates."
@@ -4482,7 +4482,7 @@ msgstr "Per gambar default yang lebih kecil dari 1 MB disematkan dalam pesan ema
 
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:1
 msgid "Please fill in the module, key and value for the new configuration key."
-msgstr "Silahkan isi modul, kunci dan nilai untuk konfigurasi baru kunci."
+msgstr "Isi modul, kunci, dan nilai untuk kunci konfigurasi baru."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:29
 msgid "Regenerate certificate"
@@ -4584,7 +4584,7 @@ msgstr "Konfigurasi sistem Zotonic diatur untuk menggunakan relai SMTP."
 
 #: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_new.erl:76
 msgid "The config key already exists, please choose another key name."
-msgstr "Config kunci sudah tersedia, silahkan pilih kunci nama yang lain."
+msgstr "Kunci konfigurasi sudah ada, pilih nama kunci lain."
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:148
 msgid "The default FROM address for emails. Defaults to"
@@ -4600,7 +4600,7 @@ msgstr "Nama host yang akan digunakan sebagai klien saat mengirimkan e-mail ke s
 
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:4
 msgid "This can't be undone. The configuration key will be lost forever."
-msgstr "Ini tidak bisa dibatalkan. Tombol konfigurasi akan hilang selamanya."
+msgstr "Tindakan ini tidak dapat dibatalkan. Kunci konfigurasi akan hilang selamanya."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:13
 msgid "This certificate is generated and signed by Zotonic. It will be used if no other certificates are available."
@@ -4813,7 +4813,7 @@ msgstr "Tambah pengguna"
 
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:39
 msgid "Also show persons without user account"
-msgstr "Juga menunjukkan orang-orang tanpa akun pengguna"
+msgstr "Tampilkan juga orang tanpa akun pengguna"
 
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_delete_username.tpl:2
 msgid "Are you sure you want to delete the username from"
@@ -4829,16 +4829,16 @@ msgstr "Apakah Anda yakin Anda ingin menghapus entri ini?"
 #: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:36
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:159
 msgid "Blocked"
-msgstr "Memblokir"
+msgstr "Diblokir"
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:129
 msgid "Changed the username."
-msgstr "Mengubah nama pengguna."
+msgstr "Nama pengguna telah diubah."
 
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_basics_user.tpl:14
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:12
 msgid "Click OK to log on as this user. You will be redirected to the home page if this user has no rights to access the admin system."
-msgstr "Klik OK untuk masuk sebagai pengguna. Anda akan diarahkan ke halaman rumah jika pengguna ini tidak memiliki hak untuk mengakses sistem admin."
+msgstr "Klik OK untuk masuk sebagai pengguna ini. Anda akan diarahkan ke beranda jika pengguna ini tidak memiliki hak akses ke sistem admin."
 
 #: zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:16
 msgid "Click on the link to confirm your email address. Copy the whole link and paste it in your browser if this doesn't work."
@@ -4872,7 +4872,7 @@ msgstr "Hapus nama pengguna"
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:103
 msgid "Deleted the user account."
-msgstr "Menghapus akun pengguna."
+msgstr "Akun pengguna telah dihapus."
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:124
 msgid "Duplicate username, please choose another username."
@@ -4911,11 +4911,11 @@ msgstr "Status Email"
 
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:7
 msgid "Enter a unique username and password. Usernames and passwords are case sensitive, so be careful when entering them."
-msgstr "Masukkan nama pengguna dan kata sandi yang unik. Nama pengguna dan kata sandi adalah hal sensitif, jadi hati-hati saat memasukkannya."
+msgstr "Masukkan nama pengguna yang unik dan kata sandi. Nama pengguna dan kata sandi membedakan huruf besar dan kecil, jadi berhati-hatilah saat memasukkannya."
 
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:21
 msgid "Every page/person can be made into a user on the edit page. The difference between a user and a normal page is only that the former has logon credentials attached to its page record."
-msgstr "Setiap halaman/orang dapat dibuat menjadi pengguna pada halaman edit. Perbedaan antara pengguna dan halaman normal adalah hanya bahwa mantan memiliki kredensial masuk yang terpasang ke halaman catatan."
+msgstr "Setiap halaman/orang dapat dijadikan pengguna pada halaman penyuntingan. Perbedaan antara pengguna dan halaman biasa hanyalah bahwa pengguna memiliki kredensial masuk yang terlampir pada rekaman halamannya."
 
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:9
 msgid "Give the name and the e-mail address of the new user. A <em>person</em> page will be created for this user."
@@ -5023,7 +5023,7 @@ msgstr "Hanya pengelola yang bisa menghapus nama pengguna."
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:109
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:155
 msgid "Only an administrator or the user him/herself can set a password."
-msgstr "Hanya pengelola atau pengguna yang bisa mengatur kata sandi."
+msgstr "Hanya administrator atau pengguna itu sendiri yang dapat mengatur kata sandi."
 
 #: zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:3
 msgid "Please verify your email address"
@@ -5050,13 +5050,13 @@ msgstr "Kirimkan e-mail selamat datang"
 #: zotonic_mod_admin_identity/src/mod_admin_identity.erl:269
 #: zotonic_mod_admin_identity/src/mod_admin_identity.erl:280
 msgid "Sent verification e-mail."
-msgstr "Dikirim verifikasi e-mail."
+msgstr "E-mail verifikasi telah dikirim."
 
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_basics_user.tpl:9
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:7
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:89
 msgid "Set username / password"
-msgstr "Setelan nama pengguna/kata sandi"
+msgstr "Atur nama pengguna / kata sandi"
 
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:97
@@ -5187,7 +5187,7 @@ msgstr "Pengguna"
 
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:17
 msgid "Users Overview"
-msgstr "Pengguna ikhtisar"
+msgstr "Ikhtisar pengguna"
 
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:21
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:44
@@ -5279,7 +5279,7 @@ msgstr "Nama pengguna Anda adalah:"
 
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:84
 msgid "set username / password"
-msgstr "mengatur nama pengguna / kata sandi"
+msgstr "atur nama pengguna / kata sandi"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:307
 msgid "<em>Jaccard similarity</em> divides the common content by all distinct content using either keyword. <em>Smaller-set overlap</em> divides it by the least-used keyword and helps reveal keywords that may be redundant or nested. Very small keyword sets can score highly, so use the minimum-uses filter when looking for meaningful patterns."
@@ -5488,13 +5488,13 @@ msgstr "Tambahkan bahasa yang hilang ke"
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:142
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:154
 msgid "Confirm merge"
-msgstr "Konfirmasi menggabungkan"
+msgstr "Konfirmasikan penggabungan"
 
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:100
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:107
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:116
 msgid "Depiction"
-msgstr "Gambaran"
+msgstr "Gambar perwakilan"
 
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:44
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:50
@@ -5506,7 +5506,7 @@ msgstr "Sunting halaman"
 
 #: zotonic_mod_admin_merge/priv/templates/admin_merge.tpl:9
 msgid "Find page to merge with:"
-msgstr "Cari halaman untuk bergabung dengan:"
+msgstr "Cari halaman untuk digabungkan:"
 
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:42
 msgid "Left"
@@ -5521,7 +5521,7 @@ msgstr "Gabungkan"
 #: zotonic_mod_admin_merge/priv/templates/_admin_edit_sidebar.tpl:8
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:28
 msgid "Merge pages"
-msgstr "Menggabungkan halaman"
+msgstr "Gabungkan halaman"
 
 #: zotonic_mod_admin_merge/priv/templates/admin_merge.tpl:12
 msgid "Merge two pages together. You can select with which page to merge and which page will remain after the merge."
@@ -5529,7 +5529,7 @@ msgstr "Gabungkan dua halaman sekalian. Anda dapat memilih halaman mana yang aka
 
 #: zotonic_mod_admin_merge/priv/templates/_admin_edit_sidebar.tpl:16
 msgid "Merge with another page …"
-msgstr "Bergabung dengan halaman lain …"
+msgstr "Gabungkan dengan halaman lain …"
 
 #: zotonic_mod_admin_merge/src/mod_admin_merge.erl:144
 msgid "Merging the two pages ..."
@@ -5537,7 +5537,7 @@ msgstr "Menggabungkan dua halaman ..."
 
 #: zotonic_mod_admin_merge/src/mod_admin_merge.erl:149
 msgid "No merge action specified."
-msgstr "Tidak ada penggabungan tindakan yang ditentukan."
+msgstr "Tidak ada tindakan penggabungan yang ditentukan."
 
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:48
 msgid "Right"
@@ -5565,7 +5565,7 @@ msgstr "Maaf, Anda tidak memiliki izin untuk menyunting halaman ini."
 
 #: zotonic_mod_admin_merge/src/mod_admin_merge.erl:128
 msgid "The loser is protected, unprotect the loser before merging."
-msgstr "Pecundang telah dilindungi, tidak melindungi pecundang sebelum penggabungan."
+msgstr "Halaman yang akan dihapus dilindungi. Hapus perlindungannya sebelum menggabungkan."
 
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:58
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:66
@@ -5578,7 +5578,7 @@ msgstr "Anda tidak diizinkan untuk memilih halaman ini dan dengan demikian mengh
 
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:61
 msgid "You are not allowed to select this page and thereby deleting page Right."
-msgstr "Anda tidak diizinkan untuk memilih halaman ini dan dengan demikian menghapus halaman yang benar."
+msgstr "Anda tidak diizinkan memilih halaman ini dan sekaligus menghapus halaman di sebelah kanan."
 
 #: zotonic_mod_admin_merge/src/mod_admin_merge.erl:104
 msgid "You cannot remove the admin user."
@@ -5600,7 +5600,7 @@ msgstr "belum diimplementasikan"
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:158
 msgid "Activate"
-msgstr "Aktifasi"
+msgstr "Aktifkan"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:54
 msgid "Activated"
@@ -5624,7 +5624,7 @@ msgstr "Hapus filter"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:149
 msgid "Configure"
-msgstr "Mengkonfigurasi"
+msgstr "Konfigurasikan"
 
 #: zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:133
 msgid "Could not find the module."
@@ -5638,7 +5638,7 @@ msgstr "Dependensi siklik"
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:34
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:153
 msgid "Deactivate"
-msgstr "Menonaktifkan"
+msgstr "Nonaktifkan"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:19
 msgid "Deactivate these modules if you are not using them, or check the installation of the system."
@@ -5684,7 +5684,7 @@ msgstr "Ketergantungan modul"
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:1
 msgid "Modules are missing dependencies"
-msgstr "Modul tidak memiliki dependensi"
+msgstr "Modul kekurangan dependensi"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:171
 msgid "No modules found"
@@ -5709,7 +5709,7 @@ msgstr "Menginstal ulang model data."
 #: zotonic_mod_admin_modules/priv/templates/_admin_status.tpl:3
 #: zotonic_mod_development/priv/templates/admin_development.tpl:219
 msgid "Rescan modules"
-msgstr "Pemindaian ulang modul"
+msgstr "Pindai ulang modul"
 
 #: zotonic_mod_admin_modules/priv/templates/_admin_status.tpl:4
 msgid "Rescanning will rebuild the index of all modules, actions, templates etc. It will also reload all dispatch rules."
@@ -5738,7 +5738,7 @@ msgstr "Maaf, Anda tidak diizinkan melakukan ini."
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:3
 msgid "The following modules will not start because they miss dependencies:"
-msgstr "Modul berikut tidak akan mulai karena melewatkan dependensi:"
+msgstr "Modul berikut tidak akan berjalan karena dependensi yang diperlukan tidak tersedia:"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:16
 msgid "The modules below are activated but could not be found."
@@ -5746,7 +5746,7 @@ msgstr "Modul di bawah ini diaktifkan tetapi tidak dapat ditemukan."
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:1
 msgid "There are modules depending on"
-msgstr "Ada modul yang tergantung"
+msgstr "Ada modul yang bergantung pada"
 
 #: zotonic_mod_admin_modules/src/controllers/controller_admin_module_manager.erl:79
 msgid "This module does not have a <tt>manage_schema/2</tt> function."
@@ -5763,7 +5763,8 @@ msgstr "Anda tidak diperbolehkan mengaktifkan atau menonaktifkan modul."
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:8
 msgid "Zotonic is a modular web development framework. Most functionality is encapsulated inside modules. A set of basic modules are shipped with the Zotonic distribution,\n"
 "            while others are externally developed. This page shows an overview of all modules which are currently known to this Zotonic installation."
-msgstr "Zotonic adalah framework pengembangan web modular. Sebagian besar fungsionalitas dienkapsulasi di dalam modul. Satu set modul dasar dikirim dengan distribusi Zotonik, sementara yang lainnya dikembangkan secara eksternal. Halaman ini menunjukkan ikhtisar semua modul yang saat ini diketahui instalasi Zotonic ini."
+msgstr "Zotonic adalah kerangka kerja pengembangan web modular. Sebagian besar fungsionalitas dikemas dalam modul. Sekumpulan modul dasar disertakan dalam distribusi Zotonic,\n"
+"            sementara modul lainnya dikembangkan secara eksternal. Halaman ini menampilkan ikhtisar semua modul yang saat ini dikenali oleh instalasi Zotonic ini."
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:74
 msgid "modules shown"
@@ -5802,7 +5803,7 @@ msgstr "Beta"
 
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:9
 msgid "Change the predicate on all existing page connections to:"
-msgstr "Mengubah predikat pada semua halaman yang sudah ada koneksi ke:"
+msgstr "Ubah predikat pada semua koneksi halaman yang ada menjadi:"
 
 #: zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:88
 msgid "Could not create the predicate."
@@ -5814,7 +5815,7 @@ msgstr "Hapus &amp; Ubah Koneksi"
 
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:34
 msgid "Delete All Connections"
-msgstr "Menghapus Semua Koneksi"
+msgstr "Hapus Semua Koneksi"
 
 #: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:117
 msgid "Delete is canceled, there are connections with this predicate."
@@ -6037,7 +6038,7 @@ msgstr "Terlalu banyak koneksi"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:29
 msgid "URI"
-msgstr "URl"
+msgstr "URI"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:65
 msgid "Use a list of checkboxes with titles when adding page connections."
@@ -10734,7 +10735,7 @@ msgstr "Ubah rotasi gambar, potong dan kontras."
 
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:39
 msgid "Click the image to set the cropping center."
-msgstr "Klik gambar untuk mengatur tanam pusat."
+msgstr "Klik gambar untuk mengatur titik pusat pemotongan."
 
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:89
 msgid "Contrast"
@@ -14818,7 +14819,7 @@ msgstr "JSON-LD khusus"
 
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:101
 msgid "Customize page slug"
-msgstr "Sesuaikan halaman slug"
+msgstr "Sesuaikan slug halaman"
 
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:31
 msgid "Description to include on every page"
@@ -14909,7 +14910,7 @@ msgstr "Kata kunci halaman"
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:22
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:24
 msgid "Page slug"
-msgstr "Halaman slug"
+msgstr "Slug halaman"
 
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:34
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:36
