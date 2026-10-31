@@ -38,6 +38,11 @@ These are Zotonic core conventions, not a universal formal or informal tone for 
 | Arabic `ar` | Clear standard Arabic, natural singular or impersonal phrasing; no artificial honorifics. |
 | Hebrew `he` | Natural impersonal or consistent singular phrasing, with context-sensitive inclusive wording. |
 | Thai `th` | Polite neutral คุณ where needed; avoid mechanically adding gendered polite particles. |
+| Japanese `ja` | Polite です/ます prose, with concise conventional action labels such as 保存 and 削除. Omit unnecessary pronouns. |
+| Czech `cs` | Polite plural instructions, e.g. vyberte/otevřete; lowercase váš. Use conventional infinitive action labels. |
+| Korean `ko` | Polite 합니다/하십시오 prose, with concise action labels such as 저장 and 삭제. Omit unnecessary pronouns. |
+| Vietnamese `vi` | Neutral bạn where needed; omit pronouns in concise instructions and action labels, e.g. Lưu/Xóa. |
+| Romanian `ro` | Polite plural instructions, e.g. faceți/puteți, and dvs. where needed. Keep action labels concise and idiomatic. |
 | English `en` | Direct, neutral you/your. |
 
 Separately maintained sites and modules may define their own preferences in project-local translation skills. Those exceptions apply to that project's strings, not automatically to this core catalog.
@@ -45,6 +50,7 @@ Separately maintained sites and modules may define their own preferences in proj
 ## Web interface constraints
 
 - Preserve variable names and placeholders exactly, including placeholders inside HTML. Preserve markup, links, escape sequences, and plural-form requirements while translating the surrounding text.
+- Preserve survey example tokens such as `[age]`, `[color]`, and `[icecream=vanilla|strawberry|chocolate|other]` in full, including names and option values inside the brackets.
 - Keep literal identifiers, protocol names, code, and URLs intact when they are not natural-language labels.
 - Labels appear in buttons, dialogs, tables, forms, and responsive layouts. Prefer concise natural wording; there is no universal character limit. Follow any limit supplied for an individual string.
 - For right-to-left languages, write natural RTL text and preserve embedded technical tokens and placeholders in their original order. Do not manually reverse text or add layout markup to compensate for direction.
