@@ -30,6 +30,63 @@ limitations under the License.
 
 // Lots of Love for LESS: http://mateuszkocz.github.io/3l/
 
+:root,
+[data-bs-theme="light"] {
+    --z-status-bg: #eee;
+    --z-status-text: #000;
+    --z-status-text-muted: #777;
+    --z-status-text-medium: #555;
+    --z-status-border: #d7d7d7;
+    --z-status-table-border: #fff;
+    --z-status-table-stopped-border: #eee;
+    --z-status-surface: #fff;
+    --z-status-primary: #0fa2db;
+    --z-status-primary-hover: #0d91c4;
+    --z-status-on-primary: #fff;
+    --z-status-running: #4CAF50;
+    --z-status-running-bg: #E8F5E9;
+    --z-status-retrying: #EF6C00;
+    --z-status-retrying-bg: #FFF3E0;
+    --z-status-stopped: #BDBDBD;
+    --z-status-stopped-bg: #fff;
+    --z-status-waiting: #00BCD4;
+    --z-status-waiting-bg: #fff;
+    --z-status-failed: #D84315;
+    --z-status-failed-bg: #FBE9E7;
+    --z-status-info-bg: #343434;
+    --z-status-info-text: #fff;
+    --z-status-error-text: #D84315;
+    --z-status-stopped-label-bg: #999;
+}
+
+[data-bs-theme="dark"] {
+    --z-status-bg: #1f2225;
+    --z-status-text: #e5e7eb;
+    --z-status-text-muted: #adb5bd;
+    --z-status-text-medium: #c7ced6;
+    --z-status-border: #495057;
+    --z-status-table-border: #343a40;
+    --z-status-table-stopped-border: #495057;
+    --z-status-surface: #2b3035;
+    --z-status-primary: #0fa2db;
+    --z-status-primary-hover: #1286b6;
+    --z-status-on-primary: #fff;
+    --z-status-running: #63d471;
+    --z-status-running-bg: #17351d;
+    --z-status-retrying: #ffb457;
+    --z-status-retrying-bg: #3b2814;
+    --z-status-stopped: #aeb7c0;
+    --z-status-stopped-bg: #2b3035;
+    --z-status-waiting: #46d9e8;
+    --z-status-waiting-bg: #12343a;
+    --z-status-failed: #ff8a72;
+    --z-status-failed-bg: #3a1f1b;
+    --z-status-info-bg: #2b3035;
+    --z-status-info-text: #e5e7eb;
+    --z-status-error-text: #ff8a72;
+    --z-status-stopped-label-bg: #6c757d;
+}
+
 $gray_base:              #000;
 $gray_darker:            lighten($gray_base, 13.5%); // #222
 $gray_dark:              lighten($gray_base, 20%);   // #333
@@ -43,30 +100,30 @@ $brand_info:            #5bc0de;
 $brand_warning:         #f0ad4e;
 $brand_danger:          #d9534f;
 
-$main_color:                $brand_primary;
-$main_color_hover:          darken($main_color, 5%);
-$color_palette_dark:        $gray_base;
-$color_running:             #4CAF50;
-$color_running_background:  #E8F5E9;
-$color_retrying:            #EF6C00;
-$color_retrying_background: #FFF3E0;
-$color_stopped:             #BDBDBD;
-$color_stopped_background:  #fff;
-$color_waiting:             #00BCD4;
-$color_waiting_background:  #fff;
-$color_failed:              #D84315;
-$color_failed_background:   #FBE9E7;
-$color_info_background:     #343434;
-$color_info_text:           #fff;
-$textColorError:            #D84315;
+$main_color:                var(--z-status-primary, #0fa2db);
+$main_color_hover:          var(--z-status-primary-hover, #0d91c4);
+$color_palette_dark:        var(--z-status-text, #000);
+$color_running:             var(--z-status-running, #4CAF50);
+$color_running_background:  var(--z-status-running-bg, #E8F5E9);
+$color_retrying:            var(--z-status-retrying, #EF6C00);
+$color_retrying_background: var(--z-status-retrying-bg, #FFF3E0);
+$color_stopped:             var(--z-status-stopped, #BDBDBD);
+$color_stopped_background:  var(--z-status-stopped-bg, #fff);
+$color_waiting:             var(--z-status-waiting, #00BCD4);
+$color_waiting_background:  var(--z-status-waiting-bg, #fff);
+$color_failed:              var(--z-status-failed, #D84315);
+$color_failed_background:   var(--z-status-failed-bg, #FBE9E7);
+$color_info_background:     var(--z-status-info-bg, #343434);
+$color_info_text:           var(--z-status-info-text, #fff);
+$textColorError:            var(--z-status-error-text, #D84315);
 $block_border_radius:       4px;
 $info_block_border_radius:  2px;
 
-$textColorMuted:            $gray_light;
-$textColorMedium:           $gray;
+$textColorMuted:            var(--z-status-text-muted, #777);
+$textColorMedium:           var(--z-status-text-medium, #555);
 
 body {
-    background: #eee;
+    background: var(--z-status-bg, #eee);
     color: $color_palette_dark;
 }
 
@@ -82,7 +139,7 @@ body {
     .navbar-brand,
     .navbar-nav > li > a {
         &, &:hover {
-            color: #fff;
+            color: var(--z-status-on-primary, #fff);
         }
         &:hover {
             background-color: $main_color_hover;
@@ -109,7 +166,7 @@ body {
 
 .footer {
     padding: 20px 0;
-    border-top: 1px solid #d7d7d7;
+    border-top: 1px solid var(--z-status-border, #d7d7d7);
     text-align: left;
     
     .zotonic-logo {
@@ -161,12 +218,12 @@ form {
     > tbody {
         > tr {
             > td {
-                border-color: #fff;
+                border-color: var(--z-status-table-border, #fff);
             }
         }
         > tr.stopped + tr.stopped {
             > td {
-                border-color: #eee;
+                border-color: var(--z-status-table-stopped-border, #eee);
             }
         }
     }
@@ -208,24 +265,24 @@ form {
         background: $color_stopped_background;
     }
     span.running {
-        color: #fff;
+        color: var(--z-status-on-primary, #fff);
         background: $color_running;
     }
     span.retrying {
-        color: #fff;
+        color: var(--z-status-on-primary, #fff);
         background: $color_retrying;
     }
     span.waiting {
-        color: #fff;
+        color: var(--z-status-on-primary, #fff);
         background: $color_waiting;
     }
     span.failed {
-        color: #fff;
+        color: var(--z-status-on-primary, #fff);
         background: $color_failed;
     }
     span.stopped {
-        color: #fff;
-        background: #999;
+        color: var(--z-status-on-primary, #fff);
+        background: var(--z-status-stopped-label-bg, #999);
     }
     .retrying button.restart,
     .retrying button.admin,
@@ -253,6 +310,9 @@ form {
 }
     
 .panel {
+    background-color: var(--z-status-surface, #fff);
+    border-color: var(--z-status-border, #d7d7d7);
+
     .panel-body > :last-child {
         margin-bottom: 0;
     }
@@ -266,6 +326,12 @@ form {
     .list-group-item-text {
         font-size: 13px;
     }
+}
+
+.list-group-item {
+    background-color: var(--z-status-surface, #fff);
+    border-color: var(--z-status-border, #d7d7d7);
+    color: $color_palette_dark;
 }
 
 .alert {
@@ -309,7 +375,7 @@ a.list-group-item {
         &, * {
             cursor: pointer;
             background-color: $main_color;
-            color: #fff;
+            color: var(--z-status-on-primary, #fff);
             border-color: $main_color;
         }
     }
@@ -319,7 +385,7 @@ a.list-group-item {
     .jumbotron {
         background-color: $main_color;
         padding: 40px;
-        color: #fff;
+        color: var(--z-status-on-primary, #fff);
         
         & > :last-child {
             margin-bottom: 0;
@@ -337,8 +403,9 @@ a.list-group-item {
 }
 
 .panel-default > .panel-heading {
-    background-color: #fff;
+    background-color: var(--z-status-surface, #fff);
+    border-color: var(--z-status-border, #d7d7d7);
+    color: $color_palette_dark;
     padding: 15px;
     text-align: center;
 }
-

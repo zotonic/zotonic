@@ -10,8 +10,8 @@
     font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
     font-size: 16px;
     line-height: 1.6;
-    color: #24282c;
-    background: #fff;
+    color: var(--bs-body-color, #24282c);
+    background: var(--bs-body-bg, #fff);
     text-align: start;
     letter-spacing: 0;
 
@@ -62,7 +62,7 @@
     }
 
     a {
-        color: #076b91;
+        color: var(--bs-link-color, #076b91);
         text-decoration: underline;
         cursor: text;
     }
@@ -93,10 +93,10 @@
     }
 
     blockquote {
-        border-inline-start: 3px solid #92a3a8;
+        border-inline-start: 3px solid var(--bs-secondary-color, #92a3a8);
         margin: 1em 0;
         padding: 0.3em 1em;
-        color: #4b555a;
+        color: var(--bs-secondary-color, #4b555a);
         font-size: inherit;
     }
 
@@ -104,8 +104,8 @@
     .admonition {
         margin: 1em 0;
         padding: 12px 16px;
-        border-inline-start: 3px solid #92a3a8;
-        background: #f4f6f7;
+        border-inline-start: 3px solid var(--bs-secondary-color, #92a3a8);
+        background: var(--bs-tertiary-bg, #f4f6f7);
 
         > :first-child {
             margin-top: 0;
@@ -117,11 +117,11 @@
     }
 
     .admonition {
-        border-inline-start-color: #076b91;
-        background: #eef7fa;
+        border-inline-start-color: var(--bs-link-color, #076b91);
+        background: var(--bs-info-bg-subtle, #eef7fa);
 
         > .admonition-title {
-            color: #076b91;
+            color: var(--bs-link-color, #076b91);
             font-weight: 600;
         }
     }
@@ -129,19 +129,19 @@
     pre {
         padding: 12px;
         border-radius: 3px;
-        background: #f0f2f3;
+        background: var(--bs-tertiary-bg, #f0f2f3);
         font-size: 14px;
     }
 
     code {
         font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
-        background: #f0f2f3;
+        background: var(--bs-tertiary-bg, #f0f2f3);
         color: inherit;
     }
 
     hr {
         border: 0;
-        border-top: 1px solid #c5c9ce;
+        border-top: 1px solid var(--bs-border-color, #c5c9ce);
         margin: 1.5em 0;
     }
 
@@ -154,7 +154,7 @@
 
     td,
     th {
-        border: 1px solid #b9c1c6;
+        border: 1px solid var(--bs-border-color, #b9c1c6);
         min-width: 40px;
         padding: 6px 9px;
         vertical-align: top;
@@ -163,7 +163,7 @@
 
     th {
         font-weight: 600;
-        background: #f0f2f3;
+        background: var(--bs-tertiary-bg, #f0f2f3);
     }
 
     td,
@@ -179,14 +179,14 @@
     }
 
     .z-tiptap-media {
-        border: 1px solid #b9c1c6;
+        border: 1px solid var(--bs-border-color, #b9c1c6);
         cursor: pointer;
 
         > figcaption {
             padding: 8px 10px;
-            border-top: 1px solid #b9c1c6;
-            background: #f0f2f3;
-            color: #4b555a;
+            border-top: 1px solid var(--bs-border-color, #b9c1c6);
+            background: var(--bs-tertiary-bg, #f0f2f3);
+            color: var(--bs-secondary-color, #4b555a);
             font-size: 14px;
             line-height: 1.4;
             overflow-wrap: anywhere;

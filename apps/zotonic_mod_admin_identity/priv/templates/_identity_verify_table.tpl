@@ -7,7 +7,7 @@
 			<td>
                 <div class="radio">
                     <label>
-                        <input type="radio" name="{{ #verified}}" {% if email_raw == idn.key %}checked{% endif %} class="radio nosubmit" value="{{ idn.key|escape }}" />
+                        <input type="radio" name="{{ #verified}}" {% if email_raw == idn.key %}checked{% endif %} class="nosubmit" value="{{ idn.key|escape }}" />
                     {{ idn.key|escape }}
                     </label>
                 </div>
