@@ -2129,6 +2129,11 @@ msgstr ""
 ""
 
 msgid ""
+"Luba-Katanga"
+msgstr ""
+""
+
+msgid ""
 "Luba-Lulua"
 msgstr ""
 ""
@@ -4149,12 +4154,12 @@ msgstr ""
 ""
 
 msgid ""
-"Tonga"
+"Tonga (Zambia)"
 msgstr ""
 ""
 
 msgid ""
-"Tonga (Zambia)"
+"Tongan"
 msgstr ""
 ""
 
@@ -4165,11 +4170,6 @@ msgstr ""
 
 msgid ""
 "Toraja-Sa'dan"
-msgstr ""
-""
-
-msgid ""
-"Tshiluba"
 msgstr ""
 ""
 
