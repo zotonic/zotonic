@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-06-30 10:00\n"
+"PO-Revision-Date: 2026-10-31 18:53\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -1282,6 +1282,9 @@ msgstr "ลอมเว"
 msgid "Lozi"
 msgstr "โลซี"
 
+msgid "Luba-Katanga"
+msgstr "ลูบา-คาตังกา"
+
 msgid "Luba-Lulua"
 msgstr "ลูบา-ลูลูอา"
 
@@ -2494,20 +2497,17 @@ msgstr "ภาษาอังกฤษแบบครีโอลของโต
 msgid "Tolaki"
 msgstr "โทลาคี"
 
-msgid "Tonga"
-msgstr "ตองกา"
-
 msgid "Tonga (Zambia)"
 msgstr "ตองกา (แซมเบีย)"
+
+msgid "Tongan"
+msgstr "ตองกา"
 
 msgid "Tooro"
 msgstr "ทูโร"
 
 msgid "Toraja-Sa'dan"
 msgstr "โทราจา-ซาดัง"
-
-msgid "Tshiluba"
-msgstr "ชิลูบา"
 
 msgid "Tsimihety Malagasy"
 msgstr "ซิมิเฮตี มาดากัสการ์"
