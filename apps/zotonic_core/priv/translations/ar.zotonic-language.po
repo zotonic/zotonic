@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-30 17:07\n"
+"PO-Revision-Date: 2026-10-31 18:53\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -1282,6 +1282,9 @@ msgstr "لوموي"
 msgid "Lozi"
 msgstr "لوزي"
 
+msgid "Luba-Katanga"
+msgstr "لوبا-كاتانغا"
+
 msgid "Luba-Lulua"
 msgstr "لوبا لولوا"
 
@@ -2494,20 +2497,17 @@ msgstr "الإنجليزية الكريولية التوباغونية الكر�
 msgid "Tolaki"
 msgstr "طولاقي"
 
-msgid "Tonga"
-msgstr "تونغا"
-
 msgid "Tonga (Zambia)"
 msgstr "تونغا (زامبيا)"
+
+msgid "Tongan"
+msgstr "التونغية"
 
 msgid "Tooro"
 msgstr "تورو"
 
 msgid "Toraja-Sa'dan"
 msgstr "توراجا-سعدان"
-
-msgid "Tshiluba"
-msgstr "تشيلوبا"
 
 msgid "Tsimihety Malagasy"
 msgstr "تسيميهتي الملغاشية"
