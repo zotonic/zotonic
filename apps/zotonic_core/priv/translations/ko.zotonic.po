@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-31 16:08\n"
+"PO-Revision-Date: 2026-10-31 18:54\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "MIME-Version: 1.0\n"
@@ -1480,7 +1480,6 @@ msgstr "연결"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:72
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:133
-#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:100
 #: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:7
 msgid "Connections"
 msgstr "연결"
@@ -2429,6 +2428,7 @@ msgstr "송장에 기재할 이름"
 msgid "Need more help?"
 msgstr "더 도움이 필요하신가요?"
 
+#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:100
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:105
 msgid "Network Connections"
 msgstr "네트워크 연결"
