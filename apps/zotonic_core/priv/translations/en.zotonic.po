@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-30 17:52\n"
+"PO-Revision-Date: 2026-10-31 18:52\n"
 "Last-Translator: \n"
 "Language-Team: English\n"
 "MIME-Version: 1.0\n"
@@ -1480,7 +1480,6 @@ msgstr "Connection"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:72
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:133
-#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:100
 #: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:7
 msgid "Connections"
 msgstr "Connections"
@@ -2429,6 +2428,7 @@ msgstr "Name for invoices"
 msgid "Need more help?"
 msgstr "Need more help?"
 
+#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:100
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:105
 msgid "Network Connections"
 msgstr "Network Connections"
