@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-31 14:32\n"
+"PO-Revision-Date: 2026-10-31 16:08\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "MIME-Version: 1.0\n"
@@ -197,7 +197,7 @@ msgid "Djibouti"
 msgstr "ジブチ"
 
 msgid "Dominica"
-msgstr "ドミニカ共和国"
+msgstr "ドミニカ国"
 
 msgid "Dominican Republic"
 msgstr "ドミニカ共和国"
@@ -347,7 +347,7 @@ msgid "Italy"
 msgstr "イタリア"
 
 msgid "Ivory Coast (Cote D'Ivoire)"
-msgstr "コートジボワール（コートジボワール）"
+msgstr "コートジボワール（象牙海岸）"
 
 msgid "Jamaica"
 msgstr "ジャマイカ"
@@ -560,7 +560,7 @@ msgid "Qatar"
 msgstr "カタール"
 
 msgid "Reunion"
-msgstr "再会"
+msgstr "レユニオン"
 
 msgid "Romania"
 msgstr "ルーマニア"
@@ -584,7 +584,7 @@ msgid "Saint Lucia"
 msgstr "セントルシア"
 
 msgid "Saint Martin (French)"
-msgstr "サン・マルタン（フランス語）"
+msgstr "サン・マルタン（フランス領）"
 
 msgid "Saint Pierre and Miquelon"
 msgstr "サンピエール島・ミクロン島"
@@ -620,7 +620,7 @@ msgid "Singapore"
 msgstr "シンガポール"
 
 msgid "Sint Maarten (Dutch)"
-msgstr "シント・マールテン（オランダ語）"
+msgstr "シント・マールテン（オランダ領）"
 
 msgid "Slovakia"
 msgstr "スロバキア"
@@ -686,7 +686,7 @@ msgid "Thailand"
 msgstr "タイ"
 
 msgid "Togo"
-msgstr "持ち帰り"
+msgstr "トーゴ"
 
 msgid "Tokelau"
 msgstr "トケラウ"
