@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-31 14:32\n"
+"PO-Revision-Date: 2026-10-31 16:08\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
 "MIME-Version: 1.0\n"
@@ -17,2759 +17,2759 @@ msgstr ""
 "Language: vi_VN\n"
 
 msgid "Abkhazian"
-msgstr ""
+msgstr "Tiếng Abkhaz"
 
 msgid "Adamawa Fulfulde"
-msgstr ""
+msgstr "Tiếng Adamawa Fulfulde"
 
 msgid "Adara"
-msgstr ""
+msgstr "Tiếng Adara"
 
 msgid "Adilabad Gondi"
-msgstr ""
+msgstr "Tiếng Adilabad Gondi"
 
 msgid "Afar"
-msgstr ""
+msgstr "Tiếng Afar"
 
 msgid "Afrikaans"
-msgstr ""
+msgstr "Tiếng Afrikaans"
 
 msgid "Akan"
-msgstr ""
+msgstr "Tiếng Akan"
 
 msgid "Albanian"
-msgstr ""
+msgstr "Tiếng Albania"
 
 msgid "Amharic"
-msgstr ""
+msgstr "Tiếng Amharic"
 
 msgid "Anyin Morofo"
-msgstr ""
+msgstr "Tiếng Anyin Morofo"
 
 msgid "Ao Naga"
-msgstr ""
+msgstr "Tiếng Ao Naga"
 
 msgid "Arabic"
-msgstr ""
+msgstr "Tiếng Ả Rập"
 
 msgid "Arabic - Algerian Sahara"
-msgstr ""
+msgstr "Tiếng Ả Rập - Sa mạc Sahara của Algeria"
 
 msgid "Arabic - Bahrain"
-msgstr ""
+msgstr "Tiếng Ả Rập - Bahrain"
 
 msgid "Arabic - Egypt"
-msgstr ""
+msgstr "Tiếng Ả Rập - Ai Cập"
 
 msgid "Arabic - Gulf"
-msgstr ""
+msgstr "Tiếng Ả Rập - vùng Vịnh"
 
 msgid "Arabic - Iraq"
-msgstr ""
+msgstr "Tiếng Ả Rập - Iraq"
 
 msgid "Arabic - Jordan"
-msgstr ""
+msgstr "Tiếng Ả Rập - Jordan"
 
 msgid "Arabic - Kuwait"
-msgstr ""
+msgstr "Tiếng Ả Rập - Kuwait"
 
 msgid "Arabic - Lebanon"
-msgstr ""
+msgstr "Tiếng Ả Rập - Lebanon"
 
 msgid "Arabic - Libya"
-msgstr ""
+msgstr "Tiếng Ả Rập - Libya"
 
 msgid "Arabic - Marocco"
-msgstr ""
+msgstr "Tiếng Ả Rập - Ma-rốc"
 
 msgid "Arabic - Morocco"
-msgstr ""
+msgstr "Tiếng Ả Rập - Ma-rốc"
 
 msgid "Arabic - North Levant"
-msgstr ""
+msgstr "Tiếng Ả Rập - Bắc Levant"
 
 msgid "Arabic - Oman"
-msgstr ""
+msgstr "Tiếng Ả Rập - Oman"
 
 msgid "Arabic - Qatar"
-msgstr ""
+msgstr "Tiếng Ả Rập - Qatar"
 
 msgid "Arabic - Saudi Arabia"
-msgstr ""
+msgstr "Tiếng Ả Rập - Ả Rập Xê Út"
 
 msgid "Arabic - South Levant"
-msgstr ""
+msgstr "Tiếng Ả Rập - Nam Levant"
 
 msgid "Arabic - Sudan"
-msgstr ""
+msgstr "Tiếng Ả Rập - Sudan"
 
 msgid "Arabic - Syria"
-msgstr ""
+msgstr "Tiếng Ả Rập - Syria"
 
 msgid "Arabic - Tunisia"
-msgstr ""
+msgstr "Tiếng Ả Rập - Tunisia"
 
 msgid "Arabic - U.A.E."
-msgstr ""
+msgstr "Tiếng Ả Rập - UAE"
 
 msgid "Arabic - Yemen"
-msgstr ""
+msgstr "Tiếng Ả Rập - Yemen"
 
 msgid "Aringa"
-msgstr ""
+msgstr "Tiếng Aringa"
 
 msgid "Assamese"
-msgstr ""
+msgstr "Tiếng Assam"
 
 msgid "Avaric"
-msgstr ""
+msgstr "Tiếng Avaric"
 
 msgid "Awa (China)"
-msgstr ""
+msgstr "Tiếng Awa (Trung Quốc)"
 
 msgid "Ayacucho Quechua"
-msgstr ""
+msgstr "Tiếng Ayacucho Quechua"
 
 msgid "Aymara"
-msgstr ""
+msgstr "Tiếng Aymara"
 
 msgid "Azerbaijani"
-msgstr ""
+msgstr "Tiếng Azerbaijan"
 
 msgid "Balangingi"
-msgstr ""
+msgstr "Tiếng Balangingi"
 
 msgid "Balkan Romani"
-msgstr ""
+msgstr "Tiếng Romani vùng Balkan"
 
 msgid "Balti"
-msgstr ""
+msgstr "Tiếng Balti"
 
 msgid "Bambara"
-msgstr ""
+msgstr "Tiếng Bambara"
 
 msgid "Bangka"
-msgstr ""
+msgstr "Tiếng Bangka"
 
 msgid "Barclayville Grebo"
-msgstr ""
+msgstr "Tiếng Barclayville Grebo"
 
 msgid "Bashkir"
-msgstr ""
+msgstr "Tiếng Bashkir"
 
 msgid "Basque"
-msgstr ""
+msgstr "Tiếng Basque"
 
 msgid "Bavarian"
-msgstr ""
+msgstr "Tiếng Bavaria"
 
 msgid "Bazigar"
-msgstr ""
+msgstr "Tiếng Bazigar"
 
 msgid "Bengali"
-msgstr ""
+msgstr "Tiếng Bengali"
 
 msgid "Berta"
-msgstr ""
+msgstr "Tiếng Berta"
 
 msgid "Bilaspuri"
-msgstr ""
+msgstr "Tiếng Bilaspuri"
 
 msgid "Bislama"
-msgstr ""
+msgstr "Tiếng Bislama"
 
 msgid "Borana-Arsi-Guji Oromo"
-msgstr ""
+msgstr "Tiếng Borana-Arsi-Guji Oromo"
 
 msgid "Borgu Fulfulde"
-msgstr ""
+msgstr "Tiếng Borgu Fulfulde"
 
 msgid "Bosnian"
-msgstr ""
+msgstr "Tiếng Bosnia"
 
 msgid "Bouyei"
-msgstr ""
+msgstr "Tiếng Bouyei"
 
 msgid "Breton"
-msgstr ""
+msgstr "Tiếng Breton"
 
 msgid "Brunei"
-msgstr ""
+msgstr "Tiếng Brunei"
 
 msgid "Bulgarian"
-msgstr ""
+msgstr "Tiếng Bulgaria"
 
 msgid "Burmese"
-msgstr ""
+msgstr "Tiếng Miến Điện"
 
 msgid "Byelorussian"
-msgstr ""
+msgstr "Tiếng Belarus"
 
 msgid "Caló"
-msgstr ""
+msgstr "Tiếng Caló"
 
 msgid "Cambodian"
-msgstr ""
+msgstr "Tiếng Khmer"
 
 msgid "Cameroon Pidgin"
-msgstr ""
+msgstr "Tiếng bồi Cameroon"
 
 msgid "Campidanese Sardinian"
-msgstr ""
+msgstr "Tiếng Sardinia Campidanese"
 
 msgid "Capiznon"
-msgstr ""
+msgstr "Tiếng Capiznon"
 
 msgid "Catalan"
-msgstr ""
+msgstr "Tiếng Catalan"
 
 msgid "Cebaara Senoufo"
-msgstr ""
+msgstr "Tiếng Cebaara Senoufo"
 
 msgid "Cebuano"
-msgstr ""
+msgstr "Tiếng Cebuano"
 
 msgid "Central Atlas Tamazight"
-msgstr ""
+msgstr "Tiếng Tamazight vùng Atlas Trung tâm"
 
 msgid "Central Hongshuihe Zhuang"
-msgstr ""
+msgstr "Tiếng Choang Hồng Thủy Hà Trung"
 
 msgid "Central Huasteca Nahuatl"
-msgstr ""
+msgstr "Tiếng Nahuatl vùng Huasteca Trung tâm"
 
 msgid "Central Kanuri"
-msgstr ""
+msgstr "Tiếng Kanuri miền Trung"
 
 msgid "Central Malay"
-msgstr ""
+msgstr "Tiếng Mã Lai miền Trung"
 
 msgid "Central Okinawan"
-msgstr ""
+msgstr "Tiếng Okinawa miền Trung"
 
 msgid "Central Pashto"
-msgstr ""
+msgstr "Tiếng Pashto miền Trung"
 
 msgid "Central Sama"
-msgstr ""
+msgstr "Tiếng Sama miền Trung"
 
 msgid "Central-Eastern Niger Fulfulde"
-msgstr ""
+msgstr "Tiếng Fulfulde vùng Trung-Đông Niger"
 
 msgid "Chadian Arabic"
-msgstr ""
+msgstr "Tiếng Ả Rập Chad"
 
 msgid "Chamorro"
-msgstr ""
+msgstr "Tiếng Chamorro"
 
 msgid "Chechen"
-msgstr ""
+msgstr "Tiếng Chechen"
 
 msgid "Chewa"
-msgstr ""
+msgstr "Tiếng Chewa"
 
 msgid "Chhattisgarhi"
-msgstr ""
+msgstr "Tiếng Chhattisgarhi"
 
 msgid "Chimborazo Highland Quichua"
-msgstr ""
+msgstr "Tiếng Quichua vùng cao Chimborazo"
 
 msgid "Chinese (Simplified)"
-msgstr ""
+msgstr "Tiếng Trung (Giản thể)"
 
 msgid "Chinese (Traditional)"
-msgstr ""
+msgstr "Tiếng Trung (Phồn thể)"
 
 msgid "Chittagonian"
-msgstr ""
+msgstr "Tiếng Chittagonian"
 
 msgid "Chitwania Tharu"
-msgstr ""
+msgstr "Tiếng Chitwania Tharu"
 
 msgid "Chuanqiandian Cluster Miao"
-msgstr ""
+msgstr "Tiếng Miêu, nhóm Chuanqiandian"
 
 msgid "Chuvash"
-msgstr ""
+msgstr "Tiếng Chuvash"
 
 msgid "Congo Swahili"
-msgstr ""
+msgstr "Tiếng Swahili Congo"
 
 msgid "Corsican"
-msgstr ""
+msgstr "Tiếng Corsica"
 
 msgid "Crimean Tatar"
-msgstr ""
+msgstr "Tiếng Tatar Crimea"
 
 msgid "Croatian"
-msgstr ""
+msgstr "Tiếng Croatia"
 
 msgid "Croatian - Bosnia and Herzegovina"
-msgstr ""
+msgstr "Tiếng Croatia - Bosnia và Herzegovina"
 
 msgid "Croatian - Croatia"
-msgstr ""
+msgstr "Tiếng Croatia - Croatia"
 
 msgid "Cusco Quechua"
-msgstr ""
+msgstr "Tiếng Cusco Quechua"
 
 msgid "Czech"
-msgstr ""
+msgstr "Tiếng Séc"
 
 msgid "Dagbani"
-msgstr ""
+msgstr "Tiếng Dagbani"
 
 msgid "Dan"
-msgstr ""
+msgstr "Tiếng Dan"
 
 msgid "Dangaura Tharu"
-msgstr ""
+msgstr "Tiếng Dangaura Tharu"
 
 msgid "Danish"
-msgstr ""
+msgstr "Tiếng Đan Mạch"
 
 msgid "Dari"
-msgstr ""
+msgstr "Tiếng Dari"
 
 msgid "Dawro"
-msgstr ""
+msgstr "Tiếng Dawro"
 
 msgid "Dazaga"
-msgstr ""
+msgstr "Tiếng Dazaga"
 
 msgid "Deccan"
-msgstr ""
+msgstr "Tiếng Deccan"
 
 msgid "Dhivehi"
-msgstr ""
+msgstr "Tiếng Dhivehi"
 
 msgid "Dhundari"
-msgstr ""
+msgstr "Tiếng Dhundari"
 
 msgid "Digo"
-msgstr ""
+msgstr "Tiếng Digo"
 
 msgid "Dimli"
-msgstr ""
+msgstr "Tiếng Dimli"
 
 msgid "Dinka"
-msgstr ""
+msgstr "Tiếng Dinka"
 
 msgid "Dogri"
-msgstr ""
+msgstr "Tiếng Dogri"
 
 msgid "Dogri (macrolanguage)"
-msgstr ""
+msgstr "Tiếng Dogri (ngôn ngữ vĩ mô)"
 
 msgid "Domari"
-msgstr ""
+msgstr "Tiếng Domari"
 
 msgid "Dombe"
-msgstr ""
+msgstr "Tiếng Dombe"
 
 msgid "Dong"
-msgstr ""
+msgstr "Tiếng Đồng"
 
 msgid "Dotyali"
-msgstr ""
+msgstr "Tiếng Dotyali"
 
 msgid "Drents"
-msgstr ""
+msgstr "Tiếng Drents"
 
 msgid "Dubli"
-msgstr ""
+msgstr "Tiếng Dubli"
 
 msgid "Duruma"
-msgstr ""
+msgstr "Tiếng Duruma"
 
 msgid "Dutch"
-msgstr ""
+msgstr "Tiếng Hà Lan"
 
 msgid "Dutch - Netherlands"
-msgstr ""
+msgstr "Tiếng Hà Lan - Hà Lan"
 
 msgid "Dyula"
-msgstr ""
+msgstr "Tiếng Dyula"
 
 msgid "Dzongkha"
-msgstr ""
+msgstr "Tiếng Dzongkha"
 
 msgid "Early Tripuri"
-msgstr ""
+msgstr "Tiếng Tripuri cổ"
 
 msgid "East Nyala"
-msgstr ""
+msgstr "Tiếng Đông Nyala"
 
 msgid "Eastern Gorkha Tamang"
-msgstr ""
+msgstr "Tiếng Tamang Đông Gorkha"
 
 msgid "Eastern Hongshuihe Zhuang"
-msgstr ""
+msgstr "Tiếng Choang Hồng Thủy Hà Đông"
 
 msgid "Eastern Huasteca Nahuatl"
-msgstr ""
+msgstr "Tiếng Nahuatl vùng Đông Huasteca"
 
 msgid "Eastern Magar"
-msgstr ""
+msgstr "Tiếng Magar phía Đông"
 
 msgid "Eastern Maninkakan"
-msgstr ""
+msgstr "Tiếng Maninkakan phía Đông"
 
 msgid "Eastern Mari"
-msgstr ""
+msgstr "Tiếng Mari miền Đông"
 
 msgid "Eastern Nisu"
-msgstr ""
+msgstr "Tiếng Đông Nisu"
 
 msgid "Eastern Oromo"
-msgstr ""
+msgstr "Tiếng Oromo phía Đông"
 
 msgid "Eastern Qiandong Miao"
-msgstr ""
+msgstr "Tiếng Miêu Qiandong miền Đông"
 
 msgid "Eastern Tamang"
-msgstr ""
+msgstr "Tiếng Tamang phía Đông"
 
 msgid "Eastern Yiddish"
-msgstr ""
+msgstr "Tiếng Yiddish miền Đông"
 
 msgid "Ebira"
-msgstr ""
+msgstr "Tiếng Ebira"
 
 msgid "Efik"
-msgstr ""
+msgstr "Tiếng Efik"
 
 msgid "Embu"
-msgstr ""
+msgstr "Tiếng Embu"
 
 msgid "Emilian"
-msgstr ""
+msgstr "Tiếng Emilian"
 
 msgid "English"
-msgstr ""
+msgstr "Tiếng Anh"
 
 msgid "English - Australia"
-msgstr ""
+msgstr "Tiếng Anh - Úc"
 
 msgid "English - Belize"
-msgstr ""
+msgstr "Tiếng Anh - Belize"
 
 msgid "English - Canada"
-msgstr ""
+msgstr "Tiếng Anh - Canada"
 
 msgid "English - Caribbean"
-msgstr ""
+msgstr "Tiếng Anh - Vùng Caribe"
 
 msgid "English - Ireland"
-msgstr ""
+msgstr "Tiếng Anh - Ireland"
 
 msgid "English - Jamaica"
-msgstr ""
+msgstr "Tiếng Anh - Jamaica"
 
 msgid "English - New Zealand"
-msgstr ""
+msgstr "Tiếng Anh - New Zealand"
 
 msgid "English - Republic of the Philippines"
-msgstr ""
+msgstr "Tiếng Anh - Cộng hòa Philippines"
 
 msgid "English - South Africa"
-msgstr ""
+msgstr "Tiếng Anh - Nam Phi"
 
 msgid "English - Trinidad and Tobago"
-msgstr ""
+msgstr "Tiếng Anh - Trinidad và Tobago"
 
 msgid "English - United Kingdom"
-msgstr ""
+msgstr "Tiếng Anh - Vương quốc Anh"
 
 msgid "English - United States"
-msgstr ""
+msgstr "Tiếng Anh - Hoa Kỳ"
 
 msgid "English - Zimbabwe"
-msgstr ""
+msgstr "Tiếng Anh - Zimbabwe"
 
 msgid "Erzya"
-msgstr ""
+msgstr "Tiếng Erzya"
 
 msgid "Esan"
-msgstr ""
+msgstr "Tiếng Esan"
 
 msgid "Esperanto"
-msgstr ""
+msgstr "Tiếng Esperanto"
 
 msgid "Estonian"
-msgstr ""
+msgstr "Tiếng Estonia"
 
 msgid "Eton (Cameroon)"
-msgstr ""
+msgstr "Tiếng Eton (Cameroon)"
 
 msgid "Ewe"
-msgstr ""
+msgstr "Tiếng Cừu"
 
 msgid "Ewondo"
-msgstr ""
+msgstr "Tiếng Ewondo"
 
 msgid "Ezaa"
-msgstr ""
+msgstr "Tiếng Ezaa"
 
 msgid "Fang (Equatorial Guinea)"
-msgstr ""
+msgstr "Tiếng Fang (Guinea Xích đạo)"
 
 msgid "Fanti"
-msgstr ""
+msgstr "Tiếng Fanti"
 
 msgid "Far Western Muria"
-msgstr ""
+msgstr "Tiếng Muria miền viễn Tây"
 
 msgid "Farefare"
-msgstr ""
+msgstr "Tiếng Farefare"
 
 msgid "Faroese"
-msgstr ""
+msgstr "Tiếng Faroe"
 
 msgid "Fiji Hindi"
-msgstr ""
+msgstr "Tiếng Hindi Fiji"
 
 msgid "Fijian"
-msgstr ""
+msgstr "Tiếng Fiji"
 
 msgid "Finnish"
-msgstr ""
+msgstr "Tiếng Phần Lan"
 
 msgid "Flemish - Belgium"
-msgstr ""
+msgstr "Tiếng Flemish - Bỉ"
 
 msgid "Fon"
-msgstr ""
+msgstr "Tiếng Fon"
 
 msgid "French"
-msgstr ""
+msgstr "Tiếng Pháp"
 
 msgid "French - Belgium"
-msgstr ""
+msgstr "Tiếng Pháp - Bỉ"
 
 msgid "French - Canada"
-msgstr ""
+msgstr "Tiếng Pháp - Canada"
 
 msgid "French - France"
-msgstr ""
+msgstr "Tiếng Pháp - Pháp"
 
 msgid "French - Luxembourg"
-msgstr ""
+msgstr "Tiếng Pháp - Luxembourg"
 
 msgid "French - Monaco"
-msgstr ""
+msgstr "Tiếng Pháp - Monaco"
 
 msgid "French - Switzerland"
-msgstr ""
+msgstr "Tiếng Pháp - Thụy Sĩ"
 
 msgid "Frisian"
-msgstr ""
+msgstr "Tiếng Frisia"
 
 msgid "Friulian"
-msgstr ""
+msgstr "Tiếng Friulian"
 
 msgid "Fula"
-msgstr ""
+msgstr "Tiếng Fula"
 
 msgid "Fuliiru"
-msgstr ""
+msgstr "Tiếng Fuliiru"
 
 msgid "Fur"
-msgstr ""
+msgstr "Tiếng Fur"
 
 msgid "Ga"
-msgstr ""
+msgstr "Tiếng Ga"
 
 msgid "Gaelic"
-msgstr ""
+msgstr "Tiếng Ireland"
 
 msgid "Gagauz"
-msgstr ""
+msgstr "Tiếng Gagauz"
 
 msgid "Galician"
-msgstr ""
+msgstr "Tiếng Galicia"
 
 msgid "Gamit"
-msgstr ""
+msgstr "Tiếng Gamit"
 
 msgid "Gamo"
-msgstr ""
+msgstr "Tiếng Gamo"
 
 msgid "Gan"
-msgstr ""
+msgstr "Tiếng Gan"
 
 msgid "Ganda"
-msgstr ""
+msgstr "Tiếng Ganda"
 
 msgid "Garhwali"
-msgstr ""
+msgstr "Tiếng Garhwali"
 
 msgid "Garo"
-msgstr ""
+msgstr "Tiếng Garo"
 
 msgid "Gayo"
-msgstr ""
+msgstr "Tiếng Gayo"
 
 msgid "Gbagyi"
-msgstr ""
+msgstr "Tiếng Gbagyi"
 
 msgid "Gbari"
-msgstr ""
+msgstr "Tiếng Gbari"
 
 msgid "Gedeo"
-msgstr ""
+msgstr "Tiếng Gedeo"
 
 msgid "Gen"
-msgstr ""
+msgstr "Tiếng Gen"
 
 msgid "Georgian"
-msgstr ""
+msgstr "Tiếng Gruzia"
 
 msgid "German"
-msgstr ""
+msgstr "Tiếng Đức"
 
 msgid "German - Austria"
-msgstr ""
+msgstr "Tiếng Đức - Áo"
 
 msgid "German - Germany"
-msgstr ""
+msgstr "Tiếng Đức - Đức"
 
 msgid "German - Liechtenstein"
-msgstr ""
+msgstr "Tiếng Đức - Liechtenstein"
 
 msgid "German - Luxembourg"
-msgstr ""
+msgstr "Tiếng Đức - Luxembourg"
 
 msgid "German - Switzerland"
-msgstr ""
+msgstr "Tiếng Đức - Thụy Sĩ"
 
 msgid "Ghanaian Pidgin English"
-msgstr ""
+msgstr "Tiếng Anh bồi Ghana"
 
 msgid "Gilaki"
-msgstr ""
+msgstr "Tiếng Gilaki"
 
 msgid "Giryama"
-msgstr ""
+msgstr "Tiếng Giryama"
 
 msgid "Goan Konkani"
-msgstr ""
+msgstr "Tiếng Konkani Goa"
 
 msgid "Godwari"
-msgstr ""
+msgstr "Tiếng Godwari"
 
 msgid "Gofa"
-msgstr ""
+msgstr "Tiếng Gofa"
 
 msgid "Gogo"
-msgstr ""
+msgstr "Tiếng Gogo"
 
 msgid "Gondi"
-msgstr ""
+msgstr "Tiếng Gondi"
 
 msgid "Gorontalo"
-msgstr ""
+msgstr "Tiếng Gorontalo"
 
 msgid "Gourmanchéma"
-msgstr ""
+msgstr "Tiếng Gourmanchéma"
 
 msgid "Grebo"
-msgstr ""
+msgstr "Tiếng Grebo"
 
 msgid "Greek"
-msgstr ""
+msgstr "Tiếng Hy Lạp"
 
 msgid "Gronings"
-msgstr ""
+msgstr "Tiếng Gronings"
 
 msgid "Guadeloupean Creole French"
-msgstr ""
+msgstr "Tiếng Creole Pháp Guadeloupe"
 
 msgid "Guarani"
-msgstr ""
+msgstr "Tiếng Guarani"
 
 msgid "Guaraní"
-msgstr ""
+msgstr "Tiếng Guaraní"
 
 msgid "Guibei Zhuang"
-msgstr ""
+msgstr "Tiếng Choang Quế Bắc"
 
 msgid "Guibian Zhuang"
-msgstr ""
+msgstr "Tiếng Choang Guibian"
 
 msgid "Guinea Kpelle"
-msgstr ""
+msgstr "Tiếng Kpelle Guinea"
 
 msgid "Gujarati"
-msgstr ""
+msgstr "Tiếng Gujarati"
 
 msgid "Gujari"
-msgstr ""
+msgstr "Tiếng Gujari"
 
 msgid "Gun"
-msgstr ""
+msgstr "Tiếng Gun"
 
 msgid "Gurani"
-msgstr ""
+msgstr "Tiếng Gurani"
 
 msgid "Guro"
-msgstr ""
+msgstr "Tiếng Guro"
 
 msgid "Gurung"
-msgstr ""
+msgstr "Tiếng Gurung"
 
 msgid "Gusii"
-msgstr ""
+msgstr "Tiếng Gusii"
 
 msgid "Guyanese Creole English"
-msgstr ""
+msgstr "Tiếng Anh Creole Guyana"
 
 msgid "Gwere"
-msgstr ""
+msgstr "Tiếng Gwere"
 
 msgid "Ha"
-msgstr ""
+msgstr "Tiếng Ha"
 
 msgid "Hadiyya"
-msgstr ""
+msgstr "Tiếng Hadiyya"
 
 msgid "Hadothi"
-msgstr ""
+msgstr "Tiếng Hadothi"
 
 msgid "Hadrami"
-msgstr ""
+msgstr "Tiếng Hadrami"
 
 msgid "Haitian Creole"
-msgstr ""
+msgstr "Tiếng Creole Haiti"
 
 msgid "Hakka"
-msgstr ""
+msgstr "Tiếng Hakka"
 
 msgid "Halbi"
-msgstr ""
+msgstr "Tiếng Halbi"
 
 msgid "Halh Mongolian"
-msgstr ""
+msgstr "Tiếng Mông Cổ Khalkha"
 
 msgid "Hani"
-msgstr ""
+msgstr "Tiếng Hani"
 
 msgid "Hassaniyya"
-msgstr ""
+msgstr "Tiếng Hassaniyya"
 
 msgid "Hausa"
-msgstr ""
+msgstr "Tiếng Hausa"
 
 msgid "Havu"
-msgstr ""
+msgstr "Tiếng Havu"
 
 msgid "Hawaiian Creole English"
-msgstr ""
+msgstr "Tiếng Anh Creole Hawaii"
 
 msgid "Haya"
-msgstr ""
+msgstr "Tiếng Haya"
 
 msgid "Hazaragi"
-msgstr ""
+msgstr "Tiếng Hazaragi"
 
 msgid "Hebrew"
-msgstr ""
+msgstr "Tiếng Do Thái"
 
 msgid "Hehe"
-msgstr ""
+msgstr "Tiếng Hehe"
 
 msgid "Herero"
-msgstr ""
+msgstr "Tiếng Herero"
 
 msgid "Hiligaynon"
-msgstr ""
+msgstr "Tiếng Hiligaynon"
 
 msgid "Hindi"
-msgstr ""
+msgstr "Tiếng Hindi"
 
 msgid "Hlai"
-msgstr ""
+msgstr "Tiếng Hlai"
 
 msgid "Hmong"
-msgstr ""
+msgstr "Tiếng Hmong"
 
 msgid "Hmong Shua"
-msgstr ""
+msgstr "Tiếng Hmong Shua"
 
 msgid "Ho"
-msgstr ""
+msgstr "Tiếng Ho"
 
 msgid "Huaxcaleca Nahuatl"
-msgstr ""
+msgstr "Tiếng Huaxcaleca Nahuatl"
 
 msgid "Huaylas Ancash Quechua"
-msgstr ""
+msgstr "Tiếng Huaylas Ancash Quechua"
 
 msgid "Huaylla Wanca Quechua"
-msgstr ""
+msgstr "Tiếng Huaylla Wanca Quechua"
 
 msgid "Huba"
-msgstr ""
+msgstr "Tiếng Huba"
 
 msgid "Huizhou Chinese"
-msgstr ""
+msgstr "Tiếng Trung Huệ Châu"
 
 msgid "Hungarian"
-msgstr ""
+msgstr "Tiếng Hungary"
 
 msgid "Hunsrik"
-msgstr ""
+msgstr "Tiếng Hunsrik"
 
 msgid "Hyam"
-msgstr ""
+msgstr "Tiếng Hyam"
 
 msgid "Iban"
-msgstr ""
+msgstr "Tiếng Iban"
 
 msgid "Ibanag"
-msgstr ""
+msgstr "Tiếng Ibanag"
 
 msgid "Ibibio"
-msgstr ""
+msgstr "Tiếng Ibibio"
 
 msgid "Idakho-Isukha-Tiriki"
-msgstr ""
+msgstr "Tiếng Idakho-Isukha-Tiriki"
 
 msgid "Idoma"
-msgstr ""
+msgstr "Tiếng Idoma"
 
 msgid "Igala"
-msgstr ""
+msgstr "Tiếng Igala"
 
 msgid "Igbo "
-msgstr ""
+msgstr "Tiếng Igbo "
 
 msgid "Igede"
-msgstr ""
+msgstr "Tiếng Igede"
 
 msgid "Ikwo"
-msgstr ""
+msgstr "Tiếng Ikwo"
 
 msgid "Iloko"
-msgstr ""
+msgstr "Tiếng Iloko"
 
 msgid "Indonesian"
-msgstr ""
+msgstr "Tiếng Indonesia"
 
 msgid "Ingush"
-msgstr ""
+msgstr "Tiếng Ingush"
 
 msgid "Inor"
-msgstr ""
+msgstr "Tiếng Inor"
 
 msgid "Interlingua"
-msgstr ""
+msgstr "Tiếng Interlingua"
 
 msgid "Iranian Persian"
-msgstr ""
+msgstr "Tiếng Ba Tư Iran"
 
 msgid "Iranun (Malaysia)"
-msgstr ""
+msgstr "Tiếng Iranun (Malaysia)"
 
 msgid "Iranun (Philippines)"
-msgstr ""
+msgstr "Tiếng Iranun (Philippines)"
 
 msgid "Iraqw"
-msgstr ""
+msgstr "Tiếng Iraqw"
 
 msgid "Isekiri"
-msgstr ""
+msgstr "Tiếng Isekiri"
 
 msgid "Islandic"
-msgstr ""
+msgstr "Tiếng Iceland"
 
 msgid "Isoko"
-msgstr ""
+msgstr "Tiếng Isoko"
 
 msgid "Italian"
-msgstr ""
+msgstr "Tiếng Ý"
 
 msgid "Italian - Italy"
-msgstr ""
+msgstr "Tiếng Ý - Ý"
 
 msgid "Italian - Switzerland"
-msgstr ""
+msgstr "Tiếng Ý - Thụy Sĩ"
 
 msgid "Iu Mein"
-msgstr ""
+msgstr "Tiếng Iu Mein"
 
 msgid "Izii"
-msgstr ""
+msgstr "Tiếng Izii"
 
 msgid "Izon"
-msgstr ""
+msgstr "Tiếng Izon"
 
 msgid "Jamaican Creole English"
-msgstr ""
+msgstr "Tiếng Anh Creole Jamaica"
 
 msgid "Jambi Malay"
-msgstr ""
+msgstr "Tiếng Mã Lai Jambi"
 
 msgid "Japanese"
-msgstr ""
+msgstr "Tiếng Nhật"
 
 msgid "Jarai"
-msgstr ""
+msgstr "Tiếng Gia Rai"
 
 msgid "Javanese"
-msgstr ""
+msgstr "Tiếng Java"
 
 msgid "Jju"
-msgstr ""
+msgstr "Tiếng Jju"
 
 msgid "Jola-Fonyi"
-msgstr ""
+msgstr "Tiếng Jola-Fonyi"
 
 msgid "Judeo-Arabic"
-msgstr ""
+msgstr "Tiếng Do Thái-Ả Rập"
 
 msgid "Juray"
-msgstr ""
+msgstr "Tiếng Juray"
 
 msgid "K'iche'"
-msgstr ""
+msgstr "Tiếng K'iche'"
 
 msgid "Kabardian"
-msgstr ""
+msgstr "Tiếng Kabardian"
 
 msgid "Kabiyè"
-msgstr ""
+msgstr "Tiếng Kabiyè"
 
 msgid "Kabras"
-msgstr ""
+msgstr "Tiếng Kabras"
 
 msgid "Kabuverdianu"
-msgstr ""
+msgstr "Tiếng Kabuverdianu"
 
 msgid "Kabyle"
-msgstr ""
+msgstr "Tiếng Kabyle"
 
 msgid "Kachhi"
-msgstr ""
+msgstr "Tiếng Kachhi"
 
 msgid "Kachi Koli"
-msgstr ""
+msgstr "Tiếng Kachi Koli"
 
 msgid "Kachin"
-msgstr ""
+msgstr "Tiếng Kachin"
 
 msgid "Kafa"
-msgstr ""
+msgstr "Tiếng Kafa"
 
 msgid "Kalabari"
-msgstr ""
+msgstr "Tiếng Kalabari"
 
 msgid "Kalanga"
-msgstr ""
+msgstr "Tiếng Kalanga"
 
 msgid "Kam"
-msgstr ""
+msgstr "Tiếng Kam"
 
 msgid "Kamayo"
-msgstr ""
+msgstr "Tiếng Kamayo"
 
 msgid "Kamba (Kenya)"
-msgstr ""
+msgstr "Tiếng Kamba (Kenya)"
 
 msgid "Kambaata"
-msgstr ""
+msgstr "Tiếng Kambaata"
 
 msgid "Kamwe"
-msgstr ""
+msgstr "Tiếng Kamwe"
 
 msgid "Kanembu"
-msgstr ""
+msgstr "Tiếng Kanembu"
 
 msgid "Kangri"
-msgstr ""
+msgstr "Tiếng Kangri"
 
 msgid "Kanuri"
-msgstr ""
+msgstr "Tiếng Kanuri"
 
 msgid "Kara-Kalpak"
-msgstr ""
+msgstr "Tiếng Kara-Kalpak"
 
 msgid "Karachay-Balkar"
-msgstr ""
+msgstr "Tiếng Karachay-Balkar"
 
 msgid "Karamojong"
-msgstr ""
+msgstr "Tiếng Karamojong"
 
 msgid "Karbi"
-msgstr ""
+msgstr "Tiếng Karbi"
 
 msgid "Kasem"
-msgstr ""
+msgstr "Tiếng Kasem"
 
 msgid "Kashmiri"
-msgstr ""
+msgstr "Tiếng Kashmiri"
 
 msgid "Katkari"
-msgstr ""
+msgstr "Tiếng Katkari"
 
 msgid "Kazakh"
-msgstr ""
+msgstr "Tiếng Kazakh"
 
 msgid "Kedah Malay"
-msgstr ""
+msgstr "Tiếng Mã Lai Kedah"
 
 msgid "Keiyo"
-msgstr ""
+msgstr "Tiếng Keiyo"
 
 msgid "Kekchí"
-msgstr ""
+msgstr "Tiếng Kekchí"
 
 msgid "Kendayan"
-msgstr ""
+msgstr "Tiếng Kendayan"
 
 msgid "Kerinci"
-msgstr ""
+msgstr "Tiếng Kerinci"
 
 msgid "Khams Tibetan"
-msgstr ""
+msgstr "Tiếng Tây Tạng Khams"
 
 msgid "Khandesi"
-msgstr ""
+msgstr "Tiếng Khandesi"
 
 msgid "Khasi"
-msgstr ""
+msgstr "Tiếng Khasi"
 
 msgid "Khmu"
-msgstr ""
+msgstr "Tiếng Khơ Mú"
 
 msgid "Khoekhoe"
-msgstr ""
+msgstr "Tiếng Khoekhoe"
 
 msgid "Khorasani Turkish"
-msgstr ""
+msgstr "Tiếng Thổ Nhĩ Kỳ Khorasan"
 
 msgid "Kikuyu"
-msgstr ""
+msgstr "Tiếng Kikuyu"
 
 msgid "Kim Mun"
-msgstr ""
+msgstr "Tiếng Kim Mun"
 
 msgid "Kimbundu"
-msgstr ""
+msgstr "Tiếng Kimbundu"
 
 msgid "Kinaray-A"
-msgstr ""
+msgstr "Tiếng Kinaray-A"
 
 msgid "Kinyarwanda"
-msgstr ""
+msgstr "Tiếng Kinyarwanda"
 
 msgid "Kipsigis"
-msgstr ""
+msgstr "Tiếng Kipsigis"
 
 msgid "Kirike"
-msgstr ""
+msgstr "Tiếng Kirike"
 
 msgid "Kistane"
-msgstr ""
+msgstr "Tiếng Kistane"
 
 msgid "Kita Maninkakan"
-msgstr ""
+msgstr "Tiếng Kita Maninkakan"
 
 msgid "Kituba (Congo)"
-msgstr ""
+msgstr "Tiếng Kituba (Congo)"
 
 msgid "Kituba (Democratic Republic of Congo)"
-msgstr ""
+msgstr "Tiếng Kituba (Cộng hòa Dân chủ Congo)"
 
 msgid "Kochila Tharu"
-msgstr ""
+msgstr "Tiếng Kochila Tharu"
 
 msgid "Kok Borok"
-msgstr ""
+msgstr "Tiếng Kok Borok"
 
 msgid "Kokola"
-msgstr ""
+msgstr "Tiếng Kokola"
 
 msgid "Komering"
-msgstr ""
+msgstr "Tiếng Komering"
 
 msgid "Komo (Democratic Republic of Congo)"
-msgstr ""
+msgstr "Tiếng Komo (Cộng hòa Dân chủ Congo)"
 
 msgid "Kongo"
-msgstr ""
+msgstr "Tiếng Kongo"
 
 msgid "Konkani"
-msgstr ""
+msgstr "Tiếng Konkani"
 
 msgid "Konkani (macrolanguage)"
-msgstr ""
+msgstr "Tiếng Konkani (ngôn ngữ vĩ mô)"
 
 msgid "Konkomba"
-msgstr ""
+msgstr "Tiếng Konkomba"
 
 msgid "Konyak Naga"
-msgstr ""
+msgstr "Tiếng Konyak Naga"
 
 msgid "Konzo"
-msgstr ""
+msgstr "Tiếng Konzo"
 
 msgid "Koongo"
-msgstr ""
+msgstr "Tiếng Koongo"
 
 msgid "Korean"
-msgstr ""
+msgstr "Tiếng Hàn"
 
 msgid "Korku"
-msgstr ""
+msgstr "Tiếng Korku"
 
 msgid "Kota Bangun Kutai Malay"
-msgstr ""
+msgstr "Tiếng Mã Lai Kutai Kota Bangun"
 
 msgid "Koya"
-msgstr ""
+msgstr "Tiếng Koya"
 
 msgid "Koyraboro Senni Songhai"
-msgstr ""
+msgstr "Tiếng Koyraboro Senni Songhai"
 
 msgid "Kpelle"
-msgstr ""
+msgstr "Tiếng Kpelle"
 
 msgid "Krio"
-msgstr ""
+msgstr "Tiếng Krio"
 
 msgid "Kuanyama"
-msgstr ""
+msgstr "Tiếng Kuanyama"
 
 msgid "Kui (India)"
-msgstr ""
+msgstr "Tiếng Kui (Ấn Độ)"
 
 msgid "Kumaoni"
-msgstr ""
+msgstr "Tiếng Kumaoni"
 
 msgid "Kumyk"
-msgstr ""
+msgstr "Tiếng Kumyk"
 
 msgid "Kura Ede Nago"
-msgstr ""
+msgstr "Tiếng Kura Ede Nago"
 
 msgid "Kuranko"
-msgstr ""
+msgstr "Tiếng Kuranko"
 
 msgid "Kurdish"
-msgstr ""
+msgstr "Tiếng Kurd"
 
 msgid "Kuria"
-msgstr ""
+msgstr "Tiếng Kuria"
 
 msgid "Kurukh"
-msgstr ""
+msgstr "Tiếng Kurukh"
 
 msgid "Kusaal"
-msgstr ""
+msgstr "Tiếng Kusaal"
 
 msgid "Kuy"
-msgstr ""
+msgstr "Tiếng Kuy"
 
 msgid "Kyrgyz"
-msgstr ""
+msgstr "Tiếng Kyrgyz"
 
 msgid "Kölsch"
-msgstr ""
+msgstr "Tiếng Kölsch"
 
 msgid "Lahnda"
-msgstr ""
+msgstr "Tiếng Lahnda"
 
 msgid "Lahu"
-msgstr ""
+msgstr "Tiếng Lahu"
 
 msgid "Lala-Bisa"
-msgstr ""
+msgstr "Tiếng Lala-Bisa"
 
 msgid "Lama (Togo)"
-msgstr ""
+msgstr "Tiếng Lama (Togo)"
 
 msgid "Lambadi"
-msgstr ""
+msgstr "Tiếng Lambadi"
 
 msgid "Lampung Api"
-msgstr ""
+msgstr "Tiếng Lampung Api"
 
 msgid "Langi"
-msgstr ""
+msgstr "Tiếng Langi"
 
 msgid "Lango (Sudan)"
-msgstr ""
+msgstr "Tiếng Lango (Sudan)"
 
 msgid "Lango (Uganda)"
-msgstr ""
+msgstr "Tiếng Lango (Uganda)"
 
 msgid "Lao-Isan"
-msgstr ""
+msgstr "Tiếng Lào-Isan"
 
 msgid "Large Flowery Miao"
-msgstr ""
+msgstr "Tiếng Miêu Hoa Lớn"
 
 msgid "Latvian"
-msgstr ""
+msgstr "Tiếng Latvia"
 
 msgid "Ledo Kaili"
-msgstr ""
+msgstr "Tiếng Ledo Kaili"
 
 msgid "Lega-Shabunda"
-msgstr ""
+msgstr "Tiếng Lega-Shabunda"
 
 msgid "Lendu"
-msgstr ""
+msgstr "Tiếng Lendu"
 
 msgid "Lezghian"
-msgstr ""
+msgstr "Tiếng Lezghian"
 
 msgid "Li'o"
-msgstr ""
+msgstr "Tiếng Li'o"
 
 msgid "Liberia Kpelle"
-msgstr ""
+msgstr "Tiếng Liberia Kpelle"
 
 msgid "Ligurian"
-msgstr ""
+msgstr "Tiếng Ligurian"
 
 msgid "Limbu"
-msgstr ""
+msgstr "Tiếng Limbu"
 
 msgid "Limburgan"
-msgstr ""
+msgstr "Tiếng Limburgan"
 
 msgid "Lingala"
-msgstr ""
+msgstr "Tiếng Lingala"
 
 msgid "Lingao"
-msgstr ""
+msgstr "Tiếng Lingao"
 
 msgid "Lipo"
-msgstr ""
+msgstr "Tiếng Lipo"
 
 msgid "Lisu"
-msgstr ""
+msgstr "Tiếng Lisu"
 
 msgid "Lithuanian"
-msgstr ""
+msgstr "Tiếng Litva"
 
 msgid "Liujiang Zhuang"
-msgstr ""
+msgstr "Tiếng Choang Liễu Giang"
 
 msgid "Liuqian Zhuang"
-msgstr ""
+msgstr "Tiếng Choang Liuqian"
 
 msgid "Lobi"
-msgstr ""
+msgstr "Tiếng Lobi"
 
 msgid "Logooli"
-msgstr ""
+msgstr "Tiếng Logooli"
 
 msgid "Logudorese Sardinian"
-msgstr ""
+msgstr "Tiếng Sardinia Logudorese"
 
 msgid "Lolopo"
-msgstr ""
+msgstr "Tiếng Lolopo"
 
 msgid "Lombard"
-msgstr ""
+msgstr "Tiếng Lombard"
 
 msgid "Lomwe"
-msgstr ""
+msgstr "Tiếng Lomwe"
 
 msgid "Lozi"
-msgstr ""
+msgstr "Tiếng Lozi"
 
 msgid "Luba-Lulua"
-msgstr ""
+msgstr "Tiếng Luba-Lulua"
 
 msgid "Luchazi"
-msgstr ""
+msgstr "Tiếng Luchazi"
 
 msgid "Lugbara"
-msgstr ""
+msgstr "Tiếng Lugbara"
 
 msgid "Luguru"
-msgstr ""
+msgstr "Tiếng Luguru"
 
 msgid "Lunda"
-msgstr ""
+msgstr "Tiếng Lunda"
 
 msgid "Luo (Kenya and Tanzania)"
-msgstr ""
+msgstr "Tiếng Luo (Kenya và Tanzania)"
 
 msgid "Lushai"
-msgstr ""
+msgstr "Tiếng Lushai"
 
 msgid "Luvale"
-msgstr ""
+msgstr "Tiếng Luvale"
 
 msgid "Luxembourgish"
-msgstr ""
+msgstr "Tiếng Luxembourg"
 
 msgid "Luyia"
-msgstr ""
+msgstr "Tiếng Luyia"
 
 msgid "Lü"
-msgstr ""
+msgstr "Tiếng Lự"
 
 msgid "Ma'di"
-msgstr ""
+msgstr "Tiếng Ma'di"
 
 msgid "Maasina Fulfulde"
-msgstr ""
+msgstr "Tiếng Maasina Fulfulde"
 
 msgid "Maay"
-msgstr ""
+msgstr "Tiếng Maay"
 
 msgid "Maba (Chad)"
-msgstr ""
+msgstr "Tiếng Maba (Chad)"
 
 msgid "Maba (Indonesia)"
-msgstr ""
+msgstr "Tiếng Maba (Indonesia)"
 
 msgid "Macedo-Romanian"
-msgstr ""
+msgstr "Tiếng Aromania"
 
 msgid "Macedonian"
-msgstr ""
+msgstr "Tiếng Macedonia"
 
 msgid "Machame"
-msgstr ""
+msgstr "Tiếng Machame"
 
 msgid "Madi"
-msgstr ""
+msgstr "Tiếng Madi"
 
 msgid "Madurese"
-msgstr ""
+msgstr "Tiếng Madurese"
 
 msgid "Magahi"
-msgstr ""
+msgstr "Tiếng Magahi"
 
 msgid "Maguindanaon"
-msgstr ""
+msgstr "Tiếng Maguindanaon"
 
 msgid "Mahou"
-msgstr ""
+msgstr "Tiếng Mahou"
 
 msgid "Mainfränkisch"
-msgstr ""
+msgstr "Tiếng Mainfränkisch"
 
 msgid "Maithili"
-msgstr ""
+msgstr "Tiếng Maithili"
 
 msgid "Makasar"
-msgstr ""
+msgstr "Tiếng Makasar"
 
 msgid "Makassar Malay"
-msgstr ""
+msgstr "Tiếng Mã Lai Makassar"
 
 msgid "Makhuwa"
-msgstr ""
+msgstr "Tiếng Makhuwa"
 
 msgid "Makhuwa-Marrevone"
-msgstr ""
+msgstr "Tiếng Makhuwa-Marrevone"
 
 msgid "Makhuwa-Meetto"
-msgstr ""
+msgstr "Tiếng Makhuwa-Meetto"
 
 msgid "Makhuwa-Saka"
-msgstr ""
+msgstr "Tiếng Makhuwa-Saka"
 
 msgid "Makhuwa-Shirima"
-msgstr ""
+msgstr "Tiếng Makhuwa-Shirima"
 
 msgid "Makonde"
-msgstr ""
+msgstr "Tiếng Makonde"
 
 msgid "Malagasy"
-msgstr ""
+msgstr "Tiếng Malagasy"
 
 msgid "Malawi Lomwe"
-msgstr ""
+msgstr "Tiếng Malawi Lomwe"
 
 msgid "Malawi Sena"
-msgstr ""
+msgstr "Tiếng Sena Malawi"
 
 msgid "Malay"
-msgstr ""
+msgstr "Tiếng Mã Lai"
 
 msgid "Malayalam"
-msgstr ""
+msgstr "Tiếng Malayalam"
 
 msgid "Malayic Dayak"
-msgstr ""
+msgstr "Tiếng Dayak Mã Lai"
 
 msgid "Maltese"
-msgstr ""
+msgstr "Tiếng Malta"
 
 msgid "Malvi"
-msgstr ""
+msgstr "Tiếng Malvi"
 
 msgid "Mam"
-msgstr ""
+msgstr "Tiếng Mam"
 
 msgid "Mamara Senoufo"
-msgstr ""
+msgstr "Tiếng Mamara Senoufo"
 
 msgid "Mambwe-Lungu"
-msgstr ""
+msgstr "Tiếng Mambwe-Lungu"
 
 msgid "Manado Malay"
-msgstr ""
+msgstr "Tiếng Mã Lai Manado"
 
 msgid "Manchu"
-msgstr ""
+msgstr "Tiếng Mãn Châu"
 
 msgid "Mandar"
-msgstr ""
+msgstr "Tiếng Mandar"
 
 msgid "Mandaya"
-msgstr ""
+msgstr "Tiếng Mandaya"
 
 msgid "Mandeali"
-msgstr ""
+msgstr "Tiếng Mandeali"
 
 msgid "Mandingo"
-msgstr ""
+msgstr "Tiếng Mandingo"
 
 msgid "Mandinka"
-msgstr ""
+msgstr "Tiếng Mandinka"
 
 msgid "Mandjak"
-msgstr ""
+msgstr "Tiếng Mandjak"
 
 msgid "Manga Kanuri"
-msgstr ""
+msgstr "Tiếng Manga Kanuri"
 
 msgid "Mangbetu"
-msgstr ""
+msgstr "Tiếng Mangbetu"
 
 msgid "Manggarai"
-msgstr ""
+msgstr "Tiếng Manggarai"
 
 msgid "Manipuri"
-msgstr ""
+msgstr "Tiếng Manipuri"
 
 msgid "Mano"
-msgstr ""
+msgstr "Tiếng Mano"
 
 msgid "Manya"
-msgstr ""
+msgstr "Tiếng Manya"
 
 msgid "Manyika"
-msgstr ""
+msgstr "Tiếng Manyika"
 
 msgid "Maranao"
-msgstr ""
+msgstr "Tiếng Maranao"
 
 msgid "Marathi"
-msgstr ""
+msgstr "Tiếng Marathi"
 
 msgid "Marenje"
-msgstr ""
+msgstr "Tiếng Marenje"
 
 msgid "Marwari"
-msgstr ""
+msgstr "Tiếng Marwari"
 
 msgid "Marwari (India)"
-msgstr ""
+msgstr "Tiếng Marwari (Ấn Độ)"
 
 msgid "Masaaba"
-msgstr ""
+msgstr "Tiếng Masaaba"
 
 msgid "Masai"
-msgstr ""
+msgstr "Tiếng Masai"
 
 msgid "Masalit"
-msgstr ""
+msgstr "Tiếng Masalit"
 
 msgid "Masbatenyo"
-msgstr ""
+msgstr "Tiếng Masbatenyo"
 
 msgid "Masikoro Malagasy"
-msgstr ""
+msgstr "Tiếng Masikoro Malagasy"
 
 msgid "Mawchi"
-msgstr ""
+msgstr "Tiếng Mawchi"
 
 msgid "Maxi Gbe"
-msgstr ""
+msgstr "Tiếng Maxi Gbe"
 
 msgid "Mazanderani"
-msgstr ""
+msgstr "Tiếng Mazanderani"
 
 msgid "Mbandja"
-msgstr ""
+msgstr "Tiếng Mbandja"
 
 msgid "Mbangala"
-msgstr ""
+msgstr "Tiếng Mbangala"
 
 msgid "Mbangi"
-msgstr ""
+msgstr "Tiếng Mbangi"
 
 msgid "Mbunda"
-msgstr ""
+msgstr "Tiếng Mbunda"
 
 msgid "Mende (Papua New Guinea)"
-msgstr ""
+msgstr "Tiếng Mende (Papua New Guinea)"
 
 msgid "Mende (Sierra Leone)"
-msgstr ""
+msgstr "Tiếng Mende (Sierra Leone)"
 
 msgid "Mennonite Low German"
-msgstr ""
+msgstr "Tiếng Hạ Đức Mennonite"
 
 msgid "Meru"
-msgstr ""
+msgstr "Tiếng Meru"
 
 msgid "Merwari"
-msgstr ""
+msgstr "Tiếng Merwari"
 
 msgid "Mewari"
-msgstr ""
+msgstr "Tiếng Mewari"
 
 msgid "Mewati"
-msgstr ""
+msgstr "Tiếng Mewati"
 
 msgid "Middle Newar"
-msgstr ""
+msgstr "Tiếng Newar trung đại"
 
 msgid "Min Zhong Chinese"
-msgstr ""
+msgstr "Tiếng Mân Trung"
 
 msgid "Minangkabau"
-msgstr ""
+msgstr "Tiếng Minangkabau"
 
 msgid "Mingrelian"
-msgstr ""
+msgstr "Tiếng Mingrelian"
 
 msgid "Miraya Bikol"
-msgstr ""
+msgstr "Tiếng Miraya Bikol"
 
 msgid "Mising"
-msgstr ""
+msgstr "Tiếng Mising"
 
 msgid "Moba"
-msgstr ""
+msgstr "Tiếng Moba"
 
 msgid "Mochi"
-msgstr ""
+msgstr "Tiếng Mochi"
 
 msgid "Moksha"
-msgstr ""
+msgstr "Tiếng Moksha"
 
 msgid "Mon"
-msgstr ""
+msgstr "Tiếng Môn"
 
 msgid "Mongo"
-msgstr ""
+msgstr "Tiếng Mongo"
 
 msgid "Mongolian"
-msgstr ""
+msgstr "Tiếng Mông Cổ"
 
 msgid "Morisyen"
-msgstr ""
+msgstr "Tiếng Morisyen"
 
 msgid "Mossi"
-msgstr ""
+msgstr "Tiếng Mossi"
 
 msgid "Mumuye"
-msgstr ""
+msgstr "Tiếng Mumuye"
 
 msgid "Muna"
-msgstr ""
+msgstr "Tiếng Muna"
 
 msgid "Munda"
-msgstr ""
+msgstr "Tiếng Munda"
 
 msgid "Mundari"
-msgstr ""
+msgstr "Tiếng Mundari"
 
 msgid "Muong"
-msgstr ""
+msgstr "Tiếng Mường"
 
 msgid "Musey"
-msgstr ""
+msgstr "Tiếng Musey"
 
 msgid "Musi"
-msgstr ""
+msgstr "Tiếng Musi"
 
 msgid "Mwaghavul"
-msgstr ""
+msgstr "Tiếng Mwaghavul"
 
 msgid "Mwera (Chimwera)"
-msgstr ""
+msgstr "Tiếng Mwera (Chimwera)"
 
 msgid "Mwera (Nyasa)"
-msgstr ""
+msgstr "Tiếng Mwera (Nyasa)"
 
 msgid "Naba"
-msgstr ""
+msgstr "Tiếng Naba"
 
 msgid "Nage"
-msgstr ""
+msgstr "Tiếng Nage"
 
 msgid "Nambya"
-msgstr ""
+msgstr "Tiếng Nambya"
 
 msgid "Nande"
-msgstr ""
+msgstr "Tiếng Nande"
 
 msgid "Nandi"
-msgstr ""
+msgstr "Tiếng Nandi"
 
 msgid "Naxi"
-msgstr ""
+msgstr "Tiếng Naxi"
 
 msgid "Ndau"
-msgstr ""
+msgstr "Tiếng Ndau"
 
 msgid "Ndonde Hamba"
-msgstr ""
+msgstr "Tiếng Ndonde Hamba"
 
 msgid "Ndonga"
-msgstr ""
+msgstr "Tiếng Ndonga"
 
 msgid "Ndzwani Comorian"
-msgstr ""
+msgstr "Tiếng Ndzwani Comorian"
 
 msgid "Neapolitan"
-msgstr ""
+msgstr "Tiếng Napoli"
 
 msgid "Negeri Sembilan Malay"
-msgstr ""
+msgstr "Tiếng Mã Lai Negeri Sembilan"
 
 msgid "Nepali"
-msgstr ""
+msgstr "Tiếng Nepal"
 
 msgid "Newari"
-msgstr ""
+msgstr "Tiếng Newari"
 
 msgid "Ngaju"
-msgstr ""
+msgstr "Tiếng Ngaju"
 
 msgid "Ngambay"
-msgstr ""
+msgstr "Tiếng Ngambay"
 
 msgid "Ngandyera"
-msgstr ""
+msgstr "Tiếng Ngandyera"
 
 msgid "Ngazidja Comorian"
-msgstr ""
+msgstr "Tiếng Ngazidja Comorian"
 
 msgid "Ngbaka"
-msgstr ""
+msgstr "Tiếng Ngbaka"
 
 msgid "Ngiemboon"
-msgstr ""
+msgstr "Tiếng Ngiemboon"
 
 msgid "Ngundu"
-msgstr ""
+msgstr "Tiếng Ngundu"
 
 msgid "Nias"
-msgstr ""
+msgstr "Tiếng Nias"
 
 msgid "Nigerian Fulfulde"
-msgstr ""
+msgstr "Tiếng Fulfulde Nigeria"
 
 msgid "Nigerian Pidgin"
-msgstr ""
+msgstr "Tiếng bồi Nigeria"
 
 msgid "Nilamba"
-msgstr ""
+msgstr "Tiếng Nilamba"
 
 msgid "Nimadi"
-msgstr ""
+msgstr "Tiếng Nimadi"
 
 msgid "Nkangala"
-msgstr ""
+msgstr "Tiếng Nkangala"
 
 msgid "Nobiin"
-msgstr ""
+msgstr "Tiếng Nobiin"
 
 msgid "Nong Zhuang"
-msgstr ""
+msgstr "Tiếng Choang Nông"
 
 msgid "North Moluccan Malay"
-msgstr ""
+msgstr "Tiếng Mã Lai Bắc Molucca"
 
 msgid "North Ndebele"
-msgstr ""
+msgstr "Tiếng Bắc Ndebele"
 
 msgid "Northeastern Dinka"
-msgstr ""
+msgstr "Tiếng Dinka vùng Đông Bắc"
 
 msgid "Northeastern Thai"
-msgstr ""
+msgstr "Tiếng Thái Đông Bắc"
 
 msgid "Northern Conchucos Ancash Quechua"
-msgstr ""
+msgstr "Tiếng Bắc Conchucos Ancash Quechua"
 
 msgid "Northern Dong"
-msgstr ""
+msgstr "Tiếng Đồng miền Bắc"
 
 msgid "Northern Gondi"
-msgstr ""
+msgstr "Tiếng Gondi phía Bắc"
 
 msgid "Northern Hindko"
-msgstr ""
+msgstr "Tiếng Hindko miền Bắc"
 
 msgid "Northern Khmer"
-msgstr ""
+msgstr "Tiếng Bắc Khmer"
 
 msgid "Northern Kissi"
-msgstr ""
+msgstr "Tiếng Bắc Kissi"
 
 msgid "Northern Kurdish"
-msgstr ""
+msgstr "Tiếng Kurd miền Bắc"
 
 msgid "Northern Luri"
-msgstr ""
+msgstr "Tiếng Luri phía Bắc"
 
 msgid "Northern Min"
-msgstr ""
+msgstr "Tiếng Mân Bắc"
 
 msgid "Northern Ngbandi"
-msgstr ""
+msgstr "Tiếng Ngbandi phía Bắc"
 
 msgid "Northern Oaxaca Nahuatl"
-msgstr ""
+msgstr "Tiếng Nahuatl vùng Bắc Oaxaca"
 
 msgid "Northern Pashto"
-msgstr ""
+msgstr "Tiếng Pashto miền Bắc"
 
 msgid "Northern Qiandong Miao"
-msgstr ""
+msgstr "Tiếng Miêu Qiandong miền Bắc"
 
 msgid "Northern Thai"
-msgstr ""
+msgstr "Tiếng Thái miền Bắc"
 
 msgid "Northern Uzbek"
-msgstr ""
+msgstr "Tiếng Uzbek miền Bắc"
 
 msgid "Northwest Gbaya"
-msgstr ""
+msgstr "Tiếng Tây Bắc Gbaya"
 
 msgid "Norwegian"
-msgstr ""
+msgstr "Tiếng Na Uy"
 
 msgid "Norwegian Nynorsk"
-msgstr ""
+msgstr "Tiếng Na Uy Nynorsk"
 
 msgid "Nsenga"
-msgstr ""
+msgstr "Tiếng Nsenga"
 
 msgid "Nuer"
-msgstr ""
+msgstr "Tiếng Nuer"
 
 msgid "Nung (Viet Nam)"
-msgstr ""
+msgstr "Tiếng Nùng (Việt Nam)"
 
 msgid "Nupe-Nupe-Tako"
-msgstr ""
+msgstr "Tiếng Nupe-Nupe-Tako"
 
 msgid "Nyakyusa-Ngonde"
-msgstr ""
+msgstr "Tiếng Nyakyusa-Ngonde"
 
 msgid "Nyambo"
-msgstr ""
+msgstr "Tiếng Nyambo"
 
 msgid "Nyamwezi"
-msgstr ""
+msgstr "Tiếng Nyamwezi"
 
 msgid "Nyaneka"
-msgstr ""
+msgstr "Tiếng Nyaneka"
 
 msgid "Nyankole"
-msgstr ""
+msgstr "Tiếng Nyankole"
 
 msgid "Nyaturu"
-msgstr ""
+msgstr "Tiếng Nyaturu"
 
 msgid "Nyeu"
-msgstr ""
+msgstr "Tiếng Nyeu"
 
 msgid "Nyiha (Tanzania)"
-msgstr ""
+msgstr "Tiếng Nyiha (Tanzania)"
 
 msgid "Nyindu"
-msgstr ""
+msgstr "Tiếng Nyindu"
 
 msgid "Nyole"
-msgstr ""
+msgstr "Tiếng Nyole"
 
 msgid "Nyore"
-msgstr ""
+msgstr "Tiếng Nyore"
 
 msgid "Nyoro"
-msgstr ""
+msgstr "Tiếng Nyoro"
 
 msgid "Nyungwe"
-msgstr ""
+msgstr "Tiếng Nyungwe"
 
 msgid "Nzima"
-msgstr ""
+msgstr "Tiếng Nzima"
 
 msgid "Occitan"
-msgstr ""
+msgstr "Tiếng Occitan"
 
 msgid "Odia"
-msgstr ""
+msgstr "Tiếng Odia"
 
 msgid "Ogbah"
-msgstr ""
+msgstr "Tiếng Ogbah"
 
 msgid "Oriya"
-msgstr ""
+msgstr "Tiếng Oriya"
 
 msgid "Oromo"
-msgstr ""
+msgstr "Tiếng Oromo"
 
 msgid "Osing"
-msgstr ""
+msgstr "Tiếng Osing"
 
 msgid "Ossetian"
-msgstr ""
+msgstr "Tiếng Ossetia"
 
 msgid "Pahari-Potwari"
-msgstr ""
+msgstr "Tiếng Pahari-Potwari"
 
 msgid "Pampanga"
-msgstr ""
+msgstr "Tiếng Pampanga"
 
 msgid "Pangasinan"
-msgstr ""
+msgstr "Tiếng Pangasinan"
 
 msgid "Panjabi"
-msgstr ""
+msgstr "Tiếng Panjabi"
 
 msgid "Papiamento"
-msgstr ""
+msgstr "Tiếng Papiamento"
 
 msgid "Papiamento - Aruba"
-msgstr ""
+msgstr "Tiếng Papiamento - Aruba"
 
 msgid "Papiamentu - Curaçao (Bonaire)"
-msgstr ""
+msgstr "Tiếng Papiamentu - Curaçao (Bonaire)"
 
 msgid "Papuan Malay"
-msgstr ""
+msgstr "Tiếng Mã Lai Papua"
 
 msgid "Paraguayan Guaraní"
-msgstr ""
+msgstr "Tiếng Guaraní Paraguay"
 
 msgid "Parauk"
-msgstr ""
+msgstr "Tiếng Parauk"
 
 msgid "Pare"
-msgstr ""
+msgstr "Tiếng Pare"
 
 msgid "Parkari Koli"
-msgstr ""
+msgstr "Tiếng Parkari Koli"
 
 msgid "Parsi"
-msgstr ""
+msgstr "Tiếng Parsi"
 
 msgid "Parsi-Dari"
-msgstr ""
+msgstr "Tiếng Parsi-Dari"
 
 msgid "Pashto"
-msgstr ""
+msgstr "Tiếng Pashto"
 
 msgid "Pattani Malay"
-msgstr ""
+msgstr "Tiếng Mã Lai Pattani"
 
 msgid "Pauri Bareli"
-msgstr ""
+msgstr "Tiếng Pauri Bareli"
 
 msgid "Pedi"
-msgstr ""
+msgstr "Tiếng Pedi"
 
 msgid "Pelende"
-msgstr ""
+msgstr "Tiếng Pelende"
 
 msgid "Pengo"
-msgstr ""
+msgstr "Tiếng Pengo"
 
 msgid "Pennsylvania German"
-msgstr ""
+msgstr "Tiếng Đức Pennsylvania"
 
 msgid "Peripheral Mongolian"
-msgstr ""
+msgstr "Tiếng Mông Cổ ngoại vi"
 
 msgid "Persian"
-msgstr ""
+msgstr "Tiếng Ba Tư"
 
 msgid "Phende"
-msgstr ""
+msgstr "Tiếng Phende"
 
 msgid "Phu Thai"
-msgstr ""
+msgstr "Tiếng Phu Thai"
 
 msgid "Phuan"
-msgstr ""
+msgstr "Tiếng Phuan"
 
 msgid "Picard"
-msgstr ""
+msgstr "Tiếng Picard"
 
 msgid "Piemontese"
-msgstr ""
+msgstr "Tiếng Piemontese"
 
 msgid "Plateau Malagasy"
-msgstr ""
+msgstr "Tiếng Malagasy cao nguyên"
 
 msgid "Pnar"
-msgstr ""
+msgstr "Tiếng Pnar"
 
 msgid "Polish"
-msgstr ""
+msgstr "Tiếng Ba Lan"
 
 msgid "Pontic"
-msgstr ""
+msgstr "Tiếng Pontic"
 
 msgid "Portuguese"
-msgstr ""
+msgstr "Tiếng Bồ Đào Nha"
 
 msgid "Portuguese - Brazil"
-msgstr ""
+msgstr "Tiếng Bồ Đào Nha - Brazil"
 
 msgid "Portuguese - Portugal"
-msgstr ""
+msgstr "Tiếng Bồ Đào Nha - Bồ Đào Nha"
 
 msgid "Powari"
-msgstr ""
+msgstr "Tiếng Powari"
 
 msgid "Pulaar "
-msgstr ""
+msgstr "Tiếng Pulaar "
 
 msgid "Pular"
-msgstr ""
+msgstr "Tiếng Pular"
 
 msgid "Punjabi"
-msgstr ""
+msgstr "Tiếng Punjabi"
 
 msgid "Punjabi - Arab"
-msgstr ""
+msgstr "Tiếng Punjabi - chữ Ả Rập"
 
 msgid "Puno Quechua"
-msgstr ""
+msgstr "Tiếng Puno Quechua"
 
 msgid "Puxian Min"
-msgstr ""
+msgstr "Tiếng Mân Phủ Tiên"
 
 msgid "Pwo Eastern Karen"
-msgstr ""
+msgstr "Tiếng Karen Pwo miền Đông"
 
 msgid "Pökoot"
-msgstr ""
+msgstr "Tiếng Pökoot"
 
 msgid "Qashqa'i"
-msgstr ""
+msgstr "Tiếng Qashqa'i"
 
 msgid "Quechua "
-msgstr ""
+msgstr "Tiếng Quechua "
 
 msgid "Rabha"
-msgstr ""
+msgstr "Tiếng Rabha"
 
 msgid "Rajasthani"
-msgstr ""
+msgstr "Tiếng Rajasthani"
 
 msgid "Rajbanshi"
-msgstr ""
+msgstr "Tiếng Rajbanshi"
 
 msgid "Rakhine"
-msgstr ""
+msgstr "Tiếng Rakhine"
 
 msgid "Rana Tharu"
-msgstr ""
+msgstr "Tiếng Rana Tharu"
 
 msgid "Rangpuri"
-msgstr ""
+msgstr "Tiếng Rangpuri"
 
 msgid "Rathawi"
-msgstr ""
+msgstr "Tiếng Rathawi"
 
 msgid "Rejang"
-msgstr ""
+msgstr "Tiếng Rejang"
 
 msgid "Reunion Creole"
-msgstr ""
+msgstr "Tiếng Creole Réunion"
 
 msgid "Riverain Sango"
-msgstr ""
+msgstr "Tiếng Riverain Sango"
 
 msgid "Rohingya"
-msgstr ""
+msgstr "Tiếng Rohingya"
 
 msgid "Romagnol"
-msgstr ""
+msgstr "Tiếng Romagnol"
 
 msgid "Romanian"
-msgstr ""
+msgstr "Tiếng Romania"
 
 msgid "Romany"
-msgstr ""
+msgstr "Tiếng Romany"
 
 msgid "Ronga"
-msgstr ""
+msgstr "Tiếng Ronga"
 
 msgid "Ruching Palaung"
-msgstr ""
+msgstr "Tiếng Ruching Palaung"
 
 msgid "Rundi"
-msgstr ""
+msgstr "Tiếng Rundi"
 
 msgid "Russian"
-msgstr ""
+msgstr "Tiếng Nga"
 
 msgid "Ruund"
-msgstr ""
+msgstr "Tiếng Ruund"
 
 msgid "S'gaw Karen"
-msgstr ""
+msgstr "Tiếng S'gaw Karen"
 
 msgid "Saamia"
-msgstr ""
+msgstr "Tiếng Saamia"
 
 msgid "Sabah Malay"
-msgstr ""
+msgstr "Tiếng Mã Lai Sabah"
 
 msgid "Sadri"
-msgstr ""
+msgstr "Tiếng Sadri"
 
 msgid "Sakalava Malagasy"
-msgstr ""
+msgstr "Tiếng Sakalava Malagasy"
 
 msgid "Sambalpuri"
-msgstr ""
+msgstr "Tiếng Sambalpuri"
 
 msgid "Samoan"
-msgstr ""
+msgstr "Tiếng Samoa"
 
 msgid "Samogitian"
-msgstr ""
+msgstr "Tiếng Samogitian"
 
 msgid "San Salvador Kongo"
-msgstr ""
+msgstr "Tiếng San Salvador Kongo"
 
 msgid "Sanga (Democratic Republic of Congo)"
-msgstr ""
+msgstr "Tiếng Sanga (Cộng hòa Dân chủ Congo)"
 
 msgid "Sangil"
-msgstr ""
+msgstr "Tiếng Sangil"
 
 msgid "Sangir"
-msgstr ""
+msgstr "Tiếng Sangir"
 
 msgid "Sango"
-msgstr ""
+msgstr "Tiếng Sango"
 
 msgid "Sankaran Maninka"
-msgstr ""
+msgstr "Tiếng Sankaran Maninka"
 
 msgid "Santa María La Alta Nahuatl"
-msgstr ""
+msgstr "Tiếng Santa María La Alta Nahuatl"
 
 msgid "Santali"
-msgstr ""
+msgstr "Tiếng Santali"
 
 msgid "Saraiki"
-msgstr ""
+msgstr "Tiếng Saraiki"
 
 msgid "Sardinian"
-msgstr ""
+msgstr "Tiếng Sardinia"
 
 msgid "Sasak"
-msgstr ""
+msgstr "Tiếng Sasak"
 
 msgid "Saya"
-msgstr ""
+msgstr "Tiếng Saya"
 
 msgid "Scots"
-msgstr ""
+msgstr "Tiếng Scots"
 
 msgid "Scottish Gaelic"
-msgstr ""
+msgstr "Tiếng Gaelic Scotland"
 
 msgid "Sebat Bet Gurage"
-msgstr ""
+msgstr "Tiếng Sebat Bet Gurage"
 
 msgid "Sehwi"
-msgstr ""
+msgstr "Tiếng Sehwi"
 
 msgid "Sena"
-msgstr ""
+msgstr "Tiếng Sena"
 
 msgid "Serbian"
-msgstr ""
+msgstr "Tiếng Serbia"
 
 msgid "Serbo-Croatian"
-msgstr ""
+msgstr "Tiếng Serbia-Croatia"
 
 msgid "Serer"
-msgstr ""
+msgstr "Tiếng Serer"
 
 msgid "Shambala"
-msgstr ""
+msgstr "Tiếng Shambala"
 
 msgid "Shan"
-msgstr ""
+msgstr "Tiếng Shan"
 
 msgid "Shekhawati"
-msgstr ""
+msgstr "Tiếng Shekhawati"
 
 msgid "Shelta"
-msgstr ""
+msgstr "Tiếng Shelta"
 
 msgid "Shi"
-msgstr ""
+msgstr "Tiếng Shi"
 
 msgid "Shina"
-msgstr ""
+msgstr "Tiếng Shina"
 
 msgid "Shona"
-msgstr ""
+msgstr "Tiếng Shona"
 
 msgid "Sichuan Yi"
-msgstr ""
+msgstr "Tiếng Di Tứ Xuyên"
 
 msgid "Sicilian"
-msgstr ""
+msgstr "Tiếng Sicilia"
 
 msgid "Sidamo"
-msgstr ""
+msgstr "Tiếng Sidamo"
 
 msgid "Sierra Negra Nahuatl"
-msgstr ""
+msgstr "Tiếng Sierra Negra Nahuatl"
 
 msgid "Silesian"
-msgstr ""
+msgstr "Tiếng Silesia"
 
 msgid "Siliput"
-msgstr ""
+msgstr "Tiếng Siliput"
 
 msgid "Silt'e"
-msgstr ""
+msgstr "Tiếng Silt'e"
 
 msgid "Sindhi"
-msgstr ""
+msgstr "Tiếng Sindhi"
 
 msgid "Sinhalese"
-msgstr ""
+msgstr "Tiếng Sinhala"
 
 msgid "Sinte Romani"
-msgstr ""
+msgstr "Tiếng Sinte Romani"
 
 msgid "Sirmauri"
-msgstr ""
+msgstr "Tiếng Sirmauri"
 
 msgid "Slovak"
-msgstr ""
+msgstr "Tiếng Slovak"
 
 msgid "Slovenian"
-msgstr ""
+msgstr "Tiếng Slovenia"
 
 msgid "Soga"
-msgstr ""
+msgstr "Tiếng Soga"
 
 msgid "Somali"
-msgstr ""
+msgstr "Tiếng Somali"
 
 msgid "Songe"
-msgstr ""
+msgstr "Tiếng Songe"
 
 msgid "Soninke"
-msgstr ""
+msgstr "Tiếng Soninke"
 
 msgid "Sora"
-msgstr ""
+msgstr "Tiếng Sora"
 
 msgid "Sotho"
-msgstr ""
+msgstr "Tiếng Sotho"
 
 msgid "South Bolivian Quechua"
-msgstr ""
+msgstr "Tiếng Quechua Nam Bolivia"
 
 msgid "South Central Dinka"
-msgstr ""
+msgstr "Tiếng Nam Trung Bộ Dinka"
 
 msgid "South Ndebele"
-msgstr ""
+msgstr "Tiếng Nam Ndebele"
 
 msgid "Southeastern Dinka"
-msgstr ""
+msgstr "Tiếng Dinka Đông Nam"
 
 msgid "Southeastern Puebla Nahuatl"
-msgstr ""
+msgstr "Tiếng Nahuatl vùng Đông Nam Puebla"
 
 msgid "Southern Bai"
-msgstr ""
+msgstr "Tiếng Bạch miền Nam"
 
 msgid "Southern Conchucos Ancash Quechua"
-msgstr ""
+msgstr "Tiếng Nam Conchucos Ancash Quechua"
 
 msgid "Southern Dagaare"
-msgstr ""
+msgstr "Tiếng Nam Dagaare"
 
 msgid "Southern Dong"
-msgstr ""
+msgstr "Tiếng Đồng miền Nam"
 
 msgid "Southern Hindko"
-msgstr ""
+msgstr "Tiếng Hindko miền Nam"
 
 msgid "Southern Kurdish"
-msgstr ""
+msgstr "Tiếng Kurd miền Nam"
 
 msgid "Southern Lolopo"
-msgstr ""
+msgstr "Tiếng Lolopo miền Nam"
 
 msgid "Southern Luri"
-msgstr ""
+msgstr "Tiếng Luri miền Nam"
 
 msgid "Southern Nago"
-msgstr ""
+msgstr "Tiếng Nam Nago"
 
 msgid "Southern Nisu"
-msgstr ""
+msgstr "Tiếng Nam Nisu"
 
 msgid "Southern Qiandong Miao"
-msgstr ""
+msgstr "Tiếng Miêu Qiandong miền Nam"
 
 msgid "Southern Sama"
-msgstr ""
+msgstr "Tiếng Nam Sama"
 
 msgid "Southern Sorsoganon"
-msgstr ""
+msgstr "Tiếng Nam Sorsoganon"
 
 msgid "Southern Thai"
-msgstr ""
+msgstr "Tiếng Thái miền Nam"
 
 msgid "Southern Uzbek"
-msgstr ""
+msgstr "Tiếng Nam Uzbek"
 
 msgid "Southwestern Dinka"
-msgstr ""
+msgstr "Tiếng Dinka Tây Nam"
 
 msgid "Spanish"
-msgstr ""
+msgstr "Tiếng Tây Ban Nha"
 
 msgid "Spanish - Argentina"
-msgstr ""
+msgstr "Tiếng Tây Ban Nha - Argentina"
 
 msgid "Spanish - Bolivia"
-msgstr ""
+msgstr "Tiếng Tây Ban Nha - Bolivia"
 
 msgid "Spanish - Chile"
-msgstr ""
+msgstr "Tiếng Tây Ban Nha - Chile"
 
 msgid "Spanish - Colombia"
-msgstr ""
+msgstr "Tiếng Tây Ban Nha - Colombia"
 
 msgid "Spanish - Costa Rica"
-msgstr ""
+msgstr "Tiếng Tây Ban Nha - Costa Rica"
 
 msgid "Spanish - Dominican Republic"
-msgstr ""
+msgstr "Tiếng Tây Ban Nha - Cộng hòa Dominica"
 
 msgid "Spanish - Ecuador"
-msgstr ""
+msgstr "Tiếng Tây Ban Nha - Ecuador"
 
 msgid "Spanish - El Salvador"
-msgstr ""
+msgstr "Tiếng Tây Ban Nha - El Salvador"
 
 msgid "Spanish - Guatemala"
-msgstr ""
+msgstr "Tiếng Tây Ban Nha - Guatemala"
 
 msgid "Spanish - Honduras"
-msgstr ""
+msgstr "Tiếng Tây Ban Nha - Honduras"
 
 msgid "Spanish - Latin America and the Caribbean"
-msgstr ""
+msgstr "Tiếng Tây Ban Nha - Khu vực Mỹ Latinh và Caribe"
 
 msgid "Spanish - Mexico"
-msgstr ""
+msgstr "Tiếng Tây Ban Nha - Mexico"
 
 msgid "Spanish - Nicaragua"
-msgstr ""
+msgstr "Tiếng Tây Ban Nha - Nicaragua"
 
 msgid "Spanish - Panama"
-msgstr ""
+msgstr "Tiếng Tây Ban Nha - Panama"
 
 msgid "Spanish - Paraguay"
-msgstr ""
+msgstr "Tiếng Tây Ban Nha - Paraguay"
 
 msgid "Spanish - Peru"
-msgstr ""
+msgstr "Tiếng Tây Ban Nha - Peru"
 
 msgid "Spanish - Puerto Rico"
-msgstr ""
+msgstr "Tiếng Tây Ban Nha - Puerto Rico"
 
 msgid "Spanish - Spain"
-msgstr ""
+msgstr "Tiếng Tây Ban Nha - Tây Ban Nha"
 
 msgid "Spanish - Uruguay"
-msgstr ""
+msgstr "Tiếng Tây Ban Nha - Uruguay"
 
 msgid "Spanish - Venezuela"
-msgstr ""
+msgstr "Tiếng Tây Ban Nha - Venezuela"
 
 msgid "Standard Arabic"
-msgstr ""
+msgstr "Tiếng Ả Rập chuẩn"
 
 msgid "Standard Estonian"
-msgstr ""
+msgstr "Tiếng Estonia chuẩn"
 
 msgid "Standard Latvian"
-msgstr ""
+msgstr "Tiếng Latvia chuẩn"
 
 msgid "Sui"
-msgstr ""
+msgstr "Tiếng Sui"
 
 msgid "Sukuma"
-msgstr ""
+msgstr "Tiếng Sukuma"
 
 msgid "Sumbawa"
-msgstr ""
+msgstr "Tiếng Sumbawa"
 
 msgid "Sundanese"
-msgstr ""
+msgstr "Tiếng Sunda"
 
 msgid "Supyire Senoufo"
-msgstr ""
+msgstr "Tiếng Supyire Senoufo"
 
 msgid "Surgujia"
-msgstr ""
+msgstr "Tiếng Surgujia"
 
 msgid "Surigaonon"
-msgstr ""
+msgstr "Tiếng Surigaonon"
 
 msgid "Surjapuri"
-msgstr ""
+msgstr "Tiếng Surjapuri"
 
 msgid "Susu"
-msgstr ""
+msgstr "Tiếng Susu"
 
 msgid "Swabian"
-msgstr ""
+msgstr "Tiếng Swabia"
 
 msgid "Swahili"
-msgstr ""
+msgstr "Tiếng Swahili"
 
 msgid "Swati"
-msgstr ""
+msgstr "Tiếng Swati"
 
 msgid "Swedish"
-msgstr ""
+msgstr "Tiếng Thụy Điển"
 
 msgid "Swiss German"
-msgstr ""
+msgstr "Tiếng Đức Thụy Sĩ"
 
 msgid "Sylheti"
-msgstr ""
+msgstr "Tiếng Sylheti"
 
 msgid "Taabwa"
-msgstr ""
+msgstr "Tiếng Taabwa"
 
 msgid "Tachawit"
-msgstr ""
+msgstr "Tiếng Tachawit"
 
 msgid "Tachelhit"
-msgstr ""
+msgstr "Tiếng Tachelhit"
 
 msgid "Tae'"
-msgstr ""
+msgstr "Tiếng Tae'"
 
 msgid "Tagalog"
-msgstr ""
+msgstr "Tiếng Tagalog"
 
 msgid "Tai Dón"
-msgstr ""
+msgstr "Tiếng Thái Trắng"
 
 msgid "Tai Nüa"
-msgstr ""
+msgstr "Tiếng Thái Nüa"
 
 msgid "Taita"
-msgstr ""
+msgstr "Tiếng Taita"
 
 msgid "Tajik"
-msgstr ""
+msgstr "Tiếng Tajik"
 
 msgid "Talysh"
-msgstr ""
+msgstr "Tiếng Talysh"
 
 msgid "Tamashek"
-msgstr ""
+msgstr "Tiếng Tamashek"
 
 msgid "Tamasheq"
-msgstr ""
+msgstr "Tiếng Tamasheq"
 
 msgid "Tamil"
-msgstr ""
+msgstr "Tiếng Tamil"
 
 msgid "Tandroy-Mahafaly Malagasy"
-msgstr ""
+msgstr "Tiếng Tandroy-Mahafaly Malagasy"
 
 msgid "Tanosy Malagasy"
-msgstr ""
+msgstr "Tiếng Tanosy Malagasy"
 
 msgid "Tarifit"
-msgstr ""
+msgstr "Tiếng Tarifit"
 
 msgid "Tarok"
-msgstr ""
+msgstr "Tiếng Tarok"
 
 msgid "Tatar"
-msgstr ""
+msgstr "Tiếng Tatar"
 
 msgid "Tausug"
-msgstr ""
+msgstr "Tiếng Tausug"
 
 msgid "Tavoyan"
-msgstr ""
+msgstr "Tiếng Tavoyan"
 
 msgid "Tawallammat Tamajaq"
-msgstr ""
+msgstr "Tiếng Tawallammat Tamajaq"
 
 msgid "Tayart Tamajeq"
-msgstr ""
+msgstr "Tiếng Tayart Tamajeq"
 
 msgid "Tee"
-msgstr ""
+msgstr "Tiếng Tee"
 
 msgid "Tem"
-msgstr ""
+msgstr "Tiếng Tem"
 
 msgid "Tenggarong Kutai Malay"
-msgstr ""
+msgstr "Tiếng Mã Lai Kutai Tenggarong"
 
 msgid "Terik"
-msgstr ""
+msgstr "Tiếng Terik"
 
 msgid "Tesaka Malagasy"
-msgstr ""
+msgstr "Tiếng Tesaka Malagasy"
 
 msgid "Teso"
-msgstr ""
+msgstr "Tiếng Teso"
 
 msgid "Tetela"
-msgstr ""
+msgstr "Tiếng Tetela"
 
 msgid "Tetum"
-msgstr ""
+msgstr "Tiếng Tetum"
 
 msgid "Tetun Dili"
-msgstr ""
+msgstr "Tiếng Tetun Dili"
 
 msgid "Tewe"
-msgstr ""
+msgstr "Tiếng Tewe"
 
 msgid "Thado Chin"
-msgstr ""
+msgstr "Tiếng Thado Chin"
 
 msgid "Thai"
-msgstr ""
+msgstr "Tiếng Thái"
 
 msgid "Tibetan"
-msgstr ""
+msgstr "Tiếng Tây Tạng"
 
 msgid "Tigre"
-msgstr ""
+msgstr "Tiếng Tigre"
 
 msgid "Tigrinya"
-msgstr ""
+msgstr "Tiếng Tigrinya"
 
 msgid "Timne"
-msgstr ""
+msgstr "Tiếng Timne"
 
 msgid "Tiv"
-msgstr ""
+msgstr "Tiếng Tiv"
 
 msgid "Tobagonian Creole English"
-msgstr ""
+msgstr "Tiếng Anh Creole Tobago"
 
 msgid "Tolaki"
-msgstr ""
+msgstr "Tiếng Tolaki"
 
 msgid "Tonga"
-msgstr ""
+msgstr "Tiếng Tonga"
 
 msgid "Tonga (Zambia)"
-msgstr ""
+msgstr "Tiếng Tonga (Zambia)"
 
 msgid "Tooro"
-msgstr ""
+msgstr "Tiếng Tooro"
 
 msgid "Toraja-Sa'dan"
-msgstr ""
+msgstr "Tiếng Toraja-Sa'dan"
 
 msgid "Tshiluba"
-msgstr ""
+msgstr "Tiếng Tshiluba"
 
 msgid "Tsimihety Malagasy"
-msgstr ""
+msgstr "Tiếng Tsimihety Malagasy"
 
 msgid "Tsonga"
-msgstr ""
+msgstr "Tiếng Tsonga"
 
 msgid "Tswa"
-msgstr ""
+msgstr "Tiếng Tswa"
 
 msgid "Tulu"
-msgstr ""
+msgstr "Tiếng Tulu"
 
 msgid "Tumbuka"
-msgstr ""
+msgstr "Tiếng Tumbuka"
 
 msgid "Turkana"
-msgstr ""
+msgstr "Tiếng Turkana"
 
 msgid "Turkish"
-msgstr ""
+msgstr "Tiếng Thổ Nhĩ Kỳ"
 
 msgid "Tuvinian"
-msgstr ""
+msgstr "Tiếng Tuvinian"
 
 msgid "Twents"
-msgstr ""
+msgstr "Tiếng Twents"
 
 msgid "Twi"
-msgstr ""
+msgstr "Tiếng Twi"
 
 msgid "Tzeltal"
-msgstr ""
+msgstr "Tiếng Tzeltal"
 
 msgid "Tzotzil"
-msgstr ""
+msgstr "Tiếng Tzotzil"
 
 msgid "Tày"
-msgstr ""
+msgstr "Tiếng Tày"
 
 msgid "Udmurt"
-msgstr ""
+msgstr "Tiếng Udmurt"
 
 msgid "Ukrainian"
-msgstr ""
+msgstr "Tiếng Ukraina"
 
 msgid "Umbundu"
-msgstr ""
+msgstr "Tiếng Umbundu"
 
 msgid "Upper Saxon"
-msgstr ""
+msgstr "Tiếng Thượng Saxon"
 
 msgid "Urdu"
-msgstr ""
+msgstr "Tiếng Urdu"
 
 msgid "Urhobo"
-msgstr ""
+msgstr "Tiếng Urhobo"
 
 msgid "Uyghur"
-msgstr ""
+msgstr "Tiếng Duy Ngô Nhĩ"
 
 msgid "Uzbek"
-msgstr ""
+msgstr "Tiếng Uzbek"
 
 msgid "Varhadi-Nagpuri"
-msgstr ""
+msgstr "Tiếng Varhadi-Nagpuri"
 
 msgid "Varli"
-msgstr ""
+msgstr "Tiếng Varli"
 
 msgid "Vasavi"
-msgstr ""
+msgstr "Tiếng Vasavi"
 
 msgid "Venda"
-msgstr ""
+msgstr "Tiếng Venda"
 
 msgid "Venetian"
-msgstr ""
+msgstr "Tiếng Venice"
 
 msgid "Vietnamese"
-msgstr ""
+msgstr "Tiếng Việt"
 
 msgid "Vlax Romani"
-msgstr ""
+msgstr "Tiếng Vlax Romani"
 
 msgid "Vunjo"
-msgstr ""
+msgstr "Tiếng Vunjo"
 
 msgid "Wa"
-msgstr ""
+msgstr "Tiếng Wa"
 
 msgid "Waci Gbe"
-msgstr ""
+msgstr "Tiếng Waci Gbe"
 
 msgid "Wadiyara Koli"
-msgstr ""
+msgstr "Tiếng Wadiyara Koli"
 
 msgid "Wagdi"
-msgstr ""
+msgstr "Tiếng Wagdi"
 
 msgid "Walloon"
-msgstr ""
+msgstr "Tiếng Walloon"
 
 msgid "Walungge"
-msgstr ""
+msgstr "Tiếng Walungge"
 
 msgid "Wanga"
-msgstr ""
+msgstr "Tiếng Wanga"
 
 msgid "Waray (Philippines)"
-msgstr ""
+msgstr "Tiếng Waray (Philippines)"
 
 msgid "Wasa"
-msgstr ""
+msgstr "Tiếng Wasa"
 
 msgid "Waxianghua"
-msgstr ""
+msgstr "Tiếng Waxianghua"
 
 msgid "Wayu"
-msgstr ""
+msgstr "Tiếng Wayu"
 
 msgid "Wayuu"
-msgstr ""
+msgstr "Tiếng Wayuu"
 
 msgid "Welsh"
-msgstr ""
+msgstr "Tiếng Wales"
 
 msgid "West Albay Bikol"
-msgstr ""
+msgstr "Tiếng Tây Albay Bikol"
 
 msgid "West Central Oromo"
-msgstr ""
+msgstr "Tiếng Tây Trung bộ Oromo"
 
 msgid "West-Central Limba"
-msgstr ""
+msgstr "Tiếng Tây-Trung Limba"
 
 msgid "Western Frisian"
-msgstr ""
+msgstr "Tiếng Tây Frisia"
 
 msgid "Western Huasteca Nahuatl"
-msgstr ""
+msgstr "Tiếng Nahuatl Tây Huasteca"
 
 msgid "Western Magar"
-msgstr ""
+msgstr "Tiếng Magar miền Tây"
 
 msgid "Western Maninkakan"
-msgstr ""
+msgstr "Tiếng Tây Maninkakan"
 
 msgid "Western Muria"
-msgstr ""
+msgstr "Tiếng Tây Muria"
 
 msgid "Western Niger Fulfulde"
-msgstr ""
+msgstr "Tiếng Fulfulde vùng Tây Niger"
 
 msgid "Western Panjabi"
-msgstr ""
+msgstr "Tiếng Punjabi miền Tây"
 
 msgid "Western Tamang"
-msgstr ""
+msgstr "Tiếng Tây Tamang"
 
 msgid "Western Xiangxi Miao"
-msgstr ""
+msgstr "Tiếng Miêu Tây Xiangxi"
 
 msgid "Wolaytta"
-msgstr ""
+msgstr "Tiếng Wolaytta"
 
 msgid "Wolof"
-msgstr ""
+msgstr "Tiếng Wolof"
 
 msgid "Wu Chinese"
-msgstr ""
+msgstr "Tiếng Ngô"
 
 msgid "Wuding-Luquan Yi"
-msgstr ""
+msgstr "Tiếng Wuding-Luquan Yi"
 
 msgid "Wusa Nasu"
-msgstr ""
+msgstr "Tiếng Wusa Nasu"
 
 msgid "Wè Southern"
-msgstr ""
+msgstr "Tiếng Wè miền Nam"
 
 msgid "Xaasongaxango"
-msgstr ""
+msgstr "Tiếng Xaasongaxango"
 
 msgid "Xhosa"
-msgstr ""
+msgstr "Tiếng Xhosa"
 
 msgid "Xiang"
-msgstr ""
+msgstr "Tiếng Tương"
 
 msgid "Yaka (Congo)"
-msgstr ""
+msgstr "Tiếng Yaka (Congo)"
 
 msgid "Yaka (Democratic Republic of Congo)"
-msgstr ""
+msgstr "Tiếng Yaka (Cộng hòa Dân chủ Congo)"
 
 msgid "Yakut"
-msgstr ""
+msgstr "Tiếng Yakut"
 
 msgid "Yang Zhuang"
-msgstr ""
+msgstr "Tiếng Choang Yang"
 
 msgid "Yao"
-msgstr ""
+msgstr "Tiếng Yao"
 
 msgid "Yekhee"
-msgstr ""
+msgstr "Tiếng Yekhee"
 
 msgid "Yemba"
-msgstr ""
+msgstr "Tiếng Yemba"
 
 msgid "Yiddish"
-msgstr ""
+msgstr "Tiếng Yiddish"
 
 msgid "Yom"
-msgstr ""
+msgstr "Tiếng Yom"
 
 msgid "Yombe"
-msgstr ""
+msgstr "Tiếng Yombe"
 
 msgid "Yongbei Zhuang"
-msgstr ""
+msgstr "Tiếng Choang Yongbei"
 
 msgid "Yongnan Zhuang"
-msgstr ""
+msgstr "Tiếng Choang Yongnan"
 
 msgid "Yoruba"
-msgstr ""
+msgstr "Tiếng Yoruba"
 
 msgid "Youjiang Zhuang"
-msgstr ""
+msgstr "Tiếng Youjiang Zhuang"
 
 msgid "Yucateco"
-msgstr ""
+msgstr "Tiếng Yucateco"
 
 msgid "Yue Chinese"
-msgstr ""
+msgstr "Tiếng Quảng Đông"
 
 msgid "Zaghawa"
-msgstr ""
+msgstr "Tiếng Zaghawa"
 
 msgid "Zande"
-msgstr ""
+msgstr "Tiếng Zande"
 
 msgid "Zapotec"
-msgstr ""
+msgstr "Tiếng Zapotec"
 
 msgid "Zarma"
-msgstr ""
+msgstr "Tiếng Zarma"
 
 msgid "Zaza"
-msgstr ""
+msgstr "Tiếng Zaza"
 
 msgid "Zhuang"
-msgstr ""
+msgstr "Tiếng Choang"
 
 msgid "Zigula"
-msgstr ""
+msgstr "Tiếng Zigula"
 
 msgid "Zulu"
-msgstr ""
+msgstr "Tiếng Zulu"
 
 msgid "Zuojiang Zhuang"
-msgstr ""
+msgstr "Tiếng Choang Tả Giang"
 
