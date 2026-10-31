@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-31 14:32\n"
+"PO-Revision-Date: 2026-10-31 16:08\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "MIME-Version: 1.0\n"
@@ -17,758 +17,758 @@ msgstr ""
 "Language: ko_KR\n"
 
 msgid "Afghanistan"
-msgstr ""
+msgstr "아프가니스탄"
 
 msgid "Albania"
-msgstr ""
+msgstr "알바니아"
 
 msgid "Algeria"
-msgstr ""
+msgstr "알제리"
 
 msgid "American Samoa"
-msgstr ""
+msgstr "미국령 사모아"
 
 msgid "Andorra"
-msgstr ""
+msgstr "안도라"
 
 msgid "Angola"
-msgstr ""
+msgstr "앙골라"
 
 msgid "Anguilla"
-msgstr ""
+msgstr "앵귈라"
 
 msgid "Antarctica"
-msgstr ""
+msgstr "남극 대륙"
 
 msgid "Antigua and Barbuda"
-msgstr ""
+msgstr "안티과 바부다"
 
 msgid "Argentina"
-msgstr ""
+msgstr "아르헨티나"
 
 msgid "Armenia"
-msgstr ""
+msgstr "아르메니아"
 
 msgid "Aruba"
-msgstr ""
+msgstr "아루바"
 
 msgid "Australia"
-msgstr ""
+msgstr "호주"
 
 msgid "Austria"
-msgstr ""
+msgstr "오스트리아"
 
 msgid "Azerbaijan"
-msgstr ""
+msgstr "아제르바이잔"
 
 msgid "Bahamas"
-msgstr ""
+msgstr "바하마"
 
 msgid "Bahrain"
-msgstr ""
+msgstr "바레인"
 
 msgid "Bangladesh"
-msgstr ""
+msgstr "방글라데시"
 
 msgid "Barbados"
-msgstr ""
+msgstr "바베이도스"
 
 msgid "Belarus"
-msgstr ""
+msgstr "벨라루스"
 
 msgid "Belgium"
-msgstr ""
+msgstr "벨기에"
 
 msgid "Belize"
-msgstr ""
+msgstr "벨리즈"
 
 msgid "Benin"
-msgstr ""
+msgstr "베냉"
 
 msgid "Bermuda"
-msgstr ""
+msgstr "버뮤다"
 
 msgid "Bhutan"
-msgstr ""
+msgstr "부탄"
 
 msgid "Bolivia"
-msgstr ""
+msgstr "볼리비아"
 
 msgid "Bonaire, Sint Eustatius and Saba"
-msgstr ""
+msgstr "보네르, 신트유스타티우스, 사바"
 
 msgid "Bosnia-Herzegovina"
-msgstr ""
+msgstr "보스니아 헤르체고비나"
 
 msgid "Botswana"
-msgstr ""
+msgstr "보츠와나"
 
 msgid "Bouvet Island"
-msgstr ""
+msgstr "부베 섬"
 
 msgid "Brazil"
-msgstr ""
+msgstr "브라질"
 
 msgid "British Indian Ocean Territory"
-msgstr ""
+msgstr "영국령 인도양 영토"
 
 msgid "Brunei Darussalam"
-msgstr ""
+msgstr "브루나이 다루살람"
 
 msgid "Bulgaria"
-msgstr ""
+msgstr "불가리아"
 
 msgid "Burkina Faso"
-msgstr ""
+msgstr "부르키나파소"
 
 msgid "Burundi"
-msgstr ""
+msgstr "부룬디"
 
 msgid "Cambodia"
-msgstr ""
+msgstr "캄보디아"
 
 msgid "Cameroon"
-msgstr ""
+msgstr "카메룬"
 
 msgid "Canada"
-msgstr ""
+msgstr "캐나다"
 
 msgid "Cape Verde"
-msgstr ""
+msgstr "카보베르데"
 
 msgid "Cayman Islands"
-msgstr ""
+msgstr "케이맨 제도"
 
 msgid "Central African Republic"
-msgstr ""
+msgstr "중앙아프리카 공화국"
 
 msgid "Chad"
-msgstr ""
+msgstr "차드"
 
 msgid "Chile"
-msgstr ""
+msgstr "칠레"
 
 msgid "China"
-msgstr ""
+msgstr "중국"
 
 msgid "Christmas Island"
-msgstr ""
+msgstr "크리스마스 섬"
 
 msgid "Cocos (Keeling) Islands"
-msgstr ""
+msgstr "코코스 제도 (킬링 제도)"
 
 msgid "Colombia"
-msgstr ""
+msgstr "콜롬비아"
 
 msgid "Comoros"
-msgstr ""
+msgstr "코모로"
 
 msgid "Congo"
-msgstr ""
+msgstr "콩고"
 
 msgid "Congo, The Democratic Republic of the"
-msgstr ""
+msgstr "콩고 민주 공화국"
 
 msgid "Cook Islands"
-msgstr ""
+msgstr "쿡 제도"
 
 msgid "Costa Rica"
-msgstr ""
+msgstr "코스타리카"
 
 msgid "Croatia"
-msgstr ""
+msgstr "크로아티아"
 
 msgid "Cuba"
-msgstr ""
+msgstr "쿠바"
 
 msgid "Curaçao"
-msgstr ""
+msgstr "퀴라소"
 
 msgid "Cyprus"
-msgstr ""
+msgstr "키프로스"
 
 msgid "Czech Republic"
-msgstr ""
+msgstr "체코 공화국"
 
 msgid "Denmark"
-msgstr ""
+msgstr "덴마크"
 
 msgid "Djibouti"
-msgstr ""
+msgstr "지부티"
 
 msgid "Dominica"
-msgstr ""
+msgstr "도미니카 연방"
 
 msgid "Dominican Republic"
-msgstr ""
+msgstr "도미니카 공화국"
 
 msgid "East Timor"
-msgstr ""
+msgstr "동티모르"
 
 msgid "Ecuador"
-msgstr ""
+msgstr "에콰도르"
 
 msgid "Egypt"
-msgstr ""
+msgstr "이집트"
 
 msgid "El Salvador"
-msgstr ""
+msgstr "엘살바도르"
 
 msgid "Equatorial Guinea"
-msgstr ""
+msgstr "적도 기니"
 
 msgid "Eritrea"
-msgstr ""
+msgstr "에리트레아"
 
 msgid "Estonia"
-msgstr ""
+msgstr "에스토니아"
 
 msgid "Ethiopia"
-msgstr ""
+msgstr "에티오피아"
 
 msgid "Falkland Islands (Malvinas)"
-msgstr ""
+msgstr "포클랜드 제도(말비나스 제도)"
 
 msgid "Faroe Islands"
-msgstr ""
+msgstr "페로 제도"
 
 msgid "Fiji"
-msgstr ""
+msgstr "피지"
 
 msgid "Finland"
-msgstr ""
+msgstr "핀란드"
 
 msgid "France"
-msgstr ""
+msgstr "프랑스"
 
 msgid "French Guiana"
-msgstr ""
+msgstr "프랑스령 기아나"
 
 msgid "French Polynesia"
-msgstr ""
+msgstr "프랑스령 폴리네시아"
 
 msgid "French Southern Territories"
-msgstr ""
+msgstr "프랑스령 남방 지역"
 
 msgid "Gabon"
-msgstr ""
+msgstr "가봉"
 
 msgid "Gambia"
-msgstr ""
+msgstr "감비아"
 
 msgid "Gaza Strip Administered by Israel"
-msgstr ""
+msgstr "이스라엘이 관리하는 가자 지구"
 
 msgid "Georgia"
-msgstr ""
+msgstr "조지아"
 
 msgid "Germany"
-msgstr ""
+msgstr "독일"
 
 msgid "Ghana"
-msgstr ""
+msgstr "가나"
 
 msgid "Gibraltar"
-msgstr ""
+msgstr "지브롤터"
 
 msgid "Greece"
-msgstr ""
+msgstr "그리스"
 
 msgid "Greenland"
-msgstr ""
+msgstr "그린란드"
 
 msgid "Grenada"
-msgstr ""
+msgstr "그레나다"
 
 msgid "Guadeloupe"
-msgstr ""
+msgstr "과들루프"
 
 msgid "Guam"
-msgstr ""
+msgstr "괌"
 
 msgid "Guatemala"
-msgstr ""
+msgstr "과테말라"
 
 msgid "Guernsey"
-msgstr ""
+msgstr "건지"
 
 msgid "Guinea"
-msgstr ""
+msgstr "기니"
 
 msgid "Guinea Bissau"
-msgstr ""
+msgstr "기니비사우"
 
 msgid "Guyana"
-msgstr ""
+msgstr "가이아나"
 
 msgid "Haiti"
-msgstr ""
+msgstr "아이티"
 
 msgid "Heard and McDonald Islands"
-msgstr ""
+msgstr "허드 섬과 맥도날드 섬"
 
 msgid "Holy See (Vatican City State)"
-msgstr ""
+msgstr "교황청 (바티칸 시국)"
 
 msgid "Honduras"
-msgstr ""
+msgstr "온두라스"
 
 msgid "Hong Kong"
-msgstr ""
+msgstr "홍콩"
 
 msgid "Hungary"
-msgstr ""
+msgstr "헝가리"
 
 msgid "Iceland"
-msgstr ""
+msgstr "아이슬란드"
 
 msgid "India"
-msgstr ""
+msgstr "인도"
 
 msgid "Indonesia"
-msgstr ""
+msgstr "인도네시아"
 
 msgid "Iran"
-msgstr ""
+msgstr "이란"
 
 msgid "Iraq"
-msgstr ""
+msgstr "이라크"
 
 msgid "Ireland"
-msgstr ""
+msgstr "아일랜드"
 
 msgid "Isle of Man"
-msgstr ""
+msgstr "맨 섬"
 
 msgid "Israel"
-msgstr ""
+msgstr "이스라엘"
 
 msgid "Italy"
-msgstr ""
+msgstr "이탈리아"
 
 msgid "Ivory Coast (Cote D'Ivoire)"
-msgstr ""
+msgstr "코트디부아르 (아이보리 코스트)"
 
 msgid "Jamaica"
-msgstr ""
+msgstr "자메이카"
 
 msgid "Japan"
-msgstr ""
+msgstr "일본"
 
 msgid "Jersey"
-msgstr ""
+msgstr "저지"
 
 msgid "Jordan"
-msgstr ""
+msgstr "요르단"
 
 msgid "Kazakhstan"
-msgstr ""
+msgstr "카자흐스탄"
 
 msgid "Kenya"
-msgstr ""
+msgstr "케냐"
 
 msgid "Kiribati"
-msgstr ""
+msgstr "키리바티"
 
 msgid "Kosovo"
-msgstr ""
+msgstr "코소보"
 
 msgid "Kuwait"
-msgstr ""
+msgstr "쿠웨이트"
 
 msgid "Kyrgyzstan"
-msgstr ""
+msgstr "키르기스스탄"
 
 msgid "Laos"
-msgstr ""
+msgstr "라오스"
 
 msgid "Latvia"
-msgstr ""
+msgstr "라트비아"
 
 msgid "Lebanon"
-msgstr ""
+msgstr "레바논"
 
 msgid "Lesotho"
-msgstr ""
+msgstr "레소토"
 
 msgid "Liberia"
-msgstr ""
+msgstr "라이베리아"
 
 msgid "Libya"
-msgstr ""
+msgstr "리비아"
 
 msgid "Liechtenstein"
-msgstr ""
+msgstr "리히텐슈타인"
 
 msgid "Lithuania"
-msgstr ""
+msgstr "리투아니아"
 
 msgid "Luxembourg"
-msgstr ""
+msgstr "룩셈부르크"
 
 msgid "Macao"
-msgstr ""
+msgstr "마카오"
 
 msgid "Macedonia"
-msgstr ""
+msgstr "마케도니아"
 
 msgid "Madagascar"
-msgstr ""
+msgstr "마다가스카르"
 
 msgid "Malawi"
-msgstr ""
+msgstr "말라위"
 
 msgid "Malaysia"
-msgstr ""
+msgstr "말레이시아"
 
 msgid "Maldives"
-msgstr ""
+msgstr "몰디브"
 
 msgid "Mali"
-msgstr ""
+msgstr "말리"
 
 msgid "Malta"
-msgstr ""
+msgstr "몰타"
 
 msgid "Marshall Islands"
-msgstr ""
+msgstr "마셜 제도"
 
 msgid "Martinique"
-msgstr ""
+msgstr "마르티니크"
 
 msgid "Mauritania"
-msgstr ""
+msgstr "모리타니"
 
 msgid "Mauritius"
-msgstr ""
+msgstr "모리셔스"
 
 msgid "Mayotte"
-msgstr ""
+msgstr "마요트"
 
 msgid "Mexico"
-msgstr ""
+msgstr "멕시코"
 
 msgid "Micronesia"
-msgstr ""
+msgstr "미크로네시아"
 
 msgid "Moldova"
-msgstr ""
+msgstr "몰도바"
 
 msgid "Monaco"
-msgstr ""
+msgstr "모나코"
 
 msgid "Mongolia"
-msgstr ""
+msgstr "몽골"
 
 msgid "Montenegro"
-msgstr ""
+msgstr "몬테네그로"
 
 msgid "Montserrat"
-msgstr ""
+msgstr "몬세라트"
 
 msgid "Morocco"
-msgstr ""
+msgstr "모로코"
 
 msgid "Mozambique"
-msgstr ""
+msgstr "모잠비크"
 
 msgid "Myanmar"
-msgstr ""
+msgstr "미얀마"
 
 msgid "Namibia"
-msgstr ""
+msgstr "나미비아"
 
 msgid "Nauru"
-msgstr ""
+msgstr "나우루"
 
 msgid "Nepal"
-msgstr ""
+msgstr "네팔"
 
 msgid "Netherlands"
-msgstr ""
+msgstr "네덜란드"
 
 msgid "New Caledonia"
-msgstr ""
+msgstr "뉴칼레도니아"
 
 msgid "New Zealand"
-msgstr ""
+msgstr "뉴질랜드"
 
 msgid "Nicaragua"
-msgstr ""
+msgstr "니카라과"
 
 msgid "Niger"
-msgstr ""
+msgstr "니제르"
 
 msgid "Nigeria"
-msgstr ""
+msgstr "나이지리아"
 
 msgid "Niue"
-msgstr ""
+msgstr "니우에"
 
 msgid "Norfolk Island"
-msgstr ""
+msgstr "노퍽 섬"
 
 msgid "North Korea"
-msgstr ""
+msgstr "북한"
 
 msgid "Northern Mariana Islands"
-msgstr ""
+msgstr "북마리아나 제도"
 
 msgid "Norway"
-msgstr ""
+msgstr "노르웨이"
 
 msgid "Oman"
-msgstr ""
+msgstr "오만"
 
 msgid "Pakistan"
-msgstr ""
+msgstr "파키스탄"
 
 msgid "Palau"
-msgstr ""
+msgstr "팔라우"
 
 msgid "Palestinian Territory, Occupied"
-msgstr ""
+msgstr "팔레스타인 영토, 점령지"
 
 msgid "Panama"
-msgstr ""
+msgstr "파나마"
 
 msgid "Papua New Guinea"
-msgstr ""
+msgstr "파푸아뉴기니"
 
 msgid "Paraguay"
-msgstr ""
+msgstr "파라과이"
 
 msgid "Peru"
-msgstr ""
+msgstr "페루"
 
 msgid "Philippines"
-msgstr ""
+msgstr "필리핀"
 
 msgid "Pitcairn Island"
-msgstr ""
+msgstr "핏케언 섬"
 
 msgid "Poland"
-msgstr ""
+msgstr "폴란드"
 
 msgid "Portugal"
-msgstr ""
+msgstr "포르투갈"
 
 msgid "Puerto Rico"
-msgstr ""
+msgstr "푸에르토리코"
 
 msgid "Qatar"
-msgstr ""
+msgstr "카타르"
 
 msgid "Reunion"
-msgstr ""
+msgstr "레위니옹"
 
 msgid "Romania"
-msgstr ""
+msgstr "루마니아"
 
 msgid "Russian Federation"
-msgstr ""
+msgstr "러시아 연방"
 
 msgid "Rwanda"
-msgstr ""
+msgstr "르완다"
 
 msgid "Saint Barthélemy"
-msgstr ""
+msgstr "생바르텔레미"
 
 msgid "Saint Helena"
-msgstr ""
+msgstr "세인트헬레나"
 
 msgid "Saint Kitts and Nevis Anguilla"
-msgstr ""
+msgstr "세인트키츠 네비스 앵귈라"
 
 msgid "Saint Lucia"
-msgstr ""
+msgstr "세인트루시아"
 
 msgid "Saint Martin (French)"
-msgstr ""
+msgstr "생마르탱(프랑스령)"
 
 msgid "Saint Pierre and Miquelon"
-msgstr ""
+msgstr "생피에르 미클롱"
 
 msgid "Saint Vincent and Grenadines"
-msgstr ""
+msgstr "세인트빈센트 그레나딘"
 
 msgid "Samoa"
-msgstr ""
+msgstr "사모아"
 
 msgid "San Marino"
-msgstr ""
+msgstr "산마리노"
 
 msgid "Sao Tome and Principe"
-msgstr ""
+msgstr "상투메 프린시페"
 
 msgid "Saudi Arabia"
-msgstr ""
+msgstr "사우디아라비아"
 
 msgid "Senegal"
-msgstr ""
+msgstr "세네갈"
 
 msgid "Serbia"
-msgstr ""
+msgstr "세르비아"
 
 msgid "Seychelles"
-msgstr ""
+msgstr "세이셸"
 
 msgid "Sierra Leone"
-msgstr ""
+msgstr "시에라리온"
 
 msgid "Singapore"
-msgstr ""
+msgstr "싱가포르"
 
 msgid "Sint Maarten (Dutch)"
-msgstr ""
+msgstr "신트마르턴(네덜란드령)"
 
 msgid "Slovakia"
-msgstr ""
+msgstr "슬로바키아"
 
 msgid "Slovenia"
-msgstr ""
+msgstr "슬로베니아"
 
 msgid "Solomon Islands"
-msgstr ""
+msgstr "솔로몬 제도"
 
 msgid "Somalia"
-msgstr ""
+msgstr "소말리아"
 
 msgid "South Africa"
-msgstr ""
+msgstr "남아프리카공화국"
 
 msgid "South Georgia and the South Sandwich Islands"
-msgstr ""
+msgstr "사우스 조지아 및 사우스 샌드위치 제도"
 
 msgid "South Korea"
-msgstr ""
+msgstr "대한민국"
 
 msgid "South Sudan"
-msgstr ""
+msgstr "남수단"
 
 msgid "Spain"
-msgstr ""
+msgstr "스페인"
 
 msgid "Sri Lanka"
-msgstr ""
+msgstr "스리랑카"
 
 msgid "Sudan"
-msgstr ""
+msgstr "수단"
 
 msgid "Suriname"
-msgstr ""
+msgstr "수리남"
 
 msgid "Svalbard and Jan Mayen Islands"
-msgstr ""
+msgstr "스발바르 제도와 얀마옌 제도"
 
 msgid "Swaziland"
-msgstr ""
+msgstr "스와질란드"
 
 msgid "Sweden"
-msgstr ""
+msgstr "스웨덴"
 
 msgid "Switzerland"
-msgstr ""
+msgstr "스위스"
 
 msgid "Syria"
-msgstr ""
+msgstr "시리아"
 
 msgid "Taiwan"
-msgstr ""
+msgstr "대만"
 
 msgid "Tajikistan"
-msgstr ""
+msgstr "타지키스탄"
 
 msgid "Tanzania"
-msgstr ""
+msgstr "탄자니아"
 
 msgid "Thailand"
-msgstr ""
+msgstr "태국"
 
 msgid "Togo"
-msgstr ""
+msgstr "토고"
 
 msgid "Tokelau"
-msgstr ""
+msgstr "토켈라우"
 
 msgid "Tonga"
-msgstr ""
+msgstr "통가"
 
 msgid "Trinidad and Tobago"
-msgstr ""
+msgstr "트리니다드 토바고"
 
 msgid "Tunisia"
-msgstr ""
+msgstr "튀니지"
 
 msgid "Turkmenistan"
-msgstr ""
+msgstr "투르크메니스탄"
 
 msgid "Turks and Caicos Islands"
-msgstr ""
+msgstr "터크스 케이코스 제도"
 
 msgid "Tuvalu"
-msgstr ""
+msgstr "투발루"
 
 msgid "Türkiye"
-msgstr ""
+msgstr "튀르키예"
 
 msgid "Uganda"
-msgstr ""
+msgstr "우간다"
 
 msgid "Ukraine"
-msgstr ""
+msgstr "우크라이나"
 
 msgid "United Arab Emirates"
-msgstr ""
+msgstr "아랍에미리트"
 
 msgid "United Kingdom"
-msgstr ""
+msgstr "영국"
 
 msgid "United States"
-msgstr ""
+msgstr "미국"
 
 msgid "United States Minor Outlying Islands"
-msgstr ""
+msgstr "미국령 군소 외곽 제도"
 
 msgid "Uruguay"
-msgstr ""
+msgstr "우루과이"
 
 msgid "Uzbekistan"
-msgstr ""
+msgstr "우즈베키스탄"
 
 msgid "Vanuatu"
-msgstr ""
+msgstr "바누아투"
 
 msgid "Venezuela"
-msgstr ""
+msgstr "베네수엘라"
 
 msgid "Vietnam"
-msgstr ""
+msgstr "베트남"
 
 msgid "Virgin Islands (British)"
-msgstr ""
+msgstr "영국령 버진 제도"
 
 msgid "Virgin Islands (USA)"
-msgstr ""
+msgstr "미국령 버진 제도"
 
 msgid "Wallis and Futuna Islands"
-msgstr ""
+msgstr "왈리스 푸투나 제도"
 
 msgid "West Bank Administered by Israel"
-msgstr ""
+msgstr "이스라엘이 관리하는 서안 지구"
 
 msgid "Western Sahara"
-msgstr ""
+msgstr "서사하라"
 
 msgid "Yemen"
-msgstr ""
+msgstr "예멘"
 
 msgid "Zambia"
-msgstr ""
+msgstr "잠비아"
 
 msgid "Zimbabwe"
-msgstr ""
+msgstr "짐바브웨"
 
 msgid "Åland Islands"
-msgstr ""
+msgstr "올란드 제도"
 
