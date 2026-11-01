@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-01 15:40\n"
+"PO-Revision-Date: 2026-11-01 16:45\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -28,14 +28,14 @@ msgctxt "relative time: duration"
 msgid "{n} hour"
 msgid_plural "{n} hours"
 msgstr[0] "{n} uur"
-msgstr[1] "{n} uren"
+msgstr[1] "{n} uur"
 
 #: zotonic_core/src/support/z_datetime.erl:448
 msgctxt "relative time: duration"
 msgid "{n} minute"
 msgid_plural "{n} minutes"
 msgstr[0] "{n} minuut"
-msgstr[1] "{n} notulen"
+msgstr[1] "{n} minuten"
 
 #: zotonic_core/src/support/z_datetime.erl:454
 msgctxt "relative time: duration"
@@ -48,7 +48,7 @@ msgstr[1] "{n} maanden"
 msgctxt "relative time: duration"
 msgid "{n} second"
 msgid_plural "{n} seconds"
-msgstr[0] "{n} tweede"
+msgstr[0] "{n} seconde"
 msgstr[1] "{n} seconden"
 
 #: zotonic_core/src/support/z_datetime.erl:456
@@ -56,7 +56,7 @@ msgctxt "relative time: duration"
 msgid "{n} year"
 msgid_plural "{n} years"
 msgstr[0] "{n} jaar"
-msgstr[1] "{n} jaren"
+msgstr[1] "{n} jaar"
 
 #: zotonic_core/src/support/z_datetime.erl:440
 msgctxt "relative time: future"
@@ -70,14 +70,14 @@ msgctxt "relative time: future"
 msgid "{n} hour"
 msgid_plural "{n} hours"
 msgstr[0] "{n} uur"
-msgstr[1] "{n} uren"
+msgstr[1] "{n} uur"
 
 #: zotonic_core/src/support/z_datetime.erl:436
 msgctxt "relative time: future"
 msgid "{n} minute"
 msgid_plural "{n} minutes"
 msgstr[0] "{n} minuut"
-msgstr[1] "{n} notulen"
+msgstr[1] "{n} minuten"
 
 #: zotonic_core/src/support/z_datetime.erl:442
 msgctxt "relative time: future"
@@ -90,7 +90,7 @@ msgstr[1] "{n} maanden"
 msgctxt "relative time: future"
 msgid "{n} second"
 msgid_plural "{n} seconds"
-msgstr[0] "{n} tweede"
+msgstr[0] "{n} seconde"
 msgstr[1] "{n} seconden"
 
 #: zotonic_core/src/support/z_datetime.erl:444
@@ -98,7 +98,7 @@ msgctxt "relative time: future"
 msgid "{n} year"
 msgid_plural "{n} years"
 msgstr[0] "{n} jaar"
-msgstr[1] "{n} jaren"
+msgstr[1] "{n} jaar"
 
 #: zotonic_core/src/support/z_datetime.erl:428
 msgctxt "relative time: past"
@@ -112,14 +112,14 @@ msgctxt "relative time: past"
 msgid "{n} hour"
 msgid_plural "{n} hours"
 msgstr[0] "{n} uur"
-msgstr[1] "{n} uren"
+msgstr[1] "{n} uur"
 
 #: zotonic_core/src/support/z_datetime.erl:424
 msgctxt "relative time: past"
 msgid "{n} minute"
 msgid_plural "{n} minutes"
 msgstr[0] "{n} minuut"
-msgstr[1] "{n} notulen"
+msgstr[1] "{n} minuten"
 
 #: zotonic_core/src/support/z_datetime.erl:430
 msgctxt "relative time: past"
@@ -132,7 +132,7 @@ msgstr[1] "{n} maanden"
 msgctxt "relative time: past"
 msgid "{n} second"
 msgid_plural "{n} seconds"
-msgstr[0] "{n} tweede"
+msgstr[0] "{n} seconde"
 msgstr[1] "{n} seconden"
 
 #: zotonic_core/src/support/z_datetime.erl:432
@@ -140,7 +140,7 @@ msgctxt "relative time: past"
 msgid "{n} year"
 msgid_plural "{n} years"
 msgstr[0] "{n} jaar"
-msgstr[1] "{n} jaren"
+msgstr[1] "{n} jaar"
 
 #: zotonic_core/src/support/z_fetch.erl:230
 msgid "Could not fetch the remote resource URL."
@@ -192,11 +192,11 @@ msgstr "Website"
 
 #: zotonic_core/src/support/z_datetime.erl:399
 msgid "in a few moments"
-msgstr ""
+msgstr "over enkele ogenblikken"
 
 #: zotonic_core/src/support/z_datetime.erl:406
 msgid "in {duration}"
-msgstr ""
+msgstr "over {duration}"
 
 #: zotonic_core/src/support/z_datetime.erl:400
 msgid "moments"
@@ -204,7 +204,7 @@ msgstr "momenten"
 
 #: zotonic_core/src/support/z_datetime.erl:398
 msgid "moments ago"
-msgstr ""
+msgstr "zojuist"
 
 #: zotonic_core/src/support/z_datetime.erl:368
 #: zotonic_core/src/support/z_datetime.erl:376
@@ -213,11 +213,11 @@ msgstr "nu"
 
 #: zotonic_core/src/support/z_datetime.erl:405
 msgid "{duration} ago"
-msgstr ""
+msgstr "{duration} geleden"
 
 #: zotonic_core/src/support/z_datetime.erl:412
 msgid "{first}, {second}"
-msgstr ""
+msgstr "{first}, {second}"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:17
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:48
