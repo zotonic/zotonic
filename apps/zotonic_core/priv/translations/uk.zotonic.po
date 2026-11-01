@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-01 15:40\n"
+"PO-Revision-Date: 2026-11-01 16:45\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -21,9 +21,9 @@ msgctxt "relative time: duration"
 msgid "{n} day"
 msgid_plural "{n} days"
 msgstr[0] "{n} день"
-msgstr[1] "{n} днів"
+msgstr[1] "{n} дні"
 msgstr[2] "{n} днів"
-msgstr[3] "{n} днів"
+msgstr[3] "{n} дня"
 
 #: zotonic_core/src/support/z_datetime.erl:450
 msgctxt "relative time: duration"
@@ -31,7 +31,7 @@ msgid "{n} hour"
 msgid_plural "{n} hours"
 msgstr[0] "{n} година"
 msgstr[1] "{n} години"
-msgstr[2] "{n} години"
+msgstr[2] "{n} годин"
 msgstr[3] "{n} години"
 
 #: zotonic_core/src/support/z_datetime.erl:448
@@ -40,7 +40,7 @@ msgid "{n} minute"
 msgid_plural "{n} minutes"
 msgstr[0] "{n} хвилина"
 msgstr[1] "{n} хвилини"
-msgstr[2] "{n} хвилини"
+msgstr[2] "{n} хвилин"
 msgstr[3] "{n} хвилини"
 
 #: zotonic_core/src/support/z_datetime.erl:454
@@ -49,16 +49,16 @@ msgid "{n} month"
 msgid_plural "{n} months"
 msgstr[0] "{n} місяць"
 msgstr[1] "{n} місяці"
-msgstr[2] "{n} місяці"
-msgstr[3] "{n} місяці"
+msgstr[2] "{n} місяців"
+msgstr[3] "{n} місяця"
 
 #: zotonic_core/src/support/z_datetime.erl:446
 msgctxt "relative time: duration"
 msgid "{n} second"
 msgid_plural "{n} seconds"
-msgstr[0] "{n} другий"
+msgstr[0] "{n} секунда"
 msgstr[1] "{n} секунди"
-msgstr[2] "{n} секунди"
+msgstr[2] "{n} секунд"
 msgstr[3] "{n} секунди"
 
 #: zotonic_core/src/support/z_datetime.erl:456
@@ -67,34 +67,34 @@ msgid "{n} year"
 msgid_plural "{n} years"
 msgstr[0] "{n} рік"
 msgstr[1] "{n} роки"
-msgstr[2] "{n} роки"
-msgstr[3] "{n} роки"
+msgstr[2] "{n} років"
+msgstr[3] "{n} року"
 
 #: zotonic_core/src/support/z_datetime.erl:440
 msgctxt "relative time: future"
 msgid "{n} day"
 msgid_plural "{n} days"
 msgstr[0] "{n} день"
-msgstr[1] "{n} днів"
+msgstr[1] "{n} дні"
 msgstr[2] "{n} днів"
-msgstr[3] "{n} днів"
+msgstr[3] "{n} дня"
 
 #: zotonic_core/src/support/z_datetime.erl:438
 msgctxt "relative time: future"
 msgid "{n} hour"
 msgid_plural "{n} hours"
-msgstr[0] "{n} година"
+msgstr[0] "{n} годину"
 msgstr[1] "{n} години"
-msgstr[2] "{n} години"
+msgstr[2] "{n} годин"
 msgstr[3] "{n} години"
 
 #: zotonic_core/src/support/z_datetime.erl:436
 msgctxt "relative time: future"
 msgid "{n} minute"
 msgid_plural "{n} minutes"
-msgstr[0] "{n} хвилина"
+msgstr[0] "{n} хвилину"
 msgstr[1] "{n} хвилини"
-msgstr[2] "{n} хвилини"
+msgstr[2] "{n} хвилин"
 msgstr[3] "{n} хвилини"
 
 #: zotonic_core/src/support/z_datetime.erl:442
@@ -103,16 +103,16 @@ msgid "{n} month"
 msgid_plural "{n} months"
 msgstr[0] "{n} місяць"
 msgstr[1] "{n} місяці"
-msgstr[2] "{n} місяці"
-msgstr[3] "{n} місяці"
+msgstr[2] "{n} місяців"
+msgstr[3] "{n} місяця"
 
 #: zotonic_core/src/support/z_datetime.erl:434
 msgctxt "relative time: future"
 msgid "{n} second"
 msgid_plural "{n} seconds"
-msgstr[0] "{n} другий"
+msgstr[0] "{n} секунду"
 msgstr[1] "{n} секунди"
-msgstr[2] "{n} секунди"
+msgstr[2] "{n} секунд"
 msgstr[3] "{n} секунди"
 
 #: zotonic_core/src/support/z_datetime.erl:444
@@ -121,34 +121,34 @@ msgid "{n} year"
 msgid_plural "{n} years"
 msgstr[0] "{n} рік"
 msgstr[1] "{n} роки"
-msgstr[2] "{n} роки"
-msgstr[3] "{n} роки"
+msgstr[2] "{n} років"
+msgstr[3] "{n} року"
 
 #: zotonic_core/src/support/z_datetime.erl:428
 msgctxt "relative time: past"
 msgid "{n} day"
 msgid_plural "{n} days"
 msgstr[0] "{n} день"
-msgstr[1] "{n} днів"
+msgstr[1] "{n} дні"
 msgstr[2] "{n} днів"
-msgstr[3] "{n} днів"
+msgstr[3] "{n} дня"
 
 #: zotonic_core/src/support/z_datetime.erl:426
 msgctxt "relative time: past"
 msgid "{n} hour"
 msgid_plural "{n} hours"
-msgstr[0] "{n} година"
+msgstr[0] "{n} годину"
 msgstr[1] "{n} години"
-msgstr[2] "{n} години"
+msgstr[2] "{n} годин"
 msgstr[3] "{n} години"
 
 #: zotonic_core/src/support/z_datetime.erl:424
 msgctxt "relative time: past"
 msgid "{n} minute"
 msgid_plural "{n} minutes"
-msgstr[0] "{n} хвилина"
+msgstr[0] "{n} хвилину"
 msgstr[1] "{n} хвилини"
-msgstr[2] "{n} хвилини"
+msgstr[2] "{n} хвилин"
 msgstr[3] "{n} хвилини"
 
 #: zotonic_core/src/support/z_datetime.erl:430
@@ -157,16 +157,16 @@ msgid "{n} month"
 msgid_plural "{n} months"
 msgstr[0] "{n} місяць"
 msgstr[1] "{n} місяці"
-msgstr[2] "{n} місяці"
-msgstr[3] "{n} місяці"
+msgstr[2] "{n} місяців"
+msgstr[3] "{n} місяця"
 
 #: zotonic_core/src/support/z_datetime.erl:422
 msgctxt "relative time: past"
 msgid "{n} second"
 msgid_plural "{n} seconds"
-msgstr[0] "{n} другий"
+msgstr[0] "{n} секунду"
 msgstr[1] "{n} секунди"
-msgstr[2] "{n} секунди"
+msgstr[2] "{n} секунд"
 msgstr[3] "{n} секунди"
 
 #: zotonic_core/src/support/z_datetime.erl:432
@@ -175,8 +175,8 @@ msgid "{n} year"
 msgid_plural "{n} years"
 msgstr[0] "{n} рік"
 msgstr[1] "{n} роки"
-msgstr[2] "{n} роки"
-msgstr[3] "{n} роки"
+msgstr[2] "{n} років"
+msgstr[3] "{n} року"
 
 #: zotonic_core/src/support/z_fetch.erl:230
 msgid "Could not fetch the remote resource URL."
@@ -228,11 +228,11 @@ msgstr "вебсайт"
 
 #: zotonic_core/src/support/z_datetime.erl:399
 msgid "in a few moments"
-msgstr ""
+msgstr "за кілька митей"
 
 #: zotonic_core/src/support/z_datetime.erl:406
 msgid "in {duration}"
-msgstr ""
+msgstr "через {duration}"
 
 #: zotonic_core/src/support/z_datetime.erl:400
 msgid "moments"
@@ -240,7 +240,7 @@ msgstr "моментів"
 
 #: zotonic_core/src/support/z_datetime.erl:398
 msgid "moments ago"
-msgstr ""
+msgstr "кілька митей тому"
 
 #: zotonic_core/src/support/z_datetime.erl:368
 #: zotonic_core/src/support/z_datetime.erl:376
@@ -249,11 +249,11 @@ msgstr "зараз"
 
 #: zotonic_core/src/support/z_datetime.erl:405
 msgid "{duration} ago"
-msgstr ""
+msgstr "{duration} тому"
 
 #: zotonic_core/src/support/z_datetime.erl:412
 msgid "{first}, {second}"
-msgstr ""
+msgstr "{first}, {second}"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:17
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:48
