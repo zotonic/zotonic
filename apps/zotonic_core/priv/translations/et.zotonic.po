@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-01 15:41\n"
+"PO-Revision-Date: 2026-11-01 16:46\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -35,7 +35,7 @@ msgctxt "relative time: duration"
 msgid "{n} minute"
 msgid_plural "{n} minutes"
 msgstr[0] "{n} minut"
-msgstr[1] "{n} minutid"
+msgstr[1] "{n} minutit"
 
 #: zotonic_core/src/support/z_datetime.erl:454
 msgctxt "relative time: duration"
@@ -48,7 +48,7 @@ msgstr[1] "{n} kuud"
 msgctxt "relative time: duration"
 msgid "{n} second"
 msgid_plural "{n} seconds"
-msgstr[0] "{n} teine"
+msgstr[0] "{n} sekund"
 msgstr[1] "{n} sekundit"
 
 #: zotonic_core/src/support/z_datetime.erl:456
@@ -56,49 +56,49 @@ msgctxt "relative time: duration"
 msgid "{n} year"
 msgid_plural "{n} years"
 msgstr[0] "{n} aasta"
-msgstr[1] "{n} aastad"
+msgstr[1] "{n} aastat"
 
 #: zotonic_core/src/support/z_datetime.erl:440
 msgctxt "relative time: future"
 msgid "{n} day"
 msgid_plural "{n} days"
-msgstr[0] "{n} päev"
+msgstr[0] "{n} päeva"
 msgstr[1] "{n} päeva"
 
 #: zotonic_core/src/support/z_datetime.erl:438
 msgctxt "relative time: future"
 msgid "{n} hour"
 msgid_plural "{n} hours"
-msgstr[0] "{n} tund"
-msgstr[1] "{n} tundi"
+msgstr[0] "{n} tunni"
+msgstr[1] "{n} tunni"
 
 #: zotonic_core/src/support/z_datetime.erl:436
 msgctxt "relative time: future"
 msgid "{n} minute"
 msgid_plural "{n} minutes"
-msgstr[0] "{n} minut"
-msgstr[1] "{n} minutid"
+msgstr[0] "{n} minuti"
+msgstr[1] "{n} minuti"
 
 #: zotonic_core/src/support/z_datetime.erl:442
 msgctxt "relative time: future"
 msgid "{n} month"
 msgid_plural "{n} months"
 msgstr[0] "{n} kuu"
-msgstr[1] "{n} kuud"
+msgstr[1] "{n} kuu"
 
 #: zotonic_core/src/support/z_datetime.erl:434
 msgctxt "relative time: future"
 msgid "{n} second"
 msgid_plural "{n} seconds"
-msgstr[0] "{n} teine"
-msgstr[1] "{n} sekundit"
+msgstr[0] "{n} sekundi"
+msgstr[1] "{n} sekundi"
 
 #: zotonic_core/src/support/z_datetime.erl:444
 msgctxt "relative time: future"
 msgid "{n} year"
 msgid_plural "{n} years"
 msgstr[0] "{n} aasta"
-msgstr[1] "{n} aastad"
+msgstr[1] "{n} aasta"
 
 #: zotonic_core/src/support/z_datetime.erl:428
 msgctxt "relative time: past"
@@ -119,7 +119,7 @@ msgctxt "relative time: past"
 msgid "{n} minute"
 msgid_plural "{n} minutes"
 msgstr[0] "{n} minut"
-msgstr[1] "{n} minutid"
+msgstr[1] "{n} minutit"
 
 #: zotonic_core/src/support/z_datetime.erl:430
 msgctxt "relative time: past"
@@ -132,7 +132,7 @@ msgstr[1] "{n} kuud"
 msgctxt "relative time: past"
 msgid "{n} second"
 msgid_plural "{n} seconds"
-msgstr[0] "{n} teine"
+msgstr[0] "{n} sekund"
 msgstr[1] "{n} sekundit"
 
 #: zotonic_core/src/support/z_datetime.erl:432
@@ -140,7 +140,7 @@ msgctxt "relative time: past"
 msgid "{n} year"
 msgid_plural "{n} years"
 msgstr[0] "{n} aasta"
-msgstr[1] "{n} aastad"
+msgstr[1] "{n} aastat"
 
 #: zotonic_core/src/support/z_fetch.erl:230
 msgid "Could not fetch the remote resource URL."
@@ -192,11 +192,11 @@ msgstr "Veebileht"
 
 #: zotonic_core/src/support/z_datetime.erl:399
 msgid "in a few moments"
-msgstr ""
+msgstr "mõne hetke pärast"
 
 #: zotonic_core/src/support/z_datetime.erl:406
 msgid "in {duration}"
-msgstr ""
+msgstr "{duration} pärast"
 
 #: zotonic_core/src/support/z_datetime.erl:400
 msgid "moments"
@@ -204,7 +204,7 @@ msgstr "mõni hetk"
 
 #: zotonic_core/src/support/z_datetime.erl:398
 msgid "moments ago"
-msgstr ""
+msgstr "mõni hetk tagasi"
 
 #: zotonic_core/src/support/z_datetime.erl:368
 #: zotonic_core/src/support/z_datetime.erl:376
@@ -213,11 +213,11 @@ msgstr "nüüd"
 
 #: zotonic_core/src/support/z_datetime.erl:405
 msgid "{duration} ago"
-msgstr ""
+msgstr "{duration} tagasi"
 
 #: zotonic_core/src/support/z_datetime.erl:412
 msgid "{first}, {second}"
-msgstr ""
+msgstr "{first}, {second}"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:17
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:48
