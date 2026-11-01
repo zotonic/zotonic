@@ -10,6 +10,8 @@ rebar3.crashdump
 compile_commands.json
 rebarconfig.json
 
+.rebar3-*
+
 *~
 *#
 

@@ -367,12 +367,15 @@
 
 %% @doc Call the translate function for a string
 -define(__(T,Context), z_trans:trans(T,Context)).
+-define(__(T,MsgCtxt,Context), z_trans:trans_msgctxt(T,MsgCtxt,Context)).
 
 %% @doc Return all translations function for a string
 -define(___(T,Context), z_trans:translations(T,Context)).
+-define(___(T,MsgCtxt,Context), z_trans:translations(T,MsgCtxt,Context)).
 
 %% @doc Extra trans record definition to ease JSON mapping of translatable strings
--record(trans, { tr = [] :: list( {atom(), binary()} )}).
+%% Plural catalogs are resolved to binary translations before text lookup.
+-record(trans, { tr = [] :: list({atom(), z_trans:value()}) }).
 
 %% Some standard periods in seconds
 -define(MINUTE,     60).
