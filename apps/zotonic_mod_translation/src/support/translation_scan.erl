@@ -33,10 +33,11 @@ scan(Apps) ->
     [scan_module(App) || App <- Apps].
 
 scan_module({App, Dir}) ->
+    MsgCtxt = z_module_manager:mod_msgctxt(App),
     Scanned = lists:map(
         fun(File) ->
             Ext = z_convert:to_list(filename:extension(File)),
-            scan_file(Ext, File)
+            scan_file(Ext, File, MsgCtxt)
         end,
         collect_all_files(Dir)),
     {App, Dir, dedupl(lists:flatten(Scanned))}.
@@ -53,17 +54,24 @@ dedupl(Trans) ->
 insert([], Dict) ->
     Dict;
 
-insert([{Text, Args, Loc}|Trans], Dict) when not is_binary(Text) ->
+insert([{Text, Args, Loc}|Trans], Dict) when is_list(Text) ->
     insert([{unicode:characters_to_binary(Text), Args, Loc}|Trans], Dict);
 insert([{Text, Args, Loc}|Trans], Dict) ->
-    case dict:find(Text, Dict) of
-        {ok, {_Text, Args0, Loc0}} ->
-            Dict1 = dict:store(Text, {Text, merge_args(Args,Args0), [Loc|Loc0]}, Dict),
+    Key = message_key(Text),
+    case dict:find(Key, Dict) of
+        {ok, {Text, Args0, Loc0}} ->
+            Dict1 = dict:store(Key, {Text, merge_args(Args,Args0), [Loc|Loc0]}, Dict),
             insert(Trans, Dict1);
+        {ok, {Other, _, _}} ->
+            error({conflicting_translation_sources, Text, Other, Loc});
         error ->
-            Dict1 = dict:store(Text, {Text, Args, [Loc]}, Dict),
+            Dict1 = dict:store(Key, {Text, Args, [Loc]}, Dict),
             insert(Trans, Dict1)
     end.
+
+message_key({context, Context, Text}) -> {context, Context, message_key(Text)};
+message_key({plural, Singular, _}) -> Singular;
+message_key(Text) -> Text.
 
 merge_args([], Args) -> Args;
 merge_args(Args, []) -> Args;
@@ -75,7 +83,14 @@ merge_args([{Lang,Text}|Rest], Args) ->
 
 %% @doc Parse the template or Erlang module. Extract all translation tags.
 scan_file(".tpl", File) ->
-    case template_compiler:translations(File) of
+    scan_file(".tpl", File, undefined);
+scan_file(".erl", File) ->
+    scan_erlang(File);
+scan_file(_, _) ->
+    [].
+
+scan_file(".tpl", File, MsgCtxt) ->
+    case template_compiler:translations(File, MsgCtxt) of
         {ok, Translations} ->
             normalize_line_info(Translations);
         {error, Reason} ->
@@ -88,7 +103,10 @@ scan_file(".tpl", File) ->
             }),
             []
       end;
-scan_file(".erl", File) ->
+scan_file(Ext, File, _MsgCtxt) ->
+    scan_file(Ext, File).
+
+scan_erlang(File) ->
     IncludeDirs = case zotonic_filehandler:compile_options(File) of
         {ok, Options} -> proplists:get_all_values(i, Options);
         false -> []
@@ -105,9 +123,7 @@ scan_file(".erl", File) ->
                 filename => File
             }),
             []
-    end;
-scan_file(_, _) ->
-    [].
+    end.
 
 normalize_line_info(Translations) ->
     normalize_line_info(Translations, []).
@@ -147,6 +163,41 @@ parse_erl_form_part({'case', _, Expr, Exprs}, File, Acc) ->
     parse_erl_form_part(Expr, File, []) ++
         lists:foldl(fun(Part,A) -> parse_erl_form_part(Part, File, A) end, Acc, Exprs);
 
+parse_erl_form_part({call, Line, {remote, _, {atom, _, z_trans}, {atom, _, Fun}},
+                     [Text, MsgCtxt|Args]}, File, Acc)
+        when Fun =:= trans_msgctxt;
+             Fun =:= translations, length(Args) =:= 1;
+             Fun =:= translations, length(Args) =:= 2 ->
+    Acc1 = try
+        S = unicode:characters_to_binary(erl_parse:normalise(Text)),
+        C = unicode:characters_to_binary(erl_parse:normalise(MsgCtxt)),
+        true = is_binary(S) andalso is_binary(C),
+        [{{context, C, S}, [], {File, erl_anno:line(Line)}}|Acc]
+    catch
+        _:_ -> Acc
+    end,
+    lists:foldl(fun(Part, A) -> parse_erl_form_part(Part, File, A) end, Acc1, Args);
+parse_erl_form_part({call, Line, {remote, _, {atom, _, z_trans}, {atom, _, Fun}},
+                     [Singular, Plural|Args]}, File, Acc)
+        when Fun =:= trans_plural; Fun =:= plural_translations ->
+    Acc1 = try
+        S = unicode:characters_to_binary(erl_parse:normalise(Singular)),
+        P = unicode:characters_to_binary(erl_parse:normalise(Plural)),
+        true = is_binary(S) andalso is_binary(P),
+        Key = case {Fun, Args} of
+            {trans_plural, [_, MsgCtxt, _]} ->
+                {context, unicode:characters_to_binary(erl_parse:normalise(MsgCtxt)), {plural, S, P}};
+            {plural_translations, [MsgCtxt, _]} ->
+                {context, unicode:characters_to_binary(erl_parse:normalise(MsgCtxt)), {plural, S, P}};
+            {plural_translations, [MsgCtxt, _, _]} ->
+                {context, unicode:characters_to_binary(erl_parse:normalise(MsgCtxt)), {plural, S, P}};
+            _ -> {plural, S, P}
+        end,
+        [{Key, [], {File, erl_anno:line(Line)}}|Acc]
+    catch
+        _:_ -> Acc
+    end,
+    lists:foldl(fun(Part, A) -> parse_erl_form_part(Part, File, A) end, Acc1, Args);
 parse_erl_form_part({call, _, {remote, _, {atom, _, z_trans}, {atom, _, trans}},
                      [{string, Line, S}, _]}, File, Acc) ->
     [{unicode:characters_to_binary(S), [], {File,Line}}|Acc];

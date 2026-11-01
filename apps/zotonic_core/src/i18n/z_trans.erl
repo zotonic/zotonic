@@ -23,6 +23,15 @@
 
 -export([
     translations/2,
+    translations/3,
+    translations/4,
+    trans_msgctxt/3,
+    trans_msgctxt/4,
+    plural_translations/3,
+    plural_translations/4,
+    plural_translations/5,
+    trans_plural/4,
+    trans_plural/5,
     parse_translations/1,
     trans/2,
     trans/3,
@@ -65,6 +74,136 @@ translations(From, Context) when is_list(From) ->
 translations(From, Context) ->
     translations(z_convert:to_binary(From), Context).
 
+%% @doc Fetch a message in a gettext context, without contextless fallback.
+%% Use lookup/lookup_fallback to select from the returned record; trans/3 can
+%% re-fetch a record by its English text and does not retain catalog identity.
+-spec translations(Text, MsgCtxt, Context) -> #trans{} when
+    Text :: binary() | string(), MsgCtxt :: binary() | string(), Context :: z:context().
+translations(Text, MsgCtxt, Context) ->
+    translations(Text, MsgCtxt, false, Context).
+
+%% @doc With Fallback=true, prefer contextual then contextless text per language.
+-spec translations(Text, MsgCtxt, Fallback, Context) -> #trans{} when
+    Text :: binary() | string(), MsgCtxt :: binary() | string(),
+    Fallback :: boolean(), Context :: z:context().
+translations(Text, MsgCtxt, Fallback, Context) when is_boolean(Fallback) ->
+    Source = unicode:characters_to_binary(Text),
+    Tr = contextual_translations(Source, unicode:characters_to_binary(MsgCtxt), Fallback, Context),
+    #trans{tr=with_english(Tr, Source)}.
+
+%% @doc Translate a message in a gettext context using the request languages.
+-spec trans_msgctxt(Text, MsgCtxt, Context) -> binary() when
+    Text :: binary() | string(), MsgCtxt :: binary() | string(), Context :: z:context().
+trans_msgctxt(Text, MsgCtxt, Context) ->
+    trans_msgctxt(Text, MsgCtxt, z_context:languages(Context), Context).
+
+%% @doc Translate within a message context, with an explicit language selection.
+-spec trans_msgctxt(Text, MsgCtxt, Languages, Context) -> binary() when
+    Text :: binary() | string(), MsgCtxt :: binary() | string(),
+    Languages :: atom() | [atom()], Context :: z:context().
+trans_msgctxt(Text, MsgCtxt, Language, Context) when is_atom(Language) ->
+    trans_msgctxt(Text, MsgCtxt, [Language], Context);
+trans_msgctxt(Text, MsgCtxt, Languages, Context) ->
+    #trans{tr=Tr} = translations(Text, MsgCtxt, Context),
+    case find_first(Languages, Tr) of
+        undefined -> proplists:get_value(en, Tr);
+        Translation -> Translation
+    end.
+
+catalog_translations(Key, Context) ->
+    try ets:lookup(z_trans_server:table(Context), Key) of
+        [{_, Tr}] -> Tr;
+        [] -> []
+    catch
+        error:badarg -> []
+    end.
+
+contextual_translations(Key, MsgCtxt, Fallback, Context) ->
+    Contextual = catalog_translations({context, MsgCtxt, Key}, Context),
+    case Fallback of
+        false -> Contextual;
+        true ->
+            General = catalog_translations(Key, Context),
+            Combined = lists:foldl(fun({Lang, Value}, Acc) ->
+                case maps:find(Lang, Acc) of
+                    {ok, GeneralValue} when is_tuple(Key) ->
+                        % Rules may differ between catalogs: do not merge form indices.
+                        Acc#{Lang => {plural_candidates, [Value, GeneralValue]}};
+                    _ when Value =:= <<>> -> Acc;
+                    _ -> Acc#{Lang => Value}
+                end
+            end, maps:from_list(General), Contextual),
+            lists:sort(maps:to_list(Combined))
+    end.
+
+with_english(Tr, Source) ->
+    case proplists:is_defined(en, Tr) of
+        true -> Tr;
+        false -> [{en, Source}|Tr]
+    end.
+
+%% @doc All plural translations, keyed separately from singular messages.
+%% Forms and their parsed rule stay together through language fallback.
+-spec plural_translations(Singular, Plural, Context) -> #trans{} when
+    Singular :: binary() | string(), Plural :: binary() | string(), Context :: z:context().
+plural_translations(Singular, Plural, Context) when is_binary(Singular), is_binary(Plural) ->
+    plural_translations_key({plural, Singular, Plural}, Singular, Plural, Context);
+plural_translations(Singular, Plural, Context) ->
+    plural_translations(unicode:characters_to_binary(Singular), unicode:characters_to_binary(Plural), Context).
+
+%% @doc Fetch plural forms in a gettext message context. No fallback to a
+%% different message context: its grammatical case or meaning can be different.
+-spec plural_translations(Singular, Plural, MsgCtxt, Context) -> #trans{} when
+    Singular :: binary() | string(), Plural :: binary() | string(),
+    MsgCtxt :: binary() | string(), Context :: z:context().
+plural_translations(Singular, Plural, MsgCtxt, Context) ->
+    plural_translations(Singular, Plural, MsgCtxt, false, Context).
+
+%% @doc Optionally try a contextless plural entry in the same language.
+-spec plural_translations(Singular, Plural, MsgCtxt, Fallback, Context) -> #trans{} when
+    Singular :: binary() | string(), Plural :: binary() | string(),
+    MsgCtxt :: binary() | string(), Fallback :: boolean(), Context :: z:context().
+plural_translations(Singular, Plural, MsgCtxt, Fallback, Context) when is_boolean(Fallback) ->
+    S = unicode:characters_to_binary(Singular),
+    P = unicode:characters_to_binary(Plural),
+    Tr = contextual_translations({plural, S, P}, unicode:characters_to_binary(MsgCtxt), Fallback, Context),
+    #trans{tr=with_english(Tr, {template_compiler_plural:english(), {S, P}})}.
+
+plural_translations_key(Key, Singular, Plural, Context) ->
+    Tr = try ets:lookup(z_trans_server:table(Context), Key) of
+        [{_, Trans}] -> Trans;
+        [] -> []
+    catch
+        error:badarg -> []
+    end,
+    case proplists:is_defined(en, Tr) of
+        true -> #trans{tr=Tr};
+        false -> #trans{tr=[{en, {template_compiler_plural:english(), {Singular, Plural}}}|Tr]}
+    end.
+
+%% @doc Translate a plural message for a non-negative integer count. Like trans/2,
+%% this returns text; callers interpolate placeholders separately.
+-spec trans_plural(Singular, Plural, N, Context) -> binary() when
+    Singular :: binary() | string(), Plural :: binary() | string(), N :: non_neg_integer(), Context :: z:context().
+trans_plural(Singular, Plural, N, Context) when is_binary(Singular), is_binary(Plural) ->
+    Trans = plural_translations(Singular, Plural, Context),
+    Selected = lookup_fallback(Trans, Context),
+    template_compiler_plural:select(Selected, N,
+        {template_compiler_plural:english(), {Singular, Plural}});
+trans_plural(Singular, Plural, N, Context) ->
+    trans_plural(unicode:characters_to_binary(Singular), unicode:characters_to_binary(Plural), N, Context).
+
+%% @doc Select a plural form within a gettext message context.
+-spec trans_plural(Singular, Plural, N, MsgCtxt, Context) -> binary() when
+    Singular :: binary() | string(), Plural :: binary() | string(),
+    N :: non_neg_integer(), MsgCtxt :: binary() | string(), Context :: z:context().
+trans_plural(Singular, Plural, N, MsgCtxt, Context) ->
+    S = unicode:characters_to_binary(Singular),
+    P = unicode:characters_to_binary(Plural),
+    Trans = plural_translations(S, P, MsgCtxt, Context),
+    template_compiler_plural:select(lookup_fallback(Trans, Context), N,
+        {template_compiler_plural:english(), {S, P}}).
+
 merge_trs([], Acc) ->
     lists:reverse(Acc);
 merge_trs([{Lang,_} = LT|Rest], Acc) ->
@@ -104,6 +243,15 @@ add_labels(_Lang, [], Acc) ->
     Acc;
 add_labels(Lang, [{header,_}|Rest], Acc) ->
     add_labels(Lang, Rest, Acc);
+add_labels(Lang, [{_Label, {undefined, _}}|Rest], Acc) ->
+    % No usable catalog rule: use the source language instead of guessing.
+    add_labels(Lang, Rest, Acc);
+add_labels(Lang, [{Label, Trans}|Rest], Acc) when is_tuple(Label) ->
+    Ts = maps:get(Label, Acc, []),
+    case proplists:is_defined(Lang, Ts) of
+        true -> add_labels(Lang, Rest, Acc);
+        false -> add_labels(Lang, Rest, Acc#{Label => [{Lang, Trans}|Ts]})
+    end;
 add_labels(Lang, [{Label,Trans}|Rest], Acc) when is_binary(Trans), is_binary(Label) ->
     case maps:find(Label, Acc) of
         {ok, Ts} ->

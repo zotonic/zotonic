@@ -60,24 +60,48 @@
 generate(Filename, Labels) ->
     {ok,Fd} = file:open(Filename, [write]),
     write_header(Fd),
+    case lists:any(fun({Id, _, _}) -> is_plural(Id) end, Labels) of
+        true -> file:write(Fd, "\"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\\n\"\n");
+        false -> ok
+    end,
     write_entries(Fd, Labels),
     ok = file:close(Fd).
 
 write_entries(Fd, Labels) ->
-    F = fun
-            ({Id, Trans, undefined}) ->
-                file:write(Fd, "\nmsgid \"\"\n"),
-                write_pretty(unicode:characters_to_binary(Id), Fd),
-                file:write(Fd, "msgstr \"\"\n"),
-                write_pretty(unicode:characters_to_binary(Trans), Fd);
-            ({Id, Trans, Finfo}) ->
-                io:format(Fd, "~s~n", [fmt_fileinfo(Finfo)]),
-        		file:write(Fd, "msgid \"\"\n"),
-                write_pretty(unicode:characters_to_binary(Id), Fd),
-        		file:write(Fd, "msgstr \"\"\n"),
-        		write_pretty(unicode:characters_to_binary(Trans), Fd)
-    	end,
-    lists:foreach(F, Labels).
+    lists:foreach(fun({Id, Trans, Finfo}) ->
+        case Finfo of
+            undefined -> file:write(Fd, "\n");
+            _ -> io:format(Fd, "~s~n", [fmt_fileinfo(Finfo)])
+        end,
+        write_message(Fd, Id, Trans)
+    end, Labels).
+
+is_plural({context, _, Key}) -> is_plural(Key);
+is_plural({plural, _, _}) -> true;
+is_plural(_) -> false.
+
+write_message(Fd, {context, MsgCtxt, Key}, Trans) ->
+    file:write(Fd, "msgctxt \"\"\n"),
+    write_pretty(MsgCtxt, Fd),
+    write_message(Fd, Key, Trans);
+write_message(Fd, {plural, Singular, Plural}, Trans) ->
+    file:write(Fd, "msgid \"\"\n"),
+    write_pretty(Singular, Fd),
+    file:write(Fd, "msgid_plural \"\"\n"),
+    write_pretty(Plural, Fd),
+    Forms = case Trans of
+        {_, Tuple} when is_tuple(Tuple) -> tuple_to_list(Tuple);
+        _ -> [<<>>, <<>>]
+    end,
+    lists:foreach(fun({I, Text}) ->
+        io:format(Fd, "msgstr[~B] \"\"~n", [I]),
+        write_pretty(case Text of undefined -> <<>>; _ -> Text end, Fd)
+    end, lists:zip(lists:seq(0, length(Forms) - 1), Forms));
+write_message(Fd, Id, Trans) ->
+    file:write(Fd, "msgid \"\"\n"),
+    write_pretty(unicode:characters_to_binary(Id), Fd),
+    file:write(Fd, "msgstr \"\"\n"),
+    write_pretty(unicode:characters_to_binary(Trans), Fd).
 
 -define(ENDCOL, 72).
 -define(SEP, <<" ">>).

@@ -306,15 +306,15 @@ relative_time(N, '-', [<<"month", _/binary>>|_], Now) ->     prev_month(Now, N);
 relative_time(N, '-', [<<"year", _/binary>>|_], Now) ->      prev_year(Now, N);
 relative_time(_N, _Op, _Unit, _Now) ->         undefined.
 
-%% @doc Show a humanized version of a relative datetime.  Like "4 months, 3 days ago".
+%% @doc Show a humanized version of a relative datetime, with up to two components.
 -spec timesince(term(), z:context()) -> iodata().
 timesince(Date, Context) ->
     timesince(Date, calendar:universal_time(), Context).
 
-%% @doc Show a humanized version of a period between two dates.  Like "4 months, 3 days ago".
+%% @doc Show a humanized period using complete, direction-specific plural messages.
 -spec timesince(term(), term(), z:context()) -> iodata().
 timesince(Date, Base, Context) ->
-    timesince(Date, Base, ?__(<<"ago">>, Context), ?__(<<"now">>, Context), ?__(<<"in">>, Context), 2, Context).
+    timesince(Date, Base, default, 2, Context).
 
 timesince(Date, Base, IndicatorStrings, Context) ->
     timesince(Date, Base, IndicatorStrings, 2, Context).
@@ -322,6 +322,11 @@ timesince(Date, Base, IndicatorStrings, Context) ->
 -spec timesince(term(), term(), term(), term(), z:context()) -> iodata().
 %% @doc Show a humanized version of a period between two dates.  Like "4 months, 3 days ago".
 %% `WhenText' is a string containing a maximum of three tokens. Example "ago, now, in"
+timesince(Date, Base, default, Mode, Context) ->
+    format_relative_time(Date, Base, Mode, Context);
+timesince(Date, Base, IndicatorStrings, Mode, Context)
+        when IndicatorStrings =:= <<"default">>; IndicatorStrings =:= "default" ->
+    format_relative_time(Date, Base, Mode, Context);
 timesince(Date, Base, IndicatorStrings, Mode, Context) ->
     %% strip the tokens, so the user can specify the text more flexible.
     case [string:strip(S, both) || S <- string:tokens(z_convert:to_list(IndicatorStrings), ",")] of
@@ -344,11 +349,9 @@ timesince(_, undefined, _AgoText, _NowText, _InText, _Mode, _Context) ->
 timesince(Date, Base, _AgoText, NowText, _InText, _Mode, _Context) when Date == Base ->
     NowText;
 timesince(Date, Base, _AgoText, _NowText, InText, Mode, Context) when Date > Base ->
-    combine({InText, combine(reldate(Base, Date, Mode, Context))}, " ");
+    combine({InText, reldate(Base, Date, Mode, duration, Context)}, " ");
 timesince(Date, Base, AgoText, _NowText, _InText, Mode, Context) ->
-    combine({combine(reldate(Date, Base, Mode, Context)), AgoText}, " ").
-
-combine(Tup) -> combine(Tup, ", ").
+    combine({reldate(Date, Base, Mode, duration, Context), AgoText}, " ").
 
 combine({"", B},   _Sep) -> B;
 combine({A,""},    _Sep) -> A;
@@ -358,35 +361,99 @@ combine({A,B}, Sep) -> [A,Sep,B].
 
 
 
-%% @doc Return a string describing the relative date difference.
-reldate(D1, D2, 1, Context) ->
-    {A, _} = reldate(D1,D2, 2, Context),
-    {A,[]};
-reldate(D1, D2, 2, Context) ->
-    case diff(D1,D2) of
-        {{0,0,0},{0,0,0}} -> {?__(<<"now">>,Context),[]};
-        {{0,0,0},{0,0,S}} when S < 10 -> {?__(<<"moments">>,Context),[]};
-        {{0,0,0},{0,0,S}} -> {plural(S, ?__(<<"second">>,Context), ?__(<<"seconds">>,Context)),
-                              []};
-        {{0,0,0},{0,I,S}} -> {plural(I, ?__(<<"minute">>,Context), ?__(<<"minutes">>,Context)),
-                              plural(S, ?__(<<"second">>,Context), ?__(<<"seconds">>,Context))};
-        {{0,0,0},{H,I,_}} -> {plural(H, ?__(<<"hour">>,Context),   ?__(<<"hours">>,Context)),
-                              plural(I, ?__(<<"minute">>,Context), ?__(<<"minutes">>,Context))};
-        {{0,0,D},{H,_,_}} -> {plural(D, ?__(<<"day">>,Context),    ?__(<<"days">>,Context)),
-                              plural(H, ?__(<<"hour">>,Context),   ?__(<<"hours">>,Context))};
-        {{0,M,D},{_,_,_}} -> {plural(M, ?__(<<"month">>,Context),  ?__(<<"months">>,Context)),
-                              plural(D, ?__(<<"day">>,Context),    ?__(<<"days">>,Context))};
-        {{Y,M,_},{_,_,_}} -> {plural(Y, ?__(<<"year">>,Context),   ?__(<<"years">>,Context)),
-                              plural(M, ?__(<<"month">>,Context),  ?__(<<"months">>,Context))}
+%% The message context selects each unit's grammatical case; the translated
+%% sentence wrapper places the direction around the complete duration once.
+format_relative_time(undefined, _, _, _) -> <<>>;
+format_relative_time(_, undefined, _, _) -> <<>>;
+format_relative_time(Date, Date, _, Context) -> ?__(<<"now">>, Context);
+format_relative_time(Date, Base, Mode, Context) when Date > Base ->
+    reldate(Base, Date, Mode, future, Context);
+format_relative_time(Date, Base, Mode, Context) ->
+    reldate(Date, Base, Mode, past, Context).
+
+reldate(D1, D2, Mode, Direction, Context) when Mode =:= 1; Mode =:= 2 ->
+    case relative_parts(D1, D2) of
+        now -> ?__(<<"now">>, Context);
+        moments -> relative_moments(Direction, Context);
+        Parts ->
+            Nonzero = [{Unit, N} || {Unit, N} <- Parts, N > 0],
+            Texts = [binary:replace(relative_unit(Unit, N, Direction, Context),
+                <<"{n}">>, integer_to_binary(N), [global])
+                || {Unit, N} <- lists:sublist(Nonzero, Mode)],
+            relative_sentence(relative_join(Texts, Context), Direction, Context)
     end.
 
+relative_parts(D1, D2) ->
+    case diff(D1,D2) of
+        {{0,0,0},{0,0,0}} -> now;
+        {{0,0,0},{0,0,S}} when S < 10 -> moments;
+        {{0,0,0},{0,0,S}} -> [{second, S}];
+        {{0,0,0},{0,I,S}} -> [{minute, I}, {second, S}];
+        {{0,0,0},{H,I,_}} -> [{hour, H}, {minute, I}];
+        {{0,0,D},{H,_,_}} -> [{day, D}, {hour, H}];
+        {{0,M,D},{_,_,_}} -> [{month, M}, {day, D}];
+        {{Y,M,_},{_,_,_}} -> [{year, Y}, {month, M}]
+    end.
 
-plural(0,_Single,_Plural) ->
-    "";
-plural(1,Single,_Plural) ->
-    [$1, 32, Single];
-plural(N,_Single,Plural) ->
-    [integer_to_list(N), 32, Plural].
+relative_moments(past, Context) -> ?__(<<"moments ago">>, Context);
+relative_moments(future, Context) -> ?__(<<"in a few moments">>, Context);
+relative_moments(duration, Context) -> ?__(<<"moments">>, Context).
+
+relative_sentence(Duration, duration, _Context) -> Duration;
+relative_sentence(Duration, Direction, Context) ->
+    Pattern = case Direction of
+        past -> ?__(<<"{duration} ago">>, Context);
+        future -> ?__(<<"in {duration}">>, Context)
+    end,
+    binary:replace(Pattern, <<"{duration}">>, iolist_to_binary(Duration), [global]).
+
+relative_join([Text], _Context) -> Text;
+relative_join([First, Second], Context) ->
+    Pattern = ?__(<<"{first}, {second}">>, Context),
+    % Split before substitution so placeholders inside a translation stay literal.
+    [case Part of
+        <<"{first}">> -> First;
+        <<"{second}">> -> Second;
+        _ -> Part
+    end || Part <- re:split(Pattern, <<"(\\{first\\}|\\{second\\})">>, [{return, binary}])].
+
+%% Literal source pairs are kept at the call sites for POT extraction.
+relative_unit(second, N, past, Context) ->
+    z_trans:trans_plural(<<"{n} second">>, <<"{n} seconds">>, N, <<"relative time: past">>, Context);
+relative_unit(minute, N, past, Context) ->
+    z_trans:trans_plural(<<"{n} minute">>, <<"{n} minutes">>, N, <<"relative time: past">>, Context);
+relative_unit(hour, N, past, Context) ->
+    z_trans:trans_plural(<<"{n} hour">>, <<"{n} hours">>, N, <<"relative time: past">>, Context);
+relative_unit(day, N, past, Context) ->
+    z_trans:trans_plural(<<"{n} day">>, <<"{n} days">>, N, <<"relative time: past">>, Context);
+relative_unit(month, N, past, Context) ->
+    z_trans:trans_plural(<<"{n} month">>, <<"{n} months">>, N, <<"relative time: past">>, Context);
+relative_unit(year, N, past, Context) ->
+    z_trans:trans_plural(<<"{n} year">>, <<"{n} years">>, N, <<"relative time: past">>, Context);
+relative_unit(second, N, future, Context) ->
+    z_trans:trans_plural(<<"{n} second">>, <<"{n} seconds">>, N, <<"relative time: future">>, Context);
+relative_unit(minute, N, future, Context) ->
+    z_trans:trans_plural(<<"{n} minute">>, <<"{n} minutes">>, N, <<"relative time: future">>, Context);
+relative_unit(hour, N, future, Context) ->
+    z_trans:trans_plural(<<"{n} hour">>, <<"{n} hours">>, N, <<"relative time: future">>, Context);
+relative_unit(day, N, future, Context) ->
+    z_trans:trans_plural(<<"{n} day">>, <<"{n} days">>, N, <<"relative time: future">>, Context);
+relative_unit(month, N, future, Context) ->
+    z_trans:trans_plural(<<"{n} month">>, <<"{n} months">>, N, <<"relative time: future">>, Context);
+relative_unit(year, N, future, Context) ->
+    z_trans:trans_plural(<<"{n} year">>, <<"{n} years">>, N, <<"relative time: future">>, Context);
+relative_unit(second, N, duration, Context) ->
+    z_trans:trans_plural(<<"{n} second">>, <<"{n} seconds">>, N, <<"relative time: duration">>, Context);
+relative_unit(minute, N, duration, Context) ->
+    z_trans:trans_plural(<<"{n} minute">>, <<"{n} minutes">>, N, <<"relative time: duration">>, Context);
+relative_unit(hour, N, duration, Context) ->
+    z_trans:trans_plural(<<"{n} hour">>, <<"{n} hours">>, N, <<"relative time: duration">>, Context);
+relative_unit(day, N, duration, Context) ->
+    z_trans:trans_plural(<<"{n} day">>, <<"{n} days">>, N, <<"relative time: duration">>, Context);
+relative_unit(month, N, duration, Context) ->
+    z_trans:trans_plural(<<"{n} month">>, <<"{n} months">>, N, <<"relative time: duration">>, Context);
+relative_unit(year, N, duration, Context) ->
+    z_trans:trans_plural(<<"{n} year">>, <<"{n} years">>, N, <<"relative time: duration">>, Context).
 
 
 %% @doc Return the date the current week starts (monday)

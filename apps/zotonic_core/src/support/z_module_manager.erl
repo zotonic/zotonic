@@ -66,6 +66,7 @@
     mod_version/1,
     mod_title/1,
     mod_description/1,
+    mod_msgctxt/1,
     mod_author/1,
     mod_schema/1,
     mod_config/1,
@@ -873,6 +874,25 @@ mod_description(Module) ->
         bin(Desc)
     catch
         _M:_E -> undefined
+    end.
+
+%% @doc Get the default gettext message context for this module's templates.
+%% An absent attribute differs from an explicitly empty gettext context.
+-spec mod_msgctxt(Module) -> MsgCtxt when
+    Module :: atom() | binary() | string(),
+    MsgCtxt :: binary() | undefined.
+mod_msgctxt(Module) ->
+    Mod = module_to_mod(Module),
+    try proplists:get_value(mod_msgctxt, Mod:module_info(attributes)) of
+        undefined -> undefined;
+        Value when is_list(Value); is_binary(Value) ->
+            case unicode:characters_to_binary(Value) of
+                B when is_binary(B) -> B;
+                _ -> undefined
+            end;
+        _ -> undefined
+    catch
+        _:_ -> undefined
     end.
 
 %% @doc Get the author of a module.
