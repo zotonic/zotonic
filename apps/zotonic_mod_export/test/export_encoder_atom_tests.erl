@@ -50,6 +50,8 @@ setup() ->
     end),
     meck:expect(m_rsc, is_visible, fun(Id, _) -> Id =/= 4 end),
     meck:new(z_template_compiler_runtime, [passthrough, no_link]),
+    %% These rendering fixtures have no site or module indexer.
+    meck:expect(z_template_compiler_runtime, get_template_msgctxt, fun(_, _) -> undefined end),
     meck:expect(z_template_compiler_runtime, is_modified, fun(_, _, _) -> false end),
     meck:expect(z_template_compiler_runtime, model_call,
         fun(site, [<<"title">>], _, _) -> {ok, {<<"Test site">>, []}} end),
