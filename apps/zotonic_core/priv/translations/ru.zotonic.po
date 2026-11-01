@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-01 15:40\n"
+"PO-Revision-Date: 2026-11-01 16:45\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -21,18 +21,18 @@ msgctxt "relative time: duration"
 msgid "{n} day"
 msgid_plural "{n} days"
 msgstr[0] "{n} день"
-msgstr[1] "{n} дней"
+msgstr[1] "{n} дня"
 msgstr[2] "{n} дней"
-msgstr[3] "{n} дней"
+msgstr[3] "{n} дня"
 
 #: zotonic_core/src/support/z_datetime.erl:450
 msgctxt "relative time: duration"
 msgid "{n} hour"
 msgid_plural "{n} hours"
 msgstr[0] "{n} час"
-msgstr[1] "{n} часов"
+msgstr[1] "{n} часа"
 msgstr[2] "{n} часов"
-msgstr[3] "{n} часов"
+msgstr[3] "{n} часа"
 
 #: zotonic_core/src/support/z_datetime.erl:448
 msgctxt "relative time: duration"
@@ -40,7 +40,7 @@ msgid "{n} minute"
 msgid_plural "{n} minutes"
 msgstr[0] "{n} минута"
 msgstr[1] "{n} минуты"
-msgstr[2] "{n} минуты"
+msgstr[2] "{n} минут"
 msgstr[3] "{n} минуты"
 
 #: zotonic_core/src/support/z_datetime.erl:454
@@ -48,17 +48,17 @@ msgctxt "relative time: duration"
 msgid "{n} month"
 msgid_plural "{n} months"
 msgstr[0] "{n} месяц"
-msgstr[1] "{n} месяцев"
+msgstr[1] "{n} месяца"
 msgstr[2] "{n} месяцев"
-msgstr[3] "{n} месяцев"
+msgstr[3] "{n} месяца"
 
 #: zotonic_core/src/support/z_datetime.erl:446
 msgctxt "relative time: duration"
 msgid "{n} second"
 msgid_plural "{n} seconds"
-msgstr[0] "{n} второй"
+msgstr[0] "{n} секунда"
 msgstr[1] "{n} секунды"
-msgstr[2] "{n} секунды"
+msgstr[2] "{n} секунд"
 msgstr[3] "{n} секунды"
 
 #: zotonic_core/src/support/z_datetime.erl:456
@@ -66,35 +66,35 @@ msgctxt "relative time: duration"
 msgid "{n} year"
 msgid_plural "{n} years"
 msgstr[0] "{n} год"
-msgstr[1] "{n} годы"
-msgstr[2] "{n} годы"
-msgstr[3] "{n} годы"
+msgstr[1] "{n} года"
+msgstr[2] "{n} лет"
+msgstr[3] "{n} года"
 
 #: zotonic_core/src/support/z_datetime.erl:440
 msgctxt "relative time: future"
 msgid "{n} day"
 msgid_plural "{n} days"
 msgstr[0] "{n} день"
-msgstr[1] "{n} дней"
+msgstr[1] "{n} дня"
 msgstr[2] "{n} дней"
-msgstr[3] "{n} дней"
+msgstr[3] "{n} дня"
 
 #: zotonic_core/src/support/z_datetime.erl:438
 msgctxt "relative time: future"
 msgid "{n} hour"
 msgid_plural "{n} hours"
 msgstr[0] "{n} час"
-msgstr[1] "{n} часов"
+msgstr[1] "{n} часа"
 msgstr[2] "{n} часов"
-msgstr[3] "{n} часов"
+msgstr[3] "{n} часа"
 
 #: zotonic_core/src/support/z_datetime.erl:436
 msgctxt "relative time: future"
 msgid "{n} minute"
 msgid_plural "{n} minutes"
-msgstr[0] "{n} минута"
+msgstr[0] "{n} минуту"
 msgstr[1] "{n} минуты"
-msgstr[2] "{n} минуты"
+msgstr[2] "{n} минут"
 msgstr[3] "{n} минуты"
 
 #: zotonic_core/src/support/z_datetime.erl:442
@@ -102,17 +102,17 @@ msgctxt "relative time: future"
 msgid "{n} month"
 msgid_plural "{n} months"
 msgstr[0] "{n} месяц"
-msgstr[1] "{n} месяцев"
+msgstr[1] "{n} месяца"
 msgstr[2] "{n} месяцев"
-msgstr[3] "{n} месяцев"
+msgstr[3] "{n} месяца"
 
 #: zotonic_core/src/support/z_datetime.erl:434
 msgctxt "relative time: future"
 msgid "{n} second"
 msgid_plural "{n} seconds"
-msgstr[0] "{n} второй"
+msgstr[0] "{n} секунду"
 msgstr[1] "{n} секунды"
-msgstr[2] "{n} секунды"
+msgstr[2] "{n} секунд"
 msgstr[3] "{n} секунды"
 
 #: zotonic_core/src/support/z_datetime.erl:444
@@ -120,35 +120,35 @@ msgctxt "relative time: future"
 msgid "{n} year"
 msgid_plural "{n} years"
 msgstr[0] "{n} год"
-msgstr[1] "{n} годы"
-msgstr[2] "{n} годы"
-msgstr[3] "{n} годы"
+msgstr[1] "{n} года"
+msgstr[2] "{n} лет"
+msgstr[3] "{n} года"
 
 #: zotonic_core/src/support/z_datetime.erl:428
 msgctxt "relative time: past"
 msgid "{n} day"
 msgid_plural "{n} days"
 msgstr[0] "{n} день"
-msgstr[1] "{n} дней"
+msgstr[1] "{n} дня"
 msgstr[2] "{n} дней"
-msgstr[3] "{n} дней"
+msgstr[3] "{n} дня"
 
 #: zotonic_core/src/support/z_datetime.erl:426
 msgctxt "relative time: past"
 msgid "{n} hour"
 msgid_plural "{n} hours"
 msgstr[0] "{n} час"
-msgstr[1] "{n} часов"
+msgstr[1] "{n} часа"
 msgstr[2] "{n} часов"
-msgstr[3] "{n} часов"
+msgstr[3] "{n} часа"
 
 #: zotonic_core/src/support/z_datetime.erl:424
 msgctxt "relative time: past"
 msgid "{n} minute"
 msgid_plural "{n} minutes"
-msgstr[0] "{n} минута"
+msgstr[0] "{n} минуту"
 msgstr[1] "{n} минуты"
-msgstr[2] "{n} минуты"
+msgstr[2] "{n} минут"
 msgstr[3] "{n} минуты"
 
 #: zotonic_core/src/support/z_datetime.erl:430
@@ -156,17 +156,17 @@ msgctxt "relative time: past"
 msgid "{n} month"
 msgid_plural "{n} months"
 msgstr[0] "{n} месяц"
-msgstr[1] "{n} месяцев"
+msgstr[1] "{n} месяца"
 msgstr[2] "{n} месяцев"
-msgstr[3] "{n} месяцев"
+msgstr[3] "{n} месяца"
 
 #: zotonic_core/src/support/z_datetime.erl:422
 msgctxt "relative time: past"
 msgid "{n} second"
 msgid_plural "{n} seconds"
-msgstr[0] "{n} второй"
+msgstr[0] "{n} секунду"
 msgstr[1] "{n} секунды"
-msgstr[2] "{n} секунды"
+msgstr[2] "{n} секунд"
 msgstr[3] "{n} секунды"
 
 #: zotonic_core/src/support/z_datetime.erl:432
@@ -174,9 +174,9 @@ msgctxt "relative time: past"
 msgid "{n} year"
 msgid_plural "{n} years"
 msgstr[0] "{n} год"
-msgstr[1] "{n} годы"
-msgstr[2] "{n} годы"
-msgstr[3] "{n} годы"
+msgstr[1] "{n} года"
+msgstr[2] "{n} лет"
+msgstr[3] "{n} года"
 
 #: zotonic_core/src/support/z_fetch.erl:230
 msgid "Could not fetch the remote resource URL."
@@ -228,11 +228,11 @@ msgstr "Веб-сайт"
 
 #: zotonic_core/src/support/z_datetime.erl:399
 msgid "in a few moments"
-msgstr ""
+msgstr "через несколько мгновений"
 
 #: zotonic_core/src/support/z_datetime.erl:406
 msgid "in {duration}"
-msgstr ""
+msgstr "через {duration}"
 
 #: zotonic_core/src/support/z_datetime.erl:400
 msgid "moments"
@@ -240,7 +240,7 @@ msgstr "несколько секунд"
 
 #: zotonic_core/src/support/z_datetime.erl:398
 msgid "moments ago"
-msgstr ""
+msgstr "несколько мгновений назад"
 
 #: zotonic_core/src/support/z_datetime.erl:368
 #: zotonic_core/src/support/z_datetime.erl:376
@@ -249,11 +249,11 @@ msgstr "сейчас"
 
 #: zotonic_core/src/support/z_datetime.erl:405
 msgid "{duration} ago"
-msgstr ""
+msgstr "{duration} назад"
 
 #: zotonic_core/src/support/z_datetime.erl:412
 msgid "{first}, {second}"
-msgstr ""
+msgstr "{first}, {second}"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:17
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:48
