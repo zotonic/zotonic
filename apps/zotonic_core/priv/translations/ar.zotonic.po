@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-31 18:52\n"
+"PO-Revision-Date: 2026-11-01 15:40\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -15,6 +15,204 @@ msgstr ""
 "X-Crowdin-File: /[zotonic.zotonic] master/apps/zotonic_core/priv/translations/zotonic.pot\n"
 "X-Crowdin-File-ID: 8692\n"
 "Language: ar_SA\n"
+
+#: zotonic_core/src/support/z_datetime.erl:452
+msgctxt "relative time: duration"
+msgid "{n} day"
+msgid_plural "{n} days"
+msgstr[0] "{n} أيام"
+msgstr[1] "{n} يوم"
+msgstr[2] "{n} أيام"
+msgstr[3] "{n} أيام"
+msgstr[4] "{n} أيام"
+msgstr[5] "{n} أيام"
+
+#: zotonic_core/src/support/z_datetime.erl:450
+msgctxt "relative time: duration"
+msgid "{n} hour"
+msgid_plural "{n} hours"
+msgstr[0] "{n} ساعات"
+msgstr[1] "{n} ساعة"
+msgstr[2] "{n} ساعات"
+msgstr[3] "{n} ساعات"
+msgstr[4] "{n} ساعات"
+msgstr[5] "{n} ساعات"
+
+#: zotonic_core/src/support/z_datetime.erl:448
+msgctxt "relative time: duration"
+msgid "{n} minute"
+msgid_plural "{n} minutes"
+msgstr[0] "{n} دقائق"
+msgstr[1] "{n} دقيقة"
+msgstr[2] "{n} دقائق"
+msgstr[3] "{n} دقائق"
+msgstr[4] "{n} دقائق"
+msgstr[5] "{n} دقائق"
+
+#: zotonic_core/src/support/z_datetime.erl:454
+msgctxt "relative time: duration"
+msgid "{n} month"
+msgid_plural "{n} months"
+msgstr[0] "{n} شهور"
+msgstr[1] "{n} شهر"
+msgstr[2] "{n} شهور"
+msgstr[3] "{n} شهور"
+msgstr[4] "{n} شهور"
+msgstr[5] "{n} شهور"
+
+#: zotonic_core/src/support/z_datetime.erl:446
+msgctxt "relative time: duration"
+msgid "{n} second"
+msgid_plural "{n} seconds"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+#: zotonic_core/src/support/z_datetime.erl:456
+msgctxt "relative time: duration"
+msgid "{n} year"
+msgid_plural "{n} years"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+#: zotonic_core/src/support/z_datetime.erl:440
+msgctxt "relative time: future"
+msgid "{n} day"
+msgid_plural "{n} days"
+msgstr[0] "{n} أيام"
+msgstr[1] "{n} يوم"
+msgstr[2] "{n} أيام"
+msgstr[3] "{n} أيام"
+msgstr[4] "{n} أيام"
+msgstr[5] "{n} أيام"
+
+#: zotonic_core/src/support/z_datetime.erl:438
+msgctxt "relative time: future"
+msgid "{n} hour"
+msgid_plural "{n} hours"
+msgstr[0] "{n} ساعات"
+msgstr[1] "{n} ساعة"
+msgstr[2] "{n} ساعات"
+msgstr[3] "{n} ساعات"
+msgstr[4] "{n} ساعات"
+msgstr[5] "{n} ساعات"
+
+#: zotonic_core/src/support/z_datetime.erl:436
+msgctxt "relative time: future"
+msgid "{n} minute"
+msgid_plural "{n} minutes"
+msgstr[0] "{n} دقائق"
+msgstr[1] "{n} دقيقة"
+msgstr[2] "{n} دقائق"
+msgstr[3] "{n} دقائق"
+msgstr[4] "{n} دقائق"
+msgstr[5] "{n} دقائق"
+
+#: zotonic_core/src/support/z_datetime.erl:442
+msgctxt "relative time: future"
+msgid "{n} month"
+msgid_plural "{n} months"
+msgstr[0] "{n} شهور"
+msgstr[1] "{n} شهر"
+msgstr[2] "{n} شهور"
+msgstr[3] "{n} شهور"
+msgstr[4] "{n} شهور"
+msgstr[5] "{n} شهور"
+
+#: zotonic_core/src/support/z_datetime.erl:434
+msgctxt "relative time: future"
+msgid "{n} second"
+msgid_plural "{n} seconds"
+msgstr[0] "{n} ثوانٍ"
+msgstr[1] "{n} ثانيًا"
+msgstr[2] "{n} ثوانٍ"
+msgstr[3] "{n} ثوانٍ"
+msgstr[4] "{n} ثوانٍ"
+msgstr[5] ""
+
+#: zotonic_core/src/support/z_datetime.erl:444
+msgctxt "relative time: future"
+msgid "{n} year"
+msgid_plural "{n} years"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+#: zotonic_core/src/support/z_datetime.erl:428
+msgctxt "relative time: past"
+msgid "{n} day"
+msgid_plural "{n} days"
+msgstr[0] "{n} أيام"
+msgstr[1] "{n} يوم"
+msgstr[2] "{n} أيام"
+msgstr[3] "{n} أيام"
+msgstr[4] "{n} أيام"
+msgstr[5] "{n} أيام"
+
+#: zotonic_core/src/support/z_datetime.erl:426
+msgctxt "relative time: past"
+msgid "{n} hour"
+msgid_plural "{n} hours"
+msgstr[0] "{n} ساعات"
+msgstr[1] "{n} ساعة"
+msgstr[2] "{n} ساعات"
+msgstr[3] "{n} ساعات"
+msgstr[4] "{n} ساعات"
+msgstr[5] "{n} ساعات"
+
+#: zotonic_core/src/support/z_datetime.erl:424
+msgctxt "relative time: past"
+msgid "{n} minute"
+msgid_plural "{n} minutes"
+msgstr[0] "{n} دقائق"
+msgstr[1] "{n} دقيقة"
+msgstr[2] "{n} دقائق"
+msgstr[3] "{n} دقائق"
+msgstr[4] "{n} دقائق"
+msgstr[5] "{n} دقائق"
+
+#: zotonic_core/src/support/z_datetime.erl:430
+msgctxt "relative time: past"
+msgid "{n} month"
+msgid_plural "{n} months"
+msgstr[0] "{n} شهور"
+msgstr[1] "{n} شهر"
+msgstr[2] "{n} شهور"
+msgstr[3] "{n} شهور"
+msgstr[4] "{n} شهور"
+msgstr[5] "{n} شهور"
+
+#: zotonic_core/src/support/z_datetime.erl:422
+msgctxt "relative time: past"
+msgid "{n} second"
+msgid_plural "{n} seconds"
+msgstr[0] "{n} ثوانٍ"
+msgstr[1] "{n} ثانيًا"
+msgstr[2] "{n} ثوانٍ"
+msgstr[3] "{n} ثوانٍ"
+msgstr[4] "{n} ثوانٍ"
+msgstr[5] ""
+
+#: zotonic_core/src/support/z_datetime.erl:432
+msgctxt "relative time: past"
+msgid "{n} year"
+msgid_plural "{n} years"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
 
 #: zotonic_core/src/support/z_fetch.erl:230
 msgid "Could not fetch the remote resource URL."
@@ -64,80 +262,34 @@ msgstr "غير مصرح به للوصول إلى عنوان URL للمورد ا�
 msgid "Website"
 msgstr "الموقع الإلكتروني"
 
-#: zotonic_core/src/support/z_datetime.erl:317
-msgid "ago"
-msgstr "منذ"
+#: zotonic_core/src/support/z_datetime.erl:399
+msgid "in a few moments"
+msgstr ""
 
-#: zotonic_core/src/support/z_datetime.erl:375
-#: zotonic_core/src/support/z_datetime.erl:378
-msgid "day"
-msgstr "يوم"
+#: zotonic_core/src/support/z_datetime.erl:406
+msgid "in {duration}"
+msgstr ""
 
-#: zotonic_core/src/support/z_datetime.erl:375
-#: zotonic_core/src/support/z_datetime.erl:378
-msgid "days"
-msgstr "أيام"
-
-#: zotonic_core/src/support/z_datetime.erl:373
-#: zotonic_core/src/support/z_datetime.erl:376
-msgid "hour"
-msgstr "ساعة"
-
-#: zotonic_core/src/support/z_datetime.erl:373
-#: zotonic_core/src/support/z_datetime.erl:376
-msgid "hours"
-msgstr "ساعات"
-
-#: zotonic_core/src/support/z_datetime.erl:317
-msgid "in"
-msgstr "بعد"
-
-#: zotonic_core/src/support/z_datetime.erl:371
-#: zotonic_core/src/support/z_datetime.erl:374
-msgid "minute"
-msgstr "دقيقة"
-
-#: zotonic_core/src/support/z_datetime.erl:371
-#: zotonic_core/src/support/z_datetime.erl:374
-msgid "minutes"
-msgstr "دقائق"
-
-#: zotonic_core/src/support/z_datetime.erl:368
+#: zotonic_core/src/support/z_datetime.erl:400
 msgid "moments"
 msgstr "لحظات"
 
-#: zotonic_core/src/support/z_datetime.erl:377
-#: zotonic_core/src/support/z_datetime.erl:380
-msgid "month"
-msgstr "شهر"
+#: zotonic_core/src/support/z_datetime.erl:398
+msgid "moments ago"
+msgstr ""
 
-#: zotonic_core/src/support/z_datetime.erl:377
-#: zotonic_core/src/support/z_datetime.erl:380
-msgid "months"
-msgstr "أشهر"
-
-#: zotonic_core/src/support/z_datetime.erl:317
-#: zotonic_core/src/support/z_datetime.erl:367
+#: zotonic_core/src/support/z_datetime.erl:368
+#: zotonic_core/src/support/z_datetime.erl:376
 msgid "now"
 msgstr "الآن"
 
-#: zotonic_core/src/support/z_datetime.erl:369
-#: zotonic_core/src/support/z_datetime.erl:372
-msgid "second"
-msgstr "ثانية"
+#: zotonic_core/src/support/z_datetime.erl:405
+msgid "{duration} ago"
+msgstr ""
 
-#: zotonic_core/src/support/z_datetime.erl:369
-#: zotonic_core/src/support/z_datetime.erl:372
-msgid "seconds"
-msgstr "ثواني"
-
-#: zotonic_core/src/support/z_datetime.erl:379
-msgid "year"
-msgstr "سنة"
-
-#: zotonic_core/src/support/z_datetime.erl:379
-msgid "years"
-msgstr "سنوات"
+#: zotonic_core/src/support/z_datetime.erl:412
+msgid "{first}, {second}"
+msgstr ""
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:17
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:48
