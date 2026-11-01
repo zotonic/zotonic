@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-01 15:40\n"
+"PO-Revision-Date: 2026-11-01 16:45\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -42,13 +42,13 @@ msgctxt "relative time: duration"
 msgid "{n} month"
 msgid_plural "{n} months"
 msgstr[0] "{n} ay"
-msgstr[1] "{n} aylar"
+msgstr[1] "{n} ay"
 
 #: zotonic_core/src/support/z_datetime.erl:446
 msgctxt "relative time: duration"
 msgid "{n} second"
 msgid_plural "{n} seconds"
-msgstr[0] "{n} ikinci"
+msgstr[0] "{n} saniye"
 msgstr[1] "{n} saniye"
 
 #: zotonic_core/src/support/z_datetime.erl:456
@@ -84,13 +84,13 @@ msgctxt "relative time: future"
 msgid "{n} month"
 msgid_plural "{n} months"
 msgstr[0] "{n} ay"
-msgstr[1] "{n} aylar"
+msgstr[1] "{n} ay"
 
 #: zotonic_core/src/support/z_datetime.erl:434
 msgctxt "relative time: future"
 msgid "{n} second"
 msgid_plural "{n} seconds"
-msgstr[0] "{n} ikinci"
+msgstr[0] "{n} saniye"
 msgstr[1] "{n} saniye"
 
 #: zotonic_core/src/support/z_datetime.erl:444
@@ -126,13 +126,13 @@ msgctxt "relative time: past"
 msgid "{n} month"
 msgid_plural "{n} months"
 msgstr[0] "{n} ay"
-msgstr[1] "{n} aylar"
+msgstr[1] "{n} ay"
 
 #: zotonic_core/src/support/z_datetime.erl:422
 msgctxt "relative time: past"
 msgid "{n} second"
 msgid_plural "{n} seconds"
-msgstr[0] "{n} ikinci"
+msgstr[0] "{n} saniye"
 msgstr[1] "{n} saniye"
 
 #: zotonic_core/src/support/z_datetime.erl:432
@@ -192,11 +192,11 @@ msgstr "Web sitesi"
 
 #: zotonic_core/src/support/z_datetime.erl:399
 msgid "in a few moments"
-msgstr ""
+msgstr "birkaç saniye içinde"
 
 #: zotonic_core/src/support/z_datetime.erl:406
 msgid "in {duration}"
-msgstr ""
+msgstr "{duration} sonra"
 
 #: zotonic_core/src/support/z_datetime.erl:400
 msgid "moments"
@@ -204,7 +204,7 @@ msgstr "anlar"
 
 #: zotonic_core/src/support/z_datetime.erl:398
 msgid "moments ago"
-msgstr ""
+msgstr "az önce"
 
 #: zotonic_core/src/support/z_datetime.erl:368
 #: zotonic_core/src/support/z_datetime.erl:376
@@ -213,11 +213,11 @@ msgstr "şimdi"
 
 #: zotonic_core/src/support/z_datetime.erl:405
 msgid "{duration} ago"
-msgstr ""
+msgstr "{duration} önce"
 
 #: zotonic_core/src/support/z_datetime.erl:412
 msgid "{first}, {second}"
-msgstr ""
+msgstr "{first}, {second}"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:17
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:48
