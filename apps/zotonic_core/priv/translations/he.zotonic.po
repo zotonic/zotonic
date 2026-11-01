@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-01 15:40\n"
+"PO-Revision-Date: 2026-11-01 16:45\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -52,7 +52,7 @@ msgstr[2] "{n} חודשים"
 msgctxt "relative time: duration"
 msgid "{n} second"
 msgid_plural "{n} seconds"
-msgstr[0] "{n} שני"
+msgstr[0] "{n} שנייה"
 msgstr[1] "{n} שניות"
 msgstr[2] "{n} שניות"
 
@@ -100,7 +100,7 @@ msgstr[2] "{n} חודשים"
 msgctxt "relative time: future"
 msgid "{n} second"
 msgid_plural "{n} seconds"
-msgstr[0] "{n} שני"
+msgstr[0] "{n} שנייה"
 msgstr[1] "{n} שניות"
 msgstr[2] "{n} שניות"
 
@@ -148,7 +148,7 @@ msgstr[2] "{n} חודשים"
 msgctxt "relative time: past"
 msgid "{n} second"
 msgid_plural "{n} seconds"
-msgstr[0] "{n} שני"
+msgstr[0] "{n} שנייה"
 msgstr[1] "{n} שניות"
 msgstr[2] "{n} שניות"
 
@@ -210,11 +210,11 @@ msgstr "אתר אינטרנט"
 
 #: zotonic_core/src/support/z_datetime.erl:399
 msgid "in a few moments"
-msgstr ""
+msgstr "בעוד כמה רגעים"
 
 #: zotonic_core/src/support/z_datetime.erl:406
 msgid "in {duration}"
-msgstr ""
+msgstr "בעוד {duration}"
 
 #: zotonic_core/src/support/z_datetime.erl:400
 msgid "moments"
@@ -222,7 +222,7 @@ msgstr "רגעים"
 
 #: zotonic_core/src/support/z_datetime.erl:398
 msgid "moments ago"
-msgstr ""
+msgstr "לפני רגעים ספורים"
 
 #: zotonic_core/src/support/z_datetime.erl:368
 #: zotonic_core/src/support/z_datetime.erl:376
@@ -231,11 +231,11 @@ msgstr "עַכשָׁיו"
 
 #: zotonic_core/src/support/z_datetime.erl:405
 msgid "{duration} ago"
-msgstr ""
+msgstr "לפני {duration}"
 
 #: zotonic_core/src/support/z_datetime.erl:412
 msgid "{first}, {second}"
-msgstr ""
+msgstr "{first}, {second}"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:17
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:48
