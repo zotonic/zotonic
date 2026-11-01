@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-01 15:41\n"
+"PO-Revision-Date: 2026-11-01 16:45\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -174,11 +174,11 @@ msgstr "เว็บไซต์"
 
 #: zotonic_core/src/support/z_datetime.erl:399
 msgid "in a few moments"
-msgstr ""
+msgstr "ในอีกสักครู่"
 
 #: zotonic_core/src/support/z_datetime.erl:406
 msgid "in {duration}"
-msgstr ""
+msgstr "ในอีก {duration}"
 
 #: zotonic_core/src/support/z_datetime.erl:400
 msgid "moments"
@@ -186,7 +186,7 @@ msgstr "ไม่กี่อึดใจ"
 
 #: zotonic_core/src/support/z_datetime.erl:398
 msgid "moments ago"
-msgstr ""
+msgstr "เมื่อสักครู่"
 
 #: zotonic_core/src/support/z_datetime.erl:368
 #: zotonic_core/src/support/z_datetime.erl:376
@@ -195,11 +195,11 @@ msgstr "ตอนนี้"
 
 #: zotonic_core/src/support/z_datetime.erl:405
 msgid "{duration} ago"
-msgstr ""
+msgstr "{duration}ที่แล้ว"
 
 #: zotonic_core/src/support/z_datetime.erl:412
 msgid "{first}, {second}"
-msgstr ""
+msgstr "{first}, {second}"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:17
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:48
