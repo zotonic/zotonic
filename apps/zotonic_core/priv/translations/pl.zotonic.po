@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-31 18:52\n"
+"PO-Revision-Date: 2026-11-01 15:40\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -15,6 +15,168 @@ msgstr ""
 "X-Crowdin-File: /[zotonic.zotonic] master/apps/zotonic_core/priv/translations/zotonic.pot\n"
 "X-Crowdin-File-ID: 8692\n"
 "Language: pl_PL\n"
+
+#: zotonic_core/src/support/z_datetime.erl:452
+msgctxt "relative time: duration"
+msgid "{n} day"
+msgid_plural "{n} days"
+msgstr[0] "{n} dzień"
+msgstr[1] "{n} dni"
+msgstr[2] "{n} dni"
+msgstr[3] "{n} dni"
+
+#: zotonic_core/src/support/z_datetime.erl:450
+msgctxt "relative time: duration"
+msgid "{n} hour"
+msgid_plural "{n} hours"
+msgstr[0] "{n} godzina"
+msgstr[1] "{n} godziny"
+msgstr[2] "{n} godziny"
+msgstr[3] "{n} godziny"
+
+#: zotonic_core/src/support/z_datetime.erl:448
+msgctxt "relative time: duration"
+msgid "{n} minute"
+msgid_plural "{n} minutes"
+msgstr[0] "{n} minuta"
+msgstr[1] "{n} protokoły"
+msgstr[2] "{n} protokoły"
+msgstr[3] "{n} protokoły"
+
+#: zotonic_core/src/support/z_datetime.erl:454
+msgctxt "relative time: duration"
+msgid "{n} month"
+msgid_plural "{n} months"
+msgstr[0] "{n} miesiąc"
+msgstr[1] "{n} miesiące"
+msgstr[2] "{n} miesiące"
+msgstr[3] "{n} miesiące"
+
+#: zotonic_core/src/support/z_datetime.erl:446
+msgctxt "relative time: duration"
+msgid "{n} second"
+msgid_plural "{n} seconds"
+msgstr[0] "{n} drugi"
+msgstr[1] "{n} sekundy"
+msgstr[2] "{n} sekundy"
+msgstr[3] "{n} sekundy"
+
+#: zotonic_core/src/support/z_datetime.erl:456
+msgctxt "relative time: duration"
+msgid "{n} year"
+msgid_plural "{n} years"
+msgstr[0] "{n} rok"
+msgstr[1] "{n} lata"
+msgstr[2] "{n} lata"
+msgstr[3] "{n} lata"
+
+#: zotonic_core/src/support/z_datetime.erl:440
+msgctxt "relative time: future"
+msgid "{n} day"
+msgid_plural "{n} days"
+msgstr[0] "{n} dzień"
+msgstr[1] "{n} dni"
+msgstr[2] "{n} dni"
+msgstr[3] "{n} dni"
+
+#: zotonic_core/src/support/z_datetime.erl:438
+msgctxt "relative time: future"
+msgid "{n} hour"
+msgid_plural "{n} hours"
+msgstr[0] "{n} godzina"
+msgstr[1] "{n} godziny"
+msgstr[2] "{n} godziny"
+msgstr[3] "{n} godziny"
+
+#: zotonic_core/src/support/z_datetime.erl:436
+msgctxt "relative time: future"
+msgid "{n} minute"
+msgid_plural "{n} minutes"
+msgstr[0] "{n} minuta"
+msgstr[1] "{n} protokoły"
+msgstr[2] "{n} protokoły"
+msgstr[3] "{n} protokoły"
+
+#: zotonic_core/src/support/z_datetime.erl:442
+msgctxt "relative time: future"
+msgid "{n} month"
+msgid_plural "{n} months"
+msgstr[0] "{n} miesiąc"
+msgstr[1] "{n} miesiące"
+msgstr[2] "{n} miesiące"
+msgstr[3] "{n} miesiące"
+
+#: zotonic_core/src/support/z_datetime.erl:434
+msgctxt "relative time: future"
+msgid "{n} second"
+msgid_plural "{n} seconds"
+msgstr[0] "{n} drugi"
+msgstr[1] "{n} sekundy"
+msgstr[2] "{n} sekundy"
+msgstr[3] "{n} sekundy"
+
+#: zotonic_core/src/support/z_datetime.erl:444
+msgctxt "relative time: future"
+msgid "{n} year"
+msgid_plural "{n} years"
+msgstr[0] "{n} rok"
+msgstr[1] "{n} lata"
+msgstr[2] "{n} lata"
+msgstr[3] "{n} lata"
+
+#: zotonic_core/src/support/z_datetime.erl:428
+msgctxt "relative time: past"
+msgid "{n} day"
+msgid_plural "{n} days"
+msgstr[0] "{n} dzień"
+msgstr[1] "{n} dni"
+msgstr[2] "{n} dni"
+msgstr[3] "{n} dni"
+
+#: zotonic_core/src/support/z_datetime.erl:426
+msgctxt "relative time: past"
+msgid "{n} hour"
+msgid_plural "{n} hours"
+msgstr[0] "{n} godzina"
+msgstr[1] "{n} godziny"
+msgstr[2] "{n} godziny"
+msgstr[3] "{n} godziny"
+
+#: zotonic_core/src/support/z_datetime.erl:424
+msgctxt "relative time: past"
+msgid "{n} minute"
+msgid_plural "{n} minutes"
+msgstr[0] "{n} minuta"
+msgstr[1] "{n} protokoły"
+msgstr[2] "{n} protokoły"
+msgstr[3] "{n} protokoły"
+
+#: zotonic_core/src/support/z_datetime.erl:430
+msgctxt "relative time: past"
+msgid "{n} month"
+msgid_plural "{n} months"
+msgstr[0] "{n} miesiąc"
+msgstr[1] "{n} miesiące"
+msgstr[2] "{n} miesiące"
+msgstr[3] "{n} miesiące"
+
+#: zotonic_core/src/support/z_datetime.erl:422
+msgctxt "relative time: past"
+msgid "{n} second"
+msgid_plural "{n} seconds"
+msgstr[0] "{n} drugi"
+msgstr[1] "{n} sekundy"
+msgstr[2] "{n} sekundy"
+msgstr[3] "{n} sekundy"
+
+#: zotonic_core/src/support/z_datetime.erl:432
+msgctxt "relative time: past"
+msgid "{n} year"
+msgid_plural "{n} years"
+msgstr[0] "{n} rok"
+msgstr[1] "{n} lata"
+msgstr[2] "{n} lata"
+msgstr[3] "{n} lata"
 
 #: zotonic_core/src/support/z_fetch.erl:230
 msgid "Could not fetch the remote resource URL."
@@ -64,80 +226,34 @@ msgstr "Brak autoryzacji dostępu do adresu URL zdalnego zasobu."
 msgid "Website"
 msgstr "Strona internetowa"
 
-#: zotonic_core/src/support/z_datetime.erl:317
-msgid "ago"
-msgstr "temu"
+#: zotonic_core/src/support/z_datetime.erl:399
+msgid "in a few moments"
+msgstr ""
 
-#: zotonic_core/src/support/z_datetime.erl:375
-#: zotonic_core/src/support/z_datetime.erl:378
-msgid "day"
-msgstr "dzień"
+#: zotonic_core/src/support/z_datetime.erl:406
+msgid "in {duration}"
+msgstr ""
 
-#: zotonic_core/src/support/z_datetime.erl:375
-#: zotonic_core/src/support/z_datetime.erl:378
-msgid "days"
-msgstr "dni"
-
-#: zotonic_core/src/support/z_datetime.erl:373
-#: zotonic_core/src/support/z_datetime.erl:376
-msgid "hour"
-msgstr "godzina"
-
-#: zotonic_core/src/support/z_datetime.erl:373
-#: zotonic_core/src/support/z_datetime.erl:376
-msgid "hours"
-msgstr "godziny"
-
-#: zotonic_core/src/support/z_datetime.erl:317
-msgid "in"
-msgstr "za"
-
-#: zotonic_core/src/support/z_datetime.erl:371
-#: zotonic_core/src/support/z_datetime.erl:374
-msgid "minute"
-msgstr "minuta"
-
-#: zotonic_core/src/support/z_datetime.erl:371
-#: zotonic_core/src/support/z_datetime.erl:374
-msgid "minutes"
-msgstr "minuty"
-
-#: zotonic_core/src/support/z_datetime.erl:368
+#: zotonic_core/src/support/z_datetime.erl:400
 msgid "moments"
 msgstr "chwile"
 
-#: zotonic_core/src/support/z_datetime.erl:377
-#: zotonic_core/src/support/z_datetime.erl:380
-msgid "month"
-msgstr "miesiąc"
+#: zotonic_core/src/support/z_datetime.erl:398
+msgid "moments ago"
+msgstr ""
 
-#: zotonic_core/src/support/z_datetime.erl:377
-#: zotonic_core/src/support/z_datetime.erl:380
-msgid "months"
-msgstr "miesiące"
-
-#: zotonic_core/src/support/z_datetime.erl:317
-#: zotonic_core/src/support/z_datetime.erl:367
+#: zotonic_core/src/support/z_datetime.erl:368
+#: zotonic_core/src/support/z_datetime.erl:376
 msgid "now"
 msgstr "teraz"
 
-#: zotonic_core/src/support/z_datetime.erl:369
-#: zotonic_core/src/support/z_datetime.erl:372
-msgid "second"
-msgstr "sekunda"
+#: zotonic_core/src/support/z_datetime.erl:405
+msgid "{duration} ago"
+msgstr ""
 
-#: zotonic_core/src/support/z_datetime.erl:369
-#: zotonic_core/src/support/z_datetime.erl:372
-msgid "seconds"
-msgstr "sekundy"
-
-#: zotonic_core/src/support/z_datetime.erl:379
-msgid "year"
-msgstr "rok"
-
-#: zotonic_core/src/support/z_datetime.erl:379
-msgid "years"
-msgstr "lata"
+#: zotonic_core/src/support/z_datetime.erl:412
+msgid "{first}, {second}"
+msgstr ""
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:17
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:48
