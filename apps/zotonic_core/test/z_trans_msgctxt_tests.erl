@@ -54,6 +54,8 @@ strict_api(C) ->
     ?assertEqual(undefined, z_trans:lookup(Resolved, fr, C)),
     ?assertEqual(<<"Actie">>, z_trans:lookup_fallback(Resolved, C)),
     ?assertEqual(<<"{n} items">>, z_trans:trans_plural("{n} item", "{n} items", 3, "action", C)),
+    % Resolve missing forms before language fallback, just like templates.
+    ?assertEqual(<<"{n} de-many">>, z_trans:trans_plural("{n} gap", "{n} gaps", 3, "action", C)),
     ?assertEqual(<<"{n} algemene">>, z_trans:trans_plural("{n} item", "{n} items", 3, C)).
 
 template_languages(C) ->
@@ -87,10 +89,11 @@ module_default(C) ->
     ?assertEqual(undefined, z_module_manager:mod_msgctxt(z_trans)),
     File = "/tmp/msgctxt_owner/priv/templates/default.tpl",
     Other = "/tmp/msgctxt_override/priv/templates/default.tpl",
+    Key = #module_index_key{site=msgctxt_tests, type=template, name= <<"default.tpl">>},
     ok = meck:new(z_module_indexer, [no_link]),
     ok = meck:expect(z_module_indexer, find_all, fun(template, <<"default.tpl">>, _) ->
-        [#module_index{filepath=Other, module=z_trans},
-         #module_index{filepath=File, module=?MODULE}]
+        [#module_index{key=Key, filepath=Other, module=z_trans},
+         #module_index{key=Key, filepath=File, module=?MODULE}]
     end),
     try
         ?assertEqual(undefined, z_template_compiler_runtime:get_template_msgctxt(Other, C)),

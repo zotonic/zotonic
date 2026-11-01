@@ -46,6 +46,13 @@
 
 -include_lib("../../include/zotonic.hrl").
 
+-type plural_forms() :: {template_compiler_plural:rule(), tuple()}.
+-type plural_value() :: plural_forms() | {plural_candidates, [plural_forms()]}.
+-type plural_trans() :: #trans{tr :: [{atom(), plural_value()}]}.
+%% Language lookup also selects the template compiler's precompiled patterns.
+-type value() :: binary() | plural_value() | fun(() -> term()).
+-export_type([plural_value/0, plural_trans/0, value/0]).
+
 %% @doc Fetch all translations for the given English string. If no translations are
 %% found then a trans record with the given string is returned.
 -spec translations(z:trans() | binary() | string(), z:context()) -> z:trans().
@@ -144,7 +151,7 @@ with_english(Tr, Source) ->
 
 %% @doc All plural translations, keyed separately from singular messages.
 %% Forms and their parsed rule stay together through language fallback.
--spec plural_translations(Singular, Plural, Context) -> #trans{} when
+-spec plural_translations(Singular, Plural, Context) -> plural_trans() when
     Singular :: binary() | string(), Plural :: binary() | string(), Context :: z:context().
 plural_translations(Singular, Plural, Context) when is_binary(Singular), is_binary(Plural) ->
     plural_translations_key({plural, Singular, Plural}, Singular, Plural, Context);
@@ -153,14 +160,14 @@ plural_translations(Singular, Plural, Context) ->
 
 %% @doc Fetch plural forms in a gettext message context. No fallback to a
 %% different message context: its grammatical case or meaning can be different.
--spec plural_translations(Singular, Plural, MsgCtxt, Context) -> #trans{} when
+-spec plural_translations(Singular, Plural, MsgCtxt, Context) -> plural_trans() when
     Singular :: binary() | string(), Plural :: binary() | string(),
     MsgCtxt :: binary() | string(), Context :: z:context().
 plural_translations(Singular, Plural, MsgCtxt, Context) ->
     plural_translations(Singular, Plural, MsgCtxt, false, Context).
 
 %% @doc Optionally try a contextless plural entry in the same language.
--spec plural_translations(Singular, Plural, MsgCtxt, Fallback, Context) -> #trans{} when
+-spec plural_translations(Singular, Plural, MsgCtxt, Fallback, Context) -> plural_trans() when
     Singular :: binary() | string(), Plural :: binary() | string(),
     MsgCtxt :: binary() | string(), Fallback :: boolean(), Context :: z:context().
 plural_translations(Singular, Plural, MsgCtxt, Fallback, Context) when is_boolean(Fallback) ->
@@ -187,9 +194,10 @@ plural_translations_key(Key, Singular, Plural, Context) ->
     Singular :: binary() | string(), Plural :: binary() | string(), N :: non_neg_integer(), Context :: z:context().
 trans_plural(Singular, Plural, N, Context) when is_binary(Singular), is_binary(Plural) ->
     Trans = plural_translations(Singular, Plural, Context),
-    Selected = lookup_fallback(Trans, Context),
-    template_compiler_plural:select(Selected, N,
-        {template_compiler_plural:english(), {Singular, Plural}});
+    Resolved = template_compiler_plural:resolve(Trans, N,
+        {template_compiler_plural:english(), {Singular, Plural}}),
+    Text = lookup_fallback(Resolved, Context),
+    text_value(Text);
 trans_plural(Singular, Plural, N, Context) ->
     trans_plural(unicode:characters_to_binary(Singular), unicode:characters_to_binary(Plural), N, Context).
 
@@ -201,8 +209,10 @@ trans_plural(Singular, Plural, N, MsgCtxt, Context) ->
     S = unicode:characters_to_binary(Singular),
     P = unicode:characters_to_binary(Plural),
     Trans = plural_translations(S, P, MsgCtxt, Context),
-    template_compiler_plural:select(lookup_fallback(Trans, Context), N,
-        {template_compiler_plural:english(), {S, P}}).
+    Resolved = template_compiler_plural:resolve(Trans, N,
+        {template_compiler_plural:english(), {S, P}}),
+    Text = lookup_fallback(Resolved, Context),
+    text_value(Text).
 
 merge_trs([], Acc) ->
     lists:reverse(Acc);
@@ -267,9 +277,10 @@ add_labels(Lang, [{Label,Trans}|Rest], Acc) when is_binary(Trans), is_binary(Lab
 %% in the context. If no translation is found or the input is undefined, then
 %% undefined is returned.
 -spec lookup(Text, Context) -> Translation when
-    Text :: z:trans() | binary() | string() | undefined,
+    Text :: #trans{tr :: [{atom(), Value}]} | binary() | string() | undefined,
     Context :: z:context(),
-    Translation :: binary() | undefined.
+    Value :: value(),
+    Translation :: Value | binary() | undefined.
 lookup(Trans, Context) ->
     lookup(Trans, z_context:languages(Context), Context).
 
@@ -277,10 +288,11 @@ lookup(Trans, Context) ->
 %% or languages. If no translation is found or the input is undefined, then
 %% undefined is returned.
 -spec lookup(Text, Language, Context) -> Translation | undefined when
-    Text :: z:trans() | binary() | string() | undefined,
+    Text :: #trans{tr :: [{atom(), Value}]} | binary() | string() | undefined,
     Language :: z_language:language_code() | [ z_language:language_code() ],
     Context :: z:context(),
-    Translation :: binary().
+    Value :: value(),
+    Translation :: Value | binary().
 lookup(undefined, _Lang, _Context) ->
     undefined;
 lookup(Text, Lang, Context) when is_list(Text) ->
@@ -312,9 +324,10 @@ lookup(_Text, _Langs, _Context) ->
 %% In order check: requested languages, default configured language, english, any
 %% If no translation is found, then the empty binary string is returned.
 -spec lookup_fallback(Text, OptContext) -> Translation when
-    Text :: z:trans() | binary() | string() | list() | undefined,
+    Text :: #trans{tr :: [{atom(), Value}]} | binary() | string() | list() | undefined,
     OptContext :: z:context() | undefined,
-    Translation :: binary().
+    Value :: value(),
+    Translation :: Value | binary().
 lookup_fallback(undefined, _OptContext) ->
     <<>>;
 lookup_fallback(Trans, undefined) ->
@@ -326,10 +339,11 @@ lookup_fallback(Trans, Context) ->
 %% In order check: requested languages, default configured language, english, any
 %% If no translation is found, then the empty binary string is returned.
 -spec lookup_fallback(Text, Language, OptContext) -> Translation when
-    Text :: z:trans() | binary() | string() | list() | undefined,
+    Text :: #trans{tr :: [{atom(), Value}]} | binary() | string() | list() | undefined,
     Language :: z_language:language_code() | [ z_language:language_code() ] | binary(),
     OptContext :: z:context() | undefined,
-    Translation :: binary().
+    Value :: value(),
+    Translation :: Value | binary().
 lookup_fallback(TextList, Lang, OptContext) when is_list(TextList) ->
     case is_iodata(TextList) of
         true ->
@@ -377,9 +391,10 @@ is_iodata([H|T]) when is_list(H) -> is_iodata(H) andalso is_iodata(T);
 is_iodata([]) -> true;
 is_iodata(_) -> false.
 
--spec find_first(Langs, Texts) -> binary() | undefined when
+-spec find_first(Langs, Texts) -> Value | undefined when
     Langs :: [ z_language:language_code() ],
-    Texts :: [ {z_language:language_code(), binary()} ].
+    Texts :: [{z_language:language_code(), Value}],
+    Value :: value().
 find_first(_Langs, []) ->
     undefined;
 find_first([], _Tr) ->
@@ -390,8 +405,9 @@ find_first([Lang|Langs], Tr) ->
         {_, Text} -> Text
     end.
 
--spec take_english_or_first(Tr) -> binary() when
-    Tr :: [ {z_language:language_code(), binary()} ].
+-spec take_english_or_first(Tr) -> Value | binary() when
+    Tr :: [{z_language:language_code(), Value}],
+    Value :: value().
 take_english_or_first(Tr) ->
     case lists:keyfind(en, 1, Tr) of
         false ->
@@ -489,10 +505,10 @@ trans(Text, #context{} = Context) when is_binary(Text) ->
 trans(#trans{} = Trans, #context{} = Context) ->
     trans(Trans, z_context:languages(Context));
 trans(#trans{ tr = Tr }, Langs) ->
-    case find_first(Langs, Tr) of
+    text_value(case find_first(Langs, Tr) of
         undefined -> take_english_or_first(Tr);
         T -> T
-    end;
+    end);
 trans(Text, _Lang) when is_binary(Text) ->
     Text;
 trans(_Text, _Lang) ->
@@ -511,7 +527,7 @@ trans(Text, Languages, Context) when is_list(Text) ->
 trans(#trans{ tr = [] }, _Languages, _Context) ->
     <<>>;
 trans(#trans{ tr = Tr0 }, Languages, Context) ->
-    case lists:keyfind(en, 1, Tr0) of
+    text_value(case lists:keyfind(en, 1, Tr0) of
         {en, EnText} ->
             #trans{ tr = Tr } = translations(EnText, Context),
             case find_first(Languages, Tr) of
@@ -528,12 +544,16 @@ trans(#trans{ tr = Tr0 }, Languages, Context) ->
                 undefined -> <<>>;
                 T -> T
             end
-    end;
+    end);
 trans(Text, Languages, Context) when is_binary(Text) ->
     #trans{ tr = Tr } = translations(Text, Context),
-    case find_first(Languages, Tr) of
+    text_value(case find_first(Languages, Tr) of
         undefined -> Text;
         T -> T
-    end;
+    end);
 trans(_Text, _Languages, _Context) ->
     <<>>.
+
+%% Text APIs must not expose unresolved catalogs or compiled template functions.
+-spec text_value(value()) -> binary().
+text_value(Text) when is_binary(Text) -> Text.

@@ -374,7 +374,8 @@
 -define(___(T,MsgCtxt,Context), z_trans:translations(T,MsgCtxt,Context)).
 
 %% @doc Extra trans record definition to ease JSON mapping of translatable strings
--record(trans, { tr = [] :: list( {atom(), binary()} )}).
+%% Plural catalogs are resolved to binary translations before text lookup.
+-record(trans, { tr = [] :: list({atom(), z_trans:value()}) }).
 
 %% Some standard periods in seconds
 -define(MINUTE,     60).

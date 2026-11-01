@@ -501,19 +501,19 @@ get_translations(Text, MsgCtxt, Context) ->
     #trans{tr=lists:sort(Tr)}.
 
 %% @doc Compile-time plural lookup with contextless fallback per language.
--spec get_plural_translations(binary(), binary(), binary(), z:context()) -> #trans{}.
+-spec get_plural_translations(binary(), binary(), binary(), z:context()) -> z_trans:plural_trans().
 get_plural_translations(Singular, Plural, MsgCtxt, Context) ->
     #trans{tr=Tr} = z_trans:plural_translations(Singular, Plural, MsgCtxt, true, Context),
     #trans{tr=lists:sort(Tr)}.
 
 %% @doc Fetch all plural forms at compile time, including each catalog's rule.
--spec get_plural_translations(binary(), binary(), z:context()) -> #trans{}.
+-spec get_plural_translations(binary(), binary(), z:context()) -> z_trans:plural_trans().
 get_plural_translations(Singular, Plural, Context) ->
     #trans{tr=Tr} = z_trans:plural_translations(Singular, Plural, Context),
     #trans{tr=lists:sort(Tr)}.
 
 %% @doc Find the best fitting translation.
--spec lookup_translation(z:trans(), TplVars :: map(), Context :: term()) -> term().
+-spec lookup_translation(#trans{}, TplVars :: map(), Context :: term()) -> term().
 lookup_translation(#trans{} = Trans, _TplVars, Context) ->
     z_trans:lookup_fallback(Trans, Context).
 
