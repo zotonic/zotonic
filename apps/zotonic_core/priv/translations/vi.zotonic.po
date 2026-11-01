@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-31 16:08\n"
+"PO-Revision-Date: 2026-11-01 16:46\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
 "MIME-Version: 1.0\n"
@@ -15,6 +15,114 @@ msgstr ""
 "X-Crowdin-File: /[zotonic.zotonic] master/apps/zotonic_core/priv/translations/zotonic.pot\n"
 "X-Crowdin-File-ID: 8692\n"
 "Language: vi_VN\n"
+
+#: zotonic_core/src/support/z_datetime.erl:452
+msgctxt "relative time: duration"
+msgid "{n} day"
+msgid_plural "{n} days"
+msgstr[0] "{n} ngày"
+
+#: zotonic_core/src/support/z_datetime.erl:450
+msgctxt "relative time: duration"
+msgid "{n} hour"
+msgid_plural "{n} hours"
+msgstr[0] "{n} giờ"
+
+#: zotonic_core/src/support/z_datetime.erl:448
+msgctxt "relative time: duration"
+msgid "{n} minute"
+msgid_plural "{n} minutes"
+msgstr[0] "{n} phút"
+
+#: zotonic_core/src/support/z_datetime.erl:454
+msgctxt "relative time: duration"
+msgid "{n} month"
+msgid_plural "{n} months"
+msgstr[0] "{n} tháng"
+
+#: zotonic_core/src/support/z_datetime.erl:446
+msgctxt "relative time: duration"
+msgid "{n} second"
+msgid_plural "{n} seconds"
+msgstr[0] "{n} giây"
+
+#: zotonic_core/src/support/z_datetime.erl:456
+msgctxt "relative time: duration"
+msgid "{n} year"
+msgid_plural "{n} years"
+msgstr[0] "{n} năm"
+
+#: zotonic_core/src/support/z_datetime.erl:440
+msgctxt "relative time: future"
+msgid "{n} day"
+msgid_plural "{n} days"
+msgstr[0] "{n} ngày"
+
+#: zotonic_core/src/support/z_datetime.erl:438
+msgctxt "relative time: future"
+msgid "{n} hour"
+msgid_plural "{n} hours"
+msgstr[0] "{n} giờ"
+
+#: zotonic_core/src/support/z_datetime.erl:436
+msgctxt "relative time: future"
+msgid "{n} minute"
+msgid_plural "{n} minutes"
+msgstr[0] "{n} phút"
+
+#: zotonic_core/src/support/z_datetime.erl:442
+msgctxt "relative time: future"
+msgid "{n} month"
+msgid_plural "{n} months"
+msgstr[0] "{n} tháng"
+
+#: zotonic_core/src/support/z_datetime.erl:434
+msgctxt "relative time: future"
+msgid "{n} second"
+msgid_plural "{n} seconds"
+msgstr[0] "{n} giây"
+
+#: zotonic_core/src/support/z_datetime.erl:444
+msgctxt "relative time: future"
+msgid "{n} year"
+msgid_plural "{n} years"
+msgstr[0] "{n} năm"
+
+#: zotonic_core/src/support/z_datetime.erl:428
+msgctxt "relative time: past"
+msgid "{n} day"
+msgid_plural "{n} days"
+msgstr[0] "{n} ngày"
+
+#: zotonic_core/src/support/z_datetime.erl:426
+msgctxt "relative time: past"
+msgid "{n} hour"
+msgid_plural "{n} hours"
+msgstr[0] "{n} giờ"
+
+#: zotonic_core/src/support/z_datetime.erl:424
+msgctxt "relative time: past"
+msgid "{n} minute"
+msgid_plural "{n} minutes"
+msgstr[0] "{n} phút"
+
+#: zotonic_core/src/support/z_datetime.erl:430
+msgctxt "relative time: past"
+msgid "{n} month"
+msgid_plural "{n} months"
+msgstr[0] "{n} tháng"
+
+#: zotonic_core/src/support/z_datetime.erl:422
+msgctxt "relative time: past"
+msgid "{n} second"
+msgid_plural "{n} seconds"
+msgstr[0] "{n} giây"
+
+#: zotonic_core/src/support/z_datetime.erl:432
+msgctxt "relative time: past"
+msgid "{n} year"
+msgid_plural "{n} years"
+msgstr[0] "{n} năm"
 
 #: zotonic_core/src/support/z_fetch.erl:230
 msgid "Could not fetch the remote resource URL."
@@ -64,80 +172,34 @@ msgstr "Chưa được cấp quyền truy cập URL tài nguyên từ xa."
 msgid "Website"
 msgstr "Trang web"
 
-#: zotonic_core/src/support/z_datetime.erl:317
-msgid "ago"
-msgstr "trước"
+#: zotonic_core/src/support/z_datetime.erl:399
+msgid "in a few moments"
+msgstr "trong giây lát"
 
-#: zotonic_core/src/support/z_datetime.erl:375
-#: zotonic_core/src/support/z_datetime.erl:378
-msgid "day"
-msgstr "ngày"
+#: zotonic_core/src/support/z_datetime.erl:406
+msgid "in {duration}"
+msgstr "sau {duration}"
 
-#: zotonic_core/src/support/z_datetime.erl:375
-#: zotonic_core/src/support/z_datetime.erl:378
-msgid "days"
-msgstr "ngày"
-
-#: zotonic_core/src/support/z_datetime.erl:373
-#: zotonic_core/src/support/z_datetime.erl:376
-msgid "hour"
-msgstr "giờ"
-
-#: zotonic_core/src/support/z_datetime.erl:373
-#: zotonic_core/src/support/z_datetime.erl:376
-msgid "hours"
-msgstr "giờ"
-
-#: zotonic_core/src/support/z_datetime.erl:317
-msgid "in"
-msgstr "sau"
-
-#: zotonic_core/src/support/z_datetime.erl:371
-#: zotonic_core/src/support/z_datetime.erl:374
-msgid "minute"
-msgstr "phút"
-
-#: zotonic_core/src/support/z_datetime.erl:371
-#: zotonic_core/src/support/z_datetime.erl:374
-msgid "minutes"
-msgstr "phút"
-
-#: zotonic_core/src/support/z_datetime.erl:368
+#: zotonic_core/src/support/z_datetime.erl:400
 msgid "moments"
 msgstr "khoảnh khắc"
 
-#: zotonic_core/src/support/z_datetime.erl:377
-#: zotonic_core/src/support/z_datetime.erl:380
-msgid "month"
-msgstr "tháng"
+#: zotonic_core/src/support/z_datetime.erl:398
+msgid "moments ago"
+msgstr "vừa xong"
 
-#: zotonic_core/src/support/z_datetime.erl:377
-#: zotonic_core/src/support/z_datetime.erl:380
-msgid "months"
-msgstr "tháng"
-
-#: zotonic_core/src/support/z_datetime.erl:317
-#: zotonic_core/src/support/z_datetime.erl:367
+#: zotonic_core/src/support/z_datetime.erl:368
+#: zotonic_core/src/support/z_datetime.erl:376
 msgid "now"
 msgstr "bây giờ"
 
-#: zotonic_core/src/support/z_datetime.erl:369
-#: zotonic_core/src/support/z_datetime.erl:372
-msgid "second"
-msgstr "giây"
+#: zotonic_core/src/support/z_datetime.erl:405
+msgid "{duration} ago"
+msgstr "{duration} trước"
 
-#: zotonic_core/src/support/z_datetime.erl:369
-#: zotonic_core/src/support/z_datetime.erl:372
-msgid "seconds"
-msgstr "giây"
-
-#: zotonic_core/src/support/z_datetime.erl:379
-msgid "year"
-msgstr "năm"
-
-#: zotonic_core/src/support/z_datetime.erl:379
-msgid "years"
-msgstr "năm"
+#: zotonic_core/src/support/z_datetime.erl:412
+msgid "{first}, {second}"
+msgstr "{first}, {second}"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:17
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:48
@@ -1480,7 +1542,6 @@ msgstr "Kết nối"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:72
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:133
-#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:100
 #: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:7
 msgid "Connections"
 msgstr "Kết nối"
@@ -2429,6 +2490,7 @@ msgstr "Tên trên hóa đơn"
 msgid "Need more help?"
 msgstr "Bạn cần thêm trợ giúp?"
 
+#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:100
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:105
 msgid "Network Connections"
 msgstr "Kết nối mạng"

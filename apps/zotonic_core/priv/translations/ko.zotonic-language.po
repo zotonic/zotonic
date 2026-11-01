@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-31 16:08\n"
+"PO-Revision-Date: 2026-10-31 20:08\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "MIME-Version: 1.0\n"
@@ -1282,6 +1282,9 @@ msgstr "롬웨어"
 msgid "Lozi"
 msgstr "로지어"
 
+msgid "Luba-Katanga"
+msgstr "루바-카탄가어"
+
 msgid "Luba-Lulua"
 msgstr "루바-룰루아어"
 
@@ -2494,20 +2497,17 @@ msgstr "토바고 영어 크리올"
 msgid "Tolaki"
 msgstr "톨라키어"
 
-msgid "Tonga"
-msgstr "통가어"
-
 msgid "Tonga (Zambia)"
 msgstr "통가어(잠비아)"
+
+msgid "Tongan"
+msgstr "통가어"
 
 msgid "Tooro"
 msgstr "토로어"
 
 msgid "Toraja-Sa'dan"
 msgstr "토라자-사단어"
-
-msgid "Tshiluba"
-msgstr "치루바어"
 
 msgid "Tsimihety Malagasy"
 msgstr "치미헤티 말라가시어"

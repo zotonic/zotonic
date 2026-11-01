@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-10-31 16:08\n"
+"PO-Revision-Date: 2026-10-31 20:08\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
 "MIME-Version: 1.0\n"
@@ -1282,6 +1282,9 @@ msgstr "Tiếng Lomwe"
 msgid "Lozi"
 msgstr "Tiếng Lozi"
 
+msgid "Luba-Katanga"
+msgstr "Tiếng Luba-Katanga"
+
 msgid "Luba-Lulua"
 msgstr "Tiếng Luba-Lulua"
 
@@ -2494,20 +2497,17 @@ msgstr "Tiếng Anh Creole Tobago"
 msgid "Tolaki"
 msgstr "Tiếng Tolaki"
 
-msgid "Tonga"
-msgstr "Tiếng Tonga"
-
 msgid "Tonga (Zambia)"
 msgstr "Tiếng Tonga (Zambia)"
+
+msgid "Tongan"
+msgstr "Tiếng Tonga"
 
 msgid "Tooro"
 msgstr "Tiếng Tooro"
 
 msgid "Toraja-Sa'dan"
 msgstr "Tiếng Toraja-Sa'dan"
-
-msgid "Tshiluba"
-msgstr "Tiếng Tshiluba"
 
 msgid "Tsimihety Malagasy"
 msgstr "Tiếng Tsimihety Malagasy"
