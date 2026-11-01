@@ -60,10 +60,6 @@
 generate(Filename, Labels) ->
     {ok,Fd} = file:open(Filename, [write]),
     write_header(Fd),
-    case lists:any(fun({Id, _, _}) -> is_plural(Id) end, Labels) of
-        true -> file:write(Fd, "\"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\\n\"\n");
-        false -> ok
-    end,
     write_entries(Fd, Labels),
     ok = file:close(Fd).
 
@@ -76,9 +72,6 @@ write_entries(Fd, Labels) ->
         write_message(Fd, Id, Trans)
     end, Labels).
 
-is_plural({context, _, Key}) -> is_plural(Key);
-is_plural({plural, _, _}) -> true;
-is_plural(_) -> false.
 
 write_message(Fd, {context, MsgCtxt, Key}, Trans) ->
     file:write(Fd, "msgctxt \"\"\n"),
@@ -148,6 +141,8 @@ fmt_fileinfo(Finfo) ->
     lists:foldr(F,<<>>,Finfo).
 
 write_header(Fd) ->
+    %% Keep headers identical across modules, including singular-only catalogs.
+    %% Otherwise msgcat concatenates conflicting headers during consolidation.
     file:write(Fd,
 	      "# SOME DESCRIPTIVE TITLE.\n"
 	      "# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER\n"
@@ -167,7 +162,8 @@ write_header(Fd) ->
 	      "\"Language-Team: LANGUAGE <LL@li.org>\\n\"\n"
 	      "\"MIME-Version: 1.0\\n\"\n"
 	      "\"Content-Type: text/plain; charset=utf-8\\n\"\n"
-	      "\"Content-Transfer-Encoding: 8bit\\n\"\n").
+	      "\"Content-Transfer-Encoding: 8bit\\n\"\n"
+              "\"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\\n\"\n").
 
 shorten_path(Path) ->
     Parts = filename:split(Path),

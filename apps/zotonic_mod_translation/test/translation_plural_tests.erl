@@ -2,6 +2,30 @@
 -mod_msgctxt(<<"module default">>).
 -include_lib("eunit/include/eunit.hrl").
 
+consolidated_header_test() ->
+    with_directory(fun(Dir) ->
+        Singular = filename:join(Dir, "singular.pot"),
+        Plural = filename:join(Dir, "plural.pot"),
+        Key = {context, <<"duration">>, {plural, <<"{n} hour">>, <<"{n} hours">>}},
+        ok = z_gettext_compile:generate(Singular, [{<<"Save">>, <<>>, undefined}]),
+        ok = z_gettext_compile:generate(Plural, [{Key, <<>>, undefined}]),
+        Header = proplists:get_value(header, z_gettext:parse_pot(Singular)),
+        ?assertEqual(Header, proplists:get_value(header, z_gettext:parse_pot(Plural))),
+        case os:find_executable("msgcat") of
+            false -> ok;
+            Msgcat ->
+                Merged = filename:join(Dir, "merged.pot"),
+                Command = lists:flatten(lists:join(" ", [z_filelib:os_filename(F)
+                    || F <- [Msgcat, "-o", Merged, Singular, Plural]])),
+                ?assertEqual([], os:cmd(Command)),
+                Entries = z_gettext:parse_pot(Merged),
+                ?assertEqual(Header, proplists:get_value(header, Entries)),
+                ?assertEqual(3, length(Entries)),
+                ?assert(lists:keymember(Key, 1, Entries)),
+                ?assert(lists:keymember(<<"Save">>, 1, Entries))
+        end
+    end).
+
 module_default_extraction_test() ->
     ?assertEqual(<<"module default">>, z_module_manager:mod_msgctxt(?MODULE)),
     with_directory(fun(Dir) ->
