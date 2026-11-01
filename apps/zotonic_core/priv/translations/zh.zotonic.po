@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-01 15:40\n"
+"PO-Revision-Date: 2026-11-01 16:45\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -38,7 +38,7 @@ msgstr[0] "{n} 分钟"
 msgctxt "relative time: duration"
 msgid "{n} month"
 msgid_plural "{n} months"
-msgstr[0] "{n} 几个月"
+msgstr[0] "{n} 个月"
 
 #: zotonic_core/src/support/z_datetime.erl:446
 msgctxt "relative time: duration"
@@ -74,7 +74,7 @@ msgstr[0] "{n} 分钟"
 msgctxt "relative time: future"
 msgid "{n} month"
 msgid_plural "{n} months"
-msgstr[0] "{n} 几个月"
+msgstr[0] "{n} 个月"
 
 #: zotonic_core/src/support/z_datetime.erl:434
 msgctxt "relative time: future"
@@ -110,7 +110,7 @@ msgstr[0] "{n} 分钟"
 msgctxt "relative time: past"
 msgid "{n} month"
 msgid_plural "{n} months"
-msgstr[0] "{n} 几个月"
+msgstr[0] "{n} 个月"
 
 #: zotonic_core/src/support/z_datetime.erl:422
 msgctxt "relative time: past"
@@ -174,11 +174,11 @@ msgstr "网站"
 
 #: zotonic_core/src/support/z_datetime.erl:399
 msgid "in a few moments"
-msgstr ""
+msgstr "过一会儿"
 
 #: zotonic_core/src/support/z_datetime.erl:406
 msgid "in {duration}"
-msgstr ""
+msgstr "{duration}后"
 
 #: zotonic_core/src/support/z_datetime.erl:400
 msgid "moments"
@@ -186,7 +186,7 @@ msgstr "瞬间"
 
 #: zotonic_core/src/support/z_datetime.erl:398
 msgid "moments ago"
-msgstr ""
+msgstr "刚才"
 
 #: zotonic_core/src/support/z_datetime.erl:368
 #: zotonic_core/src/support/z_datetime.erl:376
@@ -195,11 +195,11 @@ msgstr "现在"
 
 #: zotonic_core/src/support/z_datetime.erl:405
 msgid "{duration} ago"
-msgstr ""
+msgstr "{duration}前"
 
 #: zotonic_core/src/support/z_datetime.erl:412
 msgid "{first}, {second}"
-msgstr ""
+msgstr "{first}、{second}"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:17
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:48
