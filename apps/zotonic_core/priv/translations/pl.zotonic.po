@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-01 15:40\n"
+"PO-Revision-Date: 2026-11-01 16:45\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -23,7 +23,7 @@ msgid_plural "{n} days"
 msgstr[0] "{n} dzień"
 msgstr[1] "{n} dni"
 msgstr[2] "{n} dni"
-msgstr[3] "{n} dni"
+msgstr[3] "{n} dnia"
 
 #: zotonic_core/src/support/z_datetime.erl:450
 msgctxt "relative time: duration"
@@ -31,7 +31,7 @@ msgid "{n} hour"
 msgid_plural "{n} hours"
 msgstr[0] "{n} godzina"
 msgstr[1] "{n} godziny"
-msgstr[2] "{n} godziny"
+msgstr[2] "{n} godzin"
 msgstr[3] "{n} godziny"
 
 #: zotonic_core/src/support/z_datetime.erl:448
@@ -39,9 +39,9 @@ msgctxt "relative time: duration"
 msgid "{n} minute"
 msgid_plural "{n} minutes"
 msgstr[0] "{n} minuta"
-msgstr[1] "{n} protokoły"
-msgstr[2] "{n} protokoły"
-msgstr[3] "{n} protokoły"
+msgstr[1] "{n} minuty"
+msgstr[2] "{n} minut"
+msgstr[3] "{n} minuty"
 
 #: zotonic_core/src/support/z_datetime.erl:454
 msgctxt "relative time: duration"
@@ -49,16 +49,16 @@ msgid "{n} month"
 msgid_plural "{n} months"
 msgstr[0] "{n} miesiąc"
 msgstr[1] "{n} miesiące"
-msgstr[2] "{n} miesiące"
-msgstr[3] "{n} miesiące"
+msgstr[2] "{n} miesięcy"
+msgstr[3] "{n} miesiąca"
 
 #: zotonic_core/src/support/z_datetime.erl:446
 msgctxt "relative time: duration"
 msgid "{n} second"
 msgid_plural "{n} seconds"
-msgstr[0] "{n} drugi"
+msgstr[0] "{n} sekunda"
 msgstr[1] "{n} sekundy"
-msgstr[2] "{n} sekundy"
+msgstr[2] "{n} sekund"
 msgstr[3] "{n} sekundy"
 
 #: zotonic_core/src/support/z_datetime.erl:456
@@ -67,8 +67,8 @@ msgid "{n} year"
 msgid_plural "{n} years"
 msgstr[0] "{n} rok"
 msgstr[1] "{n} lata"
-msgstr[2] "{n} lata"
-msgstr[3] "{n} lata"
+msgstr[2] "{n} lat"
+msgstr[3] "{n} roku"
 
 #: zotonic_core/src/support/z_datetime.erl:440
 msgctxt "relative time: future"
@@ -77,25 +77,25 @@ msgid_plural "{n} days"
 msgstr[0] "{n} dzień"
 msgstr[1] "{n} dni"
 msgstr[2] "{n} dni"
-msgstr[3] "{n} dni"
+msgstr[3] "{n} dnia"
 
 #: zotonic_core/src/support/z_datetime.erl:438
 msgctxt "relative time: future"
 msgid "{n} hour"
 msgid_plural "{n} hours"
-msgstr[0] "{n} godzina"
+msgstr[0] "{n} godzinę"
 msgstr[1] "{n} godziny"
-msgstr[2] "{n} godziny"
+msgstr[2] "{n} godzin"
 msgstr[3] "{n} godziny"
 
 #: zotonic_core/src/support/z_datetime.erl:436
 msgctxt "relative time: future"
 msgid "{n} minute"
 msgid_plural "{n} minutes"
-msgstr[0] "{n} minuta"
-msgstr[1] "{n} protokoły"
-msgstr[2] "{n} protokoły"
-msgstr[3] "{n} protokoły"
+msgstr[0] "{n} minutę"
+msgstr[1] "{n} minuty"
+msgstr[2] "{n} minut"
+msgstr[3] "{n} minuty"
 
 #: zotonic_core/src/support/z_datetime.erl:442
 msgctxt "relative time: future"
@@ -103,16 +103,16 @@ msgid "{n} month"
 msgid_plural "{n} months"
 msgstr[0] "{n} miesiąc"
 msgstr[1] "{n} miesiące"
-msgstr[2] "{n} miesiące"
-msgstr[3] "{n} miesiące"
+msgstr[2] "{n} miesięcy"
+msgstr[3] "{n} miesiąca"
 
 #: zotonic_core/src/support/z_datetime.erl:434
 msgctxt "relative time: future"
 msgid "{n} second"
 msgid_plural "{n} seconds"
-msgstr[0] "{n} drugi"
+msgstr[0] "{n} sekundę"
 msgstr[1] "{n} sekundy"
-msgstr[2] "{n} sekundy"
+msgstr[2] "{n} sekund"
 msgstr[3] "{n} sekundy"
 
 #: zotonic_core/src/support/z_datetime.erl:444
@@ -121,8 +121,8 @@ msgid "{n} year"
 msgid_plural "{n} years"
 msgstr[0] "{n} rok"
 msgstr[1] "{n} lata"
-msgstr[2] "{n} lata"
-msgstr[3] "{n} lata"
+msgstr[2] "{n} lat"
+msgstr[3] "{n} roku"
 
 #: zotonic_core/src/support/z_datetime.erl:428
 msgctxt "relative time: past"
@@ -131,25 +131,25 @@ msgid_plural "{n} days"
 msgstr[0] "{n} dzień"
 msgstr[1] "{n} dni"
 msgstr[2] "{n} dni"
-msgstr[3] "{n} dni"
+msgstr[3] "{n} dnia"
 
 #: zotonic_core/src/support/z_datetime.erl:426
 msgctxt "relative time: past"
 msgid "{n} hour"
 msgid_plural "{n} hours"
-msgstr[0] "{n} godzina"
+msgstr[0] "{n} godzinę"
 msgstr[1] "{n} godziny"
-msgstr[2] "{n} godziny"
+msgstr[2] "{n} godzin"
 msgstr[3] "{n} godziny"
 
 #: zotonic_core/src/support/z_datetime.erl:424
 msgctxt "relative time: past"
 msgid "{n} minute"
 msgid_plural "{n} minutes"
-msgstr[0] "{n} minuta"
-msgstr[1] "{n} protokoły"
-msgstr[2] "{n} protokoły"
-msgstr[3] "{n} protokoły"
+msgstr[0] "{n} minutę"
+msgstr[1] "{n} minuty"
+msgstr[2] "{n} minut"
+msgstr[3] "{n} minuty"
 
 #: zotonic_core/src/support/z_datetime.erl:430
 msgctxt "relative time: past"
@@ -157,16 +157,16 @@ msgid "{n} month"
 msgid_plural "{n} months"
 msgstr[0] "{n} miesiąc"
 msgstr[1] "{n} miesiące"
-msgstr[2] "{n} miesiące"
-msgstr[3] "{n} miesiące"
+msgstr[2] "{n} miesięcy"
+msgstr[3] "{n} miesiąca"
 
 #: zotonic_core/src/support/z_datetime.erl:422
 msgctxt "relative time: past"
 msgid "{n} second"
 msgid_plural "{n} seconds"
-msgstr[0] "{n} drugi"
+msgstr[0] "{n} sekundę"
 msgstr[1] "{n} sekundy"
-msgstr[2] "{n} sekundy"
+msgstr[2] "{n} sekund"
 msgstr[3] "{n} sekundy"
 
 #: zotonic_core/src/support/z_datetime.erl:432
@@ -175,8 +175,8 @@ msgid "{n} year"
 msgid_plural "{n} years"
 msgstr[0] "{n} rok"
 msgstr[1] "{n} lata"
-msgstr[2] "{n} lata"
-msgstr[3] "{n} lata"
+msgstr[2] "{n} lat"
+msgstr[3] "{n} roku"
 
 #: zotonic_core/src/support/z_fetch.erl:230
 msgid "Could not fetch the remote resource URL."
@@ -228,11 +228,11 @@ msgstr "Strona internetowa"
 
 #: zotonic_core/src/support/z_datetime.erl:399
 msgid "in a few moments"
-msgstr ""
+msgstr "za chwilę"
 
 #: zotonic_core/src/support/z_datetime.erl:406
 msgid "in {duration}"
-msgstr ""
+msgstr "za {duration}"
 
 #: zotonic_core/src/support/z_datetime.erl:400
 msgid "moments"
@@ -240,7 +240,7 @@ msgstr "chwile"
 
 #: zotonic_core/src/support/z_datetime.erl:398
 msgid "moments ago"
-msgstr ""
+msgstr "kilka chwil temu"
 
 #: zotonic_core/src/support/z_datetime.erl:368
 #: zotonic_core/src/support/z_datetime.erl:376
@@ -249,11 +249,11 @@ msgstr "teraz"
 
 #: zotonic_core/src/support/z_datetime.erl:405
 msgid "{duration} ago"
-msgstr ""
+msgstr "{duration} temu"
 
 #: zotonic_core/src/support/z_datetime.erl:412
 msgid "{first}, {second}"
-msgstr ""
+msgstr "{first}, {second}"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:17
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:48
