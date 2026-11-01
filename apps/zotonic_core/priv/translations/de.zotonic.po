@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-01 15:40\n"
+"PO-Revision-Date: 2026-11-01 16:45\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -48,7 +48,7 @@ msgstr[1] "{n} Monate"
 msgctxt "relative time: duration"
 msgid "{n} second"
 msgid_plural "{n} seconds"
-msgstr[0] "{n} zweitens"
+msgstr[0] "{n} Sekunde"
 msgstr[1] "{n} Sekunden"
 
 #: zotonic_core/src/support/z_datetime.erl:456
@@ -63,7 +63,7 @@ msgctxt "relative time: future"
 msgid "{n} day"
 msgid_plural "{n} days"
 msgstr[0] "{n} Tag"
-msgstr[1] "{n} Tage"
+msgstr[1] "{n} Tagen"
 
 #: zotonic_core/src/support/z_datetime.erl:438
 msgctxt "relative time: future"
@@ -84,13 +84,13 @@ msgctxt "relative time: future"
 msgid "{n} month"
 msgid_plural "{n} months"
 msgstr[0] "{n} Monat"
-msgstr[1] "{n} Monate"
+msgstr[1] "{n} Monaten"
 
 #: zotonic_core/src/support/z_datetime.erl:434
 msgctxt "relative time: future"
 msgid "{n} second"
 msgid_plural "{n} seconds"
-msgstr[0] "{n} zweitens"
+msgstr[0] "{n} Sekunde"
 msgstr[1] "{n} Sekunden"
 
 #: zotonic_core/src/support/z_datetime.erl:444
@@ -98,14 +98,14 @@ msgctxt "relative time: future"
 msgid "{n} year"
 msgid_plural "{n} years"
 msgstr[0] "{n} Jahr"
-msgstr[1] "{n} Jahre"
+msgstr[1] "{n} Jahren"
 
 #: zotonic_core/src/support/z_datetime.erl:428
 msgctxt "relative time: past"
 msgid "{n} day"
 msgid_plural "{n} days"
 msgstr[0] "{n} Tag"
-msgstr[1] "{n} Tage"
+msgstr[1] "{n} Tagen"
 
 #: zotonic_core/src/support/z_datetime.erl:426
 msgctxt "relative time: past"
@@ -126,13 +126,13 @@ msgctxt "relative time: past"
 msgid "{n} month"
 msgid_plural "{n} months"
 msgstr[0] "{n} Monat"
-msgstr[1] "{n} Monate"
+msgstr[1] "{n} Monaten"
 
 #: zotonic_core/src/support/z_datetime.erl:422
 msgctxt "relative time: past"
 msgid "{n} second"
 msgid_plural "{n} seconds"
-msgstr[0] "{n} zweitens"
+msgstr[0] "{n} Sekunde"
 msgstr[1] "{n} Sekunden"
 
 #: zotonic_core/src/support/z_datetime.erl:432
@@ -140,7 +140,7 @@ msgctxt "relative time: past"
 msgid "{n} year"
 msgid_plural "{n} years"
 msgstr[0] "{n} Jahr"
-msgstr[1] "{n} Jahre"
+msgstr[1] "{n} Jahren"
 
 #: zotonic_core/src/support/z_fetch.erl:230
 msgid "Could not fetch the remote resource URL."
@@ -192,11 +192,11 @@ msgstr "Website"
 
 #: zotonic_core/src/support/z_datetime.erl:399
 msgid "in a few moments"
-msgstr ""
+msgstr "in wenigen Augenblicken"
 
 #: zotonic_core/src/support/z_datetime.erl:406
 msgid "in {duration}"
-msgstr ""
+msgstr "in {duration}"
 
 #: zotonic_core/src/support/z_datetime.erl:400
 msgid "moments"
@@ -204,7 +204,7 @@ msgstr "Momente"
 
 #: zotonic_core/src/support/z_datetime.erl:398
 msgid "moments ago"
-msgstr ""
+msgstr "vor wenigen Augenblicken"
 
 #: zotonic_core/src/support/z_datetime.erl:368
 #: zotonic_core/src/support/z_datetime.erl:376
@@ -213,11 +213,11 @@ msgstr "Jetzt"
 
 #: zotonic_core/src/support/z_datetime.erl:405
 msgid "{duration} ago"
-msgstr ""
+msgstr "vor {duration}"
 
 #: zotonic_core/src/support/z_datetime.erl:412
 msgid "{first}, {second}"
-msgstr ""
+msgstr "{first}, {second}"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:17
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:48
