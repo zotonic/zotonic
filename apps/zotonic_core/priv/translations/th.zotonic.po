@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-01 16:45\n"
+"PO-Revision-Date: 2026-11-02 09:32\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -386,6 +386,8 @@ msgstr "คุณแน่ใจหรือไม่ว่าต้องกา
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:26
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:85
 #: zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:58
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:10
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:229
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:237
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70
@@ -5631,7 +5633,7 @@ msgid "not implemented yet"
 msgstr "ยังไม่ได้พัฒนา"
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:158
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:159
 msgid "Activate"
 msgstr "เปิดใช้งาน"
 
@@ -5655,7 +5657,7 @@ msgstr "ทุกหัวข้อ"
 msgid "Clear filters"
 msgstr "ล้างตัวกรอง"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:149
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:150
 msgid "Configure"
 msgstr "กำหนดค่า"
 
@@ -5669,7 +5671,7 @@ msgstr "การอ้างอิงวงจร"
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:34
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:153
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:154
 msgid "Deactivate"
 msgstr "ปิดใช้งาน"
 
@@ -5710,7 +5712,7 @@ msgstr "ทั้งไม่ได้ติดตั้ง หรือไม�
 msgid "Execution status"
 msgstr "สถานะการดำเนินการ"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:140
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:141
 msgid "Install the module’s model and data."
 msgstr "ติดตั้งโมเดลและข้อมูลของโมดูล"
 
@@ -5727,11 +5729,11 @@ msgstr "โมดูลขาดส่วนที่ต้องพึ่งพ
 msgid "Modules shown:"
 msgstr "โมดูลที่แสดง:"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:171
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:172
 msgid "No modules found"
 msgstr "ไม่พบโมดูล"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:179
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:180
 msgid "No modules match these filters."
 msgstr "ไม่มีโมดูลใดที่ตรงกับเกณฑ์การกรองนี้"
 
@@ -5739,7 +5741,7 @@ msgstr "ไม่มีโมดูลใดที่ตรงกับเกณ
 msgid "Provides"
 msgstr "ให้"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:139
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:140
 msgid "Reinstall"
 msgstr "ติดตั้งใหม่"
 
@@ -11123,6 +11125,7 @@ msgstr "สื่อที่ขึ้นต่อทรัพยากรอื
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:12
+#: zotonic_mod_site_update/priv/templates/_site_deploy_commit.tpl:9
 #: zotonic_mod_translation/priv/templates/_translation_language_status.tpl:43
 msgid "Details"
 msgstr "รายละเอียด"
@@ -15346,46 +15349,73 @@ msgstr "คุณต้องยอมรับข้อกำหนดจึง
 msgid "Your signup code"
 msgstr "รหัสสมัครของคุณ"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:177
+#: zotonic_mod_site_update/src/mod_site_update.erl:223
+msgid "Another deployment is in progress. Please try again when it finishes."
+msgstr "การปรับใช้ระบบครั้งใหม่กำลังดำเนินการอยู่ โปรดลองอีกครั้งเมื่อการปรับใช้เสร็จสิ้น"
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:137
 msgid "Building Zotonic in the background..."
 msgstr "กำลังสร้าง Zotonic ในพื้นหลัง ..."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:128
-msgid "Error during fetch from version control."
-msgstr "เกิดข้อผิดพลาดระหว่างการดึงข้อมูลจากการควบคุมเวอร์ชัน"
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:26
+msgid "Could not fetch the remote change log. Check the remote connection and try again."
+msgstr "ไม่สามารถดึงบันทึกการเปลี่ยนแปลงจากระบบระยะไกลได้ โปรดตรวจสอบการเชื่อมต่อกับระบบระยะไกลและลองอีกครั้ง"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:146
-msgid "Error running Zotonic update"
-msgstr "เกิดข้อผิดพลาดในการเรียกใช้การอัปเดต Zotonic"
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:9
+msgid "Current commit"
+msgstr "การ commit ปัจจุบัน"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:160
-msgid "Error running site update"
-msgstr "เกิดข้อผิดพลาดในการเรียกใช้การอัปเดตไซต์"
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:60
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:62
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:11
+msgid "Deploy"
+msgstr "ติดตั้ง"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:121
-msgid "Fetching updates from the version control..."
-msgstr "กำลังดึงข้อมูลอัปเดตจากการควบคุมเวอร์ชัน ..."
+#: zotonic_mod_site_update/priv/templates/_admin_module_buttons.tpl:3
+#: zotonic_mod_site_update/priv/templates/_admin_status.tpl:4
+#: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:2
+msgid "Deploy latest"
+msgstr "ติดตั้งเวอร์ชันล่าสุด"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:141
-#: zotonic_mod_site_update/src/mod_site_update.erl:155
-msgid "Fetching updates..."
-msgstr "กำลังเรียกข้อมูลอัปเดต ..."
+#: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:3
+msgid "Deploy latest Zotonic"
+msgstr "ติดตั้ง Zotonic เวอร์ชันล่าสุด"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:175
+#: zotonic_mod_site_update/src/mod_site_update.erl:176
+msgid "Deploy latest version"
+msgstr "ติดตั้งเวอร์ชันล่าสุด"
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:210
+msgid "Deploying the latest version..."
+msgstr "กำลังติดตั้งเวอร์ชันล่าสุด..."
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:221
+msgid "Deployment completed."
+msgstr "การติดตั้งเสร็จสิ้นแล้ว"
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:225
+msgid "Deployment failed. Check the server log for details."
+msgstr "การติดตั้งล้มเหลว โปรดตรวจสอบบันทึกของเซิร์ฟเวอร์เพื่อดูรายละเอียด"
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:5
+msgid "Deployment updates the entire Git repository, including any other modules it contains."
+msgstr ""
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:6
+msgid "Fetching remote changes…"
+msgstr ""
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:135
 msgid "Finished rebuilding Zotonic."
 msgstr "สร้าง Zotonic ขึ้นมาใหม่เสร็จแล้ว"
 
-#: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
-msgid "Perform a version control (git/mercurial) update this site."
-msgstr "ดำเนินการควบคุมเวอร์ชัน (git / mercurial) อัปเดตไซต์นี้"
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:32
+msgid "Incoming changes"
+msgstr ""
 
-#: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:5
-msgid "Perform a version update of Zotonic (through git)"
-msgstr "ทำการอัปเดตเวอร์ชันของ Zotonic (ผ่าน git)"
-
-#: zotonic_mod_site_update/src/mod_site_update.erl:126
-msgid "Ready with fetch from version control."
-msgstr "ดึงข้อมูลจากระบบควบคุมเวอร์ชันเสร็จแล้ว"
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:24
+msgid "No deployable version control repository was found."
+msgstr ""
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:12
 msgid "Rebuild Zotonic"
@@ -15395,6 +15425,31 @@ msgstr "สร้าง Zotonic ใหม่"
 msgid "Recompile changed Erlang files in the background"
 msgstr "คอมไพล์ไฟล์ Erlang ที่เปลี่ยนแปลงในพื้นหลัง"
 
+#: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
+msgid "Review and deploy the latest version of this site."
+msgstr ""
+
+#: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:5
+msgid "Review incoming changes and deploy the latest version of Zotonic"
+msgstr ""
+
+#: zotonic_mod_site_update/priv/templates/_admin_module_buttons.tpl:4
+msgid "Review incoming changes and deploy this module’s Git repository."
+msgstr ""
+
+#: zotonic_mod_site_update/priv/templates/_admin_status.tpl:5
+msgid "Review incoming changes before deploying the latest version."
+msgstr ""
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:2
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:3
+msgid "Review the latest version for {name}."
+msgstr ""
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:47
+msgid "Showing the most recent 100 incoming commits."
+msgstr ""
+
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:4
 msgid "Site update API token"
 msgstr "โทเค็น API การอัปเดตไซต์"
@@ -15403,14 +15458,25 @@ msgstr "โทเค็น API การอัปเดตไซต์"
 msgid "Site update is not available as the site does not use a known version control system, like git."
 msgstr "การอัปเดตไซต์ไม่พร้อมใช้งานเนื่องจากไซต์ไม่ได้ใช้ระบบควบคุมเวอร์ชันที่รู้จักเช่น git"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:167
-#: zotonic_mod_site_update/src/mod_site_update.erl:179
+#: zotonic_mod_site_update/src/mod_site_update.erl:139
 msgid "Sorry this can only be run from the Zotonic status site"
 msgstr "ขออภัยสิ่งนี้สามารถเรียกใช้ได้จากไซต์สถานะ Zotonic เท่านั้น"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:131
-msgid "Sorry, this site is not from a known version control system"
-msgstr "ขออภัยไซต์นี้ไม่ได้มาจากระบบควบคุมเวอร์ชันที่รู้จัก"
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:28
+msgid "The deployment preview is unavailable. Check the repository and server log, then try again."
+msgstr ""
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:53
+msgid "The local branch cannot be fast-forwarded to the remote version. Resolve the local commits before deploying."
+msgstr ""
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:50
+msgid "There are no incoming changes."
+msgstr ""
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:22
+msgid "This branch has no upstream configured. Configure its remote tracking branch before deploying."
+msgstr ""
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
 msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
@@ -15420,29 +15486,11 @@ msgstr "โทเค็นนี้ใช้รักษาความปลอ
 msgid "To run the webhook update, configure your service to POST to the following URL:"
 msgstr "ในการรันการอัปเดต webhook ให้กำหนดค่าบริการของคุณเป็น POST เป็น URL ต่อไปนี้:"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:163
-msgid "Unknown site or no version control folder present."
-msgstr "ไซต์ที่ไม่รู้จักหรือไม่มีโฟลเดอร์ควบคุมเวอร์ชันอยู่"
-
-#: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:3
-msgid "Update Zotonic"
-msgstr "อัปเดต Zotonic"
-
-#: zotonic_mod_site_update/priv/templates/_admin_status.tpl:4
-msgid "Update site"
-msgstr "อัปเดตไซต์"
-
-#: zotonic_mod_site_update/priv/templates/_admin_status.tpl:5
-msgid "Update the site and templates from the version control system."
-msgstr "อัปเดตไซต์และเทมเพลตจากระบบควบคุมเวอร์ชัน"
-
-#: zotonic_mod_site_update/src/mod_site_update.erl:149
-msgid "Zotonic has not been checked out using version control."
-msgstr "ไม่ได้ checkout Zotonic โดยใช้ระบบควบคุมเวอร์ชัน"
-
-#: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:2
-msgid "update"
-msgstr "อัพเดต"
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:20
+#: zotonic_mod_site_update/src/mod_site_update.erl:180
+#: zotonic_mod_site_update/src/mod_site_update.erl:215
+msgid "You are not allowed to deploy this code."
+msgstr ""
 
 #: zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:4
 msgid "Certificate Authority"
