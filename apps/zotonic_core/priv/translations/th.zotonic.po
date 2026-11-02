@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-02 09:32\n"
+"PO-Revision-Date: 2026-11-02 11:33\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -15351,7 +15351,7 @@ msgstr "รหัสสมัครของคุณ"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:223
 msgid "Another deployment is in progress. Please try again when it finishes."
-msgstr "การปรับใช้ระบบครั้งใหม่กำลังดำเนินการอยู่ โปรดลองอีกครั้งเมื่อการปรับใช้เสร็จสิ้น"
+msgstr "มีการปรับใช้อื่นกำลังดำเนินการอยู่ โปรดลองอีกครั้งเมื่อเสร็จสิ้น"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:137
 msgid "Building Zotonic in the background..."
@@ -15369,41 +15369,41 @@ msgstr "การ commit ปัจจุบัน"
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:62
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:11
 msgid "Deploy"
-msgstr "ติดตั้ง"
+msgstr "ปรับใช้"
 
 #: zotonic_mod_site_update/priv/templates/_admin_module_buttons.tpl:3
 #: zotonic_mod_site_update/priv/templates/_admin_status.tpl:4
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:2
 msgid "Deploy latest"
-msgstr "ติดตั้งเวอร์ชันล่าสุด"
+msgstr "ปรับใช้เวอร์ชันล่าสุด"
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:3
 msgid "Deploy latest Zotonic"
-msgstr "ติดตั้ง Zotonic เวอร์ชันล่าสุด"
+msgstr "ปรับใช้ Zotonic เวอร์ชันล่าสุด"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:176
 msgid "Deploy latest version"
-msgstr "ติดตั้งเวอร์ชันล่าสุด"
+msgstr "ปรับใช้เวอร์ชันล่าสุด"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:210
 msgid "Deploying the latest version..."
-msgstr "กำลังติดตั้งเวอร์ชันล่าสุด..."
+msgstr "กำลังปรับใช้เวอร์ชันล่าสุด..."
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:221
 msgid "Deployment completed."
-msgstr "การติดตั้งเสร็จสิ้นแล้ว"
+msgstr "การปรับใช้เสร็จสิ้นแล้ว"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:225
 msgid "Deployment failed. Check the server log for details."
-msgstr "การติดตั้งล้มเหลว โปรดตรวจสอบบันทึกของเซิร์ฟเวอร์เพื่อดูรายละเอียด"
+msgstr "การปรับใช้ล้มเหลว โปรดตรวจสอบบันทึกของเซิร์ฟเวอร์เพื่อดูรายละเอียด"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:5
 msgid "Deployment updates the entire Git repository, including any other modules it contains."
-msgstr ""
+msgstr "การปรับใช้จะอัปเดต Git repository ทั้งหมด รวมถึงโมดูลอื่น ๆ ที่อยู่ในนั้นด้วย"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:6
 msgid "Fetching remote changes…"
-msgstr ""
+msgstr "กำลังดึงการเปลี่ยนแปลงจากระยะไกล…"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:135
 msgid "Finished rebuilding Zotonic."
@@ -15411,11 +15411,11 @@ msgstr "สร้าง Zotonic ขึ้นมาใหม่เสร็จแ
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:32
 msgid "Incoming changes"
-msgstr ""
+msgstr "การเปลี่ยนแปลงที่จะนำเข้า"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:24
 msgid "No deployable version control repository was found."
-msgstr ""
+msgstr "ไม่พบที่เก็บข้อมูลการควบคุมเวอร์ชันที่สามารถนำไปใช้งานได้"
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:12
 msgid "Rebuild Zotonic"
@@ -15427,28 +15427,28 @@ msgstr "คอมไพล์ไฟล์ Erlang ที่เปลี่ยน�
 
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
 msgid "Review and deploy the latest version of this site."
-msgstr ""
+msgstr "ตรวจสอบและปรับใช้เวอร์ชันล่าสุดของเว็บไซต์นี้"
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:5
 msgid "Review incoming changes and deploy the latest version of Zotonic"
-msgstr ""
+msgstr "ตรวจสอบการเปลี่ยนแปลงที่จะนำเข้าและปรับใช้ Zotonic เวอร์ชันล่าสุด"
 
 #: zotonic_mod_site_update/priv/templates/_admin_module_buttons.tpl:4
 msgid "Review incoming changes and deploy this module’s Git repository."
-msgstr ""
+msgstr "ตรวจสอบการเปลี่ยนแปลงที่จะนำเข้าและปรับใช้ Git repository ของโมดูลนี้"
 
 #: zotonic_mod_site_update/priv/templates/_admin_status.tpl:5
 msgid "Review incoming changes before deploying the latest version."
-msgstr ""
+msgstr "ตรวจสอบการเปลี่ยนแปลงที่จะนำเข้าก่อนปรับใช้เวอร์ชันล่าสุด"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:2
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:3
 msgid "Review the latest version for {name}."
-msgstr ""
+msgstr "ดูเวอร์ชันล่าสุดของ {name}"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:47
 msgid "Showing the most recent 100 incoming commits."
-msgstr ""
+msgstr "แสดงการ commit ที่เข้ามาล่าสุด 100 รายการ"
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:4
 msgid "Site update API token"
@@ -15464,19 +15464,19 @@ msgstr "ขออภัยสิ่งนี้สามารถเรียก
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:28
 msgid "The deployment preview is unavailable. Check the repository and server log, then try again."
-msgstr ""
+msgstr "ไม่สามารถแสดงตัวอย่างการปรับใช้ได้ โปรดตรวจสอบ repository และบันทึกของเซิร์ฟเวอร์ แล้วลองอีกครั้ง"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:53
 msgid "The local branch cannot be fast-forwarded to the remote version. Resolve the local commits before deploying."
-msgstr ""
+msgstr "ไม่สามารถอัปเดตสาขาในเครื่องเป็นเวอร์ชันระยะไกลด้วย fast-forward ได้ โปรดแก้ไขปัญหาของ commit ในเครื่องก่อนปรับใช้"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:50
 msgid "There are no incoming changes."
-msgstr ""
+msgstr "ไม่มีการเปลี่ยนแปลงที่จะนำเข้า"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:22
 msgid "This branch has no upstream configured. Configure its remote tracking branch before deploying."
-msgstr ""
+msgstr "สาขาดังกล่าวไม่มีการกำหนดค่าสาขาต้นทาง (upstream) ไว้ โปรดกำหนดค่าสาขาติดตามระยะไกล (remote tracking branch) ของสาขานี้ก่อนที่จะดำเนินการปรับใช้"
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
 msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
@@ -15490,7 +15490,7 @@ msgstr "ในการรันการอัปเดต webhook ให้ก
 #: zotonic_mod_site_update/src/mod_site_update.erl:180
 #: zotonic_mod_site_update/src/mod_site_update.erl:215
 msgid "You are not allowed to deploy this code."
-msgstr ""
+msgstr "คุณไม่มีสิทธิ์ปรับใช้โค้ดนี้"
 
 #: zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:4
 msgid "Certificate Authority"
