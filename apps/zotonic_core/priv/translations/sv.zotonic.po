@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-02 09:31\n"
+"PO-Revision-Date: 2026-11-02 11:33\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -15369,7 +15369,7 @@ msgstr "Din registreringskod"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:223
 msgid "Another deployment is in progress. Please try again when it finishes."
-msgstr "En ny driftsättning pågår just nu. Försök igen när den är klar."
+msgstr "En annan driftsättning pågår. Försök igen när den är klar."
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:137
 msgid "Building Zotonic in the background..."
@@ -15377,7 +15377,7 @@ msgstr "Bygga Zotonic i bakgrunden ..."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:26
 msgid "Could not fetch the remote change log. Check the remote connection and try again."
-msgstr "Det gick inte att hämta ändringsloggen från fjärvärden. Kontrollera fjärranslutningen och försök igen."
+msgstr "Det gick inte att hämta ändringsloggen från fjärrservern. Kontrollera fjärranslutningen och försök igen."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:9
 msgid "Current commit"
@@ -15387,29 +15387,29 @@ msgstr "Aktuell commit"
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:62
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:11
 msgid "Deploy"
-msgstr "Distribuera"
+msgstr "Driftsätt"
 
 #: zotonic_mod_site_update/priv/templates/_admin_module_buttons.tpl:3
 #: zotonic_mod_site_update/priv/templates/_admin_status.tpl:4
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:2
 msgid "Deploy latest"
-msgstr "Installera den senaste versionen"
+msgstr "Driftsätt den senaste versionen"
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:3
 msgid "Deploy latest Zotonic"
-msgstr "Installera den senaste versionen av Zotonic"
+msgstr "Driftsätt den senaste versionen av Zotonic"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:176
 msgid "Deploy latest version"
-msgstr "Installera den senaste versionen"
+msgstr "Driftsätt den senaste versionen"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:210
 msgid "Deploying the latest version..."
-msgstr "Installerar den senaste versionen..."
+msgstr "Driftsätter den senaste versionen..."
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:221
 msgid "Deployment completed."
-msgstr "Installationen är klar."
+msgstr "Driftsättningen är klar."
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:225
 msgid "Deployment failed. Check the server log for details."
@@ -15417,11 +15417,11 @@ msgstr "Driftsättningen misslyckades. Kontrollera serverloggen för mer informa
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:5
 msgid "Deployment updates the entire Git repository, including any other modules it contains."
-msgstr ""
+msgstr "Driftsättningen uppdaterar hela Git-repositoryt, inklusive alla andra moduler som det innehåller."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:6
 msgid "Fetching remote changes…"
-msgstr ""
+msgstr "Hämtar ändringar från fjärrservern…"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:135
 msgid "Finished rebuilding Zotonic."
@@ -15429,11 +15429,11 @@ msgstr "Ombyggnaden av Zotonic är klar."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:32
 msgid "Incoming changes"
-msgstr ""
+msgstr "Inkommande ändringar"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:24
 msgid "No deployable version control repository was found."
-msgstr ""
+msgstr "Inget versionshanteringsrepository som kan driftsättas hittades."
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:12
 msgid "Rebuild Zotonic"
@@ -15445,28 +15445,28 @@ msgstr "Kompilera om ändrade Erlang-filer i bakgrunden"
 
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
 msgid "Review and deploy the latest version of this site."
-msgstr ""
+msgstr "Granska och driftsätt den senaste versionen av den här webbplatsen."
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:5
 msgid "Review incoming changes and deploy the latest version of Zotonic"
-msgstr ""
+msgstr "Granska inkommande ändringar och driftsätt den senaste versionen av Zotonic"
 
 #: zotonic_mod_site_update/priv/templates/_admin_module_buttons.tpl:4
 msgid "Review incoming changes and deploy this module’s Git repository."
-msgstr ""
+msgstr "Granska inkommande ändringar och driftsätt modulens Git-repository."
 
 #: zotonic_mod_site_update/priv/templates/_admin_status.tpl:5
 msgid "Review incoming changes before deploying the latest version."
-msgstr ""
+msgstr "Granska inkommande ändringar innan du driftsätter den senaste versionen."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:2
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:3
 msgid "Review the latest version for {name}."
-msgstr ""
+msgstr "Granska den senaste versionen för {name}."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:47
 msgid "Showing the most recent 100 incoming commits."
-msgstr ""
+msgstr "Visar de 100 senaste inkommande committarna."
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:4
 msgid "Site update API token"
@@ -15482,19 +15482,19 @@ msgstr "Tyvärr kan detta bara köras från Zotonic-statuswebbplatsen"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:28
 msgid "The deployment preview is unavailable. Check the repository and server log, then try again."
-msgstr ""
+msgstr "Förhandsvisningen av driftsättningen är inte tillgänglig. Kontrollera repositoryt och serverloggen och försök igen."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:53
 msgid "The local branch cannot be fast-forwarded to the remote version. Resolve the local commits before deploying."
-msgstr ""
+msgstr "Den lokala grenen kan inte uppdateras till fjärrversionen med fast-forward. Åtgärda problemen med de lokala committarna före driftsättningen."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:50
 msgid "There are no incoming changes."
-msgstr ""
+msgstr "Det finns inga inkommande ändringar."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:22
 msgid "This branch has no upstream configured. Configure its remote tracking branch before deploying."
-msgstr ""
+msgstr "Den här grenen har ingen upstream konfigurerad. Konfigurera dess fjärrspårningsgren före driftsättningen."
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
 msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
@@ -15508,7 +15508,7 @@ msgstr "För att köra webbhook-uppdateringen, konfigurera din tjänst till POST
 #: zotonic_mod_site_update/src/mod_site_update.erl:180
 #: zotonic_mod_site_update/src/mod_site_update.erl:215
 msgid "You are not allowed to deploy this code."
-msgstr ""
+msgstr "Du har inte behörighet att driftsätta den här koden."
 
 #: zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:4
 msgid "Certificate Authority"
