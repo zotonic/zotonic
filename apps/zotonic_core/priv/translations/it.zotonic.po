@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-02 09:31\n"
+"PO-Revision-Date: 2026-11-02 11:32\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -15369,7 +15369,7 @@ msgstr "Il tuo codice di registrazione"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:223
 msgid "Another deployment is in progress. Please try again when it finishes."
-msgstr "È in corso un'altra operazione di distribuzione. Si prega di riprovare al termine dell'operazione."
+msgstr "È già in corso un’altra distribuzione. Riprova quando sarà terminata."
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:137
 msgid "Building Zotonic in the background..."
@@ -15377,7 +15377,7 @@ msgstr "Sto compilando Zotonic in background..."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:26
 msgid "Could not fetch the remote change log. Check the remote connection and try again."
-msgstr "Impossibile recuperare il log delle modifiche remote. Verificare la connessione remota e riprovare."
+msgstr "Impossibile recuperare il registro delle modifiche remoto. Controlla la connessione remota e riprova."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:9
 msgid "Current commit"
@@ -15387,41 +15387,41 @@ msgstr "Commit corrente"
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:62
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:11
 msgid "Deploy"
-msgstr "Distribuzione"
+msgstr "Distribuisci"
 
 #: zotonic_mod_site_update/priv/templates/_admin_module_buttons.tpl:3
 #: zotonic_mod_site_update/priv/templates/_admin_status.tpl:4
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:2
 msgid "Deploy latest"
-msgstr "Installa l'ultima versione"
+msgstr "Distribuisci l’ultima versione"
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:3
 msgid "Deploy latest Zotonic"
-msgstr "Installa l'ultima versione di Zotonic"
+msgstr "Distribuisci l’ultima versione di Zotonic"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:176
 msgid "Deploy latest version"
-msgstr "Installa l'ultima versione"
+msgstr "Distribuisci l’ultima versione"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:210
 msgid "Deploying the latest version..."
-msgstr "Installazione della versione più recente..."
+msgstr "Distribuzione dell’ultima versione..."
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:221
 msgid "Deployment completed."
-msgstr "Installazione completata."
+msgstr "Distribuzione completata."
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:225
 msgid "Deployment failed. Check the server log for details."
-msgstr "L'implementazione non è andata a buon fine. Controlla il log del server per ulteriori dettagli."
+msgstr "Distribuzione non riuscita. Controlla il log del server per i dettagli."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:5
 msgid "Deployment updates the entire Git repository, including any other modules it contains."
-msgstr ""
+msgstr "La distribuzione aggiorna l’intero repository Git, compresi tutti gli altri moduli che contiene."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:6
 msgid "Fetching remote changes…"
-msgstr ""
+msgstr "Recupero delle modifiche remote…"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:135
 msgid "Finished rebuilding Zotonic."
@@ -15429,11 +15429,11 @@ msgstr "Ricompilazione di Zotonic completata."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:32
 msgid "Incoming changes"
-msgstr ""
+msgstr "Modifiche in arrivo"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:24
 msgid "No deployable version control repository was found."
-msgstr ""
+msgstr "Non è stato trovato alcun repository di controllo delle versioni che possa essere distribuito."
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:12
 msgid "Rebuild Zotonic"
@@ -15445,28 +15445,28 @@ msgstr "Ricompila in background i file Erlang modificati"
 
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
 msgid "Review and deploy the latest version of this site."
-msgstr ""
+msgstr "Esamina e distribuisci l’ultima versione di questo sito."
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:5
 msgid "Review incoming changes and deploy the latest version of Zotonic"
-msgstr ""
+msgstr "Esamina le modifiche in arrivo e distribuisci l'ultima versione di Zotonic"
 
 #: zotonic_mod_site_update/priv/templates/_admin_module_buttons.tpl:4
 msgid "Review incoming changes and deploy this module’s Git repository."
-msgstr ""
+msgstr "Esamina le modifiche in arrivo e distribuisci il repository Git di questo modulo."
 
 #: zotonic_mod_site_update/priv/templates/_admin_status.tpl:5
 msgid "Review incoming changes before deploying the latest version."
-msgstr ""
+msgstr "Esamina le modifiche in arrivo prima di distribuire l’ultima versione."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:2
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:3
 msgid "Review the latest version for {name}."
-msgstr ""
+msgstr "Esamina l’ultima versione di {name}."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:47
 msgid "Showing the most recent 100 incoming commits."
-msgstr ""
+msgstr "Vengono visualizzati i 100 commit in entrata più recenti."
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:4
 msgid "Site update API token"
@@ -15482,19 +15482,19 @@ msgstr "Spiacente, questo può essere eseguito solo dal sito di stato Zotonic"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:28
 msgid "The deployment preview is unavailable. Check the repository and server log, then try again."
-msgstr ""
+msgstr "L'anteprima della distribuzione non è disponibile. Controlla il repository e il log del server, quindi riprova."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:53
 msgid "The local branch cannot be fast-forwarded to the remote version. Resolve the local commits before deploying."
-msgstr ""
+msgstr "Il ramo locale non può essere aggiornato alla versione remota tramite fast-forward. Risolvi i problemi con i commit locali prima della distribuzione."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:50
 msgid "There are no incoming changes."
-msgstr ""
+msgstr "Non ci sono modifiche in arrivo."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:22
 msgid "This branch has no upstream configured. Configure its remote tracking branch before deploying."
-msgstr ""
+msgstr "Questo ramo non ha un upstream configurato. Configura il ramo remoto di tracciamento prima della distribuzione."
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
 msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
@@ -15508,7 +15508,7 @@ msgstr "Per eseguire l'aggiornamento del webhook, configura il tuo servizio per 
 #: zotonic_mod_site_update/src/mod_site_update.erl:180
 #: zotonic_mod_site_update/src/mod_site_update.erl:215
 msgid "You are not allowed to deploy this code."
-msgstr ""
+msgstr "Non hai il permesso di distribuire questo codice."
 
 #: zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:4
 msgid "Certificate Authority"
