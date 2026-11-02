@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-01 16:45\n"
+"PO-Revision-Date: 2026-11-02 09:32\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -386,6 +386,8 @@ msgstr "Apakah Anda yakin ingin mengembalikan semua peraturan ACL ke versi yang 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:26
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:85
 #: zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:58
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:10
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:229
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:237
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70
@@ -5631,7 +5633,7 @@ msgid "not implemented yet"
 msgstr "belum diimplementasikan"
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:158
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:159
 msgid "Activate"
 msgstr "Aktifkan"
 
@@ -5655,7 +5657,7 @@ msgstr "Semua topik"
 msgid "Clear filters"
 msgstr "Hapus filter"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:149
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:150
 msgid "Configure"
 msgstr "Konfigurasikan"
 
@@ -5669,7 +5671,7 @@ msgstr "Dependensi siklik"
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:34
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:153
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:154
 msgid "Deactivate"
 msgstr "Nonaktifkan"
 
@@ -5710,7 +5712,7 @@ msgstr "Entah mereka tidak terinstal, atau mereka tidak dikompilasi."
 msgid "Execution status"
 msgstr "Status pelaksanaan"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:140
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:141
 msgid "Install the module’s model and data."
 msgstr "Instal model dan data modul."
 
@@ -5727,11 +5729,11 @@ msgstr "Modul kekurangan dependensi"
 msgid "Modules shown:"
 msgstr "Modul yang ditampilkan:"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:171
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:172
 msgid "No modules found"
 msgstr "Tidak ada modul yang ditemukan"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:179
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:180
 msgid "No modules match these filters."
 msgstr "Tidak ada modul yang sesuai dengan filter ini."
 
@@ -5739,7 +5741,7 @@ msgstr "Tidak ada modul yang sesuai dengan filter ini."
 msgid "Provides"
 msgstr "Menyediakan"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:139
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:140
 msgid "Reinstall"
 msgstr "Instal ulang"
 
@@ -11121,6 +11123,7 @@ msgstr "Media yang bergantung"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:12
+#: zotonic_mod_site_update/priv/templates/_site_deploy_commit.tpl:9
 #: zotonic_mod_translation/priv/templates/_translation_language_status.tpl:43
 msgid "Details"
 msgstr "Rincian"
@@ -15344,46 +15347,73 @@ msgstr "Anda harus menyetujui Persyaratan untuk mendaftar."
 msgid "Your signup code"
 msgstr "Kode pendaftaran Anda"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:177
+#: zotonic_mod_site_update/src/mod_site_update.erl:223
+msgid "Another deployment is in progress. Please try again when it finishes."
+msgstr "Proses penerapan sedang berlangsung. Silakan coba lagi setelah proses tersebut selesai."
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:137
 msgid "Building Zotonic in the background..."
 msgstr "Membangun Zotonic di latar belakang..."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:128
-msgid "Error during fetch from version control."
-msgstr "Kesalahan selama mengambil dari kontrol versi."
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:26
+msgid "Could not fetch the remote change log. Check the remote connection and try again."
+msgstr "Tidak dapat mengambil log perubahan dari server jarak jauh. Periksa koneksi ke server jarak jauh, lalu coba lagi."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:146
-msgid "Error running Zotonic update"
-msgstr "Kesalahan menjalankan pembaruan Zotonic"
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:9
+msgid "Current commit"
+msgstr "Komitmen saat ini"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:160
-msgid "Error running site update"
-msgstr "Kesalahan menjalankan pembaruan situs"
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:60
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:62
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:11
+msgid "Deploy"
+msgstr "Menerapkan"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:121
-msgid "Fetching updates from the version control..."
-msgstr "Mengambil pembaruan dari kontrol versi ..."
+#: zotonic_mod_site_update/priv/templates/_admin_module_buttons.tpl:3
+#: zotonic_mod_site_update/priv/templates/_admin_status.tpl:4
+#: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:2
+msgid "Deploy latest"
+msgstr "Terapkan versi terbaru"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:141
-#: zotonic_mod_site_update/src/mod_site_update.erl:155
-msgid "Fetching updates..."
-msgstr "Mengambil pembaruan ..."
+#: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:3
+msgid "Deploy latest Zotonic"
+msgstr "Pasang Zotonic versi terbaru"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:175
+#: zotonic_mod_site_update/src/mod_site_update.erl:176
+msgid "Deploy latest version"
+msgstr "Gunakan versi terbaru"
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:210
+msgid "Deploying the latest version..."
+msgstr "Sedang menginstal versi terbaru..."
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:221
+msgid "Deployment completed."
+msgstr "Penerapan telah selesai."
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:225
+msgid "Deployment failed. Check the server log for details."
+msgstr "Penerapan gagal. Periksa log server untuk detailnya."
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:5
+msgid "Deployment updates the entire Git repository, including any other modules it contains."
+msgstr ""
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:6
+msgid "Fetching remote changes…"
+msgstr ""
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:135
 msgid "Finished rebuilding Zotonic."
 msgstr "Selesai membangun kembali Zotonic."
 
-#: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
-msgid "Perform a version control (git/mercurial) update this site."
-msgstr "Perbarui situs ini melalui sistem kontrol versi (git/mercurial)."
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:32
+msgid "Incoming changes"
+msgstr ""
 
-#: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:5
-msgid "Perform a version update of Zotonic (through git)"
-msgstr "Lakukan update versi Zotonic (melalui git)"
-
-#: zotonic_mod_site_update/src/mod_site_update.erl:126
-msgid "Ready with fetch from version control."
-msgstr "Pengambilan dari sistem kontrol versi selesai."
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:24
+msgid "No deployable version control repository was found."
+msgstr ""
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:12
 msgid "Rebuild Zotonic"
@@ -15393,6 +15423,31 @@ msgstr "Bangun kembali Zotonic"
 msgid "Recompile changed Erlang files in the background"
 msgstr "Kompilasi ulang berkas Erlang yang berubah di latar belakang"
 
+#: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
+msgid "Review and deploy the latest version of this site."
+msgstr ""
+
+#: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:5
+msgid "Review incoming changes and deploy the latest version of Zotonic"
+msgstr ""
+
+#: zotonic_mod_site_update/priv/templates/_admin_module_buttons.tpl:4
+msgid "Review incoming changes and deploy this module’s Git repository."
+msgstr ""
+
+#: zotonic_mod_site_update/priv/templates/_admin_status.tpl:5
+msgid "Review incoming changes before deploying the latest version."
+msgstr ""
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:2
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:3
+msgid "Review the latest version for {name}."
+msgstr ""
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:47
+msgid "Showing the most recent 100 incoming commits."
+msgstr ""
+
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:4
 msgid "Site update API token"
 msgstr "Token API pembaruan situs"
@@ -15401,14 +15456,25 @@ msgstr "Token API pembaruan situs"
 msgid "Site update is not available as the site does not use a known version control system, like git."
 msgstr "Pembaruan situs tidak tersedia karena situs tidak menggunakan sistem kontrol versi yang dikenal, seperti git."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:167
-#: zotonic_mod_site_update/src/mod_site_update.erl:179
+#: zotonic_mod_site_update/src/mod_site_update.erl:139
 msgid "Sorry this can only be run from the Zotonic status site"
 msgstr "Maaf ini hanya dapat dijalankan dari situs status Zotonic"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:131
-msgid "Sorry, this site is not from a known version control system"
-msgstr "Maaf, situs ini bukan dari sistem kontrol versi yang dikenal"
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:28
+msgid "The deployment preview is unavailable. Check the repository and server log, then try again."
+msgstr ""
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:53
+msgid "The local branch cannot be fast-forwarded to the remote version. Resolve the local commits before deploying."
+msgstr ""
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:50
+msgid "There are no incoming changes."
+msgstr ""
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:22
+msgid "This branch has no upstream configured. Configure its remote tracking branch before deploying."
+msgstr ""
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
 msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
@@ -15418,29 +15484,11 @@ msgstr "Token ini digunakan untuk mengamankan panggilan API webhook untuk memper
 msgid "To run the webhook update, configure your service to POST to the following URL:"
 msgstr "Untuk menjalankan pembaruan webhook, konfigurasikan layanan Anda ke POST ke URL berikut:"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:163
-msgid "Unknown site or no version control folder present."
-msgstr "Situs tidak dikenal atau tidak ada folder kontrol versi."
-
-#: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:3
-msgid "Update Zotonic"
-msgstr "Perbaharui Zotonic"
-
-#: zotonic_mod_site_update/priv/templates/_admin_status.tpl:4
-msgid "Update site"
-msgstr "Perbarui situs"
-
-#: zotonic_mod_site_update/priv/templates/_admin_status.tpl:5
-msgid "Update the site and templates from the version control system."
-msgstr "Perbarui situs dan templat dari sistem kontrol versi."
-
-#: zotonic_mod_site_update/src/mod_site_update.erl:149
-msgid "Zotonic has not been checked out using version control."
-msgstr "Zotonic belum di-checkout menggunakan kontrol versi."
-
-#: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:2
-msgid "update"
-msgstr "perbarui"
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:20
+#: zotonic_mod_site_update/src/mod_site_update.erl:180
+#: zotonic_mod_site_update/src/mod_site_update.erl:215
+msgid "You are not allowed to deploy this code."
+msgstr ""
 
 #: zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:4
 msgid "Certificate Authority"

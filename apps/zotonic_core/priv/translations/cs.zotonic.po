@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-01 16:46\n"
+"PO-Revision-Date: 2026-11-02 09:32\n"
 "Last-Translator: \n"
 "Language-Team: Czech\n"
 "MIME-Version: 1.0\n"
@@ -440,6 +440,8 @@ msgstr "Opravdu chcete obnovit aktuálně publikovanou verzi všech pravidel ACL
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:26
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:85
 #: zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:58
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:10
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:229
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:237
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70
@@ -5685,7 +5687,7 @@ msgid "not implemented yet"
 msgstr "dosud neimplementováno"
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:158
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:159
 msgid "Activate"
 msgstr "Aktivovat"
 
@@ -5709,7 +5711,7 @@ msgstr "Všechna témata"
 msgid "Clear filters"
 msgstr "Vymazat filtry"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:149
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:150
 msgid "Configure"
 msgstr "Konfigurovat"
 
@@ -5723,7 +5725,7 @@ msgstr "Cyklické závislosti"
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:34
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:153
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:154
 msgid "Deactivate"
 msgstr "Deaktivovat"
 
@@ -5764,7 +5766,7 @@ msgstr "Buď nejsou nainstalovány, nebo nejsou zkompilovány."
 msgid "Execution status"
 msgstr "Stav provedení"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:140
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:141
 msgid "Install the module’s model and data."
 msgstr "Nainstalujte model a data modulu."
 
@@ -5781,11 +5783,11 @@ msgstr "Modulům chybí závislosti"
 msgid "Modules shown:"
 msgstr "Zobrazené moduly:"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:171
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:172
 msgid "No modules found"
 msgstr "Nenalezeny žádné moduly"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:179
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:180
 msgid "No modules match these filters."
 msgstr "Těmto filtrům neodpovídají žádné moduly."
 
@@ -5793,7 +5795,7 @@ msgstr "Těmto filtrům neodpovídají žádné moduly."
 msgid "Provides"
 msgstr "Poskytuje"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:139
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:140
 msgid "Reinstall"
 msgstr "Znovu nainstalovat"
 
@@ -11178,6 +11180,7 @@ msgstr "Závislá média"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:12
+#: zotonic_mod_site_update/priv/templates/_site_deploy_commit.tpl:9
 #: zotonic_mod_translation/priv/templates/_translation_language_status.tpl:43
 msgid "Details"
 msgstr "Podrobnosti"
@@ -15402,46 +15405,73 @@ msgstr "Pro registraci musíte souhlasit s Podmínkami."
 msgid "Your signup code"
 msgstr "Váš registrační kód"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:177
+#: zotonic_mod_site_update/src/mod_site_update.erl:223
+msgid "Another deployment is in progress. Please try again when it finishes."
+msgstr "Právě probíhá další nasazení. Zkuste to prosím znovu, až bude hotové."
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:137
 msgid "Building Zotonic in the background..."
 msgstr "Sestavování Zotonicu na pozadí…"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:128
-msgid "Error during fetch from version control."
-msgstr "Chyba při načítání ze systému správy verzí."
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:26
+msgid "Could not fetch the remote change log. Check the remote connection and try again."
+msgstr "Nepodařilo se načíst protokol změn ze vzdáleného serveru. Zkontrolujte připojení ke vzdálenému serveru a zkuste to znovu."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:146
-msgid "Error running Zotonic update"
-msgstr "Chyba při spuštění aktualizace Zotonic"
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:9
+msgid "Current commit"
+msgstr "Aktuální revize"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:160
-msgid "Error running site update"
-msgstr "Chyba při spuštění aktualizace webu"
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:60
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:62
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:11
+msgid "Deploy"
+msgstr "Nasazení"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:121
-msgid "Fetching updates from the version control..."
-msgstr "Načítání aktualizací ze správy verzí..."
+#: zotonic_mod_site_update/priv/templates/_admin_module_buttons.tpl:3
+#: zotonic_mod_site_update/priv/templates/_admin_status.tpl:4
+#: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:2
+msgid "Deploy latest"
+msgstr "Nainstalovat nejnovější verzi"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:141
-#: zotonic_mod_site_update/src/mod_site_update.erl:155
-msgid "Fetching updates..."
-msgstr "Načítání aktualizací..."
+#: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:3
+msgid "Deploy latest Zotonic"
+msgstr "Nainstalujte nejnovější verzi Zotonicu"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:175
+#: zotonic_mod_site_update/src/mod_site_update.erl:176
+msgid "Deploy latest version"
+msgstr "Nainstalovat nejnovější verzi"
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:210
+msgid "Deploying the latest version..."
+msgstr "Probíhá nasazení nejnovější verze..."
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:221
+msgid "Deployment completed."
+msgstr "Nasazení dokončeno."
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:225
+msgid "Deployment failed. Check the server log for details."
+msgstr "Nasazení se nezdařilo. Podrobnosti najdete v protokolu serveru."
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:5
+msgid "Deployment updates the entire Git repository, including any other modules it contains."
+msgstr "Nasazení aktualizuje celý repozitář Git, včetně všech dalších modulů, které obsahuje."
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:6
+msgid "Fetching remote changes…"
+msgstr "Načtení změn ze vzdáleného serveru…"
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:135
 msgid "Finished rebuilding Zotonic."
 msgstr "Nové sestavení Zotonicu bylo dokončeno."
 
-#: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
-msgid "Perform a version control (git/mercurial) update this site."
-msgstr "Proveďte aktualizaci tohoto webu pomocí systému správy verzí (git/mercurial)."
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:32
+msgid "Incoming changes"
+msgstr "Připravované změny"
 
-#: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:5
-msgid "Perform a version update of Zotonic (through git)"
-msgstr "Proveďte aktualizaci verze Zotonicu (prostřednictvím Gitu)"
-
-#: zotonic_mod_site_update/src/mod_site_update.erl:126
-msgid "Ready with fetch from version control."
-msgstr "Načítání ze systému správy verzí bylo dokončeno."
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:24
+msgid "No deployable version control repository was found."
+msgstr "Nebylo nalezeno žádné úložiště pro správu verzí, které by bylo možné nasadit."
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:12
 msgid "Rebuild Zotonic"
@@ -15451,6 +15481,31 @@ msgstr "Znovu sestavit Zotonic"
 msgid "Recompile changed Erlang files in the background"
 msgstr "Znovu kompilovat změněné soubory Erlang na pozadí"
 
+#: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
+msgid "Review and deploy the latest version of this site."
+msgstr "Zkontrolujte a nasadte nejnovější verzi tohoto webu."
+
+#: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:5
+msgid "Review incoming changes and deploy the latest version of Zotonic"
+msgstr "Zkontrolujte chystané změny a nasadte nejnovější verzi Zotonicu"
+
+#: zotonic_mod_site_update/priv/templates/_admin_module_buttons.tpl:4
+msgid "Review incoming changes and deploy this module’s Git repository."
+msgstr "Zkontrolujte chystané změny a nasadte repozitář Git tohoto modulu."
+
+#: zotonic_mod_site_update/priv/templates/_admin_status.tpl:5
+msgid "Review incoming changes before deploying the latest version."
+msgstr "Před nasazením nejnovější verze zkontrolujte chystané změny."
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:2
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:3
+msgid "Review the latest version for {name}."
+msgstr "Podívejte se na nejnovější verzi na adrese {name}."
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:47
+msgid "Showing the most recent 100 incoming commits."
+msgstr "Zobrazuje posledních 100 příchozích commitů."
+
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:4
 msgid "Site update API token"
 msgstr "Token API pro aktualizaci webu"
@@ -15459,14 +15514,25 @@ msgstr "Token API pro aktualizaci webu"
 msgid "Site update is not available as the site does not use a known version control system, like git."
 msgstr "Aktualizace webu není k dispozici, protože web nepoužívá známý systém pro správu verzí, jako je git."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:167
-#: zotonic_mod_site_update/src/mod_site_update.erl:179
+#: zotonic_mod_site_update/src/mod_site_update.erl:139
 msgid "Sorry this can only be run from the Zotonic status site"
 msgstr "Omlouváme se, toto lze spustit pouze ze stránky se stavem Zotonic."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:131
-msgid "Sorry, this site is not from a known version control system"
-msgstr "Omlouváme se, tento web nepochází ze známého systému pro správu verzí."
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:28
+msgid "The deployment preview is unavailable. Check the repository and server log, then try again."
+msgstr "Náhled nasazení není k dispozici. Zkontrolujte repozitář a protokol serveru a zkuste to znovu."
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:53
+msgid "The local branch cannot be fast-forwarded to the remote version. Resolve the local commits before deploying."
+msgstr "Lokální větev nelze synchronizovat s verzí na vzdáleném serveru. Před nasazením je třeba vyřešit lokální revize."
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:50
+msgid "There are no incoming changes."
+msgstr "Nejsou žádné chystané změny."
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:22
+msgid "This branch has no upstream configured. Configure its remote tracking branch before deploying."
+msgstr "U této větve není nakonfigurován žádný upstream. Před nasazením nakonfigurujte její vzdálenou sledovací větev."
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
 msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
@@ -15476,29 +15542,11 @@ msgstr "Tento token se používá k zabezpečení volání webhook API pro aktua
 msgid "To run the webhook update, configure your service to POST to the following URL:"
 msgstr "Chcete-li spustit aktualizaci webhooku, nakonfigurujte službu tak, aby odesílala zprávy POST na následující adresu URL:"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:163
-msgid "Unknown site or no version control folder present."
-msgstr "Neznámý web nebo chybí složka pro správu verzí."
-
-#: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:3
-msgid "Update Zotonic"
-msgstr "Aktualizovat Zotonic"
-
-#: zotonic_mod_site_update/priv/templates/_admin_status.tpl:4
-msgid "Update site"
-msgstr "Aktualizovat web"
-
-#: zotonic_mod_site_update/priv/templates/_admin_status.tpl:5
-msgid "Update the site and templates from the version control system."
-msgstr "Aktualizujte web a šablony ze systému pro správu verzí."
-
-#: zotonic_mod_site_update/src/mod_site_update.erl:149
-msgid "Zotonic has not been checked out using version control."
-msgstr "Zotonic nebyl získán ze systému správy verzí."
-
-#: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:2
-msgid "update"
-msgstr "aktualizovat"
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:20
+#: zotonic_mod_site_update/src/mod_site_update.erl:180
+#: zotonic_mod_site_update/src/mod_site_update.erl:215
+msgid "You are not allowed to deploy this code."
+msgstr "Tento kód nesmíte nasadit."
 
 #: zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:4
 msgid "Certificate Authority"

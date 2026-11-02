@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-01 16:45\n"
+"PO-Revision-Date: 2026-11-02 09:31\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -404,6 +404,8 @@ msgstr "¿Seguro que quieres restaurar todas las reglas ACL a su versión public
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:26
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:85
 #: zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:58
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:10
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:229
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:237
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70
@@ -5649,7 +5651,7 @@ msgid "not implemented yet"
 msgstr "aun no se implementa"
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:158
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:159
 msgid "Activate"
 msgstr "Activar"
 
@@ -5673,7 +5675,7 @@ msgstr "Todos los temas"
 msgid "Clear filters"
 msgstr "Borrar filtros"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:149
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:150
 msgid "Configure"
 msgstr "Configurar"
 
@@ -5687,7 +5689,7 @@ msgstr "Dependencias cíclicas"
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:34
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:153
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:154
 msgid "Deactivate"
 msgstr "Desactivar"
 
@@ -5728,7 +5730,7 @@ msgstr "O bien no están instalados o no están compilados."
 msgid "Execution status"
 msgstr "Estado de ejecución"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:140
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:141
 msgid "Install the module’s model and data."
 msgstr "Instala el modelo y los datos del módulo."
 
@@ -5745,11 +5747,11 @@ msgstr "A los módulos les faltan dependencias"
 msgid "Modules shown:"
 msgstr "Módulos mostrados:"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:171
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:172
 msgid "No modules found"
 msgstr "No se encontraron módulos"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:179
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:180
 msgid "No modules match these filters."
 msgstr "No hay módulos que se ajusten a estos filtros."
 
@@ -5757,7 +5759,7 @@ msgstr "No hay módulos que se ajusten a estos filtros."
 msgid "Provides"
 msgstr "Proporciona"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:139
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:140
 msgid "Reinstall"
 msgstr "Reinstalar"
 
@@ -11140,6 +11142,7 @@ msgstr "Medios dependientes"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:12
+#: zotonic_mod_site_update/priv/templates/_site_deploy_commit.tpl:9
 #: zotonic_mod_translation/priv/templates/_translation_language_status.tpl:43
 msgid "Details"
 msgstr "Detalles"
@@ -15363,46 +15366,73 @@ msgstr "Debes aceptar los términos para poder registrarte."
 msgid "Your signup code"
 msgstr "Tu código de registro"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:177
+#: zotonic_mod_site_update/src/mod_site_update.erl:223
+msgid "Another deployment is in progress. Please try again when it finishes."
+msgstr "Se está llevando a cabo otra implementación. Inténtalo de nuevo cuando haya finalizado."
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:137
 msgid "Building Zotonic in the background..."
 msgstr "Compilando Zotonic en segundo plano..."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:128
-msgid "Error during fetch from version control."
-msgstr "Error durante la recuperación del control de versiones."
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:26
+msgid "Could not fetch the remote change log. Check the remote connection and try again."
+msgstr "No se ha podido recuperar el registro de cambios remoto. Comprueba la conexión remota e inténtalo de nuevo."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:146
-msgid "Error running Zotonic update"
-msgstr "Error al ejecutar la actualización de Zotonic"
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:9
+msgid "Current commit"
+msgstr "Commit actual"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:160
-msgid "Error running site update"
-msgstr "Error al ejecutar la actualización del sitio"
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:60
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:62
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:11
+msgid "Deploy"
+msgstr "Implementar"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:121
-msgid "Fetching updates from the version control..."
-msgstr "Obteniendo actualizaciones desde el control de versiones ..."
+#: zotonic_mod_site_update/priv/templates/_admin_module_buttons.tpl:3
+#: zotonic_mod_site_update/priv/templates/_admin_status.tpl:4
+#: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:2
+msgid "Deploy latest"
+msgstr "Instalar la última versión"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:141
-#: zotonic_mod_site_update/src/mod_site_update.erl:155
-msgid "Fetching updates..."
-msgstr "Obteniendo actualizaciones ..."
+#: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:3
+msgid "Deploy latest Zotonic"
+msgstr "Instalar la última versión de Zotonic"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:175
+#: zotonic_mod_site_update/src/mod_site_update.erl:176
+msgid "Deploy latest version"
+msgstr "Instalar la última versión"
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:210
+msgid "Deploying the latest version..."
+msgstr "Se está instalando la última versión..."
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:221
+msgid "Deployment completed."
+msgstr "Implementación completada."
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:225
+msgid "Deployment failed. Check the server log for details."
+msgstr "La implementación ha fallado. Consulta el registro del servidor para obtener más detalles."
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:5
+msgid "Deployment updates the entire Git repository, including any other modules it contains."
+msgstr ""
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:6
+msgid "Fetching remote changes…"
+msgstr ""
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:135
 msgid "Finished rebuilding Zotonic."
 msgstr "Terminada la reconstrucción de Zotonic."
 
-#: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
-msgid "Perform a version control (git/mercurial) update this site."
-msgstr "Realizar una actualización de control de versiones (git/mercurial) del sitio."
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:32
+msgid "Incoming changes"
+msgstr ""
 
-#: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:5
-msgid "Perform a version update of Zotonic (through git)"
-msgstr "Actualizar la versión de Zotonic mediante git"
-
-#: zotonic_mod_site_update/src/mod_site_update.erl:126
-msgid "Ready with fetch from version control."
-msgstr "Ha finalizado la descarga desde el sistema de control de versiones."
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:24
+msgid "No deployable version control repository was found."
+msgstr ""
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:12
 msgid "Rebuild Zotonic"
@@ -15412,6 +15442,31 @@ msgstr "Volver a compilar Zotonic"
 msgid "Recompile changed Erlang files in the background"
 msgstr "Recompilar los archivos Erlang modificados en segundo plano"
 
+#: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
+msgid "Review and deploy the latest version of this site."
+msgstr ""
+
+#: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:5
+msgid "Review incoming changes and deploy the latest version of Zotonic"
+msgstr ""
+
+#: zotonic_mod_site_update/priv/templates/_admin_module_buttons.tpl:4
+msgid "Review incoming changes and deploy this module’s Git repository."
+msgstr ""
+
+#: zotonic_mod_site_update/priv/templates/_admin_status.tpl:5
+msgid "Review incoming changes before deploying the latest version."
+msgstr ""
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:2
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:3
+msgid "Review the latest version for {name}."
+msgstr ""
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:47
+msgid "Showing the most recent 100 incoming commits."
+msgstr ""
+
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:4
 msgid "Site update API token"
 msgstr "Token de API de actualización del sitio"
@@ -15420,14 +15475,25 @@ msgstr "Token de API de actualización del sitio"
 msgid "Site update is not available as the site does not use a known version control system, like git."
 msgstr "La actualización del sitio no está disponible ya que el sitio no utiliza un sistema de control de versiones conocido, como git."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:167
-#: zotonic_mod_site_update/src/mod_site_update.erl:179
+#: zotonic_mod_site_update/src/mod_site_update.erl:139
 msgid "Sorry this can only be run from the Zotonic status site"
 msgstr "Lo siento, esto solo se puede ejecutar desde el sitio de estado de Zotonic"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:131
-msgid "Sorry, this site is not from a known version control system"
-msgstr "Lo sentimos, este sitio no pertenece a un sistema de control de versiones conocido"
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:28
+msgid "The deployment preview is unavailable. Check the repository and server log, then try again."
+msgstr ""
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:53
+msgid "The local branch cannot be fast-forwarded to the remote version. Resolve the local commits before deploying."
+msgstr ""
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:50
+msgid "There are no incoming changes."
+msgstr ""
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:22
+msgid "This branch has no upstream configured. Configure its remote tracking branch before deploying."
+msgstr ""
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
 msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
@@ -15437,29 +15503,11 @@ msgstr "Este token se utiliza para asegurar la llamada a la API de webhook para 
 msgid "To run the webhook update, configure your service to POST to the following URL:"
 msgstr "Para actualizar el sitio mediante el webhook, configura tu servicio para enviar una solicitud POST a esta URL:"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:163
-msgid "Unknown site or no version control folder present."
-msgstr "Sitio desconocido o sin carpeta de control de versiones."
-
-#: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:3
-msgid "Update Zotonic"
-msgstr "Actualizar Zotonic"
-
-#: zotonic_mod_site_update/priv/templates/_admin_status.tpl:4
-msgid "Update site"
-msgstr "Actualizar sitio"
-
-#: zotonic_mod_site_update/priv/templates/_admin_status.tpl:5
-msgid "Update the site and templates from the version control system."
-msgstr "Actualizar el sitio y las plantillas desde el sistema de control de versiones."
-
-#: zotonic_mod_site_update/src/mod_site_update.erl:149
-msgid "Zotonic has not been checked out using version control."
-msgstr "La copia de Zotonic no se ha obtenido mediante un sistema de control de versiones."
-
-#: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:2
-msgid "update"
-msgstr "actualizar"
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:20
+#: zotonic_mod_site_update/src/mod_site_update.erl:180
+#: zotonic_mod_site_update/src/mod_site_update.erl:215
+msgid "You are not allowed to deploy this code."
+msgstr ""
 
 #: zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:4
 msgid "Certificate Authority"
