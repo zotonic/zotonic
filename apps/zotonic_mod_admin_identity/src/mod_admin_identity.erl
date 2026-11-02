@@ -232,7 +232,7 @@ observe_search_query(#search_query{ search = Req, offsetlimit = OffsetLimit }, C
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
      #menu_item{id=admin_user,
-                parent=admin_auth,
+                parent=admin_authentication_group,
                 label=?__("Users", Context),
                 url={admin_user},
                 visiblecheck={acl, use, mod_admin_identity}}

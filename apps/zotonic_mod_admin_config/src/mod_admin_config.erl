@@ -35,7 +35,7 @@ click the row.
 SSL certificates configuration
 ------------------------------
 
-Via the menu System > SSL Certificates all available certificates can be viewed.
+Via the menu System > Configuration > SSL Certificates all available certificates can be viewed.
 
 The SSL modules add a panel here using a template `_admin_config_ssl_panel.[module_name].tpl`. Only the SSL modules
 providing a certificate are listed.
@@ -47,7 +47,7 @@ Here the module `mod_ssl_letsencrypt` lets you request a free certificate from t
 Email configuration
 -------------------
 
-The System > Email configuration page groups the settings used for outgoing e-mail. It also provides a form for sending
+The System > Configuration > Email configuration page groups the settings used for outgoing e-mail. It also provides a form for sending
 a test message, which is useful for checking the effective SMTP configuration.
 
 Other e-mail modules can add their own settings panel by providing an `_admin_config_email_panel.tpl` template. The page
@@ -90,18 +90,22 @@ Delegate callbacks:
 
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
-        #menu_item{ id=admin_config_email,
+        #menu_item{ id=admin_config_group,
                     parent=admin_system,
+                    sort=200,
+                    label=?__("Configuration", Context)},
+        #menu_item{ id=admin_config_email,
+                    parent=admin_config_group,
                     label=?__("Email configuration", Context),
                     url={admin_config_email},
                     visiblecheck={acl, use, mod_admin_config}},
         #menu_item{ id=admin_config_ssl,
-                    parent=admin_system,
+                    parent=admin_config_group,
                     label=?__("SSL Certificates", Context),
                     url={admin_config_ssl},
                     visiblecheck={acl, use, mod_admin_config}},
         #menu_item{ id=admin_config,
-                    parent=admin_system,
+                    parent=admin_config_group,
                     label=?__("Config", Context),
                     url={admin_config},
                     visiblecheck={acl, use, mod_admin_config}}

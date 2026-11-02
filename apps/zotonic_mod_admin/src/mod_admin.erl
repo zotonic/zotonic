@@ -500,9 +500,14 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
                 label = ?__("Media", Context),
                 url = admin_media,
                 sort = 2},
-     #menu_separator{
-                parent=admin_content,
-                sort = 10}
+     #menu_item{id = admin_query_group,
+                parent = admin_content,
+                label = ?__("Queries", Context),
+                sort = 10},
+     #menu_item{id = admin_import_group,
+                parent = admin_content,
+                label = ?__("Imports", Context),
+                sort = 100}
     ]
     ++ admin_menu_content_queries(Context) ++
     [
@@ -520,6 +525,18 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
      %% AUTH %%
      #menu_item{id = admin_auth,
                 label = ?__("Auth", Context)},
+
+     #menu_item{id = admin_access_control_group,
+                parent = admin_auth,
+                label = ?__("Access Control", Context),
+                sort = 100},
+     #menu_item{id = admin_authentication_group,
+                parent = admin_auth,
+                label = ?__("Authentication", Context),
+                sort = 200},
+     #menu_item{id = admin_integrations_group,
+                parent = admin_auth,
+                label = ?__("Integrations", Context)},
 
      %% SYSTEM %%
      #menu_item{id = admin_system,
@@ -545,23 +562,17 @@ admin_menu_content_queries(Context) ->
             andalso Id =/= AdminOverviewQueryId
         end,
         Result),
-    CQ = lists:map(
+    lists:map(
         fun({Title, Id}) ->
             #menu_item{
                 id = {admin_query, Id},
-                parent = admin_content,
+                parent = admin_query_group,
                 label = ensure_title(Id, Title, Context),
                 url = {admin_overview_rsc, [{qquery_id, Id}]},
                 sort = 10
             }
         end,
-        Result1),
-    case CQ of
-        [] ->
-            [];
-        _ ->
-            CQ ++ [ #menu_separator{ parent = admin_content, sort = 10 } ]
-    end.
+        Result1).
 
 ensure_title(Id, Title, Context) ->
     case z_trans:lookup_fallback(Title, Context) of

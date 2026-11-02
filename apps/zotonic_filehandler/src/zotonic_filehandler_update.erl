@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2026 Marc Worrell
 %% @doc Node-wide barrier between builds/code activation and schema migrations.
-%% A failed or interrupted build stays closed until a successful retry. Watcher
+%% Only a failed or interrupted deployment stays closed until a successful retry. Watcher
 %% events are retained by the file handler while closed. All leases are monitored.
 %% @end
 
@@ -23,35 +23,40 @@
 -behaviour(gen_server).
 -include_lib("kernel/include/logger.hrl").
 
--export([start_link/0, run/1, build/1, schema/1, try_idle/1, is_pending/0]).
+-export([start_link/0, run/1, build/1, deploy/1, schema/1, try_idle/1, is_pending/0]).
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2]).
 
 -record(state, {
     owner = undefined,
     readers = #{},
     waiting = [],
-    failure = undefined
+    failure = undefined,
+    deployment = false
 }).
 
 -spec start_link() -> gen_server:start_ret().
 start_link() ->
     gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 
-%% @doc Run a build and activation exclusively. Errors leave the barrier closed.
+%% @doc Run an automatic update exclusively. Errors release the barrier.
 -spec run(Fun) -> Result when Fun :: fun(() -> Result), Result :: term().
-run(Fun) -> run(Fun, false).
+run(Fun) -> run(Fun, update).
 
 -spec build(Fun) -> Result when Fun :: fun(() -> Result), Result :: term().
-build(Fun) -> run(Fun, true).
+build(Fun) -> run(Fun, build).
 
-run(Fun, IsBuild) ->
+%% @doc Start a deployment. Failures remain blocked until a successful rebuild.
+-spec deploy(Fun) -> Result when Fun :: fun(() -> Result), Result :: term().
+deploy(Fun) -> run(Fun, deploy).
+
+run(Fun, Kind) ->
     case get({?MODULE, schema}) of
         true -> {error, update_during_schema};
-        undefined -> run_update(Fun, IsBuild)
+        undefined -> run_update(Fun, Kind)
     end.
 
-run_update(Fun, IsBuild) ->
-    case gen_server:call(?MODULE, {begin_update, IsBuild}, infinity) of
+run_update(Fun, Kind) ->
+    case gen_server:call(?MODULE, {begin_update, Kind}, infinity) of
         ok ->
             try
                 ok = zotonic_filehandler_handler:update_barrier(),
@@ -123,21 +128,24 @@ handle_call(is_pending, _From, State) ->
 %% opening the barrier could otherwise race a migration still running elsewhere.
 handle_call({begin_update, _}, _From, #state{failure = coordinator_restarted} = State) ->
     {reply, {error, coordinator_restarted}, State};
-handle_call({begin_update, false}, _From, #state{failure = Failure} = State)
+handle_call({begin_update, update}, _From, #state{failure = Failure} = State)
     when Failure =/= undefined ->
     {reply, {error, {code_update_failed, Failure}}, State};
-handle_call({begin_update, _IsBuild}, From, #state{owner = undefined, readers = Readers} = State) ->
+handle_call({begin_update, Kind}, From, #state{owner = undefined, readers = Readers} = State) ->
     {Pid, _} = From,
     Ref = monitor(process, Pid),
     persistent_term:put(?MODULE, interrupted_update),
-    State1 = State#state{owner = {Pid, Ref, From}},
+    State1 = State#state{
+        owner = {Pid, Ref, From},
+        deployment = Kind =:= deploy orelse State#state.deployment
+    },
     case map_size(Readers) of
         0 ->
             gen_server:reply(From, ok),
             {noreply, State1#state{owner = {Pid, Ref, active}}};
         _ -> {noreply, State1}
     end;
-handle_call({begin_update, _IsBuild}, _From, State) ->
+handle_call({begin_update, _Kind}, _From, State) ->
     {reply, {error, update_in_progress}, State};
 handle_call(try_idle, _From, #state{owner = Owner, failure = Failure} = State)
     when Owner =/= undefined; Failure =/= undefined ->
@@ -199,7 +207,15 @@ finish(ok, #state{waiting = Waiting, readers = Readers} = State) ->
         undefined -> ok;
         MTime -> MTime ! update_released
     end,
-    State#state{failure = undefined, waiting = [], readers = Readers1};
+    State#state{failure = undefined, deployment = false, waiting = [], readers = Readers1};
+finish({error, Reason}, #state{deployment = false} = State) ->
+    ?LOG_ERROR(#{
+        text => <<"Automatic code update failed; automatic actions remain enabled">>,
+        in => zotonic_filehandler,
+        result => error,
+        reason => Reason
+    }),
+    finish(ok, State);
 finish({error, Reason}, #state{waiting = Waiting} = State) ->
     ?LOG_ERROR(#{
         text => <<"Code update failed; schema upgrades blocked until a successful rebuild">>,

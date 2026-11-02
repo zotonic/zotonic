@@ -253,7 +253,7 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
         #menu_item{
             id = admin_websub,
-            parent = admin_content,
+            parent = admin_import_group,
             label = ?__("WebSub subscriptions", Context),
             url = {admin_websub, []},
             visiblecheck = {acl, use, mod_websub}

@@ -190,7 +190,7 @@ event(#postback{ message={dialog_2fa, _Args} }, Context) ->
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
      #menu_item{id = admin_auth2fa_config,
-                parent = admin_auth,
+                parent = admin_authentication_group,
                 label = ?__("Two-factor authentication", Context),
                 url = {admin_auth2fa_config},
                 visiblecheck = {acl, use, mod_admin_config}}

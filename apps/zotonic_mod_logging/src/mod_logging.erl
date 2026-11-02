@@ -344,27 +344,30 @@ clear_csp_reports(Context) ->
 
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
-     #menu_item{id=admin_log,
+     #menu_item{id=admin_log_group,
                 parent=admin_system,
-                label=?__("Log", Context),
+                sort=100,
+                label=?__("Logs", Context)},
+     #menu_item{id=admin_log,
+                parent=admin_log_group,
+                label=?__("Message Log", Context),
                 url={admin_log},
                 visiblecheck={acl, use, mod_logging}},
      #menu_item{id=admin_log_email,
-                parent=admin_system,
+                parent=admin_log_group,
                 label=?__("Email log", Context),
                 url={admin_log_email},
                 visiblecheck={acl, use, mod_logging}},
      #menu_item{id=admin_log_csp,
-                parent=admin_system,
+                parent=admin_log_group,
                 label=?__("Content-Security log", Context),
                 url={admin_log_csp},
                 visiblecheck={acl, use, mod_logging}},
      #menu_item{id=admin_log_ui,
-                parent=admin_system,
+                parent=admin_log_group,
                 label=?__("User interface log", Context),
                 url={admin_log_ui},
-                visiblecheck={acl, use, mod_logging}},
-     #menu_separator{parent=admin_system}
+                visiblecheck={acl, use, mod_logging}}
      |Acc].
 
 drain_ui_log(Context) ->
