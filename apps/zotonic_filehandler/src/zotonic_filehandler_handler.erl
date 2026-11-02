@@ -28,7 +28,8 @@
     reload_modules/0,
     reload_module/1,
     ignore_dir/2,
-    ignore_action/2
+    ignore_action/2,
+    update_barrier/0
 ]).
 
 -export([
@@ -50,10 +51,19 @@
 -include_lib("zotonic_filewatcher/include/zotonic_filewatcher.hrl").
 
 -record(state, {
+        pending = #{} :: map(),
         ignore_dir = #{} :: #{ [ binary() ] := boolean() },
         ignore_action = #{} :: #{ term() := boolean() }
     }).
 
+
+%% @doc Wait for already executing file actions before modifying the working tree.
+update_barrier() ->
+    case whereis(?MODULE) of
+        Pid when Pid =:= self() -> ok;
+        undefined -> ok;
+        _ -> gen_server:call(?MODULE, update_barrier, infinity)
+    end.
 
 -spec handle_changes( map() ) -> ok.
 handle_changes(Es) ->
@@ -101,7 +111,28 @@ init([]) ->
             self(), 500),
     {ok, #state{ }}.
 
+handle_call(update_barrier, _From, State) ->
+    {reply, ok, State};
 handle_call({filewatcher_changes, Es}, _From, State) ->
+    case zotonic_filehandler_update:is_pending() of
+        true ->
+            {reply, ok, State#state{pending = maps:merge(State#state.pending, Es)}};
+        false ->
+            {Result, State1} = perform_changes(Es, State),
+            {reply, Result, State1}
+    end;
+
+handle_call(compile_all, _From, State) ->
+    Result = zotonic_filehandler_compile:all(),
+    {reply, Result, State};
+handle_call(reload_modules, _From, State) ->
+    Result = zotonic_filehandler_compile:ld(),
+    {reply, Result, State};
+handle_call({reload_module, Module}, _From, State) ->
+    Result = zotonic_filehandler_compile:ld(Module),
+    {reply, Result, State}.
+
+perform_changes(Es, State) ->
     Actions = maps:fold(
         fun(F, Verb, Acc) ->
             case is_ignored_dir(F, State#state.ignore_dir) of
@@ -148,19 +179,7 @@ handle_call({filewatcher_changes, Es}, _From, State) ->
         end,
         ok,
         Es),
-    {reply, Result, State};
-
-handle_call(compile_all, _From, State) ->
-    Result = zotonic_filehandler_compile:all(),
-    {reply, Result, State};
-
-handle_call(reload_modules, _From, State) ->
-    Result = zotonic_filehandler_compile:ld(),
-    {reply, Result, State};
-
-handle_call({reload_module, Module}, _From, State) ->
-    Result = zotonic_filehandler_compile:ld(Module),
-    {reply, Result, State}.
+    {Result, State}.
 
 handle_cast({ignore_dir, Dir, true}, #state{ ignore_dir = IgnoreDir } = State) ->
     NormDir = normalize_dir(Dir),
@@ -183,6 +202,13 @@ handle_cast({ignore_action, Action, false}, #state{ ignore_action = IgnoreAction
 handle_cast(_Msg, State) ->
     {noreply, State}.
 
+handle_info(replay_changes, #state{pending = Pending} = State) ->
+    case zotonic_filehandler_update:is_pending() of
+        true -> {noreply, State};
+        false ->
+            {_Result, State1} = perform_changes(Pending, State#state{pending = #{}}),
+            {noreply, State1}
+    end;
 handle_info(_Msg, State) ->
     {noreply, State}.
 
@@ -212,7 +238,19 @@ is_ignored_dir_1(Parts, IgnoredDirs) ->
 
 
 perform(Actions) ->
-    lists:map( fun perform_action/1, Actions ).
+    {Loads, Other} = lists:partition(fun
+        ({zotonic_filehandler_compile, ld, [_]}) -> true;
+        (_) -> false
+    end, Actions),
+    case Loads of
+        [] -> lists:map(fun perform_action/1, Other);
+        _ ->
+            Modules = [M || {_, _, [M]} <- Loads],
+            case zotonic_filehandler_compile:ld_batch(Modules) of
+                {error, _} = Error -> Error;
+                _ -> lists:map(fun perform_action/1, Other)
+            end
+    end.
 
 perform_action({M, F, A}) when is_atom(M), is_atom(F), is_list(A) ->
     erlang:apply(M, F, A).

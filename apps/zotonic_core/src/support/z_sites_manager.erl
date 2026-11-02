@@ -41,6 +41,7 @@
     get_builtin_sites/0,
     get_sites_hosts/0,
     module_loaded/1,
+    modules_loaded/1,
     info/0,
     foreach/1,
 
@@ -273,8 +274,12 @@ restart(Site) when is_atom(Site) ->
             Error
     end.
 
-%% @doc Tell the sites manager that a module was loaded, check
-%%      changes to observers, schema.
+%% @doc Notify only after all code in an update has been activated.
+-spec modules_loaded(Modules) -> ok when Modules :: [module()].
+modules_loaded(Modules) ->
+    gen_server:call(?MODULE, {modules_loaded, Modules}, infinity).
+
+%% @doc Tell the sites manager that a module was loaded, check observers/schema.
 module_loaded(Module) ->
     gen_server:cast(?MODULE, {module_loaded, Module}).
 
@@ -433,6 +438,9 @@ init([]) ->
 %%                                      {stop, Reason, Reply, State} |
 %%                                      {stop, Reason, State}
 %% @doc Return all sites
+handle_call({modules_loaded, Modules}, _From, State) ->
+    lists:foreach(fun(Module) -> do_load_module(Module, State) end, Modules),
+    {reply, ok, State};
 handle_call(get_sites_status, _From, #state{ sites = Sites } = State) ->
     SiteStatus = maps:fold(
         fun(Site, Status, Acc) ->

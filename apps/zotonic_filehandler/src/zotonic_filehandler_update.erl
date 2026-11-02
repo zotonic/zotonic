@@ -1,0 +1,215 @@
+%% @author Marc Worrell <marc@worrell.nl>
+%% @copyright 2026 Marc Worrell
+%% @doc Node-wide barrier between builds/code activation and schema migrations.
+%% A failed or interrupted build stays closed until a successful retry. Watcher
+%% events are retained by the file handler while closed. All leases are monitored.
+%% @end
+
+%% Copyright 2026 Marc Worrell
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%%
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
+
+-module(zotonic_filehandler_update).
+-behaviour(gen_server).
+-include_lib("kernel/include/logger.hrl").
+
+-export([start_link/0, run/1, build/1, schema/1, try_idle/1, is_pending/0]).
+-export([init/1, handle_call/3, handle_cast/2, handle_info/2]).
+
+-record(state, {
+    owner = undefined,
+    readers = #{},
+    waiting = [],
+    failure = undefined
+}).
+
+-spec start_link() -> gen_server:start_ret().
+start_link() ->
+    gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
+
+%% @doc Run a build and activation exclusively. Errors leave the barrier closed.
+-spec run(Fun) -> Result when Fun :: fun(() -> Result), Result :: term().
+run(Fun) -> run(Fun, false).
+
+-spec build(Fun) -> Result when Fun :: fun(() -> Result), Result :: term().
+build(Fun) -> run(Fun, true).
+
+run(Fun, IsBuild) ->
+    case get({?MODULE, schema}) of
+        true -> {error, update_during_schema};
+        undefined -> run_update(Fun, IsBuild)
+    end.
+
+run_update(Fun, IsBuild) ->
+    case gen_server:call(?MODULE, {begin_update, IsBuild}, infinity) of
+        ok ->
+            try
+                ok = zotonic_filehandler_handler:update_barrier(),
+                Fun()
+            of
+                {error, _} = Error ->
+                    ok = gen_server:call(?MODULE, {finish, Error}),
+                    Error;
+                Result ->
+                    ok = gen_server:call(?MODULE, {finish, ok}),
+                    Result
+            catch Class:Reason:Stack ->
+                ok = gen_server:call(?MODULE, {finish, {error, {Class, Reason}}}),
+                erlang:raise(Class, Reason, Stack)
+            end;
+        {error, _} = Error -> Error
+    end.
+
+%% @doc Hold a read lease for the entire migration, including version recording.
+-spec schema(Fun) -> Result when Fun :: fun(() -> Result), Result :: term().
+schema(Fun) ->
+    case get({?MODULE, schema}) of
+        true -> Fun();
+        undefined -> schema_lease(Fun)
+    end.
+
+schema_lease(Fun) ->
+    case gen_server:call(?MODULE, schema, infinity) of
+        {ok, Ref} ->
+            put({?MODULE, schema}, true),
+            try Fun()
+            after
+                erase({?MODULE, schema}),
+                gen_server:call(?MODULE, {release, Ref})
+            end;
+        {error, _} = Error -> Error
+    end.
+
+%% @doc Run a short cache operation only when no update is pending. The lease
+%% makes checking the barrier and the operation atomic with respect to new builds.
+%% Unlike schema/1, this never waits for a build to complete inside a cache server.
+-spec try_idle(Fun) -> {ok, Result} | {error, update_in_progress} when
+    Fun :: fun(() -> Result), Result :: term().
+try_idle(Fun) ->
+    case gen_server:call(?MODULE, try_idle) of
+        {ok, Ref} ->
+            try {ok, Fun()}
+            after gen_server:call(?MODULE, {release, Ref})
+            end;
+        {error, _} = Error -> Error
+    end.
+
+-spec is_pending() -> boolean().
+is_pending() ->
+    gen_server:call(?MODULE, is_pending).
+
+init([]) ->
+    %% Retain failures if this coordinator alone is restarted by its supervisor.
+    Failure = case persistent_term:get(?MODULE, undefined) of
+        undefined -> undefined;
+        _ -> coordinator_restarted
+    end,
+    persistent_term:put(?MODULE, coordinator_started),
+    {ok, #state{failure = Failure}}.
+
+handle_call(is_pending, _From, State) ->
+    {reply, State#state.owner =/= undefined orelse State#state.failure =/= undefined, State};
+%% A restarted coordinator has lost its leases. A VM restart is required;
+%% opening the barrier could otherwise race a migration still running elsewhere.
+handle_call({begin_update, _}, _From, #state{failure = coordinator_restarted} = State) ->
+    {reply, {error, coordinator_restarted}, State};
+handle_call({begin_update, false}, _From, #state{failure = Failure} = State)
+    when Failure =/= undefined ->
+    {reply, {error, {code_update_failed, Failure}}, State};
+handle_call({begin_update, _IsBuild}, From, #state{owner = undefined, readers = Readers} = State) ->
+    {Pid, _} = From,
+    Ref = monitor(process, Pid),
+    persistent_term:put(?MODULE, interrupted_update),
+    State1 = State#state{owner = {Pid, Ref, From}},
+    case map_size(Readers) of
+        0 ->
+            gen_server:reply(From, ok),
+            {noreply, State1#state{owner = {Pid, Ref, active}}};
+        _ -> {noreply, State1}
+    end;
+handle_call({begin_update, _IsBuild}, _From, State) ->
+    {reply, {error, update_in_progress}, State};
+handle_call(try_idle, _From, #state{owner = Owner, failure = Failure} = State)
+    when Owner =/= undefined; Failure =/= undefined ->
+    {reply, {error, update_in_progress}, State};
+handle_call(try_idle, From, State) ->
+    handle_call(schema, From, State);
+handle_call(schema, From, #state{owner = Owner, waiting = Waiting} = State)
+    when Owner =/= undefined ->
+    {Pid, _} = From,
+    Ref = monitor(process, Pid),
+    {noreply, State#state{waiting = Waiting ++ [{Ref, From}]}};
+handle_call(schema, _From, #state{failure = Failure} = State) when Failure =/= undefined ->
+    {reply, {error, {code_update_failed, Failure}}, State};
+handle_call(schema, {Pid, _}, #state{readers = Readers} = State) ->
+    Ref = monitor(process, Pid),
+    {reply, {ok, Ref}, State#state{readers = Readers#{Ref => Pid}}};
+handle_call({release, Ref}, {Pid, _}, #state{readers = Readers} = State) ->
+    case maps:find(Ref, Readers) of
+        {ok, Pid} ->
+            demonitor(Ref, [flush]),
+            {reply, ok, maybe_begin(State#state{readers = maps:remove(Ref, Readers)})};
+        _ -> {reply, {error, not_owner}, State}
+    end;
+handle_call({finish, Result}, {Pid, _}, #state{owner = {Pid, Ref, active}} = State) ->
+    demonitor(Ref, [flush]),
+    State1 = finish(Result, State#state{owner = undefined}),
+    {reply, ok, State1};
+handle_call(_Message, _From, State) ->
+    {reply, {error, bad_request}, State}.
+
+handle_cast(_Message, State) -> {noreply, State}.
+
+handle_info({'DOWN', Ref, process, _Pid, Reason}, #state{owner = {_, Ref, _}} = State) ->
+    {noreply, finish({error, {update_process_down, Reason}}, State#state{owner = undefined})};
+handle_info({'DOWN', Ref, process, _Pid, _Reason}, State) ->
+    {noreply, maybe_begin(State#state{
+        readers = maps:remove(Ref, State#state.readers),
+        waiting = lists:keydelete(Ref, 1, State#state.waiting)
+    })};
+handle_info(_Message, State) -> {noreply, State}.
+
+maybe_begin(#state{owner = {Pid, Ref, From}, readers = Readers} = State)
+    when From =/= active, map_size(Readers) =:= 0 ->
+    gen_server:reply(From, ok),
+    State#state{owner = {Pid, Ref, active}};
+maybe_begin(State) -> State.
+
+finish(ok, #state{waiting = Waiting, readers = Readers} = State) ->
+    persistent_term:put(?MODULE, coordinator_started),
+    Readers1 = lists:foldl(fun({Ref, {Pid, _} = From}, Acc) ->
+        gen_server:reply(From, {ok, Ref}),
+        Acc#{Ref => Pid}
+    end, Readers, Waiting),
+    case whereis(zotonic_filehandler_handler) of
+        undefined -> ok;
+        Handler -> Handler ! replay_changes
+    end,
+    case whereis(z_file_mtime) of
+        undefined -> ok;
+        MTime -> MTime ! update_released
+    end,
+    State#state{failure = undefined, waiting = [], readers = Readers1};
+finish({error, Reason}, #state{waiting = Waiting} = State) ->
+    ?LOG_ERROR(#{
+        text => <<"Code update failed; schema upgrades blocked until a successful rebuild">>,
+        in => zotonic_filehandler,
+        result => error,
+        reason => Reason
+    }),
+    persistent_term:put(?MODULE, Reason),
+    lists:foreach(fun({Ref, From}) ->
+        demonitor(Ref, [flush]),
+        gen_server:reply(From, {error, {code_update_failed, Reason}})
+    end, Waiting),
+    State#state{failure = Reason, waiting = []}.

@@ -90,7 +90,6 @@ handle_cast(reload, State) ->
     {noreply, State};
 handle_cast(make, State) ->
     make_all(),
-    reload_all(),
     {noreply, State};
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
@@ -140,69 +139,29 @@ code_change(_OldVsn, State, _Extra) ->
 %% @doc Check if any of the loaded modules has been changed. If so reload the module's beam file. Also rescan for templates and files.
 reload_all() ->
     case reload_loaded_modules() of
-        [] ->
-            z_sites_dispatcher:update_dispatchinfo(),
-            [ z_module_indexer:reindex(C) || C <- z_sites_manager:get_site_contexts() ],
-            ok;
-        _ ->
+        {error, Reason} = Error ->
+            ?LOG_ERROR(#{
+                text => <<"Could not reload code">>,
+                in => zotonic_filewatcher,
+                result => error,
+                reason => Reason
+            }),
+            Error;
+        ok ->
             z:flush()
     end.
 
 
 %% @doc Remake beam files from source. Do not load the new files (yet).
 make_all() ->
-    make:all([]),
-    ok.
+    zotonic_filehandler:compile_all_sync().
 
 %% @doc Reload a module, purge the old code.
 reload_module(M) ->
-    ?LOG_DEBUG(#{
-        text => <<"Reloading module">>,
-        in => zotonic_filewatcher,
-        module => M
-    }),
-    code:purge(M),
-    code:soft_purge(M),
-    case code:load_file(M) of
-        {module, M} ->
-            {ok, M};
-        {error, Reason} = Error ->
-            ?LOG_WARNING(#{
-                text => <<"Could not reload module">>,
-                in => zotonic_filewatcher,
-                module => M,
-                result => error,
-                reason => Reason
-            }),
-            Error
-    end.
+    zotonic_filehandler:reload_module(M).
 
-%% @doc Reload all modules from the zotonic directory or subdirectories.  Return a list of modules reloaded. Empty list when nothing changed.
--spec reload_loaded_modules() -> [ term() ].
 reload_loaded_modules() ->
-    Dir = z_utils:lib_dir(),
-    Modules = [{M,P} || {M, P} <- code:all_loaded(), is_list(P) andalso string:str(P, Dir) > 0],
-    [reload_module(M) || {M,Path} <- Modules, module_changed(M,Path)].
-
-%% @doc Check if the version number of the module has been changed.  Skip template modules.
--spec module_changed(atom(), file:filename_all()) -> boolean().
-module_changed(Module, BeamFile) ->
-    case z_template:is_template_module(Module) of
-        true ->
-            false;
-        false ->
-            Props = Module:module_info(attributes),
-            case proplists:get_value(vsn, Props) of
-                undefined ->
-                    false;
-                Version ->
-                    case beam_lib:version(BeamFile) of
-                        {ok, {_Module, Version}} -> false;
-                        {ok, {_Module, _OtherVersion}} -> true;
-                        {error, _, _} -> false
-                    end
-            end
-    end.
+    zotonic_filehandler:reload_modules().
 
 %% @doc Initialize the filewatcher monitor, this one uses polling
 init_scanner() ->

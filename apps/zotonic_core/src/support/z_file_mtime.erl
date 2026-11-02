@@ -45,7 +45,8 @@
 -export([start_link/0, start_link/1]).
 
 -record(state, {
-    is_scanner_enabled = true :: boolean()
+    is_scanner_enabled = true :: boolean(),
+    is_flush_pending = false :: boolean()
 }).
 
 %% interface functions
@@ -229,12 +230,14 @@ handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
 
 handle_info(flush, #state{is_scanner_enabled = false} = State) ->
-    ets:delete_all_objects(?MTIME),
     timer:send_after(?FLUSH_INTERVAL, flush),
-    {noreply, State};
+    {noreply, maybe_flush_mtimes(State)};
 
 handle_info(flush, #state{is_scanner_enabled = true} = State) ->
     {noreply, State};
+
+handle_info(update_released, #state{is_flush_pending = true} = State) ->
+    {noreply, maybe_flush_mtimes(State)};
 
 handle_info(_Info, State) ->
     {noreply, State}.
@@ -251,6 +254,14 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+%% Keep cached timestamps throughout a pull/build, including failed updates.
+%% Retry immediately on release without starting an additional periodic timer.
+maybe_flush_mtimes(State) ->
+    case zotonic_filehandler_update:try_idle(fun() -> ets:delete_all_objects(?MTIME) end) of
+        {ok, true} -> State#state{is_flush_pending = false};
+        {error, update_in_progress} -> State#state{is_flush_pending = true}
+    end.
 
 simplify(Path) when is_binary(Path) ->
     case filename:extension(Path) of

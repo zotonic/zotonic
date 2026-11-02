@@ -1,8 +1,8 @@
 {% if m.site_update.vcs_zotonic %}
     <a id="vcs" href="#" class="list-group-item">
-        <h4 class="list-group-item-heading">{_ Update Zotonic _}</h4>
+        <h4 class="list-group-item-heading">{_ Deploy latest Zotonic _}</h4>
         <p class="list-group-item-text text-muted">
-            {_ Perform a version update of Zotonic (through git) _}
+            {_ Review incoming changes and deploy the latest version of Zotonic _}
         </p>
     </a>
     {% wire id="vcs" delegate=`mod_site_update` postback={vcs_up zotonic} %}

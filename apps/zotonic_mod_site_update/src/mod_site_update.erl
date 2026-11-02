@@ -25,12 +25,15 @@
 This module pulls updates of a site‘s code from a remote version control system. The supported version control systems
 are git and mercurial.
 
-After enabling this module you will see a button **Update site** on the System -> Status page in the admin.
+After enabling this module you will see a button **Deploy latest** on the System -> Status page in the admin.
 
-This button is only available to users with the *use.mod_site_update* right.
+This button is only available to users with the *use.mod_site_update* right. It opens a
+preview of the current commit and incoming remote history. Fetching this preview does
+not change checked-out files; deployment starts only after pressing **Deploy**.
 
-After a pull of new code, Zotonic will do everything that is needed. Including compilation of source code, reloading of
-dispatch rules, reloading of translations and reindexing the template directories.
+The update uses the same deployment barrier as `bin/zotonic deploy`: restore the tracked Git lock file,
+pull code, compile and activate the updated modules before allowing schema upgrades. File changes are
+buffered until activation completes, then caches and template indexes are refreshed.
 
 This update of the system can take a while.
 
@@ -78,7 +81,7 @@ Accepted Events
 
 Delegate callbacks:
 
-- `event/2` with `postback` messages: `make`, `vcs_up`.
+- `event/2` with `postback` messages: `make`, `vcs_up` (open dialog), `vcs_preview` (fetch preview), `vcs_deploy` (confirmation).
 
 ").
 -author("Marc Worrell <marc@worrell.nl>").
@@ -110,62 +113,19 @@ Delegate callbacks:
 
 
 -spec event(#postback{}, z:context()) -> z:context().
-event(#postback{ message = vcs_up }, Context) ->
-    Site = z_context:site(Context),
-    case m_site_update:vcs_site(Site) of
-        {_, _} = VCS ->
-            z_notifier:notify(
-                #page_actions{
-                    actions = [
-                        {growl, [
-                            {text, ?__("Fetching updates from the version control...", Context)}
-                        ]}
-                    ]}, Context),
-            case m_site_update:update_vcs(VCS, Context) of
-                {ok, _Result} ->
-                    z_render:growl(?__("Ready with fetch from version control.", Context), Context);
-                {error, _} ->
-                    z_render:growl(?__("Error during fetch from version control.", Context), Context)
-            end;
-        false ->
-            z_render:growl(?__("Sorry, this site is not from a known version control system", Context), Context)
-    end;
-event(#postback{ message = {vcs_up, Args} }, Context) ->
-    case z_context:site(Context) of
-        zotonic_site_status ->
-            true = z_acl:is_admin(Context),
-            case proplists:get_value(zotonic, Args) of
-                true ->
-                    case m_site_update:vcs_zotonic() of
-                        {_, _} = VCS ->
-                            async_notice('Zotonic', ?__("Fetching updates...", Context), Context),
-                            case m_site_update:update_vcs(VCS, Context) of
-                                {ok, Result} ->
-                                    render_notice('Zotonic', Result, Context);
-                                {error, _} ->
-                                    render_notice('Zotonic', ?__("Error running Zotonic update", Context), Context)
-                            end;
-                        false ->
-                            render_notice('Zotonic', ?__("Zotonic has not been checked out using version control.", Context), Context)
-                    end;
-                undefined ->
-                    Site = proplists:get_value(site, Args, z_context:site(Context)),
-                    case m_site_update:vcs_site(Site) of
-                        {_, _} = VCS ->
-                            async_notice(Site, ?__("Fetching updates...", Context), Context),
-                            case m_site_update:update_vcs(VCS, Context) of
-                                {ok, Result} ->
-                                    render_notice(Site, Result, Context);
-                                {error, _} ->
-                                    render_notice(Site, ?__("Error running site update", Context), Context)
-                            end;
-                        false ->
-                            render_notice(Site, ?__("Unknown site or no version control folder present.", Context), Context)
-                    end
-            end;
-        _ ->
-            z_render:growl_error(?__("Sorry this can only be run from the Zotonic status site", Context), Context)
-    end;
+event(#postback{message = vcs_up}, Context) ->
+    preview(current, Context);
+event(#postback{message = {vcs_up, Args}}, Context) ->
+    Target = case {proplists:get_value(zotonic, Args), proplists:get_value(module, Args)} of
+        {true, _} -> zotonic;
+        {_, undefined} -> {site, proplists:get_value(site, Args)};
+        {_, Module} -> {module, Module}
+    end,
+    preview(Target, Context);
+event(#postback{message = {vcs_preview, Args}}, Context) ->
+    fetch_preview(proplists:get_value(target, Args), proplists:get_value(element_id, Args), Context);
+event(#postback{message = {vcs_deploy, Args}}, Context) ->
+    deploy(proplists:get_value(target, Args), Context);
 event(#postback{ message = make }, Context) ->
     case z_context:site(Context) of
         zotonic_site_status ->
@@ -178,6 +138,91 @@ event(#postback{ message = make }, Context) ->
         _ ->
             z_render:growl_error(?__("Sorry this can only be run from the Zotonic status site", Context), Context)
     end.
+
+
+%% Resolve repositories on the server, and recheck permissions on confirmation.
+resolve_target(current, Context) ->
+    case z_acl:is_allowed(use, mod_site_update, Context) of
+        true ->
+            Site = z_context:site(Context),
+            {ok, Site, m_site_update:vcs_site(Site)};
+        false -> {error, eacces}
+    end;
+resolve_target({module, Module}, Context) when is_atom(Module); is_binary(Module) ->
+    %% A module repository can affect all sites on the node.
+    case z_acl:is_admin(Context) of
+        true -> {ok, Module, m_site_update:vcs_module(Module)};
+        false -> {error, eacces}
+    end;
+resolve_target(Target, #context{site = zotonic_site_status} = Context) ->
+    case z_acl:is_admin(Context) of
+        true -> status_target(Target);
+        false -> {error, eacces}
+    end;
+resolve_target(_, _Context) ->
+    {error, eacces}.
+
+status_target(zotonic) ->
+    {ok, 'Zotonic', m_site_update:vcs_zotonic()};
+status_target({site, Site}) when is_atom(Site), Site =/= undefined ->
+    {ok, Site, m_site_update:vcs_site(Site)};
+status_target(_) ->
+    {error, eacces}.
+
+%% Show the dialog first. Its wire fetches the preview in a separate postback.
+preview(Target, Context) ->
+    case resolve_target(Target, Context) of
+        {ok, Name, _VCS} ->
+            z_render:dialog(?__("Deploy latest version", Context),
+                "_dialog_site_deploy_loading.tpl",
+                [{target, Target}, {name, Name}], Context);
+        {error, eacces} ->
+            z_render:growl_error(?__("You are not allowed to deploy this code.", Context), Context)
+    end.
+
+fetch_preview(Target, ElementId, Context) ->
+    {Name, Preview} = case resolve_target(Target, Context) of
+        {ok, ResolvedName, VCS} ->
+            Info = case m_site_update:preview_vcs(VCS) of
+                {ok, Result} -> Result;
+                {error, Reason} -> #{error => Reason}
+            end,
+            {ResolvedName, Info};
+        {error, eacces} ->
+            {undefined, #{error => eacces}}
+    end,
+    %% A unique container prevents a late fetch from reopening a cancelled dialog
+    %% or replacing a newer preview.
+    z_render:update(ElementId, #render{
+        template = "_dialog_site_deploy.tpl",
+        vars = [{target, Target}, {name, Name}, {preview, Preview},
+                {is_module, is_module_target(Target)}]
+    }, Context).
+
+is_module_target({module, _}) -> true;
+is_module_target(_) -> false.
+
+deploy(Target, Context) ->
+    case resolve_target(Target, Context) of
+        {ok, Name, VCS} ->
+            z_notifier:notify(#page_actions{actions = [
+                {dialog_close, []},
+                {growl, [{text, ?__("Deploying the latest version...", Context)}]}
+            ]}, Context),
+            Result = m_site_update:update_vcs(VCS, Context),
+            deployment_notice(Name, Result, Context);
+        {error, eacces} ->
+            z_render:growl_error(?__("You are not allowed to deploy this code.", Context), Context)
+    end.
+
+deployment_notice(Name, {ok, Output}, #context{site = zotonic_site_status} = Context) ->
+    render_notice(Name, Output, Context);
+deployment_notice(_Name, {ok, _}, Context) ->
+    z_render:growl(?__("Deployment completed.", Context), Context);
+deployment_notice(_Name, {error, update_in_progress}, Context) ->
+    z_render:growl_error(?__("Another deployment is in progress. Please try again when it finishes.", Context), Context);
+deployment_notice(_Name, {error, _}, Context) ->
+    z_render:growl_error(?__("Deployment failed. Check the server log for details.", Context), Context).
 
 
 % @doc Wire a notice to the current context

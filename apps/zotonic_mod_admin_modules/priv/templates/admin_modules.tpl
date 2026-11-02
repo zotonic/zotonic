@@ -135,6 +135,7 @@
                         </td>
                         <td>
                             <div class="buttons" style="white-space: nowrap; text-align: right">
+                                {% all include "_admin_module_buttons.tpl" module=module %}
                                 {% if props.schema %}
                                     {% button text=_"Reinstall"
                                         title=_"Install the module’s model and data."

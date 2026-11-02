@@ -1752,6 +1752,9 @@ has_behaviour(M, Behaviour) ->
 
 %% @doc Manage the upgrade/install of this module.
 manage_schema(Module, Context) ->
+    zotonic_filehandler_update:schema(fun() -> manage_schema_loaded(Module, Context) end).
+
+manage_schema_loaded(Module, Context) ->
     Target = mod_schema(Module),
     Current = db_schema_version(Module, Context),
     HasManageSchema = erlang:function_exported(Module, manage_schema, 2),
@@ -1896,6 +1899,9 @@ observes_1(Module, Pid, [{F,Arity}|Rest], Acc) ->
 %% @doc Reinstall the given module's schema, calling
 %% Module:manage_schema(install, Context); if that function exists.
 reinstall(Module, Context) ->
+    zotonic_filehandler_update:schema(fun() -> reinstall_loaded(Module, Context) end).
+
+reinstall_loaded(Module, Context) ->
     case proplists:get_value(manage_schema, erlang:get_module_info(Module, exports)) of
         undefined ->
             %% nothing to do, no manage_schema
