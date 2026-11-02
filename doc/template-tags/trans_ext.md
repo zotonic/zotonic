@@ -64,24 +64,6 @@ invalidate compiled templates as usual.
 Use complete messages such as “{n} hours ago” and “in {n} hours” separately:
 the surrounding words can change the grammatical form of the time unit.
 
-For Erlang code, use `z_trans:trans_plural(Singular, Plural, N, Context)` with
-literal English binaries or strings for extraction. The function returns the
-selected text; callers substitute placeholders separately, just as with `trans/2`.
-
-Within a message context, use the same source pair consistently. POT extraction reports
-conflicting singular/plural definitions for the same `msgid`; give messages with
-different meanings distinct English source text.
-
-Erlang callers can distinguish identical source pairs with gettext message context:
-
-```erlang
-z_trans:trans_plural(<<"{n} hour">>, <<"{n} hours">>, N, <<"relative time: past">>, Context).
-```
-
-The five-argument form and `plural_translations/4` use `msgctxt` in PO/POT files.
-Supply a literal message context for extraction. Missing contextual translations
-fall back to the English source pair, never to a different message context.
-
 ## Message context in templates
 
 Supply a literal `msgctxt` to distinguish otherwise identical labels:
@@ -101,22 +83,8 @@ Template lookup tries the contextual and then contextless translation in each
 language, before moving to the next fallback language. The final fallback is the
 English source. Each plural candidate retains its own plural rule.
 
-## Erlang singular messages
+## Related documentation
 
-```erlang
-z_trans:trans_msgctxt(<<"Open">>, <<"action">>, Context).
-z_trans:trans_msgctxt(<<"Open">>, <<"action">>, nl, Context).
-z_trans:translations(<<"Open">>, <<"action">>, Context).
-?__(<<"Open">>, <<"action">>, Context).
-?___(<<"Open">>, <<"action">>, Context).
-```
-
-Erlang APIs are strict by default: they do not borrow a contextless translation.
-`translations(Text, MsgCtxt, true, Context)` and
-`plural_translations(Singular, Plural, MsgCtxt, true, Context)` explicitly enable
-the template fallback policy. The plural result can contain ordered candidates.
-
-Use `lookup` or `lookup_fallback` to select a language from the resolved singular
-`#trans{}` record. Passing it to `trans/3` can re-fetch translations using only the
-English text, losing the message context. Supply literal source text and `MsgCtxt`
-for POT extraction. Existing contextless calls and macros remain unchanged.
+See the [translation guide](guide#translations) for choosing message
+contexts and writing translatable messages, and the
+[Erlang translation API](reference#z_trans) for calls from Erlang code.
