@@ -1,0 +1,4 @@
+[
+ {admin_deployment, ["admin", "deployment"], controller_admin,
+    [{template, <<"admin_deployment.tpl">>}, {acl_module, mod_site_update}, seo_noindex]}
+].

@@ -26,6 +26,7 @@ isolated_result(Port, Output) ->
 isolated_tests() ->
     {foreach, fun setup/0, fun cleanup/1, [
         fun delayed_helper/0,
+        fun public_status/0,
         fun failed_build/0,
         fun automatic_failures/0,
         fun missing_compile_options/0,
@@ -80,6 +81,18 @@ delayed_helper() ->
     receive {updated, {ok, _}} -> ok after 1000 -> error(timeout) end,
     [receive {migrated, Result} -> ?assertEqual({2, 2}, Result)
      after 1000 -> error(timeout) end || _ <- [site_a, site_b]].
+
+public_status() ->
+    ?assertMatch(#{active := false, blocked := false, deployment := false},
+        zotonic_filehandler_update:status()),
+    ?assertEqual({error, private_reason}, zotonic_filehandler_update:deploy(fun() ->
+        ?assertMatch(#{active := true, deployment := true}, zotonic_filehandler_update:status()),
+        {error, private_reason}
+    end)),
+    ?assertEqual(#{active => false, blocked => true, deployment => true, restart_required => false},
+        zotonic_filehandler_update:status()),
+    ok = zotonic_filehandler_update:build(fun() -> ok end),
+    ?assertMatch(#{blocked := false, deployment := false}, zotonic_filehandler_update:status()).
 
 failed_build() ->
     ?assertEqual({error, compile_failed},

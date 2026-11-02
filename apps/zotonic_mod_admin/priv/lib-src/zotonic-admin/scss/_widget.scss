@@ -31,9 +31,18 @@
 
     .widget-content {
         position: relative;
-        padding: $widgetVerticalPadding $widgetSidePadding 0 $widgetSidePadding;
+        padding: $widgetVerticalPadding $widgetSidePadding;
         border-radius: 0 0 $radiusWidget $radiusWidget;
         border-top: none;
+
+        // The panel padding supplies the trailing space, not the last block's margin.
+        > :last-child {
+            margin-bottom: 0;
+        }
+
+        > .form-group:last-child > :last-child {
+            margin-bottom: 0;
+        }
 
         &.widget-content-full {
             padding: 0;
@@ -66,11 +75,7 @@
         // nested content blocks
         .widget-content {
             padding-top: 0;
-
-            > :last-child {
-                // nested (blocks)
-                margin-bottom: 0;
-            }
+            padding-bottom: 0;
         }
 
         // adjacent content blocks

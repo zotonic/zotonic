@@ -39,7 +39,7 @@ Maintaining the sitemap index
 
 The `seo_sitemap` model maintains an index of all pages (and their URLs) that are publicly readable.
 
-There is a button in the System > Status menu to rebuild the sitemap index. This is needed if there are (big) changes in
+There is a button in the Sitemap section of the SEO page to rebuild the sitemap index. This is needed if there are (big) changes in
 the access control affecting the publicly viewable pages or if languages are changed.
 
 If a resource is edited then all URLs of that resource are automatically added to the sitemap index tables.

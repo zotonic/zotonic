@@ -58,6 +58,7 @@ This module handles the following notifier callbacks:
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
      #menu_item{id=admin_statistics,
+                sort = 20,
                 parent=admin_system,
                 label=?__("Statistics", Context),
                 url={admin_statistics},

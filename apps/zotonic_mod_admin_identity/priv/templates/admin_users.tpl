@@ -106,4 +106,5 @@
     {% endwith %}
 
 {% endwith %}
+{% all include "_admin_authentication_maintenance.tpl" %}
 {% endblock %}

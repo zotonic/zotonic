@@ -209,4 +209,5 @@
 
     {% include "_admin_overview_bulk_actions.tpl" %}
 
+{% all include "_admin_media_maintenance.tpl" %}
 {% endblock %}

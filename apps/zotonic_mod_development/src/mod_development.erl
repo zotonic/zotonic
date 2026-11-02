@@ -1357,6 +1357,7 @@ livereload_page(Context) ->
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
      #menu_item{id=admin_development,
+                sort = 500,
                 parent=admin_system,
                 label=?__("Development", Context),
                 url={admin_development},

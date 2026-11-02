@@ -9,6 +9,8 @@
 </div>
 
 <div class="well">
+    {% button class="btn btn-default" text=_"Reload site configuration" action={admin_tasks task='reload_config'} %}
+    <p class="help-block">{_ Reload the site configuration files. Some changes require a restart. _}</p>
     {% button class="btn btn-primary" text=_"Make a new config setting" action={dialog_config_new on_success={reload}} %}
 </div>
 
