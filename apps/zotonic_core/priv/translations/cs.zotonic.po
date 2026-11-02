@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-02 09:32\n"
+"PO-Revision-Date: 2026-11-02 11:33\n"
 "Last-Translator: \n"
 "Language-Team: Czech\n"
 "MIME-Version: 1.0\n"
@@ -15425,21 +15425,21 @@ msgstr "Aktuální revize"
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:62
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:11
 msgid "Deploy"
-msgstr "Nasazení"
+msgstr "Nasadit"
 
 #: zotonic_mod_site_update/priv/templates/_admin_module_buttons.tpl:3
 #: zotonic_mod_site_update/priv/templates/_admin_status.tpl:4
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:2
 msgid "Deploy latest"
-msgstr "Nainstalovat nejnovější verzi"
+msgstr "Nasadit nejnovější verzi"
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:3
 msgid "Deploy latest Zotonic"
-msgstr "Nainstalujte nejnovější verzi Zotonicu"
+msgstr "Nasadit nejnovější verzi Zotonicu"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:176
 msgid "Deploy latest version"
-msgstr "Nainstalovat nejnovější verzi"
+msgstr "Nasadit nejnovější verzi"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:210
 msgid "Deploying the latest version..."
@@ -15459,7 +15459,7 @@ msgstr "Nasazení aktualizuje celý repozitář Git, včetně všech dalších m
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:6
 msgid "Fetching remote changes…"
-msgstr "Načtení změn ze vzdáleného serveru…"
+msgstr "Načítání změn ze vzdáleného serveru…"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:135
 msgid "Finished rebuilding Zotonic."
@@ -15467,7 +15467,7 @@ msgstr "Nové sestavení Zotonicu bylo dokončeno."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:32
 msgid "Incoming changes"
-msgstr "Připravované změny"
+msgstr "Příchozí změny"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:24
 msgid "No deployable version control repository was found."
@@ -15483,28 +15483,28 @@ msgstr "Znovu kompilovat změněné soubory Erlang na pozadí"
 
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
 msgid "Review and deploy the latest version of this site."
-msgstr "Zkontrolujte a nasadte nejnovější verzi tohoto webu."
+msgstr "Zkontrolujte a nasaďte nejnovější verzi tohoto webu."
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:5
 msgid "Review incoming changes and deploy the latest version of Zotonic"
-msgstr "Zkontrolujte chystané změny a nasadte nejnovější verzi Zotonicu"
+msgstr "Zkontrolujte příchozí změny a nasaďte nejnovější verzi Zotonicu"
 
 #: zotonic_mod_site_update/priv/templates/_admin_module_buttons.tpl:4
 msgid "Review incoming changes and deploy this module’s Git repository."
-msgstr "Zkontrolujte chystané změny a nasadte repozitář Git tohoto modulu."
+msgstr "Zkontrolujte příchozí změny a nasaďte repozitář Git tohoto modulu."
 
 #: zotonic_mod_site_update/priv/templates/_admin_status.tpl:5
 msgid "Review incoming changes before deploying the latest version."
-msgstr "Před nasazením nejnovější verze zkontrolujte chystané změny."
+msgstr "Před nasazením nejnovější verze zkontrolujte příchozí změny."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:2
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:3
 msgid "Review the latest version for {name}."
-msgstr "Podívejte se na nejnovější verzi na adrese {name}."
+msgstr "Zkontrolujte nejnovější verzi pro {name}."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:47
 msgid "Showing the most recent 100 incoming commits."
-msgstr "Zobrazuje posledních 100 příchozích commitů."
+msgstr "Zobrazuje se 100 nejnovějších příchozích commitů."
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:4
 msgid "Site update API token"
@@ -15524,11 +15524,11 @@ msgstr "Náhled nasazení není k dispozici. Zkontrolujte repozitář a protokol
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:53
 msgid "The local branch cannot be fast-forwarded to the remote version. Resolve the local commits before deploying."
-msgstr "Lokální větev nelze synchronizovat s verzí na vzdáleném serveru. Před nasazením je třeba vyřešit lokální revize."
+msgstr "Lokální větev nelze posunout na vzdálenou verzi pomocí fast-forward. Před nasazením vyřešte problémy s lokálními commity."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:50
 msgid "There are no incoming changes."
-msgstr "Nejsou žádné chystané změny."
+msgstr "Nejsou žádné příchozí změny."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:22
 msgid "This branch has no upstream configured. Configure its remote tracking branch before deploying."
