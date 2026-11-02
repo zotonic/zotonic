@@ -31,5 +31,17 @@
             </table>
 
         {% endwith %}
+        <hr>
+        {% if m.acl.is_admin %}
+            {% compose "_admin_maintenance_action.tpl" title=_"Excess connections" scope=_"All sites on this node" description=_"Close all sockets from IP addresses with more than 250 open sockets. This can disconnect clients on other sites." %}
+                {% block status %}
+                    <div id="admin-excess-sockets" aria-live="polite">{% include "_admin_status_excess_sockets.tpl" %}</div>
+                {% endblock %}
+                {% block action %}
+                    {% button class="btn btn-default" text=_"Close excess connections"
+                        action={confirm title=_"Close excess connections" text=_"Disconnect peers with more than 250 open sockets across all sites on this node?" is_danger action={admin_tasks task='close_sockets'}} %}
+                {% endblock %}
+            {% endcompose %}
+        {% endif %}
     </div>
 </div>

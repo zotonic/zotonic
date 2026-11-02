@@ -78,10 +78,14 @@ add new Erlang dependencies need more compilation and a system restart. So be ca
 Accepted Events
 ---------------
 
+The Modules page renders deployment-button placeholders without discovering repositories.
+A single `module_deployment_buttons` postback starts a background lookup and fills the
+applicable rows through page actions. Repository discovery retains its short cache;
+preview and deployment still resolve the repository and check permissions again.
 
 Delegate callbacks:
 
-- `event/2` with `postback` messages: `make`, `vcs_up` (open dialog), `vcs_preview` (fetch preview), `vcs_deploy` (confirmation).
+- `event/2` with `postback` messages: `make`, `module_deployment_buttons`, `vcs_up` (open dialog), `vcs_preview` (fetch preview), `vcs_deploy` (confirmation).
 
 ").
 -author("Marc Worrell <marc@worrell.nl>").
@@ -127,6 +131,15 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
     } | Acc].
 
 -spec event(#postback{}, z:context()) -> z:context().
+event(#postback{message = module_deployment_buttons}, Context) ->
+    case z_acl:is_admin(Context) of
+        true ->
+            AsyncContext = z_context:prune_for_async(Context),
+            z_proc:spawn_md(fun() -> module_deployment_buttons(AsyncContext) end),
+            Context;
+        false ->
+            Context
+    end;
 event(#postback{message = vcs_up}, Context) ->
     preview(current, Context);
 event(#postback{message = {vcs_up, Args}}, Context) ->
@@ -153,6 +166,20 @@ event(#postback{ message = make }, Context) ->
             z_render:growl_error(?__("Sorry this can only be run from the Zotonic status site", Context), Context)
     end.
 
+
+%% Discover repositories once, after the table is visible, and fill its placeholders.
+-spec module_deployment_buttons(z:context()) -> term().
+module_deployment_buttons(Context) ->
+    {ok, {Modules, []}} = m_site_update:m_get([<<"user_modules">>], undefined, Context),
+    Actions = [
+        {update, [
+            {target, <<"module-deploy-", (atom_to_binary(Module, utf8))/binary>>},
+            {template, "_admin_module_deploy_button.tpl"},
+            {module, Module}
+        ]}
+        || Module <- maps:keys(Modules)
+    ],
+    z_notifier:first(#page_actions{actions = Actions}, Context).
 
 %% Resolve repositories on the server, and recheck permissions on confirmation.
 resolve_target(current, Context) ->

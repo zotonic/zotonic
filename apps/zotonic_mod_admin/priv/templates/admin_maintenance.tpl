@@ -38,20 +38,22 @@
     <summary class="widget-header">{_ Advanced repair _}</summary>
     <div class="widget-content">
         <p>{_ Use these operations to repair installation data, not for routine maintenance. _}</p>
-        {% if m.acl.is_admin %}
-        <h4>{_ Network connections _} <small>{_ All sites on this node _}</small></h4>
-        <p>{_ Close all sockets from IP addresses with more than 250 open sockets. This can disconnect clients on other sites. _}</p>
-        {% button class="btn btn-default" text=_"Close excess connections"
-            action={confirm title=_"Close excess connections" text=_"Disconnect peers with more than 250 open sockets across all sites on this node?" is_danger action={admin_tasks task='close_sockets'}} %}
+        {% if m.acl.use.mod_admin_modules %}
+            <p>{_ Individual modules can be reinstalled from the Modules list. _} <a href="{% url admin_modules %}">{_ Open Modules list _}</a></p>
         {% endif %}
-        <h4>{_ Site datamodel _}</h4>
-        <p>{_ Run the site's schema installation again. The site will stop and restart. _}</p>
-        {% button class="btn btn-default" text=_"Reinstall site datamodel"
-            action={confirm title=_"Reinstall site datamodel" text=_"This runs the site's schema installation again and stops and restarts the site. Continue?" is_danger action={admin_tasks task='site_reinstall'}} %}
-        <h4>{_ Zotonic datamodel _}</h4>
-        <p>{_ Run the Zotonic core datamodel installation again for this site's database. _}</p>
-        {% button class="btn btn-default" text=_"Reinstall Zotonic datamodel"
-            action={confirm title=_"Reinstall Zotonic datamodel" text=_"Run the Zotonic core datamodel installation again for this site's database?" is_danger action={admin_tasks task='zotonic_reinstall'}} %}
+        {% compose "_admin_maintenance_action.tpl" title=_"Site datamodel" description=_"Run the site's schema installation again. The site will stop and restart." %}
+            {% block action %}
+                {% button class="btn btn-default" text=_"Reinstall site datamodel"
+                    action={confirm title=_"Reinstall site datamodel" text=_"This runs the site's schema installation again and stops and restarts the site. Continue?" is_danger action={admin_tasks task='site_reinstall'}} %}
+            {% endblock %}
+        {% endcompose %}
+        <hr>
+        {% compose "_admin_maintenance_action.tpl" title=_"Zotonic datamodel" description=_"Run the Zotonic core datamodel installation again for this site's database." %}
+            {% block action %}
+                {% button class="btn btn-default" text=_"Reinstall Zotonic datamodel"
+                    action={confirm title=_"Reinstall Zotonic datamodel" text=_"Run the Zotonic core datamodel installation again for this site's database?" is_danger action={admin_tasks task='zotonic_reinstall'}} %}
+            {% endblock %}
+        {% endcompose %}
     </div>
 </details>
 {% endblock %}

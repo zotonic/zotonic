@@ -42,6 +42,7 @@ Available Model API Paths
 | `get` | `/files_dir/...` | Return the site files base directory derived from `z_path:files_subdir/2`. |
 | `get` | `/tcp_connection_count/...` | Return the current number of open TCP sockets (`recon:tcp/0`). |
 | `get` | `/group_sockets/...` | Return open TCP sockets grouped by peer IP with counts and ports. |
+| `get` | `/excess_sockets/...` | Return peer IP addresses with more than 250 open TCP sockets (admin only). |
 | `get` | `/code_update/...` | Return node-wide update activity, blocked state and restart requirement (admin-only); excludes raw failure details. |
 | `get` | `/listeners/...` | Return network listener bindings, status and connection counts (admin-only). Missing listeners include explicitly marked configured bindings. |
 | `get` | `/memory/used/...` | Return memory usage grouped by allocator (`recon_alloc:memory(used)`). |
@@ -147,6 +148,10 @@ m_get_1([ <<"tcp_connection_count">> | Rest ], _Msg, _Context) ->
 
 m_get_1([ <<"group_sockets">> | Rest ], _Msg, _Context) ->
     {ok, {group_sockets(), Rest}};
+
+m_get_1([ <<"excess_sockets">> | Rest ], _Msg, _Context) ->
+    Peers = [Peer || [{count, Count} | _] = Peer <- group_sockets(), Count > 250],
+    {ok, {Peers, Rest}};
 
 m_get_1([ <<"memory">>, <<"used">> | Rest ], _Msg, _Context) ->
     {ok, {recon_alloc:memory(used), Rest}};
