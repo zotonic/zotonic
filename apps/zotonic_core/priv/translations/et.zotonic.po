@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-02 09:32\n"
+"PO-Revision-Date: 2026-11-02 11:33\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -15369,7 +15369,7 @@ msgstr "Teie registreerimiskood"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:223
 msgid "Another deployment is in progress. Please try again when it finishes."
-msgstr "Hetkel on käimas järjekordne kasutuselevõtt. Palun proovi uuesti, kui see on lõppenud."
+msgstr "Teine kasutuselevõtt on pooleli. Palun proovige uuesti, kui see on lõppenud."
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:137
 msgid "Building Zotonic in the background..."
@@ -15377,35 +15377,35 @@ msgstr "Zotonicu ehitamine taustal ..."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:26
 msgid "Could not fetch the remote change log. Check the remote connection and try again."
-msgstr "Kaugmuudatuste logi ei õnnestunud alla laadida. Kontrolli kaugühendust ja proovi uuesti."
+msgstr "Kaughoidla muudatuste logi ei õnnestunud hankida. Kontrollige kaugühendust ja proovige uuesti."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:9
 msgid "Current commit"
-msgstr "Praegune muudatus"
+msgstr "Praegune commit"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:60
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:62
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:11
 msgid "Deploy"
-msgstr "Kasutusele võtmine"
+msgstr "Võtke kasutusele"
 
 #: zotonic_mod_site_update/priv/templates/_admin_module_buttons.tpl:3
 #: zotonic_mod_site_update/priv/templates/_admin_status.tpl:4
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:2
 msgid "Deploy latest"
-msgstr "Paigalda uusim versioon"
+msgstr "Võtke kasutusele uusim versioon"
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:3
 msgid "Deploy latest Zotonic"
-msgstr "Paigalda uusim Zotonic"
+msgstr "Võtke kasutusele Zotonicu uusim versioon"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:176
 msgid "Deploy latest version"
-msgstr "Paigalda uusim versioon"
+msgstr "Võtke kasutusele uusim versioon"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:210
 msgid "Deploying the latest version..."
-msgstr "Viimase versiooni paigaldamine..."
+msgstr "Uusima versiooni kasutuselevõtt..."
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:221
 msgid "Deployment completed."
@@ -15417,11 +15417,11 @@ msgstr "Kasutuselevõtt ebaõnnestus. Täpsema teabe saamiseks vaadake serveri l
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:5
 msgid "Deployment updates the entire Git repository, including any other modules it contains."
-msgstr ""
+msgstr "Kasutuselevõtt uuendab kogu Git-hoidlat, sealhulgas kõiki selles sisalduvaid muid mooduleid."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:6
 msgid "Fetching remote changes…"
-msgstr ""
+msgstr "Kaughoidla muudatuste hankimine…"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:135
 msgid "Finished rebuilding Zotonic."
@@ -15429,11 +15429,11 @@ msgstr "Zotonicu uuesti kompileerimine lõpetatud."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:32
 msgid "Incoming changes"
-msgstr ""
+msgstr "Saabuvad muudatused"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:24
 msgid "No deployable version control repository was found."
-msgstr ""
+msgstr "Ei leitud versioonihalduse hoidlat, mida saaks kasutusele võtta."
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:12
 msgid "Rebuild Zotonic"
@@ -15445,28 +15445,28 @@ msgstr "Muudetud Erlangi failide kompileerimine taustal"
 
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
 msgid "Review and deploy the latest version of this site."
-msgstr ""
+msgstr "Vaadake üle ja võtke kasutusele selle veebisaidi uusim versioon."
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:5
 msgid "Review incoming changes and deploy the latest version of Zotonic"
-msgstr ""
+msgstr "Vaadake üle saabuvad muudatused ja võtke kasutusele Zotonicu uusim versioon"
 
 #: zotonic_mod_site_update/priv/templates/_admin_module_buttons.tpl:4
 msgid "Review incoming changes and deploy this module’s Git repository."
-msgstr ""
+msgstr "Vaadake üle saabuvad muudatused ja võtke kasutusele selle mooduli Git-hoidla."
 
 #: zotonic_mod_site_update/priv/templates/_admin_status.tpl:5
 msgid "Review incoming changes before deploying the latest version."
-msgstr ""
+msgstr "Enne uusima versiooni kasutuselevõttu vaadake üle saabuvad muudatused."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:2
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:3
 msgid "Review the latest version for {name}."
-msgstr ""
+msgstr "Vaadake üle uusim versioon: {name}."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:47
 msgid "Showing the most recent 100 incoming commits."
-msgstr ""
+msgstr "Näidatakse 100 uusimat saabuvat commit’i."
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:4
 msgid "Site update API token"
@@ -15482,19 +15482,19 @@ msgstr "Kahjuks saab seda käivitada ainult Zotonicu staatuse saidilt"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:28
 msgid "The deployment preview is unavailable. Check the repository and server log, then try again."
-msgstr ""
+msgstr "Kasutuselevõtu eelvaade ei ole kättesaadav. Kontrollige hoidlat ja serveri logi ning proovige uuesti."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:53
 msgid "The local branch cannot be fast-forwarded to the remote version. Resolve the local commits before deploying."
-msgstr ""
+msgstr "Kohalikku haru ei saa fast-forward-meetodil kaugversioonini uuendada. Lahendage enne kasutuselevõttu kohalike commit’idega seotud probleemid."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:50
 msgid "There are no incoming changes."
-msgstr ""
+msgstr "Saabuvaid muudatusi ei ole."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:22
 msgid "This branch has no upstream configured. Configure its remote tracking branch before deploying."
-msgstr ""
+msgstr "Sellel harul pole upstream-haru seadistatud. Seadistage enne kasutuselevõttu jälgitav kaugharu."
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
 msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
@@ -15508,7 +15508,7 @@ msgstr "Veebihaagi kaudu uuendamiseks seadistage teenus saatma POST-päringu jä
 #: zotonic_mod_site_update/src/mod_site_update.erl:180
 #: zotonic_mod_site_update/src/mod_site_update.erl:215
 msgid "You are not allowed to deploy this code."
-msgstr ""
+msgstr "Seda koodi ei tohi kasutusele võtta."
 
 #: zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:4
 msgid "Certificate Authority"
