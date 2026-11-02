@@ -4,7 +4,7 @@
 			delegate=`mod_admin_predicate`
 	%}
 	<form id="{{ #delete }}" action="postback" type="post">
-		<p>{_ Are you sure you want to delete _} “{{ id.title }}”?</p>
+		<p>{% trans "Are you sure you want to delete the predicate “{title}”?" title=id.title|escape %}</p>
 
 		<p>{_ Change the predicate on all existing page connections to: _}</p>
 
@@ -28,7 +28,7 @@
 
 		<div class="modal-footer">
 			{% button tag="a" class="btn btn-default" text=_"Cancel" action={dialog_close} %}
-			{% button type="submit" class="btn btn-primary" text=_"Delete &amp; Change Connections" %}
+			{% button type="submit" class="btn btn-primary" text=_"Delete predicate and update connections" %}
 			{% button tag="a"
 					  class="btn btn-danger pull-left"
 					  text=_"Delete All Connections"
@@ -38,7 +38,7 @@
 		</div>
 	</form>
 {% else %}
-	<p>{_ Are you sure you want to delete _} “{{ id.title }}”?</p>
+	<p>{% trans "Are you sure you want to delete the predicate “{title}”?" title=id.title|escape %}</p>
 
 	<p>{_ There are no page connections with this predicate. _}</p>
 

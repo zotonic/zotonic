@@ -54,7 +54,7 @@
 </div>
 
 <details class="form-group">
-    <summary>{_ Export fields _}</summary>
+    <summary>{_ Fields to export _}</summary>
     <p class="help-block">
         {_ Define which fields (columns) should be exported. One field expression per line. _}
         {_ Leave this empty for a default set of fields. _}
@@ -62,8 +62,8 @@
     </p>
 
     <div class="form-group label-floating">
-        <textarea class="form-control" name="export_fields" rows="15" placeholder="{_ Export fields _}">{{ id.export_fields }}</textarea>
-        <label class="control-label" for="export_fields">{_ Export fields _}</label>
+        <textarea class="form-control" name="export_fields" rows="15" placeholder="{_ Fields to export _}">{{ id.export_fields }}</textarea>
+        <label class="control-label" for="export_fields">{_ Fields to export _}</label>
     </div>
 </details>
 

@@ -41,7 +41,7 @@
 
         <section class="col-md-4">
             <div class="panel panel-default">
-                <div class="panel-heading"><h2 class="panel-title">{_ Donut chart with map data _}</h2></div>
+                <div class="panel-heading"><h2 class="panel-title">{_ Donut chart with data from an Erlang map _}</h2></div>
                 <div class="panel-body">
                     {% chart type="donut"
                              title=_"Work items"
@@ -127,7 +127,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading"><h2 class="panel-title">{_ Single value _}</h2></div>
                 <div class="panel-body">
-                    {% chart_donut title=_"Completion" data=[[ _"Complete", 100]] height=220 %}
+                    {% chart_donut title=_"Completion" data=[[ _"Completed", 100]] height=220 %}
                 </div>
             </div>
         </section>
@@ -150,7 +150,7 @@
                         <thead>
                             <tr>
                                 <th scope="col">{_ Browser _}</th>
-                                <th scope="col">{_ Share _}</th>
+                                <th scope="col">{_ Market share _}</th>
                             </tr>
                         </thead>
                         <tbody>

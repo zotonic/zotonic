@@ -122,7 +122,6 @@
             </div>
 
             {% all include "_admin_system_status.tpl" %}
-            {% include "_admin_status_media.tpl" %}
         </div>
 
         <div class="col-md-6">
@@ -179,8 +178,24 @@
                     </p>
                 </div>
             </div>
+            {% include "_admin_status_media.tpl" %}
         </div>
     </div>
+
+    {% if m.acl.is_admin %}
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="widget">
+                    <div class="widget-header">{_ Network listeners _}</div>
+                    <div class="widget-content">
+                        <div id="admin-status-listeners" aria-live="polite">
+                            {% include "_admin_status_listeners.tpl" %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 
     {% include "_admin_status_update_pivot_count.tpl" %}
 

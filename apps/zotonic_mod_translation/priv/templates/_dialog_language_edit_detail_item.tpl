@@ -41,7 +41,7 @@ languages
             {% endif %}
             {% if language.script %}
                 <tr>
-                    <td>{_ Script _}</td>
+                    <td>{_ Writing system _}</td>
                     <td>{{ language.script }}</td>
                 </tr>
             {% endif %}

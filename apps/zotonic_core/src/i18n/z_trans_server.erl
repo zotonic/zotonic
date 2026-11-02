@@ -110,8 +110,9 @@ handle_call(Message, _From, State) ->
 %% Trans is a map with all translations per translatable string.
 handle_cast({load_translations, Trans}, State) ->
     F = fun(Key, Value, Acc) ->
-            Value1 = case proplists:get_value(en, Value) of
-                undefined -> [{en,Key}|Value];
+            Value1 = case {Key, proplists:get_value(en, Value)} of
+                {{context, _, _}, _} -> Value;
+                {_, undefined} -> [{en,english_source(Key)}|Value];
                 _ -> Value
             end,
             [{Key,Value1}|Acc]
@@ -150,6 +151,10 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+english_source({plural, Singular, Plural}) ->
+    {template_compiler_plural:english(), {Singular, Plural}};
+english_source(Key) -> Key.
 
 
 %% @doc Sync a list of translations to the ets table containing all translations

@@ -148,7 +148,12 @@ in_categories(Ids, Context) when is_list(Ids) ->
 delete_all([], _N, _Total, _Context) ->
     ok;
 delete_all([Id|Ids], N, Total, Context) ->
-    case catch m_rsc:delete(Id, Context) of
+    case try m_rsc:delete(Id, Context)
+    catch
+        throw:CatchReason -> CatchReason;
+        exit:CatchReason -> {'EXIT', CatchReason};
+        error:CatchReason:CatchStack -> {'EXIT', {CatchReason, CatchStack}}
+    end of
         ok ->
             maybe_progress(N, N+1, Total, Context),
             delete_all(Ids, N+1, Total, Context);

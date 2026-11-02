@@ -8,7 +8,11 @@
 {% endblock %}
 
 {% block title %}
-{{ m.rsc.page_logon.title|default:[_"Log in to", " ", m.site.title|default:"Zotonic"] }}
+{% if m.rsc.page_logon.title %}
+    {{ m.rsc.page_logon.title|escape }}
+{% else %}
+    {% trans "Log in to {site}" site=m.site.title|default:"Zotonic"|escape %}
+{% endif %}
 {% endblock %}
 
 {% block html_attr %}

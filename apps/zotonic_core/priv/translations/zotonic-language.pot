@@ -17,6 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
 msgid ""
 "Abkhazian"
@@ -2129,6 +2130,11 @@ msgstr ""
 ""
 
 msgid ""
+"Luba-Katanga"
+msgstr ""
+""
+
+msgid ""
 "Luba-Lulua"
 msgstr ""
 ""
@@ -4149,12 +4155,12 @@ msgstr ""
 ""
 
 msgid ""
-"Tonga"
+"Tonga (Zambia)"
 msgstr ""
 ""
 
 msgid ""
-"Tonga (Zambia)"
+"Tongan"
 msgstr ""
 ""
 
@@ -4165,11 +4171,6 @@ msgstr ""
 
 msgid ""
 "Toraja-Sa'dan"
-msgstr ""
-""
-
-msgid ""
-"Tshiluba"
 msgstr ""
 ""
 

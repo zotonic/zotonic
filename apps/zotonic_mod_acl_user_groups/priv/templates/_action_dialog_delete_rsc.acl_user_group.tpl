@@ -28,7 +28,7 @@
 			{% validate id=#cgid name="acl_user_group_id" type={presence} %}
 		</div>
 
-		<p>{_ Or click <strong>Delete</strong> to disconnect all users and delete the user listed groups. _}</p>
+		<p>{_ Or click <strong>Delete</strong> to disconnect all users and delete the listed user groups. _}</p>
 
 		<p>{_ This can not be undone. _}</p>
 

@@ -13,5 +13,5 @@
     {% endif %}
 
 {% else %}
-    <h2 class="z-logon-title">{_ Log in to _} {{ m.site.title|default:"Zotonic" }}</h2>
+    <h2 class="z-logon-title">{% trans "Log in to {site}" site=m.site.title|default:"Zotonic"|escape %}</h2>
 {% endif %}

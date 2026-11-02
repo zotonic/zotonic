@@ -3,6 +3,11 @@
 {% block title %}{_ Cloud File Store Configuration _}{% endblock %}
 
 {% block content %}
+    {% if m.filestore.is_read_only %}
+        <p class="alert alert-info" role="status">{_ The cloud file store is read-only. Downloads are available; uploads, remote deletion and write-based settings tests are disabled. _}</p>
+    {% endif %}
+    {% include "_filestore_health.tpl" %}
+    {% include "_filestore_prolonged_errors.tpl" %}
     <div class="admin-header">
         <h2>{_ Cloud File Store Configuration _}</h2>
 
@@ -39,6 +44,12 @@
                                 <td>{_ S3 Cloud Location _}</td>
                                 <td><b>{{ m.filestore.s3url|escape }}</b></td>
                             </tr>
+                            {% if m.filestore.service == "s3" %}
+                                <tr>
+                                    <td>{_ S3 region _}</td>
+                                    <td><b>{{ m.filestore.s3region|default:_"Not set (Signature V2)"|escape }}</b></td>
+                                </tr>
+                            {% endif %}
                             <tr>
                                 <td>{_ Is upload enabled? _}</td>
                                 <td><b>{{ m.filestore.is_upload_enabled|if:_"Yes":_"No" }}</b></td>
@@ -56,7 +67,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>{_ Delete interval _}</td>
+                                <td>{_ Extra deletion delay _}</td>
                                 <td>
                                     <b>
                                         {% if m.filestore.delete_interval == '0' %}
@@ -74,7 +85,7 @@
                         <p id="s3error" class="alert alert-danger" style="display:none">{_ Could not access the service, double check your settings and try again. Make sure that API key has access rights to create and remove a (temporary) <code>-zotonic-filestore-test-file-</code> file. _}</p>
 
                         <p>
-                            <button type="button" id="s3testcred" class="btn btn-primary">{_ Test Cloud File Store Settings _}</button>
+                            <button type="button" id="s3testcred" class="btn btn-primary" {% if m.filestore.is_read_only %}disabled{% endif %}>{_ Test Cloud File Store Settings _}</button>
                             {% wire id="s3testcred"
                                     postback={admin_filestore_test_credentials}
                                     delegate=`filestore_admin`
@@ -109,6 +120,24 @@
                                 </p>
                             </div>
 
+                            <div class="form-group" id="s3region-group">
+                                <label class="control-label" for="s3region">{_ S3 region _}</label>
+                                <input type="text" id="s3region" name="s3region" value="{{ m.filestore.s3region|escape }}"
+                                    class="form-control" placeholder="eu-west-1" aria-describedby="s3region-help" />
+                                <p class="help-block" id="s3region-help">
+                                    {_ Enter the region supplied by your storage provider to use Signature V4. Leave empty to use legacy Signature V2. _}
+                                </p>
+                            </div>
+                            {% javascript %}
+                                const filestoreUrl = document.getElementById("s3url");
+                                const regionGroup = document.getElementById("s3region-group");
+                                const updateRegionVisibility = () => {
+                                    regionGroup.hidden = !/^https?:\/\//.test(filestoreUrl.value.trim());
+                                };
+                                filestoreUrl.addEventListener("input", updateRegionVisibility);
+                                updateRegionVisibility();
+                            {% endjavascript %}
+
                             <div class="form-group">
                                 <label class="control-label" for="s3key">{_ S3 API Key or FTP/WebDAV username_}</label>
                                 <input type="text" id="s3key" name="s3key" value="{{ m.filestore.s3key|escape }}" class="form-control" />
@@ -116,7 +145,10 @@
 
                             <div class="form-group">
                                 <label class="control-label" for="s3secret">{_ S3 API Secret or FTP/WebDAV password _}</label>
-                                <input type="password" id="s3secret" name="s3secret" value="{{ m.filestore.s3secret|escape }}" class="form-control" />
+                                <div class="input-group">
+                                    <input type="password" id="s3secret" name="s3secret" value="{{ m.filestore.s3secret|escape }}" class="form-control" />
+                                    {% include "_password_visibility.tpl" target_id="s3secret" %}
+                                </div>
                             </div>
 
                             <div class="form-group">
@@ -166,9 +198,9 @@
                                 </div>
                             </div>
 
-                            <p class="help-block">{_ Before the settings are saved they will be checked by uploading (and removing) a small file. _}</p>
+                            <p class="help-block">{% if m.filestore.is_read_only %}{_ Settings are saved without a write test while the file store is read-only. Verify access by downloading an existing file. _}{% else %}{_ Before the settings are saved they will be checked by uploading (and removing) a small file. _}{% endif %}</p>
 
-                            <p id="s3ok" class="alert alert-success" style="display:none">{_ Settings are working fine and are saved. _}</p>
+                            <p id="s3ok" class="alert alert-success" style="display:none">{% if m.filestore.is_read_only %}{_ Settings saved without a write test. _}{% else %}{_ Settings are working fine and are saved. _}{% endif %}</p>
                             <p id="s3error" class="alert alert-danger" style="display:none">{_ Could not access the service, double check your settings and try again. Make sure that API key has access rights to create and remove a (temporary) <code>-zotonic-filestore-test-file-</code> file. _}</p>
 
                             <div class="form-group">
@@ -216,7 +248,7 @@
                                         <th></th>
                                         <th><br>{_ Upload Queue _}</th>
                                         <th><br>{_ Download Queue _}</th>
-                                        <th><br>{_ Delete Queue_}</th>
+                                        <th><br>{_ Deletion queue _}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -248,7 +280,7 @@
 
                         <div class="form-group">
                             <div>
-                                <button id="queue-all" name="queue-all" type="submit" class="btn btn-danger">
+                                <button id="queue-all" name="queue-all" type="submit" class="btn btn-danger" {% if m.filestore.is_read_only %}disabled{% endif %}>
                                     {% if m.filestore.is_local_keep %}
                                         {_ Copy all local files to the remote storage _}
                                         {% wire id="queue-all"

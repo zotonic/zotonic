@@ -12,7 +12,7 @@
 		{% if not status.is_blocked %}
 			<a href="#" class="btn btn-danger btn-small pull-right" id="{{ #doblock }}"
 			   title="{_ Prevent sending email to, and receiving email from this address. _}">
-				{_ Block _}
+				{_ Block email address _}
 			</a>
 			{% if panel_id %}
 				{% wire id=#doblock
@@ -44,7 +44,7 @@
 				<strong>
 					{_ Blocked _}
 				</strong>
-				{_ This email address has been blocked, no emails will be sent or received from this address. _}
+				{_ This email address has been blocked. No emails will be sent to or received from this address. _}
 			</p>
 		{% else %}
 			<p>
@@ -222,7 +222,7 @@
 								{% if is_allow_details %}
 									<th>{_ Template _}</th>
 								{% endif %}
-								<th>{_ From _}</th>
+								<th>{_ Sender _}</th>
 								<th>{_ Date _}</th>
 							</tr>
 						</thead>
@@ -257,7 +257,7 @@
 									{% if is_allow_details and log.mailer_message %}
 										<tr>
 											<td colspan="{% if is_allow_details %}4{% else %}3{% endif %}" style="border-top: 0; padding-top: 0; padding-left:2em;" class="text-muted">
-												<b>{_ Mailer message _}:</b> {{ log.mailer_message|escape }}
+												<b>{_ Mail server message _}:</b> {{ log.mailer_message|escape }}
 											</td>
 										</tr>
 									{% endif %}

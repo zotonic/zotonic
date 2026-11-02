@@ -4,7 +4,7 @@
         <div class="col-md-6">
             <section class="widget" aria-labelledby="feed-settings-heading">
                 <div class="widget-header" id="feed-settings-heading" role="heading" aria-level="3">
-                    {_ Import settings _}
+                    {_ Settings for importing _}
                 </div>
                 <div class="widget-content">
                     {% wire id="feed-settings" type="submit" postback={save id=feed.id is_zotonic_feed=feed.is_zotonic_feed} delegate=`mod_import_feed` %}
@@ -12,7 +12,7 @@
                         <input type="hidden" name="url" value="{{ feed.url|escape }}">
                         <p>{{ feed.url|escape }}</p>
                         <div class="form-group">
-                            <label>{_ Import user _}</label>
+                            <label>{_ User account for imports _}</label>
                             <div id="feed-import-user">
                                 {% if feed.id %}
                                     {% include "_admin_import_feed_user.tpl" user_id=feed.user_id %}
@@ -120,7 +120,7 @@
                                         {_ Also subscribe imported connections for updates _}
                                     </label>
                                 </div>
-                                <p class="help-block">{_ Subscriptions require a source that supports updates and non-authoritative imports. _}</p>
+                                <p class="help-block">{_ Subscriptions require non-authoritative imports and a source that supports updates. _}</p>
                             {% else %}
                                 <input type="hidden" name="is_subscribe" value="{% if feed.is_subscribe %}1{% else %}0{% endif %}">
                                 <input type="hidden" name="is_subscribe_connections" value="{% if feed.is_subscribe_connections %}1{% else %}0{% endif %}">
@@ -144,6 +144,10 @@
                             <p class="help-block">{_ Publisher refresh hints and retries after failures can extend this interval. Successful fetches reset failure backoff. _}</p>
                         </div>
 
+                        <div class="checkbox">
+                            <label><input type="checkbox" name="import_all_pages" value="1" {% if feed.import_all_pages %}checked{% endif %}> {_ Import all pages on the initial import _}</label>
+                            <p class="help-block">{_ Warning: this can import large amounts of articles and media. By default, only the first page is imported initially. _}</p>
+                        </div>
                         <div class="checkbox">
                             <label>
                                 <input id="feed-use-wordpress" type="checkbox" name="use_wordpress" value="1" {% if feed.use_wordpress %}checked{% endif %} {% if feed.is_zotonic_feed %}disabled{% endif %}>

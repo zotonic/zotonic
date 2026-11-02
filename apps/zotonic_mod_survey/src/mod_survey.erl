@@ -654,7 +654,7 @@ observe_admin_edit_blocks(#admin_edit_blocks{id=Id}, Menu, Context) ->
                     {survey_likert, ?__("Likert", Context)},
                     {survey_thurstone, ?__("Thurstone", Context)},
                     {survey_category, ?__("Category", Context)},
-                    {survey_matching, ?__("Matching", Context)},
+                    {survey_matching, ?__("Matching question", Context)},
                     {survey_narrative, ?__("Narrative", Context)},
                     {survey_short_answer, ?__("Short answer", Context)},
                     {survey_long_answer, ?__("Long answer", Context)},

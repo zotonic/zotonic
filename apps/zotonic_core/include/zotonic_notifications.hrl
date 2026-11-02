@@ -247,7 +247,8 @@
 %% Type: first
 %% Return: a URL or ``undefined``
 -record(signup_confirm_redirect, {
-    id :: m_rsc:resource()
+    id :: m_rsc:resource(),
+    request_page = undefined :: undefined | binary()
 }).
 
 %% @doc Notification to signal an inserted comment.

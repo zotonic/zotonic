@@ -10,4 +10,9 @@
 #
 # You can start Zotonic in the Zotonic container using: "./start.sh"
 
+# Explicit overrides win; otherwise build as the user starting the container.
+ZOTONIC_UID=${ZOTONIC_UID:-$(id -u)}
+ZOTONIC_GID=${ZOTONIC_GID:-$(id -g)}
+export ZOTONIC_UID ZOTONIC_GID
+
 NO_PROXY=* docker compose -f ./docker-compose.yml run --service-ports zotonic sh

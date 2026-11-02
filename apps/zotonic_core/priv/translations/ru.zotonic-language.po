@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-06-30 09:59\n"
+"PO-Revision-Date: 2026-10-31 20:08\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -1282,6 +1282,9 @@ msgstr "Ломве"
 msgid "Lozi"
 msgstr "Лози"
 
+msgid "Luba-Katanga"
+msgstr "луба-катанга"
+
 msgid "Luba-Lulua"
 msgstr "Люба-Лулуа"
 
@@ -2494,20 +2497,17 @@ msgstr "Тобагонский креольский английский"
 msgid "Tolaki"
 msgstr "Толаки"
 
-msgid "Tonga"
-msgstr "Тонго"
-
 msgid "Tonga (Zambia)"
 msgstr "Тонга (Замбия)"
+
+msgid "Tongan"
+msgstr "тонганский"
 
 msgid "Tooro"
 msgstr "Тооро"
 
 msgid "Toraja-Sa'dan"
 msgstr "Тораджа-Са'дан"
-
-msgid "Tshiluba"
-msgstr "Тшилуба"
 
 msgid "Tsimihety Malagasy"
 msgstr "Цимихети Малагасийский"

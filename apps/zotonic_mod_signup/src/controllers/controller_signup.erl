@@ -147,7 +147,10 @@ contains a `signup_confirm` URL with the identity verification key.
 The confirmation controller looks up the identity by verification key, publishes
 the user resource, marks the account and identity as verified, emits
 `#signup_confirm{id=UserId}`, logs the user on, and redirects to the first
-`#signup_confirm_redirect{}` result or to the user's page.
+`#signup_confirm_redirect{}` result, the destination saved at signup, or the user's
+page (falling back to home). Both signup paths use `m_signup:confirm_redirect/2`.
+The first form resolves `#reload` to the browser's path and query before carrying
+the destination through the remaining steps.
 
 ").
 -author("Marc Worrell <marc@worrell.nl>").
@@ -181,11 +184,7 @@ moved_temporarily(Context) ->
         false -> []
     end,
     Page = get_redirect_page(SignupProps, z_context:get_q(<<"p">>, Context)),
-    Page1 = case z_utils:is_empty(Page) of
-        true -> m_rsc:p(z_acl:user(Context), <<"page_url">>, Context);
-        false -> Page
-    end,
-    {{true, Page1}, Context}.
+    {{true, m_signup:confirm_redirect(Page, Context)}, Context}.
 
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     z_context:logger_md(Context),
@@ -376,7 +375,14 @@ normalize_username(undefined) ->
 normalize_username(Username) ->
     z_string:to_lower(z_string:trim(Username)).
 
-event(#submit{ message={signup_email_step1, Args} }, Context) ->
+event(#submit{ message={signup_email_step1, Args0} }, Context) ->
+    % Only use the browser's current URL when the caller requested a reload.
+    Page0 = case proplists:get_value(page, Args0) of
+        <<"#reload">> -> z_context:get_q(<<"signup_page">>, Context);
+        RequestedPage -> RequestedPage
+    end,
+    Page1 = m_signup:normalize_redirect(Page0, Context),
+    Args = lists:keystore(page, 1, Args0, {page, Page1}),
     Props = proplists:get_value(props, Args, #{}),
     SignupProps = proplists:get_value(signup_props, Args, []),
     Email = case Props of
@@ -840,10 +846,8 @@ signup(Props, SignupProps, Page, Context) ->
         {ok, NewUserId} ->
             ensure_published(NewUserId, z_acl:sudo(Context)),
             {ok, ContextUser} = z_auth:logon(NewUserId, Context),
-            Location = case get_redirect_page(SignupProps, Page) of
-                <<>> -> m_signup:confirm_redirect(ContextUser);
-                Url -> Url
-            end,
+            Location = m_signup:confirm_redirect(
+                get_redirect_page(SignupProps, Page), ContextUser),
             % Post a onetime-token to the auth worker on the page
             % The auth worker will exchange it for a valid cookie and then perform
             % the redirect to the url.
@@ -888,6 +892,11 @@ signup(Props, SignupProps, Page, Context) ->
 get_redirect_page(SignupProps, Page) ->
     case z_string:trim(z_convert:to_binary(proplists:get_value(ready_page, SignupProps))) of
         <<>> -> z_string:trim(z_convert:to_binary(Page));
+        <<"#reload">> ->
+            case z_string:trim(z_convert:to_binary(Page)) of
+                <<>> -> <<"#reload">>;
+                ResolvedPage -> ResolvedPage
+            end;
         ReadyPage -> ReadyPage
     end.
 

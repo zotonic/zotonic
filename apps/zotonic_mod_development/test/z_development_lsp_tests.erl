@@ -94,7 +94,11 @@ multiple_changes_test() ->
     {_, Rejected} = z_development_lsp:handle(notify(<<"textDocument/didChange">>, Bad), S1, Remote),
     ?assertEqual(#{}, maps:get(documents, Rejected)).
 
-automatic_conflicting_sites_test() ->
+automatic_conflicting_sites_test_() ->
+    z_test_support:isolated(fun automatic_conflicting_sites/0).
+
+%% Site-manager mocks must not replace callbacks used by live sandbox workers.
+automatic_conflicting_sites() ->
     Modules = [z_sites_manager, z_module_manager, z_module_indexer, z_development_template],
     lists:foreach(fun(M) -> meck:new(M, [non_strict]) end, Modules),
     try
@@ -136,7 +140,10 @@ automatic_conflicting_sites_test() ->
         lists:foreach(fun meck:unload/1, Modules)
     end.
 
-cursor_only_resolution_test() ->
+cursor_only_resolution_test_() ->
+    z_test_support:isolated(fun cursor_only_resolution/0).
+
+cursor_only_resolution() ->
     Modules = [z_sites_manager, z_module_manager, z_module_indexer, z_development_editor, z_development_lsp_docs],
     lists:foreach(fun(M) -> meck:new(M, [non_strict]) end, Modules),
     try

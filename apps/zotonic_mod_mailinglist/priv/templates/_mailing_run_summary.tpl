@@ -7,7 +7,7 @@
 {% if stats.selected %}
 <div class="mailing-run-progress">
     <progress value="{{ stats.processed }}" max="{{ stats.selected }}" aria-label="{_ Mailing progress _}"></progress>
-    <span>{{ stats.processed|format_number }} / {{ stats.selected|format_number }} {_ emails processed _} <strong>{{ stats.percent }}%</strong></span>
+    <span>{% trans "Emails processed: {processed} / {selected}" processed=stats.processed|format_number selected=stats.selected|format_number %} <strong>{{ stats.percent }}%</strong></span>
 </div>
 {% endif %}
 

@@ -115,26 +115,20 @@ run(Caller, Ref, Root, Operation, Context) ->
 %% @doc Return live or cached progress, marking an interrupted worker as failed.
 -spec status(Id, Context) -> map() when Id :: m_rsc:resource_id() | binary(), Context :: z:context().
 status(Root, Context) ->
-    Live = try gproc:lookup_value(root_key(Root, Context))
-        catch error:badarg -> undefined end,
-    State = case Live of
-        S when is_map(S) ->
-            S;
+    %% Read the owner and progress together. A second registry lookup after reading
+    %% progress can see a completed worker disappear and misclassify it as failed.
+    case gproc:lookup_values(root_key(Root, Context)) of
+        [{_Pid, State}] when is_map(State) ->
+            State;
         _ ->
+            %% The worker stores its final result before unregistering. Discard any
+            %% process-local snapshot before reading that result from the shared cache.
+            z_depcache:flush_process_dict(),
             case z_depcache:get({?MODULE, Root}, Context) of
-                {ok, Cached} -> Cached;
-                undefined -> #{ state => idle, root => Root }
+                {ok, #{state := running} = State} -> State#{state => failed};
+                {ok, State} -> State;
+                undefined -> #{state => idle, root => Root}
             end
-    end,
-    case State of
-        #{state := running} ->
-            %% Registry cleanup is asynchronous after a killed worker.
-            Pid = z_proc:whereis({?MODULE, Root}, Context),
-            case is_pid(Pid) andalso is_process_alive(Pid) of
-                true -> State;
-                false -> State#{ state => failed }
-            end;
-        _ -> State
     end.
 
 %% @doc Build the site-local process registry key for a tree job and its live progress.

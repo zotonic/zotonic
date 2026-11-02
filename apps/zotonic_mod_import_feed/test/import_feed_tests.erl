@@ -23,6 +23,7 @@
 -export([
     start_dependencies/0,
     oldest_first_check/0,
+    calendar_prepare_check/0,
     rss_full_content_check/0,
     atom_base_and_xhtml_check/0,
     rdf_check/0,
@@ -76,6 +77,7 @@ isolated_test_() ->
                 peer:call(Peer, ?MODULE, Test, [], 30000)
             end}} || Test <- [
         oldest_first_check,
+        calendar_prepare_check,
         rss_full_content_check,
         atom_base_and_xhtml_check,
         rdf_check,
@@ -393,7 +395,7 @@ admin_poll_is_blocked_check() ->
         meck:expect(z_db, q, fun(_, Args, _) -> Self ! {poll_finished, Args}, [] end),
         meck:expect(m_import_feed, error_message, fun(admin_import_user, _) -> <<"Administrator imports blocked">> end),
         ?assertEqual(ok, z_import_feed_poll:run(#context{})),
-        receive {poll_finished, [1,0,0,0,1,Message,_,_,7200,true,0]} ->
+        receive {poll_finished, [1,0,0,0,1,Message,_,_,7200,true,0,undefined,undefined,undefined,false,false]} ->
             ?assertEqual(<<"Administrator imports blocked">>, Message)
         after 1000 -> error(no_poll_result) end,
         ?assertEqual(0, meck:num_calls(z_import_feed_http, get, '_'))
@@ -862,7 +864,7 @@ configured_fetch_user_check() ->
 
 feed_type_detection_check() ->
     {ok, Rss} = parse(<<"<rss><channel><title>Empty RSS</title></channel></rss>">>),
-    ?assertEqual(false, maps:get(is_zotonic_feed, Rss)),
+    ?assertEqual(undefined, maps:get(is_zotonic_feed, Rss)),
     {ok, EmptyAtom} = parse(<<"<feed xmlns='http://www.w3.org/2005/Atom'><title>Empty</title></feed>">>),
     ?assertEqual(undefined, maps:get(is_zotonic_feed, EmptyAtom)),
     {ok, Ordinary} = parse(<<"<feed xmlns='http://www.w3.org/2005/Atom'><entry><id>https://example.org/1</id></entry></feed>">>),
@@ -905,3 +907,39 @@ data_urls_check() ->
         ?assertNotEqual(nomatch, binary:match(Body, <<"<!-- z-media 123 ">>)),
         ?assertEqual(nomatch, binary:match(Body, <<"data:">>))
     after meck:unload(z_media_tag) end.
+
+next_url_test() ->
+    Base = <<"https://example.org/feed?page=1">>,
+    Next = <<"https://example.org/feed?page=2&cat=news">>,
+    lists:foreach(fun(Xml) ->
+        ?assertMatch({ok, #{next_url := Next}}, z_import_feed_parse:parse(Xml, Base))
+    end, [
+        <<"<feed xmlns='http://www.w3.org/2005/Atom'><link rel='next' href='?page=2&amp;cat=news'/></feed>">>,
+        <<"<rss xmlns:atom='http://www.w3.org/2005/Atom'><channel><atom:link rel='next' href='?page=2&amp;cat=news'/></channel></rss>">>
+    ]),
+    Json = z_json:encode(#{<<"version">> => <<"https://jsonfeed.org/version/1.1">>,
+        <<"title">> => <<"Test">>, <<"items">> => [], <<"next_url">> => <<"?page=2&cat=news">>}),
+    ?assertMatch({ok, #{next_url := Next}}, z_import_feed_parse:parse(Json, Base)).
+
+calendar_prepare_check() ->
+    meck:new(m_rsc, [no_link]),
+    meck:new(z_module_manager, [no_link]),
+    try
+        meck:expect(m_rsc, rid, fun(event, _) -> 101 end),
+        meck:expect(z_module_manager, active, fun(mod_copyright, _) -> false end),
+        {ok, #{entries := [Entry]}} = z_import_feed_parse:parse(
+            <<"BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Test//EN\r\nBEGIN:VEVENT\r\n",
+              "UID:prepare\r\nDTSTAMP:20261024T120000Z\r\nDTSTART;VALUE=DATE:20261101\r\n",
+              "DTEND;VALUE=DATE:20261103\r\nSTATUS:CANCELLED\r\nLOCATION:Room 1\r\nEND:VEVENT\r\nEND:VCALENDAR\r\n">>,
+            <<"https://example.org/events.ics">>),
+        Feed = #{category_id => 100, content_group_id => undefined, guess_category => true,
+            is_authoritative => false, media_mode => <<"none">>, connections => []},
+        {#{props := Props}, []} = z_import_feed_import:prepare(Entry, Feed, #context{db = {test, test}}),
+        ?assertEqual(101, maps:get(<<"category_id">>, Props)),
+        ?assertEqual(false, maps:get(<<"is_published">>, Props)),
+        ?assertEqual(true, maps:get(<<"date_is_all_day">>, Props)),
+        ?assertEqual({{2026,11,2},{0,0,0}}, maps:get(<<"date_end">>, Props)),
+        ?assertEqual(<<"Room 1">>, maps:get(<<"location">>, Props))
+    after
+        meck:unload([m_rsc, z_module_manager])
+    end.

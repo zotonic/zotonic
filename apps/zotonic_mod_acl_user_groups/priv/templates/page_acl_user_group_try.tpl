@@ -5,52 +5,47 @@
 {% block content %}
 	<h1>{_ Test Access Control Rules _}</h1>
 
-	<p class="alert alert-info">
-		{% if m.acl_rule.acl_user_groups_state == `edit` %}
-			{_ You are using the <b>test</b> version of the access control rules. _}
-		{% else %}
-			{_ You are using the <b>published</b> version of the access control rules. _}
-		{% endif %}
-	</p>
+	{% with m.acl_rule.acl_user_groups_state == `edit` as is_test %}
+	{% with q.code and m.acl_rule.is_valid_code[q.code] as is_valid_code %}
+		<p class="alert alert-info" role="status">
+			{% if is_test %}
+				{_ Test access control rules are active. Select Published rules to stop testing. _}
+			{% else %}
+				{_ Published access control rules are active. _}
+			{% endif %}
+		</p>
 
-	{% if q.code and m.acl_rule.is_valid_code[q.code] %}
-		<p>{_ You can switch back to the published access control rules by: _}</p>
+		<div class="btn-group" role="group" aria-label="{_ Access control rules _}">
+			<button type="button" id="{{ #acl_publish }}" class="btn btn-default{% if not is_test %} active{% endif %}"
+				aria-pressed="{% if is_test %}false{% else %}true{% endif %}" {% if not is_test %}disabled{% endif %}>
+				{_ Published rules _}
+			</button>
+			<button type="button" id="{{ #acl_edit }}" class="btn btn-warning{% if is_test %} active{% endif %}"
+				aria-pressed="{% if is_test %}true{% else %}false{% endif %}" {% if is_test or not is_valid_code %}disabled{% endif %}>
+				{_ Test rules _}
+			</button>
+		</div>
 
-		<ul>
-			<li>{_ clicking on <b>Use published rules</b> below _}</li>
-			<li>{_ closing this browser tab _}</li>
-		</ul>
-
-		<p>{_ Which version of the ACL rules do you want to use? _}</p>
-		<p>
-			<a href="#" role="button" id="{{ #acl_edit }}" class="btn btn-warning">{_ Test ACL rules _}</a>
-			<a href="#" role="button" id="{{ #acl_publish }}" class="btn btn-default">{_ Use published rules _}</a>
-
-			{% wire id=#acl_edit
-					action={mask target=" body"}
-					postback={switch_rule_state code=q.code state=`edit`}
-					delegate=`admin_acl_rules_rsc`
-			%}
+		{% if is_test %}
 			{% wire id=#acl_publish
 					action={mask target=" body"}
 					postback={switch_rule_state code=q.code state=`publish`}
 					delegate=`admin_acl_rules_rsc`
 			%}
-		</p>
-	{% else %}
-		{% if q.code %}
+		{% elseif is_valid_code %}
+			{% wire id=#acl_edit
+					action={mask target=" body"}
+					postback={switch_rule_state code=q.code state=`edit`}
+					delegate=`admin_acl_rules_rsc`
+			%}
+		{% endif %}
+
+		{% if not is_valid_code %}
 			<p class="alert alert-warning">
-				{_ You have to use a special URL, as provided by the an editor or administrator. _}<br/>
-				{_ The URL is only valid for one day. _}
+				{_ To start testing, use a valid test link provided by an editor or administrator. _}
 			</p>
 		{% endif %}
-
-		{% if m.acl_rule.acl_user_groups_state == `edit` %}
-			<p>
-				<a href="#" role="button" id="{{ #acl_publish }}" class="btn btn-success">{_ Use published rules _}</a>
-				{% wire id=#acl_publish postback={switch_rule_state code=q.code state=`publish`} delegate=`admin_acl_rules_rsc` %}
-			</p>
-		{% endif %}
-	{% endif %}
-
+		<p>{_ This test link is valid for 24 hours after it is generated. _}</p>
+	{% endwith %}
+	{% endwith %}
 {% endblock %}

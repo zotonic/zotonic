@@ -38,7 +38,9 @@
                             class="stop btn btn-default btn-xs"
                             title=_"Stop the site."
                             action={confirm
-                                text=[ _"Are you sure you want to stop the site:", " <b>", name|to_binary, "</b> ?" ]
+                                text_template="_site_action_confirm.tpl"
+                                site=name
+                                site_action="stop"
                                 ok=_"stop"
                                 is_danger
                                 postback={site_stop site=name}
@@ -51,7 +53,9 @@
                             class="restart btn btn-default btn-xs"
                             title=_"Restart the site, all users will be logged off."
                             action={confirm
-                                text=[ _"Are you sure you want to restart the site:", " <b>", name|to_binary, "</b> ?" ]
+                                text_template="_site_action_confirm.tpl"
+                                site=name
+                                site_action="restart"
                                 ok=_"restart"
                                 is_danger
                                 postback={site_restart site=name}

@@ -1,15 +1,15 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %}{_ Recipients for _} “{{ m.rsc[id].title }}”{% endblock %}
+{% block title %}{% trans "Mailing list recipients: {title}" title=m.rsc[id].title|escape %}{% endblock %}
 
 {% block content %}
 <ul class="breadcrumb">
     <li><a href="{% url admin_mailinglist %}">{_ Mailing lists _}</a></li>
-    <li class="active">{% trans "Recipients for “{title}”" title=m.rsc[id].title %}</li>
+    <li class="active">{% trans "Mailing list recipients: {title}" title=m.rsc[id].title|escape %}</li>
 </ul>
 
 <div class="admin-header">
-    <h2>{_ Recipients for _} “{{ m.rsc[id].title }}”</h2>
+    <h2>{% trans "Mailing list recipients: {title}" title=m.rsc[id].title|escape %}</h2>
 	{% if not m.rsc[id].is_editable %}
 	<p>{_ You are not allowed to view or edit the recipients list. You need to have edit permission on the mailing list to change and view the recipients. _}</p>
 	{% endif %}

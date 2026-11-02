@@ -35,11 +35,11 @@
     <table class="table table-striped do_adminLinkedTable">
         <thead>
             <tr>
-                <th>{_ Name _}</th>
+                <th>{_ Unique name _}</th>
                 <th>{_ Domain _}</th>
                 <th width="15%">{_ Description _}</th>
                 <th>{_ Auth _}</th>
-                <th>{_ Import _}</th>
+                <th>{_ Content import _}</th>
                 <th>{_ Added by _}</th>
                 <th>{_ Created on _}</th>
                 <th>{_ User count _}</th>

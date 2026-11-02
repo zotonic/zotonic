@@ -75,7 +75,7 @@ retain semantic-web content negotiation while a WebSub topic has one media type.
    checks the subscribing user's resource access and GETs B's callback with the
    topic, mode, random challenge, and lease. B verifies pending intent and echoes
    the challenge as plain text with nosniff. A records the verified subscription.
-5. Changes on A queue the resource's newest version. A rechecks access and lease,
+5. Changes on A queue the topic's newest export revision. A rechecks access and lease,
    then POSTs the complete JSON topic representation, Link hub/self headers, and
    an HMAC-SHA256 signature to B. Private topics also send full authorized JSON;
    there is no notification-only or Zotonic-specific wire format.
@@ -92,7 +92,7 @@ retain semantic-web content negotiation while a WebSub topic has one media type.
 ## Collections and connected resources
 
 Edge insertions, removals, and reordering advance the authoritative subject's
-version and publish its updated export. Receivers synchronize edges using saved
+export revision and publish its updated export. Receivers synchronize edges using saved
 import depth and filters, then fetch newly referenced placeholders after commit.
 Existing imported members are reused, not refreshed by the collection's delivery.
 
@@ -200,7 +200,7 @@ See README.md for deployment details and the regression suite."/utf8>>).
 -mod_title("WebSub resource synchronization").
 -mod_description("Publish and subscribe to resources between sites using WebSub.").
 -mod_depends([ cron, mod_mqtt ]).
--mod_schema(6).
+-mod_schema(7).
 -mod_config([
     #{
         key => subscription_retry_timeout,
@@ -306,12 +306,37 @@ publisher_headers(Id, Acc, Context) ->
     ].
 
 observe_rsc_export_done(#rsc_export_done{id = Id}, Export, Context) ->
-    case m_rsc:p_no_acl(Id, <<"is_authoritative">>, Context) of
-        true ->
-            publisher_export(Id, Export, Context);
+    case z_context:get(websub_export_revision, Context) of
+        {Id, Revision} ->
+            publisher_export(Id, Export#{
+                <<"export_revision">> => Revision,
+                % Older Zotonic subscribers already prefer the top-level version.
+                % The editable resource.version retains its original meaning.
+                <<"version">> => Revision
+            }, Context);
         _ ->
-            Export
+            publisher_snapshot(Id, Export, Context)
     end.
+
+%% Rebuild after taking the revision snapshot, not before: otherwise an export
+%% could attach a new revision to stale content. Content updates and edge-log
+%% observers take this same lock. Edges committed while exporting may be included
+%% early, but their observer will still publish a later revision.
+publisher_snapshot(Id, Export, Context) ->
+    z_db:transaction(fun(Ctx) ->
+        case z_db:q1("select is_authoritative from rsc where id = $1 for update", [Id], Ctx) of
+            true ->
+                Revision = m_websub:export_revision(Id, Ctx),
+                z_depcache:flush(Id, Ctx),
+                SnapshotContext = z_context:set(websub_export_revision, {Id, Revision}, Ctx),
+                case m_rsc_export:full(Id, SnapshotContext) of
+                    {ok, Snapshot} -> Snapshot;
+                    {error, _} -> Export
+                end;
+            _ ->
+                Export
+        end
+    end, Context).
 
 publisher_export(Id, Export, Context) ->
     ContextNoLang = z_context:set_language('x-default', Context),

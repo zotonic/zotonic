@@ -48,7 +48,7 @@ Extra arguments
 The `timesince` filter can take several extra arguments, in the order of arguments:
 
 *   Base date to use. Useful to show the difference between two dates, defaults to `now`
-*   Text to use for the relative time designations, defaults to `\"ago,now,in\"`
+*   Text to use for the relative time designations. The default uses translated sentence patterns and direction-specific plural units. Pass `\"default\"` to select this behavior explicitly, or an empty string for a duration without direction. Custom comma-separated indicators such as `\"ago,now,in\"` are also supported.
 *   Format for the printout. Now two options `1` and `2`, for the number of components shown. For example `2` will show *2 minutes, 10 seconds ago* where `1` will show *2 minutes ago*
 
 
@@ -63,7 +63,17 @@ Show the time between creation and modification of a resource:
 {{ id.created|timesince:id.modified:\"\":1 }}
 ```
 
-This might display something like:
+The default translations distinguish past, future, and standalone durations using
+gettext `msgctxt` values `relative time: past`, `relative time: future`, and
+`relative time: duration`. Each unit selects its own plural form. The translated
+patterns `{first}, {second}`, `{duration} ago`, and `in {duration}` control the
+separator, order, and placement of the direction. For example, two components
+produce “2 minutes, 10 seconds ago”, with the direction shown once.
+
+Custom indicators are applied literally to standalone duration forms; use the
+default behavior when the unit's grammatical case depends on the direction.
+
+The example above might display something like:
 
 
 ```django

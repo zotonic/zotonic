@@ -17,7 +17,7 @@
 
 {% block widget_content %}
     <fieldset>
-        <legend>{_ View _}</legend>
+        <legend>{_ Result views _}</legend>
         <div>
             <a class="btn btn-default" href="{% url admin_survey_editor id=id %}">{_ Results editor _}</a>
 
@@ -30,7 +30,7 @@
 
     {% if m.survey.is_allowed_results_download[id] and m.modules.active.mod_export %}
         <fieldset>
-            <legend>{_ Download _}</legend>
+            <legend>{_ Result downloads _}</legend>
             <div>
                 {% include "_survey_results_download_button.tpl" id=id %}
             </div>

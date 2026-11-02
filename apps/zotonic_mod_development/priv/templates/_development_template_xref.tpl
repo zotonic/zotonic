@@ -41,7 +41,7 @@
             <tr>
                 <td colspan="5">
                     <span class="text-muted">
-                        {_ All templates are compiling. _}
+                        {_ No template syntax errors found. _}
                     </span>
                 </td>
             </tr>

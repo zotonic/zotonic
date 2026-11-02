@@ -11,8 +11,7 @@ batching() ->
     {ok, Id} = m_rsc:insert(#{<<"category_id">> => text, <<"is_published">> => true}, C),
     Topic = m_websub:topic_url(Id, C),
     Callback = <<"https://callback.test/batching">>,
-    Saved = [{Key, m_config:get_value(mod_websub, Key, C)}
-        || Key <- [push_quiet_seconds, push_deadline_seconds]],
+    ok = meck:new(m_config, [passthrough]),
     ok = meck:new(mod_websub, [passthrough]),
     ok = meck:new(z_websub_http, [passthrough]),
     try
@@ -20,8 +19,7 @@ batching() ->
         meck:expect(z_websub_http, fetch, fun(post, Url, _, _, _) ->
             {ok, {binary_to_list(Url), [], 0, <<>>}}
         end),
-        m_config:delete(mod_websub, push_quiet_seconds, C),
-        m_config:delete(mod_websub, push_deadline_seconds, C),
+        mock_push_config(undefined, undefined),
         ?assertEqual({10, 300}, m_websub:push_delays(C)),
         ok = m_websub:update_export(Callback, Topic, Id, 600, undefined, C),
         ok = m_websub:queue_push(Id, 1, C),
@@ -66,8 +64,8 @@ batching() ->
         meck:expect(mod_websub, is_editor_active, fun(_, _) -> true end),
 
         %% Configuration takes effect for a new batch. Retries keep their backoff.
-        m_config:set_value(mod_websub, push_quiet_seconds, <<"30">>, C),
-        m_config:set_value(mod_websub, push_deadline_seconds, <<"5">>, C),
+        mock_push_config(<<"30">>, <<"5">>),
+        ?assertEqual({30, 5}, m_websub:push_delays(C)),
         ok = m_websub:queue_push(Id, 5, C),
         ?assertEqual(5, z_db:q1("select extract(epoch from due-created)::int
             from websub_push_queue where local_rsc_id=$1", [Id], C)),
@@ -75,16 +73,12 @@ batching() ->
         make_due(Id, C),
         ok = m_websub:process_push_queue(C),
         ?assertEqual(5, z_db:q1("select last_push_version from websub_export where local_rsc_id=$1", [Id], C)),
-        m_config:set_value(mod_websub, push_quiet_seconds, <<"invalid">>, C),
-        m_config:set_value(mod_websub, push_deadline_seconds, <<"-1">>, C),
+        mock_push_config(<<"invalid">>, <<"-1">>),
         ?assertEqual({10, 300}, m_websub:push_delays(C))
     after
         meck:unload(z_websub_http),
         meck:unload(mod_websub),
-        lists:foreach(fun
-            ({Key, undefined}) -> m_config:delete(mod_websub, Key, C);
-            ({Key, Value}) -> m_config:set_value(mod_websub, Key, Value, C)
-        end, Saved),
+        meck:unload(m_config),
         m_rsc:delete(Id, C),
         sys:resume(Server)
     end.
@@ -136,3 +130,12 @@ presence() ->
 make_due(Id, Context) ->
     z_db:q("update websub_push_queue set due=now() where local_rsc_id=$1", [Id], Context),
     ok.
+
+%% Isolate batching from concurrent readers repopulating the shared config cache
+%% with an older snapshot while configuration values are being changed.
+mock_push_config(Quiet, Deadline) ->
+    meck:expect(m_config, get_value, fun
+        (mod_websub, push_quiet_seconds, _) -> Quiet;
+        (mod_websub, push_deadline_seconds, _) -> Deadline;
+        (Module, Key, Context) -> meck:passthrough([Module, Key, Context])
+    end).

@@ -24,6 +24,26 @@ Installation
 * Read the [**Installation chapter**](https://zotonic.com/docs/1526/getting-started#installation)
   in the documentation.
 
+The development launchers `./start-docker.sh` and `./start-podman.sh` use your local
+UID and GID for the container's Zotonic user. Start them as your normal user.
+Override either ID when necessary, for example:
+
+```sh
+ZOTONIC_UID=1001 ZOTONIC_GID=1001 ./start-docker.sh
+```
+
+The same overrides work with `./start-podman.sh`. It loads
+`docker-compose.podman.yml` to map the calling user to those container IDs using
+Podman's `keep-id` namespace. The entrypoint initializes as container root and
+then runs Zotonic as the selected user. The Podman bind mount uses `:Z` for
+SELinux labeling. Use the launcher so both Compose files and the IDs are supplied.
+
+Direct Docker Compose runs can set `ZOTONIC_UID` and `ZOTONIC_GID` explicitly;
+without them, the entrypoint infers ownership from `rebar.config`. IDs must be
+non-zero decimal numbers. Existing image groups are reused, while a UID belonging
+to another image account is rejected. Overrides do not change host checkout
+ownership; Docker user-namespace remapping can require additional host-side setup.
+
 Documentation
 -------------
 

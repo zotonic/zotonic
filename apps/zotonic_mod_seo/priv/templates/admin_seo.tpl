@@ -80,7 +80,7 @@
                     <input type="text" id="seo_google-analytics" name="seo_google-analytics" value="{{ m.config.seo_google.analytics.value|escape }}" class="form-control" placeholder="{_ Google Analytics tracking id _}">
                     <label class="control-label" for="seo_google-analytics">{_ Google Analytics tracking id _}</label>
                     <p class="help-block">
-                        {_ You find this id in the tracking script, it has the format _} <strong>G-..........</strong>.
+                        {% trans "You can find this ID in the tracking script. Its format is <strong>{format}</strong>." format="G-.........." %}
                         <a href="https://support.google.com/analytics/answer/9304153#add-tag&zippy=%2Cadd-the-tag-to-a-website-builder-or-cms-hosted-website-eg-hubspot-shopify-etc" title="Google Analytics Help" rel="noopener noreferrer" target="_blank">{_ Where can I find my tracking script? _}</a>
                     </p>
                 </div>
@@ -89,7 +89,10 @@
                     <input type="text" id="seo_google-gtm" name="seo_google-gtm" value="{{ m.config.seo_google.gtm.value|escape }}" class="form-control" placeholder="{_ Google Tag Manager id _}">
                     <label class="control-label" for="seo_google-gtm">{_ Google Tag Manager id _}</label>
                     <p class="help-block">
-                        {_ You find this on your _} <a href="https://tagmanager.google.com/" title="Google Tag Manager" rel="noopener noreferrer" target="_blank">{_ Google Tag Manager account page _}</a>, {_ it has the format _} <strong>GTM-......</strong>.
+                        {% trans "You can find this ID on your <a href='{url}' rel='noopener noreferrer' target='_blank'>Google Tag Manager account page</a>. Its format is <strong>{format}</strong>."
+                            url="https://tagmanager.google.com/"
+                            format="GTM-......"
+                        %}
                     </p>
                 </div>
 

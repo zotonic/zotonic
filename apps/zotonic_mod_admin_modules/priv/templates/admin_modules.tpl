@@ -56,7 +56,7 @@
             </select>
         </div>
         <div class="col-md-3 form-group">
-            <label for="module-runtime">{_ Runtime _}</label>
+            <label for="module-runtime">{_ Execution status _}</label>
             <select id="module-runtime" name="module_runtime" class="form-control">
                 <option value="">{_ All _}</option>
                 <option value="running">{_ Running _}</option>
@@ -71,7 +71,7 @@
         </div>
         <div class="col-md-12 form-group">
             <button type="button" class="btn btn-default" id="module-filters-clear">{_ Clear filters _}</button>
-            <span role="status" aria-live="polite"><span id="module-filter-count"></span> {_ modules shown _}</span>
+            <span role="status" aria-live="polite">{_ Modules shown: _} <span id="module-filter-count"></span></span>
         </div>
     </div>
 
@@ -135,6 +135,7 @@
                         </td>
                         <td>
                             <div class="buttons" style="white-space: nowrap; text-align: right">
+                                {% all include "_admin_module_buttons.tpl" module=module %}
                                 {% if props.schema %}
                                     {% button text=_"Reinstall"
                                         title=_"Install the module’s model and data."

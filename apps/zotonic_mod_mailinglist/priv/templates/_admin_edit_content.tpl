@@ -42,7 +42,7 @@
                         </p>
                         <p>
                             {% if sub.email %}
-                                <small>{_ Subscribed with _} <b>{{ sub.email|escape }}</b></small>
+                                <small>{% trans "Subscription email: <b>{email}</b>" email=sub.email|escape %}</small>
                             {% endif %}
                         </p>
                     </div>

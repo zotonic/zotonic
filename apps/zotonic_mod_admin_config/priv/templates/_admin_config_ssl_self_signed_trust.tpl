@@ -48,14 +48,14 @@
 
     <h4>{_ Debian and Ubuntu _}</h4>
     <ol>
-        <li>{_ Copy the certificate file to _} <code>/usr/local/share/ca-certificates/zotonic-self-signed.crt</code>.</li>
-        <li>{_ Run _} <code>sudo update-ca-certificates</code> {_ and restart the browser. _}</li>
+        <li>{% trans "Copy the certificate file to <code>{path}</code>." path="/usr/local/share/ca-certificates/zotonic-self-signed.crt" %}</li>
+        <li>{% trans "Run <code>{command}</code> and restart the browser." command="sudo update-ca-certificates" %}</li>
     </ol>
 
     <h4>{_ Fedora and Red Hat _}</h4>
     <ol>
-        <li>{_ Copy the certificate file to _} <code>/etc/pki/ca-trust/source/anchors/zotonic-self-signed.crt</code>.</li>
-        <li>{_ Run _} <code>sudo update-ca-trust</code> {_ and restart the browser. _}</li>
+        <li>{% trans "Copy the certificate file to <code>{path}</code>." path="/etc/pki/ca-trust/source/anchors/zotonic-self-signed.crt" %}</li>
+        <li>{% trans "Run <code>{command}</code> and restart the browser." command="sudo update-ca-trust" %}</li>
     </ol>
 
     <h4>{_ Firefox _}</h4>

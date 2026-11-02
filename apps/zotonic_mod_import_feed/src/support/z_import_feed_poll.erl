@@ -19,6 +19,7 @@
 -module(z_import_feed_poll).
 -define(FEEDS_PER_RUN, 5).
 -define(LEASE_TOKEN_BYTES, 24).
+-define(PAGES_PER_POLL, 100).
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([run/1, sort_entries/1]).
 
@@ -110,8 +111,35 @@ poll_user(#{user_id := User} = FeedSettings, Context) ->
     end.
 
 fetch(FeedSettings, Context) ->
-    case z_import_feed_http:get(maps:get(url, FeedSettings), Context) of
-        {ok, {FinalUrl, _, _, Body}} ->
+    %% Keep the boundary across retries, so entries imported by this traversal
+    %% do not become a reason to stop before a failed later page is retried.
+    Started = z_db:q1("update import_feed
+        set pagination_started=coalesce(pagination_started, now())
+        where id=$1 and lease_token=$2 and modified::text=$3
+        returning pagination_started::text",
+        [maps:get(id, FeedSettings), maps:get(lease_token, FeedSettings),
+         maps:get(settings_version, FeedSettings)], Context),
+    case Started of
+        undefined -> {error, cancelled};
+        _ -> fetch_first(FeedSettings#{pagination_version => Started}, Context)
+    end.
+
+fetch_first(FeedSettings, Context) ->
+    Response = case maps:get(next_url, FeedSettings, undefined) of
+        Url when is_binary(Url), Url =/= <<>> -> z_import_feed_http:get(Url, Context);
+        _ -> z_import_feed_http:get_feed(FeedSettings, Context)
+    end,
+    case Response of
+        {not_modified, {FinalUrl, Headers}} ->
+            Validators = maps:merge(
+                maps:with([http_etag, http_last_modified], FeedSettings),
+                z_import_feed_http:validators(Headers)),
+            poll_log(FeedSettings, <<"unchanged">>, <<"Feed not modified (HTTP 304)">>, Context),
+            {ok, #{imported => 0, updated => 0, skipped => 0, errors => 0,
+                last_error => undefined,
+                publisher_seconds => maps:get(poll_hint_seconds, FeedSettings, 0),
+                http_validators => Validators#{http_url => z_convert:to_binary(FinalUrl)}}};
+        {ok, {FinalUrl, Headers, _, Body}} ->
             case z_import_feed_parse:parse(Body, z_convert:to_binary(FinalUrl)) of
                 {ok, #{truncated := true}} -> {error, too_many_entries};
                 {ok, ParsedFeed} ->
@@ -119,7 +147,12 @@ fetch(FeedSettings, Context) ->
                     poll_log(
                         FeedSettings, <<"parsed">>,
                         iolist_to_binary(io_lib:format("Parsed ~B entries", [length(maps:get(entries, ParsedFeed))])), Context),
+                    Validators = case maps:get(next_url, FeedSettings, undefined) of
+                        undefined -> (z_import_feed_http:validators(Headers))#{http_url => z_convert:to_binary(FinalUrl)};
+                        _ -> #{}
+                    end,
                     Counts = #{
+                        http_validators => Validators,
                         imported => 0,
                         updated => 0,
                         skipped => 0,
@@ -129,13 +162,71 @@ fetch(FeedSettings, Context) ->
                         publisher_seconds => maps:get(refresh_seconds, ParsedFeed, 0)
                     },
                     ImportSettings = restore_settings(FeedSettings#{feed => maps:without([entries], ParsedFeed)}, Context),
-                    {ok, entries(sort_entries(maps:get(entries, ParsedFeed)), ImportSettings, Counts, Context)};
+                    page(ParsedFeed, ImportSettings, Counts, ?PAGES_PER_POLL,
+                        [z_convert:to_binary(FinalUrl)], Context);
                 Error ->
                     Error
             end;
         Error ->
             Error
     end.
+
+%% Check prior successful entries before importing this page (which changes
+%% their timestamps). Always process the whole page, including updated entries.
+page(Parsed, Settings, Counts, Remaining, Visited, Context) ->
+    Entries = maps:get(entries, Parsed),
+    Uris = [U || #{uri := U} <- Entries, is_binary(U)],
+    Seen = z_db:q1("select exists(select 1 from import_feed_item
+        where feed_id=$1 and uri=any($2::text[]) and status in ('ok','deleted')
+          and modified < $3::text::timestamptz)",
+        [maps:get(id, Settings), Uris, maps:get(pagination_version, Settings)], Context),
+    Counts1 = entries(sort_entries(Entries), Settings#{feed => maps:without([entries], Parsed)}, Counts, Context),
+    Initial = maps:get(last_success, Settings, undefined) =:= undefined,
+    Follow = (not Initial orelse maps:get(import_all_pages, Settings, false))
+        andalso not Seen,
+    Next = case Follow of true -> maps:get(next_url, Parsed, <<>>); false -> <<>> end,
+    case {maps:get(errors, Counts1), Next} of
+        {0, <<>>} -> {ok, Counts1};
+        {0, Url} when is_binary(Url) ->
+            case lists:member(Url, Visited) of
+                true -> page_error(pagination_loop, Counts1);
+                false ->
+                    case checkpoint(Url, Settings, Context) of
+                        false -> page_error(cancelled, Counts1);
+                        true when Remaining =< 1 ->
+                            {ok, Counts1#{pagination_pending => true, http_validators => #{}}};
+                        true -> next_page(Url, Settings, Counts1#{http_validators => #{}},
+                            Remaining - 1, [Url | Visited], Context)
+                    end
+            end;
+        _ -> {ok, Counts1}
+    end.
+
+checkpoint(Url, Settings, Context) ->
+    z_db:q1("update import_feed set next_url=$4, lease_until=now()+interval '15 minutes'
+        where id=$1 and lease_token=$2 and modified::text=$3
+          and (not is_paused or $5) returning id",
+        [maps:get(id, Settings), maps:get(lease_token, Settings),
+         maps:get(settings_version, Settings), Url,
+         maps:get(refetch_deleted_once, Settings, false)], Context) =/= undefined.
+
+next_page(Url, Settings, Counts, Remaining, Visited, Context) ->
+    %% No first-page validators on continuation requests. The same URL checks,
+    %% response limits and destination credential policy apply to every fetch.
+    case z_import_feed_http:get(Url, Context) of
+        {ok, {FinalUrl, _, _, Body}} ->
+            case z_import_feed_parse:parse(Body, z_convert:to_binary(FinalUrl)) of
+                {ok, #{truncated := true}} -> page_error(too_many_entries, Counts);
+                {ok, Parsed} -> page(Parsed, Settings, Counts, Remaining,
+                    lists:usort([z_convert:to_binary(FinalUrl) | Visited]), Context);
+                {error, Reason} -> page_error(Reason, Counts)
+            end;
+        {error, Reason} -> page_error(Reason, Counts)
+    end.
+
+page_error(Reason, Counts) ->
+    {ok, Counts#{errors := maps:get(errors, Counts) + 1, last_error := Reason,
+        delay_seconds => max(maps:get(delay_seconds, Counts, 0), z_import_feed_http:error_delay(Reason))}}.
 
 %% Keep the initial deletion set for this fetch. Several articles can embed the
 %% same deleted medium; all must update their embeds after the first restores it.
@@ -177,7 +268,7 @@ entries([Entry | Rest], FeedSettings, Counts, Context) ->
         ],
         Context),
     case Active of
-        undefined -> Counts;
+        undefined -> Counts#{errors := maps:get(errors, Counts) + 1, last_error := cancelled};
         _ ->
             case m_import_feed:is_admin_user(maps:get(user_id, FeedSettings), Context) of
                 true ->
@@ -263,12 +354,23 @@ finish(FeedSettings, {ok, Counts}, Context) ->
             0
     end,
     Delay = lists:max([PublisherSeconds, Backoff, maps:get(delay_seconds, Counts, 0)]),
+    Validators = case maps:get(errors, Counts) of
+        0 -> maps:get(http_validators, Counts, #{});
+        _ -> #{}
+    end,
+    Complete = maps:get(errors, Counts) =:= 0 andalso not maps:get(pagination_pending, Counts, false),
     z_db:q("
         update import_feed
-        set lease_token=null,
+        set next_url=case when $15 and modified::text=$8 then null else next_url end,
+            pagination_started=case when $15 and modified::text=$8 then null else pagination_started end,
+            http_etag=case when modified::text=$8 then $12 else null end,
+            http_last_modified=case when modified::text=$8 then $13 else null end,
+            http_url=case when modified::text=$8 then $14 else null end,
+            http_settings_version=case when modified::text=$8 and $5=0 then $8 else null end,
+            lease_token=null,
             lease_until=null,
             next_poll=case when modified::text=$8 and not refetch_deleted
-                      then now()+greatest(poll_minutes*60, $9::bigint)*interval '1 second'
+                      then now()+(case when $16 then 1 else greatest(poll_minutes*60, $9::bigint) end)*interval '1 second'
                       else next_poll end,
             failure_count=case when $10 then least(failure_count+1, 31) else 0 end,
             poll_hint_seconds=$11,
@@ -277,14 +379,18 @@ finish(FeedSettings, {ok, Counts}, Context) ->
             skipped=skipped+$4,
             errors=errors+$5,
             last_error=$6,
-            last_success=case when $5=0 then now() else last_success end
+            last_success=case when $15 and modified::text=$8 then now() else last_success end
         where id=$1
           and lease_token=$7",
         [
             maps:get(id, FeedSettings), maps:get(imported, Counts), maps:get(updated, Counts),
             maps:get(skipped, Counts), maps:get(errors, Counts), Error,
             maps:get(lease_token, FeedSettings), maps:get(settings_version, FeedSettings),
-            Delay, Failed, PublisherSeconds
+            Delay, Failed, PublisherSeconds,
+            maps:get(http_etag, Validators, undefined),
+            maps:get(http_last_modified, Validators, undefined),
+            maps:get(http_url, Validators, undefined), Complete,
+            maps:get(pagination_pending, Counts, false)
         ],
         Context),
     poll_log(FeedSettings, Status, Summary, Context).

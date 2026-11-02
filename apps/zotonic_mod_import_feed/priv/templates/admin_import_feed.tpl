@@ -9,7 +9,7 @@
         {% lib "css/admin_import_feed.css" %}
         <div class="admin-header">
             <h2>{_ Import feeds _}</h2>
-            <p>{_ Discover RSS or Atom feeds and import their articles automatically. _}</p>
+            <p>{_ Discover RSS, Atom, JSON or iCalendar feeds and import their content automatically. _}</p>
         </div>
         <p><a class="btn btn-default" href="{% url admin_import_feed_log %}">{_ Activity log _}</a></p>
         {% wire id="feed-discover-form" type="submit" postback=`discover` delegate=`mod_import_feed`
@@ -41,11 +41,11 @@
                         <th>{_ Feed _}</th>
                         <th>{_ Status _}</th>
                         <th>{_ Articles _}</th>
-                        <th>{_ Polls _}</th>
+                        <th>{_ Feed checks _}</th>
                         <th>{_ Imported / updated / skipped _}</th>
                         <th>{_ Errors _}</th>
-                        <th>{_ Last poll _}</th>
-                        <th>{_ Next poll _}</th>
+                        <th>{_ Last feed check _}</th>
+                        <th>{_ Next feed check _}</th>
                         <th></th>
                     </tr>
                 </thead>

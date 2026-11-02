@@ -66,7 +66,7 @@
 
             <div class="modal-footer">
                 {% button tag="a" class="btn btn-default" text=_"Cancel" action={dialog_close} %}
-                <button type="submit" class="btn btn-primary">{_ Set passcode _}</button>
+                <button type="submit" class="btn btn-primary">{_ Enable two-factor authentication _}</button>
             </div>
         </form>
     {% endwith %}

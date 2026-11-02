@@ -9,6 +9,12 @@
 -define(COLUMNS_KEY, {columns, "schema_test", "public", "rsc"}).
 
 schema_cache_test() ->
+    OwnedCoordinator = case whereis(zotonic_filehandler_update) of
+        undefined ->
+            {ok, Coordinator} = zotonic_filehandler_update:start_link(),
+            Coordinator;
+        _ -> undefined
+    end,
     {ok, Cache} = depcache:start_link([]),
     Context = #context{depcache = Cache},
     Modules = [z_db, z_db_pool, z_datamodel],
@@ -40,7 +46,13 @@ schema_cache_test() ->
         end, [commit, rollback])
     after
         lists:foreach(fun(M) -> meck:unload(M) end, Modules),
-        gen_server:stop(Cache)
+        gen_server:stop(Cache),
+        case OwnedCoordinator of
+            undefined -> ok;
+            Pid ->
+                gen_server:stop(Pid),
+                persistent_term:erase(zotonic_filehandler_update)
+        end
     end.
 
 %% @doc Simulate a parallel reader caching the old schema before commit.

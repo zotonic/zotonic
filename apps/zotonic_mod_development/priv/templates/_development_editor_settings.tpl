@@ -27,7 +27,7 @@
                 </div>
                 <div data-editor-browser hidden>
                     <div class="form-group">
-                        <label for="development-editor-preset">{_ Editor _}</label>
+                        <label for="development-editor-preset">{_ Code editor _}</label>
                         <select id="development-editor-preset" name="preset" class="form-control">
                             <option value="">{_ Choose an editor _}</option>
                             <option value="vscode">Visual Studio Code</option>

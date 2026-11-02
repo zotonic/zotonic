@@ -30,6 +30,15 @@
 
 -define(BATCH_MOVE, 100).
 
+event(#postback{message={filestore_unrecoverable, Args}}, Context) ->
+    case m_filestore:mark_unrecoverable(proplists:get_value(id, Args), Context) of
+        ok ->
+            z_render:wire({reload, []}, Context);
+        {error, eacces} ->
+            z_render:growl_error(?__("Only the admin account (user 1) can mark files unrecoverable.", Context), Context);
+        {error, _} ->
+            z_render:growl_error(?__("This file no longer has an eligible error older than 24 hours. Reload the page.", Context), Context)
+    end;
 event(#submit{message=admin_filestore}, Context) ->
     case z_acl:is_allowed(use, mod_admin_config, Context) of
         true ->
@@ -38,18 +47,26 @@ event(#submit{message=admin_filestore}, Context) ->
                     S3Url = noslash(z_string:trim(z_context:get_q(<<"s3url">>, Context))),
                     S3Key = z_string:trim(z_context:get_q(<<"s3key">>, Context)),
                     S3Secret = z_string:trim(z_context:get_q(<<"s3secret">>, Context)),
+                    S3Region = z_string:trim(z_convert:to_binary(z_context:get_q(<<"s3region">>, Context))),
                     Service = url2service(S3Url),
                     IsUploadEnabled = z_convert:to_bool(z_context:get_q(<<"is_upload_enabled">>, Context)),
                     IsCreateBucket = z_convert:to_bool(z_context:get_q(<<"is_create_bucket">>, Context)),
                     IsLocalKeep = z_convert:to_bool(z_context:get_q(<<"is_local_keep">>, Context)),
                     DeleteInterval = z_context:get_q(<<"delete_interval">>, Context),
                     TLS = filestore_config:tls_options(Context),
-                    case testcred(Service, S3Url, S3Key, S3Secret, TLS, IsCreateBucket) of
+                    Cred = filestore_config:credentials(Service, S3Key, S3Secret, S3Region, TLS),
+                    % Read-only settings can be saved without a write-based test.
+                    TestResult = case filestore_config:is_read_only(Context) of
+                        true -> ok;
+                        false -> testcred(Service, S3Url, Cred, IsCreateBucket)
+                    end,
+                    case TestResult of
                         ok ->
                             m_config:set_value(mod_filestore, service, Service, Context),
                             m_config:set_value(mod_filestore, s3url, S3Url, Context),
                             m_config:set_value(mod_filestore, s3key, S3Key, Context),
                             m_config:set_value(mod_filestore, s3secret, S3Secret, Context),
+                            m_config:set_value(mod_filestore, s3region, S3Region, Context),
                             m_config:set_value(mod_filestore, is_local_keep, IsLocalKeep, Context),
                             m_config:set_value(mod_filestore, is_upload_enabled, IsUploadEnabled, Context),
                             m_config:set_value(mod_filestore, delete_interval, DeleteInterval, Context),
@@ -132,32 +149,30 @@ service2mod(<<"webdav">>) -> webdavfilez.
     Context :: z:context(),
     Reason :: term().
 testcred(Context) ->
+    case filestore_config:is_read_only(Context) of
+        true -> {error, read_only};
+        false -> testcred_writable(Context)
+    end.
+
+testcred_writable(Context) ->
     Service = filestore_config:service(Context),
     S3Url = filestore_config:s3url(Context),
-    S3Key = filestore_config:s3key(Context),
-    S3Secret = filestore_config:s3secret(Context),
-    TLS = filestore_config:tls_options(Context),
-    testcred(Service, S3Url, S3Key, S3Secret, TLS, true).
+    Cred = filestore_config:credentials(Context),
+    testcred(Service, S3Url, Cred, true).
 
 % Try a put, get, and delete sequence
-testcred(<<>>, _, _, _, _, _) ->
+testcred(<<>>, _, _, _) ->
     ok;
-testcred(Service, S3Url, S3Key, S3Secret, TLSOptions, IsCreateBucket)
-    when is_binary(S3Url), is_binary(S3Key), is_binary(S3Secret) ->
-    case testcred_file(Service, S3Url, S3Key, S3Secret, TLSOptions) of
+testcred(Service, S3Url, Cred, IsCreateBucket) ->
+    case testcred_file(Service, S3Url, Cred) of
         ok ->
             ok;
         {error, enoent} when IsCreateBucket ->
             % Bucket might not exist, try creating it
-            Cred = #{
-                username => S3Key,
-                password => S3Secret,
-                tls_options => TLSOptions
-            },
             Mod = service2mod(Service),
             case Mod:create_bucket(Cred, S3Url) of
                 ok ->
-                    testcred_file(Service, S3Url, S3Key, S3Secret, TLSOptions);
+                    testcred_file(Service, S3Url, Cred);
                 {error, Reason} = Error ->
                     ?LOG_ERROR(#{
                         text => <<"S3 could not create bucket">>,
@@ -172,15 +187,8 @@ testcred(Service, S3Url, S3Key, S3Secret, TLSOptions, IsCreateBucket)
             Error
     end.
 
-testcred_file(Service, S3Url, S3Key, S3Secret, TLSOptions)
-    when is_binary(S3Url),
-         is_binary(S3Key),
-         is_binary(S3Secret) ->
-    Cred = #{
-        username => S3Key,
-        password => S3Secret,
-        tls_options => TLSOptions
-    },
+testcred_file(Service, S3Url, #{username := S3Key, password := S3Secret} = Cred)
+    when is_binary(S3Url), is_binary(S3Key), is_binary(S3Secret) ->
     Url = <<S3Url/binary, $/, "-zotonic-filestore-test-file-">>,
     Data = iolist_to_binary([?DATA, " ", z_ids:identifier()]),
     Mod = service2mod(Service),
@@ -227,7 +235,7 @@ testcred_file(Service, S3Url, S3Key, S3Secret, TLSOptions)
             }),
             Error
     end;
-testcred_file(_, _, _, _, _) ->
+testcred_file(_, _, _) ->
     {error, filestore_unconfigured}.
 
 
@@ -243,12 +251,16 @@ noslash(B) ->
 
 
 queue_upload_all(Context) ->
+    case filestore_config:is_read_only(Context) of
+        true -> z_render:growl_error(?__("The cloud file store is read-only.", Context), Context);
+        false -> queue_upload_all_writable(Context)
+    end.
+
+queue_upload_all_writable(Context) ->
     Service = filestore_config:service(Context),
     S3Url = filestore_config:s3url(Context),
-    S3Key = filestore_config:s3key(Context),
-    S3Secret = filestore_config:s3secret(Context),
-    TLSOptions = filestore_config:tls_options(Context),
-    case testcred_file(Service, S3Url, S3Key, S3Secret, TLSOptions) of
+    Cred = filestore_config:credentials(Context),
+    case testcred_file(Service, S3Url, Cred) of
         ok ->
             mod_filestore:queue_all(Context),
             z_pivot_rsc:delete_task(?MODULE, task_file_to_local, <<>>, Context),
@@ -282,7 +294,12 @@ queue_local_all(Context) ->
 
 
 task_file_to_local(Context) ->
-    case catch m_filestore:mark_move_to_local_limit(?BATCH_MOVE, Context) of
+    case try m_filestore:mark_move_to_local_limit(?BATCH_MOVE, Context)
+    catch
+        throw:CatchReason -> CatchReason;
+        exit:CatchReason -> {'EXIT', CatchReason};
+        error:CatchReason:CatchStack -> {'EXIT', {CatchReason, CatchStack}}
+    end of
         {ok, 0} ->
             ok;
         {ok, N} ->
@@ -298,7 +315,12 @@ task_file_to_local(Context) ->
     end.
 
 task_file_to_remote(Context) ->
-    case catch m_filestore:unmark_move_to_local_limit(?BATCH_MOVE, Context) of
+    case try m_filestore:unmark_move_to_local_limit(?BATCH_MOVE, Context)
+    catch
+        throw:CatchReason -> CatchReason;
+        exit:CatchReason -> {'EXIT', CatchReason};
+        error:CatchReason:CatchStack -> {'EXIT', {CatchReason, CatchStack}}
+    end of
         {ok, 0} ->
             ok;
         {ok, N} ->

@@ -36,6 +36,8 @@
 
     ld/0,
     ld/1,
+    ld_batch/1,
+    deploy/2,
     code_path_check/1
 ]).
 
@@ -53,6 +55,9 @@ start() ->
 
 halt_with_result(ok) -> halt(0);
 halt_with_result(error) -> halt(1);
+halt_with_result({error, Reason}) ->
+    io:fwrite(standard_error, "Could not compile: ~p.~n", [Reason]),
+    halt(1);
 halt_with_result({badrpc, Reason}) ->
     io:fwrite(standard_error, "Could not compile: ~p.~n", [Reason]),
     halt(1).
@@ -66,29 +71,75 @@ get_node_argument() ->
             list_to_atom(NodeArg)
     end.
 
-%% @doc Load all changed beam files, return list of reloaded modules.
--spec ld() -> list( code:load_ret() ).
+%% @doc Activate changed code as one batch, then notify the sites.
+-spec ld() -> [code:load_ret()] | {error, term()}.
 ld() ->
-    Ms = reloader:all_changed(),
-    [ ld(M) || M <- Ms ].
+    zotonic_filehandler_update:run(fun() -> activate(all) end).
 
-%% @doc Load a specific beam file, reattach any observers etc.
 -spec ld(module()) -> code:load_ret().
-ld(Module) when is_atom(Module) ->
-    code:purge(Module),
-    case code:load_file(Module) of
-        {error, Reason} = Error ->
-            ?LOG_ERROR(#{
-                text => <<"Error loading module">>,
-                in => zotonic_core,
-                module => Module,
-                reason => Reason
-            }),
-            Error;
-        {module, _} = Ok ->
-            z_sites_manager:module_loaded(Module),
-            Ok
+ld(Module) ->
+    case ld_batch([Module]) of
+        {error, _} = Error -> Error;
+        _ -> {module, Module}
     end.
+
+%% Include other changed helpers, even when the watcher reported the schema
+%% owner first. A deployment still needs a barrier before its working-tree update.
+-spec ld_batch([module()]) -> [code:load_ret()] | {error, term()}.
+ld_batch(Modules) ->
+    zotonic_filehandler_update:run(fun() ->
+        activate(lists:usort(Modules ++ reloader:all_changed()))
+    end).
+
+activate(Which) ->
+    Result = case Which of
+        all -> zotonic_filehandler_reload:all();
+        Modules -> zotonic_filehandler_reload:modules(Modules)
+    end,
+    case Result of
+        {ok, Loaded} ->
+            case whereis(z_sites_manager) of
+                undefined -> ok;
+                _ -> ok = z_sites_manager:modules_loaded(Loaded)
+            end,
+            [{module, M} || M <- Loaded];
+        {error, _} = Error -> Error
+    end.
+
+%% @doc Pull a working tree under the barrier, compile the umbrella, then load.
+%% A failed pull/build keeps watcher events and schema upgrades blocked for retry.
+-spec deploy(git | hg, file:filename_all()) -> {ok, iolist()} | {error, term()}.
+deploy(Vcs, Path) ->
+    Result = zotonic_filehandler_update:build(fun() ->
+        case pull(Vcs, Path) of
+            {ok, Output} ->
+                case compile_build() of
+                    ok -> {ok, proplists:get_value(stdout, Output, [])};
+                    {error, _} = Error -> Error
+                end;
+            {error, _} = Error -> Error
+        end
+    end),
+    finish_build(Result).
+
+%% Compilation can rewrite the tracked lock file with apps_user dependencies.
+%% Restore only that file, inside the barrier and before Git updates the tree.
+pull(git, Path) ->
+    Opts = [sync, stdout, stderr, {cd, Path}],
+    case exec:run("git ls-tree --name-only HEAD -- rebar.lock", Opts) of
+        {ok, Output} ->
+            case iolist_to_binary(proplists:get_value(stdout, Output, [])) of
+                <<>> -> exec:run("git pull --ff-only", Opts);
+                <<"rebar.lock\n">> ->
+                    case exec:run("git restore --source=HEAD --staged --worktree -- rebar.lock", Opts) of
+                        {ok, _} -> exec:run("git pull --ff-only", Opts);
+                        {error, _} = Error -> Error
+                    end
+            end;
+        {error, _} = Error -> Error
+    end;
+pull(hg, Path) ->
+    exec:run("hg pull -u", [sync, stdout, stderr, {cd, Path}]).
 
 %% @doc Check if the application is present in the current code path
 -spec code_path_check( binary() ) -> boolean().
@@ -141,53 +192,58 @@ all() ->
     ok.
 
 all_sync() ->
-    QueueOptions = #{
-        timeout => 10,
-        deadline => 100,
-        is_drop_running => true
-    },
-    {ok, _} = buffalo:queue(compile_all_task, {?MODULE, all_task, [ self() ]}, QueueOptions),
-    receive
-        {all_task_result, Result} ->
-            Result
-    end.
+    %% A synchronous caller must not be dropped by buffalo's is_drop_running.
+    all_task(undefined).
 
 all_task( OptPid ) ->
     jobs:run(zotonic_filehandler_single_job, fun() -> do_all_task( OptPid ) end).
 
-do_all_task( OptPid ) ->
-    Cmd = case os:getenv("ZOTONIC") of
-        false ->
-            "./rebar3 compile";
-        ZotonicDir ->
-            lists:flatten([
-                "cd ", z_filelib:os_filename(ZotonicDir),
-                "; ./rebar3 compile"
-            ])
-    end,
-    ?LOG_DEBUG(#{
-        in => zotonic_core,
-        text => <<"Compile all: start">>
-    }),
-    zotonic_filehandler:terminal_notifier("Compile all: start"),
-    Result = run_cmd_task(Cmd, [], []),
-    case Result of
-        {error, _} ->
-            zotonic_filehandler:terminal_notifier("Compile all: ERROR");
-        _ ->
-            zotonic_filehandler:terminal_notifier("Compile all: ready")
-    end,
-    ?LOG_DEBUG(#{
-        text => <<"Compile all: ready">>,
-        in => zotonic_core,
-        result => Result
-    }),
-    Result1 = cleanup_stdout(Result),
+do_all_task(OptPid) ->
+    Result = try
+                 BuildResult = zotonic_filehandler_update:build(fun compile_build/0),
+                 finish_build(BuildResult)
+             catch Class:Reason -> {error, {Class, Reason}}
+             end,
     case is_pid(OptPid) of
         false -> ok;
-        true -> OptPid ! {all_task_result, Result1}
+        true -> OptPid ! {all_task_result, Result}
     end,
-    Result1.
+    Result.
+
+compile_build() ->
+    Cmd = case os:getenv("ZOTONIC") of
+        false -> "./rebar3 compile";
+        ZotonicDir -> "cd " ++ z_filelib:os_filename(ZotonicDir) ++ " && ./rebar3 compile"
+    end,
+    zotonic_filehandler:terminal_notifier("Compile all: start"),
+    case cleanup_stdout(run_cmd_task(Cmd, [], [])) of
+        ok ->
+            case activate(all) of
+                {error, _} = Error -> Error;
+                _Loaded ->
+                    ok
+            end;
+        {error, _} = Error ->
+            zotonic_filehandler:terminal_notifier("Compile all: ERROR"),
+            Error
+    end.
+
+%% Refresh files only after activation has released the update barrier. Hold a
+%% read lease so a subsequent deployment cannot start halfway through the refresh.
+finish_build({error, _} = Error) ->
+    Error;
+finish_build(Result) ->
+    zotonic_filehandler_update:schema(fun() ->
+        case whereis(z_sites_manager) of
+            undefined -> ok;
+            _ ->
+                z_sites_manager:upgrade(),
+                z:flush(),
+                z:reindex()
+        end,
+        zotonic_filehandler:terminal_notifier("Compile all: ready"),
+        Result
+    end).
 
 cleanup_stdout({error, Props} = E) ->
     case proplists:get_value(stdout, Props) of
@@ -327,50 +383,70 @@ recompile(File) ->
     end.
 
 recompile_task(File) ->
-    case compile_options(File) of
-        {ok, Options} ->
-            ?LOG_DEBUG(#{
-                text => <<"Recompile of erlang file using make">>,
-                in => zotonic_core,
-                file => File
-            }),
-            zotonic_filehandler:terminal_notifier("Compiling: " ++ filename:basename(File)),
-            try
-                case make:files([File], Options) of
-                    up_to_date ->
-                        ok;
-                    Other ->
-                        ?LOG_WARNING(#{
-                            text => <<"Recompile of Erlang file unexpected result">>,
-                            in => zotonic_core,
-                            result => error,
-                            reason => Other,
-                            file => File
-                        })
-                end
-            catch
-                Type:Err:Stack ->
-                    ?LOG_WARNING(#{
-                        text => <<"Recompile of Erlang file exit">>,
-                        in => zotonic_core,
-                        file => File,
-                        result => Type,
-                        reason => Err,
-                        stack => Stack
-                    })
+    jobs:run(zotonic_filehandler_single_job, fun() -> recompile_locked(File) end).
+
+recompile_locked(File) ->
+    zotonic_filehandler_update:run(fun() ->
+        case compile_options(File) of
+            {ok, Options} ->
+                recompile_activate(File, Options);
+            false ->
+                % Rebar touches test sources not compiled in this profile.
+                % New applications also need a full build first. Skipping these
+                % files must not mark the activation/schema barrier as failed.
+                ?LOG_DEBUG(#{
+                    text => <<"Skipping Erlang file without compile options">>,
+                    in => zotonic_filehandler,
+                    file => File
+                }),
+                ok
+        end
+    end).
+
+recompile_activate(File, Options) ->
+    case recompile_file(File, Options) of
+        ok ->
+            Module = list_to_atom(filename:basename(File, ".erl")),
+            case activate([Module]) of
+                {error, _} = Error -> Error;
+                _ -> ok
             end;
-        false ->
-            % Might be some new OTP app, so a manual build on the top level
-            % should take care of this, we don't do anything now.
+        {error, _} = Error -> Error
+    end.
+
+recompile_file(File, Options) ->
+    ?LOG_DEBUG(#{
+        text => <<"Recompile of erlang file using make">>,
+        in => zotonic_core,
+        file => File
+    }),
+    zotonic_filehandler:terminal_notifier("Compiling: " ++ filename:basename(File)),
+    try
+        case make:files([File], Options) of
+            up_to_date ->
+                ok;
+            Other ->
+                ?LOG_WARNING(#{
+                    text => <<"Recompile of Erlang file unexpected result">>,
+                    in => zotonic_core,
+                    result => error,
+                    reason => Other,
+                    file => File
+                }),
+                {error, Other}
+        end
+    catch
+        Type:Err:Stack ->
             ?LOG_WARNING(#{
-                text => <<"Could not find compile options, no recompile for Erlang file">>,
+                text => <<"Recompile of Erlang file exit">>,
                 in => zotonic_core,
-                result => error,
-                reason => no_compile_options,
-                file => File
-            })
-    end,
-    ok.
+                file => File,
+                result => Type,
+                reason => Err,
+                stack => Stack
+            }),
+            {error, {Type, Err}}
+    end.
 
 -spec compile_options(file:filename_all()) -> {ok, list()} | false.
 compile_options(File) when is_binary(File) ->

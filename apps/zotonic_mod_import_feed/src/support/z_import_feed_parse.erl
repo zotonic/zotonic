@@ -1,5 +1,5 @@
 %% @copyright 2026 Marc Worrell
-%% @doc RSS 2, RDF/RSS 1 and Atom normalization without creating XML-name atoms.
+%% @doc RSS 2, RDF/RSS 1, Atom and JSON Feed normalization without creating XML-name atoms.
 %% @end
 
 %% Copyright 2026 Marc Worrell
@@ -29,7 +29,21 @@
     when
         Data :: binary(),
         Url :: binary().
-parse(Data, Url) when byte_size(Data) =< ?MAX_FEED_BYTES ->
+parse(Data, Url) when is_binary(Data), byte_size(Data) =< ?MAX_FEED_BYTES ->
+    case trim_start(Data) of
+        <<239, 187, 191, Rest/binary>> -> parse(Rest, Url);
+        <<"{", _/binary>> = Json -> z_import_feed_json:parse(Json, Url, ?MAX_ENTRIES);
+        <<"BEGIN:VCALENDAR", _/binary>> = Calendar -> z_import_feed_ical:parse(Calendar, Url, ?MAX_ENTRIES);
+        _ -> parse_xml(Data, Url)
+    end;
+parse(_, _) ->
+    {error, response_too_large}.
+
+%% JSON whitespace is ASCII; do not decode untrusted input before the parser.
+trim_start(<<C, Rest/binary>>) when C =:= 32; C =:= 9; C =:= 10; C =:= 13 -> trim_start(Rest);
+trim_start(Data) -> Data.
+
+parse_xml(Data, Url) ->
     %% No DTDs or custom entities, including external entities. z_html_parse
     %% retains names as binaries and does not fetch external documents.
     case re:run(Data, <<"<!\\s*(DOCTYPE|ENTITY)" >>, [caseless, {capture, none}]) of
@@ -40,9 +54,7 @@ parse(Data, Url) when byte_size(Data) =< ?MAX_FEED_BYTES ->
                 {ok, {Name, _, _} = Root} -> parse_root(local(Name), Root, Url);
                 _ -> {error, invalid_feed}
             catch _:_ -> {error, invalid_feed} end
-    end;
-parse(_, _) ->
-    {error, response_too_large}.
+    end.
 
 parse_root(<<"rss">>, Root, Url) ->
     case children(<<"channel">>, Root) of
@@ -64,9 +76,8 @@ feed(Channel, Nodes, Kind, Url) ->
     Links = links(Channel, Base),
     Entries = [entry(ChildNode, Kind, Base, Url) || ChildNode <- lists:sublist(Nodes, ?MAX_ENTRIES)],
     IsZotonic = case {Kind, Entries} of
-        {rss, _} -> false;
-        {atom, []} -> undefined;
-        {atom, _} ->
+        {_, []} -> undefined;
+        {_, _} ->
             case lists:any(fun(Entry) -> is_binary(maps:get(zotonic_export, Entry)) end, Entries) of
                 true -> true;
                 false when length(Nodes) > ?MAX_ENTRIES -> undefined;
@@ -80,6 +91,7 @@ feed(Channel, Nodes, Kind, Url) ->
                         atom -> alternate(Links);
                         rss -> absolute(value(<<"link">>, Channel), Base)
                    end,
+        next_url => first([LinkUrl || {<<"next">>, LinkUrl} <- Links]),
         hubs => [LinkUrl || {<<"hub">>, LinkUrl} <- Links],
         entries => Entries,
         is_zotonic_feed => IsZotonic,
@@ -170,7 +182,7 @@ entry(Node, Kind, ParentBase, FeedUrl) ->
 
 %% An explicit relation identifies a resource export; a generator name or JSON
 %% alternate alone is not sufficient (WordPress also advertises JSON).
-zotonic_export(atom, Node, Base) ->
+zotonic_export(Kind, Node, Base) when Kind =:= atom; Kind =:= rss ->
     case [LinkUrl || ChildNode <- children(<<"link">>, Node),
             attr(<<"rel">>, ChildNode) =:= ?ZOTONIC_RESOURCE_REL,
             attr(<<"type">>, ChildNode) =:= <<"application/json">>,
@@ -225,7 +237,7 @@ discover(Data, Url, Headers) ->
                 || #{<<"href">> := LinkUrl} = Attributes <- HeaderLinks ++ HtmlLinks,
                    z_import_feed_http:url(LinkUrl),
                    lists:member(maps:get(<<"type">>, Attributes, <<>>),
-                       [<<"application/rss+xml">>, <<"application/atom+xml">>, <<"application/rdf+xml">>])],
+                       [<<"application/rss+xml">>, <<"application/atom+xml">>, <<"application/rdf+xml">>, <<"application/feed+json">>, <<"text/calendar">>])],
             case Found of [] -> {error, no_feeds}; _ -> {ok, lists:usort(Found)} end
     end.
 
@@ -318,7 +330,8 @@ srcset_candidate(LinkUrl, Descriptor, Base) ->
             re:run(Descriptor, <<"^([0-9]+(?:\\.[0-9]+)?)(w|x)$">>, [{capture, all_but_first, binary}])
         }
     of
-        {<<>>, _} -> false;
+        {<<>>, _} ->
+            false;
         {Url, {match, [Number, Unit]}} ->
             Value = case binary:match(Number, <<".">>) of
                 nomatch -> binary_to_integer(Number);
@@ -328,7 +341,8 @@ srcset_candidate(LinkUrl, Descriptor, Base) ->
                 true -> {true, {{case Unit of <<"w">> -> 2; <<"x">> -> 1 end, Value}, Url}};
                 false -> false
             end;
-        _ -> false
+        _ ->
+            false
     end.
 
 %% Repeated images sometimes expose different subsets of the same srcset.
@@ -351,9 +365,8 @@ date(Value) ->
     try
         case re:run(Value, <<"^\\d{4}-\\d\\d-\\d\\dT">>, [{capture, none}]) of
             match ->
-                calendar:system_time_to_universal_time(
-                    calendar:rfc3339_to_system_time(binary_to_list(Value), [{unit, second}]),
-                    second);
+                z_datetime:timestamp_to_datetime(
+                    calendar:rfc3339_to_system_time(binary_to_list(Value), [{unit, second}]));
             nomatch ->
                 rss_date(Value)
         end
@@ -373,7 +386,7 @@ rss_date(Value) ->
                 <<"+">> -> -Offset;
                 _ -> Offset
             end,
-            calendar:gregorian_seconds_to_datetime(calendar:datetime_to_gregorian_seconds(DateTime) + Delta);
+            z_datetime:next_second(DateTime, Delta);
         nomatch ->
             DateTime
     end.
@@ -440,11 +453,13 @@ alternate(Links) ->
     first([LinkUrl || {<<"alternate">>, LinkUrl} <- Links]).
 
 unique(Urls) ->
-    lists:reverse(
-        element(2, lists:foldl(
-            fun(Url, {Seen, Acc}) ->
-                case maps:is_key(Url, Seen) of
-                    true -> {Seen, Acc};
-                    false -> {Seen#{Url => true}, [Url | Acc]}
-                end
-            end, {#{}, []}, Urls))).
+    {_Seen, UniqueUrls} = lists:foldl(
+        fun(Url, {Seen, Acc}) ->
+            case maps:is_key(Url, Seen) of
+                true -> {Seen, Acc};
+                false -> {Seen#{Url => true}, [Url | Acc]}
+            end
+        end,
+        {#{}, []},
+        Urls),
+    lists:reverse(UniqueUrls).

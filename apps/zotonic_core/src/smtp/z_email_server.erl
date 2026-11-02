@@ -1244,7 +1244,12 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                         true ->
                             ok;
                         false ->
-                            catch send_blocking(Id, VERP, Bcc, EncodedMail, BccSmtpOpts, Context)
+                            try send_blocking(Id, VERP, Bcc, EncodedMail, BccSmtpOpts, Context)
+                            catch
+                                throw:CatchReason -> CatchReason;
+                                exit:CatchReason -> {'EXIT', CatchReason};
+                                error:CatchReason:CatchStack -> {'EXIT', {CatchReason, CatchStack}}
+                            end
                     end
             end
     end.
@@ -1294,7 +1299,12 @@ send_blocking_smtp(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts, Context) 
         port => proplists:get_value(port, SmtpOpts)
     }),
     IsFallbackPlainText = z_config:get(smtp_plaintext_fallback),
-    case catch gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) of
+    case try gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts)
+    catch
+        throw:CatchReason -> CatchReason;
+        exit:CatchReason -> {'EXIT', CatchReason};
+        error:CatchReason:CatchStack -> {'EXIT', {CatchReason, CatchStack}}
+    end of
         Receipt when is_binary(Receipt) ->
             {ok, Receipt};
         {error, no_more_hosts, {permanent_failure, _Host, <<"ign Root ", _/binary>>}}

@@ -18,14 +18,14 @@ RUN apt-get update
 RUN apt-get -y install build-essential libcap2-bin libseccomp-dev libssl-dev automake autoconf \
         ncurses-dev zlib1g-dev git postgresql postgresql-client curl gettext \
         inotify-tools libnotify-bin clamav clamav-daemon ghostscript file \
-        imagemagick ffmpeg xvfb wkhtmltopdf sass less vim \
+        imagemagick ffmpeg xvfb sass less vim \
         gosu dumb-init
 
 # Max inotify files setting
 RUN echo "fs.inotify.max_user_watches=10000" > /etc/sysctl.d/40-max-user-watches.conf
 
 # Enable ImageMagick PDF rendering
-RUN sed -i 's/^.*pattern="PDF".*$/<!-- &1 -->/g' /etc/ImageMagick-6/policy.xml
+RUN sed -i 's/^.*pattern="PDF".*$/<!-- & -->/g' /etc/ImageMagick-*/policy.xml
 
 COPY docker/docker-entrypoint.sh /opt/zotonic-docker/docker-entrypoint.sh
 

@@ -25,7 +25,7 @@
     <thead>
         <tr>
             <th width="20%">{_ Title _}</th>
-            <th width="20%">{_ Name _}</th>
+            <th width="20%">{_ Unique name _}</th>
             <th width="40%">{_ URI _}</th>
             <th width="20%">&nbsp;</th>
         </tr>

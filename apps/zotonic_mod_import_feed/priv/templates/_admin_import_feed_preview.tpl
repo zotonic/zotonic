@@ -30,7 +30,7 @@
                                 <td>{{ e.author|escape }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">{_ Published _}</th>
+                                <th scope="row">{_ Publication date _}</th>
                                 <td>{{ e.published|date:"Y-m-d H:i" }}</td>
                             </tr>
                             <tr>

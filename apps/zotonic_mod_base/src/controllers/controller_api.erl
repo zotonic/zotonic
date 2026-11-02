@@ -22,26 +22,67 @@
     zotonic_keywords => ["reference", "backend_developer", "controller", "api_and_integration", "authorization_and_access_control", "http"]
 }).
 -moduledoc("
-`controler_api` processes authorized REST API requests: It provides an easy way to create API calls to allow computer programs to perform functions on your Zotonic site.
+`controller_api` exposes MQTT topics over HTTP at `/api/:topic`, including model calls.
+Requests use the normal MQTT and model access checks for the current user.
 
-`controller_api` by default intercepts all URLs according to the patterns `/api/:topic`.
+Model calls
+-----------
 
 The topic can refer to a model. In this case the topic pattern is one of:
 
 *   `/api/model/mymodel/get/foo/bar` maps to `m_mymodel:m_get([ <<\"foo\">>, <<\"bar\">> ], Msg, Context)`
-*   `/api/model/mymodel/post/foo/bar` maps to `m_mymodel:m_delete([ <<\"foo\">>, <<\"bar\">> ], Msg, Context)`
+*   `/api/model/mymodel/post/foo/bar` maps to `m_mymodel:m_post([ <<\"foo\">>, <<\"bar\">> ], Msg, Context)`
 *   `/api/model/mymodel/delete/foo/bar` maps to `m_mymodel:m_delete([ <<\"foo\">>, <<\"bar\">> ], Msg, Context)`
 
-In all case the `Msg` is an MQTT message map, with the `payload` set to the body of the received request. In case of a
-GET or DELETE the payload is set to a map of the query arguments.
+In all cases, `Msg` is an MQTT message map, with the `payload` set to the body of the received request. In case of a
+GET, HEAD or DELETE the payload is set to a map of the query arguments.
 
 Note that for a POST the payload might not be the complete message as additional query arguments are passed via
 `z_context:get_q(<<\"argument_name\">>, Context)`. If the model function is called using MQTT, then all arguments
 are contained in the payload.
 
-The API controller will publish a message to the topic, and wait for max 60 seconds for a response on the response topic.
+HTTP methods
+------------
 
-If there is a query argument `response_topic` then the API controller will only publish the message and immediately return.
+| HTTP method | Supported topics |
+| --- | --- |
+| GET | Model `get` topics and non-model topics. |
+| HEAD | Model `get` topics only. |
+| POST | Any topic, including model `get`, `post` and `delete` topics. |
+| DELETE | Model `delete` topics only. |
+| OPTIONS | Any topic; does not call the model or publish a message. |
+
+A method/topic mismatch returns `400 Bad Request`. Known HTTP methods outside this list return
+`405 Method Not Allowed`; unrecognized methods return `501 Not Implemented`.
+The `Allow` header lists the controller's methods, rather than
+filtering them for the requested topic.
+
+HEAD executes the model call and returns the same status and headers as GET, without a
+response body. It still performs authorization and model validation; it does not return
+success without checking the result. For example, to check whether all sites are running:
+
+```sh
+curl --head https://example.com/api/model/zotonic_status/get/check
+```
+
+On a site exposing the `zotonic_status` model, this returns `200 OK` when all sites are running,
+or `500 Internal Server Error` when the check fails.
+
+Replies
+-------
+
+By default, the controller publishes a message to the topic and waits up to 60 seconds for
+its response. The response is encoded in the negotiated content type, with JSON as the default.
+Model errors determine the HTTP status, for example `403` for `eacces` and `404` for `enoent`
+or `unknown_path`.
+
+With the `response_topic` query argument, the controller publishes the message and returns
+without waiting for the model's result. A non-empty value supplies the MQTT response topic;
+an empty value publishes without a response topic. The HTTP reply then reports the outcome
+of publishing, not the outcome of the model call.
+
+HEAD rejects any `response_topic` query argument with `400 Bad Request`, including an empty
+value or a bare `?response_topic`. This ensures that HEAD waits for the model's result.
 ").
 
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
@@ -73,7 +114,7 @@ options(Context) ->
 
 -spec allowed_methods( z:context() ) -> {[ binary() ], z:context()}.
 allowed_methods(Context) ->
-    {[ <<"GET">>, <<"POST">>, <<"DELETE">>, <<"OPTIONS">> ], Context}.
+    {[ <<"GET">>, <<"HEAD">>, <<"POST">>, <<"DELETE">>, <<"OPTIONS">> ], Context}.
 
 -spec malformed_request( z:context() ) -> {boolean(), z:context()}.
 malformed_request(Context) ->
@@ -82,15 +123,21 @@ malformed_request(Context) ->
         {ok, Topic} ->
             Context1 = z_context:set(topic, Topic, Context),
             Method = cowmachine_req:method(Context1),
-            {not is_method_topic_match(Method, Topic), Context1};
+            IsMalformed = not is_method_topic_match(Method, Topic) orelse
+                (Method =:= <<"HEAD">> andalso
+                    lists:keymember(<<"response_topic">>, 1, cowmachine_req:req_qs(Context1))),
+            {IsMalformed, Context1};
         {error, _} ->
             {true, Context}
     end.
 
 % Check method against model call methods
 % GET -> get
+% HEAD -> model get only, without asynchronous response_topic
 % POST -> post / delete / get
 % DELETE -> delete
+is_method_topic_match(<<"HEAD">>, [ <<"model">>, _Model, <<"get">> | _ ]) -> true;
+is_method_topic_match(<<"HEAD">>, _) -> false;
 is_method_topic_match(<<"GET">>, [ <<"model">>, _Model, <<"get">> | _ ]) -> true;
 is_method_topic_match(<<"GET">>, [ <<"model">>, _Model, _ModelMethod | _ ]) -> false;
 is_method_topic_match(<<"GET">>, _) -> true;

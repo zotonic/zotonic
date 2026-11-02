@@ -5,16 +5,19 @@
 	delegate="controller_logon"
 %}
 <form id="logon_confirm_form" method="post" action="postback">
-	<h1 class="z-logon-title">{_ Please confirm your _} <span>{{ m.site.title|default:"Zotonic" }} password</span></h1>
+	<h1 class="z-logon-title">{% trans "Please confirm your password for <span>{site}</span>." site=m.site.title|default:"Zotonic"|escape %}</h1>
 
 	<input type="hidden" name="page" value="{{ page|escape }}" />
 	<input type="hidden" name="handler" value="username" />
 
 	<div id="logon_password">
-		<p class="do_inputoverlay">
+		<div class="do_inputoverlay">
 			<span>{_ Password _}</span>
-			<input class="form-control" type="password" id="password" name="password" value="" autocomplete="off" />
-		</p>
+			<div class="input-group">
+			    <input class="form-control" type="password" id="password" name="password" value="" autocomplete="off" />
+			    {% include "_password_visibility.tpl" target_id="password" %}
+			</div>
+		</div>
 	</div>
 
 	<p class="error" id="logon_confirm_error" style="display:none"> {_ Confirmation failure _} </p>

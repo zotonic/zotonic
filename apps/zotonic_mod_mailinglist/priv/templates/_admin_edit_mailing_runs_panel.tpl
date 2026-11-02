@@ -5,7 +5,7 @@
         {% for run in runs|slice:[,3] %}
             <p>
                 <a href="{% url admin_mailing_run run_id=run.id %}">{{ m.rsc[run.page_id].title }} → {{ m.rsc[run.mailinglist_id].title }}</a><br>
-                {% if run.is_test %}{_ Test: _}{% endif %}
+                {% if run.is_test %}{_ Test email: _}{% endif %}
                 {% include "_mailing_run_status.tpl" status=run.status type=run.type due=run.due %}
                 · {{ run.stats.sent|default:0 }} {_ sent _}
                 {% if run.stats.selected and run.status == "sending" or run.stats.selected and run.status == "retrying" %}

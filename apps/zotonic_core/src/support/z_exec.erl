@@ -672,10 +672,10 @@ guard_job(true, Pid, OsPid) ->
             done -> ok;
             {'DOWN', JobRef, process, Pid, _} -> ok;
             {'DOWN', OwnerRef, process, Owner, _} ->
-                catch exec:kill(OsPid, sigterm),
+                try exec:kill(OsPid, sigterm) catch _:_ -> ok end,
                 receive
                     {'DOWN', JobRef, process, Pid, _} -> ok
-                after 1000 -> catch exec:kill(OsPid, sigkill)
+                after 1000 -> try exec:kill(OsPid, sigkill) catch _:_ -> ok end
                 end
         end
     end).

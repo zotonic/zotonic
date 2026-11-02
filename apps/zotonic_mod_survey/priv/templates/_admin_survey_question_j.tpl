@@ -12,7 +12,7 @@
         <div class="row">
             <label class="control-label col-sm-2 col-md-1">{_ if _}</label>
             <div class="col-sm-9 col-md-10 col-lg-11">
-                <input name="jump-condition-{{#j}}" id="jump-condition-{{#j}}" class="form-control jump-condition {% if nosubmit %}nosubmit{% endif %}" type="text" placeholder="{_ question == 1 _}" value="{{ condition }}">
+                <input name="jump-condition-{{#j}}" id="jump-condition-{{#j}}" class="form-control jump-condition {% if nosubmit %}nosubmit{% endif %}" type="text" placeholder="question == 1" value="{{ condition }}">
             </div>
         </div>
         <div class="row">

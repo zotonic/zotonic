@@ -94,7 +94,7 @@
                         <select id="metric" name="qmetric" class="form-control">
                             <option value="jaccard"{% if dashboard.filters.metric == "jaccard" %} selected{% endif %}>{_ Jaccard similarity _}</option>
                             <option value="overlap"{% if dashboard.filters.metric == "overlap" %} selected{% endif %}>{_ Smaller-set overlap _}</option>
-                            <option value="count"{% if dashboard.filters.metric == "count" %} selected{% endif %}>{_ Common content count _}</option>
+                            <option value="count"{% if dashboard.filters.metric == "count" %} selected{% endif %}>{_ Shared content count _}</option>
                         </select>
                     </div>
                 </div>
@@ -203,9 +203,9 @@
                         {% if dashboard.filters.metric == "count" %}
                             {_ Cells show the number of content items using both keywords. _}
                         {% elseif dashboard.filters.metric == "overlap" %}
-                            {_ Cells show which percentage of the smaller keyword set is shared. _}
+                            {_ Cells show the shared content count as a percentage of the content count for the less-used keyword. _}
                         {% else %}
-                            {_ Cells show the shared percentage of the combined keyword sets. _}
+                            {_ Cells show the shared content count as a percentage of all distinct content using either keyword. _}
                         {% endif %}
                     </span>
                 </div>
@@ -270,7 +270,7 @@
                             <tr>
                                 <th>{_ Keyword _}</th>
                                 <th>{_ Keyword _}</th>
-                                <th class="text-right">{_ Common _}</th>
+                                <th class="text-right">{_ Shared content count _}</th>
                                 <th class="text-right{% if dashboard.filters.metric == "jaccard" %} is-active{% endif %}">{_ Jaccard _}</th>
                                 <th class="text-right{% if dashboard.filters.metric == "overlap" %} is-active{% endif %}">{_ Smaller set _}</th>
                             </tr>
@@ -304,7 +304,7 @@
             <div class="well well-sm keyword-dashboard__method">
                 <strong>{_ How to read the overlap _}</strong>
                 <p>
-                    {_ <em>Jaccard similarity</em> divides the common content by all distinct content using either keyword. <em>Smaller-set overlap</em> divides it by the least-used keyword and helps reveal keywords that may be redundant or nested. Very small keyword sets can score highly, so use the minimum-uses filter when looking for meaningful patterns. _}
+                    {_ <em>Jaccard similarity</em> divides the number of content items using both keywords by the number using either keyword, counting each item once. <em>Smaller-set overlap</em> divides the shared content count by the content count for the less-used keyword. This helps reveal keywords that may be redundant or nested. Keywords used on very few content items can score highly, so use the minimum-uses filter when looking for meaningful patterns. _}
                 </p>
             </div>
         {% endif %}

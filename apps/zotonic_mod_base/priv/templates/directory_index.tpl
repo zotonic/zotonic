@@ -14,7 +14,7 @@
             <th>{_ Filename _}</th>
             <th>{_ Type _}</th>
             <th>{_ Date _}</th>
-            <th>{_ Size _}</th>
+            <th>{_ File size _}</th>
         </tr>
     </thead>
     <tbody>

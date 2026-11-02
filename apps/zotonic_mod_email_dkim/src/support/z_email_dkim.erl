@@ -21,7 +21,7 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
--export([ensure_configured/1, cert_files/1, dns_entry/1, dns_entry_domain/1, mimemail_options/1]).
+-export([ensure_configured/1, cert_files/1, dns_entry/1, dns_entry_domain/1, dkim_selector/1, mimemail_options/1]).
 
 %% @doc Called by mod_email_dkim:init/1 to generate the DKIM key files
 %% on first install.

@@ -1,6 +1,6 @@
 # mod_import_feed
 
-Discover RSS 2.0, RSS 1.0/RDF and Atom feeds and continuously import their articles.
+Discover RSS 2.0, RSS 1.0/RDF, Atom, JSON Feed 1/1.1 and iCalendar feeds and continuously import their articles.
 Enable **Import feeds** in Modules, then open **Content → Import feeds**. The module
 requires `mod_admin` and `mod_cron`; it does not require `mod_websub`.
 
@@ -65,16 +65,44 @@ backoff cap are fixed constants, not new configuration settings.
 The importance order is WordPress featured image, feed media/enclosures, then
 inline images. Attaching one medium leaves other inline images at their source.
 
-## Zotonic Atom feeds
+## iCalendar feeds
 
-Atom entries exported by `mod_export` advertise their structured resource with a
+Discover `text/calendar` links or enter an `.ics` feed URL directly. VEVENTs
+must have a UID, UTC DTSTAMP and valid DTSTART. Invalid events are skipped;
+malformed calendar structure is rejected. Dates, durations and exclusive all-day
+end dates are normalized to Zotonic event properties. UTC and known IANA TZIDs
+are supported; floating times are interpreted as UTC. Custom VTIMEZONE rules
+are not evaluated, and events with unknown TZIDs are skipped. Cancelled events
+are unpublished. With category guessing enabled, calendar entries use `event`;
+otherwise the configured category applies.
+
+Recurrence rules and recurrence IDs are retained as `ical_rrule` and
+`ical_recurrence_id`; occurrences are not expanded. Exceptions have separate
+identities derived from UID and RECURRENCE-ID. Alarms are ignored.
+
+Zotonic calendar exports advertise `X-ZOTONIC-RESOURCE`, using the same native
+resource import and optional per-resource WebSub subscriptions as Atom/RSS/JSON
+Feed. Generic calendar feeds continue to use polling; feed-level WebSub push
+subscriptions are not provided. `X-ZOTONIC-NEXT` is followed using the existing
+first-page/initial-import-all-pages and stop-at-seen-entry policies.
+
+## Zotonic resource feeds
+
+Atom and RSS entries exported by `mod_export` advertise their structured resource with a
 `link` whose `rel` is `https://zotonic.com/rel/resource` and type is
 `application/json`. Its URL is the `rsc_export` model API. The importer checks
-that the exported resource URI matches the Atom ID before using `m_rsc_import`.
+that the exported resource URI matches the entry ID/GUID before using `m_rsc_import`.
+JSON Feed items carry the same endpoint in the `_zotonic.resource_url` extension.
 An ordinary JSON alternate link does not activate native importing.
 
+JSON Feed discovery supports `application/feed+json` HTML and HTTP alternate
+links, as well as direct feed URLs. Content, authors (including version 1’s
+`author`), dates, tags, images and attachments enter the normal import pipeline.
+Plain-text content is escaped before HTML cleanup. The usual 4 MiB response
+limit and 100-entry polling limit apply.
+
 The Zotonic-specific settings are hidden for feeds detected as non-Zotonic.
-Detection is remembered after previews and polling. Empty Atom feeds remain
+Detection is remembered after previews and polling. Empty feeds remain
 unknown; mixed feeds keep these options available. Hidden settings retain their
 saved values.
 
@@ -185,7 +213,7 @@ Avoid external side effects inside the notification: the transaction can roll ba
 This allows overlapping feeds to reuse resources and authoritative copies to be
 updated without relying on the local resource's `uri` property.
 
-The source identity is an absolute RSS GUID/Atom ID when available, otherwise the
+The source identity is an absolute RSS GUID, Atom ID or JSON Feed item ID when available, otherwise the
 article URL. Opaque GUIDs become a SHA-256 URN scoped to the publisher origin;
 missing both ID and URL is an error. Opaque identifiers must be unique within that
 origin. Publishers with separate applications that reuse opaque IDs should emit

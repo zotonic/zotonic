@@ -1,9 +1,9 @@
 {% extends "email_base.tpl" %}
 
-{% block title %}{{ name|escape }} - {_ contact form on _} {{ m.site.title|default:m.site.hostname }}{% endblock %}
+{% block title %}{{ name|escape }} - {% trans "Contact form on {site}" site=m.site.title|default:m.site.hostname|escape %}{% endblock %}
 
 {% block body %}
-<p>{_ Hello, the contact form of _} “{{m.site.title|default:m.site.hostname}}” {_ has been submitted. _}</p>
+<p>{% trans "Hello, the contact form on “{site}” has been submitted." site=m.site.title|default:m.site.hostname|escape %}</p>
 
 <table>
 <tr>

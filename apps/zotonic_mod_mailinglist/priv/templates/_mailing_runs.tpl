@@ -13,7 +13,7 @@
         <tr>
             <td>
                 <a href="{% url admin_mailing_run run_id=run.id %}">{{ m.rsc[run.page_id].title }}</a>
-                {% if run.is_test %}<small>{_ Test _}</small>{% endif %}
+                {% if run.is_test %}<small>{_ Test email _}</small>{% endif %}
                 <br><small>{{ run.created|date:"Y-m-d H:i" }}</small>
             </td>
             <td>

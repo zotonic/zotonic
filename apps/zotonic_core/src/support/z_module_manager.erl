@@ -66,6 +66,7 @@
     mod_version/1,
     mod_title/1,
     mod_description/1,
+    mod_msgctxt/1,
     mod_author/1,
     mod_schema/1,
     mod_config/1,
@@ -167,6 +168,9 @@ upgrade(Context) ->
 %% @doc Wait till all modules are started, used when starting up a new or test site.
 -spec upgrade_await(z:context()) -> ok | {error, timeout}.
 upgrade_await(Context) ->
+    % Like upgrade/1, discard any active-module list cached before the change
+    % committed. The manager must read the current list when handling upgrade.
+    flush(Context),
     upgrade_await_1(Context, 20).
 
 upgrade_await_1(_Context, 0) ->
@@ -870,6 +874,25 @@ mod_description(Module) ->
         bin(Desc)
     catch
         _M:_E -> undefined
+    end.
+
+%% @doc Get the default gettext message context for this module's templates.
+%% An absent attribute differs from an explicitly empty gettext context.
+-spec mod_msgctxt(Module) -> MsgCtxt when
+    Module :: atom() | binary() | string(),
+    MsgCtxt :: binary() | undefined.
+mod_msgctxt(Module) ->
+    Mod = module_to_mod(Module),
+    try proplists:get_value(mod_msgctxt, Mod:module_info(attributes)) of
+        undefined -> undefined;
+        Value when is_list(Value); is_binary(Value) ->
+            case unicode:characters_to_binary(Value) of
+                B when is_binary(B) -> B;
+                _ -> undefined
+            end;
+        _ -> undefined
+    catch
+        _:_ -> undefined
     end.
 
 %% @doc Get the author of a module.
@@ -1729,6 +1752,9 @@ has_behaviour(M, Behaviour) ->
 
 %% @doc Manage the upgrade/install of this module.
 manage_schema(Module, Context) ->
+    zotonic_filehandler_update:schema(fun() -> manage_schema_loaded(Module, Context) end).
+
+manage_schema_loaded(Module, Context) ->
     Target = mod_schema(Module),
     Current = db_schema_version(Module, Context),
     HasManageSchema = erlang:function_exported(Module, manage_schema, 2),
@@ -1873,6 +1899,9 @@ observes_1(Module, Pid, [{F,Arity}|Rest], Acc) ->
 %% @doc Reinstall the given module's schema, calling
 %% Module:manage_schema(install, Context); if that function exists.
 reinstall(Module, Context) ->
+    zotonic_filehandler_update:schema(fun() -> reinstall_loaded(Module, Context) end).
+
+reinstall_loaded(Module, Context) ->
     case proplists:get_value(manage_schema, erlang:get_module_info(Module, exports)) of
         undefined ->
             %% nothing to do, no manage_schema

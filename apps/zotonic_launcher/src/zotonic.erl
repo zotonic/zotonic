@@ -213,10 +213,9 @@ status([Node]) ->
     ok.
 
 %% @doc Update the server. Compiles and loads any new code, flushes caches and rescans all modules.
--spec update() -> ok.
+-spec update() -> ok | {error, term()}.
 update() ->
-    z:m(),
-    ok.
+    zotonic_filehandler:compile_all_sync().
 
 %% @doc Update the server on a specific node with new code on disk and flush the caches.
 -spec update([node()]) -> ok.

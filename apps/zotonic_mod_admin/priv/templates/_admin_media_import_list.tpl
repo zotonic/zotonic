@@ -175,7 +175,7 @@
                                                                     title="{_ Subscribing to connected resources _}" aria-label="{_ Subscribing to connected resources _}"
                                                                     data-dialog="{{ %{
                                                                         title: _"Subscribing to connected resources",
-                                                                        text: _"Follows the Connections option. Connected resources keep their subscriptions when disconnected from this page.",
+                                                                        text: _"Uses the Connections setting. Connected resources keep their subscriptions when disconnected from this page.",
                                                                         level: 10
                                                                     }|escape }}"></a>
                                                             </label>

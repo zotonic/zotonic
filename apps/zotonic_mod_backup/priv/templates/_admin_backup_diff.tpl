@@ -2,18 +2,24 @@
 
 {% if a.id and (a.id == b.id or b.id|is_undefined) %}
 <p>
-	{_ This is the version saved on _} <strong>{{ a.created|date:"Y-m-d H:i" }}</strong>
-	{_ by _} <strong>{{ a.user_id.title|default:a.user_name }}</strong>
+	{% trans "This version was saved on <strong>{date}</strong> by <strong>{author}</strong>."
+        date=a.created|date:"Y-m-d H:i"|escape
+        author=a.user_id.title|default:a.user_name|escape
+    %}
 </p>
 {% elseif a and b %}
 <p>
-	{_ Changes since _} <strong>{{ a.created|date:"Y-m-d H:i" }}</strong>
-	{_ till _} <strong>{{ b.created|date:"Y-m-d H:i" }}</strong>
+	{% trans "Changes from <strong>{from}</strong> to <strong>{to}</strong>."
+        from=a.created|date:"Y-m-d H:i"|escape
+        to=b.created|date:"Y-m-d H:i"|escape
+    %}
 </p>
 {% else %}
 <p>
-	{_ This is the version saved on _} <strong>{{ id.modified|date:"Y-m-d H:i" }}</strong>
-	{_ by _} <strong>{{ id.modifier_id.title }}</strong>
+	{% trans "This version was saved on <strong>{date}</strong> by <strong>{author}</strong>."
+        date=id.modified|date:"Y-m-d H:i"|escape
+        author=id.modifier_id.title|escape
+    %}
 </p>
 {% endif %}
 

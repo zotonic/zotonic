@@ -92,12 +92,14 @@ set(Key, Data, MaxAge, Depend, #context{depcache=Server}) ->
 %% @doc Fetch the key from the cache, when the key does not exist then lock the entry and let
 %% the calling process insert the value. All other processes requesting the key will wait till
 %% the key is updated and receive the key's new value.
+%% If the memo computation fails, waiting callers receive its exception reply.
 -spec get_wait(Key, Context) -> Result when
     Key :: any(),
     Context :: z:context(),
     Data :: any(),
     Result :: {ok, Data}
             | undefined
+            | {exception, error | exit | throw, term(), list()}
             | {throw, term()}
             | {error, term()}.
 get_wait(Key, #context{depcache=Server}) ->

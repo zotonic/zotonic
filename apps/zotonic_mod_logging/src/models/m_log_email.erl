@@ -99,7 +99,12 @@ search(Query, Context) ->
     }.
 
 map_search(<<"severity">>, Status, {Ws,As}, _Context) ->
-    case catch z_convert:to_integer(Status) of
+    case try z_convert:to_integer(Status)
+    catch
+        throw:CatchReason -> CatchReason;
+        exit:CatchReason -> {'EXIT', CatchReason};
+        error:CatchReason:CatchStack -> {'EXIT', {CatchReason, CatchStack}}
+    end of
         StatusNr when is_integer(StatusNr) ->
             {As1,N} = arg(StatusNr, As),
             {[["severity <= $",N]|Ws], As1};

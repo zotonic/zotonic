@@ -3,7 +3,10 @@
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-pending_signup_policy_test() ->
+pending_signup_policy_test_() ->
+    z_test_support:isolated(fun pending_signup_policy/0).
+
+pending_signup_policy() ->
     Modules = [m_identity, z_notifier],
     lists:foreach(fun(M) -> meck:new(M, [no_link]) end, Modules),
     try

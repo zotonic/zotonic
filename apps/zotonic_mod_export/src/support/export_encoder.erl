@@ -47,6 +47,7 @@
 -record(stream_state, {
         id,
         is_query,
+        resource_ids,
         content_type,
         dispatch,
         encoder,
@@ -55,6 +56,10 @@
     }).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
+
+-define(DEFAULT_QUERY_MAX_ROWS_STREAMING, 50000).
+-define(DEFAULT_QUERY_MAX_ROWS_NON_STREAMING, 1000).
+-define(DEFAULT_QUERY_MAX_ROWS_NON_STREAMING_AUTH, 20000).
 
 
 content_types(_Context) ->
@@ -91,6 +96,7 @@ stream(Id, ContentType, Options, Context) ->
         is_query = proplists:get_value(is_query, EncOpts),
         content_type = ContentType,
         dispatch = proplists:get_value(dispatch, EncOpts),
+        resource_ids = proplists:get_value(resource_ids, Options),
         encoder = Enc,
         encoder_state = EncState
     },
@@ -111,6 +117,8 @@ encoders() ->
         export_encoder_xlsx,
         export_encoder_ics,
         export_encoder_atom,
+        export_encoder_rss,
+        export_encoder_jsonfeed,
         export_encoder_bert,
         export_encoder_ubf
     ].
@@ -169,13 +177,12 @@ is_empty(<<>>) -> true;
 is_empty(_) -> false.
 
 
-do_body(#stream_state{is_query=true, id=Id} = StreamState, Context) ->
-    #search_result{result=Ids} = z_search:search(
-            <<"query">>, #{ <<"query_id">> => Id },
-            1, 50000,
-            #{ is_count_rows => false, is_single_page => true },
-            Context),
+do_body(#stream_state{resource_ids=Ids} = StreamState, Context) when is_list(Ids) ->
     do_body_data(Ids, StreamState, Context);
+do_body(#stream_state{is_query=true, id=Id, encoder=Encoder} = StreamState, Context) ->
+    PageLen = query_page_len(Encoder, Context),
+    Ids = query_ids(Id, PageLen, Context),
+    do_body_data(Ids, StreamState, export_feed:next_page(Ids, PageLen, Context));
 do_body(StreamState, Context) ->
     case export_helper:call(#export_resource_data{
                                 id=StreamState#stream_state.id,
@@ -194,6 +201,48 @@ do_body(StreamState, Context) ->
         {ok, List, NewState} when is_list(List) ->
             do_body_data(List, StreamState#stream_state{exporter_state=NewState}, Context)
     end.
+
+%% Select the bulk query when the encoder starts streaming its body.
+-spec query_ids(Id, PageLen, Context) -> list() when
+    Id :: term(), PageLen :: pos_integer(), Context :: z:context().
+query_ids(Id, PageLen, Context) ->
+    #search_result{result=Ids} = z_search:search(
+        <<"query">>, #{<<"query_id">> => Id, <<"zsort">> => [<<"-publication_start">>, <<"-id">>]}, export_feed:page(Context), PageLen,
+        #{is_count_rows => false, is_single_page => true}, Context),
+    Ids.
+
+%% Request pagination can lower, but never exceed, the configured bulk limit.
+query_page_len(Encoder, Context) ->
+    Max = query_max_rows(Encoder, Context),
+    try z_convert:to_integer(z_context:get_q(<<"pagelen">>, Context)) of
+        N when is_integer(N), N > 0 -> min(N, Max);
+        _ -> Max
+    catch _:_ -> Max end.
+
+%% XLSX builds a complete workbook and BERT serializes the complete resource
+%% list in the footer. Both need a lower limit than row-at-a-time encoders.
+query_max_rows(Encoder, Context)
+        when Encoder =:= export_encoder_xlsx; Encoder =:= export_encoder_bert ->
+    Value = m_config:get_value(mod_export, query_max_rows_non_streaming, Context),
+    Default = case z_auth:is_auth(Context) of
+        true -> ?DEFAULT_QUERY_MAX_ROWS_NON_STREAMING_AUTH;
+        false -> ?DEFAULT_QUERY_MAX_ROWS_NON_STREAMING
+    end,
+    query_max_rows_value(Value, Default);
+query_max_rows(_Encoder, Context) ->
+    Value = m_config:get_value(mod_export, query_max_rows_streaming, Context),
+    query_max_rows_value(Value, ?DEFAULT_QUERY_MAX_ROWS_STREAMING).
+
+query_max_rows_value(N, _Default) when is_integer(N), N > 0 -> N;
+query_max_rows_value(Value, Default) when is_binary(Value); is_list(Value) ->
+    try z_convert:to_integer(Value) of
+        N when is_integer(N), N > 0 -> N;
+        _ -> Default
+    catch
+        error:badarg -> Default
+    end;
+query_max_rows_value(_, Default) -> Default.
+
 
 do_body_data([], StreamState, Context) ->
     do_footer(StreamState, Context);

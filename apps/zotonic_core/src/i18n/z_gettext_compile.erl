@@ -64,20 +64,37 @@ generate(Filename, Labels) ->
     ok = file:close(Fd).
 
 write_entries(Fd, Labels) ->
-    F = fun
-            ({Id, Trans, undefined}) ->
-                file:write(Fd, "\nmsgid \"\"\n"),
-                write_pretty(unicode:characters_to_binary(Id), Fd),
-                file:write(Fd, "msgstr \"\"\n"),
-                write_pretty(unicode:characters_to_binary(Trans), Fd);
-            ({Id, Trans, Finfo}) ->
-                io:format(Fd, "~s~n", [fmt_fileinfo(Finfo)]),
-        		file:write(Fd, "msgid \"\"\n"),
-                write_pretty(unicode:characters_to_binary(Id), Fd),
-        		file:write(Fd, "msgstr \"\"\n"),
-        		write_pretty(unicode:characters_to_binary(Trans), Fd)
-    	end,
-    lists:foreach(F, Labels).
+    lists:foreach(fun({Id, Trans, Finfo}) ->
+        case Finfo of
+            undefined -> file:write(Fd, "\n");
+            _ -> io:format(Fd, "~s~n", [fmt_fileinfo(Finfo)])
+        end,
+        write_message(Fd, Id, Trans)
+    end, Labels).
+
+
+write_message(Fd, {context, MsgCtxt, Key}, Trans) ->
+    file:write(Fd, "msgctxt \"\"\n"),
+    write_pretty(MsgCtxt, Fd),
+    write_message(Fd, Key, Trans);
+write_message(Fd, {plural, Singular, Plural}, Trans) ->
+    file:write(Fd, "msgid \"\"\n"),
+    write_pretty(Singular, Fd),
+    file:write(Fd, "msgid_plural \"\"\n"),
+    write_pretty(Plural, Fd),
+    Forms = case Trans of
+        {_, Tuple} when is_tuple(Tuple) -> tuple_to_list(Tuple);
+        _ -> [<<>>, <<>>]
+    end,
+    lists:foreach(fun({I, Text}) ->
+        io:format(Fd, "msgstr[~B] \"\"~n", [I]),
+        write_pretty(case Text of undefined -> <<>>; _ -> Text end, Fd)
+    end, lists:zip(lists:seq(0, length(Forms) - 1), Forms));
+write_message(Fd, Id, Trans) ->
+    file:write(Fd, "msgid \"\"\n"),
+    write_pretty(unicode:characters_to_binary(Id), Fd),
+    file:write(Fd, "msgstr \"\"\n"),
+    write_pretty(unicode:characters_to_binary(Trans), Fd).
 
 -define(ENDCOL, 72).
 -define(SEP, <<" ">>).
@@ -124,6 +141,8 @@ fmt_fileinfo(Finfo) ->
     lists:foldr(F,<<>>,Finfo).
 
 write_header(Fd) ->
+    %% Keep headers identical across modules, including singular-only catalogs.
+    %% Otherwise msgcat concatenates conflicting headers during consolidation.
     file:write(Fd,
 	      "# SOME DESCRIPTIVE TITLE.\n"
 	      "# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER\n"
@@ -143,7 +162,8 @@ write_header(Fd) ->
 	      "\"Language-Team: LANGUAGE <LL@li.org>\\n\"\n"
 	      "\"MIME-Version: 1.0\\n\"\n"
 	      "\"Content-Type: text/plain; charset=utf-8\\n\"\n"
-	      "\"Content-Transfer-Encoding: 8bit\\n\"\n").
+	      "\"Content-Transfer-Encoding: 8bit\\n\"\n"
+              "\"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\\n\"\n").
 
 shorten_path(Path) ->
     Parts = filename:split(Path),

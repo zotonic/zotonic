@@ -1,0 +1,49 @@
+name: Docker
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  docker:
+    name: Build image and test entrypoint
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PYTHON: /usr/bin/python3
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install Compose test dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-yaml
+      - name: Test launcher UID/GID defaults
+        run: bash docker/test-launchers.sh
+      - name: Build development image
+        run: docker build -f docker/Dockerfile.dev -t zotonic-docker-test .
+      - name: Test entrypoint
+        run: |
+          docker run --rm -i --network none --entrypoint /bin/bash \
+            zotonic-docker-test -s < docker/test-entrypoint.sh
+      - name: Test Docker bind-mount ownership
+        run: bash docker/test-bind-mount.sh docker
+      - name: Install Podman
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y podman podman-compose
+      - name: Load image into rootless Podman
+        run: |
+          docker save zotonic-docker-test -o "$RUNNER_TEMP/zotonic-docker-test.tar"
+          podman load -i "$RUNNER_TEMP/zotonic-docker-test.tar"
+          rm "$RUNNER_TEMP/zotonic-docker-test.tar"
+      - name: Test rootless Podman bind-mount ownership
+        run: |
+          test "$(podman info --format '{{.Host.Security.Rootless}}')" = true
+          bash docker/test-bind-mount.sh podman
+          ZOTONIC_UID=12345 ZOTONIC_GID=12346 bash docker/test-bind-mount.sh podman

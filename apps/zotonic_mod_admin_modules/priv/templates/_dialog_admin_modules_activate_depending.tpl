@@ -25,7 +25,7 @@
     </tbody>
 </table>
 
-<p>{_ Do you still want to activate the module _} <b>{{ module|escape }}</b>?</p>
+<p>{% trans "Do you still want to activate the module <b>{module}</b>?" module=module|escape %}</p>
 
 <div class="modal-footer">
     {% button tag="a" class="btn btn-primary" text=_"Cancel" action={dialog_close} %}

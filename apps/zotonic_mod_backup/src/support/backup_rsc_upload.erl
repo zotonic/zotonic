@@ -26,7 +26,12 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 rsc_upload(#rsc_upload{id=Id, format=bert, data=Data}, Context) ->
-    case catch bert:decode(Data) of
+    case try bert:decode(Data)
+    catch
+        throw:CatchReason -> CatchReason;
+        exit:CatchReason -> {'EXIT', CatchReason};
+        error:CatchReason:CatchStack -> {'EXIT', {CatchReason, CatchStack}}
+    end of
         [ {OtherId, Props} ] when is_list(Props), is_integer(OtherId) ->
             rsc_upload(Id, Props, Context);
         [ {Prop,_} | _ ] = Props when is_list(Props), is_atom(Prop) ->

@@ -1,5 +1,5 @@
 {% with run.status == "cancelled" or run.status == "failed" or run.status == "empty" as stopped %}
-<p class="help-block">{_ Times shown in _} {{ m.req.timezone|escape }}. {_ Future phases have no actual timestamp yet. _}</p>
+<p class="help-block">{% trans "Times shown in {timezone}." timezone=m.req.timezone|escape %} {_ Future phases have no actual timestamp yet. _}</p>
 <div class="table-responsive">
 <table class="table table-condensed mailing-run-timeline">
     <thead><tr><th>{_ Phase _}</th><th>{_ Progress _}</th><th>{_ Time _}</th></tr></thead>

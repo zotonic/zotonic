@@ -306,15 +306,15 @@ relative_time(N, '-', [<<"month", _/binary>>|_], Now) ->     prev_month(Now, N);
 relative_time(N, '-', [<<"year", _/binary>>|_], Now) ->      prev_year(Now, N);
 relative_time(_N, _Op, _Unit, _Now) ->         undefined.
 
-%% @doc Show a humanized version of a relative datetime.  Like "4 months, 3 days ago".
+%% @doc Show a humanized version of a relative datetime, with up to two components.
 -spec timesince(term(), z:context()) -> iodata().
 timesince(Date, Context) ->
     timesince(Date, calendar:universal_time(), Context).
 
-%% @doc Show a humanized version of a period between two dates.  Like "4 months, 3 days ago".
+%% @doc Show a humanized period using complete, direction-specific plural messages.
 -spec timesince(term(), term(), z:context()) -> iodata().
 timesince(Date, Base, Context) ->
-    timesince(Date, Base, ?__(<<"ago">>, Context), ?__(<<"now">>, Context), ?__(<<"in">>, Context), 2, Context).
+    timesince(Date, Base, default, 2, Context).
 
 timesince(Date, Base, IndicatorStrings, Context) ->
     timesince(Date, Base, IndicatorStrings, 2, Context).
@@ -322,6 +322,11 @@ timesince(Date, Base, IndicatorStrings, Context) ->
 -spec timesince(term(), term(), term(), term(), z:context()) -> iodata().
 %% @doc Show a humanized version of a period between two dates.  Like "4 months, 3 days ago".
 %% `WhenText' is a string containing a maximum of three tokens. Example "ago, now, in"
+timesince(Date, Base, default, Mode, Context) ->
+    format_relative_time(Date, Base, Mode, Context);
+timesince(Date, Base, IndicatorStrings, Mode, Context)
+        when IndicatorStrings =:= <<"default">>; IndicatorStrings =:= "default" ->
+    format_relative_time(Date, Base, Mode, Context);
 timesince(Date, Base, IndicatorStrings, Mode, Context) ->
     %% strip the tokens, so the user can specify the text more flexible.
     case [string:strip(S, both) || S <- string:tokens(z_convert:to_list(IndicatorStrings), ",")] of
@@ -344,11 +349,9 @@ timesince(_, undefined, _AgoText, _NowText, _InText, _Mode, _Context) ->
 timesince(Date, Base, _AgoText, NowText, _InText, _Mode, _Context) when Date == Base ->
     NowText;
 timesince(Date, Base, _AgoText, _NowText, InText, Mode, Context) when Date > Base ->
-    combine({InText, combine(reldate(Base, Date, Mode, Context))}, " ");
+    combine({InText, reldate(Base, Date, Mode, duration, Context)}, " ");
 timesince(Date, Base, AgoText, _NowText, _InText, Mode, Context) ->
-    combine({combine(reldate(Date, Base, Mode, Context)), AgoText}, " ").
-
-combine(Tup) -> combine(Tup, ", ").
+    combine({reldate(Date, Base, Mode, duration, Context), AgoText}, " ").
 
 combine({"", B},   _Sep) -> B;
 combine({A,""},    _Sep) -> A;
@@ -358,35 +361,99 @@ combine({A,B}, Sep) -> [A,Sep,B].
 
 
 
-%% @doc Return a string describing the relative date difference.
-reldate(D1, D2, 1, Context) ->
-    {A, _} = reldate(D1,D2, 2, Context),
-    {A,[]};
-reldate(D1, D2, 2, Context) ->
-    case diff(D1,D2) of
-        {{0,0,0},{0,0,0}} -> {?__(<<"now">>,Context),[]};
-        {{0,0,0},{0,0,S}} when S < 10 -> {?__(<<"moments">>,Context),[]};
-        {{0,0,0},{0,0,S}} -> {plural(S, ?__(<<"second">>,Context), ?__(<<"seconds">>,Context)),
-                              []};
-        {{0,0,0},{0,I,S}} -> {plural(I, ?__(<<"minute">>,Context), ?__(<<"minutes">>,Context)),
-                              plural(S, ?__(<<"second">>,Context), ?__(<<"seconds">>,Context))};
-        {{0,0,0},{H,I,_}} -> {plural(H, ?__(<<"hour">>,Context),   ?__(<<"hours">>,Context)),
-                              plural(I, ?__(<<"minute">>,Context), ?__(<<"minutes">>,Context))};
-        {{0,0,D},{H,_,_}} -> {plural(D, ?__(<<"day">>,Context),    ?__(<<"days">>,Context)),
-                              plural(H, ?__(<<"hour">>,Context),   ?__(<<"hours">>,Context))};
-        {{0,M,D},{_,_,_}} -> {plural(M, ?__(<<"month">>,Context),  ?__(<<"months">>,Context)),
-                              plural(D, ?__(<<"day">>,Context),    ?__(<<"days">>,Context))};
-        {{Y,M,_},{_,_,_}} -> {plural(Y, ?__(<<"year">>,Context),   ?__(<<"years">>,Context)),
-                              plural(M, ?__(<<"month">>,Context),  ?__(<<"months">>,Context))}
+%% The message context selects each unit's grammatical case; the translated
+%% sentence wrapper places the direction around the complete duration once.
+format_relative_time(undefined, _, _, _) -> <<>>;
+format_relative_time(_, undefined, _, _) -> <<>>;
+format_relative_time(Date, Date, _, Context) -> ?__(<<"now">>, Context);
+format_relative_time(Date, Base, Mode, Context) when Date > Base ->
+    reldate(Base, Date, Mode, future, Context);
+format_relative_time(Date, Base, Mode, Context) ->
+    reldate(Date, Base, Mode, past, Context).
+
+reldate(D1, D2, Mode, Direction, Context) when Mode =:= 1; Mode =:= 2 ->
+    case relative_parts(D1, D2) of
+        now -> ?__(<<"now">>, Context);
+        moments -> relative_moments(Direction, Context);
+        Parts ->
+            Nonzero = [{Unit, N} || {Unit, N} <- Parts, N > 0],
+            Texts = [binary:replace(relative_unit(Unit, N, Direction, Context),
+                <<"{n}">>, integer_to_binary(N), [global])
+                || {Unit, N} <- lists:sublist(Nonzero, Mode)],
+            relative_sentence(relative_join(Texts, Context), Direction, Context)
     end.
 
+relative_parts(D1, D2) ->
+    case diff(D1,D2) of
+        {{0,0,0},{0,0,0}} -> now;
+        {{0,0,0},{0,0,S}} when S < 10 -> moments;
+        {{0,0,0},{0,0,S}} -> [{second, S}];
+        {{0,0,0},{0,I,S}} -> [{minute, I}, {second, S}];
+        {{0,0,0},{H,I,_}} -> [{hour, H}, {minute, I}];
+        {{0,0,D},{H,_,_}} -> [{day, D}, {hour, H}];
+        {{0,M,D},{_,_,_}} -> [{month, M}, {day, D}];
+        {{Y,M,_},{_,_,_}} -> [{year, Y}, {month, M}]
+    end.
 
-plural(0,_Single,_Plural) ->
-    "";
-plural(1,Single,_Plural) ->
-    [$1, 32, Single];
-plural(N,_Single,Plural) ->
-    [integer_to_list(N), 32, Plural].
+relative_moments(past, Context) -> ?__(<<"moments ago">>, Context);
+relative_moments(future, Context) -> ?__(<<"in a few moments">>, Context);
+relative_moments(duration, Context) -> ?__(<<"moments">>, Context).
+
+relative_sentence(Duration, duration, _Context) -> Duration;
+relative_sentence(Duration, Direction, Context) ->
+    Pattern = case Direction of
+        past -> ?__(<<"{duration} ago">>, Context);
+        future -> ?__(<<"in {duration}">>, Context)
+    end,
+    binary:replace(Pattern, <<"{duration}">>, iolist_to_binary(Duration), [global]).
+
+relative_join([Text], _Context) -> Text;
+relative_join([First, Second], Context) ->
+    Pattern = ?__(<<"{first}, {second}">>, Context),
+    % Split before substitution so placeholders inside a translation stay literal.
+    [case Part of
+        <<"{first}">> -> First;
+        <<"{second}">> -> Second;
+        _ -> Part
+    end || Part <- re:split(Pattern, <<"(\\{first\\}|\\{second\\})">>, [{return, binary}])].
+
+%% Literal source pairs are kept at the call sites for POT extraction.
+relative_unit(second, N, past, Context) ->
+    z_trans:trans_plural(<<"{n} second">>, <<"{n} seconds">>, N, <<"relative time: past">>, Context);
+relative_unit(minute, N, past, Context) ->
+    z_trans:trans_plural(<<"{n} minute">>, <<"{n} minutes">>, N, <<"relative time: past">>, Context);
+relative_unit(hour, N, past, Context) ->
+    z_trans:trans_plural(<<"{n} hour">>, <<"{n} hours">>, N, <<"relative time: past">>, Context);
+relative_unit(day, N, past, Context) ->
+    z_trans:trans_plural(<<"{n} day">>, <<"{n} days">>, N, <<"relative time: past">>, Context);
+relative_unit(month, N, past, Context) ->
+    z_trans:trans_plural(<<"{n} month">>, <<"{n} months">>, N, <<"relative time: past">>, Context);
+relative_unit(year, N, past, Context) ->
+    z_trans:trans_plural(<<"{n} year">>, <<"{n} years">>, N, <<"relative time: past">>, Context);
+relative_unit(second, N, future, Context) ->
+    z_trans:trans_plural(<<"{n} second">>, <<"{n} seconds">>, N, <<"relative time: future">>, Context);
+relative_unit(minute, N, future, Context) ->
+    z_trans:trans_plural(<<"{n} minute">>, <<"{n} minutes">>, N, <<"relative time: future">>, Context);
+relative_unit(hour, N, future, Context) ->
+    z_trans:trans_plural(<<"{n} hour">>, <<"{n} hours">>, N, <<"relative time: future">>, Context);
+relative_unit(day, N, future, Context) ->
+    z_trans:trans_plural(<<"{n} day">>, <<"{n} days">>, N, <<"relative time: future">>, Context);
+relative_unit(month, N, future, Context) ->
+    z_trans:trans_plural(<<"{n} month">>, <<"{n} months">>, N, <<"relative time: future">>, Context);
+relative_unit(year, N, future, Context) ->
+    z_trans:trans_plural(<<"{n} year">>, <<"{n} years">>, N, <<"relative time: future">>, Context);
+relative_unit(second, N, duration, Context) ->
+    z_trans:trans_plural(<<"{n} second">>, <<"{n} seconds">>, N, <<"relative time: duration">>, Context);
+relative_unit(minute, N, duration, Context) ->
+    z_trans:trans_plural(<<"{n} minute">>, <<"{n} minutes">>, N, <<"relative time: duration">>, Context);
+relative_unit(hour, N, duration, Context) ->
+    z_trans:trans_plural(<<"{n} hour">>, <<"{n} hours">>, N, <<"relative time: duration">>, Context);
+relative_unit(day, N, duration, Context) ->
+    z_trans:trans_plural(<<"{n} day">>, <<"{n} days">>, N, <<"relative time: duration">>, Context);
+relative_unit(month, N, duration, Context) ->
+    z_trans:trans_plural(<<"{n} month">>, <<"{n} months">>, N, <<"relative time: duration">>, Context);
+relative_unit(year, N, duration, Context) ->
+    z_trans:trans_plural(<<"{n} year">>, <<"{n} years">>, N, <<"relative time: duration">>, Context).
 
 
 %% @doc Return the date the current week starts (monday)
@@ -420,15 +487,10 @@ prev_month(DT, N) -> next_month(DT, -N).
 
 %% @doc Return the date one week earlier.
 prev_week(DT) ->
-    prev_week_1(DT, 7).
+    prev_day(DT, 7).
 
-prev_week_1(DT, 0) -> DT;
-prev_week_1(DT, N) ->
-    DT1 = prev_day(DT),
-    prev_week_1(DT1, N-1).
-
-prev_week(Date, N) ->
-    nth(Date, -N, fun next_week/1, fun prev_week/1).
+prev_week(Date, N) when is_integer(N) ->
+    shift_days(Date, -N * 7).
 
 %% @doc Return the date one day earlier.
 prev_day({{_,_,1},_} = Date) ->
@@ -439,8 +501,8 @@ prev_day({{Y,M,D},T}) ->
 prev_day({_,_,_} = Date) ->
     prev_day({Date, {0,0,0}}).
 
-prev_day(Date, N) ->
-    nth(Date, -N, fun next_day/1, fun prev_day/1).
+prev_day(Date, N) when is_integer(N) ->
+    shift_days(Date, -N).
 
 %% @doc Return the date one hour earlier.
 prev_hour({_,{0,_,_}} = Date) ->
@@ -449,8 +511,8 @@ prev_hour({_,{0,_,_}} = Date) ->
 prev_hour({YMD,{H,I,S}}) ->
     {YMD, {H-1,I,S}}.
 
-prev_hour(Date, N) ->
-    nth(Date, -N, fun next_hour/1, fun prev_hour/1).
+prev_hour(Date, N) when is_integer(N) ->
+    shift_seconds(Date, -N * 3600).
 
 %% @doc Return the date one minute earlier.
 prev_minute({_,{_,0,_}} = Date) ->
@@ -459,8 +521,8 @@ prev_minute({_,{_,0,_}} = Date) ->
 prev_minute({YMD,{H,I,S}}) ->
     {YMD, {H,I-1,S}}.
 
-prev_minute(Date, N) ->
-    nth(Date, -N, fun next_minute/1, fun prev_minute/1).
+prev_minute(Date, N) when is_integer(N) ->
+    shift_seconds(Date, -N * 60).
 
 %% @doc Return the date one second earlier.
 prev_second({_,{_,_,0}} = Date) ->
@@ -469,8 +531,8 @@ prev_second({_,{_,_,0}} = Date) ->
 prev_second({YMD,{H,I,S}}) ->
     {YMD, {H,I,S-1}}.
 
-prev_second(Date, N) ->
-    nth(Date, -N, fun next_second/1, fun prev_second/1).
+prev_second(Date, N) when is_integer(N) ->
+    shift_seconds(Date, -N).
 
 %% @doc Return the date one year later.
 next_year({{Y,M,D},T}) ->
@@ -496,26 +558,19 @@ next_month({_,_,_} = Date, N) ->
     next_month({Date, {0,0,0}}, N).
 
 %% @doc Move the date so that the month/day number is valid.
-norm_month({{Y, M, D}, T}) when M =< 0 ->
-    norm_month({{Y-1, M+12, D}, T});
-norm_month({{Y, M, D}, T}) when M > 12 ->
-    norm_month({{Y+1, M-12, D}, T});
 norm_month({{Y, M, D}, T}) ->
-    D1 = erlang:min(last_day_of_the_month(Y,M), D),
-    {{Y, M, D1}, T}.
+    Years = floor_div(M - 1, 12),
+    Y1 = Y + Years,
+    M1 = M - Years * 12,
+    D1 = erlang:min(last_day_of_the_month(Y1, M1), D),
+    {{Y1, M1, D1}, T}.
 
 %% @doc Return the date one week later.
 next_week(DT) ->
-    next_week_1(DT, 7).
+    next_day(DT, 7).
 
-next_week_1(DT, 0) ->
-    DT;
-next_week_1(DT, N) ->
-    DT1 = next_day(DT),
-    next_week_1(DT1, N-1).
-
-next_week(Date, N) ->
-    nth(Date, N, fun next_week/1, fun prev_week/1).
+next_week(Date, N) when is_integer(N) ->
+    shift_days(Date, N * 7).
 
 %% @doc Return the date one day later.
 next_day({{Y,M,D},T} = Date) ->
@@ -529,8 +584,8 @@ next_day({{Y,M,D},T} = Date) ->
 next_day({_,_,_} = Date) ->
     next_day({Date, {0,0,0}}).
 
-next_day(Date, N) ->
-    nth(Date, N, fun next_day/1, fun prev_day/1).
+next_day(Date, N) when is_integer(N) ->
+    shift_days(Date, N).
 
 %% @doc Return the date one hour later.
 next_hour({_,{23,_,_}} = Date) ->
@@ -539,8 +594,8 @@ next_hour({_,{23,_,_}} = Date) ->
 next_hour({YMD,{H,I,S}}) ->
     {YMD, {H+1,I,S}}.
 
-next_hour(Date, N) ->
-    nth(Date, N, fun next_hour/1, fun prev_hour/1).
+next_hour(Date, N) when is_integer(N) ->
+    shift_seconds(Date, N * 3600).
 
 %% @doc Return the date one minute later.
 next_minute({_,{_,59,_}} = Date) ->
@@ -549,8 +604,8 @@ next_minute({_,{_,59,_}} = Date) ->
 next_minute({YMD,{H,I,S}}) ->
     {YMD, {H,I+1,S}}.
 
-next_minute(Date, N) ->
-    nth(Date, N, fun next_minute/1, fun prev_minute/1).
+next_minute(Date, N) when is_integer(N) ->
+    shift_seconds(Date, N * 60).
 
 %% @doc Return the date one second later.
 next_second({_,{_,_,59}} = Date) ->
@@ -559,15 +614,35 @@ next_second({_,{_,_,59}} = Date) ->
 next_second({YMD,{H,I,S}}) ->
     {YMD, {H,I,S+1}}.
 
-next_second(Date, N) ->
-    nth(Date, N, fun next_second/1, fun prev_second/1).
+next_second(Date, N) when is_integer(N) ->
+    shift_seconds(Date, N).
 
-nth(Date, 0, _Next, _Prev) ->
+%% Bulk shifts do not iterate over N. Preserve the zero-offset result (including
+%% date-only inputs), and promote date-only day/week shifts to midnight otherwise.
+shift_days(Date, 0) ->
     Date;
-nth(Date, N, Next, Prev) when is_integer(N), N > 0 ->
-    nth(Next(Date), N-1, Next, Prev);
-nth(Date, N, Next, Prev) when is_integer(N), N < 0 ->
-    nth(Prev(Date), N+1, Next, Prev).
+shift_days({{Y, M, D}, T}, N) ->
+    %% Gregorian leap years repeat every 400 years (146097 days). Reduce to a
+    %% nonnegative cycle before calling calendar, which does not support BCE.
+    Cycle = floor_div(Y, 400),
+    Days = calendar:date_to_gregorian_days({Y - Cycle * 400, M, D}) + N,
+    Shift = floor_div(Days, 146097),
+    {Y1, M1, D1} = calendar:gregorian_days_to_date(Days - Shift * 146097),
+    {{Y1 + (Cycle + Shift) * 400, M1, D1}, T};
+shift_days({_, _, _} = Date, N) ->
+    shift_days({Date, {0, 0, 0}}, N).
+
+shift_seconds(Date, 0) ->
+    Date;
+shift_seconds({Date, {H, I, S}}, N) ->
+    Seconds = H * 3600 + I * 60 + S + N,
+    Days = floor_div(Seconds, 86400),
+    Time = calendar:seconds_to_time(Seconds - Days * 86400),
+    shift_days({Date, Time}, Days).
+
+%% Erlang div truncates towards zero; date arithmetic needs floor division.
+floor_div(N, D) when N < 0 -> (N - D + 1) div D;
+floor_div(N, D) -> N div D.
 
 %% @doc Return the number of days in a certain year.
 days_in_year(Y) ->
@@ -629,13 +704,8 @@ weeknorm(D) when D > 6 ->
 weeknorm(D) ->
     D.
 
-day_add(Date, 0) ->
-    Date;
-day_add(Date, Num) when Num < 0 ->
-    day_add(prev_day(Date), Num + 1);
-day_add(Date, Num) when Num > 0 ->
-    day_add(next_day(Date), Num - 1).
-
+day_add(Date, Num) ->
+    next_day(Date, Num).
 
 %% @doc Return the millisec value of the current clock.
 -spec msec() -> integer().

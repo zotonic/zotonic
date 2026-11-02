@@ -165,7 +165,7 @@ run_unique(RegName, {Module, Function, Args}) ->
                 erlang:apply(Module, Function, Args),
                 ok
             after
-                catch erlang:unregister(RegName)
+                try erlang:unregister(RegName) catch _:_ -> ok end
             end
     catch
         error:badarg ->
@@ -182,7 +182,7 @@ run_unique(RegName, {Module, Function, Args}, Context) ->
                 erlang:apply(Module, Function, Args ++ [ Context ]),
                 ok
             after
-                catch erlang:unregister(RegName)
+                try erlang:unregister(RegName) catch _:_ -> ok end
             end
     catch
         error:badarg ->
@@ -206,7 +206,7 @@ run_unique_started(Caller, Ref, RegName, {Module, Function, Args}) ->
                 erlang:apply(Module, Function, Args),
                 ok
             after
-                catch erlang:unregister(RegName)
+                try erlang:unregister(RegName) catch _:_ -> ok end
             end
     catch
         error:badarg ->
@@ -227,7 +227,7 @@ run_unique_started(Caller, Ref, RegName, {Module, Function, Args}, Context) ->
                 erlang:apply(Module, Function, Args ++ [ Context ]),
                 ok
             after
-                catch erlang:unregister(RegName)
+                try erlang:unregister(RegName) catch _:_ -> ok end
             end
     catch
         error:badarg ->

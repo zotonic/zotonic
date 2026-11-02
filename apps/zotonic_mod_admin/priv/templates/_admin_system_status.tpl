@@ -73,7 +73,7 @@
                 <thead>
                     <tr>
                         <th>{_ Path _}</th>
-                        <th>{_ Size _}</th>
+                        <th>{_ Disk capacity _}</th>
                         <th>{_ Usage _}</th>
                     </tr>
                 </thead>
@@ -97,7 +97,7 @@
 </div>
 
 <div class="widget">
-    <div class="widget-header">{_ Connections _}</div>
+    <div class="widget-header">{_ Network Connections _}</div>
     <div class="widget-content">
 
         {% with m.modules.active.mod_geoip as is_ip2country %}

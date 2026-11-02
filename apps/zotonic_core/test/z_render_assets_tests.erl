@@ -23,7 +23,7 @@
 -include_lib("zotonic.hrl").
 
 assets_test_() ->
-    {setup, fun setup/0, fun cleanup/1, [
+    z_test_support:isolated({setup, fun setup/0, fun cleanup/1, [
         fun page_duplicates/0,
         fun materialized_context/0,
         fun update_dependencies/0,
@@ -40,7 +40,7 @@ assets_test_() ->
         fun collection_boundaries/0,
         fun collection_validation/0,
         fun compiled_collect/0
-    ]}.
+    ]}).
 
 setup() ->
     meck:new(z_lib_include, [passthrough, no_link]),

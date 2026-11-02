@@ -168,7 +168,12 @@ do_exec_chrome(Executable, SiteUrl, Args, _Options) ->
     do_exec_browser(Command).
 
 do_exec_browser(Command) ->
-    case catch open_port({spawn, Command}, [in, hide]) of
+    case try open_port({spawn, Command}, [in, hide])
+    catch
+        throw:CatchReason -> CatchReason;
+        exit:CatchReason -> {'EXIT', CatchReason};
+        error:CatchReason:CatchStack -> {'EXIT', {CatchReason, CatchStack}}
+    end of
         Port when is_port(Port) ->
             ok;
         Error ->

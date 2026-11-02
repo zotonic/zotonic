@@ -93,11 +93,14 @@
 				<div class="row">
 					<div class="col-lg-4 col-md-4" data-block-type='survey_narrative'>
 						<div class="form-inline">
-							{_ Fill in the gaps _}  (Narrative)</p><br>{_ I am _}
-							<input type="text" class="form-control" style="display: inline; float: none;" disabled>
-							{_ years old. I like _}
-							<select class="form-control" style="display: inline; float: none;" disabled><option>{_ chocolate _}</option></select>
-							{_ ice cream and my favorite color is _} <input type="text" class="form-control" style="display: inline; float: none;" disabled>.
+							<p>{_ Fill in the gaps _} ({_ Narrative _})</p>
+							{% with "<input type='text' class='form-control' style='display: inline; float: none;' disabled>" as preview_input %}
+								{% trans "I am {age} years old. I like {flavor} ice cream and my favorite color is {color}."
+									age=preview_input
+									flavor="<select class='form-control' style='display: inline; float: none;' disabled><option>" ++ (_"chocolate"|escape) ++ "</option></select>"
+									color=preview_input
+								%}
+							{% endwith %}
 						</div>
 					</div>
 					<div class="col-lg-4 col-md-4" data-block-type='survey_country'>

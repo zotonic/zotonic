@@ -220,7 +220,12 @@ make_cert_bg(Domain, Opts=#{async := Async}) ->
 %
 -spec get_challenge() -> error|map().
 get_challenge() ->
-    case catch gen_statem:call({global, ?MODULE}, get_challenge) of
+    case try gen_statem:call({global, ?MODULE}, get_challenge)
+    catch
+        throw:CatchReason -> CatchReason;
+        exit:CatchReason -> {'EXIT', CatchReason};
+        error:CatchReason:CatchStack -> {'EXIT', {CatchReason, CatchStack}}
+    end of
         % process not started, wrong state, ...
         {'EXIT', _Exc} ->
             %io:format("exc: ~p~n", [Exc]),

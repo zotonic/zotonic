@@ -63,6 +63,12 @@ upload_job(QueueId, Path, {error, enoent}, MediaInfo, Context) ->
     upload_job_1(QueueId, Path, MediaInfo, Context).
 
 upload_job_1(QueueId, Path, MediaInfo, Context) ->
+    case filestore_config:is_read_only(Context) of
+        true -> {error, read_only};
+        false -> upload_job_writable(QueueId, Path, MediaInfo, Context)
+    end.
+
+upload_job_writable(QueueId, Path, MediaInfo, Context) ->
     % A queued sidejob can start after pool load has increased. Keep its queue
     % entry for the next batch if it cannot run now.
     z_db:run_if_low_load(fun() ->
@@ -157,6 +163,12 @@ try_upload(MaybeEntry, QueueId, Path, MInfo, Context) ->
     end.
 
 handle_upload(Path, Mime, Cred, Context) ->
+    case filestore_config:is_read_only(Context) of
+        true -> retry_no_backoff;
+        false -> handle_upload_writable(Path, Mime, Cred, Context)
+    end.
+
+handle_upload_writable(Path, Mime, Cred, Context) ->
     AbsPath = z_path:abspath(Path, Context),
     case file:read_file_info(AbsPath, [raw, {time, universal}]) of
         {ok, #file_info{type=regular, size=0}} ->

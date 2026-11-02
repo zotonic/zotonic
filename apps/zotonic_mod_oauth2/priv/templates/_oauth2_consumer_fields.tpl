@@ -85,8 +85,8 @@
 
         <div class="form-group">
             <div class="label-floating">
-                <input id="{{ #authorize_url }}" type="text" value="{{ app.authorize_url|escape }}" class="form-control" name="authorize_url" placeholder="{_ Authorize URL _}">
-                <label class="control-label" for="authorize_url">{_ Authorize URL _}</label>
+                <input id="{{ #authorize_url }}" type="text" value="{{ app.authorize_url|escape }}" class="form-control" name="authorize_url" placeholder="{_ Authorization URL _}">
+                <label class="control-label" for="authorize_url">{_ Authorization URL _}</label>
                 <p class="help-block">{% trans "Fill this in for “{grant}” if the remote site is not a Zotonic site." grant="Authorization Code" %}</p>
             </div>
         </div>

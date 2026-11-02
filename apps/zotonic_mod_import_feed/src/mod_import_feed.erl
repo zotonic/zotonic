@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2026 Marc Worrell
-%% @doc Discover, preview and continuously import RSS and Atom articles.
+%% @doc Discover, preview and continuously import RSS, Atom and JSON Feed articles.
 %% @end
 
 %% Copyright 2026 Marc Worrell
@@ -22,9 +22,9 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Import feeds").
--mod_description("Discover RSS and Atom feeds and automatically import articles and media.").
+-mod_description("Import articles, events and media from RSS, Atom, JSON Feed and iCalendar sources.").
 -mod_depends([admin, cron]).
--mod_schema(9).
+-mod_schema(11).
 -mod_config([]).
 
 -moduledoc(#{
@@ -33,7 +33,7 @@
     ]
 }).
 -moduledoc("
-Discover RSS 2.0, RSS 1.0/RDF and Atom feeds and automatically import articles and media.
+Discover RSS 2.0, RSS 1.0/RDF, Atom, JSON Feed 1/1.1 and iCalendar feeds and automatically import articles and media.
 
 Administrator accounts cannot run imports. Select an enabled non-administrator account
 with only the required import permissions. This is checked when saving settings and
@@ -114,6 +114,31 @@ sent over HTTP. Anonymous fetching remains anonymous across redirects.
 
 ## Polling and identity
 
+Polling stores the source's `ETag` and `Last-Modified` after a successful
+import and sends both validators on subsequent requests. HTTP 304 is a
+successful unchanged poll: it does not parse a body, import entries, or remove
+existing content, and preserves the publisher's polling interval. Validator
+updates are protected by the poll lease and settings version. Failed imports,
+settings changes, manual reimport and restoring deleted resources require a
+fresh response. Previews and individual-resource fetches remain unconditional.
+
+Atom and RSS `rel=next` links and JSON Feed `next_url` are followed. The initial
+import reads only the first page unless **Import all pages on the initial import**
+is enabled (`import_all_pages`, default false). This option can import large
+amounts of articles and media.
+
+Later polls process each complete page and stop following links when that page
+contains a previously successfully imported entry. Deleted tracked entries also
+count as seen. This fetches new published entries, but is not a history or change
+synchronization mechanism: older edits and backdated articles may be missed.
+
+Continuation requests use the same URL, credential and response-size checks,
+without first-page HTTP validators. Failed pages resume from their saved URL.
+Each worker processes at most 100 pages, then schedules a continuation. Loops are
+rejected within a traversal batch. Settings saves restart from the first page.
+Validators are saved only for completed single-page polls; pending or failed
+traversals cannot be hidden by a first-page HTTP 304.
+
 Polling uses `poll_minutes` as a minimum interval (default 60 minutes; range
 5–10080). RSS `ttl` and namespace-qualified syndication `updatePeriod` /
 `updateFrequency` hints can lengthen it. When both are present, the longer hint
@@ -170,10 +195,32 @@ Deleting imported content checks each resource's delete permission and protectio
 Dependent cleanup follows the normal resource deletion rules; a dependent does
 not prevent deletion of its parent.
 
+## iCalendar feeds
+
+Discover `text/calendar` links or enter an `.ics` feed URL directly. VEVENTs
+must have a UID, UTC DTSTAMP and valid DTSTART. Invalid events are skipped;
+malformed calendar structure is rejected. Dates, durations and exclusive all-day
+end dates are normalized to Zotonic event properties. UTC and known IANA TZIDs
+are supported; floating times are interpreted as UTC. Custom VTIMEZONE rules
+are not evaluated, and events with unknown TZIDs are skipped. Cancelled events
+are unpublished. With category guessing enabled, calendar entries use `event`;
+otherwise the configured category applies.
+
+Recurrence rules and recurrence IDs are retained as `ical_rrule` and
+`ical_recurrence_id`; occurrences are not expanded. Exceptions have separate
+identities derived from UID and RECURRENCE-ID. Alarms are ignored.
+
+Zotonic calendar exports advertise `X-ZOTONIC-RESOURCE`, using the same native
+resource import and optional per-resource WebSub subscriptions as Atom/RSS/JSON
+Feed. Generic calendar feeds continue to use polling; feed-level WebSub push
+subscriptions are not provided. `X-ZOTONIC-NEXT` is followed using the existing
+first-page/initial-import-all-pages and stop-at-seen-entry policies.
+
 ## Zotonic resource feeds
 
-Atom entries from `mod_export` advertise a JSON resource link with relation
-`https://zotonic.com/rel/resource`. These use `m_rsc_import`, preserving native
+Atom and RSS entries from `mod_export` advertise a JSON resource link with
+relation `https://zotonic.com/rel/resource`. JSON Feed items advertise the same
+endpoint in `_zotonic.resource_url`. These use `m_rsc_import`, preserving native
 properties, categories, media embeds and connections. Connection import depth
 defaults to 1 and accepts 0–10. Content-group/copyright defaults and cleanup
 patterns apply; category guessing and media-layout choices do not reshape native

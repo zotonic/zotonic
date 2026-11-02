@@ -469,7 +469,12 @@ verify(IdnId, VerifyKey, Context) ->
     case m_identity:lookup_by_verify_key(VerifyKey, Context) of
         undefined ->
             % Return ok when the identity was already verified
-            case catch z_convert:to_integer(IdnId) of
+            case try z_convert:to_integer(IdnId)
+            catch
+                throw:CatchReason -> CatchReason;
+                exit:CatchReason -> {'EXIT', CatchReason};
+                error:CatchReason:CatchStack -> {'EXIT', {CatchReason, CatchStack}}
+            end of
                 N when is_integer(N) ->
                     case m_identity:get(N, Context) of
                         undefined ->

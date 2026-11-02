@@ -187,7 +187,55 @@ function zotonic_eval(script) {
   }
 }
 
+// Password visibility is local DOM state; never send the input value over a topic.
+const z_password_visibility = (() => {
+  const topic = "model/password/post/toggle";
+  const selector = 'button[data-onclick-topic="' + topic + '"]';
+
+  const inputFor = (button) => {
+    const id = button.getAttribute("aria-controls");
+    const scope = button.form || document;
+    return Array.from(scope.querySelectorAll("input")).find(input =>
+      input.id === id && (input.type === "password" || input.type === "text")
+    );
+  };
+
+  const setVisible = (button, input, visible) => {
+    input.type = visible ? "text" : "password";
+    button.setAttribute("aria-pressed", visible ? "true" : "false");
+    button.querySelector("[data-password-slash]")?.setAttribute("visibility", visible ? "visible" : "hidden");
+  };
+
+  const toggle = (msg) => {
+    const button = document.getElementById(msg.payload?.message?.id);
+    if (!button?.matches(selector)) return;
+    const input = inputFor(button);
+    if (!input || input.disabled) return;
+    setVisible(button, input, input.type === "password");
+  };
+
+  // Incremental DOM may reuse an input whose type was changed locally.
+  const reset = (msg) => {
+    const root = document.getElementById(msg.payload?.id);
+    if (!root) return;
+    const buttons = Array.from(root.querySelectorAll(selector));
+    if (root.matches(selector)) buttons.push(root);
+    buttons.forEach(button => {
+      const input = inputFor(button);
+      if (input) setVisible(button, input, false);
+    });
+  };
+
+  return {
+    init: () => {
+      cotonic.broker.subscribe(topic, toggle, { wid: "zotonic-wired" });
+      cotonic.broker.subscribe("model/ui/event/dom-updated/+key", reset, { wid: "zotonic-wired" });
+    }
+  };
+})();
+
 function zotonic_startup() {
+  z_password_visibility.init();
   // Language switches inside an iframe must not change the user's preference.
   if (window.self !== window.top) {
     z_postback_data_set("z_language_persist", false);

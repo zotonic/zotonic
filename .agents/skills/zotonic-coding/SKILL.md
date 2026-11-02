@@ -94,6 +94,8 @@ description: Use when working in Zotonic projects, especially Erlang modules, Zo
 
 ## Translations
 
+For translation wording and audits, follow [Zotonic Translations](../zotonic-translations/SKILL.md). Dutch action buttons use macOS-style imperatives, for example **Bewaar**, **Annuleer**, and **Bewerk**.
+
 - Keep template source strings in English. Replace Dutch or other source-language literals with English sentences.
 - Wrap user-facing static text in translation tags:
 

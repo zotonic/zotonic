@@ -6,7 +6,7 @@
             <table class="table table-striped admin-table do_adminLinkedTable">
                 <thead>
                     <tr>
-                        <th width="26%">{_ Name _}</th>
+                        <th width="26%">{_ Display name _}</th>
                         <th width="20%"> {_ Email _}</th>
                         <th width="10%">{_ Category _}</th>
                         <th width="12%" class="hidden-xs">{_ Created on _}</th>

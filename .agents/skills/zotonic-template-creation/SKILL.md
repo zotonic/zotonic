@@ -71,6 +71,8 @@ description: Use when creating, refactoring, or reviewing Zotonic template_compi
 
 ## Translations
 
+For translation wording and audits, follow [Zotonic Translations](../zotonic-translations/SKILL.md). Dutch action buttons use macOS-style imperatives, for example **Bewaar**, **Annuleer**, and **Bewerk**.
+
 - Keep template source strings in English.
 - Wrap user-facing static text in `{_ Text _}`.
 - Use `{% trans "Hello {name}" name=id.title %}` for translated strings with variable substitution.

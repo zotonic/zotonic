@@ -10,6 +10,8 @@ rebar3.crashdump
 compile_commands.json
 rebarconfig.json
 
+.rebar3-*
+
 *~
 *#
 
@@ -68,6 +70,7 @@ zotonic.tmproj
 __pycache__
 
 doc/ref/models/model_.rst
+doc/translations/audits/
 
 .eunit
 

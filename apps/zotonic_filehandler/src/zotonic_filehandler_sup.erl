@@ -38,6 +38,9 @@ init([]) ->
 
 children() ->
     [
+        {zotonic_filehandler_update,
+          {zotonic_filehandler_update, start_link, []},
+          permanent, 5000, worker, [zotonic_filehandler_update]},
         {zotonic_filehandler_terminal,
           {zotonic_filehandler_terminal, start_link, []},
           permanent, 5000, worker, [zotonic_filehandler_terminal]},

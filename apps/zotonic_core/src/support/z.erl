@@ -98,7 +98,7 @@
 
 -type context() :: #context{}.
 -type validation_error() :: invalid | novalue | {script, iodata()} | novalidator | string().
--type trans() :: #trans{}.
+-type trans() :: #trans{tr :: [{atom(), binary()}]}.
 -type qvalue() :: binary() | string() | #upload{} | term().
 
 -type severity() :: debug | info | notice | warning | error | fatal.

@@ -44,7 +44,7 @@
 
                     {% if show_signup_name_prefix|default_if_none:true %}
                         <div class="form-group" id="signup_surname_prefix">
-                            <label for="surprefix" class="control-label">{_ Prefix _}</label>
+                            <label for="surprefix" class="control-label">{_ Surname prefix _}</label>
 
                             <input class="form-control" id="surprefix" name="surprefix" type="text" value="{{ props.name_surname_prefix|escape }}" autocomplete="additional-name">
                         </div>
@@ -96,9 +96,12 @@
                 <div class="form-group" id="signup_password">
                     <label for="password" class="control-label">{_ Password _}</label>
 
-                    <input class="form-control" id="password" name="password" type="password" value=""
-                           required autocomplete="new-password" autocapitalize="off" autocorrect="off"
-                           minlength="{{ m.authentication.password_min_length }}">
+                    <div class="input-group">
+                        <input class="form-control" id="password" name="password" type="password" value=""
+                               required autocomplete="new-password" autocapitalize="off" autocorrect="off"
+                               minlength="{{ m.authentication.password_min_length }}">
+                        {% include "_password_visibility.tpl" target_id="password" %}
+                    </div>
                     {% validate id="password" name="password"
                         type={presence failure_message=_"Enter a password"}
                         type={acceptable_password
