@@ -39,7 +39,7 @@ not the complete content of every member.
   created or matched by semantic URI and their content is fetched asynchronously.
   Deeper imports follow connections up to the configured depth.
 * **Membership updates:** insertion, deletion, and reordering of publisher edges
-  advance the authoritative subject's version and queue publication. This includes
+  advance the subject's separate export revision and queue publication. This includes
   edge-only changes, without requiring an editor to save the collection again.
   The receiver replaces membership/order using its saved import options and ACLs.
 * **New members:** incoming updates first create placeholders. A durable task,
@@ -261,6 +261,33 @@ existing automatic-update status and start/stop controls.
 Template API: `m.websub.subscriptions::%{type: "export", rsc_id: id, page: 1}`
 (`type` also accepts `import` or `all`) and `m.websub.subscriber_count[id]`.
 The latter requires resource edit permission, as does `m.websub.status[id]`.
+
+## Export revisions
+
+Schema version 7 stores each authoritative resource's export revision in
+`websub_revision`, with a foreign key that removes it when the resource is deleted.
+Resource edits and outgoing edge insertions, deletions, and reordering advance this
+counter. Edge changes do not update the resource row, its edit version, modification
+date, or modifier, even when WebSub is enabled without any subscribers.
+
+Exports contain `export_revision` and a matching top-level `version` for existing
+Zotonic subscribers. The nested `resource.version` remains the resource edit version.
+Pushes and authenticated topic fetches use the same representation. New receivers
+prefer `export_revision`, falling back to the old version fields for older publishers.
+Queue columns named `version` and subscription version watermarks now track this
+export revision; their names are retained for schema and API compatibility.
+
+Counters start at the resource's current version, preserving existing delivery and
+import watermarks. A stored content-version watermark makes repeated or delayed
+content notifications idempotent. Schema upgrades are additive and preserve queues;
+reinstalling the schema does not reset counters. Downgrading a publisher after it
+has issued export revisions requires resetting subscriber watermarks or restoring
+the corresponding revision support: resource versions alone may be lower.
+
+Export assembly locks the resource while capturing the revision and rebuilding the
+representation with fresh caches. Revision allocation uses the same lock. Edges
+committed during assembly can be included early; their pending edge-log notification
+still advances the revision afterwards, so those changes are not lost.
 
 ## Validation
 
