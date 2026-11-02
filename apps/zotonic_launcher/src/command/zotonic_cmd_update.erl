@@ -31,8 +31,10 @@ run(_) ->
     case zotonic_command:net_start() of
         ok ->
             io:format("Updating zotonic .."),
-            Res = zotonic_command:rpc(zotonic, update, []),
-            io:format("~n~p~n", [ Res ]);
+            {ok, Target} = zotonic_command:get_target_node(),
+            Res = rpc:call(Target, zotonic, update, [], infinity),
+            io:format("~n~p~n", [Res]),
+            case Res of ok -> ok; _ -> halt(1) end;
         {error, _} = Error ->
             zotonic_command:format_error(Error)
     end.

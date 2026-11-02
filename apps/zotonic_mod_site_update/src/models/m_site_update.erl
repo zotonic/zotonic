@@ -44,11 +44,12 @@ Available Model API Paths
 
 | Method | Path pattern | Description |
 | --- | --- | --- |
+| `get` | `/user_modules/...` | Admin-only map of known modules with independent Git repositories; includes inactive modules and excludes the Zotonic repository. |
 | `get` | `/is_vcs_site/...` | Return whether the current site source directory resolves to a VCS checkout (`.git`, `.hg`, or symlinked checkout). |
 | `get` | `/vcs_site/+site/...` | Return admin-only VCS tuple for site `+site` (`{git|hg, Path}`) or `false` when no repository is detected. |
 | `get` | `/vcs_zotonic/...` | Return admin-only VCS tuple for the Zotonic core library directory (`{git|hg, Path}`) or `false` when not under VCS. |
-| `post` | `/webhook` | Read webhook token from query arg `token`; if it matches `mod_site_update.webhook_token`, run VCS update (`git pull`/`hg pull -u`) for the current site. No further lookups. |
-| `post` | `/webhook/+token` | Use path token `+token`; if it matches `mod_site_update.webhook_token`, run VCS update (`git pull`/`hg pull -u`) for the current site. No further lookups. |
+| `post` | `/webhook` | Read webhook token from query arg `token`; if it matches `mod_site_update.webhook_token`, run the protected pull/build/activation deployment for the current site. No further lookups. |
+| `post` | `/webhook/+token` | Use path token `+token`; if it matches `mod_site_update.webhook_token`, run the protected pull/build/activation deployment for the current site. No further lookups. |
 
 `/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
@@ -64,7 +65,9 @@ Available Model API Paths
     vcs_zotonic/0,
     vcs_site/1,
     vcs_dir/1,
+    vcs_module/1,
 
+    preview_vcs/1,
     update_vcs/2
 ]).
 
@@ -77,6 +80,14 @@ Available Model API Paths
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ <<"user_modules">> | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true ->
+            Modules = z_depcache:memo(fun z_site_update_repositories:user_modules/0,
+                {?MODULE, user_modules}, 60, Context),
+            {ok, {Modules, Rest}};
+        false -> {error, eacces}
+    end;
 m_get([ <<"is_vcs_site">> | Rest ], _Msg, Context) ->
     Site = z_context:site(Context),
     IsVCS = case vcs_site(Site) of
@@ -119,29 +130,46 @@ webhook(Token, Context) ->
     case Token of
         OurToken when OurToken =/= <<>> ->
             ?zInfo("Received site update webhook request.", Context),
-            _ = update_vcs( vcs_site( z_context:site(Context) ), Context ),
-            {ok, <<"Updating site.">>};
+            case update_vcs(vcs_site(z_context:site(Context)), Context) of
+                {ok, _} -> {ok, <<"Site updated.">>};
+                {error, _} = Error -> Error
+            end;
         _ ->
             ?zInfo("Received site update webhook request, but access denied.", Context),
             {error, eacces}
     end.
 
 
-%% @doc Run the VCS update command for a directory.
+%% @doc Resolve a known module's independent Git repository, including worktrees.
+-spec vcs_module(atom() | binary()) -> vcs() | false.
+vcs_module(Module) ->
+    z_site_update_repositories:module(Module).
+
+%% @doc Fetch remote history without updating the checkout. Call only after ACL checks.
+-spec preview_vcs(vcs() | false) -> {ok, map()} | {error, term()}.
+preview_vcs(false) ->
+    {error, no_vcs};
+preview_vcs(VCS) ->
+    zotonic_filehandler_update:schema(fun() -> z_site_update_preview:preview(VCS) end).
+
+%% @doc Deploy a directory through the same barrier as the CLI, for admin/status and webhooks.
 update_vcs(false, _Context) ->
     {error, no_vcs};
-update_vcs({hg, Path}, Context) ->
-    Command = lists:flatten(["(cd ", z_filelib:os_filename(Path), "; hg pull -u)"]),
-    Result = os:cmd(Command),
-    zotonic_fileindexer:flush(),
-    ?zInfo("hg pull: ~s", [ Result ], Context),
-    {ok, Result};
-update_vcs({git, Path}, Context) ->
-    Command = lists:flatten(["(cd ", z_filelib:os_filename(Path), "; git pull)"]),
-    Result = os:cmd(Command),
-    zotonic_fileindexer:flush(),
-    ?zInfo("git pull: ~s", [ Result ], Context),
-    {ok, Result}.
+update_vcs({Vcs, Path}, Context) when Vcs =:= git; Vcs =:= hg ->
+    case zotonic_filehandler_compile:deploy(Vcs, Path) of
+        {ok, Output} ->
+            Result = unicode:characters_to_list(Output),
+            ?zInfo("VCS update: ~s", [Result], Context),
+            {ok, Result};
+        {error, Reason} = Error ->
+            ?LOG_ERROR(#{
+                text => <<"VCS update failed; schema upgrades remain blocked until rebuild">>,
+                in => mod_site_update,
+                result => error,
+                reason => Reason
+            }),
+            Error
+    end.
 
 
 %% @doc Check if zotonic itself has a .hg directory
