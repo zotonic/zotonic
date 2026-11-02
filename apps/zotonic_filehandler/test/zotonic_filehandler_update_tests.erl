@@ -27,6 +27,7 @@ isolated_tests() ->
     {foreach, fun setup/0, fun cleanup/1, [
         fun delayed_helper/0,
         fun failed_build/0,
+        fun missing_compile_options/0,
         fun interrupted_build/0,
         fun active_migrations/0,
         fun atomic_failure/0,
@@ -146,6 +147,28 @@ old_code_in_use() ->
     Worker ! stop,
     receive {'DOWN', Ref, _, _, normal} -> ok after 1000 -> error(timeout) end,
     ?assertMatch({ok, _}, zotonic_filehandler_reload:load([V3])).
+
+%% Rebar can touch uncompiled test sources after a successful deployment.
+%% Skipping them must neither poison the barrier nor clear a real build failure.
+missing_compile_options() ->
+    meck:new(jobs, [no_link]),
+    meck:expect(jobs, run, fun(zotonic_filehandler_single_job, Fun) -> Fun() end),
+    File = "/nonexistent/zotonic_filehandler/test/uncompiled_deploy_fixture.erl",
+    try
+        ?assertEqual(false, zotonic_filehandler_compile:compile_options(File)),
+        ?assertEqual(ok, zotonic_filehandler_compile:recompile_task(File)),
+        ?assertEqual(false, zotonic_filehandler_update:is_pending()),
+        ?assertEqual(ok, zotonic_filehandler_update:schema(fun() -> ok end)),
+        ?assertEqual({error, compile_failed},
+            zotonic_filehandler_update:build(fun() -> {error, compile_failed} end)),
+        ?assertEqual({error, {code_update_failed, compile_failed}},
+            zotonic_filehandler_compile:recompile_task(File)),
+        ?assertEqual(true, zotonic_filehandler_update:is_pending()),
+        ?assertEqual({error, {code_update_failed, compile_failed}},
+            zotonic_filehandler_update:schema(fun() -> error(unexpected_schema) end))
+    after
+        meck:unload(jobs)
+    end.
 
 watcher_replay() ->
     meck:new(zotonic_notifier, [no_link]),

@@ -79,7 +79,7 @@ callers must not use them to bypass authorization or callback verification.
 
 ## Delivery and import processing
 
-Publisher queues coalesce resource versions, enforce lease expiry, and recheck
+Publisher queues coalesce export revisions, enforce lease expiry, and recheck
 current access within the original authentication's group restrictions. Delivery
 contains the complete JSON topic representation and a signature when a secret was
 supplied. Exhausted retries discard the notification and mark the subscription
@@ -117,6 +117,7 @@ renewal, pending intent, callback rotation, and subscriber state persistence."/u
     next_queue_delay/1,
     push_delays/1,
     queue_edge_update/2,
+    export_revision/2,
     task_import_referred/4,
     queue_import/4,
     handle_push_notification/4,
@@ -509,26 +510,43 @@ delete_export(Callback, Topic, Context) ->
     ok.
 
 
-%% @doc Publish changes to outgoing edges. Called by trusted edge-log observers
-%% after the original edge mutation has committed and passed its ACL checks.
-%% A new resource version is needed because subscribers reject stale versions.
+%% @doc Publish live edges without changing resource properties or edit versions.
+%% Serialize with content notifications and exports using the resource row lock.
 -spec queue_edge_update(RscId, Context) -> ok when
     RscId :: integer(),
     Context :: z:context().
 queue_edge_update(RscId, Context) ->
-    Result = z_db:transaction(fun(Ctx) ->
+    z_db:transaction(fun(Ctx) ->
         case z_db:q1("select is_authoritative from rsc where id = $1 for update", [RscId], Ctx) of
             true ->
-                {ok, RscId} = m_rsc:touch(RscId, Ctx),
-                Version = z_db:q1("select version from rsc where id = $1", [RscId], Ctx),
-                queue_push_authoritative(RscId, Version, Ctx);
+                _ = export_revision(RscId, Ctx),
+                Revision = z_db:q1("update websub_revision set revision = revision + 1
+                    where rsc_id = $1 returning revision", [RscId], Ctx),
+                queue_push_authoritative(RscId, Revision, Ctx);
             _ ->
                 ok
         end
-    end, Context),
-    % Other readers can repopulate the cache while the transaction is open.
-    z_depcache:flush(RscId, Context),
-    Result.
+    end, Context).
+
+%% @doc Return the export revision, accounting for content changes whose observer
+%% has not run yet. Call under the resource row lock. Keeping the resource version
+%% watermark makes duplicate/delayed content notifications idempotent.
+-spec export_revision(RscId, Context) -> Revision when
+    RscId :: integer(),
+    Context :: z:context(),
+    Revision :: pos_integer().
+export_revision(RscId, Context) ->
+    Version = z_db:q1("select version from rsc where id = $1", [RscId], Context),
+    revision_for_version(RscId, Version, Context).
+
+revision_for_version(RscId, Version, Context) ->
+    z_db:q1("insert into websub_revision (rsc_id, revision, resource_version)
+        values ($1, $2, $2)
+        on conflict (rsc_id) do update
+        set revision = websub_revision.revision
+                + greatest(0, excluded.resource_version - websub_revision.resource_version),
+            resource_version = greatest(websub_revision.resource_version, excluded.resource_version)
+        returning revision", [RscId, Version], Context).
 
 %% @doc Populate newly referenced placeholders after the parent import commits.
 %% Recheck the subscription and editor rights; never inherit pivot-worker rights.
@@ -625,7 +643,8 @@ queue_push(RscId, Version, Context) when is_integer(RscId), is_integer(Version) 
         % must not delete subscriptions created after authority was restored.
         case z_db:q1("select is_authoritative from rsc where id = $1 for update", [RscId], Ctx) of
             true ->
-                queue_push_authoritative(RscId, Version, Ctx);
+                Revision = revision_for_version(RscId, Version, Ctx),
+                queue_push_authoritative(RscId, Revision, Ctx);
             _ ->
                 z_db:q("delete from websub_export where local_rsc_id = $1", [RscId], Ctx),
                 ok
@@ -1280,6 +1299,8 @@ resource_uri(#{ <<"result">> := Result }) ->
 resource_uri(_) ->
     undefined.
 
+resource_version(#{ <<"export_revision">> := Revision }) ->
+    valid_version(Revision);
 resource_version(#{ <<"version">> := Version }) ->
     valid_version(Version);
 resource_version(#{ <<"resource">> := Resource }) when is_map(Resource) ->
@@ -1336,6 +1357,7 @@ manage_schema(_Version, Context) ->
     install(Context).
 
 install(Context) ->
+    ok = install_revision(Context),
     ok = install_export(Context),
     ok = install_import(Context),
     ok = install_push_queue(Context),
@@ -1357,6 +1379,17 @@ install_hostname_indexes(Context) ->
             {"websub_export", "callback_url", "websub_export_hostname_key"},
             {"websub_import", "source_uri", "websub_import_hostname_key"}
         ]),
+    ok.
+
+%% Seed lazily from the existing resource version, so old delivery/import
+%% watermarks remain valid. The counter and its content watermark survive renewals.
+install_revision(Context) ->
+    [] = z_db:q("create table if not exists websub_revision (
+        rsc_id integer primary key references rsc(id) on delete cascade on update cascade,
+        revision integer not null,
+        resource_version integer not null
+    )", Context),
+    z_db:flush(Context),
     ok.
 
 install_export(Context) ->

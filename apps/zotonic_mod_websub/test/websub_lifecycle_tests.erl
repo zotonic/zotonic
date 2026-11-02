@@ -46,7 +46,7 @@ lifecycle() ->
         z_db:q("delete from websub_import_queue where import_id=$1", [ImportId], A),
 
         % A signed delivery maps to the existing resource and preserves import options.
-        Push = payload(Topic, 2, <<"Updated">>),
+        Push = (payload(Topic, 1, <<"Updated">>))#{<<"export_revision">> => 2},
         Body = z_json:encode(Push),
         Signature = <<"sha256=", (binary:encode_hex(crypto:mac(hmac, sha256, Secret, Body)))/binary>>,
         CallbackContext = z_context:set_q(<<"token">>, Token, C),
@@ -57,6 +57,19 @@ lifecycle() ->
         {ok, Saved} = m_rsc_import:get_import_status(Id, A),
         ?assertEqual(0, proplists:get_value(import_edges, maps:get(<<"options">>, Saved))),
         ?assertEqual(2, z_db:q1("select last_import_version from websub_import where id=$1", [ImportId], A)),
+
+        % Edge-only revisions can share a resource version. A delayed older
+        % signed payload must not overwrite the newer imported representation.
+        NewerPush = Push#{<<"export_revision">> => 3,
+            <<"resource">> => #{<<"title">> => <<"Newer export">>, <<"is_published">> => true}},
+        NewerBody = z_json:encode(NewerPush),
+        NewerSignature = <<"sha256=", (binary:encode_hex(crypto:mac(hmac, sha256, Secret, NewerBody)))/binary>>,
+        ok = m_websub:handle_push_notification(NewerPush, NewerBody, NewerSignature, CallbackContext),
+        ok = m_websub:process_import_queue(A),
+        ok = m_websub:handle_push_notification(Push, Body, Signature, CallbackContext),
+        ok = m_websub:process_import_queue(A),
+        ?assertEqual(<<"Newer export">>, m_rsc:p(Id, <<"title">>, A)),
+        ?assertEqual(3, z_db:q1("select last_import_version from websub_import where id=$1", [ImportId], A)),
 
         % Renewing does not interrupt the confirmed lease; a failed POST retains it.
         z_db:q("update websub_import set next_check=now() where id=$1", [ImportId], A),
@@ -167,7 +180,8 @@ publisher_delivery(Visibility) ->
         0 -> ok;
         _ -> ?assertMatch({error, _}, m_rsc_export:full(Id, z_acl:anondo(C)))
     end,
-    TopicContext = z_context:set_q(<<"id">>, integer_to_binary(Id), C#context{cowreq = websub_test_support:request(#{})}),
+    TopicContext = z_context:set_q(<<"id">>, integer_to_binary(Id), C#context{cowreq = websub_test_support:request(#{}),
+        cowenv = #{cowmachine_remote => <<"127.0.0.1">>, cowmachine_forwarded_proto => <<"https">>}}),
     {TopicBody, _} = controller_websub_topic:process(<<"GET">>, undefined, undefined, TopicContext),
     ok = meck:new(z_websub_http, [passthrough]),
     try
@@ -663,20 +677,85 @@ edge_publication_test() ->
 edge_publication() ->
     C = z_acl:logon(1, z_context:new(zotonic_site_testsandbox)),
     {ok, Id} = m_rsc:insert(#{<<"category_id">> => collection}, C),
+    Topic = [<<"model">>, <<"rsc">>, <<"event">>, Id, <<"update">>],
+    ok = z_mqtt:subscribe(Topic, C),
     try
         ok = m_websub:update_export(<<"https://callback.test/edges">>, m_websub:topic_url(Id, C), Id, 600, undefined, C),
         lists:foreach(fun(Notify) ->
-            Before = m_rsc:p(Id, <<"version">>, C),
+            Before = m_rsc:get_raw(Id, C),
+            {ok, ExportBefore} = m_rsc_export:full(Id, C),
+            Revision = maps:get(<<"export_revision">>, ExportBefore),
             ok = Notify(C),
-            After = m_rsc:p(Id, <<"version">>, C),
-            ?assert(After > Before),
-            ?assertEqual(After, z_db:q1("select version from websub_push_queue where local_rsc_id=$1", [Id], C))
+            ?assertEqual(Before, m_rsc:get_raw(Id, C)),
+            {ok, ExportAfter} = m_rsc_export:full(Id, C),
+            ?assertEqual(Revision + 1, maps:get(<<"export_revision">>, ExportAfter)),
+            ?assertEqual(Revision + 1, maps:get(<<"version">>, ExportAfter)),
+            receive
+                {mqtt_msg, #{message := #{payload := #{id := Id}}}} ->
+                    error(unexpected_resource_update)
+            after 0 -> ok
+            end,
+            ?assertEqual(Revision + 1, z_db:q1("select version from websub_push_queue where local_rsc_id=$1", [Id], C))
         end, [
             fun(Ctx) -> mod_websub:observe_edge_insert(#edge_insert{subject_id = Id, edge_id = 1}, Ctx) end,
             fun(Ctx) -> mod_websub:observe_edge_update(#edge_update{subject_id = Id, edge_id = 1}, Ctx) end,
             fun(Ctx) -> mod_websub:observe_edge_delete(#edge_delete{subject_id = Id, edge_id = 1}, Ctx) end
         ])
-    after m_rsc:delete(Id, C) end.
+    after
+        z_mqtt:unsubscribe(Topic, C),
+        m_rsc:delete(Id, C)
+    end.
+
+export_revision_test_() ->
+    {timeout, 30, fun() -> without_scheduler(fun export_revision/0) end}.
+
+export_revision() ->
+    C = z_acl:logon(1, z_context:new(zotonic_site_testsandbox)),
+    {ok, Id} = m_rsc:insert(#{<<"category_id">> => text, <<"title">> => <<"Revision test">>}, C),
+    EdgeTopic = [<<"model">>, <<"edge">>, <<"event">>, Id, <<"o">>, <<"relation">>],
+    ok = z_mqtt:subscribe(EdgeTopic, C),
+    try
+        {ok, Id} = m_rsc:update(Id, #{<<"title">> => <<"Existing publisher">>}, C),
+        Version = m_rsc:p(Id, version, C),
+        % Simulate upgrading a publisher whose delivery watermarks predate the table.
+        z_db:q("delete from websub_revision where rsc_id=$1", [Id], C),
+        {ok, Initial} = m_rsc_export:full(Id, C),
+        ?assertEqual(Version, maps:get(<<"export_revision">>, Initial)),
+        Before = m_rsc:get_raw(Id, C),
+        {ok, _} = m_edge:insert(Id, relation, 1, C),
+        await_edge_notification(),
+        {ok, Linked} = m_rsc_export:full(Id, C),
+        ?assertEqual(Version + 1, maps:get(<<"export_revision">>, Linked)),
+        ?assertEqual(Before, m_rsc:get_raw(Id, C)),
+        ?assertEqual(Version, maps:get(<<"version">>, maps:get(<<"resource">>, Linked))),
+        % Repeated schema installation preserves revisions and resource metadata.
+        ok = m_websub:install(C),
+        {ok, Linked} = m_rsc_export:full(Id, C),
+        ok = m_edge:delete(Id, relation, 1, C),
+        await_edge_notification(),
+        {ok, Unlinked} = m_rsc_export:full(Id, C),
+        ?assertEqual(Version + 2, maps:get(<<"export_revision">>, Unlinked)),
+        ?assertEqual(Before, m_rsc:get_raw(Id, C)),
+        % Content edits advance both counters; old notifications cannot roll back.
+        {ok, Id} = m_rsc:update(Id, #{<<"title">> => <<"Content edit">>}, C),
+        ok = m_websub:queue_push(Id, Version, C),
+        {ok, Edited} = m_rsc_export:full(Id, C),
+        ?assertEqual(Version + 3, maps:get(<<"export_revision">>, Edited)),
+        ?assertEqual(Version + 1, m_rsc:p(Id, version, C)),
+        % The export observer must not attach today's revision to an old snapshot.
+        Snapshot = mod_websub:observe_rsc_export_done(#rsc_export_done{id = Id}, Initial, C),
+        ?assertEqual(Version + 3, maps:get(<<"export_revision">>, Snapshot)),
+        ?assertEqual(<<"Content edit">>, maps:get(<<"title">>, maps:get(<<"resource">>, Snapshot)))
+    after
+        z_mqtt:unsubscribe(EdgeTopic, C),
+        m_rsc:delete(Id, C)
+    end,
+    ?assertEqual(undefined, z_db:q1("select revision from websub_revision where rsc_id=$1", [Id], C)).
+
+await_edge_notification() ->
+    receive {mqtt_msg, _} -> ok
+    after 5000 -> error(missing_edge_notification)
+    end.
 
 shallow_collection_import_test() ->
     without_scheduler(fun shallow_collection_import/0).

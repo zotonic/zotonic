@@ -387,63 +387,65 @@ recompile_task(File) ->
 
 recompile_locked(File) ->
     zotonic_filehandler_update:run(fun() ->
-        case recompile_file(File) of
-            ok ->
-                Module = list_to_atom(filename:basename(File, ".erl")),
-                case activate([Module]) of
-                    {error, _} = Error -> Error;
-                    _ -> ok
-                end;
-            {error, _} = Error -> Error
+        case compile_options(File) of
+            {ok, Options} ->
+                recompile_activate(File, Options);
+            false ->
+                % Rebar touches test sources not compiled in this profile.
+                % New applications also need a full build first. Skipping these
+                % files must not mark the activation/schema barrier as failed.
+                ?LOG_DEBUG(#{
+                    text => <<"Skipping Erlang file without compile options">>,
+                    in => zotonic_filehandler,
+                    file => File
+                }),
+                ok
         end
     end).
 
-recompile_file(File) ->
-    case compile_options(File) of
-        {ok, Options} ->
-            ?LOG_DEBUG(#{
-                text => <<"Recompile of erlang file using make">>,
-                in => zotonic_core,
-                file => File
-            }),
-            zotonic_filehandler:terminal_notifier("Compiling: " ++ filename:basename(File)),
-            try
-                case make:files([File], Options) of
-                    up_to_date ->
-                        ok;
-                    Other ->
-                        ?LOG_WARNING(#{
-                            text => <<"Recompile of Erlang file unexpected result">>,
-                            in => zotonic_core,
-                            result => error,
-                            reason => Other,
-                            file => File
-                        }),
-                        {error, Other}
-                end
-            catch
-                Type:Err:Stack ->
-                    ?LOG_WARNING(#{
-                        text => <<"Recompile of Erlang file exit">>,
-                        in => zotonic_core,
-                        file => File,
-                        result => Type,
-                        reason => Err,
-                        stack => Stack
-                    }),
-                    {error, {Type, Err}}
+recompile_activate(File, Options) ->
+    case recompile_file(File, Options) of
+        ok ->
+            Module = list_to_atom(filename:basename(File, ".erl")),
+            case activate([Module]) of
+                {error, _} = Error -> Error;
+                _ -> ok
             end;
-        false ->
-            % Might be some new OTP app, so a manual build on the top level
-            % should take care of this, we don't do anything now.
+        {error, _} = Error -> Error
+    end.
+
+recompile_file(File, Options) ->
+    ?LOG_DEBUG(#{
+        text => <<"Recompile of erlang file using make">>,
+        in => zotonic_core,
+        file => File
+    }),
+    zotonic_filehandler:terminal_notifier("Compiling: " ++ filename:basename(File)),
+    try
+        case make:files([File], Options) of
+            up_to_date ->
+                ok;
+            Other ->
+                ?LOG_WARNING(#{
+                    text => <<"Recompile of Erlang file unexpected result">>,
+                    in => zotonic_core,
+                    result => error,
+                    reason => Other,
+                    file => File
+                }),
+                {error, Other}
+        end
+    catch
+        Type:Err:Stack ->
             ?LOG_WARNING(#{
-                text => <<"Could not find compile options, no recompile for Erlang file">>,
+                text => <<"Recompile of Erlang file exit">>,
                 in => zotonic_core,
-                result => error,
-                reason => no_compile_options,
-                file => File
+                file => File,
+                result => Type,
+                reason => Err,
+                stack => Stack
             }),
-            {error, no_compile_options}
+            {error, {Type, Err}}
     end.
 
 -spec compile_options(file:filename_all()) -> {ok, list()} | false.
