@@ -27,8 +27,10 @@ isolated_tests() ->
     {foreach, fun setup/0, fun cleanup/1, [
         fun delayed_helper/0,
         fun failed_build/0,
+        fun automatic_failures/0,
         fun missing_compile_options/0,
         fun interrupted_build/0,
+        fun interrupted_automatic_update/0,
         fun active_migrations/0,
         fun atomic_failure/0,
         fun old_code_in_use/0,
@@ -58,7 +60,7 @@ delayed_helper() ->
     {ok, _} = zotonic_filehandler_reload:load([Owner1, Helper1]),
     Parent = self(),
     Updater = spawn_link(fun() ->
-        Result = zotonic_filehandler_update:build(fun() ->
+        Result = zotonic_filehandler_update:deploy(fun() ->
             Parent ! owner_compiled,
             receive helper_compiled -> ok end,
             zotonic_filehandler_reload:load([Owner2, Helper2])
@@ -81,18 +83,33 @@ delayed_helper() ->
 
 failed_build() ->
     ?assertEqual({error, compile_failed},
-        zotonic_filehandler_update:build(fun() -> {error, compile_failed} end)),
+        zotonic_filehandler_update:deploy(fun() -> {error, compile_failed} end)),
     ?assert(zotonic_filehandler_update:is_pending()),
     ?assertMatch({error, {code_update_failed, compile_failed}},
         zotonic_filehandler_update:schema(fun() -> error(must_not_run) end)),
     ?assertMatch({error, _}, zotonic_filehandler_update:run(fun() -> error(must_not_run) end)),
+    ?assertEqual({error, retry_failed},
+        zotonic_filehandler_update:build(fun() -> {error, retry_failed} end)),
+    ?assert(zotonic_filehandler_update:is_pending()),
     ?assertEqual(ok, zotonic_filehandler_update:build(fun() -> ok end)),
     ?assertEqual(migrated, zotonic_filehandler_update:schema(fun() -> migrated end)).
+
+%% Neither single-file updates nor ordinary full builds latch a deployment failure.
+automatic_failures() ->
+    lists:foreach(fun(Update) ->
+        ?assertEqual({error, compile_failed}, Update(fun() -> {error, compile_failed} end)),
+        ?assertNot(zotonic_filehandler_update:is_pending()),
+        ?assertEqual(ok, zotonic_filehandler_update:run(fun() -> ok end)),
+        ?assertEqual(ok, zotonic_filehandler_update:schema(fun() -> ok end)),
+        ?assertEqual({ok, ok}, zotonic_filehandler_update:try_idle(fun() -> ok end)),
+        ?assertError(compile_crashed, Update(fun() -> error(compile_crashed) end)),
+        ?assertNot(zotonic_filehandler_update:is_pending())
+    end, [fun zotonic_filehandler_update:run/1, fun zotonic_filehandler_update:build/1]).
 
 interrupted_build() ->
     Parent = self(),
     {Updater, Ref} = spawn_monitor(fun() ->
-        zotonic_filehandler_update:build(fun() ->
+        zotonic_filehandler_update:deploy(fun() ->
             Parent ! started,
             receive stop -> ok end
         end)
@@ -101,7 +118,22 @@ interrupted_build() ->
     exit(Updater, kill),
     receive {'DOWN', Ref, _, _, _} -> ok after 1000 -> error(timeout) end,
     ?assertMatch({error, _}, zotonic_filehandler_update:schema(fun() -> error(must_not_run) end)),
-    ?assertEqual(ok, zotonic_filehandler_update:build(fun() -> ok end)).
+    ?assertEqual(ok, zotonic_filehandler_update:deploy(fun() -> ok end)).
+
+interrupted_automatic_update() ->
+    Parent = self(),
+    {Updater, Ref} = spawn_monitor(fun() ->
+        zotonic_filehandler_update:run(fun() ->
+            Parent ! started,
+            receive stop -> ok end
+        end)
+    end),
+    receive started -> ok after 1000 -> error(timeout) end,
+    exit(Updater, kill),
+    receive {'DOWN', Ref, _, _, _} -> ok after 1000 -> error(timeout) end,
+    %% The schema lease waits for the coordinator to process its DOWN message.
+    ?assertEqual(ok, zotonic_filehandler_update:schema(fun() -> ok end)),
+    ?assertNot(zotonic_filehandler_update:is_pending()).
 
 active_migrations() ->
     Parent = self(),
@@ -113,7 +145,7 @@ active_migrations() ->
     end),
     receive migrating -> ok after 1000 -> error(timeout) end,
     spawn_link(fun() ->
-        zotonic_filehandler_update:build(fun() -> Parent ! building, ok end)
+        zotonic_filehandler_update:deploy(fun() -> Parent ! building, ok end)
     end),
     receive building -> error(build_during_migration) after 30 -> ok end,
     Reader ! finish_migration,
@@ -160,7 +192,7 @@ missing_compile_options() ->
         ?assertEqual(false, zotonic_filehandler_update:is_pending()),
         ?assertEqual(ok, zotonic_filehandler_update:schema(fun() -> ok end)),
         ?assertEqual({error, compile_failed},
-            zotonic_filehandler_update:build(fun() -> {error, compile_failed} end)),
+            zotonic_filehandler_update:deploy(fun() -> {error, compile_failed} end)),
         ?assertEqual({error, {code_update_failed, compile_failed}},
             zotonic_filehandler_compile:recompile_task(File)),
         ?assertEqual(true, zotonic_filehandler_update:is_pending()),
@@ -181,13 +213,18 @@ watcher_replay() ->
     end),
     {ok, Handler} = zotonic_filehandler_handler:start_link(),
     try
-        ?assertEqual({error, failed}, zotonic_filehandler_update:build(fun() ->
+        ?assertEqual({error, failed}, zotonic_filehandler_update:deploy(fun() ->
             ok = zotonic_filehandler_handler:handle_changes(#{<<"page.tpl">> => modify}),
             {error, failed}
         end)),
         receive {mapped, _, _} -> error(early_file_action) after 30 -> ok end,
-        ok = zotonic_filehandler_update:build(fun() -> ok end),
-        receive {mapped, modify, <<"page.tpl">>} -> ok after 1000 -> error(timeout) end
+        ok = zotonic_filehandler_update:deploy(fun() -> ok end),
+        receive {mapped, modify, <<"page.tpl">>} -> ok after 1000 -> error(timeout) end,
+        ?assertEqual({error, compile_failed}, zotonic_filehandler_update:run(fun() ->
+            ok = zotonic_filehandler_handler:handle_changes(#{<<"fixed.erl">> => modify}),
+            {error, compile_failed}
+        end)),
+        receive {mapped, modify, <<"fixed.erl">>} -> ok after 1000 -> error(timeout) end
     after
         gen_server:stop(Handler),
         meck:unload(zotonic_filehandler_mapper),
@@ -200,7 +237,7 @@ periodic_mtime_flush() ->
     try
         ?assertEqual({error, notfound}, z_file_mtime:mtime(File)),
         ?assert(ets:member(z_filewatcher_mtime_tab, File)),
-        ?assertEqual({error, failed}, zotonic_filehandler_update:build(fun() ->
+        ?assertEqual({error, failed}, zotonic_filehandler_update:deploy(fun() ->
             flush_mtimes(MTime),
             ?assert(ets:member(z_filewatcher_mtime_tab, File)),
             {error, failed}
@@ -208,7 +245,7 @@ periodic_mtime_flush() ->
         %% Periodic ticks during a failed deployment must retain the cache too.
         flush_mtimes(MTime),
         ?assert(ets:member(z_filewatcher_mtime_tab, File)),
-        ok = zotonic_filehandler_update:build(fun() -> ok end),
+        ok = zotonic_filehandler_update:deploy(fun() -> ok end),
         _ = sys:get_state(MTime),
         ?assertNot(ets:member(z_filewatcher_mtime_tab, File)),
         %% Normal periodic clearing resumes once the barrier is open.
@@ -224,7 +261,7 @@ scanner_mtime_flush() ->
     File = <<"/nonexistent/zotonic-mtime-scanner-test">>,
     try
         ?assertEqual({error, notfound}, z_file_mtime:mtime(File)),
-        ok = zotonic_filehandler_update:build(fun() -> flush_mtimes(MTime) end),
+        ok = zotonic_filehandler_update:deploy(fun() -> flush_mtimes(MTime) end),
         _ = sys:get_state(MTime),
         ?assert(ets:member(z_filewatcher_mtime_tab, File))
     after

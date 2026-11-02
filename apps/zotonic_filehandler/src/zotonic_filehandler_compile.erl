@@ -110,7 +110,7 @@ activate(Which) ->
 %% A failed pull/build keeps watcher events and schema upgrades blocked for retry.
 -spec deploy(git | hg, file:filename_all()) -> {ok, iolist()} | {error, term()}.
 deploy(Vcs, Path) ->
-    Result = zotonic_filehandler_update:build(fun() ->
+    Result = zotonic_filehandler_update:deploy(fun() ->
         case pull(Vcs, Path) of
             {ok, Output} ->
                 case compile_build() of
