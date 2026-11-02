@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-02 09:32\n"
+"PO-Revision-Date: 2026-11-02 11:33\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "MIME-Version: 1.0\n"
@@ -15384,11 +15384,11 @@ msgstr "最新バージョンをデプロイする"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:210
 msgid "Deploying the latest version..."
-msgstr "最新バージョンの展開中..."
+msgstr "最新バージョンをデプロイ中..."
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:221
 msgid "Deployment completed."
-msgstr "展開が完了しました。"
+msgstr "デプロイが完了しました。"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:225
 msgid "Deployment failed. Check the server log for details."
@@ -15396,11 +15396,11 @@ msgstr "デプロイに失敗しました。詳細については、サーバー
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:5
 msgid "Deployment updates the entire Git repository, including any other modules it contains."
-msgstr ""
+msgstr "デプロイを行うと、Gitリポジトリ全体（そこに含まれる他のモジュールも含む）が更新されます。"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:6
 msgid "Fetching remote changes…"
-msgstr ""
+msgstr "リモートの変更を取得中…"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:135
 msgid "Finished rebuilding Zotonic."
@@ -15408,11 +15408,11 @@ msgstr "Zotonicの再構築が完了しました。"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:32
 msgid "Incoming changes"
-msgstr ""
+msgstr "取り込まれる変更"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:24
 msgid "No deployable version control repository was found."
-msgstr ""
+msgstr "デプロイ可能なバージョン管理リポジトリが見つかりませんでした。"
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:12
 msgid "Rebuild Zotonic"
@@ -15424,28 +15424,28 @@ msgstr "変更されたErlangファイルをバックグラウンドで再コン
 
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
 msgid "Review and deploy the latest version of this site."
-msgstr ""
+msgstr "このサイトの最新バージョンを確認し、デプロイしてください。"
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:5
 msgid "Review incoming changes and deploy the latest version of Zotonic"
-msgstr ""
+msgstr "取り込まれる変更を確認し、Zotonicの最新バージョンをデプロイしてください"
 
 #: zotonic_mod_site_update/priv/templates/_admin_module_buttons.tpl:4
 msgid "Review incoming changes and deploy this module’s Git repository."
-msgstr ""
+msgstr "取り込まれる変更を確認し、このモジュールのGitリポジトリをデプロイしてください。"
 
 #: zotonic_mod_site_update/priv/templates/_admin_status.tpl:5
 msgid "Review incoming changes before deploying the latest version."
-msgstr ""
+msgstr "最新バージョンをデプロイする前に、適用される変更内容を確認してください。"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:2
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:3
 msgid "Review the latest version for {name}."
-msgstr ""
+msgstr "{name} の最新バージョンをご確認ください。"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:47
 msgid "Showing the most recent 100 incoming commits."
-msgstr ""
+msgstr "取り込まれるコミットのうち、最新の100件を表示しています。"
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:4
 msgid "Site update API token"
@@ -15461,19 +15461,19 @@ msgstr "申し訳ありませんが、これはZotonicステータスサイト�
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:28
 msgid "The deployment preview is unavailable. Check the repository and server log, then try again."
-msgstr ""
+msgstr "デプロイのプレビューは利用できません。リポジトリとサーバーのログを確認してから、もう一度お試しください。"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:53
 msgid "The local branch cannot be fast-forwarded to the remote version. Resolve the local commits before deploying."
-msgstr ""
+msgstr "ローカルブランチをリモートブランチのバージョンまでファストフォワードすることはできません。デプロイする前に、ローカルのコミットを処理してください。"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:50
 msgid "There are no incoming changes."
-msgstr ""
+msgstr "取り込まれる変更はありません。"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:22
 msgid "This branch has no upstream configured. Configure its remote tracking branch before deploying."
-msgstr ""
+msgstr "このブランチにはアップストリームが設定されていません。デプロイする前に、リモート追跡ブランチを設定してください。"
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
 msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
@@ -15487,7 +15487,7 @@ msgstr "ウェブフックの更新を実行するには、サービスが次の
 #: zotonic_mod_site_update/src/mod_site_update.erl:180
 #: zotonic_mod_site_update/src/mod_site_update.erl:215
 msgid "You are not allowed to deploy this code."
-msgstr ""
+msgstr "このコードをデプロイすることは許可されていません。"
 
 #: zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:4
 msgid "Certificate Authority"

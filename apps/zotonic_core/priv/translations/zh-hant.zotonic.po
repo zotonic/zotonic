@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-02 09:31\n"
+"PO-Revision-Date: 2026-11-02 11:33\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -15399,11 +15399,11 @@ msgstr "部署失敗。請查看伺服器日誌以了解詳細資訊。"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:5
 msgid "Deployment updates the entire Git repository, including any other modules it contains."
-msgstr ""
+msgstr "部署會更新整個 Git 儲存庫，包括其中所包含的任何其他模組。"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:6
 msgid "Fetching remote changes…"
-msgstr ""
+msgstr "擷取遠端變更…"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:135
 msgid "Finished rebuilding Zotonic."
@@ -15411,11 +15411,11 @@ msgstr "完成重建 Zotonic。"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:32
 msgid "Incoming changes"
-msgstr ""
+msgstr "傳入的變更"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:24
 msgid "No deployable version control repository was found."
-msgstr ""
+msgstr "未找到可部署的版本控制儲存庫。"
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:12
 msgid "Rebuild Zotonic"
@@ -15427,28 +15427,28 @@ msgstr "在背景重新編譯已變更的 Erlang 檔案"
 
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
 msgid "Review and deploy the latest version of this site."
-msgstr ""
+msgstr "檢視並部署此網站的最新版本。"
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:5
 msgid "Review incoming changes and deploy the latest version of Zotonic"
-msgstr ""
+msgstr "檢視傳入的變更並部署 Zotonic 的最新版本"
 
 #: zotonic_mod_site_update/priv/templates/_admin_module_buttons.tpl:4
 msgid "Review incoming changes and deploy this module’s Git repository."
-msgstr ""
+msgstr "檢視傳入的變更並部署此模組的 Git 儲存庫。"
 
 #: zotonic_mod_site_update/priv/templates/_admin_status.tpl:5
 msgid "Review incoming changes before deploying the latest version."
-msgstr ""
+msgstr "部署最新版本前，請先檢視傳入的變更。"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:2
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:3
 msgid "Review the latest version for {name}."
-msgstr ""
+msgstr "請參閱 {name} 的最新版本。"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:47
 msgid "Showing the most recent 100 incoming commits."
-msgstr ""
+msgstr "顯示最近的 100 筆傳入提交。"
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:4
 msgid "Site update API token"
@@ -15464,19 +15464,19 @@ msgstr "抱歉，這只能從 Zotonic 狀態網站執行"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:28
 msgid "The deployment preview is unavailable. Check the repository and server log, then try again."
-msgstr ""
+msgstr "無法使用部署預覽功能。請檢查儲存庫和伺服器日誌，然後再試一次。"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:53
 msgid "The local branch cannot be fast-forwarded to the remote version. Resolve the local commits before deploying."
-msgstr ""
+msgstr "無法將本機分支快轉至遠端版本。請在部署前先處理本機的提交。"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:50
 msgid "There are no incoming changes."
-msgstr ""
+msgstr "沒有傳入的變更。"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:22
 msgid "This branch has no upstream configured. Configure its remote tracking branch before deploying."
-msgstr ""
+msgstr "此分支未設定上游。部署前請先設定其遠端追蹤分支。"
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
 msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
@@ -15490,7 +15490,7 @@ msgstr "若要透過 webhook 更新，請將服務設為向下列 URL 傳送 POS
 #: zotonic_mod_site_update/src/mod_site_update.erl:180
 #: zotonic_mod_site_update/src/mod_site_update.erl:215
 msgid "You are not allowed to deploy this code."
-msgstr ""
+msgstr "你沒有部署此程式碼的權限。"
 
 #: zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:4
 msgid "Certificate Authority"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-02 09:31\n"
+"PO-Revision-Date: 2026-11-02 11:32\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -15403,7 +15403,7 @@ msgstr "Twój kod rejestracyjny"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:223
 msgid "Another deployment is in progress. Please try again when it finishes."
-msgstr "Trwa kolejne wdrożenie. Proszę spróbować ponownie po jego zakończeniu."
+msgstr "Trwa już inne wdrożenie. Spróbuj ponownie po jego zakończeniu."
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:137
 msgid "Building Zotonic in the background..."
@@ -15421,21 +15421,21 @@ msgstr "Aktualny commit"
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:62
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:11
 msgid "Deploy"
-msgstr "Wdrożenie"
+msgstr "Wdróż"
 
 #: zotonic_mod_site_update/priv/templates/_admin_module_buttons.tpl:3
 #: zotonic_mod_site_update/priv/templates/_admin_status.tpl:4
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:2
 msgid "Deploy latest"
-msgstr "Zainstaluj najnowszą wersję"
+msgstr "Wdróż najnowszą wersję"
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:3
 msgid "Deploy latest Zotonic"
-msgstr "Zainstaluj najnowszą wersję Zotonic"
+msgstr "Wdróż najnowszą wersję Zotonic"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:176
 msgid "Deploy latest version"
-msgstr "Zainstaluj najnowszą wersję"
+msgstr "Wdróż najnowszą wersję"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:210
 msgid "Deploying the latest version..."
@@ -15451,11 +15451,11 @@ msgstr "Wdrożenie nie powiodło się. Szczegółowe informacje znajdziesz w dzi
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:5
 msgid "Deployment updates the entire Git repository, including any other modules it contains."
-msgstr ""
+msgstr "Wdrożenie powoduje aktualizację całego repozytorium Git, w tym wszystkich innych modułów, które się w nim znajdują."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:6
 msgid "Fetching remote changes…"
-msgstr ""
+msgstr "Pobieranie zmian z serwera zdalnego…"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:135
 msgid "Finished rebuilding Zotonic."
@@ -15463,11 +15463,11 @@ msgstr "Zakończono przebudowę Zotonic."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:32
 msgid "Incoming changes"
-msgstr ""
+msgstr "Przychodzące zmiany"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:24
 msgid "No deployable version control repository was found."
-msgstr ""
+msgstr "Nie znaleziono żadnego repozytorium kontroli wersji, które można by wdrożyć."
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:12
 msgid "Rebuild Zotonic"
@@ -15479,28 +15479,28 @@ msgstr "Przekompiluj zmienione pliki Erlanga w tle"
 
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
 msgid "Review and deploy the latest version of this site."
-msgstr ""
+msgstr "Sprawdź i wdróż najnowszą wersję tej witryny."
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:5
 msgid "Review incoming changes and deploy the latest version of Zotonic"
-msgstr ""
+msgstr "Przejrzyj przychodzące zmiany i wdróż najnowszą wersję Zotonic"
 
 #: zotonic_mod_site_update/priv/templates/_admin_module_buttons.tpl:4
 msgid "Review incoming changes and deploy this module’s Git repository."
-msgstr ""
+msgstr "Przejrzyj przychodzące zmiany i wdróż repozytorium Git tego modułu."
 
 #: zotonic_mod_site_update/priv/templates/_admin_status.tpl:5
 msgid "Review incoming changes before deploying the latest version."
-msgstr ""
+msgstr "Przejrzyj przychodzące zmiany przed wdrożeniem najnowszej wersji."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:2
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:3
 msgid "Review the latest version for {name}."
-msgstr ""
+msgstr "Sprawdź najnowszą wersję dla {name}."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:47
 msgid "Showing the most recent 100 incoming commits."
-msgstr ""
+msgstr "Wyświetlanie 100 najnowszych commitów przychodzących."
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:4
 msgid "Site update API token"
@@ -15516,19 +15516,19 @@ msgstr "Przepraszamy, to można uruchomić tylko ze strony statusu Zotonic"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:28
 msgid "The deployment preview is unavailable. Check the repository and server log, then try again."
-msgstr ""
+msgstr "Podgląd wdrożenia jest niedostępny. Sprawdź repozytorium i dziennik serwera, a następnie spróbuj ponownie."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:53
 msgid "The local branch cannot be fast-forwarded to the remote version. Resolve the local commits before deploying."
-msgstr ""
+msgstr "Nie można zaktualizować lokalnej gałęzi do wersji zdalnej w trybie fast-forward. Rozwiąż problemy z lokalnymi commitami przed wdrożeniem."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:50
 msgid "There are no incoming changes."
-msgstr ""
+msgstr "Nie ma przychodzących zmian."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:22
 msgid "This branch has no upstream configured. Configure its remote tracking branch before deploying."
-msgstr ""
+msgstr "Ta gałąź nie ma skonfigurowanej gałęzi upstream. Skonfiguruj jej zdalną gałąź śledzenia przed wdrożeniem."
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
 msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
@@ -15542,7 +15542,7 @@ msgstr "Aby uruchomić aktualizację elementu webhook, skonfiguruj usługę do P
 #: zotonic_mod_site_update/src/mod_site_update.erl:180
 #: zotonic_mod_site_update/src/mod_site_update.erl:215
 msgid "You are not allowed to deploy this code."
-msgstr ""
+msgstr "Nie masz uprawnień do wdrożenia tego kodu."
 
 #: zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:4
 msgid "Certificate Authority"

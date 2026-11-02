@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-02 09:31\n"
+"PO-Revision-Date: 2026-11-02 11:33\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -15425,19 +15425,19 @@ msgstr "Розгорнути"
 #: zotonic_mod_site_update/priv/templates/_admin_status.tpl:4
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:2
 msgid "Deploy latest"
-msgstr "Встановити останню версію"
+msgstr "Розгорнути останню версію"
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:3
 msgid "Deploy latest Zotonic"
-msgstr "Встановити останню версію Zotonic"
+msgstr "Розгорнути останню версію Zotonic"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:176
 msgid "Deploy latest version"
-msgstr "Встановити останню версію"
+msgstr "Розгорнути останню версію"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:210
 msgid "Deploying the latest version..."
-msgstr "Встановлення останньої версії..."
+msgstr "Розгортання останньої версії..."
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:221
 msgid "Deployment completed."
@@ -15449,11 +15449,11 @@ msgstr "Розгортання не вдалося. Детальнішу інф�
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:5
 msgid "Deployment updates the entire Git repository, including any other modules it contains."
-msgstr ""
+msgstr "Під час розгортання оновлюється весь репозиторій Git, включаючи всі інші модулі, що в ньому містяться."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:6
 msgid "Fetching remote changes…"
-msgstr ""
+msgstr "Завантаження змін з віддаленого сервера…"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:135
 msgid "Finished rebuilding Zotonic."
@@ -15461,11 +15461,11 @@ msgstr "Завершено перебудову Zotonic."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:32
 msgid "Incoming changes"
-msgstr ""
+msgstr "Вхідні зміни"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:24
 msgid "No deployable version control repository was found."
-msgstr ""
+msgstr "Не знайдено жодного репозиторію для управління версіями, який можна розгорнути."
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:12
 msgid "Rebuild Zotonic"
@@ -15477,28 +15477,28 @@ msgstr "Перекомпілювати змінені файли Erlang у фо�
 
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
 msgid "Review and deploy the latest version of this site."
-msgstr ""
+msgstr "Перегляньте та розгорніть останню версію цього сайту."
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:5
 msgid "Review incoming changes and deploy the latest version of Zotonic"
-msgstr ""
+msgstr "Перегляньте вхідні зміни та розгорніть останню версію Zotonic"
 
 #: zotonic_mod_site_update/priv/templates/_admin_module_buttons.tpl:4
 msgid "Review incoming changes and deploy this module’s Git repository."
-msgstr ""
+msgstr "Перегляньте вхідні зміни та розгорніть репозиторій Git цього модуля."
 
 #: zotonic_mod_site_update/priv/templates/_admin_status.tpl:5
 msgid "Review incoming changes before deploying the latest version."
-msgstr ""
+msgstr "Перед розгортанням останньої версії перегляньте вхідні зміни."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:2
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:3
 msgid "Review the latest version for {name}."
-msgstr ""
+msgstr "Перегляньте останню версію для {name}."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:47
 msgid "Showing the most recent 100 incoming commits."
-msgstr ""
+msgstr "Відображення останніх 100 вхідних комітів."
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:4
 msgid "Site update API token"
@@ -15514,19 +15514,19 @@ msgstr "На жаль, це можна запустити лише з сайту
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:28
 msgid "The deployment preview is unavailable. Check the repository and server log, then try again."
-msgstr ""
+msgstr "Попередній перегляд розгортання недоступний. Перевірте репозиторій та журнал сервера, а потім спробуйте ще раз."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:53
 msgid "The local branch cannot be fast-forwarded to the remote version. Resolve the local commits before deploying."
-msgstr ""
+msgstr "Локальну гілку неможливо оновити до віддаленої версії методом fast-forward. Перед розгортанням розв’яжіть проблеми з локальними комітами."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:50
 msgid "There are no incoming changes."
-msgstr ""
+msgstr "Вхідних змін немає."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:22
 msgid "This branch has no upstream configured. Configure its remote tracking branch before deploying."
-msgstr ""
+msgstr "Для цієї гілки не налаштовано upstream. Перед розгортанням налаштуйте відстежувану віддалену гілку."
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
 msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
@@ -15540,7 +15540,7 @@ msgstr "Щоб запустити оновлення через вебхук, н
 #: zotonic_mod_site_update/src/mod_site_update.erl:180
 #: zotonic_mod_site_update/src/mod_site_update.erl:215
 msgid "You are not allowed to deploy this code."
-msgstr ""
+msgstr "Вам заборонено розгортати цей код."
 
 #: zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:4
 msgid "Certificate Authority"

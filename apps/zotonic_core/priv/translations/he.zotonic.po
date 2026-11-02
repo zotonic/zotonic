@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-02 09:31\n"
+"PO-Revision-Date: 2026-11-02 11:32\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -15405,25 +15405,25 @@ msgstr "ה-commit הנוכחי"
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:62
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:11
 msgid "Deploy"
-msgstr "פריסה"
+msgstr "פרוס"
 
 #: zotonic_mod_site_update/priv/templates/_admin_module_buttons.tpl:3
 #: zotonic_mod_site_update/priv/templates/_admin_status.tpl:4
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:2
 msgid "Deploy latest"
-msgstr "הפעל את הגרסה העדכנית ביותר"
+msgstr "פרוס את הגרסה העדכנית ביותר"
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:3
 msgid "Deploy latest Zotonic"
-msgstr "התקן את הגרסה העדכנית ביותר של Zotonic"
+msgstr "פרוס את הגרסה העדכנית ביותר של Zotonic"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:176
 msgid "Deploy latest version"
-msgstr "התקן את הגרסה העדכנית ביותר"
+msgstr "פרוס את הגרסה העדכנית ביותר"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:210
 msgid "Deploying the latest version..."
-msgstr "מפעילים את הגרסה האחרונה..."
+msgstr "הגרסה העדכנית ביותר נפרסת..."
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:221
 msgid "Deployment completed."
@@ -15435,11 +15435,11 @@ msgstr "הפריסה נכשלה. בדוק את יומן השרת לקבלת פר
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:5
 msgid "Deployment updates the entire Git repository, including any other modules it contains."
-msgstr ""
+msgstr "הפריסה מעדכנת את מאגר ה-Git כולו, כולל כל המודולים האחרים שהוא מכיל."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:6
 msgid "Fetching remote changes…"
-msgstr ""
+msgstr "הורדת שינויים מרחוק…"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:135
 msgid "Finished rebuilding Zotonic."
@@ -15447,11 +15447,11 @@ msgstr "סיים לבנות מחדש את Zotonic."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:32
 msgid "Incoming changes"
-msgstr ""
+msgstr "שינויים נכנסים"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:24
 msgid "No deployable version control repository was found."
-msgstr ""
+msgstr "לא נמצא מאגר בקרת גרסאות שניתן לפרוס."
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:12
 msgid "Rebuild Zotonic"
@@ -15463,28 +15463,28 @@ msgstr "הידור מחדש קבצי Erlang ששונו ברקע"
 
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
 msgid "Review and deploy the latest version of this site."
-msgstr ""
+msgstr "בדוק ופרוס את הגרסה העדכנית ביותר של אתר זה."
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:5
 msgid "Review incoming changes and deploy the latest version of Zotonic"
-msgstr ""
+msgstr "בדוק את השינויים הנכנסים ופרוס את הגרסה העדכנית ביותר של Zotonic"
 
 #: zotonic_mod_site_update/priv/templates/_admin_module_buttons.tpl:4
 msgid "Review incoming changes and deploy this module’s Git repository."
-msgstr ""
+msgstr "בדוק את השינויים הנכנסים ופרוס את מאגר ה-Git של מודול זה."
 
 #: zotonic_mod_site_update/priv/templates/_admin_status.tpl:5
 msgid "Review incoming changes before deploying the latest version."
-msgstr ""
+msgstr "בדוק את השינויים הנכנסים לפני פריסת הגרסה העדכנית ביותר."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:2
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:3
 msgid "Review the latest version for {name}."
-msgstr ""
+msgstr "עיין בגרסה האחרונה של {name}."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:47
 msgid "Showing the most recent 100 incoming commits."
-msgstr ""
+msgstr "הצגת 100 ה-commits הנכנסים האחרונים."
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:4
 msgid "Site update API token"
@@ -15500,19 +15500,19 @@ msgstr "מצטער, ניתן להריץ זאת רק מאתר הסטטוס של �
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:28
 msgid "The deployment preview is unavailable. Check the repository and server log, then try again."
-msgstr ""
+msgstr "תצוגה מקדימה של הפריסה אינה זמינה. בדוק את המאגר ואת יומן השרת, ולאחר מכן נסה שוב."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:53
 msgid "The local branch cannot be fast-forwarded to the remote version. Resolve the local commits before deploying."
-msgstr ""
+msgstr "לא ניתן לעדכן את הענף המקומי לגרסה המרוחקת באמצעות fast-forward. יש להסדיר את ה-commits המקומיים לפני הפריסה."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:50
 msgid "There are no incoming changes."
-msgstr ""
+msgstr "אין שינויים נכנסים."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:22
 msgid "This branch has no upstream configured. Configure its remote tracking branch before deploying."
-msgstr ""
+msgstr "לענף זה לא הוגדר upstream. יש להגדיר את ענף המעקב המרוחק לפני הפריסה."
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
 msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
@@ -15526,7 +15526,7 @@ msgstr "כדי להריץ את עדכון ה- webhook, הגדר את השירו�
 #: zotonic_mod_site_update/src/mod_site_update.erl:180
 #: zotonic_mod_site_update/src/mod_site_update.erl:215
 msgid "You are not allowed to deploy this code."
-msgstr ""
+msgstr "אין לך הרשאה לפרוס את הקוד הזה."
 
 #: zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:4
 msgid "Certificate Authority"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-02 09:31\n"
+"PO-Revision-Date: 2026-11-02 11:32\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -15415,11 +15415,11 @@ msgstr "Die Bereitstellung ist fehlgeschlagen. Weitere Informationen finden Sie 
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:5
 msgid "Deployment updates the entire Git repository, including any other modules it contains."
-msgstr ""
+msgstr "Durch die Bereitstellung wird das gesamte Git-Repository aktualisiert, einschließlich aller darin enthaltenen Module."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:6
 msgid "Fetching remote changes…"
-msgstr ""
+msgstr "Remote-Änderungen abrufen…"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:135
 msgid "Finished rebuilding Zotonic."
@@ -15427,11 +15427,11 @@ msgstr "Zotonic wurde neu gebaut."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:32
 msgid "Incoming changes"
-msgstr ""
+msgstr "Eingehende Änderungen"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:24
 msgid "No deployable version control repository was found."
-msgstr ""
+msgstr "Es wurde kein bereitstellbares Versionskontroll-Repository gefunden."
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:12
 msgid "Rebuild Zotonic"
@@ -15443,28 +15443,28 @@ msgstr "Geänderte Erlang-Dateien im Hintergrund neu kompilieren"
 
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
 msgid "Review and deploy the latest version of this site."
-msgstr ""
+msgstr "Überprüfen Sie die neueste Version dieser Website und stellen Sie sie bereit."
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:5
 msgid "Review incoming changes and deploy the latest version of Zotonic"
-msgstr ""
+msgstr "Überprüfen Sie die eingehenden Änderungen und stellen Sie die neueste Version von Zotonic bereit"
 
 #: zotonic_mod_site_update/priv/templates/_admin_module_buttons.tpl:4
 msgid "Review incoming changes and deploy this module’s Git repository."
-msgstr ""
+msgstr "Überprüfen Sie die eingehenden Änderungen und stellen Sie das Git-Repository dieses Moduls bereit."
 
 #: zotonic_mod_site_update/priv/templates/_admin_status.tpl:5
 msgid "Review incoming changes before deploying the latest version."
-msgstr ""
+msgstr "Überprüfen Sie die eingehenden Änderungen, bevor Sie die neueste Version bereitstellen."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:2
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:3
 msgid "Review the latest version for {name}."
-msgstr ""
+msgstr "Überprüfen Sie die neueste Version für {name}."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:47
 msgid "Showing the most recent 100 incoming commits."
-msgstr ""
+msgstr "Es werden die letzten 100 eingegangenen Commits angezeigt."
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:4
 msgid "Site update API token"
@@ -15480,19 +15480,19 @@ msgstr "Dies kann leider nur von der Zotonic-Statusseite ausgeführt werden"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:28
 msgid "The deployment preview is unavailable. Check the repository and server log, then try again."
-msgstr ""
+msgstr "Die Bereitstellungsvorschau ist nicht verfügbar. Überprüfen Sie das Repository und das Serverprotokoll und versuchen Sie es anschließend erneut."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:53
 msgid "The local branch cannot be fast-forwarded to the remote version. Resolve the local commits before deploying."
-msgstr ""
+msgstr "Der lokale Branch kann nicht per Fast-Forward auf die Remote-Version aktualisiert werden. Klären Sie vor der Bereitstellung die Probleme mit den lokalen Commits."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:50
 msgid "There are no incoming changes."
-msgstr ""
+msgstr "Es gibt keine eingehenden Änderungen."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:22
 msgid "This branch has no upstream configured. Configure its remote tracking branch before deploying."
-msgstr ""
+msgstr "Für diesen Zweig ist kein Upstream konfiguriert. Konfigurieren Sie vor der Bereitstellung den Remote-Tracking-Zweig."
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
 msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
@@ -15506,7 +15506,7 @@ msgstr "Um das Webhook-Update auszuführen, konfigurieren Sie Ihren Dienst für 
 #: zotonic_mod_site_update/src/mod_site_update.erl:180
 #: zotonic_mod_site_update/src/mod_site_update.erl:215
 msgid "You are not allowed to deploy this code."
-msgstr ""
+msgstr "Sie dürfen diesen Code nicht bereitstellen."
 
 #: zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:4
 msgid "Certificate Authority"

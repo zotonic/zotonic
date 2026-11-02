@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-02 09:31\n"
+"PO-Revision-Date: 2026-11-02 11:32\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -15374,7 +15374,7 @@ msgstr "Je registratiecode"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:223
 msgid "Another deployment is in progress. Please try again when it finishes."
-msgstr "Er is momenteel een nieuwe implementatie gaande. Probeer het opnieuw zodra deze is voltooid."
+msgstr "Er wordt al een andere versie uitgerold. Probeer het opnieuw zodra dat klaar is."
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:137
 msgid "Building Zotonic in the background..."
@@ -15392,41 +15392,41 @@ msgstr "Huidige commit"
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:62
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:11
 msgid "Deploy"
-msgstr "Implementeren"
+msgstr "Rol uit"
 
 #: zotonic_mod_site_update/priv/templates/_admin_module_buttons.tpl:3
 #: zotonic_mod_site_update/priv/templates/_admin_status.tpl:4
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:2
 msgid "Deploy latest"
-msgstr "De nieuwste versie implementeren"
+msgstr "Rol de nieuwste versie uit"
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:3
 msgid "Deploy latest Zotonic"
-msgstr "De nieuwste versie van Zotonic implementeren"
+msgstr "Rol de nieuwste Zotonic-versie uit"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:176
 msgid "Deploy latest version"
-msgstr "De nieuwste versie installeren"
+msgstr "Rol de nieuwste versie uit"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:210
 msgid "Deploying the latest version..."
-msgstr "De nieuwste versie wordt geïnstalleerd..."
+msgstr "De nieuwste versie wordt uitgerold..."
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:221
 msgid "Deployment completed."
-msgstr "De implementatie is voltooid."
+msgstr "Uitrollen voltooid."
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:225
 msgid "Deployment failed. Check the server log for details."
-msgstr "De implementatie is mislukt. Raadpleeg het serverlogboek voor meer informatie."
+msgstr "Uitrollen mislukt. Raadpleeg het serverlogboek voor meer informatie."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:5
 msgid "Deployment updates the entire Git repository, including any other modules it contains."
-msgstr ""
+msgstr "Bij het uitrollen wordt de volledige Git-repository bijgewerkt, inclusief alle andere modules die deze bevat."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:6
 msgid "Fetching remote changes…"
-msgstr ""
+msgstr "Wijzigingen uit de remote ophalen…"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:135
 msgid "Finished rebuilding Zotonic."
@@ -15434,11 +15434,11 @@ msgstr "Klaar met het herbouwen van Zotonic."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:32
 msgid "Incoming changes"
-msgstr ""
+msgstr "Binnenkomende wijzigingen"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:24
 msgid "No deployable version control repository was found."
-msgstr ""
+msgstr "Er is geen versiebeheerrepository gevonden die kan worden uitgerold."
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:12
 msgid "Rebuild Zotonic"
@@ -15450,28 +15450,28 @@ msgstr "Hercompileer gewijzigde Erlang-bestanden op de achtergrond"
 
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
 msgid "Review and deploy the latest version of this site."
-msgstr ""
+msgstr "Bekijk de nieuwste versie van deze site en rol deze uit."
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:5
 msgid "Review incoming changes and deploy the latest version of Zotonic"
-msgstr ""
+msgstr "Bekijk de binnenkomende wijzigingen en rol de nieuwste versie van Zotonic uit"
 
 #: zotonic_mod_site_update/priv/templates/_admin_module_buttons.tpl:4
 msgid "Review incoming changes and deploy this module’s Git repository."
-msgstr ""
+msgstr "Bekijk de binnenkomende wijzigingen en rol de Git-repository van deze module uit."
 
 #: zotonic_mod_site_update/priv/templates/_admin_status.tpl:5
 msgid "Review incoming changes before deploying the latest version."
-msgstr ""
+msgstr "Bekijk de binnenkomende wijzigingen voordat je de nieuwste versie uitrolt."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:2
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:3
 msgid "Review the latest version for {name}."
-msgstr ""
+msgstr "Bekijk de nieuwste versie voor {name}."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:47
 msgid "Showing the most recent 100 incoming commits."
-msgstr ""
+msgstr "De 100 meest recente inkomende commits worden weergegeven."
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:4
 msgid "Site update API token"
@@ -15487,19 +15487,19 @@ msgstr "Sorry, dit kan alleen worden uitgevoerd vanaf de Zotonic-statussite"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:28
 msgid "The deployment preview is unavailable. Check the repository and server log, then try again."
-msgstr ""
+msgstr "Het uitrolvoorbeeld is niet beschikbaar. Controleer de repository en het serverlogboek en probeer het opnieuw."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:53
 msgid "The local branch cannot be fast-forwarded to the remote version. Resolve the local commits before deploying."
-msgstr ""
+msgstr "De lokale branch kan niet met een fast-forward worden bijgewerkt naar de remote versie. Werk eerst de lokale commits af voordat je de versie uitrolt."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:50
 msgid "There are no incoming changes."
-msgstr ""
+msgstr "Er zijn geen binnenkomende wijzigingen."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:22
 msgid "This branch has no upstream configured. Configure its remote tracking branch before deploying."
-msgstr ""
+msgstr "Voor deze branch is geen upstream ingesteld. Stel de te volgen remote branch in voordat je de versie uitrolt."
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
 msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
@@ -15513,7 +15513,7 @@ msgstr "Om de webhook-update uit te voeren, configureer je je service voor POST 
 #: zotonic_mod_site_update/src/mod_site_update.erl:180
 #: zotonic_mod_site_update/src/mod_site_update.erl:215
 msgid "You are not allowed to deploy this code."
-msgstr ""
+msgstr "Je mag deze code niet uitrollen."
 
 #: zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:4
 msgid "Certificate Authority"
