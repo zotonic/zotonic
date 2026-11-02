@@ -712,7 +712,7 @@ export_revision_test_() ->
 export_revision() ->
     C = z_acl:logon(1, z_context:new(zotonic_site_testsandbox)),
     {ok, Id} = m_rsc:insert(#{<<"category_id">> => text, <<"title">> => <<"Revision test">>}, C),
-    EdgeTopic = [<<"model">>, <<"edge">>, <<"event">>, Id, <<"o">>, <<"relation">>],
+    EdgeTopic = [<<"model">>, <<"edge">>, <<"event">>, integer_to_binary(Id), <<"o">>, <<"relation">>],
     ok = z_mqtt:subscribe(EdgeTopic, C),
     try
         {ok, Id} = m_rsc:update(Id, #{<<"title">> => <<"Existing publisher">>}, C),
@@ -722,8 +722,9 @@ export_revision() ->
         {ok, Initial} = m_rsc_export:full(Id, C),
         ?assertEqual(Version, maps:get(<<"export_revision">>, Initial)),
         Before = m_rsc:get_raw(Id, C),
-        {ok, _} = m_edge:insert(Id, relation, 1, C),
-        await_edge_notification(),
+        {ok, EdgeId} = m_edge:insert(Id, relation, 1, C),
+        await_edge_notification(EdgeTopic,
+            #edge_insert{subject_id = Id, predicate = relation, object_id = 1, edge_id = EdgeId}),
         {ok, Linked} = m_rsc_export:full(Id, C),
         ?assertEqual(Version + 1, maps:get(<<"export_revision">>, Linked)),
         ?assertEqual(Before, m_rsc:get_raw(Id, C)),
@@ -732,7 +733,8 @@ export_revision() ->
         ok = m_websub:install(C),
         {ok, Linked} = m_rsc_export:full(Id, C),
         ok = m_edge:delete(Id, relation, 1, C),
-        await_edge_notification(),
+        await_edge_notification(EdgeTopic,
+            #edge_delete{subject_id = Id, predicate = relation, object_id = 1, edge_id = EdgeId}),
         {ok, Unlinked} = m_rsc_export:full(Id, C),
         ?assertEqual(Version + 2, maps:get(<<"export_revision">>, Unlinked)),
         ?assertEqual(Before, m_rsc:get_raw(Id, C)),
@@ -752,9 +754,25 @@ export_revision() ->
     end,
     ?assertEqual(undefined, z_db:q1("select revision from websub_revision where rsc_id=$1", [Id], C)).
 
-await_edge_notification() ->
-    receive {mqtt_msg, _} -> ok
-    after 5000 -> error(missing_edge_notification)
+%% The edge-log server publishes only after the synchronous observers finish.
+%% Other tests can leave MQTT messages in this process; they are not a barrier.
+await_edge_notification(Topic, Edge) ->
+    receive
+        {mqtt_msg, #{topic := Topic, message := #{payload := Events}}} ->
+            ?assert(lists:member(Edge, Events))
+    after 5000 -> error({missing_edge_notification, Topic, Edge})
+    end.
+
+edge_notification_wait_test() ->
+    Topic = [<<"model">>, <<"edge">>, <<"event">>, <<"123">>, <<"o">>, <<"relation">>],
+    Edge = #edge_insert{subject_id = 123, predicate = relation, object_id = 1, edge_id = 456},
+    Unrelated = {mqtt_msg, #{topic => [<<"model">>, <<"rsc">>, <<"event">>, <<"123">>, <<"update">>],
+        message => #{payload => #{id => 123, version => 2}}}},
+    self() ! Unrelated,
+    self() ! {mqtt_msg, #{topic => Topic, message => #{payload => [Edge]}}},
+    await_edge_notification(Topic, Edge),
+    receive Unrelated -> ok
+    after 0 -> error(consumed_unrelated_notification)
     end.
 
 shallow_collection_import_test() ->
