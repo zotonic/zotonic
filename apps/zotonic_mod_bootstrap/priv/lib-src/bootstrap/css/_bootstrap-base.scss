@@ -1,0 +1,18 @@
+// Keep the root font size at Bootstrap 3's selector specificity. Sites often
+// override html to use a different rem scale; Bootstrap 5's :root wins over
+// those rules even when the site's stylesheet is loaded after Bootstrap.
+$zotonic-root-font-size: $font-size-root;
+$font-size-root: null;
+@import "../scss/bootstrap";
+$font-size-root: $zotonic-root-font-size;
+
+@if $font-size-root != null {
+  :root,
+  [data-bs-theme="light"] {
+    --#{$prefix}root-font-size: #{$font-size-root};
+  }
+
+  html {
+    font-size: var(--#{$prefix}root-font-size);
+  }
+}

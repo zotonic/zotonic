@@ -5,9 +5,10 @@
 }
 
 .widget {
-    background-color: white;
+    background-color: var(--z-admin-surface);
+    color: var(--z-admin-widget-text);
     margin-bottom: $widgetVerticalPadding;
-    border-bottom: none;
+    border: 1px solid var(--z-admin-widget-border);
     border-radius: $radiusWidget;
     @include clearfix;
 
@@ -16,7 +17,7 @@
     }
 
     &.dark {
-        background-color: $backgroundColorMedium;
+        background-color: var(--z-admin-surface-muted);
     }
 
     h5 {
@@ -31,6 +32,7 @@
 
     .widget-content {
         position: relative;
+        color: var(--z-admin-widget-text);
         padding: $widgetVerticalPadding $widgetSidePadding 0 $widgetSidePadding;
         border-radius: 0 0 $radiusWidget $radiusWidget;
         border-top: none;
@@ -109,12 +111,13 @@
 
     .widget-header + .widget-content,
     .widget-header + .nav {
-        border-top: 1px solid $borderColorMediumTransparent;
+        border-top: 1px solid var(--z-admin-widget-header-border);
     }
 
     .widget-header,
     .widget-section-header {
         @extend .admin-text-header;
+        color: var(--z-admin-widget-text);
         font-weight: bold;
     }
 
@@ -126,7 +129,7 @@
         margin: 0;
         padding: $widgetVerticalPadding $widgetSidePadding;
         @include user-select("none");
-        text-shadow: $darkOnLightTextShadow;
+        text-shadow: var(--z-admin-text-shadow);
         font-size: $font-size-large;
         font-weight: normal;
         line-height: 16px; // make room for widget-header-tools
@@ -153,7 +156,7 @@
             }
 
             .z-btn-help {
-                color: $textColorLight;
+                color: var(--z-admin-widget-help-color);
             }
         }
 
@@ -168,6 +171,7 @@
         }
 
         .text-muted.pull-right {
+            color: var(--z-admin-widget-text-muted) !important;
             font-size: $font-size-small;
         }
     }
@@ -175,7 +179,6 @@
     &.widget-active:not(.widget-expanded) {
         $_transitionDuration: .5s;
         $_transitionEffect: ease-in-out;
-        $_color: $backgroundColorLightest;
     }
 
     &.widget-expanded,
@@ -185,7 +188,7 @@
 
             .widget-header-tools {
                 .z-btn-help {
-                    color: $colorLink;
+                    color: var(--z-admin-widget-help-active-color);
                 }
             }
         }
@@ -202,13 +205,13 @@
         float: right;
         width: $_size;
         height: $_size;
-        background-color: #333;
-        border-color: #fff;
+        background-color: var(--z-admin-widget-button-help-bg);
+        border-color: var(--z-admin-widget-button-help-border);
         border-radius: calc($_size / 2);
     }
 
     .navbar {
-        background-color: $backgroundColorMediumDark;
+        background-color: var(--z-admin-widget-navbar-bg);
         padding: 10px 0;
     }
 }
@@ -232,7 +235,7 @@
 
 li {
     h3.widget-header {
-        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+        box-shadow: var(--z-admin-widget-list-shadow);
     }
 }
 
@@ -240,7 +243,7 @@ li {
     @extend .minimalTabs;
 
     &.language-tabs {
-        border-bottom: 1px solid $borderColorLight;
+        border-bottom: 1px solid var(--z-admin-table-border);
     }
 }
 
@@ -255,8 +258,8 @@ li {
         > ul.nav-tabs {
             padding: 0;
             margin: 0 0 15px 0;
-            background: none;
-            border-color: $borderColorLight;
+            background: var(--z-admin-surface);
+            border-color: var(--z-admin-table-border);
         }
     }
 }

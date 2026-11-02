@@ -10,8 +10,8 @@
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
   font-size: 16px;
   line-height: 1.6;
-  color: #24282c;
-  background: #fff;
+  color: var(--bs-body-color, #24282c);
+  background: var(--bs-body-bg, #fff);
   text-align: start;
   letter-spacing: 0;
 }
@@ -53,7 +53,7 @@
   font-size: 16px;
 }
 .z-tiptap-body a {
-  color: #076b91;
+  color: var(--bs-link-color, #076b91);
   text-decoration: underline;
   cursor: text;
 }
@@ -76,18 +76,18 @@
   margin-bottom: 0.3em;
 }
 .z-tiptap-body blockquote {
-  border-inline-start: 3px solid #92a3a8;
+  border-inline-start: 3px solid var(--bs-secondary-color, #92a3a8);
   margin: 1em 0;
   padding: 0.3em 1em;
-  color: #4b555a;
+  color: var(--bs-secondary-color, #4b555a);
   font-size: inherit;
 }
 .z-tiptap-body aside,
 .z-tiptap-body .admonition {
   margin: 1em 0;
   padding: 12px 16px;
-  border-inline-start: 3px solid #92a3a8;
-  background: #f4f6f7;
+  border-inline-start: 3px solid var(--bs-secondary-color, #92a3a8);
+  background: var(--bs-tertiary-bg, #f4f6f7);
 }
 .z-tiptap-body aside > :first-child,
 .z-tiptap-body .admonition > :first-child {
@@ -98,27 +98,27 @@
   margin-bottom: 0;
 }
 .z-tiptap-body .admonition {
-  border-inline-start-color: #076b91;
-  background: #eef7fa;
+  border-inline-start-color: var(--bs-link-color, #076b91);
+  background: var(--bs-info-bg-subtle, #eef7fa);
 }
 .z-tiptap-body .admonition > .admonition-title {
-  color: #076b91;
+  color: var(--bs-link-color, #076b91);
   font-weight: 600;
 }
 .z-tiptap-body pre {
   padding: 12px;
   border-radius: 3px;
-  background: #f0f2f3;
+  background: var(--bs-tertiary-bg, #f0f2f3);
   font-size: 14px;
 }
 .z-tiptap-body code {
   font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
-  background: #f0f2f3;
+  background: var(--bs-tertiary-bg, #f0f2f3);
   color: inherit;
 }
 .z-tiptap-body hr {
   border: 0;
-  border-top: 1px solid #c5c9ce;
+  border-top: 1px solid var(--bs-border-color, #c5c9ce);
   margin: 1.5em 0;
 }
 .z-tiptap-body table {
@@ -129,7 +129,7 @@
 }
 .z-tiptap-body td,
 .z-tiptap-body th {
-  border: 1px solid #b9c1c6;
+  border: 1px solid var(--bs-border-color, #b9c1c6);
   min-width: 40px;
   padding: 6px 9px;
   vertical-align: top;
@@ -137,7 +137,7 @@
 }
 .z-tiptap-body th {
   font-weight: 600;
-  background: #f0f2f3;
+  background: var(--bs-tertiary-bg, #f0f2f3);
 }
 .z-tiptap-body td > p,
 .z-tiptap-body th > p {
@@ -148,14 +148,14 @@
   height: auto;
 }
 .z-tiptap-body .z-tiptap-media {
-  border: 1px solid #b9c1c6;
+  border: 1px solid var(--bs-border-color, #b9c1c6);
   cursor: pointer;
 }
 .z-tiptap-body .z-tiptap-media > figcaption {
   padding: 8px 10px;
-  border-top: 1px solid #b9c1c6;
-  background: #f0f2f3;
-  color: #4b555a;
+  border-top: 1px solid var(--bs-border-color, #b9c1c6);
+  background: var(--bs-tertiary-bg, #f0f2f3);
+  color: var(--bs-secondary-color, #4b555a);
   font-size: 14px;
   line-height: 1.4;
   overflow-wrap: anywhere;
