@@ -1,6 +1,6 @@
 <div class="form-group">
     <div>
-        {% button class="btn btn-default" text=_"Ensure <i>hasmenupart</i> connections"
+        {% button class="btn btn-default" text=_"Rebuild menu connections"
                   postback={ensure_hasmenupart}
                   delegate=`mod_menu`
         %}

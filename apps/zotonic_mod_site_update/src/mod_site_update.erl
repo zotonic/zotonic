@@ -25,7 +25,7 @@
 This module pulls updates of a site‘s code from a remote version control system. The supported version control systems
 are git and mercurial.
 
-After enabling this module you will see a button **Deploy latest** on the System -> Status page in the admin.
+After enabling this module you will see a **Deployment** page in the System menu in the admin.
 
 This button is only available to users with the *use.mod_site_update* right. It opens a
 preview of the current commit and incoming remote history. Fetching this preview does
@@ -100,7 +100,8 @@ Delegate callbacks:
     ]).
 
 -export([
-    event/2
+    event/2,
+    observe_admin_menu/3
 ]).
 
 -export([
@@ -110,7 +111,20 @@ Delegate callbacks:
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_wires/include/mod_wires.hrl").
+-include_lib("zotonic_mod_admin/include/admin_menu.hrl").
 
+
+%% @doc Add the deployment page only when the site update module is enabled.
+-spec observe_admin_menu(#admin_menu{}, list(), z:context()) -> list().
+observe_admin_menu(#admin_menu{}, Acc, Context) ->
+    [#menu_item{
+        id = admin_deployment,
+        sort = 400,
+        parent = admin_system,
+        label = ?__("Deployment", Context),
+        url = admin_deployment,
+        visiblecheck = {acl, use, mod_site_update}
+    } | Acc].
 
 -spec event(#postback{}, z:context()) -> z:context().
 event(#postback{message = vcs_up}, Context) ->

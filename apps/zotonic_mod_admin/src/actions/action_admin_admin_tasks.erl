@@ -77,6 +77,16 @@ event(#postback{message={admin_tasks, [{task, <<"renumber_categories">>}]}}, Con
        ?__(<<"The category tree is rebuilding. This can take a long time."/utf8>>, Context),
        Context);
 
+%% @doc Close connections from peers with excessive concurrent sockets (node-wide).
+event(#postback{message={admin_tasks, [{task, <<"close_sockets">>}]}}, Context) ->
+    case z_acl:is_admin(Context) of
+        true ->
+            _ = m_admin_status:close_sockets(251, Context),
+            z_render:growl(?__("Excess connections have been closed.", Context), Context);
+        false ->
+            z_render:growl_error(?__("Only system administrators can close node connections.", Context), Context)
+    end;
+
 %% @doc Reload the site configuration.
 event(#postback{message={admin_tasks, [{task, <<"reload_config">>}]}}, Context) ->
     case z_acl:is_allowed(use, mod_admin_config, Context) of

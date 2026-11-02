@@ -23,7 +23,7 @@
 -behaviour(gen_server).
 -include_lib("kernel/include/logger.hrl").
 
--export([start_link/0, run/1, build/1, deploy/1, schema/1, try_idle/1, is_pending/0]).
+-export([start_link/0, run/1, build/1, deploy/1, schema/1, try_idle/1, is_pending/0, status/0]).
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2]).
 
 -record(state, {
@@ -113,6 +113,11 @@ try_idle(Fun) ->
 is_pending() ->
     gen_server:call(?MODULE, is_pending).
 
+%% @doc Public state for administration; never expose raw failure terms or paths.
+-spec status() -> map().
+status() ->
+    gen_server:call(?MODULE, status).
+
 init([]) ->
     %% Retain failures if this coordinator alone is restarted by its supervisor.
     Failure = case persistent_term:get(?MODULE, undefined) of
@@ -122,6 +127,13 @@ init([]) ->
     persistent_term:put(?MODULE, coordinator_started),
     {ok, #state{failure = Failure}}.
 
+handle_call(status, _From, #state{owner = Owner, failure = Failure, deployment = Deployment} = State) ->
+    {reply, #{
+        active => Owner =/= undefined,
+        blocked => Failure =/= undefined,
+        deployment => Deployment,
+        restart_required => Failure =:= coordinator_restarted
+    }, State};
 handle_call(is_pending, _From, State) ->
     {reply, State#state.owner =/= undefined orelse State#state.failure =/= undefined, State};
 %% A restarted coordinator has lost its leases. A VM restart is required;

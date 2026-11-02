@@ -580,7 +580,8 @@ observe_filestore_credentials_revlookup(
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
      #menu_item{id=admin_filestore,
-                parent=admin_system,
+                sort = 50,
+                parent=admin_config_group,
                 label=?__("Cloud File Store", Context),
                 url={admin_filestore},
                 visiblecheck={acl, use, mod_config}}

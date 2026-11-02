@@ -1,3 +1,5 @@
+{% if m.acl.is_admin %}
+<div class="table-responsive">
 <table class="table">
     <thead>
         <tr>
@@ -48,7 +50,7 @@
             {% endwith %}
         {% empty %}
             <tr>
-                <td colspan="3">
+                <td colspan="5">
                     <p>
                         {_ There are no tasks in the task queue. _}
                     </p>
@@ -57,3 +59,5 @@
         {% endfor %}
     </tbody>
 </table>
+</div>
+{% endif %}

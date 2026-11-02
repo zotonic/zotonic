@@ -1920,9 +1920,15 @@ ul.tree-list.connections-list li.menu-item-alert {
 }
 .widget .widget-content {
   position: relative;
-  padding: 15px 15px 0 15px;
+  padding: 15px 15px;
   border-radius: 0 0 10px 10px;
   border-top: none;
+}
+.widget .widget-content > :last-child {
+  margin-bottom: 0;
+}
+.widget .widget-content > .form-group:last-child > :last-child {
+  margin-bottom: 0;
 }
 .widget .widget-content.widget-content-full {
   padding: 0;
@@ -1947,9 +1953,7 @@ ul.tree-list.connections-list li.menu-item-alert {
 }
 .widget .widget-content .widget-content {
   padding-top: 0;
-}
-.widget .widget-content .widget-content > :last-child {
-  margin-bottom: 0;
+  padding-bottom: 0;
 }
 .widget .widget-content + .widget-content > .tab-pane {
   padding-top: 0;
