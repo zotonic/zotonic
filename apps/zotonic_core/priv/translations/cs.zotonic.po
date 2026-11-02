@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-02 11:33\n"
+"PO-Revision-Date: 2026-11-02 19:50\n"
 "Last-Translator: \n"
 "Language-Team: Czech\n"
 "MIME-Version: 1.0\n"
@@ -307,8 +307,8 @@ msgstr "Přidat odkazy do skupiny spolupráce"
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:91
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:141
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:110
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:53
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:61
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:55
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:63
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:47
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:152
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:184
@@ -566,7 +566,7 @@ msgstr "Považujte autory zdrojů za vlastníky."
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:19
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4
-#: zotonic_mod_admin/src/mod_admin.erl:491
+#: zotonic_mod_admin/src/mod_admin.erl:516
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:70
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 msgid "Content"
@@ -608,15 +608,15 @@ msgstr "Přesun do skupiny spolupráce se nezdařil."
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:48
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:57
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:83
-#: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:32
-#: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:41
+#: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:34
+#: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:43
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:18
 #: zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:21
 #: zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:25
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:118
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:53
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:8
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:65
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:67
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:30
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:53
 #: zotonic_mod_admin_identity/src/mod_admin_identity.erl:330
@@ -770,16 +770,16 @@ msgstr "Členové stejné skupiny uživatelů"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:13
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:137
-#: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:4
+#: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:6
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:5
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:6
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:8
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:9
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:42
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:19
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:21
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:26
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:82
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:28
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:84
 #: zotonic_mod_base/priv/templates/error.tpl:78
 #: zotonic_mod_development/priv/templates/_development_template.tpl:3
 #: zotonic_mod_development/priv/templates/_development_template_matches.tpl:8
@@ -792,10 +792,10 @@ msgid "Module"
 msgstr "Modul"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:25
-#: zotonic_mod_admin/src/mod_admin.erl:517
+#: zotonic_mod_admin/src/mod_admin.erl:551
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:3
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:7
-#: zotonic_mod_admin_modules/src/mod_admin_modules.erl:133
+#: zotonic_mod_admin_modules/src/mod_admin_modules.erl:134
 msgid "Modules"
 msgstr "Moduly"
 
@@ -1151,10 +1151,6 @@ msgstr "+ přidat"
 msgid "+ add page block"
 msgstr "+ přidat blok stránky"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:113
-msgid "<b>Warning:</b> the site will stop and restart."
-msgstr "<b>Varování:</b> web se zastaví a restartuje."
-
 #: zotonic_mod_admin/priv/templates/_admin_overview_list_title.tpl:2
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:32
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:55
@@ -1171,6 +1167,10 @@ msgstr "<strong>Křestní jméno</strong>, také označované jako rodné jméno
 msgid "A copy that will remain connected so that a new version can be fetched."
 msgstr "Kopie, která zůstane připojená, aby bylo možné načíst novou verzi."
 
+#: zotonic_mod_admin/priv/templates/_admin_status_update.tpl:9
+msgid "A deployment failed. Automatic updates and schema upgrades are waiting for a successful rebuild. Check the server log and retry the deployment or rebuild through Zotonic."
+msgstr "Nasazení se nezdařilo. Automatické aktualizace a aktualizace schématu čekají na úspěšnou přestavbu. Zkontrolujte protokol serveru a zkuste nasazení zopakovat nebo proveďte přestavbu prostřednictvím Zotonicu."
+
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:127
 msgid "A local copy, disconnected from the remote site."
 msgstr "Místní kopie odpojená od vzdáleného webu."
@@ -1186,6 +1186,10 @@ msgstr "O kategoriích"
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:97
 msgid "About {n} items found."
 msgstr "Přibližný počet nalezených položek: {n}."
+
+#: zotonic_mod_admin/src/mod_admin.erl:560
+msgid "Access Control"
+msgstr "Řízení přístupu"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:18
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:62
@@ -1264,9 +1268,13 @@ msgstr "Přidat médium do hlavního textu"
 msgid "Add note"
 msgstr "Přidat poznámku"
 
-#: zotonic_mod_admin/src/mod_admin.erl:1124
+#: zotonic_mod_admin/src/mod_admin.erl:1177
 msgid "Added the connection to"
 msgstr "Bylo přidáno propojení s"
+
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:53
+msgid "Additional module tools"
+msgstr "Další nástroje modulů"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:6
 msgid "Address"
@@ -1283,6 +1291,10 @@ msgstr "Administrace"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:6
 msgid "Advanced"
 msgstr "Pokročilé"
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:38
+msgid "Advanced repair"
+msgstr "Pokročilá oprava"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:2
 msgid "After the duplication you can edit the new page. The new page will be unpublished."
@@ -1315,7 +1327,13 @@ msgstr "Všechny stránky"
 msgid "All sites have been flushed."
 msgstr "Mezipaměť všech webů byla vyprázdněna."
 
-#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:7
+#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:36
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:2
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:37
+msgid "All sites on this node"
+msgstr "Všechny stránky v tomto uzlu"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:7
 msgid "Allocated"
 msgstr "Přiděleno"
 
@@ -1333,7 +1351,7 @@ msgstr "Další telefon"
 msgid "Always import all resources, including manually deleted resources."
 msgstr "Vždy importujte všechny zdroje, včetně ručně smazaných zdrojů."
 
-#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:115
+#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:17
 msgid "Amount"
 msgstr "Množství"
 
@@ -1363,11 +1381,16 @@ msgstr "Jakýkoli predikát"
 msgid "Anybody’s"
 msgstr "Kohokoli"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_update.tpl:11
+#: zotonic_mod_admin/priv/templates/_admin_status_update.tpl:16
+msgid "Applies to all sites on this node."
+msgstr "Platí pro všechny weby v tomto uzlu."
+
 #: zotonic_mod_admin/priv/templates/_rsc_import_deleted_options.tpl:10
 msgid "Applies to the selected connection depth, including future updates. By default, manually deleted resources stay deleted; automatically removed dependent resources can be imported again."
 msgstr "Platí pro vybranou hloubku propojení včetně budoucích aktualizací. Ve výchozím nastavení zůstávají ručně odstraněné zdroje odstraněné; automaticky odstraněné závislé zdroje lze znovu importovat."
 
-#: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:36
+#: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:38
 msgid "Are you sure you want to delete all tasks for this module and function?"
 msgstr "Opravdu chcete odstranit všechny úlohy pro tento modul a funkci?"
 
@@ -1387,7 +1410,7 @@ msgstr "Opravdu chcete odstranit vybrané stránky? Počet stránek: {n}."
 msgid "Are you sure you want to delete this note?"
 msgstr "Jste si jisti, že chcete tuto poznámku smazat?"
 
-#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:72
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:63
 msgid "Are you sure you want to exit the admin interface?"
 msgstr "Opravdu chcete opustit administrační rozhraní?"
 
@@ -1401,10 +1424,15 @@ msgstr "Postranní poznámka"
 msgid "Attached media"
 msgstr "Připojená média"
 
-#: zotonic_mod_admin/src/mod_admin.erl:522
+#: zotonic_mod_admin/src/mod_admin.erl:556
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:41
 msgid "Auth"
 msgstr "Autentizace"
+
+#: zotonic_mod_admin/src/mod_admin.erl:564
+#: zotonic_mod_base/priv/templates/tests/connection_test.tpl:142
+msgid "Authentication"
+msgstr "Ověřování"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:162
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:164
@@ -1417,8 +1445,7 @@ msgid "Automatically fetch updates from the original website."
 msgstr "Automaticky načítat aktualizace z původního webu."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:62
-#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:35
-#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:38
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:38
 msgid "Available"
 msgstr "K dispozici"
 
@@ -1437,6 +1464,10 @@ msgstr "K dispozici"
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:23
 msgid "Back"
 msgstr "Zpět"
+
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:12
+msgid "Background work"
+msgstr "Přípravné práce"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_basics.tpl:4
 msgid "Basic"
@@ -1458,13 +1489,17 @@ msgstr "Název bloku"
 msgid "Block quote"
 msgstr "Bloková citace"
 
-#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:36
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:36
 msgid "Buffered"
 msgstr "Uloženo do vyrovnávací paměti"
 
-#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:37
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:37
 msgid "Cached"
 msgstr "Uloženo v mezipaměti"
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:10
+msgid "Caches"
+msgstr "Meziúložiště"
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:47
 msgid "Caches have been flushed."
@@ -1486,10 +1521,6 @@ msgstr "Změnit kategorii"
 #: zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:34
 msgid "Change the category of this page"
 msgstr "Změnit kategorii této stránky"
-
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:139
-msgid "Check all pages for embedded page references and add a <i>refers</i> connection for all of those references."
-msgstr "Zkontrolujte všechny stránky na vložené odkazy na stránky a pro každý takový odkaz přidejte propojení <i>refers</i>."
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_bulk_actions.tpl:41
 msgid "Check the pages you want to delete."
@@ -1519,6 +1550,10 @@ msgstr "Město"
 msgid "Clear"
 msgstr "Vymazat"
 
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:12
+msgid "Clear cached templates, dispatch rules and in-memory site data. The shared file index is also refreshed."
+msgstr "Vymažte šablony uložené v mezipaměti, pravidla pro směrování a data webu uložená v paměti. Obnoví se také index sdílených souborů."
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:10
 msgid "Click \"Save\" to see your changes."
 msgstr "Kliknutím na tlačítko „Uložit“ zobrazíte provedené změny."
@@ -1535,13 +1570,14 @@ msgstr "Kliknutím zobrazíte náhled."
 msgid "Close Live view"
 msgstr "Zavřít živý náhled"
 
-#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:133
-msgid "Close Sockets"
-msgstr "Zavřít sockety"
+#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:36
+msgid "Close all sockets from IP addresses with more than 250 open sockets. This can disconnect clients on other sites."
+msgstr "Zavřete všechny sokety z IP adres, které mají více než 250 otevřených soketů. To může způsobit odpojení klientů na jiných webech."
 
-#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:134
-msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets."
-msgstr "Zavřít všechny sockety z IP adres, které mají &gt; 250 otevřených socketů."
+#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:41
+#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:42
+msgid "Close excess connections"
+msgstr "Ukončit nadbytečná připojení"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:4
 msgid "Close panel"
@@ -1551,9 +1587,17 @@ msgstr "Zavřít panel"
 msgid "Close preview"
 msgstr "Zavřít náhled"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:50
-msgid "Config Directory"
-msgstr "Adresář konfigurace"
+#: zotonic_mod_admin/priv/templates/_admin_status_update.tpl:15
+msgid "Code is being updated. Background changes will resume when activation finishes."
+msgstr "Kód se právě aktualizuje. Změny na pozadí budou pokračovat, jakmile se aktualizace dokončí."
+
+#: zotonic_mod_admin/priv/templates/_admin_status_update.tpl:5
+msgid "Code updates need attention"
+msgstr "Je třeba věnovat pozornost aktualizacím kódu"
+
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:32
+msgid "Config directory"
+msgstr "Adresář s konfiguračními soubory"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:24
 msgid "Configured"
@@ -1564,7 +1608,7 @@ msgstr "Nakonfigurováno"
 msgid "Confirm delete"
 msgstr "Potvrdit odstranění"
 
-#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:72
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:63
 msgid "Confirm logoff"
 msgstr "Potvrdit odhlášení"
 
@@ -1605,6 +1649,10 @@ msgstr "Propojení"
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:222
 msgid "Content origin"
 msgstr "Původ obsahu"
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:28
+msgid "Content repair"
+msgstr "Oprava obsahu"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:24
 msgid "Content type"
@@ -1651,11 +1699,11 @@ msgstr "Nepodařilo se připojit k webu."
 msgid "Could not detect anything to import on that URL or embed code."
 msgstr "Na této adrese URL ani ve vloženém kódu nebyl nalezen žádný obsah k importu."
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:88
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:98
 msgid "Could not reload the site configuration, check the logs."
 msgstr "Nepodařilo se znovu načíst konfiguraci webu, zkontrolujte protokoly."
 
-#: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:6
+#: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:8
 #: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:37
 msgid "Count"
 msgstr "Počet"
@@ -1664,7 +1712,7 @@ msgstr "Počet"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:86
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:142
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:220
-#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:113
+#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:15
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:110
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:45
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:47
@@ -1712,17 +1760,13 @@ msgstr "Datum vytvoření, od nejstarších"
 
 #: zotonic_mod_admin/priv/templates/admin.tpl:4
 #: zotonic_mod_admin/priv/templates/admin.tpl:8
-#: zotonic_mod_admin/src/mod_admin.erl:486
+#: zotonic_mod_admin/src/mod_admin.erl:511
 msgid "Dashboard"
 msgstr "Přehled"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:44
-msgid "Data Directory"
-msgstr "Adresář dat"
-
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:33
-msgid "Database Version"
-msgstr "Verze databáze"
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:30
+msgid "Data directory"
+msgstr "Adresář s daty"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:6
 msgid "Date range"
@@ -1763,7 +1807,7 @@ msgstr "Odstranit tuto stránku."
 msgid "Delete this page..."
 msgstr "Smazat tuto stránku..."
 
-#: zotonic_mod_admin/src/mod_admin.erl:957
+#: zotonic_mod_admin/src/mod_admin.erl:1010
 msgid "Deleted tasks."
 msgstr "Úlohy byly odstraněny."
 
@@ -1771,7 +1815,7 @@ msgstr "Úlohy byly odstraněny."
 msgid "Deleted."
 msgstr "Odstraněno."
 
-#: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:38
+#: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:40
 #: zotonic_mod_admin_merge/priv/templates/_confirm_merge.tpl:83
 msgid "Deletion cannot be undone."
 msgstr "Smazání nelze vrátit zpět."
@@ -1805,15 +1849,19 @@ msgstr "Zakázáno"
 msgid "Disconnect"
 msgstr "Odpojit"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:42
+msgid "Disconnect peers with more than 250 open sockets across all sites on this node?"
+msgstr "Odpojit uzly, které mají více než 250 otevřených soketů napříč všemi lokalitami na tomto uzlu?"
+
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:36
 msgid "Discover media"
 msgstr "Vyhledat média"
 
-#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:76
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:76
 msgid "Disk capacity"
 msgstr "Kapacita disku"
 
-#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:69
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:69
 msgid "Disks"
 msgstr "Disky"
 
@@ -1881,7 +1929,7 @@ msgstr "E-mailová adresa"
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:34
 #: zotonic_mod_admin/priv/templates/_rsc_edge.tpl:19
 #: zotonic_mod_admin/priv/templates/admin_edit.tpl:3
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:66
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:68
 #: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:70
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:23
@@ -1938,7 +1986,7 @@ msgstr "Vložit externí obsah"
 msgid "Embed code will be sanitized for allowed sites and html."
 msgstr "Vložený kód bude upraven tak, aby obsahoval pouze povolené weby a HTML."
 
-#: zotonic_mod_admin/src/mod_admin.erl:590
+#: zotonic_mod_admin/src/mod_admin.erl:643
 msgid "Embed page | a citation, popup, or link to another page"
 msgstr "Vložit stránku | citace, vyskakovací okno nebo odkaz na jinou stránku"
 
@@ -1946,6 +1994,10 @@ msgstr "Vložit stránku | citace, vyskakovací okno nebo odkaz na jinou stránk
 #: zotonic_mod_oembed/src/mod_oembed.erl:356
 msgid "Embedded Content"
 msgstr "Vložený obsah"
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:30
+msgid "Embedded-page references"
+msgstr "Odkazy na vložené stránky"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:33
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:34
@@ -1956,25 +2008,25 @@ msgstr "Nouzový telefon"
 msgid "Endpoint"
 msgstr "Koncový bod"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:135
-msgid "Ensure <i>refers</i> connections"
-msgstr "Doplnit propojení <i>refers</i>"
-
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:21
 msgid "Enter a URL or embed code. It will be analyzed and you can choose how to import the data."
 msgstr "Zadejte adresu URL nebo kód pro vložení. Po analýze si můžete vybrat, jak data importovat."
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:53
-msgid "Erlang Init Files"
-msgstr "Inicializační soubory Erlangu"
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:37
+msgid "Erlang init files"
+msgstr "Inicializační soubory jazyka Erlang"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:65
-msgid "Erlang Installation Root"
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:36
+msgid "Erlang installation root"
 msgstr "Kořenový adresář instalace Erlangu"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:30
-msgid "Erlang Version"
-msgstr "Verze Erlangu"
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:2
+msgid "Erlang memory"
+msgstr "Paměť v Erlangu"
+
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:18
+msgid "Erlang/OTP"
+msgstr "Erlang/OTP"
 
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:195
 msgid "Error checking the website."
@@ -2017,6 +2069,14 @@ msgstr "Každá stránka patří právě do jedné kategorie. Kategorie určuje,
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:82
 msgid "Exact category"
 msgstr "Přesná kategorie"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:36
+msgid "Excess connections"
+msgstr "Nadbytečná připojení"
+
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:85
+msgid "Excess connections have been closed."
+msgstr "Nadbytečná připojení byla uzavřena."
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:100
 msgid "Exclude category"
@@ -2064,7 +2124,11 @@ msgstr "Soubor / mediální obsah"
 msgid "File size"
 msgstr "Velikost souboru"
 
-#: zotonic_mod_admin/src/mod_admin.erl:882
+#: zotonic_mod_admin/priv/templates/admin_imports.tpl:14
+msgid "File to import"
+msgstr "Soubor k importu"
+
+#: zotonic_mod_admin/src/mod_admin.erl:935
 msgid "File uploaded to the drop folder, will be handled shortly."
 msgstr "Soubor byl nahrán do vstupní složky a bude brzy zpracován."
 
@@ -2073,6 +2137,10 @@ msgstr "Soubor byl nahrán do vstupní složky a bude brzy zpracován."
 #: zotonic_mod_base/priv/templates/directory_index.tpl:14
 msgid "Filename"
 msgstr "Název souboru"
+
+#: zotonic_mod_admin/priv/templates/admin_imports.tpl:11
+msgid "Files are handled in the background by mailinglist recipient import and other modules watching the drop folder."
+msgstr "Soubory jsou zpracovávány na pozadí pomocí importu příjemců z mailinglistu a dalších modulů, které sledují složku „drop“."
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:27
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:24
@@ -2105,6 +2173,10 @@ msgstr "Najít média"
 msgid "Find Page"
 msgstr "Najít stránku"
 
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:30
+msgid "Find embedded page references and rebuild their refers connections. This runs in the background."
+msgstr "Vyhledá vložené odkazy na stránky a obnoví jejich propojení. Tento proces probíhá na pozadí."
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:149
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:220
 msgid "Find page"
@@ -2134,20 +2206,20 @@ msgstr "Dokončeno"
 msgid "First name"
 msgstr "Křestní jméno"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:82
-msgid "Flush all URL dispatch rules, template- and library caches and other in-memory cached data."
-msgstr "Vyprázdnit všechna pravidla směrování URL, mezipaměti šablon a knihoven a další data uložená v paměti."
-
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:81
-msgid "Flush system caches"
-msgstr "Vyprázdnit systémové mezipaměti"
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:13
+msgid "Flush caches"
+msgstr "Vymazat mezipaměti"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:145
 #: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:23
 msgid "Follow connections and import all (deep copy)."
 msgstr "Sledovat propojení a importovat vše (hluboká kopie)."
 
-#: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:5
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:35
+msgid "Free"
+msgstr "Zdarma"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:7
 msgid "Function"
 msgstr "Funkce"
 
@@ -2174,9 +2246,13 @@ msgstr "Má připojené médium"
 msgid "Header"
 msgstr "Nadpis"
 
-#: zotonic_mod_admin/src/mod_admin.erl:588
+#: zotonic_mod_admin/src/mod_admin.erl:641
 msgid "Header | a big header"
 msgstr "Nadpis | velký nadpis"
+
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:6
+msgid "Health, background work and services for"
+msgstr "Zdraví, podpůrné činnosti a služby pro"
 
 #: zotonic_mod_admin/priv/templates/_edit_medium_language.tpl:11
 msgid "Help"
@@ -2190,15 +2266,25 @@ msgstr "Zde můžete upravit argumenty vyhledávacího dotazu. Každý argument 
 msgid "Hide page from searches (depends on the search query)"
 msgstr "Skrýt stránku z vyhledávání (záleží na vyhledávacím dotazu)"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:59
-msgid "Home Directory"
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:34
+msgid "Home directory"
 msgstr "Domovský adresář"
 
-#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:111
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:26
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:69
+#: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:158
+msgid "Host"
+msgstr "Hostitel"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:13
 #: zotonic_mod_authentication/priv/templates/sessions.tpl:48
 #: zotonic_mod_authentication/priv/templates/sessions.tpl:93
 msgid "IP Address"
 msgstr "IP adresa"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:4
+msgid "IP addresses have more than 250 open sockets."
+msgstr "IP adresy mají více než 250 otevřených soketů."
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:269
 msgid "Id, newest first"
@@ -2225,6 +2311,10 @@ msgstr "Pokud není zaškrtnuto, je návštěvník vždy přesměrován na kanon
 msgid "Import only direct connections (shallow copy)."
 msgstr "Importovat pouze přímá propojení (mělká kopie)."
 
+#: zotonic_mod_admin/src/mod_admin.erl:534
+msgid "Import tools"
+msgstr "Nástroje pro import"
+
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:227
 msgid "Imported content"
 msgstr "Importovaný obsah"
@@ -2234,9 +2324,19 @@ msgstr "Importovaný obsah"
 msgid "Importing deleted resources"
 msgstr "Import odstraněných zdrojů"
 
+#: zotonic_mod_admin/priv/templates/admin_imports.tpl:2
+#: zotonic_mod_admin/priv/templates/admin_imports.tpl:5
+#: zotonic_mod_admin/src/mod_admin.erl:538
+msgid "Imports"
+msgstr "Dovoz"
+
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:78
 msgid "Indexed by search engines"
 msgstr "Indexováno vyhledávači"
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:42
+msgid "Individual modules can be reinstalled from the Modules list."
+msgstr "Jednotlivé moduly lze znovu nainstalovat ze seznamu modulů."
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:133
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:21
@@ -2251,6 +2351,18 @@ msgstr "Informační odkaz s modálním oknem"
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_show_as.tpl:6
 msgid "Inline block"
 msgstr "Blok v hlavním textu"
+
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:26
+msgid "Installation"
+msgstr "Instalace"
+
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:44
+msgid "Installation details are available to system administrators."
+msgstr "Podrobnosti k instalaci jsou k dispozici správcům systému."
+
+#: zotonic_mod_admin/src/mod_admin.erl:568
+msgid "Integrations"
+msgstr "Integrace"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:77
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:74
@@ -2320,15 +2432,15 @@ msgstr "Místní záložní funkce je povolena."
 msgid "Local sandbox"
 msgstr "Místní sandbox"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:47
-msgid "Log Directory"
-msgstr "Adresář protokolů"
-
-#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:71
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:62
 #: zotonic_site_status/priv/templates/_menu.tpl:5
 #: zotonic_site_status/priv/templates/_navbar.tpl:34
 msgid "Log Off"
 msgstr "Odhlásit se"
+
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:31
+msgid "Log directory"
+msgstr "Adresář protokolů"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:3
 msgid "MIME type"
@@ -2342,6 +2454,14 @@ msgstr "Korespondenční adresa"
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_edit_basics.person.tpl:5
 msgid "Main"
 msgstr "Hlavní"
+
+#: zotonic_mod_admin/priv/templates/_admin_system_navigation.tpl:5
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:2
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:5
+#: zotonic_mod_admin/src/mod_admin.erl:584
+#: zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:32
+msgid "Maintenance"
+msgstr "Údržba"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:232
 msgid "Make"
@@ -2376,7 +2496,7 @@ msgstr "Odpovídající hledaný text"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:3
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:86
-#: zotonic_mod_admin/src/mod_admin.erl:500
+#: zotonic_mod_admin/src/mod_admin.erl:525
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:100
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:103
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:113
@@ -2440,8 +2560,7 @@ msgstr "Název média"
 msgid "Media updated."
 msgstr "Média aktualizována."
 
-#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:2
-#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:43
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:43
 msgid "Memory"
 msgstr "Paměť"
 
@@ -2484,7 +2603,7 @@ msgid "Modification date, oldest first"
 msgstr "Datum úpravy, od nejstarších"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:134
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:22
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:24
 msgid "Modified"
 msgstr "Změněno"
 
@@ -2546,14 +2665,14 @@ msgstr "Název pro faktury"
 msgid "Need more help?"
 msgstr "Potřebujete další pomoc?"
 
-#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:100
-#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:105
+#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:2
+#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:7
 msgid "Network Connections"
 msgstr "Síťová připojení"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:189
-msgid "Network listeners"
-msgstr "Síťové posluchače"
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:40
+msgid "Network listeners and connections"
+msgstr "Síťové posluchače a připojení"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:84
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:12
@@ -2569,13 +2688,17 @@ msgstr "Nejnovější příchozí propojení."
 msgid "Next &gt;"
 msgstr "Další &gt;"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:7
+#: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:9
 msgid "Next due"
 msgstr "Další termín"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:34
 msgid "Next in category:"
 msgstr "Další v kategorii:"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:11
+msgid "No IP addresses have more than 250 open sockets."
+msgstr "Žádná IP adresa nemá více než 250 otevřených soketů."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_depictions.tpl:21
 msgid "No connected images."
@@ -2653,17 +2776,29 @@ msgstr "Není chráněno"
 msgid "Not running"
 msgstr "Neběží"
 
-#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:26
-msgid "OS Memory"
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:26
+msgid "OS memory"
 msgstr "Paměť operačního systému"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:129
 msgid "Ongoing"
 msgstr "Probíhající"
 
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:87
+msgid "Only system administrators can close node connections."
+msgstr "Připojení uzlů mohou ukončit pouze správci systému."
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:42
+msgid "Open Modules list"
+msgstr "Otevřít seznam modulů"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:13
 msgid "Open in new tab"
 msgstr "Otevřít v nové kartě"
+
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:57
+msgid "Open maintenance tools"
+msgstr "Nástroje pro správu Open"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:4
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:10
@@ -2718,7 +2853,7 @@ msgid "Page to connect to"
 msgstr "Cílová stránka propojení"
 
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:3
-#: zotonic_mod_admin/src/mod_admin.erl:495
+#: zotonic_mod_admin/src/mod_admin.erl:520
 msgid "Pages"
 msgstr "Stránky"
 
@@ -2731,7 +2866,7 @@ msgstr "Stránky pro"
 msgid "Pages overview"
 msgstr "Přehled stránek"
 
-#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:75
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:75
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:36
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:27
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24
@@ -2739,7 +2874,7 @@ msgstr "Přehled stránek"
 msgid "Path"
 msgstr "Cesta"
 
-#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:10
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:10
 msgid "Percent in use"
 msgstr "Procento využití"
 
@@ -2772,6 +2907,10 @@ msgstr "Port"
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:75
 msgid "Postcode"
 msgstr "PSČ"
+
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:19
+msgid "PostgreSQL"
+msgstr "PostgreSQL"
 
 #: zotonic_mod_admin/priv/templates/_admin_footer.tpl:4
 #: zotonic_site_status/priv/templates/error.400.tpl:6
@@ -2873,6 +3012,10 @@ msgstr "Publikováno dne, od nejnovějších"
 msgid "Published on, oldest first"
 msgstr "Publikováno dne, od nejstarších"
 
+#: zotonic_mod_admin/src/mod_admin.erl:530
+msgid "Queries"
+msgstr "Dotazy"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:24
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:19
 msgid "Query"
@@ -2882,22 +3025,26 @@ msgstr "Dotaz"
 msgid "Query results"
 msgstr "Výsledky dotazu"
 
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:21
+msgid "Queue every page for search indexing. Large sites can take a long time to finish."
+msgstr "Zařaďte každou stránku do fronty pro indexování pro vyhledávání. U rozsáhlých webů může dokončení tohoto procesu trvat dlouhou dobu."
+
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:14
 msgid "Ranch limit"
 msgstr "Limit Ranch"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:94
-msgid "Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time!"
-msgstr "Znovu sestavit všechny vyhledávací indexy přidáním všech stránek a dat z databáze do fronty indexování. Tato operace může trvat dlouho!"
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:6
+msgid "Rebuild derived data and maintain this site. Queued work can be followed on the Status page."
+msgstr "Obnovit odvozená data a spravovat tento web. Práce v pořadí lze sledovat na stránce Stav."
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:89
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:31
+msgid "Rebuild references"
+msgstr "Obnovit odkazy"
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:22
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:169
 msgid "Rebuild search indices"
 msgstr "Znovu sestavit vyhledávací indexy"
-
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:103
-msgid "Recalculate the numbering of the category tree. This can take a long time."
-msgstr "Přepočítat číslování stromu kategorií. Tato operace může trvat dlouho."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:6
 msgid "Recent referrers"
@@ -2921,20 +3068,24 @@ msgid "Referrers to"
 msgstr "Odkazy na"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:12
+#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:13
+#: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:51
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
 msgid "Refresh"
 msgstr "Obnovit"
 
-#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:94
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:94
 msgid "Refreshed every 30 minutes."
 msgstr "Obnovuje se každých 30 minut."
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:117
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:53
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:54
 msgid "Reinstall Zotonic datamodel"
 msgstr "Znovu nainstalovat datový model Zotonicu"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:112
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:46
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:47
 msgid "Reinstall site datamodel"
 msgstr "Znovu nainstalovat datový model webu"
 
@@ -2942,14 +3093,6 @@ msgstr "Znovu nainstalovat datový model webu"
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:15
 msgid "Reload page"
 msgstr "Znovu načíst stránku"
-
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:107
-msgid "Reload site configuration"
-msgstr "Znovu načíst konfiguraci webu"
-
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:108
-msgid "Reload the configuration of a site. Note that not all site configurations can be done whilst the site is running."
-msgstr "Znovu načtěte konfiguraci webu. Upozorňujeme, že ne všechny konfigurace webu lze provést, když je web spuštěný."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_version.tpl:10
 msgid "Reloading discards any unsaved changes in this form. Continue?"
@@ -2973,13 +3116,9 @@ msgstr "Podrobnosti o izolaci vzdáleného sandboxu a frontě najdete na přehle
 msgid "Remove"
 msgstr "Odstranit"
 
-#: zotonic_mod_admin/src/mod_admin.erl:1128
+#: zotonic_mod_admin/src/mod_admin.erl:1181
 msgid "Removed the connection to"
 msgstr "Bylo odstraněno propojení s"
-
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:102
-msgid "Renumber category tree"
-msgstr "Přečíslovat strom kategorií"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:67
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:95
@@ -2995,6 +3134,10 @@ msgstr "Nahradit současné médium"
 msgid "Resize Live view"
 msgstr "Změnit velikost živého náhledu"
 
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:46
+msgid "Resources"
+msgstr "Zdroje"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_meta_features.tpl:9
 msgid "Resources in the <i>meta</i> category can have 'features': certain resource properties that decide what to show or hide on certain pages in the admin. If this box is empty, no features are enabled for this meta-resource."
 msgstr "Zdroje v kategorii <i>meta</i> mohou mít „funkce“: určité vlastnosti zdroje, které určují, co se má na některých stránkách administrace zobrazit nebo skrýt. Pokud je toto pole prázdné, nejsou pro tento metazdroj povoleny žádné funkce."
@@ -3002,6 +3145,10 @@ msgstr "Zdroje v kategorii <i>meta</i> mohou mít „funkce“: určité vlastno
 #: zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:85
 msgid "Retrieving status..."
 msgstr "Zjišťování stavu…"
+
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:17
+msgid "Revision"
+msgstr "Revize"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:22
 msgid "Rotated 180 degrees"
@@ -3015,23 +3162,27 @@ msgstr "Otočeno o 270 stupňů"
 msgid "Rotated 90 degrees"
 msgstr "Otočeno o 90 stupňů"
 
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:51
+msgid "Run the Zotonic core datamodel installation again for this site's database."
+msgstr "Pro databázi tohoto webu znovu spusťte instalaci základního datového modelu Zotonic."
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:54
+msgid "Run the Zotonic core datamodel installation again for this site's database?"
+msgstr "Mám znovu spustit instalaci základního datového modelu Zotonic pro databázi tohoto webu?"
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:44
+msgid "Run the site's schema installation again. The site will stop and restart."
+msgstr "Znovu spusťte instalaci schématu webu. Web se zastaví a znovu spustí."
+
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:69
 msgid "Runner availability and ImageMagick versions are cached for up to one minute. Failed probes are retried after five seconds. Refresh this page to check again."
 msgstr "Dostupnost spouštěčů a verze ImageMagick se ukládají do mezipaměti až na jednu minutu. Neúspěšné kontroly se opakují po pěti sekundách. Další kontrolu provedete obnovením této stránky."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:29
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:62
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:64
 #: zotonic_site_status/priv/templates/_sites.tpl:15
 msgid "Running"
 msgstr "Běží"
-
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:113
-msgid "Runs the schema install command from the site's module again."
-msgstr "Znovu spustí příkaz pro instalaci schématu z modulu webu."
-
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:118
-msgid "Runs the schema install for Zotonic core again."
-msgstr "Znovu spustí instalaci schématu pro jádro Zotonic."
 
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:74
 #: zotonic_mod_seo/src/mod_seo.erl:290
@@ -3087,18 +3238,39 @@ msgstr "Uložit a zobrazit stránku."
 msgid "Save this page."
 msgstr "Uložit tuto stránku."
 
-#: zotonic_mod_admin/src/mod_admin.erl:946
+#: zotonic_mod_admin/src/mod_admin.erl:999
 msgid "Scheduled a background task to check all refers connections."
 msgstr "Byla naplánována úloha na pozadí pro kontrolu všech propojení typu refers."
 
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:24
+msgid "Scheduled tasks"
+msgstr "Naplánované úkoly"
+
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:294
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:17
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user_dialog.tpl:9
 msgid "Search"
 msgstr "Vyhledat"
 
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:16
+msgid "Search indexing"
+msgstr "Indexování vyhledávání"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:3
+msgid "Search indexing runs separately from the scheduled task queue."
+msgstr "Indexování vyhledávání probíhá odděleně od fronty naplánovaných úloh."
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:21
+msgid "Search indices"
+msgstr "Vyhledávací indexy"
+
 #: zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:55
 msgid "Search indices rebuilt."
 msgstr "Vyhledávací indexy byly znovu sestaveny."
+
+#: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:5
+msgid "Search maintenance"
+msgstr "Údržba vyhledávání"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:5
 msgid "Search other media"
@@ -3113,12 +3285,12 @@ msgstr "Vyhledávací dotaz"
 msgid "Search results"
 msgstr "Výsledky vyhledávání"
 
-#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:85
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:76
 msgid "Search..."
 msgstr "Hledat…"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:56
-msgid "Security Directory"
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:33
+msgid "Security directory"
 msgstr "Adresář zabezpečení"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:7
@@ -3149,7 +3321,7 @@ msgstr "Vyberte predikát pro nalezení stránek, které mohou odkazovat na tuto
 msgid "Select a predicate to find pages this page can connect to."
 msgstr "Vyberte predikát pro vyhledání stránek, se kterými lze tuto stránku propojit."
 
-#: zotonic_mod_admin/src/mod_admin.erl:936
+#: zotonic_mod_admin/src/mod_admin.erl:989
 msgid "Select both a visible page and a valid predicate for each connection."
 msgstr "Pro každé propojení vyberte viditelnou stránku i platný predikát."
 
@@ -3173,6 +3345,10 @@ msgstr "Výběrem souboru se stránka změní na mediální položku."
 #: zotonic_mod_video_embed/priv/templates/_admin_edit_media_metadata_extra.tpl:7
 msgid "Service"
 msgstr "Služba"
+
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:37
+msgid "Services"
+msgstr "Služby"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_sidebar_parts.tpl:32
 msgid "Settings &amp; more"
@@ -3225,9 +3401,25 @@ msgstr "Zobrazují se stránky, které mohou odkazovat na tuto stránku pomocí 
 msgid "Showing pages you can connect to using <b>{predicate}</b>."
 msgstr "Zobrazují se stránky, které lze propojit pomocí predikátu <b>{predicate}</b>."
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:41
-msgid "Site Files Directory"
-msgstr "Adresář souborů webu"
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:12
+msgid "Site caches"
+msgstr "Místní mezipaměti"
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:44
+msgid "Site datamodel"
+msgstr "Datový model webu"
+
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:29
+msgid "Site files directory"
+msgstr "Adresář se soubory webu"
+
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:13
+msgid "Software"
+msgstr "Software"
+
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:6
+msgid "Software versions and installation paths. Runtime and host information is shared by all sites on this node."
+msgstr "Verze softwaru a instalační cesty. Informace o běhovém prostředí a hostitelském systému jsou sdíleny všemi weby na tomto uzlu."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:15
 msgid "Some disks are almost full."
@@ -3237,11 +3429,11 @@ msgstr "Některé disky jsou téměř plné."
 msgid "Some images, PDFs, audio and video are presented in a single language. Here you can select this language."
 msgstr "Některé obrázky, soubory PDF, audio a video jsou prezentovány v jednom jazyce. Zde si můžete vybrat tento jazyk."
 
-#: zotonic_mod_admin/src/mod_admin.erl:934
+#: zotonic_mod_admin/src/mod_admin.erl:987
 msgid "Some pages or connections could not be updated. Check your permissions. Other changes may have been saved."
 msgstr "Některé stránky nebo propojení se nepodařilo aktualizovat. Zkontrolujte svá oprávnění. Jiné změny mohly být uloženy."
 
-#: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:24
+#: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:26
 msgid "Some tasks are retrying.<br>Total errors: {total}<br>Highest for single task: {max}"
 msgstr "U některých úloh probíhají opakované pokusy.<br>Celkový počet chyb: {total}<br>Nejvyšší počet chyb u jedné úlohy: {max}"
 
@@ -3249,31 +3441,31 @@ msgstr "U některých úloh probíhají opakované pokusy.<br>Celkový počet ch
 msgid "Something went wrong. Sorry."
 msgstr "Něco se pokazilo. Omlouváme se."
 
-#: zotonic_mod_admin/src/mod_admin.erl:855
+#: zotonic_mod_admin/src/mod_admin.erl:908
 msgid "Sorry, could not handle this filename."
 msgstr "Omlouváme se, tento název souboru se nepodařilo zpracovat."
 
-#: zotonic_mod_admin/src/mod_admin.erl:894
+#: zotonic_mod_admin/src/mod_admin.erl:947
 msgid "Sorry, could not move the file to the drop folder."
 msgstr "Soubor se bohužel nepodařilo přesunout do vstupní složky."
 
-#: zotonic_mod_admin/src/mod_admin.erl:948
-#: zotonic_mod_admin/src/mod_admin.erl:959
+#: zotonic_mod_admin/src/mod_admin.erl:1001
+#: zotonic_mod_admin/src/mod_admin.erl:1012
 #: zotonic_mod_menu/src/mod_menu.erl:133
 msgid "Sorry, only an admin is allowed to do this"
 msgstr "Omlouváme se, toto může udělat pouze administrátor."
 
-#: zotonic_mod_admin/src/mod_admin.erl:830
-#: zotonic_mod_admin/src/mod_admin.erl:841
+#: zotonic_mod_admin/src/mod_admin.erl:883
+#: zotonic_mod_admin/src/mod_admin.erl:894
 msgid "Sorry, that page is unknown."
 msgstr "Omlouvám se, tato stránka je neznámá."
 
-#: zotonic_mod_admin/src/mod_admin.erl:832
-#: zotonic_mod_admin/src/mod_admin.erl:843
+#: zotonic_mod_admin/src/mod_admin.erl:885
+#: zotonic_mod_admin/src/mod_admin.erl:896
 msgid "Sorry, you are not allowed to edit notes."
 msgstr "Je nám líto, ale nemáte oprávnění upravovat poznámky."
 
-#: zotonic_mod_admin/src/mod_admin.erl:898
+#: zotonic_mod_admin/src/mod_admin.erl:951
 msgid "Sorry, you are not allowed to upload drop folder files."
 msgstr "Nemáte oprávnění nahrávat soubory do vstupní složky."
 
@@ -3281,11 +3473,11 @@ msgstr "Nemáte oprávnění nahrávat soubory do vstupní složky."
 msgid "Sorry, you don't have permission to add the connection."
 msgstr "Nemáte oprávnění přidat toto propojení."
 
-#: zotonic_mod_admin/src/mod_admin.erl:1110
+#: zotonic_mod_admin/src/mod_admin.erl:1163
 msgid "Sorry, you have no permission to add the connection."
 msgstr "Nemáte oprávnění přidat toto propojení."
 
-#: zotonic_mod_admin/src/mod_admin.erl:1112
+#: zotonic_mod_admin/src/mod_admin.erl:1165
 msgid "Sorry, you have no permission to delete the connection."
 msgstr "Nemáte oprávnění odstranit toto propojení."
 
@@ -3294,7 +3486,7 @@ msgstr "Nemáte oprávnění odstranit toto propojení."
 msgid "Sort by"
 msgstr "Seřadit podle"
 
-#: zotonic_mod_admin/src/mod_admin.erl:587
+#: zotonic_mod_admin/src/mod_admin.erl:640
 msgid "Standard page block types"
 msgstr "Standardní typy bloků stránek"
 
@@ -3318,7 +3510,8 @@ msgid "State or province"
 msgstr "Stát nebo provincie"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:11
-#: zotonic_mod_admin/src/mod_admin.erl:531
+#: zotonic_mod_admin/priv/templates/_admin_system_navigation.tpl:3
+#: zotonic_mod_admin/src/mod_admin.erl:578
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 #: zotonic_mod_base/priv/templates/_session_info.tpl:12
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:221
@@ -3364,7 +3557,7 @@ msgstr "Ulice, řádek 1"
 msgid "Street Line 2"
 msgstr "Ulice, řádek 2"
 
-#: zotonic_mod_admin/src/mod_admin.erl:512
+#: zotonic_mod_admin/src/mod_admin.erl:546
 msgid "Structure"
 msgstr "Struktura"
 
@@ -3417,33 +3610,37 @@ msgstr "Předpona příjmení"
 msgid "Suspended"
 msgstr "Pozastaveno"
 
-#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:53
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:53
 msgid "Swap"
 msgstr "Odkládací prostor"
 
-#: zotonic_mod_admin/src/mod_admin.erl:526
+#: zotonic_mod_admin/src/mod_admin.erl:572
 msgid "System"
 msgstr "Systém"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:3
-msgid "System Status"
-msgstr "Stav systému"
-
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:8
+#: zotonic_mod_admin/priv/templates/_admin_system_navigation.tpl:1
 msgid "System administration"
 msgstr "Správa systému"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:169
-msgid "Task queue"
-msgstr "Fronta úloh"
+#: zotonic_mod_admin/priv/templates/_admin_system_navigation.tpl:6
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:2
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:5
+#: zotonic_mod_admin/src/mod_admin.erl:590
+msgid "System information"
+msgstr "Informace o systému"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:176
-msgid "Tasks are functions scheduled to run at a certain time."
-msgstr "Úlohy jsou funkce naplánované ke spuštění v určitý čas."
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:2
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:5
+msgid "System status"
+msgstr "Stav systému"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:177
-msgid "Tasks with errors will retry 10 times before being dropped."
-msgstr "Úlohy s chybami se před zrušením desetkrát opakují."
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:30
+msgid "Task details are available to system administrators."
+msgstr "Podrobnosti o úloze jsou k dispozici správcům systému."
+
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:28
+msgid "Tasks with errors retry up to 10 times before being dropped."
+msgstr "Úlohy s chybami se opakují až 10krát, než jsou zrušeny."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:17
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:18
@@ -3465,7 +3662,7 @@ msgstr "Otestovat dotaz"
 msgid "Text"
 msgstr "Text"
 
-#: zotonic_mod_admin/src/mod_admin.erl:589
+#: zotonic_mod_admin/src/mod_admin.erl:642
 msgid "Text | a (rich) text block"
 msgstr "Text | blok (formátovaného) textu"
 
@@ -3525,7 +3722,7 @@ msgstr "Text dotazu je prázdný."
 msgid "The search index is rebuilding. Depending on the database size, this can take a long time."
 msgstr "Probíhá nové sestavování vyhledávacího indexu. V závislosti na velikosti databáze může tato operace trvat dlouho."
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:86
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:96
 msgid "The site configuration has been reloaded."
 msgstr "Konfigurace webu byla znovu načtena."
 
@@ -3537,6 +3734,10 @@ msgstr "Probíhá opětovná instalace dat webu. Sledujte zprávy v konzoli"
 msgid "The system has allocated more than the specified threshold of available memory, as reported by the underlying operating system."
 msgstr "Systém přidělil více paměti, než je zadaný limit dostupné paměti, jak jej hlásí základní operační systém."
 
+#: zotonic_mod_admin/priv/templates/_admin_status_update.tpl:7
+msgid "The update coordinator restarted. Restart the Zotonic node before deploying again."
+msgstr "Koordinátor aktualizací se restartoval. Před dalším nasazením restartujte uzel Zotonic."
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers_list.tpl:43
 msgid "There are no incoming connections."
 msgstr "Nejsou k dispozici žádná příchozí propojení."
@@ -3545,7 +3746,7 @@ msgstr "Nejsou k dispozici žádná příchozí propojení."
 msgid "There are no pages with a connection to the page"
 msgstr "Žádné stránky nejsou propojeny se stránkou"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:53
+#: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:55
 msgid "There are no tasks in the task queue."
 msgstr "Ve frontě úloh nejsou žádné úlohy."
 
@@ -3644,10 +3845,6 @@ msgstr "Tato stránka se změnila. Obnovte ji pro zobrazení nejnovějších př
 msgid "This page has changed. Your changes were not saved. Reload the page before trying again."
 msgstr "Tato stránka se změnila. Vaše změny nebyly uloženy. Před dalším pokusem stránku znovu načtěte."
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:9
-msgid "This page holds a collection of administrative options to perform certain tasks on this Zotonic installation."
-msgstr "Tato stránka obsahuje nástroje pro správu a provádění úloh v této instalaci Zotonicu."
-
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:11
 msgid "This page is able to connect to others. For example you can connect it to an actor or a brand."
 msgstr "Tuto stránku lze propojit s dalšími. Můžete ji například propojit s hercem nebo značkou."
@@ -3663,6 +3860,15 @@ msgstr "Tuto cestu ke stránce používá jiná stránka."
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:89
 msgid "This resource was created by the module"
 msgstr "Tento zdroj vytvořil modul"
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:47
+msgid "This runs the site's schema installation again and stops and restarts the site. Continue?"
+msgstr "Tím se znovu spustí instalace schématu webu a web se zastaví a znovu spustí. Chcete pokračovat?"
+
+#: zotonic_mod_admin/priv/templates/_admin_maintenance_panel.tpl:3
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:12
+msgid "This site"
+msgstr "Tato stránka"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:65
 msgid "Till"
@@ -3706,7 +3912,7 @@ msgid "Too many connections, only the first and last are shown."
 msgstr "Příliš mnoho spojení, zobrazena jsou pouze první a poslední."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:13
-#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:33
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:33
 msgid "Total"
 msgstr "Celkem"
 
@@ -3766,7 +3972,7 @@ msgstr "Nepublikovaný"
 #: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:2
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:29
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_connection.tpl:19
-#: zotonic_mod_admin/src/mod_admin.erl:1118
+#: zotonic_mod_admin/src/mod_admin.erl:1171
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:118
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:182
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:9
@@ -3794,11 +4000,11 @@ msgstr "Bez názvu"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:25
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:30
-#: zotonic_mod_admin/src/mod_admin.erl:570
+#: zotonic_mod_admin/src/mod_admin.erl:623
 msgid "Untitled query"
 msgstr "Dotaz bez názvu"
 
-#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:9
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:9
 msgid "Unused"
 msgstr "Nepoužité"
 
@@ -3824,13 +4030,15 @@ msgstr "Aktualizovat vybrané stránky"
 msgid "Update {n} pages with the following properties:"
 msgstr "U vybraných stránek (počet: {n}) nastavit následující vlastnosti:"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:14
+#: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:8
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:54
 msgid "Updated"
 msgstr "Aktualizováno"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:89
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:161
+#: zotonic_mod_admin/priv/templates/admin_imports.tpl:16
 msgid "Upload"
 msgstr "Nahrát"
 
@@ -3842,16 +4050,19 @@ msgstr "Nahrát soubor"
 msgid "Upload a file from your computer."
 msgstr "Nahrajte soubor ze svého počítače."
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:151
-msgid "Upload a file to the drop folder. This file will be handled in the background by the mailinglists for recipient import and other modules."
-msgstr "Nahrajte soubor do vstupní složky. Modul seznamů adresátů jej na pozadí zpracuje pro import příjemců; zpracovat jej mohou také další moduly."
-
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:74
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:148
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:31
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:36
 msgid "Upload file"
 msgstr "Nahrát soubor"
+
+#: zotonic_mod_admin/priv/templates/admin_imports.tpl:6
+msgid "Upload files for background processing or use a module's import tool."
+msgstr "Nahrajte soubory pro zpracování na pozadí nebo použijte nástroj pro import v rámci modulu."
+
+#: zotonic_mod_admin/priv/templates/admin_imports.tpl:9
+msgid "Upload to drop folder"
+msgstr "Nahrát do složky pro odeslání"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:135
 #: zotonic_mod_fileuploader/src/mod_fileuploader.erl:147
@@ -3864,7 +4075,7 @@ msgstr "Nahráno"
 msgid "Uploaded on"
 msgstr "Nahráno dne"
 
-#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:77
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:77
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:127
 msgid "Usage"
 msgstr "Využití"
@@ -3877,12 +4088,16 @@ msgstr "Pomocí automatického doplňování vyhledejte média na tomto webu."
 msgid "Use the title of the base content for the display name of this person."
 msgstr "Použít název základního obsahu jako zobrazované jméno této osoby."
 
-#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:8
-#: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:34
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:40
+msgid "Use these operations to repair installation data, not for routine maintenance."
+msgstr "Tyto operace slouží k opravě instalačních dat, nikoli k běžné údržbě."
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:8
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:34
 msgid "Used"
 msgstr "Použité"
 
-#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:68
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:59
 msgid "User page"
 msgstr "Stránka uživatele"
 
@@ -3969,8 +4184,8 @@ msgstr "Web po kliknutí na obrázek"
 msgid "Website or Embed"
 msgstr "Web nebo vložený obsah"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:62
-msgid "Work Directory"
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:35
+msgid "Work directory"
 msgstr "Pracovní adresář"
 
 #: zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
@@ -4036,8 +4251,8 @@ msgstr "Nemáte oprávnění k úpravě této stránky."
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "Nemáte potřebná oprávnění k nahrávání tohoto typu souboru."
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:91
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:100
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:101
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:110
 msgid "You don’t have permission to perform this action."
 msgstr "K provedení této akce nemáte oprávnění."
 
@@ -4049,9 +4264,13 @@ msgstr "Uveďte popis souboru, aby jej bylo snadnější najít a sdílet."
 msgid "Your search query is invalid. Please correct it before saving."
 msgstr "Váš vyhledávací dotaz je neplatný. Před uložením jej prosím opravte."
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:21
-msgid "Zotonic Version"
-msgstr "Verze Zotonicu"
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:16
+msgid "Zotonic"
+msgstr "Zotonic"
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:51
+msgid "Zotonic datamodel"
+msgstr "Datový model Zotonicu"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:30
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:27
@@ -4080,7 +4299,7 @@ msgstr "autor:"
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:165
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:168
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:68
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:70
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:32
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:33
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:76
@@ -4157,6 +4376,10 @@ msgstr "změnil"
 msgid "name"
 msgstr "název"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:7
+msgid "open sockets"
+msgstr "otevřené sokety"
+
 #: zotonic_mod_admin/priv/templates/_admin_view_types.tpl:3
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:104
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:55
@@ -4168,6 +4391,10 @@ msgstr "stránka"
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:24
 msgid "page block"
 msgstr "blok stránky"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:2
+msgid "pages waiting to be indexed"
+msgstr "stránky čekající na zařazení do indexu"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:28
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:10
@@ -4277,6 +4504,14 @@ msgstr "Některé zdroje se nepodařilo odstranit."
 msgid "Or click <strong>Delete All Pages</strong> to delete all pages in the categories."
 msgstr "Nebo klikněte na <strong>Odstranit všechny stránky</strong> a odstraňte všechny stránky v těchto kategoriích."
 
+#: zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:34
+msgid "Recalculate the numbering of the category tree. This can take a long time."
+msgstr "Přepočítat číslování stromu kategorií. Tato operace může trvat dlouho."
+
+#: zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:35
+msgid "Renumber category tree"
+msgstr "Přečíslovat strom kategorií"
+
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:49
 msgid "There are no pages in these categories."
 msgstr "V těchto kategoriích nejsou žádné stránky."
@@ -4343,12 +4578,13 @@ msgstr "Soubor certifikátu"
 msgid "Certificates provided by SSL modules"
 msgstr "Certifikáty poskytované moduly SSL"
 
-#: zotonic_mod_admin_config/src/mod_admin_config.erl:105
+#: zotonic_mod_admin_config/src/mod_admin_config.erl:112
 msgid "Config"
 msgstr "Konfigurace"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:3
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:32
+#: zotonic_mod_admin_config/src/mod_admin_config.erl:96
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:79
 msgid "Configuration"
 msgstr "Konfigurace"
@@ -4362,7 +4598,7 @@ msgstr "Zkopírujte cestu k souboru certifikátu do schránky."
 msgid "Copy the certificate file to <code>{path}</code>."
 msgstr "Zkopírujte soubor certifikátu do <code>{path}</code>."
 
-#: zotonic_mod_admin_config/src/mod_admin_config.erl:176
+#: zotonic_mod_admin_config/src/mod_admin_config.erl:183
 msgid "Could not generate a new self-signed certificate."
 msgstr "Nepodařilo se vygenerovat nový certifikát s vlastním podpisem."
 
@@ -4429,7 +4665,7 @@ msgstr "Zachycení e-mailů &ndash; výjimky"
 msgid "Email FROM"
 msgstr "E-mail OD"
 
-#: zotonic_mod_admin_config/src/mod_admin_config.erl:95
+#: zotonic_mod_admin_config/src/mod_admin_config.erl:100
 msgid "Email configuration"
 msgstr "Konfigurace e-mailu"
 
@@ -4454,7 +4690,7 @@ msgstr "Dokončete průvodce a restartujte prohlížeč. Může být vyžadován
 msgid "Firefox"
 msgstr "Firefox"
 
-#: zotonic_mod_admin_config/src/mod_admin_config.erl:164
+#: zotonic_mod_admin_config/src/mod_admin_config.erl:171
 msgid "Generated a new self-signed certificate."
 msgstr "Vygenerován nový certifikát s vlastním podpisem."
 
@@ -4506,11 +4742,11 @@ msgstr "Obvykle je nastaven na reverzní DNS název počítače."
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:13
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:14
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:43
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:20
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:22
 msgid "Key"
 msgstr "Klíč"
 
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:12
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:14
 msgid "Make a new config setting"
 msgstr "Vytvořit nové konfigurační nastavení"
 
@@ -4518,7 +4754,7 @@ msgstr "Vytvořit nové konfigurační nastavení"
 msgid "No configuration keys found."
 msgstr "Nebyly nalezeny žádné konfigurační klíče."
 
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:79
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:81
 msgid "No configurations found."
 msgstr "Nebyla nalezena žádná nastavení."
 
@@ -4534,7 +4770,7 @@ msgstr "Konfiguraci mohou měnit pouze správci."
 msgid "Only administrators can delete configurations."
 msgstr "Konfigurace mohou odstraňovat pouze správci."
 
-#: zotonic_mod_admin_config/src/mod_admin_config.erl:181
+#: zotonic_mod_admin_config/src/mod_admin_config.erl:188
 msgid "Only administrators can regenerate the self-signed certificate."
 msgstr "Pouze administrátoři mohou znovu vygenerovat certifikát podepsaný svým držitelem."
 
@@ -4603,6 +4839,14 @@ msgstr "Název hostitele přeposílacího serveru"
 msgid "Relay port"
 msgstr "Port přeposílacího serveru"
 
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:12
+msgid "Reload site configuration"
+msgstr "Znovu načíst konfiguraci webu"
+
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:13
+msgid "Reload the site configuration files. Some changes require a restart."
+msgstr "Znovu načtěte konfigurační soubory webu. Některé změny vyžadují restart."
+
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:65
 msgid "Restart Firefox. This separate import can be needed when Firefox does not use the operating system trust store."
 msgstr "Restartujte Firefox. Tento samostatný import může být nutný, pokud Firefox nepoužívá úložiště důvěryhodných certifikátů operačního systému."
@@ -4622,7 +4866,7 @@ msgid "SMTP Hostname"
 msgstr "Název hostitele SMTP"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:3
-#: zotonic_mod_admin_config/src/mod_admin_config.erl:100
+#: zotonic_mod_admin_config/src/mod_admin_config.erl:106
 msgid "SSL Certificates"
 msgstr "Certifikáty SSL"
 
@@ -4655,7 +4899,7 @@ msgstr "Odešlete testovací e-mail nebo zkontrolujte stav e-mailové adresy."
 msgid "Sent an email to"
 msgstr "Odeslán e-mail uživateli"
 
-#: zotonic_mod_admin_config/src/mod_admin_config.erl:148
+#: zotonic_mod_admin_config/src/mod_admin_config.erl:155
 msgid "Sent email to"
 msgstr "Odeslán e-mail uživateli"
 
@@ -4767,14 +5011,14 @@ msgstr "Platnost do"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:19
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:20
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:21
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:21
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:23
 #: zotonic_mod_base/src/support/z_chart_svg.erl:1352
 #: zotonic_mod_development/priv/templates/_development_dispatch_options.tpl:2
 msgid "Value"
 msgstr "Hodnota"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:195
-#: zotonic_mod_admin_config/src/mod_admin_config.erl:152
+#: zotonic_mod_admin_config/src/mod_admin_config.erl:159
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 msgid "View email status"
 msgstr "Zobrazit stav e-mailu"
@@ -5687,31 +5931,31 @@ msgid "not implemented yet"
 msgstr "dosud neimplementováno"
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:159
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:161
 msgid "Activate"
 msgstr "Aktivovat"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:54
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:56
 msgid "Activated"
 msgstr "Aktivováno"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:63
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:65
 msgid "Activated but not running"
 msgstr "Aktivováno, ale neběží"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:51
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:53
 msgid "Activation"
 msgstr "Aktivace"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:69
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:71
 msgid "All topics"
 msgstr "Všechna témata"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:73
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:75
 msgid "Clear filters"
 msgstr "Vymazat filtry"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:150
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:152
 msgid "Configure"
 msgstr "Konfigurovat"
 
@@ -5724,16 +5968,16 @@ msgid "Cyclic dependencies"
 msgstr "Cyklické závislosti"
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:34
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:154
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:36
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:156
 msgid "Deactivate"
 msgstr "Deaktivovat"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:19
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:21
 msgid "Deactivate these modules if you are not using them, or check the installation of the system."
 msgstr "Deaktivujte tyto moduly, pokud je nepoužíváte, nebo zkontrolujte instalaci systému."
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:55
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:57
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:41
 msgid "Deactivated"
 msgstr "Deaktivováno"
@@ -5746,7 +5990,7 @@ msgstr "Deaktivace tohoto modulu zastaví následující moduly:"
 msgid "Dependencies"
 msgstr "Závislosti"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:83
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:85
 msgid "Depends"
 msgstr "Závisí na"
 
@@ -5758,15 +6002,15 @@ msgstr "Stále chcete aktivovat modul <b>{module}</b>?"
 msgid "Do you still want to deactivate the module <b>{module}</b>?"
 msgstr "Stále chcete deaktivovat modul <b>{module}</b>?"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:17
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:19
 msgid "Either they are not installed, or they are not compiled."
 msgstr "Buď nejsou nainstalovány, nebo nejsou zkompilovány."
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:59
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:61
 msgid "Execution status"
 msgstr "Stav provedení"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:141
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:143
 msgid "Install the module’s model and data."
 msgstr "Nainstalujte model a data modulu."
 
@@ -5779,23 +6023,23 @@ msgstr "Závislosti modulů"
 msgid "Modules are missing dependencies"
 msgstr "Modulům chybí závislosti"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:74
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:76
 msgid "Modules shown:"
 msgstr "Zobrazené moduly:"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:172
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:174
 msgid "No modules found"
 msgstr "Nenalezeny žádné moduly"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:180
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:182
 msgid "No modules match these filters."
 msgstr "Těmto filtrům neodpovídají žádné moduly."
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:84
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:86
 msgid "Provides"
 msgstr "Poskytuje"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:140
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:142
 msgid "Reinstall"
 msgstr "Znovu nainstalovat"
 
@@ -5803,20 +6047,20 @@ msgstr "Znovu nainstalovat"
 msgid "Reinstalled the data model."
 msgstr "Znovu nainstalován datový model."
 
-#: zotonic_mod_admin_modules/priv/templates/_admin_status.tpl:3
+#: zotonic_mod_admin_modules/priv/templates/_admin_modules_tools.tpl:3
 #: zotonic_mod_development/priv/templates/admin_development.tpl:219
 msgid "Rescan modules"
 msgstr "Znovu prohledat moduly"
 
-#: zotonic_mod_admin_modules/priv/templates/_admin_status.tpl:4
+#: zotonic_mod_admin_modules/priv/templates/_admin_modules_tools.tpl:4
 msgid "Rescanning will rebuild the index of all modules, actions, templates etc. It will also reload all dispatch rules."
 msgstr "Nové prohledání znovu sestaví index všech modulů, akcí, šablon atd. Také znovu načte všechna pravidla směrování."
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:47
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:49
 msgid "Search modules"
 msgstr "Hledat moduly"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:48
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:50
 msgid "Search modules…"
 msgstr "Hledat moduly…"
 
@@ -5833,7 +6077,7 @@ msgstr "Je nám líto, ale tohle nemáte dovoleno."
 msgid "The following modules will not start because they miss dependencies:"
 msgstr "Následující moduly se nespustí, protože jim chybí závislosti:"
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:16
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:18
 msgid "The modules below are activated but could not be found."
 msgstr "Níže uvedené moduly jsou aktivovány, ale nebyly nalezeny."
 
@@ -5845,7 +6089,7 @@ msgstr "Existují moduly závislé na"
 msgid "This module does not have a <tt>manage_schema/2</tt> function."
 msgstr "Tento modul nemá funkci <tt>manage_schema/2</tt>."
 
-#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:67
+#: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:69
 msgid "Topic"
 msgstr "Téma"
 
@@ -6191,7 +6435,7 @@ msgstr "Využití paměti"
 
 #: zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:3
 #: zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:8
-#: zotonic_mod_admin_statistics/src/mod_admin_statistics.erl:62
+#: zotonic_mod_admin_statistics/src/mod_admin_statistics.erl:63
 #: zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:26
 #: zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:34
 #: zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:51
@@ -7735,10 +7979,6 @@ msgstr "srpen"
 msgid "Auth Web Worker?"
 msgstr "Autentizační Web Worker?"
 
-#: zotonic_mod_base/priv/templates/tests/connection_test.tpl:142
-msgid "Authentication"
-msgstr "Ověřování"
-
 #: zotonic_mod_base/priv/templates/tests/chart_test.tpl:64
 msgid "Average"
 msgstr "Průměr"
@@ -8856,7 +9096,7 @@ msgid "Detecting editors…"
 msgstr "Detekce editorů…"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:7
-#: zotonic_mod_development/src/mod_development.erl:1361
+#: zotonic_mod_development/src/mod_development.erl:1362
 msgid "Development"
 msgstr "Vývoj"
 
@@ -10431,7 +10671,7 @@ msgstr "Před uložením nastavení budou zkontrolována nahráním (a odebrán�
 msgid "Check the storage service and its access permissions. Failed reads are retried when requested, with a delay of up to ten minutes."
 msgstr "Zkontrolujte úložnou službu a její přístupová oprávnění. Neúspěšné čtení se na vyžádání opakuje s prodlevou až deseti minut."
 
-#: zotonic_mod_filestore/src/mod_filestore.erl:584
+#: zotonic_mod_filestore/src/mod_filestore.erl:585
 msgid "Cloud File Store"
 msgstr "Cloudové úložiště souborů"
 
@@ -10934,7 +11174,7 @@ msgid "Import CSV XLSX file"
 msgstr "Importovat soubor CSV XLSX"
 
 #: zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:7
-#: zotonic_mod_import_csv/src/mod_import_csv.erl:150
+#: zotonic_mod_import_csv/src/mod_import_csv.erl:146
 msgid "Import CSV or XLSX file"
 msgstr "Importovat soubor CSV nebo XLSX"
 
@@ -10955,11 +11195,11 @@ msgstr "Importujte data ze souboru CSV nebo XLSX."
 msgid "Multilingual properties can be set by specifying the language after the property name."
 msgstr "Vícejazyčné vlastnosti lze nastavit zadáním jazyka za názvem vlastnosti."
 
-#: zotonic_mod_import_csv/src/mod_import_csv.erl:214
+#: zotonic_mod_import_csv/src/mod_import_csv.erl:210
 msgid "Only admins can import CSV files."
 msgstr "Pouze administrátoři mohou importovat soubory CSV."
 
-#: zotonic_mod_import_csv/src/mod_import_csv.erl:187
+#: zotonic_mod_import_csv/src/mod_import_csv.erl:183
 msgid "Please hold on while the file is importing. You will get a notification when it is ready."
 msgstr "Počkejte prosím, soubor se importuje. Jakmile bude připraven, dostanete oznámení."
 
@@ -11019,12 +11259,12 @@ msgstr "Název stránky."
 msgid "The unique name of the page, used to identify the page."
 msgstr "Jedinečný název stránky, který se používá k její identifikaci."
 
-#: zotonic_mod_import_csv/src/mod_import_csv.erl:197
-#: zotonic_mod_import_csv/src/mod_import_csv.erl:235
+#: zotonic_mod_import_csv/src/mod_import_csv.erl:193
+#: zotonic_mod_import_csv/src/mod_import_csv.erl:231
 msgid "The uploaded file has been imported."
 msgstr "Nahraný soubor byl importován."
 
-#: zotonic_mod_import_csv/src/mod_import_csv.erl:210
+#: zotonic_mod_import_csv/src/mod_import_csv.erl:206
 msgid "This file cannot be imported."
 msgstr "Tento soubor nelze importovat."
 
@@ -11372,7 +11612,6 @@ msgstr "Načítání kanálu a vzorových položek…"
 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed.tpl:86
 #: zotonic_mod_logging/priv/templates/admin_log_base.tpl:3
-#: zotonic_mod_logging/src/mod_logging.erl:349
 msgid "Log"
 msgstr "Protokol"
 
@@ -11636,11 +11875,11 @@ msgstr "Kanály zdrojů Zotonicu"
 msgid "Zotonic resource: uses the native resource importer."
 msgstr "Zdroj Zotonicu: používá nativní importér zdrojů."
 
-#: zotonic_mod_import_wordpress/priv/templates/_admin_status.tpl:4
+#: zotonic_mod_import_wordpress/priv/templates/_admin_import_tools.tpl:7
 msgid "Import WXR file"
 msgstr "Importovat soubor WXR"
 
-#: zotonic_mod_import_wordpress/priv/templates/_admin_status.tpl:5
+#: zotonic_mod_import_wordpress/priv/templates/_admin_import_tools.tpl:8
 msgid "Import a WordPress WXR export file into Zotonic."
 msgstr "Importujte exportní soubor WXR z WordPressu do Zotonicu."
 
@@ -11656,7 +11895,8 @@ msgstr "Nahrajte soubor WXR pro WordPress z počítače."
 msgid "WXR file"
 msgstr "Soubor WXR"
 
-#: zotonic_mod_import_wordpress/priv/templates/_admin_status.tpl:4
+#: zotonic_mod_import_wordpress/priv/templates/_admin_import_tools.tpl:2
+#: zotonic_mod_import_wordpress/priv/templates/_admin_import_tools.tpl:7
 msgid "WordPress import"
 msgstr "Import WordPressu"
 
@@ -11894,7 +12134,7 @@ msgid "Cleared the CSP reports."
 msgstr "Vymazány zprávy CSP."
 
 #: zotonic_mod_logging/priv/templates/admin_log_base.tpl:13
-#: zotonic_mod_logging/src/mod_logging.erl:359
+#: zotonic_mod_logging/src/mod_logging.erl:363
 msgid "Content-Security log"
 msgstr "Protokol zabezpečení obsahu"
 
@@ -11919,7 +12159,7 @@ msgid "Directive"
 msgstr "Směrnice"
 
 #: zotonic_mod_logging/priv/templates/admin_log_base.tpl:12
-#: zotonic_mod_logging/src/mod_logging.erl:354
+#: zotonic_mod_logging/src/mod_logging.erl:358
 msgid "Email log"
 msgstr "Protokol e-mailů"
 
@@ -11978,6 +12218,14 @@ msgstr "Záznam všech odchozích a příchozích e-mailů. Pro každý e-mail z
 #: zotonic_mod_logging/priv/templates/admin_log_base.tpl:7
 msgid "Logging"
 msgstr "Protokolování"
+
+#: zotonic_mod_logging/src/mod_logging.erl:350
+msgid "Logs"
+msgstr "Protokoly"
+
+#: zotonic_mod_logging/src/mod_logging.erl:353
+msgid "Message Log"
+msgstr "Protokol zpráv"
 
 #: zotonic_mod_logging/priv/templates/admin_log_base.tpl:11
 msgid "Message log"
@@ -12107,7 +12355,7 @@ msgid "User interface events log"
 msgstr "Protokol událostí uživatelského rozhraní"
 
 #: zotonic_mod_logging/priv/templates/admin_log_base.tpl:14
-#: zotonic_mod_logging/src/mod_logging.erl:364
+#: zotonic_mod_logging/src/mod_logging.erl:368
 msgid "User interface log"
 msgstr "Protokol uživatelského rozhraní"
 
@@ -13964,7 +14212,7 @@ msgstr "Přidat na začátek"
 msgid "Are you sure you want to remove <b>{title}</b> and all indented items below it?"
 msgstr "Opravdu chcete odstranit <b>{title}</b> a všechny odsazené položky pod ním?"
 
-#: zotonic_mod_menu/priv/templates/_admin_status.tpl:7
+#: zotonic_mod_menu/priv/templates/_admin_menu_maintenance.tpl:7
 msgid "Check all menu pages and add <i>hasmenupart</i> connections for all of the \n"
 "    pages in the menu."
 msgstr "Zkontrolujte všechny stránky nabídky a přidejte propojení <i>hasmenupart</i> pro všechny stránky \n"
@@ -14015,10 +14263,6 @@ msgstr "Přetáhněte stránky na požadované místo v hierarchii."
 msgid "Empty hierarchy"
 msgstr "Prázdná hierarchie"
 
-#: zotonic_mod_menu/priv/templates/_admin_status.tpl:3
-msgid "Ensure <i>hasmenupart</i> connections"
-msgstr "Doplnit propojení <i>hasmenupart</i>"
-
 #: zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:74
 msgid "Hierarchies can be defined for any existing category."
 msgstr "Hierarchie lze definovat pro jakoukoli existující kategorii."
@@ -14031,6 +14275,14 @@ msgstr "Hierarchie pro"
 #: zotonic_mod_menu/src/mod_menu.erl:152
 msgid "Menu"
 msgstr "Nabídka"
+
+#: zotonic_mod_menu/priv/templates/admin_edit.menu.tpl:11
+msgid "Menu maintenance"
+msgstr "Údržba nabídky"
+
+#: zotonic_mod_menu/priv/templates/_admin_menu_maintenance.tpl:3
+msgid "Rebuild menu connections"
+msgstr "Obnovit propojení v nabídce"
 
 #: zotonic_mod_menu/src/mod_menu.erl:253
 msgid "Sorry, can’t copy that page."
@@ -14735,7 +14987,7 @@ msgstr "pro načtení jednoho tokenu"
 msgid "API Key can be found on"
 msgstr "Klíč API naleznete na"
 
-#: zotonic_mod_oembed/priv/templates/_admin_status.tpl:5
+#: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:8
 msgid "Attempt to fix embedded videos for which OEmbed embedding has failed previously."
 msgstr "Pokus o opravu vložených videí, u kterých vkládání OEmbed dříve selhalo."
 
@@ -14758,9 +15010,13 @@ msgstr "Zkopírujte URL do schránky."
 msgid "Embedding of media item failed with HTTP code"
 msgstr "Vkládání mediální položky selhalo s kódem HTTP"
 
-#: zotonic_mod_oembed/priv/templates/_admin_status.tpl:4
+#: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:7
 msgid "Fix embedded videos"
 msgstr "Opravit vložená videa"
+
+#: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:2
+msgid "Media maintenance"
+msgstr "Údržba médií"
 
 #: zotonic_mod_oembed/src/mod_oembed.erl:458
 msgid "No embedded videos found which need fixing."
@@ -14812,11 +15068,15 @@ msgstr "Nemáte oprávnění ke změně nastavení Embedly."
 msgid "your Embedly app dashboard"
 msgstr "váš řídicí panel aplikace Embedly"
 
-#: zotonic_mod_ratelimit/priv/templates/_admin_status.tpl:4
+#: zotonic_mod_ratelimit/priv/templates/_admin_authentication_maintenance.tpl:2
+msgid "Authentication maintenance"
+msgstr "Údržba ověřování"
+
+#: zotonic_mod_ratelimit/priv/templates/_admin_authentication_maintenance.tpl:7
 msgid "Reset rate limit counters"
 msgstr "Vynulovat čítače limitů rychlosti"
 
-#: zotonic_mod_ratelimit/priv/templates/_admin_status.tpl:8
+#: zotonic_mod_ratelimit/priv/templates/_admin_authentication_maintenance.tpl:11
 msgid "Reset the authentication attempts counters. Useful when encountering rate limit errors during testing. Be careful as this enables more password tries."
 msgstr "Vynulujte počítadla pokusů o ověření. Užitečné, pokud se během testování setkáte s chybami omezení rychlosti. Buďte opatrní, protože to umožňuje více pokusů o zadání hesla."
 
@@ -14827,10 +15087,6 @@ msgstr "Počítadla byla vynulována."
 #: zotonic_mod_ratelimit/src/mod_ratelimit.erl:117
 msgid "You are not allowed to do this."
 msgstr "K této akci nemáte oprávnění."
-
-#: zotonic_mod_search/priv/templates/_admin_status.tpl:8
-msgid "Check the table for the faceted search and fill it by reindexing all pages."
-msgstr "Zkontrolujte tabulku pro fasetové vyhledávání a naplňte ji novým indexováním všech stránek."
 
 #: zotonic_mod_search/priv/templates/search_view.tpl:8
 msgid "Matching id, name or path"
@@ -14849,13 +15105,21 @@ msgstr "Odpovídající dřívější cesta ke stránce"
 msgid "Matching text"
 msgstr "Odpovídající text"
 
-#: zotonic_mod_search/priv/templates/_admin_status.tpl:4
+#: zotonic_mod_search/priv/templates/_admin_maintenance_search.tpl:4
 msgid "Rebuild search facets"
 msgstr "Znovu vytvořit vyhledávací fasety"
+
+#: zotonic_mod_search/priv/templates/_admin_maintenance_search.tpl:2
+msgid "Rebuild the faceted search table by reindexing all pages."
+msgstr "Obnovte tabulku pro faceted search pomocí reindexace všech stránek."
 
 #: zotonic_mod_search/src/mod_search.erl:199
 msgid "Rebuilding the faceted search table."
 msgstr "Probíhá nové vytvoření tabulky fasetového vyhledávání."
+
+#: zotonic_mod_search/priv/templates/_admin_maintenance_search.tpl:2
+msgid "Search facets"
+msgstr "Vyhledávací filtry"
 
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:152
 msgid "Add Plausible tracking script"
@@ -15108,13 +15372,8 @@ msgid "Priority in sitemap"
 msgstr "Priorita v mapě webu"
 
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:11
-#: zotonic_mod_seo_sitemap/priv/templates/_admin_status.tpl:2
 msgid "Rebuild sitemap"
 msgstr "Znovu sestavit mapu webu"
-
-#: zotonic_mod_seo_sitemap/priv/templates/_admin_status.tpl:8
-msgid "Rebuild the sitemap index for all pages."
-msgstr "Znovu sestavte index souboru Sitemap pro všechny stránky."
 
 #: zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:176
 msgid "Rebuilding the sitemap in the background."
@@ -15405,11 +15664,11 @@ msgstr "Pro registraci musíte souhlasit s Podmínkami."
 msgid "Your signup code"
 msgstr "Váš registrační kód"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:223
+#: zotonic_mod_site_update/src/mod_site_update.erl:264
 msgid "Another deployment is in progress. Please try again when it finishes."
 msgstr "Právě probíhá další nasazení. Zkuste to prosím znovu, až bude hotové."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:137
+#: zotonic_mod_site_update/src/mod_site_update.erl:164
 msgid "Building Zotonic in the background..."
 msgstr "Sestavování Zotonicu na pozadí…"
 
@@ -15427,8 +15686,8 @@ msgstr "Aktuální revize"
 msgid "Deploy"
 msgstr "Nasadit"
 
-#: zotonic_mod_site_update/priv/templates/_admin_module_buttons.tpl:3
-#: zotonic_mod_site_update/priv/templates/_admin_status.tpl:4
+#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:4
+#: zotonic_mod_site_update/priv/templates/_admin_module_deploy_button.tpl:2
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:2
 msgid "Deploy latest"
 msgstr "Nasadit nejnovější verzi"
@@ -15437,19 +15696,25 @@ msgstr "Nasadit nejnovější verzi"
 msgid "Deploy latest Zotonic"
 msgstr "Nasadit nejnovější verzi Zotonicu"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:176
+#: zotonic_mod_site_update/src/mod_site_update.erl:217
 msgid "Deploy latest version"
 msgstr "Nasadit nejnovější verzi"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:210
+#: zotonic_mod_site_update/src/mod_site_update.erl:251
 msgid "Deploying the latest version..."
 msgstr "Probíhá nasazení nejnovější verze..."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:221
+#: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:2
+#: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:5
+#: zotonic_mod_site_update/src/mod_site_update.erl:128
+msgid "Deployment"
+msgstr "Nasazení"
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:262
 msgid "Deployment completed."
 msgstr "Nasazení dokončeno."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:225
+#: zotonic_mod_site_update/src/mod_site_update.erl:266
 msgid "Deployment failed. Check the server log for details."
 msgstr "Nasazení se nezdařilo. Podrobnosti najdete v protokolu serveru."
 
@@ -15461,13 +15726,17 @@ msgstr "Nasazení aktualizuje celý repozitář Git, včetně všech dalších m
 msgid "Fetching remote changes…"
 msgstr "Načítání změn ze vzdáleného serveru…"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:135
+#: zotonic_mod_site_update/src/mod_site_update.erl:162
 msgid "Finished rebuilding Zotonic."
 msgstr "Nové sestavení Zotonicu bylo dokončeno."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:32
 msgid "Incoming changes"
 msgstr "Příchozí změny"
+
+#: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:14
+msgid "Modules list"
+msgstr "Seznam modulů"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:24
 msgid "No deployable version control repository was found."
@@ -15489,11 +15758,15 @@ msgstr "Zkontrolujte a nasaďte nejnovější verzi tohoto webu."
 msgid "Review incoming changes and deploy the latest version of Zotonic"
 msgstr "Zkontrolujte příchozí změny a nasaďte nejnovější verzi Zotonicu"
 
-#: zotonic_mod_site_update/priv/templates/_admin_module_buttons.tpl:4
+#: zotonic_mod_site_update/priv/templates/_admin_module_deploy_button.tpl:3
 msgid "Review incoming changes and deploy this module’s Git repository."
 msgstr "Zkontrolujte příchozí změny a nasaďte repozitář Git tohoto modulu."
 
-#: zotonic_mod_site_update/priv/templates/_admin_status.tpl:5
+#: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:6
+msgid "Review incoming changes and deploy this site's code. Compilation and activation are coordinated across all sites on this node."
+msgstr "Zkontrolujte chystané změny a nasadte kód tohoto webu. Kompilace a aktivace probíhají koordinovaně napříč všemi weby na tomto uzlu."
+
+#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:5
 msgid "Review incoming changes before deploying the latest version."
 msgstr "Před nasazením nejnovější verze zkontrolujte příchozí změny."
 
@@ -15506,21 +15779,29 @@ msgstr "Zkontrolujte nejnovější verzi pro {name}."
 msgid "Showing the most recent 100 incoming commits."
 msgstr "Zobrazuje se 100 nejnovějších příchozích commitů."
 
+#: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:9
+msgid "Site deployment"
+msgstr "Nasazení webu"
+
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:4
 msgid "Site update API token"
 msgstr "Token API pro aktualizaci webu"
 
-#: zotonic_mod_site_update/priv/templates/_admin_status.tpl:9
+#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:9
 msgid "Site update is not available as the site does not use a known version control system, like git."
 msgstr "Aktualizace webu není k dispozici, protože web nepoužívá známý systém pro správu verzí, jako je git."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:139
+#: zotonic_mod_site_update/src/mod_site_update.erl:166
 msgid "Sorry this can only be run from the Zotonic status site"
 msgstr "Omlouváme se, toto lze spustit pouze ze stránky se stavem Zotonic."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:28
 msgid "The deployment preview is unavailable. Check the repository and server log, then try again."
 msgstr "Náhled nasazení není k dispozici. Zkontrolujte repozitář a protokol serveru a zkuste to znovu."
+
+#: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:11
+msgid "The deployment preview shows the current revision and incoming commits. No checked-out files change until you confirm Deploy."
+msgstr "V náhledu nasazení se zobrazuje aktuální revize a připravované commity. Žádné vybraného soubory se nezmění, dokud nepotvrdíte nasazení."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:53
 msgid "The local branch cannot be fast-forwarded to the remote version. Resolve the local commits before deploying."
@@ -15538,13 +15819,21 @@ msgstr "U této větve není nakonfigurován žádný upstream. Před nasazením
 msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
 msgstr "Tento token se používá k zabezpečení volání webhook API pro aktualizaci této webové stránky při odesílání kódu na Github (nebo podobné služby, jako je BitBucket)."
 
+#: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:14
+msgid "To deploy updates for individual modules, open the"
+msgstr "Chcete-li nainstalovat aktualizace pro jednotlivé moduly, otevřete soubor"
+
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:16
 msgid "To run the webhook update, configure your service to POST to the following URL:"
 msgstr "Chcete-li spustit aktualizaci webhooku, nakonfigurujte službu tak, aby odesílala zprávy POST na následující adresu URL:"
 
+#: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:16
+msgid "View system status"
+msgstr "Zobrazit stav systému"
+
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:20
-#: zotonic_mod_site_update/src/mod_site_update.erl:180
-#: zotonic_mod_site_update/src/mod_site_update.erl:215
+#: zotonic_mod_site_update/src/mod_site_update.erl:221
+#: zotonic_mod_site_update/src/mod_site_update.erl:256
 msgid "You are not allowed to deploy this code."
 msgstr "Tento kód nesmíte nasadit."
 
@@ -18182,10 +18471,6 @@ msgstr "Vytváření pracovní kopie z Gitu…"
 #: zotonic_mod_zotonic_site_management/priv/templates/_addsite_success.tpl:11
 msgid "Go to the admin interface at"
 msgstr "Přejděte do administrátorského rozhraní na adrese"
-
-#: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:158
-msgid "Host"
-msgstr "Hostitel"
 
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:39
 msgid "Host name"
