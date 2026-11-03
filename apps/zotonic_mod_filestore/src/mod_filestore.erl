@@ -770,6 +770,7 @@ load_cache(#{
             }),
             Ctx = z_context:prune_for_async(Context),
             StreamFun = fun(CachePid) ->
+                z_context:logger_md(Ctx),
                 Claim = case m_filestore:claim_download(Id, Ctx) of
                     {ok, C} -> C;
                     {error, _} -> exit(normal)
@@ -1106,7 +1107,12 @@ start_deleter_writable(#{
             })
     end.
 
-delete_ready(Id, Path, Context, _Ref, ok) ->
+%% Filez callbacks run in library workers, without the caller's logger metadata.
+delete_ready(Id, Path, Context, Ref, Result) ->
+    z_context:logger_md(Context),
+    delete_ready_1(Id, Path, Context, Ref, Result).
+
+delete_ready_1(Id, Path, Context, _Ref, ok) ->
     ?LOG_INFO(#{
         text => <<"Delete remote file done">>,
         in => zotonic_mod_filestore,
@@ -1116,7 +1122,7 @@ delete_ready(Id, Path, Context, _Ref, ok) ->
     }),
     update_backoff(success, Context),
     m_filestore:purge_deleted(Id, Context);
-delete_ready(Id, Path, Context, _Ref, {error, Reason})
+delete_ready_1(Id, Path, Context, _Ref, {error, Reason})
     when Reason =:= enoent; Reason =:= epath ->
     ?LOG_INFO(#{
         text => <<"Delete remote file was not found">>,
@@ -1127,7 +1133,7 @@ delete_ready(Id, Path, Context, _Ref, {error, Reason})
         action => delete
     }),
     m_filestore:purge_deleted(Id, Context);
-delete_ready(Id, Path, Context, _Ref, {error, forbidden}) ->
+delete_ready_1(Id, Path, Context, _Ref, {error, forbidden}) ->
     ?LOG_WARNING(#{
         text => <<"Delete remote file was forbidden - dropping local ref">>,
         in => zotonic_mod_filestore,
@@ -1138,7 +1144,7 @@ delete_ready(Id, Path, Context, _Ref, {error, forbidden}) ->
         action => delete
     }),
     m_filestore:purge_deleted(Id, Context);
-delete_ready(Id, Path, Context, _Ref, {error, Reason}) ->
+delete_ready_1(Id, Path, Context, _Ref, {error, Reason}) ->
     ?LOG_ERROR(#{
         text => <<"Delete remote file failed, will retry">>,
         in => zotonic_mod_filestore,
@@ -1209,7 +1215,12 @@ start_downloader(#{
             })
     end.
 
-download_stream(_Id, _Path, LocalPath, _Context, stream_start) ->
+%% Establish metadata even if the first callback is an error before stream_start.
+download_stream(Id, Path, LocalPath, Context, Data) ->
+    z_context:ensure_logger_md(Context),
+    download_stream_1(Id, Path, LocalPath, Context, Data).
+
+download_stream_1(_Id, _Path, LocalPath, _Context, stream_start) ->
     ?LOG_DEBUG(#{
         text => <<"Download remote file stream started">>,
         result => ok,
@@ -1217,7 +1228,7 @@ download_stream(_Id, _Path, LocalPath, _Context, stream_start) ->
         local => LocalPath
     }),
     file:delete(temp_path(LocalPath));
-download_stream(_Id, _Path, LocalPath, _Context, {content_type, _}) ->
+download_stream_1(_Id, _Path, LocalPath, _Context, {content_type, _}) ->
     ?LOG_DEBUG(#{
         text => <<"Download remote file stream started">>,
         result => ok,
@@ -1225,9 +1236,9 @@ download_stream(_Id, _Path, LocalPath, _Context, {content_type, _}) ->
         local => LocalPath
     }),
     file:delete(temp_path(LocalPath));
-download_stream(_Id, _Path, LocalPath, _Context, Data) when is_binary(Data) ->
+download_stream_1(_Id, _Path, LocalPath, _Context, Data) when is_binary(Data) ->
     file:write_file(temp_path(LocalPath), Data, [append,raw,binary]);
-download_stream(Id, Path, LocalPath, Context, eof) ->
+download_stream_1(Id, Path, LocalPath, Context, eof) ->
     ?LOG_DEBUG(#{
         text => <<"Download remote file stream ended">>,
         result => ok,
@@ -1237,7 +1248,7 @@ download_stream(Id, Path, LocalPath, Context, eof) ->
     ok = file:rename(temp_path(LocalPath), LocalPath),
     update_backoff(success, Context),
     download_done(Id, Path, Context);
-download_stream(Id, Path, LocalPath, Context, {error, Reason}) ->
+download_stream_1(Id, Path, LocalPath, Context, {error, Reason}) ->
     ?LOG_WARNING(#{
         text => <<"Download error on file stream">>,
         in => zotonic_mod_filestore,
@@ -1254,7 +1265,7 @@ download_stream(Id, Path, LocalPath, Context, {error, Reason}) ->
     end,
     file:delete(temp_path(LocalPath)),
     m_filestore:unmark_move_to_local(Id, Context);
-download_stream(_Id, _Path, _LocalPath, _Context, _Other) ->
+download_stream_1(_Id, _Path, _LocalPath, _Context, _Other) ->
     ok.
 
 download_done(Id, Path, Context) ->
