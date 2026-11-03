@@ -19,13 +19,15 @@
 
 -module(admin_edit_version_tests).
 -author("Marc Worrell <marc@worrell.nl>").
--export([check/1]).
+-export([check/1, check_connections/1]).
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 versioned_save_test() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
-    check(z_acl:logon(?ACL_ADMIN_USER_ID, z_context:new(zotonic_site_testsandbox))).
+    Context = z_acl:logon(?ACL_ADMIN_USER_ID, z_context:new(zotonic_site_testsandbox)),
+    check(Context),
+    check_connections(Context).
 
 %% May also be run against a development site; only a temporary resource is changed.
 check(Context) ->
@@ -62,4 +64,41 @@ notification_version(Id) ->
     receive
         {mqtt_msg, #{message := #{payload := #{id := Id, version := Version}}}} -> Version
     after 5000 -> error(missing_version_notification)
+    end.
+
+%% Connection mutations must neither invalidate the form version nor block saving.
+%% Menu saves do version the resource, but explicitly identify menu-only changes.
+check_connections(Context) ->
+    {ok, Id} = m_rsc:insert(#{<<"category_id">> => menu,
+        <<"title">> => <<"Menu connection version regression test">>}, Context),
+    {ok, A} = m_rsc:insert(#{<<"category_id">> => text}, Context),
+    {ok, B} = m_rsc:insert(#{<<"category_id">> => text}, Context),
+    Topic = [<<"model">>, <<"rsc">>, <<"event">>, Id, <<"update">>],
+    ok = z_mqtt:subscribe(Topic, Context),
+    try
+        V = m_rsc:p(Id, version, Context),
+        {ok, _} = m_edge:insert(Id, relation, A, Context),
+        {ok, _} = m_edge:insert(Id, relation, B, Context),
+        ?assertEqual(V, m_rsc:p(Id, version, Context)),
+        ok = m_edge:set_sequence(Id, relation, [B, A], Context),
+        ?assertEqual(V, m_rsc:p(Id, version, Context)),
+        ok = m_edge:delete(Id, relation, A, Context),
+        ?assertEqual(V, m_rsc:p(Id, version, Context)),
+        {ok, V1} = admin_edit_version:save(Id, V,
+            fun(Ctx) -> m_rsc:update(Id, #{<<"title">> => <<"Still editable">>}, Ctx) end, Context),
+        ?assertEqual(V1, notification_version(Id)),
+        {ok, Id} = mod_menu:set_menu(Id, [#rsc_tree{id = A}], Context),
+        V2 = m_rsc:p(Id, version, Context),
+        receive
+            {mqtt_msg, #{message := #{payload := Payload}}} ->
+                ?assertMatch(#{id := Id, version := V2, previous_version := V1, reason := menu}, Payload)
+        after 5000 -> error(missing_menu_notification)
+        end,
+        ?assertEqual([A], m_edge:objects(Id, hasmenupart, Context)),
+        {ok, _} = admin_edit_version:save(Id, V2,
+            fun(Ctx) -> m_rsc:update(Id, #{<<"title">> => <<"Saved after menu change">>}, Ctx) end, Context),
+        ok
+    after
+        z_mqtt:unsubscribe(Topic, Context),
+        [m_rsc:delete(R, Context) || R <- [Id, A, B]]
     end.
