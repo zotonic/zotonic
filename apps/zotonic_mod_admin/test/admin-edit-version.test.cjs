@@ -174,3 +174,30 @@ test('processing does not hide intervening or later edits, or skip versions', t 
     f.processingUpdate(5, 7);
     assert.equal(f.input.value, '5');
 });
+
+test('menu-only updates never warn, including a version read arriving first', t => {
+    const f = fixture(t);
+    f.update(5);
+    f.processingUpdate(4, 5, 'menu');
+    assert.equal(f.input.value, '5');
+    assert.equal(f.warning.hidden, true);
+    f.processingUpdate(5, 6, 'menu');
+    assert.equal(f.input.value, '6');
+    assert.equal(f.warning.hidden, true);
+});
+
+test('menu updates do not acknowledge an intervening content edit', t => {
+    const f = fixture(t);
+    f.update(5); // Somebody else changed the title.
+    f.processingUpdate(5, 6, 'menu');
+    assert.equal(f.input.value, '4');
+    assert.equal(f.warning.hidden, false);
+});
+
+test('menu updates do not hide a newer content edit', t => {
+    const f = fixture(t);
+    f.update(6);
+    f.processingUpdate(4, 5, 'menu');
+    assert.equal(f.input.value, '5');
+    assert.equal(f.warning.hidden, false);
+});

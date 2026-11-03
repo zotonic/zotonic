@@ -39,9 +39,9 @@
         };
         const updated = msg => {
             const version = msg.payload?.version;
-            // Processing only changes media, not the resource fields being edited.
+            // Media processing and menu saves do not change the fields being edited.
             // Never skip a missing version: it could contain somebody else's edit.
-            if (msg.topic === topics[0] && msg.payload?.reason === 'media_processing'
+            if (msg.topic === topics[0] && ['media_processing', 'menu'].includes(msg.payload?.reason)
                 && msg.payload.id === id && Number.isInteger(version)
                 && msg.payload.previous_version === Number(input.value)
                 && version === msg.payload.previous_version + 1) {
