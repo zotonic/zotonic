@@ -9,9 +9,23 @@
 </div>
 
 <div class="well">
-    {% button class="btn btn-default" text=_"Reload site configuration" action={admin_tasks task='reload_config'} %}
-    <p class="help-block">{_ Reload the site configuration files. Some changes require a restart. _}</p>
-    {% button class="btn btn-primary" text=_"Make a new config setting" action={dialog_config_new on_success={reload}} %}
+    <div class="row">
+        <div class="col-md-8">
+            <p class="help-block">{_ Reload the site configuration files. Some changes require a restart. _}</p>
+        </div>
+        <div class="col-md-4 z-button-row">
+            {% button class="btn btn-default" text=_"Reload site configuration" action={admin_tasks task='reload_config'} %}
+        </div>
+    </div>
+</div>
+
+<div class="row form-group admin-section-heading">
+    <div class="col-md-8">
+        <h3>{_ Configuration _}</h3>
+    </div>
+    <div class="col-md-4 z-button-row">
+        {% button class="btn btn-primary" text=_"Make a new config setting" action={dialog_config_new on_success={reload}} %}
+    </div>
 </div>
 
 <div class="widget">

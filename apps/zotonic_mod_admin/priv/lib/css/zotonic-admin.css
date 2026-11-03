@@ -196,6 +196,15 @@ label .z-btn-help {
   vertical-align: text-bottom;
 }
 
+@media (min-width: 992px) {
+  .admin-section-heading {
+    display: flex;
+    align-items: center;
+  }
+  .admin-section-heading h3 {
+    margin: 0;
+  }
+}
 .admin-header {
   margin-bottom: 24px;
   *zoom: 1;
