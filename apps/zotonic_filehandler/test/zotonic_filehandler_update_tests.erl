@@ -30,6 +30,8 @@ isolated_tests() ->
         fun failed_build/0,
         fun automatic_failures/0,
         fun missing_compile_options/0,
+        fun recompile_paths/0,
+        fun new_application_build/0,
         fun interrupted_build/0,
         fun interrupted_automatic_update/0,
         fun active_migrations/0,
@@ -213,6 +215,83 @@ missing_compile_options() ->
             zotonic_filehandler_update:schema(fun() -> error(unexpected_schema) end))
     after
         meck:unload(jobs)
+    end.
+
+%% Compile real BEAMs outside the code path, using a loaded sibling's options.
+recompile_paths() ->
+    meck:new(jobs, [no_link]),
+    meck:expect(jobs, run, fun(zotonic_filehandler_single_job, Fun) -> Fun() end),
+    Root = filename:join(os:getenv("TMPDIR", "/tmp"),
+        "zotonic-recompile-" ++ integer_to_list(erlang:unique_integer([positive]))),
+    try
+        lists:foreach(fun({Layout, OnPath, ExpectLoaded}) ->
+            App = filename:join(Root, Layout),
+            IsTest = Layout =:= "test-off-path" orelse Layout =:= "test-on-path",
+            Src = filename:join(App, case IsTest of true -> "test"; false -> "src" end),
+            Out = case IsTest of true -> Src; false -> filename:join(App, "ebin") end,
+            ok = filelib:ensure_dir(filename:join(Out, "placeholder")),
+            ok = filelib:ensure_dir(filename:join(Src, "placeholder")),
+            Helper = filename:join(Src, "update_compile_helper.erl"),
+            File = filename:join(Src, "update_compile_fixture.erl"),
+            ok = file:write_file(Helper,
+                "-module(update_compile_helper). -export([version/0]). version() -> 1."),
+            ok = file:write_file(File,
+                "-module(update_compile_fixture). -export([version/0]). version() -> 2."),
+            {ok, update_compile_helper} = compile:file(Helper, [{outdir, Out}]),
+            {module, update_compile_helper} = code:load_abs(filename:join(Out, "update_compile_helper")),
+            case IsTest of
+                true -> ok;
+                false -> ok = file:write_file(filename:join(Out, "fixture.app"),
+                    "{application, fixture, [{vsn, \"1\"}, {modules, [update_compile_fixture]}]}.")
+            end,
+            case OnPath of true -> true = code:add_patha(Out); false -> ok end,
+            try
+                ?assertEqual(ok, zotonic_filehandler_compile:recompile_task(File)),
+                ?assert(filelib:is_regular(filename:join(Out, "update_compile_fixture.beam"))),
+                ?assertEqual(ExpectLoaded, code:is_loaded(update_compile_fixture) =/= false),
+                case ExpectLoaded of
+                    true -> ?assertEqual(2, fixture_call(update_compile_fixture, version, []));
+                    false -> ?assertNot(lists:member(Out, code:get_path()))
+                end,
+                ?assertNot(zotonic_filehandler_update:is_pending())
+            after
+                code:del_path(Out),
+                lists:foreach(fun(M) -> code:purge(M), code:delete(M), code:purge(M) end,
+                    [update_compile_helper, update_compile_fixture])
+            end
+        end, [{"test-off-path", false, false}, {"test-on-path", true, true},
+              {"deps/new_dependency", false, true}, {"apps_user/new_application", false, true}])
+    after
+        meck:unload(jobs),
+        file:del_dir_r(Root)
+    end.
+
+%% A new application has no sibling compile options yet: ask Rebar to build it.
+new_application_build() ->
+    meck:new(jobs, [no_link]),
+    meck:expect(jobs, run, fun(zotonic_filehandler_single_job, Fun) -> Fun() end),
+    meck:new(buffalo, [no_link]),
+    meck:expect(buffalo, queue, fun(compile_all_task,
+            {zotonic_filehandler_compile, all_task, [undefined]}, _) -> {ok, self()} end),
+    Root = filename:join(os:getenv("TMPDIR", "/tmp"),
+        "zotonic-new-app-" ++ integer_to_list(erlang:unique_integer([positive]))),
+    try
+        lists:foreach(fun(Layout) ->
+            Src = filename:join([Root, Layout, "src"]),
+            File = filename:join(Src, "update_unbuilt_fixture.erl"),
+            ok = filelib:ensure_dir(File),
+            ok = file:write_file(File, "-module(update_unbuilt_fixture)."),
+            ok = file:write_file(filename:join(Src, "fixture.app.src"),
+                "{application, fixture, [{vsn, \"1\"}]} ."),
+            ?assertEqual(false, zotonic_filehandler_compile:compile_options(File)),
+            meck:reset(buffalo),
+            ?assertEqual(ok, zotonic_filehandler_compile:recompile_task(File)),
+            ?assert(meck:called(buffalo, queue, [compile_all_task, '_', '_']))
+        end, ["deps/new_dependency", "apps_user/new_application"])
+    after
+        meck:unload(buffalo),
+        meck:unload(jobs),
+        file:del_dir_r(Root)
     end.
 
 watcher_replay() ->

@@ -391,15 +391,14 @@ recompile_locked(File) ->
             {ok, Options} ->
                 recompile_activate(File, Options);
             false ->
-                % Rebar touches test sources not compiled in this profile.
-                % New applications also need a full build first. Skipping these
-                % files must not mark the activation/schema barrier as failed.
-                ?LOG_DEBUG(#{
-                    text => <<"Skipping Erlang file without compile options">>,
-                    in => zotonic_filehandler,
-                    file => File
-                }),
-                ok
+                case is_application_source(File) andalso not is_test_source(File) of
+                    true ->
+                        %% Rebar must resolve dependencies and generate the .app
+                        %% before a new application can be activated.
+                        all();
+                    false ->
+                        skip_recompile(File)
+                end
         end
     end).
 
@@ -407,12 +406,61 @@ recompile_activate(File, Options) ->
     case recompile_file(File, Options) of
         ok ->
             Module = list_to_atom(filename:basename(File, ".erl")),
-            case activate([Module]) of
-                {error, _} = Error -> Error;
-                _ -> ok
+            case {code:where_is_file(atom_to_list(Module) ++ ".beam"), is_test_source(File)} of
+                {non_existing, true} ->
+                    %% Rebar also compiles tests into directories which are not
+                    %% on a running site's code path. Do not activate those.
+                    skip_recompile(File);
+                {non_existing, false} ->
+                    activate_new_application(Module, Options);
+                {_Path, _} ->
+                    activate_compiled(Module)
             end;
         {error, _} = Error -> Error
     end.
+
+activate_compiled(Module) ->
+    case activate([Module]) of
+        {error, _} = Error -> Error;
+        _ -> ok
+    end.
+
+activate_new_application(Module, Options) ->
+    Outdir = proplists:get_value(outdir, Options, "."),
+    case filename:basename(Outdir) =:= "ebin"
+        andalso filelib:wildcard(filename:join(Outdir, "*.app")) =/= []
+    of
+        true ->
+            %% The .beam event can precede the .app event for a new dependency
+            %% or apps_user application. Keep non-application paths out.
+            case code:add_patha(Outdir) of
+                true -> activate_compiled(Module);
+                {error, _} = Error -> Error
+            end;
+        false ->
+            %% Preserve errors for missing production BEAMs.
+            activate_compiled(Module)
+    end.
+
+is_test_source(File) ->
+    lists:member("test", filename:split(z_convert:to_list(File))).
+
+is_application_source(File) ->
+    Parts = filename:split(z_convert:to_list(File)),
+    case lists:splitwith(fun is_not_src/1, Parts) of
+        {Root, ["src" | _]} ->
+            filelib:is_regular(File) andalso
+                filelib:wildcard(filename:join(Root ++ ["src", "*.app.src"])) =/= [];
+        _ -> false
+    end.
+
+skip_recompile(File) ->
+    ?LOG_DEBUG(#{
+        text => <<"Skipping activation of Erlang file outside the code path or without compile options">>,
+        in => zotonic_filehandler,
+        file => File
+    }),
+    ok.
 
 recompile_file(File, Options) ->
     ?LOG_DEBUG(#{
