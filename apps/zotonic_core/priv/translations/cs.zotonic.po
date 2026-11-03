@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-02 19:50\n"
+"PO-Revision-Date: 2026-11-02 21:24\n"
 "Last-Translator: \n"
 "Language-Team: Czech\n"
 "MIME-Version: 1.0\n"
@@ -1331,7 +1331,7 @@ msgstr "Mezipaměť všech webů byla vyprázdněna."
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:2
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:37
 msgid "All sites on this node"
-msgstr "Všechny stránky v tomto uzlu"
+msgstr "Všechny weby na tomto uzlu"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:7
 msgid "Allocated"
@@ -1467,7 +1467,7 @@ msgstr "Zpět"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:12
 msgid "Background work"
-msgstr "Přípravné práce"
+msgstr "Úlohy na pozadí"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_basics.tpl:4
 msgid "Basic"
@@ -1499,7 +1499,7 @@ msgstr "Uloženo v mezipaměti"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:10
 msgid "Caches"
-msgstr "Meziúložiště"
+msgstr "Mezipaměti"
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:47
 msgid "Caches have been flushed."
@@ -1552,7 +1552,7 @@ msgstr "Vymazat"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:12
 msgid "Clear cached templates, dispatch rules and in-memory site data. The shared file index is also refreshed."
-msgstr "Vymažte šablony uložené v mezipaměti, pravidla pro směrování a data webu uložená v paměti. Obnoví se také index sdílených souborů."
+msgstr "Vymažte šablony z mezipaměti, pravidla směrování a data webu uložená v paměti. Obnoví se také sdílený index souborů."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:10
 msgid "Click \"Save\" to see your changes."
@@ -1589,7 +1589,7 @@ msgstr "Zavřít náhled"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_update.tpl:15
 msgid "Code is being updated. Background changes will resume when activation finishes."
-msgstr "Kód se právě aktualizuje. Změny na pozadí budou pokračovat, jakmile se aktualizace dokončí."
+msgstr "Kód se aktualizuje. Změny na pozadí budou pokračovat po dokončení aktivace."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_update.tpl:5
 msgid "Code updates need attention"
@@ -1851,7 +1851,7 @@ msgstr "Odpojit"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:42
 msgid "Disconnect peers with more than 250 open sockets across all sites on this node?"
-msgstr "Odpojit uzly, které mají více než 250 otevřených soketů napříč všemi lokalitami na tomto uzlu?"
+msgstr "Odpojit protistrany s více než 250 otevřenými sokety napříč všemi weby na tomto uzlu?"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:36
 msgid "Discover media"
@@ -2175,7 +2175,7 @@ msgstr "Najít stránku"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:30
 msgid "Find embedded page references and rebuild their refers connections. This runs in the background."
-msgstr "Vyhledá vložené odkazy na stránky a obnoví jejich propojení. Tento proces probíhá na pozadí."
+msgstr "Vyhledejte odkazy na vložené stránky a obnovte jejich propojení refers. Tento proces probíhá na pozadí."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:149
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:220
@@ -2217,7 +2217,7 @@ msgstr "Sledovat propojení a importovat vše (hluboká kopie)."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:35
 msgid "Free"
-msgstr "Zdarma"
+msgstr "Volná"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:7
 msgid "Function"
@@ -2252,7 +2252,7 @@ msgstr "Nadpis | velký nadpis"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:6
 msgid "Health, background work and services for"
-msgstr "Zdraví, podpůrné činnosti a služby pro"
+msgstr "Stav, úlohy na pozadí a služby pro"
 
 #: zotonic_mod_admin/priv/templates/_edit_medium_language.tpl:11
 msgid "Help"
@@ -2328,7 +2328,7 @@ msgstr "Import odstraněných zdrojů"
 #: zotonic_mod_admin/priv/templates/admin_imports.tpl:5
 #: zotonic_mod_admin/src/mod_admin.erl:538
 msgid "Imports"
-msgstr "Dovoz"
+msgstr "Importy"
 
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:78
 msgid "Indexed by search engines"
@@ -2798,7 +2798,7 @@ msgstr "Otevřít v nové kartě"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:57
 msgid "Open maintenance tools"
-msgstr "Nástroje pro správu Open"
+msgstr "Otevřít nástroje údržby"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:4
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:10
@@ -3035,7 +3035,7 @@ msgstr "Limit Ranch"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:6
 msgid "Rebuild derived data and maintain this site. Queued work can be followed on the Status page."
-msgstr "Obnovit odvozená data a spravovat tento web. Práce v pořadí lze sledovat na stránce Stav."
+msgstr "Obnovte odvozená data a proveďte údržbu tohoto webu. Úlohy ve frontě můžete sledovat na stránce Stav."
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:31
 msgid "Rebuild references"
@@ -3403,7 +3403,7 @@ msgstr "Zobrazují se stránky, které lze propojit pomocí predikátu <b>{predi
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:12
 msgid "Site caches"
-msgstr "Místní mezipaměti"
+msgstr "Mezipaměti webu"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:44
 msgid "Site datamodel"
@@ -3868,7 +3868,7 @@ msgstr "Tím se znovu spustí instalace schématu webu a web se zastaví a znovu
 #: zotonic_mod_admin/priv/templates/_admin_maintenance_panel.tpl:3
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:12
 msgid "This site"
-msgstr "Tato stránka"
+msgstr "Tento web"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:65
 msgid "Till"
@@ -15764,7 +15764,7 @@ msgstr "Zkontrolujte příchozí změny a nasaďte repozitář Git tohoto modulu
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:6
 msgid "Review incoming changes and deploy this site's code. Compilation and activation are coordinated across all sites on this node."
-msgstr "Zkontrolujte chystané změny a nasadte kód tohoto webu. Kompilace a aktivace probíhají koordinovaně napříč všemi weby na tomto uzlu."
+msgstr "Zkontrolujte příchozí změny a nasaďte kód tohoto webu. Kompilace a aktivace probíhají koordinovaně napříč všemi weby na tomto uzlu."
 
 #: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:5
 msgid "Review incoming changes before deploying the latest version."
@@ -15801,7 +15801,7 @@ msgstr "Náhled nasazení není k dispozici. Zkontrolujte repozitář a protokol
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:11
 msgid "The deployment preview shows the current revision and incoming commits. No checked-out files change until you confirm Deploy."
-msgstr "V náhledu nasazení se zobrazuje aktuální revize a připravované commity. Žádné vybraného soubory se nezmění, dokud nepotvrdíte nasazení."
+msgstr "Náhled nasazení zobrazuje aktuální revizi a příchozí commity. Žádné soubory v pracovní kopii se nezmění, dokud nepotvrdíte nasazení."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:53
 msgid "The local branch cannot be fast-forwarded to the remote version. Resolve the local commits before deploying."
@@ -15821,7 +15821,7 @@ msgstr "Tento token se používá k zabezpečení volání webhook API pro aktua
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:14
 msgid "To deploy updates for individual modules, open the"
-msgstr "Chcete-li nainstalovat aktualizace pro jednotlivé moduly, otevřete soubor"
+msgstr "Chcete-li nasadit aktualizace jednotlivých modulů, otevřete"
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:16
 msgid "To run the webhook update, configure your service to POST to the following URL:"

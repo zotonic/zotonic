@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-02 19:49\n"
+"PO-Revision-Date: 2026-11-02 21:24\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -1151,7 +1151,7 @@ msgstr "עותק שיישאר מחובר כך שניתן יהיה להביא ג�
 
 #: zotonic_mod_admin/priv/templates/_admin_status_update.tpl:9
 msgid "A deployment failed. Automatic updates and schema upgrades are waiting for a successful rebuild. Check the server log and retry the deployment or rebuild through Zotonic."
-msgstr ""
+msgstr "הפריסה נכשלה. עדכונים אוטומטיים ושדרוגי סכימה ממתינים לבנייה מחדש מוצלחת. בדוק את יומן השרת ונסה שוב לבצע את הפריסה או לבנות מחדש באמצעות Zotonic."
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:127
 msgid "A local copy, disconnected from the remote site."
@@ -1171,7 +1171,7 @@ msgstr "נמצאו בערך {n} פריטים."
 
 #: zotonic_mod_admin/src/mod_admin.erl:560
 msgid "Access Control"
-msgstr ""
+msgstr "בקרת גישה"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:18
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:62
@@ -1256,7 +1256,7 @@ msgstr "נוסף החיבור אל"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:53
 msgid "Additional module tools"
-msgstr ""
+msgstr "כלים נוספים של המודול"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:6
 msgid "Address"
@@ -1276,7 +1276,7 @@ msgstr "מִתקַדֵם"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:38
 msgid "Advanced repair"
-msgstr ""
+msgstr "תיקון מתקדם"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:2
 msgid "After the duplication you can edit the new page. The new page will be unpublished."
@@ -1313,7 +1313,7 @@ msgstr "המטמונים של כל האתרים נוקו."
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:2
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:37
 msgid "All sites on this node"
-msgstr ""
+msgstr "כל האתרים בצומת זה"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:7
 msgid "Allocated"
@@ -1366,7 +1366,7 @@ msgstr "של כל אחד"
 #: zotonic_mod_admin/priv/templates/_admin_status_update.tpl:11
 #: zotonic_mod_admin/priv/templates/_admin_status_update.tpl:16
 msgid "Applies to all sites on this node."
-msgstr ""
+msgstr "חל על כל האתרים בצומת זה."
 
 #: zotonic_mod_admin/priv/templates/_rsc_import_deleted_options.tpl:10
 msgid "Applies to the selected connection depth, including future updates. By default, manually deleted resources stay deleted; automatically removed dependent resources can be imported again."
@@ -1449,7 +1449,7 @@ msgstr "חזור"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:12
 msgid "Background work"
-msgstr ""
+msgstr "עבודת רקע"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_basics.tpl:4
 msgid "Basic"
@@ -1481,7 +1481,7 @@ msgstr "שמור במטמון"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:10
 msgid "Caches"
-msgstr ""
+msgstr "מטמון"
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:47
 msgid "Caches have been flushed."
@@ -1534,7 +1534,7 @@ msgstr "נקה"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:12
 msgid "Clear cached templates, dispatch rules and in-memory site data. The shared file index is also refreshed."
-msgstr ""
+msgstr "נקה תבניות שנשמרו במטמון, כללי ניתוב ונתוני אתר בזיכרון. גם אינדקס הקבצים המשותף מתרענן."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:10
 msgid "Click \"Save\" to see your changes."
@@ -1554,12 +1554,12 @@ msgstr "סגור תצוגה חיה"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:36
 msgid "Close all sockets from IP addresses with more than 250 open sockets. This can disconnect clients on other sites."
-msgstr ""
+msgstr "סגור את כל הסוקטים מכתובות IP עם יותר מ-250 סוקטים פתוחים. פעולה זו עלולה לנתק לקוחות באתרים אחרים."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:41
 #: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:42
 msgid "Close excess connections"
-msgstr ""
+msgstr "סגור חיבורים מיותרים"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:4
 msgid "Close panel"
@@ -1571,15 +1571,15 @@ msgstr "סגור תצוגה מקדימה"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_update.tpl:15
 msgid "Code is being updated. Background changes will resume when activation finishes."
-msgstr ""
+msgstr "הקוד נמצא בתהליך עדכון. השינויים ברקע יחודשו עם סיום ההפעלה."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_update.tpl:5
 msgid "Code updates need attention"
-msgstr ""
+msgstr "יש להקדיש תשומת לב לעדכוני הקוד"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:32
 msgid "Config directory"
-msgstr ""
+msgstr "ספריית התצורה"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:24
 msgid "Configured"
@@ -1634,7 +1634,7 @@ msgstr "מקור התוכן"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:28
 msgid "Content repair"
-msgstr ""
+msgstr "תיקון תוכן"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:24
 msgid "Content type"
@@ -1748,7 +1748,7 @@ msgstr "לוּחַ מַחווָנִים"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:30
 msgid "Data directory"
-msgstr ""
+msgstr "ספריית הנתונים"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:6
 msgid "Date range"
@@ -1833,7 +1833,7 @@ msgstr "ניתוק"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:42
 msgid "Disconnect peers with more than 250 open sockets across all sites on this node?"
-msgstr ""
+msgstr "לנתק עמיתים עם יותר מ-250 סוקטים פתוחים בסך הכול בכל האתרים בצומת זה?"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:36
 msgid "Discover media"
@@ -1979,7 +1979,7 @@ msgstr "תוכן משובץ"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:30
 msgid "Embedded-page references"
-msgstr ""
+msgstr "הפניות לדפים משובצים"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:33
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:34
@@ -1996,19 +1996,19 @@ msgstr "יש להזין כתובת URL או קוד הטמעה. התוכן ינו
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:37
 msgid "Erlang init files"
-msgstr ""
+msgstr "קובצי ההפעלה של Erlang"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:36
 msgid "Erlang installation root"
-msgstr ""
+msgstr "תיקיית השורש של ההתקנה של Erlang"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:2
 msgid "Erlang memory"
-msgstr ""
+msgstr "זיכרון Erlang"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:18
 msgid "Erlang/OTP"
-msgstr ""
+msgstr "Erlang/OTP"
 
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:195
 msgid "Error checking the website."
@@ -2054,11 +2054,11 @@ msgstr "קטגוריה מדויקת"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:36
 msgid "Excess connections"
-msgstr ""
+msgstr "חיבורים עודפים"
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:85
 msgid "Excess connections have been closed."
-msgstr ""
+msgstr "חיבורים עודפים נסגרו."
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:100
 msgid "Exclude category"
@@ -2108,7 +2108,7 @@ msgstr "גודל הקובץ"
 
 #: zotonic_mod_admin/priv/templates/admin_imports.tpl:14
 msgid "File to import"
-msgstr ""
+msgstr "קובץ לייבוא"
 
 #: zotonic_mod_admin/src/mod_admin.erl:935
 msgid "File uploaded to the drop folder, will be handled shortly."
@@ -2122,7 +2122,7 @@ msgstr "שם קובץ"
 
 #: zotonic_mod_admin/priv/templates/admin_imports.tpl:11
 msgid "Files are handled in the background by mailinglist recipient import and other modules watching the drop folder."
-msgstr ""
+msgstr "הקבצים מטופלים ברקע באמצעות ייבוא נמעני רשימת התפוצה ומודולים אחרים העוקבים אחר תיקיית ה-drop."
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:27
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:24
@@ -2157,7 +2157,7 @@ msgstr "מצא דף"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:30
 msgid "Find embedded page references and rebuild their refers connections. This runs in the background."
-msgstr ""
+msgstr "מצא הפניות לדפים משובצים ובנה מחדש את קשרי refers שלהם. פעולה זו מתבצעת ברקע."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:149
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:220
@@ -2190,7 +2190,7 @@ msgstr "שם פרטי"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:13
 msgid "Flush caches"
-msgstr ""
+msgstr "נקה את המטמון"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:145
 #: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:23
@@ -2199,7 +2199,7 @@ msgstr "עקוב אחר חיבורים וייבא הכל (העתקה עמוקה)
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:35
 msgid "Free"
-msgstr ""
+msgstr "פנוי"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:7
 msgid "Function"
@@ -2234,7 +2234,7 @@ msgstr "כותרת | כותרת גדולה"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:6
 msgid "Health, background work and services for"
-msgstr ""
+msgstr "מצב תקינות, עבודות רקע ושירותים עבור"
 
 #: zotonic_mod_admin/priv/templates/_edit_medium_language.tpl:11
 msgid "Help"
@@ -2250,7 +2250,7 @@ msgstr "הסתר דף מחיפושים (תלוי בשאילתת החיפוש)"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:34
 msgid "Home directory"
-msgstr ""
+msgstr "ספריית הבית"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:26
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:69
@@ -2266,7 +2266,7 @@ msgstr "כתובת ה - IP"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:4
 msgid "IP addresses have more than 250 open sockets."
-msgstr ""
+msgstr "כתובות IP עם יותר מ-250 סוקטים פתוחים."
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:269
 msgid "Id, newest first"
@@ -2295,7 +2295,7 @@ msgstr "ייבא רק חיבורים ישירים (העתק רדוד)."
 
 #: zotonic_mod_admin/src/mod_admin.erl:534
 msgid "Import tools"
-msgstr ""
+msgstr "כלי ייבוא"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:227
 msgid "Imported content"
@@ -2310,7 +2310,7 @@ msgstr "ייבוא משאבים שנמחקו"
 #: zotonic_mod_admin/priv/templates/admin_imports.tpl:5
 #: zotonic_mod_admin/src/mod_admin.erl:538
 msgid "Imports"
-msgstr ""
+msgstr "יבוא"
 
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:78
 msgid "Indexed by search engines"
@@ -2318,7 +2318,7 @@ msgstr "הוכנס לאינדקס על ידי מנועי החיפוש"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:42
 msgid "Individual modules can be reinstalled from the Modules list."
-msgstr ""
+msgstr "ניתן להתקין מחדש מודולים בודדים מרשימת המודולים."
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:133
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:21
@@ -2336,15 +2336,15 @@ msgstr "בלוק מוטבע"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:26
 msgid "Installation"
-msgstr ""
+msgstr "התקנה"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:44
 msgid "Installation details are available to system administrators."
-msgstr ""
+msgstr "פרטי ההתקנה זמינים למנהלי המערכת."
 
 #: zotonic_mod_admin/src/mod_admin.erl:568
 msgid "Integrations"
-msgstr ""
+msgstr "שילובים"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:77
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:74
@@ -2422,7 +2422,7 @@ msgstr "להתנתק"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:31
 msgid "Log directory"
-msgstr ""
+msgstr "ספריית היומנים"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:3
 msgid "MIME type"
@@ -2443,7 +2443,7 @@ msgstr "רָאשִׁי"
 #: zotonic_mod_admin/src/mod_admin.erl:584
 #: zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:32
 msgid "Maintenance"
-msgstr ""
+msgstr "תחזוקה"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:232
 msgid "Make"
@@ -2654,7 +2654,7 @@ msgstr "חיבורי רשת"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:40
 msgid "Network listeners and connections"
-msgstr ""
+msgstr "מאזינים ברשת וחיבורים"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:84
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:12
@@ -2680,7 +2680,7 @@ msgstr "הבא בקטגוריה:"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:11
 msgid "No IP addresses have more than 250 open sockets."
-msgstr ""
+msgstr "אין כתובות IP עם יותר מ-250 סוקטים פתוחים."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_depictions.tpl:21
 msgid "No connected images."
@@ -2760,7 +2760,7 @@ msgstr "לא פועל"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:26
 msgid "OS memory"
-msgstr ""
+msgstr "זיכרון מערכת ההפעלה"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:129
 msgid "Ongoing"
@@ -2768,11 +2768,11 @@ msgstr "מתמשך"
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:87
 msgid "Only system administrators can close node connections."
-msgstr ""
+msgstr "רק מנהלי מערכת יכולים לסגור חיבורי צמתים."
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:42
 msgid "Open Modules list"
-msgstr ""
+msgstr "פתח את רשימת המודולים"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:13
 msgid "Open in new tab"
@@ -2780,7 +2780,7 @@ msgstr "פתח בכרטיסייה חדשה"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:57
 msgid "Open maintenance tools"
-msgstr ""
+msgstr "פתח כלי תחזוקה"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:4
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:10
@@ -2892,7 +2892,7 @@ msgstr "מיקוד"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:19
 msgid "PostgreSQL"
-msgstr ""
+msgstr "PostgreSQL"
 
 #: zotonic_mod_admin/priv/templates/_admin_footer.tpl:4
 #: zotonic_site_status/priv/templates/error.400.tpl:6
@@ -2996,7 +2996,7 @@ msgstr "פורסם בתאריך, הישן ביותר ראשון"
 
 #: zotonic_mod_admin/src/mod_admin.erl:530
 msgid "Queries"
-msgstr ""
+msgstr "שאילתות"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:24
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:19
@@ -3009,7 +3009,7 @@ msgstr "תוצאות החיפוש"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:21
 msgid "Queue every page for search indexing. Large sites can take a long time to finish."
-msgstr ""
+msgstr "הוסף כל דף לתור האינדוקס של החיפוש. באתרים גדולים התהליך עלול להימשך זמן רב."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:14
 msgid "Ranch limit"
@@ -3017,11 +3017,11 @@ msgstr "מגבלת Ranch"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:6
 msgid "Rebuild derived data and maintain this site. Queued work can be followed on the Status page."
-msgstr ""
+msgstr "בנה מחדש נתונים נגזרים ותחזק אתר זה. ניתן לעקוב אחר המשימות שבתור בעמוד ״סטטוס״."
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:31
 msgid "Rebuild references"
-msgstr ""
+msgstr "בנה מחדש הפניות"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:22
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:169
@@ -3118,7 +3118,7 @@ msgstr "שנה את גודל התצוגה החיה"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:46
 msgid "Resources"
-msgstr ""
+msgstr "משאבים"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_meta_features.tpl:9
 msgid "Resources in the <i>meta</i> category can have 'features': certain resource properties that decide what to show or hide on certain pages in the admin. If this box is empty, no features are enabled for this meta-resource."
@@ -3130,7 +3130,7 @@ msgstr "מאחזר סטטוס ..."
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:17
 msgid "Revision"
-msgstr ""
+msgstr "גרסה"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:22
 msgid "Rotated 180 degrees"
@@ -3146,15 +3146,15 @@ msgstr "מסובב ב-90 מעלות"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:51
 msgid "Run the Zotonic core datamodel installation again for this site's database."
-msgstr ""
+msgstr "הפעל שוב את ההתקנה של מודל הנתונים המרכזי של Zotonic עבור מסד הנתונים של אתר זה."
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:54
 msgid "Run the Zotonic core datamodel installation again for this site's database?"
-msgstr ""
+msgstr "להריץ שוב את ההתקנה של מודל הנתונים המרכזי של Zotonic עבור מסד הנתונים של אתר זה?"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:44
 msgid "Run the site's schema installation again. The site will stop and restart."
-msgstr ""
+msgstr "הפעל שוב את התקנת הסכימה של האתר. האתר יופסק ויפעל מחדש."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:69
 msgid "Runner availability and ImageMagick versions are cached for up to one minute. Failed probes are retried after five seconds. Refresh this page to check again."
@@ -3226,7 +3226,7 @@ msgstr "תוזמנה משימה ברקע לבדיקת כל קשרי refers."
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:24
 msgid "Scheduled tasks"
-msgstr ""
+msgstr "משימות מתוזמנות"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:294
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:17
@@ -3236,15 +3236,15 @@ msgstr "חיפוש"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:16
 msgid "Search indexing"
-msgstr ""
+msgstr "אינדוקס לחיפוש"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:3
 msgid "Search indexing runs separately from the scheduled task queue."
-msgstr ""
+msgstr "אינדוקס החיפוש מתבצע בנפרד מתור המשימות המתוזמנות."
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:21
 msgid "Search indices"
-msgstr ""
+msgstr "אינדקסים לחיפוש"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:55
 msgid "Search indices rebuilt."
@@ -3252,7 +3252,7 @@ msgstr "אינדקסי החיפוש נבנו מחדש."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:5
 msgid "Search maintenance"
-msgstr ""
+msgstr "תחזוקת החיפוש"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:5
 msgid "Search other media"
@@ -3273,7 +3273,7 @@ msgstr "חיפוש..."
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:33
 msgid "Security directory"
-msgstr ""
+msgstr "ספריית האבטחה"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:7
 msgid "See also: <a href=\"https://zotonic.com/en/stable/ref/configuration/zotonic-configuration.html#the-erlang-config-file\">The erlang.config file</a>"
@@ -3330,7 +3330,7 @@ msgstr "שֵׁרוּת"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:37
 msgid "Services"
-msgstr ""
+msgstr "שירותים"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_sidebar_parts.tpl:32
 msgid "Settings &amp; more"
@@ -3385,23 +3385,23 @@ msgstr "הצגת דפים שאליהם אתה יכול להתחבר באמצעו
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:12
 msgid "Site caches"
-msgstr ""
+msgstr "מטמון האתר"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:44
 msgid "Site datamodel"
-msgstr ""
+msgstr "מודל הנתונים של האתר"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:29
 msgid "Site files directory"
-msgstr ""
+msgstr "ספריית הקבצים של האתר"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:13
 msgid "Software"
-msgstr ""
+msgstr "תוכנה"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:6
 msgid "Software versions and installation paths. Runtime and host information is shared by all sites on this node."
-msgstr ""
+msgstr "גרסאות תוכנה ונתיבי התקנה. כל האתרים בצומת זה חולקים מידע על סביבת ההרצה ועל המארח."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:15
 msgid "Some disks are almost full."
@@ -3609,20 +3609,20 @@ msgstr "ניהול המערכת"
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:5
 #: zotonic_mod_admin/src/mod_admin.erl:590
 msgid "System information"
-msgstr ""
+msgstr "מידע על המערכת"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:2
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:5
 msgid "System status"
-msgstr ""
+msgstr "מצב המערכת"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:30
 msgid "Task details are available to system administrators."
-msgstr ""
+msgstr "פרטי המשימה זמינים למנהלי המערכת."
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:28
 msgid "Tasks with errors retry up to 10 times before being dropped."
-msgstr ""
+msgstr "משימות שכוללות שגיאות יבוצעו מחדש עד 10 פעמים לפני שיימחקו."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:17
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:18
@@ -3718,7 +3718,7 @@ msgstr "המערכת הקצתה יותר מהסף שצוין של זיכרון �
 
 #: zotonic_mod_admin/priv/templates/_admin_status_update.tpl:7
 msgid "The update coordinator restarted. Restart the Zotonic node before deploying again."
-msgstr ""
+msgstr "מתאם העדכונים הופעל מחדש. יש להפעיל מחדש את הצומת של Zotonic לפני ביצוע הפריסה שוב."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers_list.tpl:43
 msgid "There are no incoming connections."
@@ -3845,12 +3845,12 @@ msgstr "משאב זה נוצר על ידי המודול"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:47
 msgid "This runs the site's schema installation again and stops and restarts the site. Continue?"
-msgstr ""
+msgstr "פעולה זו תפעיל מחדש את התקנת הסכמה של האתר, ותעצור ותפעיל מחדש את האתר. להמשיך?"
 
 #: zotonic_mod_admin/priv/templates/_admin_maintenance_panel.tpl:3
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:12
 msgid "This site"
-msgstr ""
+msgstr "אתר זה"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:65
 msgid "Till"
@@ -4040,11 +4040,11 @@ msgstr "העלה קובץ"
 
 #: zotonic_mod_admin/priv/templates/admin_imports.tpl:6
 msgid "Upload files for background processing or use a module's import tool."
-msgstr ""
+msgstr "העלה קבצים לעיבוד ברקע או השתמש בכלי הייבוא של המודול."
 
 #: zotonic_mod_admin/priv/templates/admin_imports.tpl:9
 msgid "Upload to drop folder"
-msgstr ""
+msgstr "העלה לתיקיית ה-drop"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:135
 #: zotonic_mod_fileuploader/src/mod_fileuploader.erl:147
@@ -4072,7 +4072,7 @@ msgstr "השתמש בכותרת תוכן הבסיס לשם התצוגה של א�
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:40
 msgid "Use these operations to repair installation data, not for routine maintenance."
-msgstr ""
+msgstr "יש להשתמש בפעולות אלה לתיקון נתוני ההתקנה, ולא לצורך תחזוקה שוטפת."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:8
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:34
@@ -4168,7 +4168,7 @@ msgstr "אתר או הטמעה"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:35
 msgid "Work directory"
-msgstr ""
+msgstr "ספריית העבודה"
 
 #: zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:54
@@ -4248,11 +4248,11 @@ msgstr "שאילתת החיפוש שלך אינה חוקית. אנא תקן זא
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:16
 msgid "Zotonic"
-msgstr ""
+msgstr "Zotonic"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:51
 msgid "Zotonic datamodel"
-msgstr ""
+msgstr "מודל הנתונים של Zotonic"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:30
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:27
@@ -4360,7 +4360,7 @@ msgstr "שֵׁם"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:7
 msgid "open sockets"
-msgstr ""
+msgstr "סוקטים פתוחים"
 
 #: zotonic_mod_admin/priv/templates/_admin_view_types.tpl:3
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:104
@@ -4376,7 +4376,7 @@ msgstr "בלוק עמוד"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:2
 msgid "pages waiting to be indexed"
-msgstr ""
+msgstr "דפים הממתינים לאינדוקס"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:28
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:10
@@ -4827,7 +4827,7 @@ msgstr "טען מחדש את תצורת האתר"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:13
 msgid "Reload the site configuration files. Some changes require a restart."
-msgstr ""
+msgstr "טען מחדש את קבצי התצורה של האתר. שינויים מסוימים מחייבים הפעלה מחדש."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:65
 msgid "Restart Firefox. This separate import can be needed when Firefox does not use the operating system trust store."
@@ -12202,11 +12202,11 @@ msgstr "רישום"
 
 #: zotonic_mod_logging/src/mod_logging.erl:350
 msgid "Logs"
-msgstr ""
+msgstr "יומנים"
 
 #: zotonic_mod_logging/src/mod_logging.erl:353
 msgid "Message Log"
-msgstr ""
+msgstr "יומן הודעות"
 
 #: zotonic_mod_logging/priv/templates/admin_log_base.tpl:11
 msgid "Message log"
@@ -14258,11 +14258,11 @@ msgstr "תַפרִיט"
 
 #: zotonic_mod_menu/priv/templates/admin_edit.menu.tpl:11
 msgid "Menu maintenance"
-msgstr ""
+msgstr "תחזוקת תפריטים"
 
 #: zotonic_mod_menu/priv/templates/_admin_menu_maintenance.tpl:3
 msgid "Rebuild menu connections"
-msgstr ""
+msgstr "בנה מחדש את הקישורים בתפריט"
 
 #: zotonic_mod_menu/src/mod_menu.erl:253
 msgid "Sorry, can’t copy that page."
@@ -14996,7 +14996,7 @@ msgstr "תקן קטעי וידאו משובצים"
 
 #: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:2
 msgid "Media maintenance"
-msgstr ""
+msgstr "תחזוקת מדיה"
 
 #: zotonic_mod_oembed/src/mod_oembed.erl:458
 msgid "No embedded videos found which need fixing."
@@ -15050,7 +15050,7 @@ msgstr "לוח הבקרה של אפליקציית Embedly שלך"
 
 #: zotonic_mod_ratelimit/priv/templates/_admin_authentication_maintenance.tpl:2
 msgid "Authentication maintenance"
-msgstr ""
+msgstr "תחזוקת אימות"
 
 #: zotonic_mod_ratelimit/priv/templates/_admin_authentication_maintenance.tpl:7
 msgid "Reset rate limit counters"
@@ -15091,7 +15091,7 @@ msgstr "בנה מחדש היבטי חיפוש"
 
 #: zotonic_mod_search/priv/templates/_admin_maintenance_search.tpl:2
 msgid "Rebuild the faceted search table by reindexing all pages."
-msgstr ""
+msgstr "יש לבנות מחדש את טבלת החיפוש לפי פילוחים באמצעות אינדוקס מחדש של כל הדפים."
 
 #: zotonic_mod_search/src/mod_search.erl:199
 msgid "Rebuilding the faceted search table."
@@ -15099,7 +15099,7 @@ msgstr "בנייה מחדש של טבלת חיפוש ההיבטים."
 
 #: zotonic_mod_search/priv/templates/_admin_maintenance_search.tpl:2
 msgid "Search facets"
-msgstr ""
+msgstr "פילוחי חיפוש"
 
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:152
 msgid "Add Plausible tracking script"
@@ -15688,7 +15688,7 @@ msgstr "הגרסה העדכנית ביותר נפרסת..."
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:5
 #: zotonic_mod_site_update/src/mod_site_update.erl:128
 msgid "Deployment"
-msgstr ""
+msgstr "פריסה"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:262
 msgid "Deployment completed."
@@ -15716,7 +15716,7 @@ msgstr "שינויים נכנסים"
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:14
 msgid "Modules list"
-msgstr ""
+msgstr "רשימת מודולים"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:24
 msgid "No deployable version control repository was found."
@@ -15744,7 +15744,7 @@ msgstr "בדוק את השינויים הנכנסים ופרוס את מאגר �
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:6
 msgid "Review incoming changes and deploy this site's code. Compilation and activation are coordinated across all sites on this node."
-msgstr ""
+msgstr "בדוק את השינויים הנכנסים ופרוס את הקוד של אתר זה. ההידור וההפעלה מתואמים בין כל האתרים בצומת זה."
 
 #: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:5
 msgid "Review incoming changes before deploying the latest version."
@@ -15761,7 +15761,7 @@ msgstr "הצגת 100 ה-commits הנכנסים האחרונים."
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:9
 msgid "Site deployment"
-msgstr ""
+msgstr "פריסת האתר"
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:4
 msgid "Site update API token"
@@ -15781,7 +15781,7 @@ msgstr "תצוגה מקדימה של הפריסה אינה זמינה. בדוק 
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:11
 msgid "The deployment preview shows the current revision and incoming commits. No checked-out files change until you confirm Deploy."
-msgstr ""
+msgstr "התצוגה המקדימה של הפריסה מציגה את הגרסה הנוכחית ואת הקומיטים הנכנסים. קבצים בעותק העבודה לא ישתנו עד שתאשר ״פרוס״."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:53
 msgid "The local branch cannot be fast-forwarded to the remote version. Resolve the local commits before deploying."
@@ -15801,7 +15801,7 @@ msgstr "אסימון זה משמש לאבטחת קריאת ה- API של webhook 
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:14
 msgid "To deploy updates for individual modules, open the"
-msgstr ""
+msgstr "כדי לפרוס עדכונים למודולים בודדים, פתח את"
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:16
 msgid "To run the webhook update, configure your service to POST to the following URL:"
@@ -15809,7 +15809,7 @@ msgstr "כדי להריץ את עדכון ה- webhook, הגדר את השירו�
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:16
 msgid "View system status"
-msgstr ""
+msgstr "הצג את מצב המערכת"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:20
 #: zotonic_mod_site_update/src/mod_site_update.erl:221

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-02 19:50\n"
+"PO-Revision-Date: 2026-11-02 21:24\n"
 "Last-Translator: \n"
 "Language-Team: Romanian\n"
 "MIME-Version: 1.0\n"
@@ -1449,7 +1449,7 @@ msgstr "Înapoi"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:12
 msgid "Background work"
-msgstr "Lucrări preliminare"
+msgstr "Activități în fundal"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_basics.tpl:4
 msgid "Basic"
@@ -1534,7 +1534,7 @@ msgstr "Goliți"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:12
 msgid "Clear cached templates, dispatch rules and in-memory site data. The shared file index is also refreshed."
-msgstr "Șterge șabloanele din cache, regulile de redirecționare și datele site-ului stocate în memorie. De asemenea, se actualizează indexul fișierelor partajate."
+msgstr "Ștergeți șabloanele din cache, regulile de rutare și datele site-ului stocate în memorie. Indexul comun al fișierelor este, de asemenea, actualizat."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:10
 msgid "Click \"Save\" to see your changes."
@@ -2157,7 +2157,7 @@ msgstr "Găsiți o pagină"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:30
 msgid "Find embedded page references and rebuild their refers connections. This runs in the background."
-msgstr "Găsește referințele la pagini încorporate și restabilește legăturile către acestea. Acest proces se desfășoară în fundal."
+msgstr "Găsiți referințele la pagini încorporate și reconstruiți conexiunile lor refers. Acest proces se desfășoară în fundal."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:149
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:220
@@ -2190,7 +2190,7 @@ msgstr "Prenume"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:13
 msgid "Flush caches"
-msgstr "Goliți cache-urile"
+msgstr "Golește cache-urile"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:145
 #: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:23
@@ -2199,7 +2199,7 @@ msgstr "Urmați legăturile și importați totul (copie în profunzime)."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:35
 msgid "Free"
-msgstr "Gratuit"
+msgstr "Liberă"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:7
 msgid "Function"
@@ -2234,7 +2234,7 @@ msgstr "Titlu | un titlu mare"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:6
 msgid "Health, background work and services for"
-msgstr "Sănătate, activități de pregătire și servicii pentru"
+msgstr "Starea de funcționare, activitățile în fundal și serviciile pentru"
 
 #: zotonic_mod_admin/priv/templates/_edit_medium_language.tpl:11
 msgid "Help"
@@ -2266,7 +2266,7 @@ msgstr "Adresă IP"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:4
 msgid "IP addresses have more than 250 open sockets."
-msgstr "Adresele IP au peste 250 de socket-uri deschise."
+msgstr "adrese IP au peste 250 de socket-uri deschise."
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:269
 msgid "Id, newest first"
@@ -2780,7 +2780,7 @@ msgstr "Deschideți într-o filă nouă"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:57
 msgid "Open maintenance tools"
-msgstr "Instrumente de întreținere deschise"
+msgstr "Deschide instrumentele de întreținere"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:4
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview_button.tpl:10
@@ -2996,7 +2996,7 @@ msgstr "Data publicării, cele mai vechi întâi"
 
 #: zotonic_mod_admin/src/mod_admin.erl:530
 msgid "Queries"
-msgstr "Întrebări"
+msgstr "Interogări"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:24
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:19
@@ -3009,7 +3009,7 @@ msgstr "Rezultatele interogării"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:21
 msgid "Queue every page for search indexing. Large sites can take a long time to finish."
-msgstr "Adaugă fiecare pagină în coada de așteptare pentru indexare în motorul de căutare. În cazul site-urilor mari, procesul poate dura mult timp."
+msgstr "Adăugați fiecare pagină în coada de indexare pentru căutare. În cazul site-urilor mari, procesul poate dura mult timp."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:14
 msgid "Ranch limit"
@@ -3021,7 +3021,7 @@ msgstr "Reconstruirea datelor derivate și întreținerea acestui site. Activit�
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:31
 msgid "Rebuild references"
-msgstr "Reconstruirea referințelor"
+msgstr "Reconstruiește referințele"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:22
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:169
@@ -3130,7 +3130,7 @@ msgstr "Se preia starea..."
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:17
 msgid "Revision"
-msgstr "Revizuire"
+msgstr "Revizie"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:22
 msgid "Rotated 180 degrees"
@@ -4044,7 +4044,7 @@ msgstr "Încărcați fișierele pentru procesare în fundal sau utilizați instr
 
 #: zotonic_mod_admin/priv/templates/admin_imports.tpl:9
 msgid "Upload to drop folder"
-msgstr "Încărcați în folderul de destinație"
+msgstr "Încarcă în folderul de depunere"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:135
 #: zotonic_mod_fileuploader/src/mod_fileuploader.erl:147
@@ -4360,7 +4360,7 @@ msgstr "nume"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:7
 msgid "open sockets"
-msgstr "socluri deschise"
+msgstr "socket-uri deschise"
 
 #: zotonic_mod_admin/priv/templates/_admin_view_types.tpl:3
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:104
@@ -4827,7 +4827,7 @@ msgstr "Reîncărcați configurarea site-ului"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:13
 msgid "Reload the site configuration files. Some changes require a restart."
-msgstr "Reîncarcă fișierele de configurare ale site-ului. Anumite modificări necesită o repornire."
+msgstr "Reîncărcați fișierele de configurare ale site-ului. Anumite modificări necesită o repornire."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_self_signed_trust.tpl:65
 msgid "Restart Firefox. This separate import can be needed when Firefox does not use the operating system trust store."
@@ -14999,7 +14999,7 @@ msgstr "Remediați videoclipurile încorporate"
 
 #: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:2
 msgid "Media maintenance"
-msgstr "Întreținerea echipamentelor media"
+msgstr "Întreținerea conținutului media"
 
 #: zotonic_mod_oembed/src/mod_oembed.erl:458
 msgid "No embedded videos found which need fixing."
@@ -15784,7 +15784,7 @@ msgstr "Previzualizarea implementării nu este disponibilă. Verificați depozit
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:11
 msgid "The deployment preview shows the current revision and incoming commits. No checked-out files change until you confirm Deploy."
-msgstr "Previzualizarea implementării afișează revizia curentă și commit-urile viitoare. Niciun fișier extras nu se modifică până când nu confirmați implementarea."
+msgstr "Previzualizarea implementării afișează revizia curentă și commit-urile primite. Niciun fișier din copia de lucru nu se modifică până când nu confirmați «Implementează»."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:53
 msgid "The local branch cannot be fast-forwarded to the remote version. Resolve the local commits before deploying."
@@ -15804,7 +15804,7 @@ msgstr "Acest token securizează apelul API webhook folosit pentru actualizarea 
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:14
 msgid "To deploy updates for individual modules, open the"
-msgstr "Pentru a instala actualizările pentru fiecare modul în parte, deschideți fișierul"
+msgstr "Pentru a implementa actualizări pentru module individuale, deschideți"
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:16
 msgid "To run the webhook update, configure your service to POST to the following URL:"
@@ -15812,7 +15812,7 @@ msgstr "Pentru actualizarea prin webhook, configurați serviciul să trimită o 
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:16
 msgid "View system status"
-msgstr "Vizualizare stare sistem"
+msgstr "Vizualizează starea sistemului"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:20
 #: zotonic_mod_site_update/src/mod_site_update.erl:221
