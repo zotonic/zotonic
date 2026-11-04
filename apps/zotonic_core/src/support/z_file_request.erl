@@ -35,6 +35,7 @@
     content_stream/2,
     content_stream/3,
     content_file/2,
+    cache_file/1,
     is_visible/2,
 
     %% Exported for cowmachine streaming
@@ -109,12 +110,35 @@ content_file(#z_file_info{encodings=Encs}, Context) ->
     {identity, Parts} = proplists:lookup(identity, Encs),
     content_file_part(Parts, Context).
 
+%% Completed entries move from a short-lived process into the cache index. The
+%% stable key closes that handoff race and keeps a process-owned cache reference.
+-spec cache_file(Key) -> {ok, {file, non_neg_integer(), file:filename_all()}} | {error, term()}
+    when Key :: term().
+cache_file(#part_cache{cache_key=undefined,cache_pid=Pid}) -> cache_file(Pid);
+cache_file(#part_cache{cache_key=Key}) -> cache_file(Key);
+cache_file(Pid) when is_pid(Pid) -> filezcache:lookup_file(Pid, [lock]);
+cache_file(Key) ->
+    case filezcache:locate_monitor(Key) of
+        {ok, {file, _, _}} = Found -> Found;
+        {ok, {pid, Pid}} ->
+            case filezcache:lookup_file(Pid, [lock]) of
+                {ok, {file, _, _}} = Found -> Found;
+                {error, enoent} ->
+                    %% The entry may have exited after registering its file.
+                    case filezcache:locate_monitor(Key) of
+                        {ok, {file, _, _}} = Found -> Found;
+                        _ -> {error, enoent}
+                    end
+            end;
+        {error, _} = Error -> Error
+    end.
+
 content_file_part([#part_missing{}], _Context) ->
     {error, enoent};
 content_file_part([#part_file{filepath=File}], _Context) ->
     {ok, File};
-content_file_part([#part_cache{cache_pid=Pid}], _Context) ->
-    case filezcache:lookup_file(Pid) of
+content_file_part([#part_cache{} = Part], _Context) ->
+    case cache_file(Part) of
         {ok, {file, _Size, File}} ->
             {ok, File};
         {error, _} = Error ->
@@ -149,12 +173,16 @@ content_stream_parts([Part], FzLookup) ->
 content_stream_parts(Parts, FzLookup) ->
     {stream, stream_many_parts(Parts, FzLookup)}.
 
+cache_lookup(Part, lookup_file) -> cache_file(Part);
+cache_lookup(#part_cache{cache_key=undefined,cache_pid=Pid}, lookup) -> filezcache:lookup(Pid);
+cache_lookup(#part_cache{cache_key=Key}, lookup) -> filezcache:lookup(Key).
+
 stream_single_part(#part_data{data=Data}, _FzLookup) ->
     Data;
 stream_single_part(#part_file{filepath=File, size=Size}, _FzLookup) ->
     {file, Size, File};
-stream_single_part(#part_cache{cache_pid=Pid}, FzLookup) ->
-    case filezcache:FzLookup(Pid) of
+stream_single_part(#part_cache{} = Part, FzLookup) ->
+    case cache_lookup(Part, FzLookup) of
         {ok, Data} ->
             Data;
         Other ->
@@ -174,8 +202,8 @@ stream_many_parts([#part_data{data=Data}|Parts], FzLookup) ->
     {Data, fun() -> ?MODULE:stream_many_parts(Parts, FzLookup) end};
 stream_many_parts([#part_file{filepath=File, size=Size}|Parts], FzLookup) ->
     {{file, Size, File}, fun() -> ?MODULE:stream_many_parts(Parts, FzLookup) end};
-stream_many_parts([#part_cache{cache_pid=Pid}|Parts], FzLookup) ->
-    case filezcache:FzLookup(Pid) of
+stream_many_parts([#part_cache{} = Part|Parts], FzLookup) ->
+    case cache_lookup(Part, FzLookup) of
         {ok, {file, _Size, _File} = FileRef} ->
             {FileRef, fun() -> ?MODULE:stream_many_parts(Parts, FzLookup) end};
         {ok, {device, _DevicePid} = Device} ->

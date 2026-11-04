@@ -602,8 +602,8 @@ gzip_compress_1(M, [#part_data{data=B}|Ps], Z, Acc) ->
 gzip_compress_1(Minify, [#part_file{filepath=Filename}|Ps], Z, Acc) ->
     Acc1 = compress_file(Minify, Filename, Z, Acc),
     gzip_compress_1(Minify, Ps, Z, Acc1);
-gzip_compress_1(Minify, [#part_cache{cache_pid=Pid}|Ps], Z, Acc) ->
-    {ok, {file, _, Filename}} = filezcache:lookup_file(Pid),
+gzip_compress_1(Minify, [#part_cache{} = Part|Ps], Z, Acc) ->
+    {ok, {file, _, Filename}} = z_file_request:cache_file(Part),
     Acc1 = compress_file(Minify, Filename, Z, Acc),
     gzip_compress_1(Minify, Ps, Z, Acc1);
 gzip_compress_1(M, [#part_missing{}|Ps], Z, Acc) ->

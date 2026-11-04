@@ -18,11 +18,111 @@
 %% limitations under the License.
 
 -module(z_media_cafs_migrate).
--export([run/3, migrate/2, cleanup/3]).
+-export([run/3, migrate/2, cleanup/3, queue_cleanup/3, cleanup_preview/4, queue_preview_cleanup/4,
+    requested/4, promote_requested/4, is_owned/2, promote_file/4]).
 
 -include_lib("zotonic.hrl").
 -include_lib("zotonic_file.hrl").
 -include_lib("kernel/include/file.hrl").
+
+%% @doc Opportunistically promote an owned original already requested by a client.
+%% Never start a download here, and never delay the response for hashing. Overload
+%% or a failed download leaves the legacy path intact for a later request.
+-spec requested(Filename, Source, Medium, Context) -> ok when
+    Filename :: binary(), Source :: {file, file:filename_all()} | {cache, term()} | {data, binary()},
+    Medium :: map(), Context :: z:context().
+requested(Filename, Source, Medium, Context) ->
+    case m_cafs:is_enabled(Context) andalso owned_key(Filename, Medium) =/= undefined of
+        true ->
+            case m_cafs:lookup(Filename, Context) of
+                {error, enoent} ->
+                    case z_sidejob:start(?MODULE, promote_requested, [Filename, Source, Medium], Context) of
+                        {ok, _} -> ok;
+                        {error, overload} -> ok
+                    end;
+                {ok, _} -> ok
+            end;
+        false -> ok
+    end.
+
+%% @doc Sidejob entry point. Serialize requests for the same logical file and
+%% recheck the medium under its row lock before attaching the staged bytes.
+-spec promote_requested(Filename, Source, Medium, Context) -> ok when
+    Filename :: binary(), Source :: {file, file:filename_all()} | {cache, term()} | {data, binary()},
+    Medium :: map(), Context :: z:context().
+promote_requested(Filename, Source, Medium, Context) ->
+    Name = {n, l, {?MODULE, requested, z_context:site(Context), Filename}},
+    Registered = try gproc:reg(Name) catch error:badarg -> false end,
+    case Registered of
+        true ->
+            try
+                case {owned_key(Filename, Medium), m_cafs:lookup(Filename, Context)} of
+                    {{Key, Owned}, {error, enoent}} ->
+                        promote_requested_source(Filename, Source, Key, Owned, Medium, Context);
+                    _ -> ok
+                end
+            after gproc:unreg(Name) end;
+        false -> ok
+    end.
+
+-spec is_owned(Filename, Medium) -> boolean() when Filename :: binary(), Medium :: map().
+is_owned(Filename, Medium) -> owned_key(Filename, Medium) =/= undefined.
+
+%% @doc Promote available bytes only if the medium still owns the same source.
+-spec promote_file(Filename, File, Medium, Context) -> {ok, binary()} | {error, term()} when
+    Filename :: binary(), File :: file:filename_all(), Medium :: map(), Context :: z:context().
+promote_file(Filename, File, #{<<"id">> := Id} = Medium, Context) ->
+    case owned_key(Filename, Medium) of
+        {Key, Owned} ->
+            case attach_stage(m_cafs:stage_original(File, Context), Id, Key, Owned, Filename, Medium, Context) of
+                {attached, Hash} ->
+                    z_depcache:flush({medium, Id}, Context),
+                    z_depcache:flush({medium, Filename}, Context),
+                    {ok, Hash};
+                ok -> {error, stale};
+                {error, _} = Error -> Error
+            end;
+        undefined -> {error, unowned}
+    end.
+
+owned_key(Filename, #{<<"filename">> := Filename, <<"is_deletable_file">> := true}) ->
+    {<<"filename">>, <<"is_deletable_file">>};
+owned_key(Filename, #{<<"preview_filename">> := Filename, <<"is_deletable_preview">> := true}) ->
+    {<<"preview_filename">>, <<"is_deletable_preview">>};
+owned_key(_, _) -> undefined.
+
+promote_requested_source(Filename, {cache, CacheKey}, Key, Owned, Medium, Context) ->
+    %% Waiting for a stalled download must not consume a sidejob indefinitely.
+    %% The cache lock is process-owned and is released even on timeout or death.
+    {ok, Timer} = timer:exit_after(timer:minutes(5), shutdown),
+    Result = try z_file_request:cache_file(CacheKey)
+        catch exit:_ -> {error, unavailable}
+        after timer:cancel(Timer) end,
+    case Result of
+        {ok, {file, _, File}} ->
+            promote_requested_source(Filename, {file, File}, Key, Owned, Medium, Context);
+        {error, _} -> ok
+    end;
+promote_requested_source(Filename, {data, Data}, Key, Owned, Medium, Context) ->
+    File = z_tempfile:new(),
+    try
+        ok = file:write_file(File, Data),
+        promote_requested_source(Filename, {file, File}, Key, Owned, Medium, Context)
+    after file:delete(File) end;
+promote_requested_source(Filename, {file, File}, Key, Owned, #{<<"id">> := Id} = Medium, Context) ->
+    Result = attach_stage(m_cafs:stage_original(File, Context), Id, Key, Owned, Filename, Medium, Context),
+    case Result of
+        {attached, Hash} ->
+            z_depcache:flush({medium, Id}, Context),
+            z_depcache:flush({medium, Filename}, Context),
+            queue_cleanup(Filename, Hash, Context),
+            ok;
+        ok -> ok;
+        {error, Reason} ->
+            ?LOG_WARNING(#{text => <<"Requested media CAFS promotion deferred">>,
+                in => zotonic_core, filename => Filename, result => error, reason => Reason}),
+            ok
+    end.
 
 %% Fixed upper ID bounds the scan. Each record has its own durable retry task,
 %% so one unavailable backend/file cannot prevent progress on other records.
@@ -72,7 +172,7 @@ stage(Id, Key, Owned, Filename, Medium, Context) ->
     File = z_media_archive:abspath(Filename, Context),
     Result = case file:read_link_info(File) of
         {ok, #file_info{type=regular}} ->
-            attach_stage(m_cafs:stage_file(File, Context), Id, Key, Owned, Filename, Medium, Context);
+            attach_stage(m_cafs:stage_original(File, Context), Id, Key, Owned, Filename, Medium, Context);
         {error, enoent} ->
             %% Retargeting a remote registry entry and attaching its logical
             %% filename must commit together: the backend has unique locations.
@@ -93,6 +193,7 @@ stage(Id, Key, Owned, Filename, Medium, Context) ->
     case Result of
         {attached, Hash} ->
             z_depcache:flush({medium, Id}, Context),
+            z_depcache:flush({medium, Filename}, Context),
             queue_cleanup(Filename, Hash, Context);
         {rollback, Reason} -> {error, Reason};
         Other -> Other
@@ -117,7 +218,7 @@ attach_stage(Result, Id, Key, Owned, Filename, Medium, Context) ->
                             case unchanged(Key, Owned, Filename, Medium, Current)
                             of
                                 true ->
-                                    ok = m_cafs:attach(Filename, Staged, Ctx),
+                                    ok = m_cafs:attach_original(Filename, Staged, Ctx),
                                     case Key of
                                         <<"filename">> ->
                                             {ok, _} = z_db:update(medium, Id, #{<<"digest">> => Hash}, Ctx);
@@ -157,8 +258,11 @@ stage_remote(<<"filename">>, Filename, Medium, Context) ->
     end;
 stage_remote(_, _, _, _) -> skipped.
 
+%% @doc Queue idempotent legacy cleanup after publishing an original mapping.
+-spec queue_cleanup(Filename, Hash, Context) -> ok | {error, term()} when
+    Filename :: binary(), Hash :: binary(), Context :: z:context().
 queue_cleanup(Filename, Hash, Context) ->
-    case z_pivot_rsc:insert_task_after(0, ?MODULE, cleanup, z_crypto:hex_sha2(Filename),
+    case z_pivot_rsc:insert_task_after_transaction(0, ?MODULE, cleanup, z_crypto:hex_sha2(Filename),
             [Filename, Hash], Context) of
         {ok, _} -> ok;
         {error, _} = Error -> Error
@@ -172,13 +276,47 @@ cleanup(Filename, Hash, Context) ->
     Result = z_db:transaction(fun(Ctx) ->
         State = z_db:q1("select state from cafs where hash=$1 for update", [Hash], Ctx),
         case {State, m_cafs:lookup(Filename, Ctx)} of
-            {<<"ready">>, {ok, Hash}} -> cleanup_file(Filename, Hash, Ctx);
+            {<<"ready">>, {ok, Hash}} ->
+                %% A shared logical path may also be referenced as an unowned
+                %% file. Such references must keep their original storage.
+                case z_db:q1("select exists(select 1 from medium where
+                        (filename=$1 and not is_deletable_file) or
+                        (preview_filename=$1 and not is_deletable_preview))", [Filename], Ctx) of
+                    true -> ok;
+                    false -> cleanup_file(Filename, Hash, Ctx)
+                end;
             _ -> ok
         end
     end, Context),
     case Result of
         ok -> ok;
         _ -> {delay, 600, [Filename, Hash]}
+    end.
+
+%% @doc Retire a promoted generated preview after its derivative is published.
+-spec queue_preview_cleanup(Path, Hash, Adopt, Context) -> ok when
+    Path :: binary(), Hash :: binary(), Adopt :: boolean(), Context :: z:context().
+queue_preview_cleanup(Path, Hash, Adopt, Context) ->
+    {ok, _} = z_pivot_rsc:insert_task_after_transaction(0, ?MODULE, cleanup_preview,
+        z_crypto:hex_sha2(Path), [Path, Hash, Adopt], Context),
+    ok.
+
+-spec cleanup_preview(Path, Hash, Adopt, Context) -> ok | {delay, pos_integer(), list()} when
+    Path :: binary(), Hash :: binary(), Adopt :: boolean(), Context :: z:context().
+cleanup_preview(Path, Hash, Adopt, Context) ->
+    Result = z_db:transaction(fun(Ctx) ->
+        case z_db:q1("select state from cafs where hash=$1 for update", [Hash], Ctx) of
+            <<"ready">> ->
+                case z_db:q1("select 1 from cafs_derivative where output_hash=$1 limit 1", [Hash], Ctx) of
+                    1 -> cleanup_path(<<"preview/", Path/binary>>, Hash, Adopt, Ctx);
+                    undefined -> ok
+                end;
+            _ -> ok
+        end
+    end, Context),
+    case Result of
+        ok -> ok;
+        _ -> {delay, 600, [Path, Hash, Adopt]}
     end.
 
 cleanup_file(Filename, Hash, Context) ->
@@ -188,19 +326,39 @@ cleanup_file(Filename, Hash, Context) ->
     end.
 
 cleanup_legacy(Filename, Hash, Context) ->
-    Source = <<"archive/", Filename/binary>>,
+    cleanup_path(<<"archive/", Filename/binary>>, Hash, Context).
+
+cleanup_path(Source, Hash, Context) -> cleanup_path(Source, Hash, true, Context).
+
+cleanup_path(Source, Hash, Adopt, Context) ->
     Target = m_cafs:path(Hash),
     Local = filelib:is_regular(z_path:files_subdir(Target, Context)),
-    Available = Local orelse remote(cafs_adopt, Source, Target, Context) =:= ok,
+    %% With different legacy bytes, only verify the canonical remote object;
+    %% never retarget the legacy object under another content hash.
+    AdoptSource = case Adopt of true -> Source; false -> Target end,
+    Adoption = remote(cafs_adopt, AdoptSource, Target, Context),
+    Available = case Adoption of
+        ok ->
+            z_db:q("update cafs set upload_pending=false where hash=$1", [Hash], Context),
+            true;
+        {error, enoent} when Local ->
+            z_db:q("update cafs set upload_pending=true where hash=$1", [Hash], Context),
+            true;
+        _ -> false
+    end,
     case Available andalso remote(cafs_retire, Source, Target, Context) =:= ok of
         true ->
-            %% Stop cached legacy readers after publishing the canonical mapping.
-            lists:foreach(fun(Pid) -> catch z_file_entry:stop(Pid) end,
-                m_cafs:readers(Source, Context)),
-            case file:delete(z_media_archive:abspath(Filename, Context)) of
-                ok -> ok;
-                {error, enoent} -> ok;
-                {error, _} = Error -> Error
+            %% Do not stop a reader or unlink its file while its response may
+            %% still be opening it. Retry after legacy entries have gone idle.
+            case [Pid || Pid <- m_cafs:readers(Source, Context),
+                    Pid =/= self(), is_process_alive(Pid)] of
+                [] ->
+                    case file:delete(z_path:files_subdir(Source, Context)) of
+                        ok -> ok;
+                        {error, enoent} -> ok;
+                        {error, _} = Error -> Error
+                    end;
+                _ -> {error, readers}
             end;
         false -> {error, pending}
     end.
@@ -210,6 +368,7 @@ remote(Action, Source, Target, Context) ->
         undefined ->
             case m_config:get_boolean(site, filestore_used, Context) of
                 false when Action =:= cafs_retire -> ok;
+                false when Action =:= cafs_adopt -> {error, enoent};
                 _ -> {error, unavailable}
             end;
         Result -> Result

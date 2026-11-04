@@ -92,9 +92,37 @@ it never revives an object that an in-flight remote delete could remove. Pending
 collection and failed deletion are rescheduled so they do not starve other objects.
 A filename already mapped
 to different bytes is a conflict. `clone_filename/3` shares an existing mapping;
-`promote/3` maps an available legacy file and returns `{ok, Hash}`.
+`promote/3` maps an available legacy file and returns `{ok, Hash}`. It adopts an
+existing remote registry entry before allowing a canonical upload, and queues
+retryable cleanup of redundant legacy paths. `stage_original/2` and
+`attach_original/3` provide that same handoff for maintenance migration: newly
+staged originals are not uploadable until remote adoption has been checked.
+Busy or unavailable backends defer adoption and cleanup; they do not trigger a
+second upload. Remote retirement follows the backend retention policy. Cleanup
+is queued in the publication transaction and defers local unlinking while legacy
+readers remain. With local retention disabled, the backend queues adopted objects
+for local offloading without another upload; active pins and readers defer it.
+
+Requests for owned non-CAFS originals schedule background promotion through
+`z_media_cafs_migrate`. Local bytes or the completed, locked download cache are
+used without starting another download or delaying the response for hashing.
+Attachment rechecks the medium under its row lock and records the original digest;
+replaced/deleted media and unowned files are not attached. Failed or overloaded
+attempts leave the legacy file usable, and successful attempts queue durable cleanup.
 
 ## Shared previews and retention
+
+On a miss for a revision-bearing URL, a current source, mediaclass and edit
+revision may reuse the legacy URL for the exact same rendering operations. Only
+`editrev` is removed; dimensions, operation order, class checksum and output
+extension stay unchanged, and the legacy signature is reconstructed. Existing
+local or remote preview bytes are promoted without running the resizer when the
+source hash is available. Unknown remote originals are not downloaded for this.
+Background cleanup adopts the remote preview and removes redundant legacy copies;
+new local outputs are uploaded only after remote absence is confirmed. Registered
+current URLs resolve directly to their CAFS output without legacy path probes or
+usage writes, while checking the current source, edits, class and renderer version.
+
 
 `derivative/5` keys generation by source hash, ordered effective operations, and
 renderer version. Its zero-argument generator returns a staged output from
@@ -149,7 +177,7 @@ and durable task inputs. `queue_uploads/1` submits a bounded batch to filestore.
 Neither function discovers or downloads legacy files.
 """).
 
--export([is_enabled/1, install/1, schema/0, stage_file/2, stage_remote/4, attach/3, lookup/2,
+-export([delete_uploaded_file/2, is_enabled/1, install/1, schema/0, stage_file/2, stage_original/2, stage_remote/4, attach/3, attach_original/3, lookup/2,
     clone_filename/3, promote/3, stage_medium/2, attach_medium/2,
     release/2, pin/3, unpin/3, with_local_file/3, with_path_pin/3,
     path/1, path_hash/1, aliases/2, retire_filename/2, maintenance/1,
@@ -298,7 +326,7 @@ path_hash(_) -> undefined.
 stage_file(File, Context) ->
     case is_enabled(Context) of
         false -> {error, nodb};
-        true -> stage_file_db(File, Context)
+        true -> stage_file_db(File, true, Context)
     end.
 
 %% @doc Stage a known remote original without fetching its bytes. The backend
@@ -311,7 +339,7 @@ stage_remote(Filename, Hash, Size, Context) ->
     transaction(fun(Ctx) ->
         z_db:q("insert into cafs (hash,size) values ($1,$2) on conflict do nothing",
             [Hash, Size], Ctx),
-        case stage_state(Hash, Ctx) of
+        case stage_state(Hash, false, Ctx) of
             <<"ready">> ->
                 case z_notifier:first(#filestore{action=cafs_adopt,
                         path= <<"archive/", Filename/binary>>, target_path=path(Hash)}, Ctx) of
@@ -328,28 +356,38 @@ stage_remote(Filename, Hash, Size, Context) ->
         end
     end, Context).
 
-stage_file_db(File, Context) ->
+%% @doc Stage a legacy original without making it eligible for upload yet.
+%% attach_original/3 first tries to adopt its existing remote location.
+-spec stage_original(File, Context) -> {ok, map()} | {error, term()} when
+    File :: file:filename_all(), Context :: z:context().
+stage_original(File, Context) ->
+    case is_enabled(Context) of
+        true -> stage_file_db(File, false, Context);
+        false -> {error, nodb}
+    end.
+
+stage_file_db(File, UploadPending, Context) ->
     case z_crypto:hex_sha2_file(File) of
-        {ok, Hash} -> stage_hashed(File, Hash, Context);
+        {ok, Hash} -> stage_hashed(File, Hash, UploadPending, Context);
         {error, _} = Error -> Error
     end.
 
-stage_hashed(File, Hash, Context) ->
+stage_hashed(File, Hash, UploadPending, Context) ->
     Target = z_path:files_subdir(path(Hash), Context),
     Token = z_ids:id(),
     Tmp = <<(z_convert:to_binary(Target))/binary, ".", Token/binary, ".staging">>,
-    ok = z_filelib:ensure_dir(Tmp),
     try
+        ok = z_filelib:ensure_dir(Tmp),
         {ok, Size} = file:copy(File, Tmp),
         %% Detect a changing input; never publish bytes under the wrong hash.
         {ok, Hash} = z_crypto:hex_sha2_file(Tmp),
         transaction(fun(Ctx) ->
             z_db:q("
-                insert into cafs (hash, size)
-                values ($1,$2)
+                insert into cafs (hash, size, upload_pending)
+                values ($1,$2,$3)
                 on conflict do nothing",
-                [Hash, Size], Ctx),
-            case stage_state(Hash, Ctx) of
+                [Hash, Size, UploadPending], Ctx),
+            case stage_state(Hash, UploadPending, Ctx) of
                 <<"ready">> ->
                     case filelib:is_regular(Target) of
                         true -> ok;
@@ -363,6 +401,9 @@ stage_hashed(File, Hash, Context) ->
                 _ -> {error, deleting}
             end
         end, Context)
+    catch
+        error:{badmatch, {error, Reason}} -> {error, Reason};
+        error:{badmatch, {ok, _OtherHash}} -> {error, source_changed}
     after
         file:delete(Tmp)
     end.
@@ -370,7 +411,7 @@ stage_hashed(File, Hash, Context) ->
 %% A deletion can be cancelled only before the filestore dispatcher fences it.
 %% Both cancellation and dispatch lock the same filestore row. Once dispatched,
 %% keep the tombstone until remote absence is confirmed, even after a timeout.
-stage_state(Hash, Context) ->
+stage_state(Hash, UploadPending, Context) ->
     case lock(Hash, Context) of
         <<"deleting">> ->
             case cancel_pending_delete(path(Hash), Context) of
@@ -378,10 +419,10 @@ stage_state(Hash, Context) ->
                     z_db:q("
                         update cafs
                         set state = 'ready',
-                            upload_pending = true,
+                            upload_pending = $2,
                             gc_after = now()+interval '5 weeks'
                         where hash=$1",
-                        [Hash], Context),
+                        [Hash, UploadPending], Context),
                     <<"ready">>;
                 false ->
                     <<"deleting">>
@@ -461,20 +502,52 @@ clone_filename(Source, Destination, Context) ->
         end
     end, Context).
 
+%% @doc Attach an original and adopt its remote object in the same transaction.
+%% Busy/unavailable backends defer adoption to the durable cleanup task; only
+%% confirmed absence (or no backend) allows a new canonical upload.
+-spec attach_original(Filename, Staged, Context) -> ok | {error, term()} when
+    Filename :: binary(), Staged :: map(), Context :: z:context().
+attach_original(Filename, #{hash := Hash} = Staged, Context) ->
+    transaction(fun(Ctx) ->
+        case attach(Filename, Staged, Ctx) of
+            ok ->
+                Result = z_notifier:first(#filestore{action=cafs_adopt,
+                    path= <<"archive/", Filename/binary>>, target_path=path(Hash)}, Ctx),
+                Pending = Result =:= {error, enoent} orelse
+                    (Result =:= undefined andalso not m_config:get_boolean(site, filestore_used, Ctx)),
+                z_db:q("update cafs set upload_pending=$2 where hash=$1", [Hash, Pending], Ctx),
+                ok = z_media_cafs_migrate:queue_cleanup(Filename, Hash, Ctx),
+                ok;
+            Error -> Error
+        end
+    end, Context).
+
 -spec promote(Filename, File, Context) -> {ok, binary()} | {error, term()}
     when Filename :: binary(), File :: file:filename_all(), Context :: z:context().
 promote(Filename, File, Context) ->
-    case lookup(Filename, Context) of
+    Result = case lookup(Filename, Context) of
         {ok, _} = Found -> Found;
         {error, enoent} ->
-            case stage_file(File, Context) of
+            case stage_original(File, Context) of
                 {ok, #{hash := Hash} = Staged} ->
-                    case attach(Filename, Staged, Context) of
-                        ok -> {ok, Hash};
-                        Error -> Error
+                    try
+                        case attach_original(Filename, Staged, Context) of
+                            ok -> {ok, Hash};
+                            Error -> Error
+                        end
+                    after
+                        release([{Filename, Staged}], Context)
                     end;
                 Error -> Error
             end
+    end,
+    case Result of
+        {ok, PromotedHash} ->
+            case z_media_cafs_migrate:queue_cleanup(Filename, PromotedHash, Context) of
+                ok -> Result;
+                Error1 -> Error1
+            end;
+        Error1 -> Error1
     end.
 
 -spec stage_medium(Medium, Context) -> {ok, [{binary(), map()}]} | {error, term()}
@@ -835,7 +908,7 @@ generate_derivative(Hash, Ops, Version, Token, Generate, Context) ->
     Renewer = spawn_link(fun() -> renew_claim(Parent, Args, Context) end),
     try
         case Generate() of
-            {ok, #{hash := Output, token := Pin}} ->
+            {ok, #{hash := Output, token := Pin} = Staged} ->
                 transaction(fun(Ctx) ->
                     case z_db:q1("
                         update cafs_derivative
@@ -849,7 +922,13 @@ generate_derivative(Hash, Ops, Version, Token, Generate, Context) ->
                         returning output_hash",
                         Args ++ [Output], Ctx)
                     of
-                        Output -> unpin(Output, Pin, Ctx), {ok, Output};
+                        Output ->
+                            case maps:get(preview_cleanup, Staged, undefined) of
+                                undefined -> ok;
+                                Path -> ok = z_media_cafs_migrate:queue_preview_cleanup(Path, Output, true, Ctx)
+                            end,
+                            unpin(Output, Pin, Ctx),
+                            {ok, Output};
                         undefined -> {error, stale_claim}
                     end
                 end, Context);
@@ -897,13 +976,49 @@ transaction(Fun, Context) ->
         Result -> Result
     end.
 
+%% @doc Remove a local CAFS copy after the backend confirmed a healthy remote
+%% object. The uploader must hold its path pin. Other pins/readers postpone the
+%% removal, and the row lock excludes new pins until the unlink is complete.
+-spec delete_uploaded_file(Path, Context) -> ok | {error, term()} when
+    Path :: binary(), Context :: z:context().
+delete_uploaded_file(Path, Context) ->
+    case path_hash(Path) of
+        undefined -> {error, unsupported};
+        Hash -> transaction(fun(Ctx) ->
+            case lock(Hash,Ctx) of
+                <<"ready">> ->
+                    Pins = z_db:q1("select count(*) from cafs_pin where hash=$1 and expires>now()",[Hash],Ctx),
+                    case Pins =< 1 andalso readers(Path,Ctx) =:= [] of
+                        true ->
+                            case file:delete(z_path:files_subdir(Path,Ctx)) of
+                                ok -> ok;
+                                {error,enoent} -> ok;
+                                Error -> Error
+                            end;
+                        false -> {error,busy}
+                    end;
+                _ -> {error,busy}
+            end
+        end,Context)
+    end.
+
 %% File-entry processes subscribe to physical objects, including shared variants.
 %% gproc removes subscriptions automatically when a file entry exits.
 -spec track(Path, Context) -> ok when Path :: binary(), Context :: z:context().
 track(Path, Context) ->
-    gproc:ensure_reg({p, l, {?MODULE, z_context:site(Context), tracking_key(Path)}},
-        z_context:get(file_entry_owner, Context, self())),
-    ok.
+    Register = fun() ->
+        gproc:ensure_reg({p, l, {?MODULE, z_context:site(Context), tracking_key(Path)}},
+            z_context:get(file_entry_owner, Context, self())),
+        ok
+    end,
+    case path_hash(Path) of
+        undefined -> Register();
+        Hash ->
+            %% Serialize registration with collection and local offloading.
+            %% After this lock is released, the registered reader protects the
+            %% file until its resolver exits, including before opening it.
+            transaction(fun(Ctx) -> lock(Hash, Ctx), Register() end, Context)
+    end.
 
 -spec readers(Path, Context) -> [pid()] when Path :: binary(), Context :: z:context().
 readers(Path, Context) ->

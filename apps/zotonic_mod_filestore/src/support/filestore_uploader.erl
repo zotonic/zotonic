@@ -155,24 +155,40 @@ try_upload(MaybeEntry, QueueId, Path, MInfo, Context) ->
                     {error, no_credentials}
             end;
         false ->
-            case m_filestore:is_download_ok(MaybeEntry) of
-                true ->
-                    % Already uploaded - we can safely delete the file.
-                    case filestore_config:is_local_keep(Context) of
-                        true ->
-                            ok;
-                        false ->
-                            AbsPath = z_path:abspath(Path, Context),
-                            pause_file_entry(Path, Context),
-                            file:delete(AbsPath),
-                            stale_file_entry(Path, Context)
-                    end;
-                false ->
-                    ok
-            end,
-            m_filestore:dequeue(QueueId, Context),
-            ok
+            case offload_existing(MaybeEntry, Path, Context) of
+                ok -> m_filestore:dequeue(QueueId,Context), ok;
+                {error,_} -> retry_no_backoff
+            end
     end.
+
+%% Retargeted CAFS objects already exist remotely. Do not unlink their local
+%% bytes while another pin is hashing/converting them or a file entry uses them.
+offload_existing(#{is_move_to_local := true}, _Path, _Context) -> {error,busy};
+offload_existing(Entry, Path, Context) ->
+    case filestore_config:is_read_only(Context) of
+        true -> {error,read_only};
+        false -> offload_existing_writable(Entry,Path,Context)
+    end.
+
+offload_existing_writable(Entry, Path, Context) ->
+    case m_filestore:is_download_ok(Entry) andalso not filestore_config:is_local_keep(Context) of
+        false -> ok;
+        true ->
+            case m_cafs:path_hash(Path) of
+                undefined ->
+                    AbsPath = z_path:abspath(Path,Context),
+                    pause_file_entry(Path,Context),
+                    file:delete(AbsPath),
+                    stale_file_entry(Path,Context),
+                    ok;
+                _ ->
+                    case m_cafs:delete_uploaded_file(Path,Context) of
+                        ok -> m_filestore:mark_remote(Path,Context);
+                        Error -> Error
+                    end
+            end
+    end.
+
 
 handle_upload(Path, Mime, Cred, Context) ->
     case filestore_config:is_read_only(Context) of

@@ -20,7 +20,7 @@
 
 -module(z_cafs_preview).
 -export([install/1, schema/0, fingerprint/2, prepare/5, bind/5,
-    lookup/2, expired/2, maintenance/1, grace_days/1, purge_batch/2]).
+    lookup/2, lookup_current/2, renderer_version/1, expired/2, maintenance/1, grace_days/1, purge_batch/2, legacy_path/3]).
 
 -include_lib("zotonic.hrl").
 
@@ -75,6 +75,44 @@ fingerprint(Id, Context) ->
     Settings = z_notifier:foldl(#media_preview_revision{id=Id}, [], Context),
     digest(term_to_binary(lists:sort(Settings), [deterministic])).
 
+%% @doc Find the pre-editrev URL for exactly the same rendering operations.
+%% Validate the signature and current source/class/revision first. Never strip
+%% edit operations or substitute the current checksum for an obsolete class.
+-spec legacy_path(Path, Medium, Context) -> {ok, binary()} | {error, enoent} when
+    Path :: binary(), Medium :: map(), Context :: z:context().
+legacy_path(Path, #{<<"id">> := Id}, Context) ->
+    case z_media_tag:url2props(Path, Context) of
+        {ok, {Filename, Filters, _Checksum, Props}} when is_list(Props) ->
+            Revision = proplists:get_value(editrev, Filters),
+            {Class, Sum} = proplists:get_value(mediaclass, Filters, {undefined, undefined}),
+            Usage = #{<<"rsc_id">> => Id, <<"filename">> => z_convert:to_binary(Filename),
+                <<"edit_revision">> => Revision, <<"mediaclass">> => Class,
+                <<"mediaclass_checksum">> => Sum},
+            case Revision =/= undefined andalso is_current(Usage, Context) of
+                true -> legacy_path_1(Filename, Props, filename:extension(Path), Context);
+                false -> {error, enoent}
+            end;
+        _ -> {error, enoent}
+    end;
+legacy_path(_, _, _) -> {error, enoent}.
+
+legacy_path_1(Filename, Props, Extension, Context) ->
+    LegacyProps = re:replace(Props, "\\(editrev-[^)]*\\)", <<>>, [{return, binary}]),
+    %% Old class-only URLs used the checksum-bearing mediaclass shorthand.
+    Suffix = case LegacyProps of
+        <<"()(mediaclass-", Class/binary>> ->
+            case binary:match(Class, <<"(">>) of
+                nomatch -> <<"(mediaclass-", Class/binary>>;
+                _ -> legacy_signed_props(Filename, LegacyProps, Extension, Context)
+            end;
+        _ -> legacy_signed_props(Filename, LegacyProps, Extension, Context)
+    end,
+    {ok, iolist_to_binary([Filename, Suffix, Extension])}.
+
+legacy_signed_props(Filename, Props, Extension, Context) ->
+    Checksum = z_crypto:checksum([Filename, Props, Extension], Context),
+    iolist_to_binary([Props, $(, Checksum, $)]).
+
 -spec grace_days(Context) -> pos_integer() when Context :: z:context().
 grace_days(Context) ->
     case catch z_convert:to_integer(m_config:get_value(site, cafs_preview_retention_days, 90, Context)) of
@@ -119,6 +157,39 @@ bind(Key, Hash, Operations, Version, Context) ->
                 where request_key=$1", [Key,Hash,Operations,Version], Context),
             ok
     end.
+
+%% @doc Resolve an already bound current URL without rewriting usage metadata.
+%% Revalidate the source, edits and class; renderer changes must take the normal
+%% derivative path. Obsolete URLs still use lookup/2 and its retention checks.
+-spec lookup_current(Path, Context) -> {ok, binary()} | {error, enoent | renderer_changed} when
+    Path :: binary(), Context :: z:context().
+lookup_current(Path, Context) ->
+    case z_db:qmap_row("select u.*, c.hash as output_hash from cafs_preview_usage u
+        left join cafs_derivative d using (source_hash,operations,renderer_version)
+        left join cafs c on c.hash=d.output_hash and c.state='ready'
+        where u.request_key=$1", [digest(Path)], Context) of
+        {ok, Usage} ->
+            case is_current(Usage, Context) of
+                true -> lookup_current_output(Usage, Context);
+                false -> {error, enoent}
+            end;
+        _ -> {error, enoent}
+    end.
+
+lookup_current_output(#{<<"renderer_version">> := undefined}, _Context) ->
+    {error, enoent};
+lookup_current_output(#{<<"renderer_version">> := Version,
+        <<"output_hash">> := Hash, <<"obsolete_since">> := Obsolete}, Context) ->
+    case Version =:= term_to_binary(renderer_version(Context)) of
+        false -> {error, renderer_changed};
+        true when is_binary(Hash), Obsolete =:= undefined -> {ok, Hash};
+        true -> {error, enoent}
+    end.
+
+-spec renderer_version(Context) -> tuple() when Context :: z:context().
+renderer_version(Context) ->
+    {1, z_media_imagemagick:selected(), z_config:get(default_colorspace, "sRGB"),
+        m_config:get_value(site, cafs_renderer_version, <<"1">>, Context)}.
 
 %% Allows an old, still-retained URL to use its existing output even when the old
 %% mediaclass checksum is no longer present in ETS. It cannot generate new bytes.

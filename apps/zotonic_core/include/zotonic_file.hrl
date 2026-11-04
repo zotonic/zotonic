@@ -91,6 +91,7 @@
         modified,               % modification time for this entry
         cache_pid,              % pid of cache entry
         cache_monitor,          % monitor of cache entry
+        cache_key,              % stable key after the download process exits
         size,
         mime                    % optional mime type
     }).

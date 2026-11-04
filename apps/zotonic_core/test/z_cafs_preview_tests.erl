@@ -190,3 +190,102 @@ obsolete(Path,C) -> z_db:q1("select obsolete_since from cafs_preview_usage where
 age_usage(Path,C) -> z_db:q("update cafs_preview_usage set obsolete_since=now()-interval '91 days' where path=$1",[Path],C).
 age_derivatives(Hash,C) -> z_db:q("update cafs_derivative set created=now()-interval '91 days' where source_hash=$1",[Hash],C).
 derivative_count(Hash,C) -> z_db:q1("select count(*) from cafs_derivative where source_hash=$1",[Hash],C).
+
+legacy_reuse_test_() -> {timeout, 60, fun legacy_reuse/0}.
+legacy_reuse() ->
+    C = context(),
+    WasUsed = m_config:get_value(site,filestore_used,C),
+    ok = m_config:set_value(site,filestore_used,false,C),
+    File = filename:join(code:priv_dir(zotonic_site_testsandbox), "files/archive/koe.jpg"),
+    {ok, Data} = file:read_file(File),
+    {ok, Id} = m_media:insert_file(#upload{filename= <<"legacy-reuse.jpg">>, data=Data}, C),
+    Medium = m_media:get(Id, C),
+    #{<<"filename">> := Name, <<"digest">> := Hash} = Medium,
+    %% Signed width/edit operations and the old class-only shorthand both reuse
+    %% existing bytes, without a converter or a new CAFS derivative.
+    Options = [[{width,47},{crop,center}], [{mediaclass,<<"admin-list-overview">>}]],
+    try
+        lists:foreach(fun(Opts) ->
+            Path = image_path(Id, Opts, C),
+            {ok, Legacy} = z_cafs_preview:legacy_path(Path, Medium, C),
+            {Kind, Props} = z_media_tag:props2url(Opts, C),
+            Ext = filename:extension(Path),
+            Expected = case Kind of
+                no_checksum -> iolist_to_binary([Name,Props,Ext]);
+                checksum -> iolist_to_binary([Name,Props,$(,z_crypto:checksum([Name,Props,Ext],C),$),Ext])
+            end,
+            ?assertEqual(Expected, Legacy),
+            LegacyFile = filename:join(z_path:media_preview(C), Legacy),
+            ok = z_filelib:ensure_dir(LegacyFile),
+            ok = file:write_file(LegacyFile, Data),
+            Before = derivative_count(Hash, C),
+            try
+                Promoted = preview(Path, C),
+                ?assertNotEqual(z_convert:to_binary(LegacyFile), z_convert:to_binary(Promoted)),
+                ?assertEqual({ok, Data}, file:read_file(Promoted)),
+                ?assertEqual(Before+1, derivative_count(Hash, C)),
+                {ok, Output} = z_cafs_preview:lookup_current(Path, C),
+                Checked = z_db:q1("select checked_at from cafs_preview_usage where path=$1", [Path], C),
+                ?assertMatch({delay,600,_}, z_media_cafs_migrate:cleanup_preview(Legacy, Output, true, C)),
+                ?assert(filelib:is_regular(LegacyFile)),
+                lists:foreach(fun z_file_entry:force_stale/1,
+                    m_cafs:readers(<<"preview/",Legacy/binary>>,C)),
+                ?assertEqual(Promoted, preview(Path, C)),
+                ok = z_media_cafs_migrate:cleanup_preview(Legacy, Output, true, C),
+                ?assertNot(filelib:is_regular(LegacyFile)),
+                %% Force a cold file-entry resolution: no metadata rewrite or
+                %% legacy file is required once the output has been bound.
+                _ = z_file_request:force_stale(Path, C),
+                ?assertEqual(Promoted, preview(Path, C)),
+                ?assertEqual(Checked, z_db:q1("select checked_at from cafs_preview_usage where path=$1", [Path], C)),
+                ?assertEqual(undefined, obsolete(Legacy, C)),
+                ?assertEqual(1, z_db:q1("select count(*) from cafs_preview_usage where path=$1", [Legacy], C))
+            after file:delete(LegacyFile) end
+        end, Options),
+        %% Renderer changes bypass the direct hit even while the old output exists.
+        CurrentPath = image_path(Id, [{width,47},{crop,center}], C),
+        OldVersion = m_config:get_value(site, cafs_renderer_version, C),
+        try
+            ok = m_config:set_value(site, cafs_renderer_version, <<"test-new-renderer">>, C),
+            ?assertEqual({error,renderer_changed}, z_cafs_preview:lookup_current(CurrentPath, C)),
+            %% A collected output must not hide a renderer mismatch and allow
+            %% old legacy bytes to be imported under the new renderer version.
+            CheckedRollback = z_db:transaction(fun(Ctx) ->
+                z_db:q("delete from cafs_derivative where source_hash=$1", [Hash], Ctx),
+                ?assertEqual({error,renderer_changed}, z_cafs_preview:lookup_current(CurrentPath, Ctx)),
+                throw({rollback,checked})
+            end, C),
+            ?assertEqual({rollback,checked}, CheckedRollback)
+        after m_config:set_value(site, cafs_renderer_version, OldVersion, C) end,
+        Path1 = image_path(Id, [{width,49}], C),
+        ?assertEqual({error,enoent}, z_cafs_preview:legacy_path(
+            binary:replace(Path1, <<"49">>, <<"50">>), Medium, C)),
+        %% Even a correctly signed stale revision must not be reused.
+        {checksum, StaleProps} = z_media_tag:props2url([{width,49},{editrev,binary:copy(<<"0">>,64)}], C),
+        StalePath = iolist_to_binary([Name,StaleProps,$(,
+            z_crypto:checksum([Name,StaleProps,<<".jpg">>],C),$),<<".jpg">>]),
+        ?assertEqual({error,enoent}, z_cafs_preview:legacy_path(StalePath, Medium, C))
+    after
+        m_config:set_value(site,filestore_used,WasUsed,C),
+        m_rsc:delete(Id, C)
+    end.
+
+unowned_legacy_test_() -> {timeout,60,fun unowned_legacy/0}.
+unowned_legacy() ->
+    C = context(),
+    Input = filename:join(code:priv_dir(zotonic_site_testsandbox), "files/archive/koe.jpg"),
+    {ok, Data} = file:read_file(Input),
+    {ok, Id} = m_media:insert_file(#upload{filename= <<"unowned.jpg">>,data=Data}, C),
+    Name = <<"unowned/", (z_ids:id())/binary, ".jpg">>,
+    Local = z_media_archive:abspath(Name,C),
+    ok = z_filelib:ensure_dir(Local),
+    ok = file:write_file(Local,Data),
+    try
+        {ok,_} = z_db:update(medium,Id,#{filename=>Name,digest=>undefined,is_deletable_file=>false},C),
+        z_depcache:flush(Id,C),
+        Path = image_path(Id,[{width,37}],C),
+        _ = preview(Path,C),
+        ?assertEqual({error,enoent},m_cafs:lookup(Name,C)),
+        ?assert(filelib:is_regular(Local)),
+        file:delete(filename:join(z_path:media_preview(C),Path))
+    after m_rsc:delete(Id,C),file:delete(Local) end.

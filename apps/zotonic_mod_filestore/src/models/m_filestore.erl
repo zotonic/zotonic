@@ -132,6 +132,7 @@ Available Model API Paths
     fetch_move_to_local/1,
     fetch_move_to_local/2,
     purge_move_to_local/3,
+    mark_remote/2,
 
     store/6,
     lookup/2,
@@ -526,13 +527,24 @@ cafs_migrate(Action, Path, Target, Context) ->
                         {ok, Entries} ->
                             Source = lists:search(fun(#{path := P}) -> P =:= Path end, Entries),
                             Dest = lists:search(fun(#{path := P}) -> P =:= Target end, Entries),
-                            cafs_migrate_1(Action, Source, Dest, Target, Context);
+                            case cafs_migrate_1(Action, Source, Dest, Target, Context) of
+                                ok when Action =:= cafs_adopt ->
+                                    %% The existing-object uploader branch only
+                                    %% offloads the local copy; it does not PUT.
+                                    case not filestore_config:is_local_keep(Context)
+                                            andalso filelib:is_regular(z_path:files_subdir(Target,Context)) of
+                                        true -> _ = queue(Target,#{},Context), ok;
+                                        false -> ok
+                                    end;
+                                Result -> Result
+                            end;
                         {error, _} = Error -> Error
                     end
             end
     end.
 
 cafs_migrate_1(cafs_retire, false, _Dest, _Target, _Context) -> ok;
+cafs_migrate_1(cafs_adopt, false, false, _Target, _Context) -> {error, enoent};
 cafs_migrate_1(cafs_adopt, {value, #{id := Id, is_deleted := false,
         delete_started := false, is_move_to_local := false, error := undefined}},
         false, Target, Context) ->
@@ -913,6 +925,13 @@ fetch_move_to_local(BatchSize, Context) ->
             [ BatchSize ],
             [ {keys, atom} ],
             Context).
+
+%% @doc Record that a confirmed remote object no longer has a permanent local
+%% copy. Keep any concurrently requested move-to-local flag intact.
+-spec mark_remote(Path, Context) -> ok when Path :: binary(), Context :: z:context().
+mark_remote(Path, Context) ->
+    z_db:q("update filestore set is_local=false where path=$1",[Path],Context),
+    ok.
 
 %% @doc Called after a file has been moved from the remote service to local.
 %% Marks the entry as deleted and removes the 'move to local' flag.

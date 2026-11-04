@@ -268,3 +268,67 @@ or **Idle** for each operation and refresh every five seconds. Deduplication rem
 pending while its per-medium or legacy-cleanup tasks remain, even after the scan
 finishes. These are task counts, not file counts. Idle means no maintenance tasks
 remain; remote objects already marked for deletion still follow filestore retention.
+
+### On-demand promotion and legacy previews
+
+Requests for owned legacy originals also trigger background promotion. Local files
+can be hashed immediately; a remote file is promoted after the download already
+started by the request completes. The response does not wait for hashing, and no
+additional download is started for promotion. The worker holds a cache lock while
+using downloaded bytes and rechecks the medium before attaching them. It updates
+the original checksum and uses the same remote adoption and legacy cleanup as
+maintenance migration. Extracted posters are handled as owned source files, too.
+
+Unowned files and database-free sites are excluded. An overloaded worker pool,
+failed download, or download that has not completed within five minutes leaves
+the legacy file usable; promotion can be tried on a later cold lookup. Completed
+promotions queue durable cleanup, including retries for a busy filestore.
+
+Opening a media overview may request previews of older files. When new rendering
+is necessary, promotion first tries to reuse the original's existing remote
+location. Busy uploads and unavailable storage are retried before allowing a new
+CAFS upload. Redundant legacy paths use the same background cleanup as maintenance
+migration; remote removal respects retention.
+
+The `editrev` URL addition alone no longer forces regeneration. If the source,
+mediaclass checksum and edit revision are current, lookup also tries the old URL
+with exactly the same rendering operations and output extension. Existing local or
+remote preview bytes are promoted into CAFS without resizing. This requires a
+known source hash: local sources are migrated on demand, and remote sources with a
+known checksum can be adopted. Remote sources without a checksum keep their legacy
+previews until the original becomes available; promotion does not download those
+originals. A remote preview itself may be downloaded to calculate its output hash.
+
+Promotion publishes the shared derivative before background cleanup removes its
+old local path. Cleanup adopts an existing remote object without uploading it again,
+or retires a redundant remote copy according to filestore retention. Busy uploads
+and unavailable backends are retried. Local-only outputs become eligible for normal
+CAFS upload once remote absence is confirmed.
+
+On subsequent cold lookups, a registered current URL resolves directly to its CAFS
+output. This uses two metadata reads (the output mapping and current source), plus
+any uncached edit settings and the protected physical file/filestore lookup.
+Registering a CAFS reader briefly locks the object row to exclude concurrent
+collection or local offloading before the file is opened. It avoids legacy
+path probes and usage metadata writes. Source, mediaclass, edit revision and renderer
+version checks remain enforced; obsolete URLs still follow the retention path.
+Changed operations produce a different legacy path, and invalid signatures cannot
+use the fallback. Database-free sites continue to use their local preview directory.
+
+### Legacy-file migration safeguards
+
+Original mappings and promoted preview outputs commit together with their cleanup
+tasks. A rollback or restart cannot publish a migration while losing its required
+cleanup. Files that disappear or change during staging are left for a later retry.
+Unowned source files are neither promoted nor removed, including when a resizer
+requests them. Cleanup also preserves an original path shared with an unowned
+medium reference.
+
+Legacy local copies stay in place while a file entry still uses them. Cleanup
+retries after those entries go idle, instead of interrupting a response. Completed
+filestore downloads are resolved by their stable cache key, so promotion and reads
+continue to work after the temporary download process exits.
+
+When `mod_filestore.is_local_keep` is false, adopted remote objects also enter the
+normal filestore queue for local offloading. This does not upload the object again.
+Active CAFS pins and file entries postpone removal of the local canonical copy.
