@@ -89,8 +89,13 @@ empty_fulltext_facet() ->
         end,
         fun(_) -> meck:unload([z_template, z_module_manager, z_db]) end,
         [
-            {atom_to_list(Block) ++ " " ++ atom_to_list(Kind), fun() ->
+            {atom_to_list(Block) ++ " " ++ atom_to_list(Kind) ++ " " ++ atom_to_list(Mode), fun() ->
                 meck:reset(z_db),
+                meck:expect(z_db, q1, fun(_, [42], _) -> ExistingId end),
+                meck:expect(z_db, insert,
+                    fun(search_facet, #{<<"id">> := 42}, [{conflict, ignore}], _) ->
+                        {ok, undefined}
+                    end),
                 meck:expect(z_template, blocks, fun(_, _, _) -> {ok, [Block]} end),
                 meck:expect(z_template, render_block_to_iolist,
                     fun(_, _, _, Context) -> {Output, Context} end),
@@ -100,10 +105,12 @@ empty_fulltext_facet() ->
                     {ok, 1}
                 end),
                 ?assertEqual(ok, search_facet:pivot_rsc(42, #context{})),
-                ?assert(meck:called(z_db, update, [search_facet, 42, '_', #context{}]))
+                ?assert(meck:called(z_db, update, [search_facet, 42, '_', #context{}])),
+                ?assertEqual(Mode =:= concurrent_insert, meck:called(z_db, insert, '_'))
             end}
             || {Block, SearchColumn} <- [{body_ft, <<"ft_body">>}, {body_fts, <<"fts_body">>}],
-               {Kind, Output} <- [{empty, <<>>}, {whitespace, <<" \n\t ">>}]
+               {Kind, Output} <- [{empty, <<>>}, {whitespace, <<" \n\t ">>}],
+               {Mode, ExistingId} <- [{existing, 42}, {concurrent_insert, undefined}]
         ]}.
 
 nested_facet_query() ->
