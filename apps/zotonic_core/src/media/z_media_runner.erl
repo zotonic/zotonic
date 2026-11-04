@@ -80,24 +80,36 @@ find_executable(Name) ->
 
 -spec run(atom(), iodata(), map()) -> {ok, binary()} | {error, term()}.
 run(Profile, Command, Options) ->
+    Runtime = maps:get(timeout, Options, maps:get(timeout, z_exec:profile(Profile))),
+    Budget = z_config:get(media_runner_wait_timeout, (Runtime + 300000) div 1000) * 1000,
+    Deadline = erlang:monotonic_time(millisecond) + Budget,
+    z_media_deadline:run(fun() -> run_deadline(Profile, Command,
+        Options#{media_runner_deadline => Deadline}, Deadline) end, Deadline).
+
+run_deadline(Profile, Command, Options, Deadline) ->
     case z_media_runner_pool:runners() of
-        {ok, []} -> z_exec:run_local(Profile, Command, Options);
+        {ok, []} -> run_local(Profile, Command, Options);
         {ok, Runners} ->
             case z_media_runner_protocol:pack(Profile, Command, Options) of
                 {ok, Job} ->
                     Eligible = compatible(Profile, Runners, Options),
-                    Wait = z_config:get(media_runner_wait_timeout, ?DEFAULT_RUNNER_WAIT_SECONDS),
-                    Deadline = erlang:monotonic_time(second) + Wait,
                     Result = run_pool(Eligible, Job, Options, Deadline,
                         {error, {media_runner_unavailable, no_runner}}),
                     case {Result, z_config:get(media_runner_local_fallback, false)} of
                         {{error, {media_runner_unavailable, _}}, true} ->
-                            z_exec:run_local(Profile, Command, Options);
+                            run_local(Profile, Command, Options);
                         _ -> Result
                     end;
                 Error -> Error
             end;
         Error -> Error
+    end.
+
+run_local(Profile, Command, Options) ->
+    Runtime = maps:get(timeout, Options, maps:get(timeout, z_exec:profile(Profile))),
+    case z_media_deadline:remaining(Options, Runtime) of
+        0 -> {error, {media_runner_unavailable, operation_timeout}};
+        Left -> z_exec:run_local(Profile, Command, Options#{timeout => Left})
     end.
 
 %% Commands are constructed for the selected ImageMagick installation. Do not
@@ -123,7 +135,7 @@ run_pool(Runners, Job, Options, Deadline, PreviousError) ->
     case z_media_runner_protocol:https_url(Callback) of
         false -> {error, media_runner_configuration};
         true ->
-            case erlang:monotonic_time(second) < Deadline of
+            case erlang:monotonic_time(millisecond) < Deadline of
                 false -> {error, {media_runner_unavailable, callback_timeout}};
                 true ->
                     Id = z_ids:id(32),
@@ -160,29 +172,30 @@ callback_url(Context) ->
     z_dispatcher:url_for(media_runner_callback, [{absolute_url, true}], SiteContext).
 
 submit(Url, Token, Callback, Job, Options, Id, Secret) ->
-    WaitSeconds = max(1, maps:get(media_runner_deadline, Options) - erlang:monotonic_time(second)),
+    WaitSeconds = max(1, maps:get(media_runner_deadline, Options) - erlang:monotonic_time(millisecond)),
     Request = Job#{
         <<"id">> => Id,
         <<"callback_url">> => Callback,
         <<"callback_token">> => Secret,
-        <<"expires">> => erlang:system_time(second) + WaitSeconds
+        <<"expires">> => erlang:system_time(second) + (WaitSeconds + 999) div 1000
     },
     case submit_request(Url, Token, Request, Options, 2) of
         ok ->
             remember(Url, Token, maps:get(<<"files">>, Job)),
             case await_result(Id, Url, Token, maps:get(media_runner_deadline, Options), 0) of
                 {ok, Result} ->
-                    Received = z_media_runner_protocol:unpack(Result, Options#{
+                    Received = unpack_retry(Result, Options#{
                         media_runner_profile => maps:get(<<"profile">>, Job),
                         media_runner_endpoint => Url,
                         media_runner_token => Token
-                    }),
+                    }, 2),
                     case Received of
                         {ok, _} ->
                             remember(Url, Token, maps:get(<<"files">>, Result, [])),
-                            z_media_runner_protocol:request(
+                            %% Receipt is best effort and cannot turn installed outputs into failure.
+                            spawn(fun() -> deadline_request(
                                 z_media_runner_protocol:control_url(Url, <<"received">>),
-                                Token, #{<<"id">> => Id});
+                                Token, #{<<"id">> => Id}, maps:get(media_runner_deadline, Options), 1000) end);
                         _ -> ok
                     end,
                     Received;
@@ -202,15 +215,17 @@ submit(Url, Token, Callback, Job, Options, Id, Secret) ->
 %% failed runner during long renders. Three failed probes allow another attempt;
 %% the old attempt's registration is removed before accepting replacement results.
 await_result(Id, Url, Token, Deadline, Failures) ->
-    Left = Deadline - erlang:monotonic_time(second),
+    Left = Deadline - erlang:monotonic_time(millisecond),
     case Left =< 0 of
         true -> {error, {media_runner_unavailable, callback_timeout}};
         false ->
             receive
                 {media_runner_result, Id, Result} -> {ok, Result}
-            after min(15, Left) * 1000 ->
-                Reply = z_media_runner_protocol:request(
-                    z_media_runner_protocol:control_url(Url, <<"status">>), Token, #{<<"id">> => Id}, 5000),
+            %% Leave budget for a status probe even when the operation is
+            %% shorter than the normal polling interval.
+            after min(15000, max(100, Left div 2)) ->
+                Reply = deadline_request(
+                    z_media_runner_protocol:control_url(Url, <<"status">>), Token, #{<<"id">> => Id}, Deadline, 5000),
                 case Reply of
                     {ok, #{<<"result">> := Result}} when is_map(Result) -> {ok, Result};
                     {ok, #{<<"outcome">> := Status}} when
@@ -220,6 +235,16 @@ await_result(Id, Url, Token, Deadline, Failures) ->
                     _ -> await_result(Id, Url, Token, Deadline, Failures + 1)
                 end
             end
+    end.
+
+unpack_retry(Result, Options, Retries) ->
+    case z_media_runner_protocol:unpack(Result, Options) of
+        {error, {media_runner_unavailable, {download, _}}} = Error when Retries > 0 ->
+            case z_media_deadline:remaining(Options, 1000) of
+                1000 -> timer:sleep(250), unpack_retry(Result, Options, Retries - 1);
+                _ -> Error
+            end;
+        Reply -> Reply
     end.
 
 remember(Url, Token, Files) ->
@@ -258,7 +283,7 @@ submit_request(Url, Token, Request, Options, Retries) ->
             case deadline_request(
                 z_media_runner_protocol:control_url(Url, <<"status">>), Token,
                 #{<<"id">> => maps:get(<<"id">>, Request)},
-                maps:get(media_runner_deadline, Options) * 1000, 5000)
+                maps:get(media_runner_deadline, Options), 5000)
             of
                 {ok, #{<<"outcome">> := Status}} when
                     Status =:= <<"queued">>; Status =:= <<"starting">>; Status =:= <<"running">>;
@@ -274,7 +299,7 @@ submit_request(Url, Token, Request, Options, Retries) ->
 %% synchronized callers. Allow up to a minute within the overall job deadline.
 %% Waiting happens in the caller, never in the registry.
 capacity_request(Url, Token, Request, JobDeadline) ->
-    Deadline = min(JobDeadline * 1000, erlang:monotonic_time(millisecond) + 60000),
+    Deadline = min(JobDeadline, erlang:monotonic_time(millisecond) + 60000),
     capacity_request(Url, Token, Request, Deadline, 100).
 
 capacity_request(Url, Token, Request, Deadline, Delay) ->
@@ -334,7 +359,8 @@ ensure_uploaded(Url, Token, Path, Size, Deadline) ->
     case capacity_request(ControlUrl, Token, #{<<"hash">> => Hash, <<"size">> => Size}, Deadline) of
         {ok, #{<<"outcome">> := <<"present">>}} -> ok;
         {ok, #{<<"outcome">> := <<"upload">>, <<"upload_token">> := Lease}} ->
-            case z_media_runner_protocol:upload(Url, Token, Lease, Path, Size) of
+            case z_media_runner_protocol:upload(Url, Token, Lease, Path, Size,
+                    max(1, min(3600000, Deadline - erlang:monotonic_time(millisecond)))) of
                 {ok, 204} -> ok;
                 {ok, 409} ->
                     wait_for_upload(Url, Token, Path, Size, Deadline);
@@ -350,10 +376,10 @@ ensure_uploaded(Url, Token, Path, Size, Deadline) ->
 %% A busy hash or an expired claim must return to reservation, never resend bytes
 %% using the old token. The next POST either finds the file or elects one uploader.
 wait_for_upload(Url, Token, Path, Size, Deadline) ->
-    case erlang:monotonic_time(second) < Deadline of
+    case erlang:monotonic_time(millisecond) < Deadline of
         true ->
             timer:sleep(100 + rand:uniform(200)),
-            case erlang:monotonic_time(second) < Deadline of
+            case erlang:monotonic_time(millisecond) < Deadline of
                 true -> ensure_uploaded(Url, Token, Path, Size, Deadline);
                 false -> {error, upload_wait_timeout}
             end;

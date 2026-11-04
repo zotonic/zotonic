@@ -88,7 +88,12 @@ upload_job_2(QueueId, Path, MediaInfo, Context) ->
             }),
             % The lookup passed to upload_job/5 can be stale if this sidejob was
             % waiting to start while another uploader finished the same path.
-            try_upload(lookup(Path, Context), QueueId, Path, MediaInfo, Context);
+            case m_cafs:with_path_pin(Path, fun() ->
+                try_upload(lookup(Path, Context), QueueId, Path, MediaInfo, Context)
+            end, Context) of
+                {error, deleting} -> m_filestore:dequeue(QueueId, Context);
+                Result -> Result
+            end;
         {error, duplicate} ->
             ok
     end.
@@ -153,7 +158,9 @@ try_upload(MaybeEntry, QueueId, Path, MInfo, Context) ->
                             ok;
                         false ->
                             AbsPath = z_path:abspath(Path, Context),
-                            file:delete(AbsPath)
+                            pause_file_entry(Path, Context),
+                            file:delete(AbsPath),
+                            stale_file_entry(Path, Context)
                     end;
                 false ->
                     ok
@@ -291,10 +298,14 @@ start_empty_cache_entry(Location) ->
     end.
 
 pause_file_entry(Path, Context) ->
-    z_file_request:pause(file_entry_path(Path), Context).
+    lists:foreach(fun z_file_entry:pause/1, m_cafs:readers(Path, Context)),
+    lists:foreach(fun(P) -> z_file_request:pause(P, Context) end,
+        [file_entry_path(Path) | m_cafs:aliases(Path, Context)]).
 
 stale_file_entry(Path, Context) ->
-    z_file_request:force_stale(file_entry_path(Path), Context).
+    lists:foreach(fun z_file_entry:force_stale/1, m_cafs:readers(Path, Context)),
+    lists:foreach(fun(P) -> z_file_request:force_stale(P, Context) end,
+        [file_entry_path(Path) | m_cafs:aliases(Path, Context)]).
 
 file_entry_path(<<"archive/", Path/binary>>) ->
     Path;

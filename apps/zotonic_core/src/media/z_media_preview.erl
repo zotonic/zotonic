@@ -24,6 +24,7 @@
 -export([
     convert/4,
     convert/5,
+    convert_with_metadata/5,
     size/3,
     can_generate_preview/1,
     out_mime/3,
@@ -68,43 +69,31 @@ convert(InFile, OutFile, Filters, Context) ->
     convert(InFile, InFile, OutFile, Filters, Context).
 
 
-convert(InFile, MediumFilename, OutFile, Filters, Context) ->
+convert(InFile, MediumFilename, OutFile, Filters0, Context) ->
+    Filters = proplists:delete(editrev, Filters0),
     case z_media_identify:identify(InFile, MediumFilename, MediumFilename, Context) of
-        {ok, #{ <<"mime">> := Mime } = FileProps} ->
-            case can_generate_preview(Mime) of
-                true ->
-                    case z_mediaclass:expand_mediaclass_checksum(Filters) of
-                        {ok, FiltersExpanded} ->
-                            % TODO: add the notification here to let a module pick up the resize
-                            % A remote server can then handle the resize request.
-                            SiteDir = z_path:site_dir(Context),
-                            convert_1(
-                                z_media_imagemagick:selected(), InFile, OutFile, Mime,
-                                FileProps, FiltersExpanded, SiteDir, Context);
-                        {error, Reason} = Error ->
-                            ?LOG_WARNING(#{
-                                text => <<"Cannot expand mediaclass">>,
-                                in => zotonic_core,
-                                result => error,
-                                reason => Reason,
-                                filters => Filters
-                            }),
-                            Error
-                    end;
-                false ->
-                    ?LOG_NOTICE(#{
-                        text => <<"cannot convert mime type">>,
-                        in => zotonic_core,
-                        mime => Mime,
-                        file => unicode:characters_to_binary(InFile)
-                    }),
-                    {error, mime_type}
-            end;
-        {ok, _} ->
-            {error, mime_type};
-        {error, Reason} ->
-            {error, Reason}
+        {ok, FileProps} -> convert_with_metadata(InFile, OutFile, Filters, FileProps, Context);
+        {error, _} = Error -> Error
     end.
+
+%% Use the exact metadata snapshot included in the CAFS derivative identity.
+-spec convert_with_metadata(InFile, OutFile, Filters, FileProps, Context) -> ok | {error, term()}
+    when InFile :: file:filename_all(), OutFile :: file:filename_all(),
+         Filters :: list(), FileProps :: map(), Context :: z:context().
+convert_with_metadata(InFile, OutFile, Filters, #{<<"mime">> := Mime} = FileProps, Context) ->
+    case can_generate_preview(Mime) of
+        true ->
+            case z_mediaclass:expand_mediaclass_checksum(Filters) of
+                {ok, Expanded} ->
+                    convert_1(z_media_imagemagick:selected(), InFile, OutFile, Mime,
+                        FileProps, Expanded, z_path:site_dir(Context), Context);
+                {error, _} = Error -> Error
+            end;
+        false -> {error, mime_type}
+    end;
+convert_with_metadata(_InFile, _OutFile, _Filters, _FileProps, _Context) ->
+    {error, mime_type}.
+
 
 %% @doc Internal helper to discover and cache the ImageMagick executable and
 %% whether we are running a legacy (pre-v7) installation.
@@ -142,7 +131,8 @@ convert_2(CmdArgs, Installation, InFile, OutFile, InMime, FileProps, SiteDir, Co
         ok = z_filelib:ensure_dir(OutFile),
         TempDir = filename:join(filename:dirname(OutFile),
             ".preview-" ++ filename:basename(z_convert:to_list(z_tempfile:new()))),
-        case file:make_dir(TempDir) of
+        Guard = z_media_temp:guard(TempDir, directory),
+        try case file:make_dir(TempDir) of
             ok ->
                 try
                     ok = file:change_mode(TempDir, 8#700),
@@ -157,7 +147,7 @@ convert_2(CmdArgs, Installation, InFile, OutFile, InMime, FileProps, SiteDir, Co
                     file:del_dir_r(TempDir)
                 end;
             {error, _} = Error -> Error
-        end
+        end after z_media_temp:release(Guard) end
     end,
     jobs:run(media_preview_jobs, fun() -> once(OutFile, Convert) end).
 
@@ -193,7 +183,7 @@ convert_temp(CmdArgs, Installation, InFile, TempFile, InMime, FileProps, SiteDir
                 command => Cmd,
                 reason => Reason
             }),
-            {error, convert_error}
+            {error, Reason}
     end.
 
 % We need to set a higher density for PDF rendering, otherwise the resulting
@@ -877,6 +867,14 @@ string2filter("grey",[]) ->
     {ok, grey};
 string2filter("gray",[]) ->
     {ok, grey};
+%% Signed URL provenance; never an ImageMagick operation.
+string2filter("editrev", "original") ->
+    {ok, {editrev, <<"original">>}};
+string2filter("editrev", Arg) when length(Arg) =:= 64 ->
+    case lists:all(fun(C) -> (C >= $0 andalso C =< $9) orelse (C >= $a andalso C =< $f) end, Arg) of
+        true -> {ok, {editrev, list_to_binary(Arg)}};
+        false -> {error, badarg}
+    end;
 string2filter("mono",[]) ->
     {ok, mono};
 string2filter("flip",[]) ->

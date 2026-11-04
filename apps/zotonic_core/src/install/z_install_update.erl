@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2025 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc This server will install the database when started. It will always return ignore to the supervisor.
 %% This server should be started after the database pool but before any database queries will be done.
 %% @end
 
-%% Copyright 2009-2025 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -373,7 +373,20 @@ upgrade(C, Database, Schema) ->
 upgrade_models(Context) ->
     ok = m_rsc:install(Context),
     ok = m_rsc_gone:install(Context),
-    ok = m_rsc_import:install(Context).
+    ok = m_rsc_import:install(Context),
+    %% Bootstrap backend history for older sites, including disabled filestore.
+    %% Use core module metadata; backend tables remain private to their module.
+    case z_db:q1("select exists(select 1 from module where name='mod_filestore'
+        and schema_version is not null)", Context) of
+        true ->
+            case m_config:get_boolean(site, filestore_used, Context) of
+                true -> ok;
+                false -> ok = m_config:set_value(site, filestore_used, true, Context)
+            end;
+        false -> ok
+    end,
+    ok = z_media_cleanup_server:install(Context),
+    m_cafs:install(Context).
 
 
 upgrade_config_schema(C, Database, Schema) ->

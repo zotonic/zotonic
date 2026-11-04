@@ -94,6 +94,8 @@ locate_source(NoRoots, Path, OriginalFile, Filters, Context) when NoRoots =:= un
     case locate_source_uploaded(Path, OriginalFile, Filters, Context) of
         {error, preview_source_gone} ->
             throw(preview_source_gone);
+        {error, Reason} when Reason =/= enoent, Reason =/= eacces, Reason =/= checksum ->
+            throw({file_unavailable, Reason});
         {error, Reason} ->
             ?LOG_DEBUG(#{
                 text => <<"Could not find file">>,
@@ -109,6 +111,8 @@ locate_source(NoRoots, Path, OriginalFile, Filters, Context) when NoRoots =:= un
     end;
 locate_source([archive|Roots], Path, OriginalFile, [], Context) ->
     case locate_source_uploaded_1(#{}, Path, OriginalFile, [], Context) of
+        {error, Reason} when Reason =/= enoent, Reason =/= eacces, Reason =/= checksum ->
+            throw({file_unavailable, Reason});
         {error, Reason} ->
             ?LOG_DEBUG(#{
                 text => <<"Could not find file">>,
@@ -139,7 +143,8 @@ locate_source([ModuleIndex|Roots], Path, OriginalFile, Filters, Context) when is
             }),
             locate_source(Roots, Path, OriginalFile, Filters, Context);
         {error, enoent} ->
-            locate_source(Roots, Path, OriginalFile, Filters, Context)
+            locate_source(Roots, Path, OriginalFile, Filters, Context);
+        {error, Reason} -> throw({file_unavailable, Reason})
     end;
 locate_source([{module, Module} = M|Rs], Path, OriginalFile, Filters, Context) ->
     case Module:file_exists(Path, Context) of
@@ -206,6 +211,30 @@ locate_source_module_indexer(ModuleIndex, _Path, OriginalFile, undefined, Contex
             end
     end;
 locate_source_module_indexer(ModuleIndex, Path, OriginalFile, Filters, Context) ->
+    case m_cafs:is_enabled(Context) of
+        false -> locate_local_preview(ModuleIndex, Path, OriginalFile, Filters, Context);
+        true -> locate_module_preview(ModuleIndex, Path, OriginalFile, Filters, Context)
+    end.
+
+%% Database-free sites have only occasional library previews. Keep these local,
+%% without archive lookup, filestore notifications, CAFS metadata or collection.
+locate_local_preview(ModuleIndex, Path, OriginalFile, Filters, Context) ->
+    Preview = filename:join(z_path:media_preview(Context), Path),
+    case part_file(Preview, []) of
+        {error, enoent} ->
+            case z_module_indexer:find(ModuleIndex, OriginalFile, Context) of
+                {ok, #module_index{filepath=Source}} ->
+                    case z_media_preview:convert(z_convert:to_list(Source),
+                            z_convert:to_list(Preview), Filters, Context) of
+                        ok -> part_file(Preview, []);
+                        Error -> Error
+                    end;
+                Error -> Error
+            end;
+        Result -> Result
+    end.
+
+locate_module_preview(ModuleIndex, Path, OriginalFile, Filters, Context) ->
     case locate_in_filestore(Path, z_path:media_preview(Context), true, #{}, Context) of
         {ok, Part} ->
             {ok, Part};
@@ -220,7 +249,10 @@ locate_source_module_indexer(ModuleIndex, Path, OriginalFile, Filters, Context) 
 
 %% @doc Locate an uploaded file, stored in the archive.
 locate_source_uploaded(<<"preview/", _/binary>> = Path, OriginalFile, Filters, Context) ->
-    locate_source_uploaded_1(#{}, Path, OriginalFile, Filters, Context);
+    case z_db:q1("select id from medium where preview_filename=$1", [OriginalFile], Context) of
+        undefined -> {error, enoent};
+        Id -> locate_source_uploaded_1(m_media:get(Id, Context), Path, OriginalFile, Filters, Context)
+    end;
 locate_source_uploaded(Path, OriginalFile, Filters, Context) ->
     case m_media:get_by_filename(OriginalFile, Context) of
         undefined ->
@@ -234,6 +266,18 @@ locate_source_uploaded_1(Medium, _Path, OriginalFile, undefined, Context) ->
 locate_source_uploaded_1(Medium, _Path, OriginalFile, [], Context) ->
     locate_in_filestore(OriginalFile, z_path:media_archive(Context), false, Medium, Context);
 locate_source_uploaded_1(Medium, Path, OriginalFile, Filters, Context) ->
+    case z_cafs_preview:prepare(Path, OriginalFile, Filters, Medium, Context) of
+        {ok, Usage} ->
+            case z_cafs_preview:lookup(Usage, Context) of
+                {ok, Hash} -> locate_cafs_output(Hash, Path, Medium, Context);
+                {error, enoent} ->
+                    locate_source_preview(Medium#{cafs_preview_usage => Usage}, Path,
+                        OriginalFile, Filters, Context)
+            end;
+        {error, enoent} = Error -> Error
+    end.
+
+locate_source_preview(Medium, Path, OriginalFile, Filters, Context) ->
     case locate_in_filestore(Path, z_path:media_preview(Context), true, Medium, Context) of
         {ok, Part} ->
             {ok, Part};
@@ -242,14 +286,26 @@ locate_source_uploaded_1(Medium, Path, OriginalFile, Filters, Context) ->
     end.
 
 locate_in_filestore(Path, InDir, IsPreview, Medium, Context) ->
-    LocalPath = filename:join(InDir, Path),
-    BaseDirPath = z_convert:to_binary(filename:join(filename:basename(InDir), Path)),
+    LegacyPath = z_convert:to_binary(filename:join(filename:basename(InDir), Path)),
+    BaseDirPath = case IsPreview of
+        false ->
+            case m_cafs:lookup(Path, Context) of
+                {ok, Hash} -> m_cafs:path(Hash);
+                {error, enoent} -> LegacyPath
+            end;
+        true -> LegacyPath
+    end,
+    ok = m_cafs:track(BaseDirPath, Context),
+    LocalPath = z_path:files_subdir(BaseDirPath, Context),
     OptRscId = maps:get(<<"id">>, Medium, undefined),
     OptMime = case IsPreview of
         true ->
             z_media_identify:guess_mime(Path);
         false ->
-            maps:get(<<"mime">>, Medium, undefined)
+            case maps:get(<<"preview_filename">>, Medium, undefined) of
+                Path -> z_media_identify:guess_mime(Path);
+                _ -> maps:get(<<"mime">>, Medium, undefined)
+            end
     end,
     case z_notifier:first(#filestore{action=lookup, path=BaseDirPath, local_path=LocalPath}, Context) of
         {ok, {filezcache, Pid, #{ created := Created, size := Size }}} when is_pid(Pid) ->
@@ -319,6 +375,19 @@ maybe_generate_preview(Path, OriginalFile, Filters, Medium, Context) ->
     Mime = z_media_identify:guess_mime(OriginalFile),
     generate_preview(z_media_preview:can_generate_preview(Mime), Path, OriginalFile, Filters, Medium, Context).
 
+generate_preview(true, Path, OriginalFile, Filters, #{ <<"id">> := _ } = Medium, Context) ->
+    case m_cafs:lookup(OriginalFile, Context) of
+        {ok, Hash} -> shared_preview(Hash, Path, OriginalFile, Filters, Medium, Context);
+        {error, enoent} ->
+            case fetch_archive(OriginalFile, Context) of
+                {ok, File} ->
+                    case m_cafs:promote(OriginalFile, File, Context) of
+                        {ok, Hash} -> shared_preview(Hash, Path, OriginalFile, Filters, Medium, Context);
+                        Error -> Error
+                    end;
+                Error -> Error
+            end
+    end;
 generate_preview(true, Path, OriginalFile, Filters, Medium, Context) ->
     case fetch_archive(OriginalFile, Context) of
         {ok, Filename} ->
@@ -344,8 +413,6 @@ generate_preview(true, Path, OriginalFile, Filters, Medium, Context) ->
                         filename => Filename
                     }),
                     {error, preview_source_gone};
-                {error, convert_error} ->
-                    convert_error_part(Medium, PreviewFilePath, Filters, Context);
                 {error, Reason} = Error ->
                     ?LOG_WARNING(#{
                         text => <<"Convert error">>,
@@ -363,39 +430,72 @@ generate_preview(false, _Path, _OriginalFile, _Filters, _Medium, _Context) ->
     {error, enoent}.
 
 
-% Copy error image to the OutFile
-% 1. Find correct error image
-% 2. Redo the resize with the error image as input
-convert_error_part(Medium, PreviewFilePath, Filters, Context) ->
-    case z_module_indexer:find(lib, <<"images/placeholder.png">>, Context) of
-        {ok, #module_index{filepath=Path}} ->
-            case z_media_preview:convert(z_convert:to_list(Path), Path, z_convert:to_list(PreviewFilePath), Filters, Context) of
-                ok ->
-                    case maps:get(<<"id">>, Medium, undefined) of
-                        undefined ->
-                            part_file(PreviewFilePath, []);
-                        RscId ->
-                            part_file(PreviewFilePath, [{acl,RscId}])
-                    end;
-                {error, Reason} = Error ->
-                    ?LOG_WARNING(#{
-                        text => <<"Error generating fallback preview with filters">>,
-                        in => zotonic_core,
-                        result => error,
-                        reason => Reason,
-                        path => PreviewFilePath,
-                        filters => Filters
-                    }),
-                    Error
+%% Key by effective ordered operations, not by the requesting filename. The
+%% extension controls the output encoder and must be included in the identity.
+shared_preview(Hash, Path, OriginalFile, Filters, Medium, Context) ->
+    %% Avoid fetching an original just to read metadata on an ordinary cache hit.
+    Identify = case m_media:identify(OriginalFile, Context) of
+        {ok, _} = Found -> Found;
+        {error, _} ->
+            m_cafs:with_local_file(Hash, fun(Input) ->
+                z_media_identify:identify_file(Input, OriginalFile, Context)
+            end, Context)
+    end,
+    case Identify of
+        {ok, Props} ->
+            shared_preview_identified(Hash, Path, Filters, Medium,
+                maps:remove(<<"id">>, Props), Context);
+        Error -> Error
+    end.
+
+shared_preview_identified(Hash, Path, Filters, Medium, FileProps, Context) ->
+    RenderFilters = proplists:delete(editrev, Filters),
+    case z_mediaclass:expand_mediaclass_checksum(RenderFilters) of
+        {ok, Expanded} ->
+            Extension = filename:extension(Path),
+            Version = {1, z_media_imagemagick:selected(),
+                z_config:get(default_colorspace, "sRGB"),
+                m_config:get_value(site, cafs_renderer_version, <<"1">>, Context)},
+            Generate = fun() ->
+                m_cafs:with_local_file(Hash, fun(Input) ->
+                    Tmp = z_tempfile:new(z_convert:to_list(Extension)),
+                    Output = Tmp,
+                    try
+                        case z_media_preview:convert_with_metadata(z_convert:to_list(Input), Output,
+                                Expanded, FileProps, Context) of
+                            ok -> m_cafs:stage_file(Output, Context);
+                            Error -> Error
+                        end
+                    after
+                        file:delete(Output),
+                        file:delete(Tmp)
+                    end
+                end, Context)
+            end,
+            Usage = maps:get(cafs_preview_usage, Medium),
+            case m_cafs:derivative(Hash, {Extension, Expanded, FileProps}, Version, Usage, Generate, Context) of
+                {ok, OutputHash} ->
+                    %% Direct object lookup retains this alias's ACL and MIME.
+                    locate_cafs_output(OutputHash, Path, Medium, Context);
+                Error -> Error
             end;
-        {error, enoent} ->
-            ?LOG_NOTICE(#{
-                text => <<"Can't find 'images/placeholder.png' for convert error fallback.">>,
-                in => zotonic_core,
-                result => error,
-                reason => enoent
-            }),
-            {error, convert_error}
+        Error -> Error
+    end.
+
+locate_cafs_output(Hash, Path, Medium, Context) ->
+    Physical = m_cafs:path(Hash),
+    ok = m_cafs:track(Physical, Context),
+    Local = z_path:files_subdir(Physical, Context),
+    Id = maps:get(<<"id">>, Medium),
+    Mime = z_media_identify:guess_mime(Path),
+    case z_notifier:first(#filestore{action=lookup, path=Physical, local_path=Local}, Context) of
+        undefined -> part_file(Local, [{acl, Id}, {mime, Mime}]);
+        {ok, {filename, File, #{modified := Modified}}} ->
+            part_file(File, [{acl, Id}, {mime, Mime}, {modified, Modified}]);
+        {ok, {filezcache, Pid, #{created := Created, size := Size}}} ->
+            {ok, #part_cache{cache_pid=Pid, cache_monitor=erlang:monitor(process, Pid),
+                modified=Created, acl=Id, size=Size, mime=Mime}};
+        Error -> Error
     end.
 
 

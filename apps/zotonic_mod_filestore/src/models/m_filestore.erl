@@ -110,10 +110,14 @@ Available Model API Paths
     retry_delay/1,
     health/1,
     mark_deleted/2,
+    delete_status/2,
     fetch_deleted/2,
     fetch_deleted/3,
     purge_deleted/2,
+    claim_delete/2,
+    defer_delete/3,
     clear_deleted/2,
+    cancel_pending_delete/2,
 
     mark_move_to_local_all/1,
     mark_move_to_local_limit/2,
@@ -502,6 +506,28 @@ prolonged_errors(Page0, Context) ->
     }.
 
 
+%% @doc Request deletion without restarting retention, then report pending work.
+%% Both queued uploads and remote entries count, including already deleted entries.
+%% Read-only backends can confirm absence but cannot schedule new deletions.
+-spec delete_status(Path, Context) -> absent | pending | {error, read_only} when
+    Path :: binary() | {prefix, binary()},
+    Context :: z:context().
+delete_status(Path, Context) ->
+    {Predicate, Value} = case Path of
+        {prefix, Prefix} -> {"starts_with(path, $1)", Prefix};
+        Exact -> {"path = $1", Exact}
+    end,
+    HasWork = z_db:q1("select exists(select 1 from filestore where " ++ Predicate
+        ++ ") or exists(select 1 from filestore_queue where " ++ Predicate ++ ")",
+        [Value], Context),
+    case {HasWork, filestore_config:is_read_only(Context)} of
+        {false, _} -> absent;
+        {true, true} -> {error, read_only};
+        {true, false} ->
+            _ = mark_deleted(Path, Context),
+            pending
+    end.
+
 %% @doc Mark the file entries as deleted for the path or having the path as a prefix.
 -spec mark_deleted(Path, Context) -> {ok, Count} | {error, enoent} when
     Path :: binary() | {prefix, binary()},
@@ -511,9 +537,10 @@ mark_deleted({prefix, Path}, Context) when is_binary(Path) ->
     case z_db:q("update filestore
             set is_deleted = true,
                 modified = now(),
-                deleted = now()
-            where path like $1",
-            [<<Path/binary, $%>>],
+                deleted = now(),
+                retry_after = null
+            where not is_deleted and starts_with(path, $1)",
+            [Path],
             Context)
     of
         N when N > 0 -> {ok, N};
@@ -523,8 +550,9 @@ mark_deleted(Path, Context) when is_binary(Path) ->
     case z_db:q("update filestore
             set is_deleted = true,
                 modified = now(),
-                deleted = now()
-            where path = $1",
+                deleted = now(),
+                retry_after = null
+            where not is_deleted and path = $1",
             [Path],
             Context)
     of
@@ -555,7 +583,8 @@ fetch_deleted(Interval, BatchSize, Context) ->
             {ok, []};
         <<"0">> ->
             z_db:qmap(
-                "select * from filestore where is_deleted = true limit $1",
+                "select * from filestore where is_deleted = true
+                    and (retry_after is null or retry_after <= now()) order by deleted limit $1",
                 [ BatchSize ],
                 [ {keys, atom} ],
                 Context);
@@ -564,8 +593,9 @@ fetch_deleted(Interval, BatchSize, Context) ->
                 "select * ",
                 "from filestore ",
                 "where is_deleted =true "
+                "  and (retry_after is null or retry_after <= now()) "
                 "  and deleted < now() - interval '", Interval1/binary,"' ",
-                "limit $1">>,
+                "order by deleted limit $1">>,
                 [ BatchSize ],
                 [ {keys, atom} ],
                 Context)
@@ -601,6 +631,23 @@ map_interval(Interval) ->
 num(N) -> integer_to_binary( binary_to_integer(N) ).
 
 
+%% @doc Fence cancellation before dispatching a remote delete. A failed or
+%% interrupted delete remains fenced until confirmed absent; retries are safe.
+-spec claim_delete(Id, Context) -> boolean() when Id :: integer(), Context :: z:context().
+claim_delete(Id, Context) ->
+    z_db:q1("update filestore set delete_started=true,retry_after=now()+interval '10 minutes'
+        where id=$1 and is_deleted and (retry_after is null or retry_after<=now())
+        returning id", [Id], Context) =:= Id.
+
+%% @doc Retain failed deletes with an observable error and a fair retry schedule.
+-spec defer_delete(Id, Reason, Context) -> ok
+    when Id :: integer(), Reason :: atom() | binary(), Context :: z:context().
+defer_delete(Id, Reason, Context) ->
+    z_db:q("update filestore set error=$2,error_count=least(error_count+1,1000000),
+        error_since=coalesce(error_since,now()),retry_after=now()+interval '1 hour'
+        where id=$1 and is_deleted", [Id, z_convert:to_binary(Reason)], Context),
+    ok.
+
 %% @doc Remove the deleted file entry from the filestore table. This is done after
 %% the file has been deleted from the remote service.
 -spec purge_deleted( integer(), z:context() ) -> ok | {error, enoent}.
@@ -608,6 +655,45 @@ purge_deleted(Id, Context) ->
     case z_db:q("delete from filestore where id = $1 and is_deleted = true", [Id], Context) of
         1 -> ok;
         0 -> {error, enoent}
+    end.
+
+%% @doc Cancel deletion only if it has not been dispatched. Return true when the
+%% path is absent or cancellation succeeds, false when remote deletion may be in
+%% flight. The row lock shares the caller's transaction, or a new transaction for
+%% standalone calls, so claim_delete/2 cannot race with cancellation.
+-spec cancel_pending_delete(Path, Context) -> boolean() | {rollback, term()} when
+    Path :: binary(),
+    Context :: z:context().
+cancel_pending_delete(Path, Context) ->
+    z_db:transaction(fun(Ctx) -> cancel_pending_delete_locked(Path, Ctx) end, Context).
+
+cancel_pending_delete_locked(Path, Context) ->
+    case z_db:table_exists(filestore, Context) of
+        false -> true;
+        true ->
+            %% A disabled module might not yet have upgraded its table. Do not
+            %% guess whether a remote delete has been sent by that older version.
+            case z_db:column(filestore, delete_started, Context) of
+                {ok, _} ->
+                    case z_db:q1("
+                            select delete_started
+                            from filestore
+                            where path = $1
+                            for update",
+                            [Path], Context)
+                    of
+                        undefined -> true;
+                        false ->
+                            z_db:q("
+                                update filestore
+                                set is_deleted = false,
+                                    deleted = null
+                                where path = $1", [Path], Context),
+                            true;
+                        true -> false
+                    end;
+                _ -> false
+            end
     end.
 
 %% @doc Unmark the file entry as deleted, used when the deletion could not be done
@@ -620,8 +706,8 @@ clear_deleted(Id, Context) when is_integer(Id) ->
             update filestore
             set is_deleted = false,
                 modified = now(),
-                deleted = undefined
-            where id = $1",
+                deleted = null
+            where id = $1 and not delete_started",
             [Id],
             Context)
     of
@@ -817,13 +903,22 @@ stats(Context) ->
 
 
 install(_Version, Context) ->
+    ok = m_config:set_value(site, filestore_used, true, Context),
     ok = install_filestore(Context),
     ok = ensure_column_deleted(Context),
     ok = ensure_column_is_local(Context),
     ok = install_filequeue(Context),
     ok = ensure_size_bigint(Context),
     ok = install_retries(Context),
-    ok = install_unrecoverable(Context).
+    ok = install_unrecoverable(Context),
+    case z_db:column(filestore, delete_started, Context) of
+        {ok, _} -> ok;
+        {error, enoent} ->
+            [] = z_db:q("alter table filestore add column delete_started boolean not null default false", Context),
+            %% Older code may already have dispatched these deletions.
+            z_db:q("update filestore set delete_started=true where is_deleted", Context),
+            z_db:flush(Context)
+    end.
 
 install_filestore(Context) ->
     case z_db:table_exists(filestore, Context) of
@@ -832,6 +927,7 @@ install_filestore(Context) ->
                 create table filestore (
                     id serial not null,
                     is_deleted boolean not null default false,
+                    delete_started boolean not null default false,
                     is_local boolean not null default false,
                     is_move_to_local boolean not null default false,
                     is_unrecoverable boolean not null default false,

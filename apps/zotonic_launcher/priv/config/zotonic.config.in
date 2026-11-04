@@ -362,7 +362,10 @@
    %%     #{hostname => <<"media-b.example.com">>, protocol => <<"https">>, oauth2_key => <<"TOKEN-B">>}
    %% ]},
    %% {media_runner_local_fallback, false},
-   %% Callback wait timeout in seconds (12 hours plus 5 minutes).
+   %% Total media operation budget in seconds, including packing, capabilities,
+   %% queueing, uploads, rendering, downloads and optional local fallback.
+   %% Default: the command profile's timeout plus 300 seconds. Explicit values
+   %% replace that default; failover does not reset the budget.
    %% {media_runner_wait_timeout, 43500},
    %% Source uploads and result downloads stream to disk; JSON remains bounded.
    %% {media_runner_max_input_bytes, 17179869184},

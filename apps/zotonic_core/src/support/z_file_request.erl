@@ -21,9 +21,11 @@
 -module(z_file_request).
 
 -export([
+    delete_remote/2,
     lookup_lib/2,
     lookup_file/2,
     lookup_file/4,
+    lookup_file/5,
     pause/2,
     stop/2,
     force_stale/2,
@@ -44,6 +46,22 @@
 % Path: request path including optional url resize filters (binary)
 % Filters: optional filters to be applied to the original file
 
+%% @doc Request remote deletion and report whether all backend work is finished.
+%% A missing handler is safe only for sites that have never used a backend.
+%% Backends must persist site.filestore_used before accepting any stored files.
+-spec delete_remote(Path, Context) -> absent | pending | {error, term()} when
+    Path :: binary() | {prefix, binary()},
+    Context :: z:context().
+delete_remote(Path, Context) ->
+    case z_notifier:first(#filestore{action=delete_status, path=Path}, Context) of
+        undefined ->
+            case m_config:get_boolean(site, filestore_used, Context) of
+                true -> {error, filestore_unavailable};
+                false -> absent
+            end;
+        Result -> Result
+    end.
+
 lookup_lib(Path, Context) ->
     lookup_file(Path, [lib], undefined, Context).
 
@@ -52,6 +70,12 @@ lookup_file(Path, Context) ->
 
 lookup_file(Path, Root, OptFilters, Context) ->
     z_file_sup:ensure_file(z_convert:to_binary(Path), Root, OptFilters, Context).
+
+%% @doc Wait at most Timeout milliseconds; a timeout does not cancel shared work.
+-spec lookup_file(binary() | list(), list(), list() | undefined, pos_integer(), z:context()) ->
+    {ok, #z_file_info{}} | {error, term()}.
+lookup_file(Path, Root, OptFilters, Timeout, Context) ->
+    z_file_sup:ensure_file(z_convert:to_binary(Path), Root, OptFilters, Timeout, Context).
 
 stop(Path, Context) ->
     z_file_entry:stop(Path, Context).

@@ -33,6 +33,7 @@ trusted Erlang staging step; sandbox grants contain private job copies, never th
     control_url/2,
     input_limit/0,
     upload/5,
+    upload/6,
     validate/1,
     execute/1,
     execute/2,
@@ -250,6 +251,7 @@ execute(Job, Resolve, Store) ->
 %% @doc Execute in a caller-owned staging path, removed on normal completion or failure.
 -spec execute(map(), function(), function(), file:filename_all()) -> map().
 execute(Job, Resolve, Store, Dir) ->
+    Guard = z_media_temp:guard(Dir, directory),
     try
         ok = validate(Job),
         ok = file:make_dir(Dir),
@@ -259,7 +261,7 @@ execute(Job, Resolve, Store, Dir) ->
         _:_ ->
             #{<<"status">> => <<"error">>, <<"error">> => <<"processing_failed">>}
     after
-        file:del_dir_r(Dir)
+        z_media_temp:release(Guard)
     end.
 
 execute_staged(
@@ -511,6 +513,11 @@ request(Url, Token, Payload, Timeout) ->
 -spec upload(binary(), binary(), binary(), file:filename_all(), non_neg_integer()) ->
     {ok, integer()} | {error, term()}.
 upload(Url, Token, Lease, Path, Size) ->
+    upload(Url, Token, Lease, Path, Size, ?UPLOAD_TIMEOUT).
+
+-spec upload(binary(), binary(), binary(), file:filename_all(), non_neg_integer(), pos_integer()) ->
+    {ok, integer()} | {error, term()}.
+upload(Url, Token, Lease, Path, Size, Timeout) ->
     case http_url(Url) of
         false ->
             {error, invalid_url};
@@ -529,7 +536,7 @@ upload(Url, Token, Lease, Path, Size) ->
                         },
                         %% A dedicated connection keeps long uploads independent
                         %% of job requests and callbacks to the same host.
-                        case z_media_runner_http:request(put, Request, ?UPLOAD_TIMEOUT) of
+                        case z_media_runner_http:request(put, Request, Timeout) of
                             {ok, Status, _} ->
                                 {ok, Status};
                             {error, _} = Error ->

@@ -527,7 +527,10 @@ filename_to_filepath_1(<<"lib/", RelFilename/binary>> = Filename, Context) ->
         _ -> Filename
     end;
 filename_to_filepath_1(Filename, Context) ->
-    filename:join([z_path:media_archive(Context), Filename]).
+    case m_cafs:lookup(Filename, Context) of
+        {ok, Hash} -> z_path:files_subdir(m_cafs:path(Hash), Context);
+        {error, enoent} -> filename:join([z_path:media_archive(Context), Filename])
+    end.
 
 
 %% @doc Give the base url for the filename being served using the 'image' dispatch rule
@@ -636,7 +639,13 @@ url2(Filename, Options, Context) ->
     case lists:partition(fun is_tagopt/1, filter_options(Options)) of
         {TagOpts, []} ->
             {url, filename_to_urlpath(Filename, Context), TagOpts, []};
-        {TagOpts, ImageOpts} ->
+        {TagOpts, [{editrev, _}]} ->
+            {url, filename_to_urlpath(Filename, Context), TagOpts, []};
+        {TagOpts, ImageOpts0} ->
+            ImageOpts = case proplists:is_defined(editrev, ImageOpts0) of
+                true -> ImageOpts0;
+                false -> [{editrev, <<"original">>} | ImageOpts0]
+            end,
             % Map all ImageOpts to an opt string
             MimeFile = z_media_identify:guess_mime(Filename),
             {_Mime, Extension} = z_media_preview:out_mime(MimeFile, ImageOpts, Context),
@@ -813,7 +822,9 @@ url2props(Url, Context) ->
                                            "()" ++ _ -> [""|string:tokens(Props, ")(")];
                                            _ -> string:tokens(Props, ")(")
                                        end,
-                            {_Mime, Extension} = z_media_preview:out_mime(FileMime, map_mime_props(PropList), Context),
+                            %% Validate the extension originally signed into this URL.
+                            %% The current mediaclass may have changed output format.
+                            Extension = filename:extension(Rest),
                             case {Check1,PropList} of
                                 {"mediaclass-"++_, []} ->
                                     % shorthand with only the mediaclass
@@ -863,17 +874,6 @@ is_valid_resize_mime(<<"image/png">>) -> true;
 is_valid_resize_mime(<<"image/webp">>) -> true;
 is_valid_resize_mime(_) -> false.
 
-map_mime_props(Props) ->
-    [ map_mime_prop(P) || P <- Props ].
-
-map_mime_prop("lossless") ->
-    lossless;
-map_mime_prop("mediaclass-"++Rest) ->
-    {mediaclass, lists:takewhile(fun(C) -> C =/= $. end, Rest)};
-map_mime_prop(X) ->
-    X.
-
-
 url2props1([], Acc) ->
     lists:reverse(Acc);
 url2props1([P|Rest], Acc) ->
@@ -893,12 +893,12 @@ url2props1([P|Rest], Acc) ->
 extra_image_options(Id, Props, Options, Context) ->
     case proplists:get_value(original, Options) of
         true ->
-            proplists:delete(original, Options);
+            [{editrev, <<"original">>} | proplists:delete(editrev, proplists:delete(original, Options))];
         _ ->
-            Options1 = proplists:delete(original, Options),
+            Options1 = proplists:delete(editrev, proplists:delete(original, Options)),
             Width = maps:get(<<"width">>, Props),
             Height = maps:get(<<"height">>, Props),
-            z_notifier:foldl(
+            Expanded = z_notifier:foldl(
                 #media_preview_options{
                     id = Id,
                     width = Width,
@@ -906,6 +906,7 @@ extra_image_options(Id, Props, Options, Context) ->
                     options = Options
                 },
                 Options1,
-                Context)
+                Context),
+            [{editrev, z_cafs_preview:fingerprint(Id, Context)} | Expanded]
     end.
 

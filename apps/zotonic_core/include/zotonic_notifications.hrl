@@ -1101,7 +1101,16 @@
     width :: non_neg_integer(),
     height :: non_neg_integer(),
     options :: proplists:proplist()
-    }).
+}).
+
+%% @doc Collect normalized settings that affect a resource's image edits.
+%% Contributions are hashed into signed preview URLs, independently of rendering
+%% operations. Modules should return stable terms and include their module name.
+%% Type: foldl
+%% Return: list of {Module, Settings} contributions.
+-record(media_preview_revision, {
+    id :: m_rsc:resource_id()
+}).
 
 %% @doc Request a translation of a list of strings. The resulting translations must
 %% be in the same order as the request. This notification is handled by modules
@@ -1113,7 +1122,7 @@
     from :: atom(),
     to :: atom(),
     texts = [] :: list( binary() )
-    }).
+}).
 
 %% @doc Try to detect the language of a translation. Set is_editable_only to false
 %% to detect any language, even if the language is not enabled for the site.

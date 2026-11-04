@@ -33,6 +33,22 @@ whatever templates they want.
 Core base module providing fundamental dispatch rules, actions, and template components used across sites.
 
 
+CAFS configuration
+------------------
+
+The base module lists the core content-addressable file storage settings in the
+admin configuration catalog. These are per-site `m_config` settings in the `site`
+namespace; they do not require `mod_filestore` or a separate CAFS module.
+
+| Key | Default | Description |
+| --- | --- | --- |
+| `site.cafs_preview_retention_days` | `90` | Grace period for obsolete previews, in days. Valid values are 1 through 3650; invalid values use 90. Cleanup is lazy, and other valid usages preserve shared output. Requests do not extend the grace period. |
+| `site.cafs_renderer_version` | `1` | Additional image renderer version. Change after rendering changes not already captured in the generation key, then call `z_file_sup:refresh/0` to invalidate running file entries. New previews are generated on demand. |
+
+See `model#m_cafs` for source recovery retention, shared preview collection, and
+remote storage behavior.
+
+
 Accepted Events
 ---------------
 
@@ -54,6 +70,24 @@ This module handles the following notifier callbacks:
 -mod_provides([base]).
 -mod_schema(3).
 -mod_config([
+        #{
+            module => site,
+            key => cafs_preview_retention_days,
+            type => integer,
+            default => 90,
+            description => "Grace period in days for obsolete CAFS previews after source removal, mediaclass changes, or image-edit changes. "
+                           "Accepts 1 to 3650; invalid values use 90. Collection is lazy and preserves shared output still in use. "
+                           "Requests do not extend the obsolete preview's grace period."
+        },
+        #{
+            module => site,
+            key => cafs_renderer_version,
+            type => string,
+            default => "1",
+            description => "Additional version included in CAFS image-preview generation keys. "
+                           "Change after rendering changes not represented by the operations or renderer identity. "
+                           "Call z_file_sup:refresh/0 afterwards to invalidate running file entries; previews regenerate on demand."
+        },
         #{
             module => site,
             key => title,

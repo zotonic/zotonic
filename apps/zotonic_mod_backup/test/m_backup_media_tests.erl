@@ -77,11 +77,15 @@ filestore_redelete() ->
         ?assert(is_pid(FilestorePid)),
         lists:foreach(fun(_) ->
             offload_media(Id, Context),
+            Reads = meck:num_calls(s3filez, stream, '_'),
             redelete_media(Id, Context),
+            ?assertEqual(Reads, meck:num_calls(s3filez, stream, '_')),
             #{ <<"filename">> := Restored } = m_media:get(Id, Context),
-            ?assertEqual({ok, Original}, file:read_file(z_media_archive:abspath(Restored, Context))),
+            {ok, RestoredHash} = m_cafs:lookup(Restored, Context),
+            ?assertEqual({ok, Original}, m_cafs:with_local_file(RestoredHash, fun file:read_file/1, Context)),
             ?assertEqual(FilestorePid, whereis(z_utils:name_for_site(mod_filestore, Context)))
         end, lists:seq(1, 2)),
+        ?assertEqual(1, ets:info(Remote, size)),
         ?assert(meck:num_calls(s3filez, stream, '_') > 0),
         ?assert(meck:validate(s3filez))
     after
@@ -93,7 +97,8 @@ filestore_redelete() ->
 
 offload_media(Id, Context) ->
     #{ <<"filename">> := Filename } = Medium = m_media:get(Id, Context),
-    Path = <<"archive/", Filename/binary>>,
+    {ok, Hash} = m_cafs:lookup(Filename, Context),
+    Path = m_cafs:path(Hash),
     % Synchronize queueing with the test; duplicate queue entries are harmless.
     _ = mod_filestore:observe_media_update_done(
         #media_update_done{
@@ -111,11 +116,14 @@ offload_media(Id, Context) ->
         {'DOWN', Ref, process, Pid, Reason} -> ?assertEqual(normal, Reason)
     after 10000 -> error(upload_timeout)
     end,
-    ?assertNot(filelib:is_regular(z_media_archive:abspath(Filename, Context))),
+    ?assertNot(filelib:is_regular(z_path:files_subdir(Path, Context))),
     {ok, #{ location := Location }} = m_filestore:lookup(Path, Context),
     % Evict the uploaded copy, forcing recovery through the download stream.
     % Terminate the temporary file entry synchronously: its graceful stop uses
     % an inactivity timeout that refreshes and cache events can interrupt.
+    lists:foreach(fun(FilePid) ->
+        supervisor:terminate_child(z_file_sup, FilePid)
+    end, m_cafs:readers(Path, Context)),
     case z_file_entry:where(Filename, Context) of
         undefined -> ok;
         FilePid ->
@@ -127,9 +135,14 @@ offload_media(Id, Context) ->
     ok = delete_cached_media(Location, 3).
 
 %% A cache entry can stop normally after being logged, between lookup and the
-%% delete call. Retry the public API so it also removes the persisted entry.
+%% delete call, or still be busy releasing readers. Retry the public API so it
+%% also removes the persisted entry; return the last error if retries run out.
 delete_cached_media(Location, Retries) ->
-    try filezcache:delete(Location)
+    try filezcache:delete(Location) of
+        {error, _Reason} when Retries > 0 ->
+            timer:sleep(20),
+            delete_cached_media(Location, Retries - 1);
+        Result -> Result
     catch
         exit:{normal, {gen_statem, call, [_Pid, delete, infinity]}} when Retries > 0 ->
             delete_cached_media(Location, Retries - 1)

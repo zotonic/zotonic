@@ -327,6 +327,12 @@ clear the unrecoverable state. A new successful upload of the path resets it.
 
 - `#media_update_done{}` queues inserted or updated media files.
 - `#filestore{}` handles file lookup, upload, and deletion through the file registry and cache.
+- `#filestore{action=delete_status}` requests deletion and returns `absent`, `pending`,
+  or an error. Exact paths and prefixes include queued uploads and remote entries;
+  repeated requests preserve the deletion retention deadline.
+- `#filestore{action=cancel_delete}` cancels an undispatched deletion in the caller’s
+  transaction. It returns `true` when safe to reuse the path, and `false` once
+  deletion has been dispatched. No handler means cancellation is unconfirmed.
 - `#filestore_request{}` handles direct storage upload, download, and deletion requests.
 - `#filestore_credentials_lookup{}` maps a local path and optional resource ID to remote credentials and location.
 - `#filestore_credentials_revlookup{}` resolves credentials for an existing remote service and location.
@@ -342,7 +348,7 @@ for the configuration and statistics model. Storage requests use `s3filez`,
 -mod_title("File Storage").
 -mod_description("Store files on cloud storage services using FTP, S3 and WebDAV").
 -mod_prio(500).
--mod_schema(15).
+-mod_schema(17).
 -mod_provides([filestore]).
 -mod_depends([cron]).
 -mod_config([
@@ -478,6 +484,10 @@ observe_filestore(#filestore{action=upload} = Request, Context) ->
         true -> {error, read_only};
         false -> queue_filestore_upload(Request, Context)
     end;
+observe_filestore(#filestore{action=delete_status, path=Path}, Context) ->
+    m_filestore:delete_status(Path, Context);
+observe_filestore(#filestore{action=cancel_delete, path=Path}, Context) ->
+    m_filestore:cancel_pending_delete(Path, Context);
 observe_filestore(#filestore{action=delete, path=PathOrPrefix}, Context) ->
     mark_filestore_deleted(PathOrPrefix, Context).
 
@@ -854,6 +864,7 @@ testcred(Context) ->
     filestore_admin:testcred(Context).
 
 queue_all(Context) ->
+    ok = m_cafs:queue_all(Context),
     Max = z_db:q1("select count(*) from medium", Context),
     z_pivot_rsc:insert_task(?MODULE, task_queue_all, filestore_queue_all, [0, Max], Context).
 
@@ -920,7 +931,15 @@ maybe_queue_file(_Prefix, _Path, false, _MediaInfo, _Context) ->
     nop;
 maybe_queue_file(Prefix, Filename, true, MediaInfo, Context) ->
     FilenameBin = z_convert:to_binary(Filename),
-    case m_filestore:queue(<<Prefix/binary, FilenameBin/binary>>, MediaInfo, Context) of
+    Path = case Prefix of
+        <<"archive/">> ->
+            case m_cafs:lookup(FilenameBin, Context) of
+                {ok, Hash} -> m_cafs:path(Hash);
+                {error, enoent} -> <<Prefix/binary, FilenameBin/binary>>
+            end;
+        _ -> <<Prefix/binary, FilenameBin/binary>>
+    end,
+    case m_filestore:queue(Path, MediaInfo, Context) of
         ok -> ok;
         {error, duplicate} -> ok
     end.
@@ -984,6 +1003,7 @@ next_batch(BatchSize, Context) ->
     z_db:run_if_low_load(fun() -> next_batch_1(BatchSize, Context) end, Context).
 
 next_batch_1(BatchSize, Context) ->
+    ok = m_cafs:queue_uploads(Context),
     case filestore_config:is_upload_enabled(Context) of
         true ->
             start_uploaders(m_filestore:fetch_queue(BatchSize, Context), Context);
@@ -1070,11 +1090,16 @@ start_deleter_writable(#{
                     }),
                     ContextAsync = z_context:prune_for_async(Context),
                     Mod = filestore_request:filezmod(CredService),
-                    _ = Mod:queue_delete_id({?MODULE, delete, Id}, Cred, Location1, {?MODULE, delete_ready, [Id, Path, ContextAsync]});
+                    case m_filestore:claim_delete(Id, Context) of
+                        true ->
+                            _ = Mod:queue_delete_id({?MODULE, delete, Id}, Cred, Location1,
+                                {?MODULE, delete_ready, [Id, Path, ContextAsync]});
+                        false -> ok % Cancelled before dispatch (e.g. identical CAFS reupload).
+                    end;
                 false ->
                     ?LOG_WARNING(#{
                         in => zotonic_mod_filestore,
-                        text => <<"Not deleting remote file as it is not matching with service url - dropping local ref">>,
+                        text => <<"Not deleting remote file as it is not matching with service url - retaining for retry">>,
                         result => error,
                         reason => service_url_mismatch,
                         service => CredService,
@@ -1084,7 +1109,8 @@ start_deleter_writable(#{
                         path => Path,
                         action => delete
                     }),
-                    m_filestore:purge_deleted(Id, Context)
+                    m_filestore:defer_delete(Id, service_url_mismatch, Context),
+                    update_backoff(fail, Context)
             end;
         {ok, #filestore_credentials{ service = CredService }} ->
             ?LOG_DEBUG(#{
@@ -1095,7 +1121,8 @@ start_deleter_writable(#{
                 location => Location,
                 path => Path,
                 id => Id
-            });
+            }),
+            m_filestore:defer_delete(Id, service_mismatch, Context);
         undefined ->
             ?LOG_DEBUG(#{
                 text => <<"No credentials for queue delete.">>,
@@ -1104,7 +1131,8 @@ start_deleter_writable(#{
                 location => Location,
                 path => Path,
                 id => Id
-            })
+            }),
+            m_filestore:defer_delete(Id, no_credentials, Context)
     end.
 
 %% Filez callbacks run in library workers, without the caller's logger metadata.
@@ -1135,7 +1163,7 @@ delete_ready_1(Id, Path, Context, _Ref, {error, Reason})
     m_filestore:purge_deleted(Id, Context);
 delete_ready_1(Id, Path, Context, _Ref, {error, forbidden}) ->
     ?LOG_WARNING(#{
-        text => <<"Delete remote file was forbidden - dropping local ref">>,
+        text => <<"Delete remote file was forbidden - retaining for retry">>,
         in => zotonic_mod_filestore,
         path => Path,
         result => error,
@@ -1143,7 +1171,8 @@ delete_ready_1(Id, Path, Context, _Ref, {error, forbidden}) ->
         id => Id,
         action => delete
     }),
-    m_filestore:purge_deleted(Id, Context);
+    m_filestore:defer_delete(Id, forbidden, Context),
+    update_backoff(fail, Context);
 delete_ready_1(Id, Path, Context, _Ref, {error, Reason}) ->
     ?LOG_ERROR(#{
         text => <<"Delete remote file failed, will retry">>,
@@ -1154,6 +1183,7 @@ delete_ready_1(Id, Path, Context, _Ref, {error, Reason}) ->
         id => Id,
         action => delete
     }),
+    m_filestore:defer_delete(Id, delete_failed, Context),
     update_backoff(fail, Context).
 
 
