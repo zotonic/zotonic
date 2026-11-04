@@ -160,6 +160,7 @@
                     break;
                 case "close": setOpen(false); break;
                 case "refresh": refresh(); break;
+                case "save": document.getElementById("save_stay")?.click(); break;
             }
             broker.publish("model/sessionStorage/post/admin-preview-open", open);
         });
