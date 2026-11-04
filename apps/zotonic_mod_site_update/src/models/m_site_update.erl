@@ -48,6 +48,7 @@ Available Model API Paths
 | `get` | `/is_vcs_site/...` | Return whether the current site source directory resolves to a VCS checkout (`.git`, `.hg`, or symlinked checkout). |
 | `get` | `/vcs_site/+site/...` | Return admin-only VCS tuple for site `+site` (`{git|hg, Path}`) or `false` when no repository is detected. |
 | `get` | `/vcs_zotonic/...` | Return admin-only VCS tuple for the Zotonic core library directory (`{git|hg, Path}`) or `false` when not under VCS. |
+| `get` | `/deployment_status/...` | Return node-wide coordinator status (`active`, `deployment`, `blocked`, `restart_required`). Requires administrator or `use mod_site_update` permission. A deployment is running only when both `active` and `deployment` are true. |
 | `post` | `/webhook` | Read webhook token from query arg `token`; if it matches `mod_site_update.webhook_token`, run the protected pull/build/activation deployment for the current site. No further lookups. |
 | `post` | `/webhook/+token` | Use path token `+token`; if it matches `mod_site_update.webhook_token`, run the protected pull/build/activation deployment for the current site. No further lookups. |
 
@@ -80,6 +81,11 @@ Available Model API Paths
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ <<"deployment_status">> | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) orelse z_acl:is_allowed(use, mod_site_update, Context) of
+        true -> {ok, {zotonic_filehandler_update:status(), Rest}};
+        false -> {error, eacces}
+    end;
 m_get([ <<"user_modules">> | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
         true ->

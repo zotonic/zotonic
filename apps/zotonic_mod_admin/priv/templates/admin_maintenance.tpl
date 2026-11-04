@@ -14,6 +14,26 @@
         {% endcompose %}
     {% endblock %}
 {% endcompose %}
+{% if m.acl.use.mod_admin_config %}
+    {% compose "_admin_maintenance_panel.tpl" title=_"Media" %}
+        {% block tools %}
+            <div id="admin-status-media-maintenance" aria-live="polite">
+                {% include "_admin_status_media_maintenance.tpl" %}
+            </div>
+            {% compose "_admin_maintenance_action.tpl" title=_"Deduplicate media files" description=_"Move originals and extracted preview images into content-addressable storage. Redundant local and remote copies are cleaned up in the background. Remote files without a checksum are skipped; no files are downloaded to calculate checksums." %}
+                {% block action %}
+                    {% button class="btn btn-default" text=_"Deduplicate media files" action={admin_tasks task='migrate_to_cafs'} %}
+                {% endblock %}
+            {% endcompose %}
+            {% compose "_admin_maintenance_action.tpl" title=_"Generated previews" description=_"Delete all resized image variants, including variants in remote storage. Uploaded originals and preview images extracted from movies, PDFs and embeds are kept. Previews regenerate when requested. Remote deletion follows the filestore retention policy." %}
+                {% block action %}
+                    {% button class="btn btn-danger" text=_"Delete generated previews"
+                        action={confirm title=_"Delete generated previews" text=_"Delete all generated image sizes? Preview originals are kept. Image requests may be slower while previews regenerate." is_danger action={admin_tasks task='delete_generated_previews'}} %}
+                {% endblock %}
+            {% endcompose %}
+        {% endblock %}
+    {% endcompose %}
+{% endif %}
 {% compose "_admin_maintenance_panel.tpl" title=_"Search" panel_id="search" %}
     {% block tools %}
         <div id="admin-status-indexing" aria-live="polite">{% include "_admin_status_indexing.tpl" %}</div>

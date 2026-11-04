@@ -18,11 +18,19 @@ check(Site) ->
     Maintenance = render("admin_maintenance.tpl", Context),
     ?assertNotEqual(nomatch, binary:match(Maintenance, <<"Rebuild search indices">>)),
     ?assertNotEqual(nomatch, binary:match(Maintenance, <<"Advanced repair">>)),
+    ?assertNotEqual(nomatch, binary:match(Maintenance, <<"Delete generated previews">>)),
+    ?assertNotEqual(nomatch, binary:match(Maintenance, <<"Deduplicate media files">>)),
+    ?assertEqual(nomatch, binary:match(render("admin_maintenance.tpl", Anonymous), <<"Deduplicate media files">>)),
+    ?assertEqual(nomatch, binary:match(render("admin_maintenance.tpl", Anonymous), <<"Delete generated previews">>)),
     ?assertEqual(nomatch, binary:match(Maintenance, <<"Close excess connections">>)),
     Information = render("admin_system_info.tpl", Context),
     ?assertNotEqual(nomatch, binary:match(Information, <<"Erlang init files">>)),
     ?assertNotEqual(nomatch, binary:match(render("admin_imports.tpl", Context), <<"dropupload">>)),
     ?assertEqual({error, eacces}, m_admin_status:m_get([<<"code_update">>], undefined, Anonymous)),
+    ?assertEqual({error, eacces}, m_admin_status:m_get([<<"media_maintenance">>], undefined, Anonymous)),
+    ?assertNotEqual(nomatch, binary:match(Maintenance, <<"admin-status-media-maintenance">>)),
+    ?assertNotEqual(nomatch, binary:match(Status, <<"admin-status-media-maintenance">>)),
+    ?assertEqual(nomatch, binary:match(render("_admin_status_media_maintenance.tpl", Anonymous), <<"Media deduplication">>)),
     ?assertEqual(nomatch, binary:match(render("admin_system_info.tpl", Anonymous), <<"Erlang init files">>)),
     ?assertEqual(nomatch, binary:match(render("_admin_status_task_queue.tpl", Anonymous), <<"<table">>)),
     ok.
@@ -33,3 +41,33 @@ render(Template, Context) ->
         _ -> z_template:render_block_to_iolist(content, Template, [], Context)
     end,
     iolist_to_binary(Html).
+
+maintenance_status_test() ->
+    C = z_acl:sudo(z_context:set_language(en, z_context:new(zotonic_site_testsandbox))),
+    meck:new(z_pivot_rsc, [passthrough, no_link]),
+    try
+        Result = z_db:transaction(fun(Ctx) ->
+            z_db:q("delete from pivot_task_queue where module in
+                ('z_media_cafs_migrate','z_media_preview_purge')", Ctx),
+            {ok, {Idle, []}} = m_admin_status:m_get([<<"media_maintenance">>], undefined, Ctx),
+            ?assertEqual(#{pending => 0, running => false}, maps:get(migration, Idle)),
+            {ok, Id} = z_db:insert(pivot_task_queue, #{module => z_media_cafs_migrate,
+                function => cleanup, key => <<"status-test">>}, Ctx),
+            {ok, _} = z_db:insert(pivot_task_queue, #{module => z_media_preview_purge,
+                function => run, key => <<"status-test">>, due => {{2099,1,1},{0,0,0}}}, Ctx),
+            meck:expect(z_pivot_rsc, status, fun(_) -> {ok, #{task_id => Id}} end),
+            {ok, {Active, []}} = m_admin_status:m_get([<<"media_maintenance">>], undefined, Ctx),
+            ?assertEqual(#{pending => 1, running => true}, maps:get(migration, Active)),
+            ?assertEqual(#{pending => 1, running => false}, maps:get(previews, Active)),
+            Html = render("_admin_status_media_maintenance.tpl", Ctx),
+            ?assertNotEqual(nomatch, binary:match(Html, <<"Running">>)),
+            ?assertNotEqual(nomatch, binary:match(Html, <<"Queued / waiting">>)),
+            z_db:delete(pivot_task_queue, Id, Ctx),
+            {ok, {Done, []}} = m_admin_status:m_get([<<"media_maintenance">>], undefined, Ctx),
+            ?assertEqual(#{pending => 0, running => false}, maps:get(migration, Done)),
+            throw({rollback, checked})
+        end, C),
+        ?assertEqual({rollback, checked}, Result)
+    after
+        meck:unload(z_pivot_rsc)
+    end.

@@ -71,18 +71,28 @@ filestore_redelete() ->
             ok
         end),
         File = filename:join(code:priv_dir(zotonic_site_testsandbox), "files/archive/koe.jpg"),
-        {ok, Original} = file:read_file(File),
+        {ok, Image} = file:read_file(File),
+        %% A distinct JPEG comment gives this fixture its own CAFS object.
+        %% Reusing koe.jpg shares bytes and background cache readers with other
+        %% resources, so their downloads can race with the recovery assertion.
+        <<16#ff, 16#d8, ImageRest/binary>> = Image,
+        Comment = z_ids:id(),
+        CommentSize = byte_size(Comment) + 2,
+        Original = <<16#ff, 16#d8, 16#ff, 16#fe, CommentSize:16,
+            Comment/binary, ImageRest/binary>>,
         {ok, Id} = m_media:insert_file(#upload{ filename = <<"koe.jpg">>, data = Original }, Context),
         FilestorePid = whereis(z_utils:name_for_site(mod_filestore, Context)),
         ?assert(is_pid(FilestorePid)),
         lists:foreach(fun(_) ->
-            offload_media(Id, Context),
-            Reads = meck:num_calls(s3filez, stream, '_'),
+            Location = offload_media(Id, Context),
+            StreamArgs = ['_', Location, '_'],
+            Reads = meck:num_calls(s3filez, stream, StreamArgs),
             redelete_media(Id, Context),
-            ?assertEqual(Reads, meck:num_calls(s3filez, stream, '_')),
+            ?assertEqual(Reads, meck:num_calls(s3filez, stream, StreamArgs)),
             #{ <<"filename">> := Restored } = m_media:get(Id, Context),
             {ok, RestoredHash} = m_cafs:lookup(Restored, Context),
             ?assertEqual({ok, Original}, m_cafs:with_local_file(RestoredHash, fun file:read_file/1, Context)),
+            ?assert(meck:num_calls(s3filez, stream, StreamArgs) > Reads),
             ?assertEqual(FilestorePid, whereis(z_utils:name_for_site(mod_filestore, Context)))
         end, lists:seq(1, 2)),
         ?assertEqual(1, ets:info(Remote, size)),
@@ -132,7 +142,8 @@ offload_media(Id, Context) ->
                 {error, not_found} -> ok
             end
     end,
-    ok = delete_cached_media(Location, 3).
+    ok = delete_cached_media(Location, 3),
+    Location.
 
 %% A cache entry can stop normally after being logged, between lookup and the
 %% delete call, or still be busy releasing readers. Retry the public API so it

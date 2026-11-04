@@ -48,6 +48,21 @@ preview retention, and internal Erlang APIs.
 Copy a medium to another resource
 --------------------------------
 
+`m_media:migrate_to_cafs(Context)` queues a resumable scan of all current medium
+records. It requires `use mod_admin_config`. Owned originals and extracted preview
+images are deduplicated into CAFS; logical filenames remain unchanged. Local bytes
+are hashed, while remote-only originals with a valid SHA-256 digest reuse their
+existing remote location. Remote-only files without a digest are logged and skipped,
+never downloaded for hashing. Retry tasks handle unavailable backends separately
+from the scan. Legacy remote copies are retired only after a healthy canonical
+remote copy exists; deletion follows filestore retention. Rerunning is safe.
+
+`m_media:delete_generated_previews(Context)` queues background deletion of resized
+variants and requires `use` permission on `mod_admin_config`. Original files and
+`preview_filename` images are preserved, including CAFS bytes shared with them.
+The maintenance page exposes this operation. Remote deletion follows filestore
+retention; requests may regenerate previews during or after cleanup.
+
 Use `m_media:copy(Source, Destination, Context)` to replace an existing resource's
 medium with a copy of another resource's medium. Both arguments accept resource
 ids or names. The result is `ok` or `{error, Reason}`.
@@ -132,6 +147,8 @@ Available Model API Paths
     depiction/2,
     depicts/2,
     delete/2,
+    migrate_to_cafs/1,
+    delete_generated_previews/1,
     replace/3,
     copy/3,
     duplicate/3,
@@ -179,6 +196,46 @@ Available Model API Paths
                 | m_rsc:update_option().
 
 -export_type([media_url/0, options/0, option/0]).
+
+%% @doc Queue a resumable scan of owned medium files for CAFS deduplication.
+%% Remote-only files without a SHA-256 digest are skipped, never downloaded.
+-spec migrate_to_cafs(Context) -> ok | {error, term()} when Context :: z:context().
+migrate_to_cafs(Context) ->
+    case z_acl:is_allowed(use, mod_admin_config, Context) of
+        false -> {error, eacces};
+        true ->
+            case m_cafs:is_enabled(Context) of
+                false -> {error, nodb};
+                true ->
+                    Last = z_db:q1("select coalesce(max(id), 0) from medium", Context),
+                    case z_pivot_rsc:insert_task_after(0, z_media_cafs_migrate, run,
+                            <<"medium">>, [0, Last], Context) of
+                        {ok, _} -> ok;
+                        {error, _} = Error -> Error
+                    end
+            end
+    end.
+
+%% @doc Queue deletion of resized variants, preserving originals and extracted
+%% preview_filename images. Remote deletion follows the backend retention policy.
+-spec delete_generated_previews(Context) -> ok | {error, term()} when Context :: z:context().
+delete_generated_previews(Context) ->
+    case z_acl:is_allowed(use, mod_admin_config, Context) of
+        false -> {error, eacces};
+        true ->
+            case m_cafs:is_enabled(Context) of
+                false -> {error, nodb};
+                true ->
+                    Before = z_db:q1("select clock_timestamp()::text", Context),
+                    Args = [Before, erlang:system_time(second), cafs],
+                    case z_pivot_rsc:insert_task_after(0, z_media_preview_purge, run,
+                            z_ids:id(), Args, Context) of
+                        {ok, _} -> ok;
+                        {error, _} = Error -> Error
+                    end
+            end
+    end.
+
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().

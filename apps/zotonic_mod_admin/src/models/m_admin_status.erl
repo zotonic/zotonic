@@ -53,6 +53,7 @@ Available Model API Paths
 | `get` | `/disks/alert/...` | Return whether any disk usage crosses configured alert thresholds. |
 | `get` | `/os_memory/...` | Return operating-system memory statistics. |
 | `get` | `/os_memory/alert/...` | Return whether OS memory pressure crosses alert thresholds. |
+| `get` | `/media_maintenance/...` | Return this site’s media deduplication and preview-cleanup task counts and running flags. Requires `use mod_admin_config`; includes queued work, retries and migration cleanup. |
 | `get` | `/task_queue/...` | Return pivot/task queue counters from `z_pivot_rsc:count_tasks/1`. |
 | `get` | `/media_processing/...` | Return local sandbox and cached media runner availability, without credentials. |
 | `get` | `/is_ssl_application_configured/...` | Return whether the `ssl` application has session settings configured. |
@@ -93,6 +94,15 @@ m_get([ <<"zotonic_version">> | Rest ], _Msg, Context) ->
 m_get([ <<"zotonic_git_version">> | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
         true -> {ok, {zotonic_git_version(), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ <<"media_maintenance">> | Rest ], _Msg, Context) ->
+    case z_acl:is_allowed(use, mod_admin_config, Context) of
+        true ->
+            case media_maintenance(Context) of
+                {ok, Status} -> {ok, {Status, Rest}};
+                {error, _} = Error -> Error
+            end;
         false -> {error, eacces}
     end;
 m_get(Path, Msg, Context) ->
@@ -261,6 +271,34 @@ listener_address(IP, _Family) ->
 
 listener_port(none) -> undefined;
 listener_port(Port) -> Port.
+
+%% @doc Include all durable phases, including delayed retries and legacy cleanup.
+%% Task execution stays in the pivot sidejob; this only reads its status and queue.
+-spec media_maintenance(Context) -> {ok, map()} | {error, term()} when Context :: z:context().
+media_maintenance(Context) ->
+    Empty = #{pending => 0, running => false},
+    Initial = #{migration => Empty, previews => Empty},
+    case m_cafs:is_enabled(Context) of
+        false -> {ok, Initial};
+        true ->
+            {ok, Pivot} = z_pivot_rsc:status(Context),
+            TaskId = maps:get(task_id, Pivot, undefined),
+            case z_db:qmap("select module, count(*) as pending,
+                    coalesce(bool_or(id=$1), false) as running
+                from pivot_task_queue
+                where module in ('z_media_cafs_migrate', 'z_media_preview_purge')
+                group by module", [TaskId], [{keys, atom}], Context) of
+                {ok, Rows} ->
+                    {ok, lists:foldl(fun(#{module := Module} = Row, Acc) ->
+                        Key = case Module of
+                            <<"z_media_cafs_migrate">> -> migration;
+                            <<"z_media_preview_purge">> -> previews
+                        end,
+                        Acc#{Key => maps:remove(module, Row)}
+                    end, Initial, Rows)};
+                {error, _} = Error -> Error
+            end
+    end.
 
 %% @doc Summarize media execution without exposing runner credentials or raw errors.
 %% Remote probes share the bounded, configuration-aware ImageMagick cache.

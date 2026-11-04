@@ -5,4 +5,5 @@
         postback={vcs_up module=module}
         delegate=`mod_site_update`
     %}
+    {% include "_site_deploy_status.tpl" %}
 {% endif %}

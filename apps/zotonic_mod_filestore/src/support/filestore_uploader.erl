@@ -89,7 +89,12 @@ upload_job_2(QueueId, Path, MediaInfo, Context) ->
             % The lookup passed to upload_job/5 can be stale if this sidejob was
             % waiting to start while another uploader finished the same path.
             case m_cafs:with_path_pin(Path, fun() ->
-                try_upload(lookup(Path, Context), QueueId, Path, MediaInfo, Context)
+                %% A delayed sidejob must not resurrect a retired legacy path.
+                case z_db:q1("select 1 from filestore_queue where id=$1 and path=$2",
+                        [QueueId, Path], Context) of
+                    1 -> try_upload(lookup(Path, Context), QueueId, Path, MediaInfo, Context);
+                    undefined -> ok
+                end
             end, Context) of
                 {error, deleting} -> m_filestore:dequeue(QueueId, Context);
                 Result -> Result

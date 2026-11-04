@@ -149,11 +149,11 @@ and durable task inputs. `queue_uploads/1` submits a bounded batch to filestore.
 Neither function discovers or downloads legacy files.
 """).
 
--export([is_enabled/1, install/1, schema/0, stage_file/2, attach/3, lookup/2,
+-export([is_enabled/1, install/1, schema/0, stage_file/2, stage_remote/4, attach/3, lookup/2,
     clone_filename/3, promote/3, stage_medium/2, attach_medium/2,
     release/2, pin/3, unpin/3, with_local_file/3, with_path_pin/3,
     path/1, path_hash/1, aliases/2, retire_filename/2, maintenance/1,
-    queue_uploads/1, queue_all/1, derivative/5, derivative/6, track/2, readers/2]).
+    queue_uploads/1, queue_all/1, collect_unused/2, derivative/5, derivative/6, track/2, readers/2]).
 
 -include_lib("zotonic.hrl").
 -include_lib("zotonic_file.hrl").
@@ -300,6 +300,33 @@ stage_file(File, Context) ->
         false -> {error, nodb};
         true -> stage_file_db(File, Context)
     end.
+
+%% @doc Stage a known remote original without fetching its bytes. The backend
+%% retargets its existing object under the canonical path in this transaction.
+%% The caller must hold the medium lock and attach the returned stage in the same
+%% transaction, so existing logical URLs remain resolvable throughout migration.
+-spec stage_remote(Filename, Hash, Size, Context) -> {ok, map()} | {error, term()} when
+    Filename :: binary(), Hash :: binary(), Size :: non_neg_integer(), Context :: z:context().
+stage_remote(Filename, Hash, Size, Context) ->
+    transaction(fun(Ctx) ->
+        z_db:q("insert into cafs (hash,size) values ($1,$2) on conflict do nothing",
+            [Hash, Size], Ctx),
+        case stage_state(Hash, Ctx) of
+            <<"ready">> ->
+                case z_notifier:first(#filestore{action=cafs_adopt,
+                        path= <<"archive/", Filename/binary>>, target_path=path(Hash)}, Ctx) of
+                    ok ->
+                        Token = z_ids:id(),
+                        z_db:q("insert into cafs_pin (owner,hash,expires)
+                            values ($1,$2,now()+interval '1 day')", [Token, Hash], Ctx),
+                        z_db:q("update cafs set upload_pending=false where hash=$1", [Hash], Ctx),
+                        {ok, #{hash => Hash, token => Token}};
+                    undefined -> {error, unavailable};
+                    Error -> Error
+                end;
+            _ -> {error, deleting}
+        end
+    end, Context).
 
 stage_file_db(File, Context) ->
     case z_crypto:hex_sha2_file(File) of
@@ -672,6 +699,14 @@ maintenance_db(Context) ->
     lists:foreach(
         fun({Hash}) -> collect(Hash, Context) end,
         z_db:q("select hash from cafs where gc_after<now() order by gc_after limit 100", Context)),
+    ok.
+
+%% @doc Collect a generated object after removing its derivative reference.
+%% Ordinary references and pins still protect shared original/preview bytes.
+-spec collect_unused(Hash, Context) -> ok when Hash :: binary(), Context :: z:context().
+collect_unused(Hash, Context) ->
+    z_db:q("update cafs set gc_after=now() where hash=$1", [Hash], Context),
+    collect(Hash, Context),
     ok.
 
 collect(Hash, Context) ->

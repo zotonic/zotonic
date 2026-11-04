@@ -327,6 +327,12 @@ clear the unrecoverable state. A new successful upload of the path resets it.
 
 - `#media_update_done{}` queues inserted or updated media files.
 - `#filestore{}` handles file lookup, upload, and deletion through the file registry and cache.
+- `#filestore{action=cafs_adopt}` registers a known-checksum remote original under
+  its canonical CAFS path without downloading. `cafs_retire` retires a redundant
+  legacy path once the canonical remote copy is healthy. Adoption retargets the
+  registry entry while keeping its URL. Both use the caller's transaction.
+- `#filestore{action=purge_previews}` removes old generated-preview queue entries and
+  schedules deletion of remote `preview/` files. Archive preview originals are kept.
 - `#filestore{action=delete_status}` requests deletion and returns `absent`, `pending`,
   or an error. Exact paths and prefixes include queued uploads and remote entries;
   repeated requests preserve the deletion retention deadline.
@@ -484,6 +490,12 @@ observe_filestore(#filestore{action=upload} = Request, Context) ->
         true -> {error, read_only};
         false -> queue_filestore_upload(Request, Context)
     end;
+observe_filestore(#filestore{action=Action, path=Path, target_path=Target}, Context)
+    when Action =:= cafs_adopt; Action =:= cafs_retire ->
+    m_filestore:cafs_migrate(Action, Path, Target, Context);
+observe_filestore(#filestore{action=purge_previews,
+        path={prefix, <<"preview/">>}, older_than=Before}, Context) ->
+    m_filestore:purge_previews(Before, Context);
 observe_filestore(#filestore{action=delete_status, path=Path}, Context) ->
     m_filestore:delete_status(Path, Context);
 observe_filestore(#filestore{action=cancel_delete, path=Path}, Context) ->

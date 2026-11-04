@@ -31,6 +31,18 @@ This button is only available to users with the *use.mod_site_update* right. It 
 preview of the current commit and incoming remote history. Fetching this preview does
 not change checked-out files; deployment starts only after pressing **Deploy**.
 
+Deploy controls show a node-wide **Deployment running** indicator, including
+updates started from another page or the CLI. The retained MQTT topic
+`$SYS/status/code-update` (under the extensible `$SYS/status/` namespace) carries the sanitized node-wide coordinator
+state in the shared MQTT pool. Indicators subscribe to changes without polling;
+new pages receive the current state immediately. The topic follows the coordinator's
+active deployment state, so failed or completed deployments are not marked running.
+Snapshots use two-hour retention and are refreshed on state
+changes, coordinator restart and site startup. Rendering an indicator also reads
+the coordinator directly, so it does not depend on an unexpired snapshot. Subscribers need
+administrator or `use mod_site_update` permission; no repository paths or failure
+terms are published.
+
 The update uses the same deployment barrier as `bin/zotonic deploy`: restore the tracked Git lock file,
 pull code, compile and activate the updated modules before allowing schema upgrades. File changes are
 buffered until activation completes, then caches and template indexes are refreshed.

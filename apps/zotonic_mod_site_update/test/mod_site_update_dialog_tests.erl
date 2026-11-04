@@ -41,13 +41,17 @@ dialog() ->
         ?assertNotEqual(nomatch, binary:match(LoadingBinary, Text))
     end, [<<"spinner.gif">>, <<"Fetching remote changes">>, <<"role=\"status\"">>,
           <<"Cancel">>, <<" disabled">>]),
-    module_buttons(Context).
+    module_buttons(Context),
+    deployment_status(Context),
+    retained_status(Context).
 
 module_buttons(Context) ->
     meck:new(m_site_update, [passthrough, no_link]),
     try
-        meck:expect(m_site_update, m_get, fun([<<"user_modules">> | Rest], _, _) ->
-            {ok, {#{mod_example => #{repository => "example"}}, Rest}}
+        meck:expect(m_site_update, m_get, fun
+            ([<<"user_modules">> | Rest], _, _) ->
+                {ok, {#{mod_example => #{repository => "example"}}, Rest}};
+            (Path, Msg, Ctx) -> meck:passthrough([Path, Msg, Ctx])
         end),
         {Button, _} = z_template:render_to_iolist("_admin_module_buttons.tpl",
             #{module => mod_example}, Context),
@@ -76,4 +80,48 @@ await_template(Context, Retries) ->
     case z_module_indexer:find(template, <<"_dialog_site_deploy.tpl">>, Context) of
         {ok, _} -> ok;
         {error, enoent} -> timer:sleep(50), await_template(Context, Retries - 1)
+    end.
+
+deployment_status(Context) ->
+    meck:new(zotonic_filehandler_update, [passthrough, no_link]),
+    try
+        lists:foreach(fun({Active, Deployment, Hidden}) ->
+            meck:expect(zotonic_filehandler_update, status, fun() ->
+                #{active => Active, deployment => Deployment,
+                    blocked => not Active andalso Deployment, restart_required => false}
+            end),
+            {Html, _} = z_template:render_to_iolist("_site_deploy_status.tpl", [], Context),
+            Binary = iolist_to_binary(Html),
+            ?assertNotEqual(nomatch, binary:match(Binary, <<"Deployment running on this node">>)),
+            ?assertEqual(Hidden, binary:match(Binary, <<"text-info hidden">>) =/= nomatch),
+            ?assertNotEqual(nomatch, binary:match(Binary, <<"role=\"status\"">>))
+        end, [{false, false, true}, {true, true, false},
+              {false, true, true}, {true, false, true}]),
+        ?assertEqual({error, eacces}, m_site_update:m_get(
+            [<<"deployment_status">>], undefined, z_acl:anondo(Context))),
+        {Anon, _} = z_template:render_to_iolist("_site_deploy_status.tpl", [], z_acl:anondo(Context)),
+        ?assertEqual(nomatch, binary:match(iolist_to_binary(Anon), <<"site-deploy-running">>))
+    after
+        meck:unload(zotonic_filehandler_update)
+    end.
+
+retained_status(Context) ->
+    Topic = <<"$SYS/status/code-update">>,
+    TopicParts = [<<"$SYS">>, <<"status">>, <<"code-update">>],
+    ?assert(z_mqtt_sessions_runtime:is_allowed(subscribe, TopicParts, #{}, Context)),
+    ?assertNot(z_mqtt_sessions_runtime:is_allowed(subscribe, TopicParts, #{}, z_acl:anondo(Context))),
+    ?assertNot(z_mqtt_sessions_runtime:is_allowed(publish, TopicParts, #{}, z_acl:anondo(Context))),
+    Status = zotonic_filehandler_update:status(),
+    ok = z_filehandler:code_update_status_observer({code_update_status, Status}, undefined),
+    %% Subscribe after publication: the broker must deliver its retained snapshot.
+    ok = z_mqtt:subscribe(Topic, Context),
+    try
+        receive
+            {mqtt_msg, #{topic := TopicParts, message := #{payload := Payload} = Message}} ->
+                ?assertEqual(Status, Payload),
+                ?assertEqual(7200, maps:get(message_expiry_interval, maps:get(properties, Message)))
+        after 2000 -> error(no_retained_deployment_status)
+        end
+    after
+        z_mqtt:unsubscribe(Topic, Context)
     end.

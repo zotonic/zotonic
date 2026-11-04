@@ -188,6 +188,28 @@ contain only a fraction of remotely stored media, and the mediarunner cache is n
 a backup. Keep the remote credentials and storage configuration needed for recovery.
 See [backup and restore](module#mod_backup) for the supported workflow.
 
+## Delete all generated previews
+
+On **Maintenance → Media**, use **Delete generated previews** to queue a complete
+cleanup of resized image variants. The action requires permission to use
+`mod_admin_config` and runs in bounded background batches, visible in the task queue.
+
+It clears CAFS derivative references and legacy files in the generated `preview/`
+directory, including library-image variants. It also removes pending uploads of
+old legacy variants and queues their remote deletion. Filestore retention and
+read-only settings still apply; an unavailable backend is retried.
+
+Uploaded originals and all medium `preview_filename` images (movie posters, PDF
+covers, embed thumbnails, etc.) are preserved. Those stored preview originals
+belong to the archive, including `archive/preview/`, rather than the generated
+preview directory. CAFS objects shared with originals, stored previews, other
+references or active processing remain protected.
+
+Previews regenerate on demand. The task uses a fixed cutoff, so it does not keep
+collecting newly created variants while visitors browse. Active CAFS generators
+finish before their old derivative references are removed. Cleanup preserves URL
+obsolescence records, so old invalid mediaclass/edit URLs do not become valid again.
+
 ## Backend deletion coordination
 
 Remote deletion is coordinated through `#filestore{action=delete_status}`. The
@@ -213,3 +235,36 @@ filestore to generate those previews.
 
 This behavior is selected by site configuration. A temporary database outage on
 a database-backed site does not switch its files into a different storage model.
+
+## Deduplicating existing media
+
+Use **Maintenance → Media → Deduplicate media files**, or call
+`m_media:migrate_to_cafs(Context)` with `use mod_admin_config` permission.
+The background scan visits every medium present when it starts, including its
+owned original and its extracted preview image (`preview_filename`). Logical
+filenames and media URLs remain unchanged. Identical bytes share one CAFS object.
+
+Local files are hashed even when they have no checksum yet. Remote-only originals
+with a valid SHA-256 digest can reuse their existing remote location without a
+download. Remote-only files without a checksum, including extracted previews,
+are skipped and logged. This operation never downloads files merely to hash them;
+rerun it after making missing bytes available locally if needed.
+
+The scan runs in bounded batches, and individual files retry independently after
+failures. Cleanup also retries separately. A redundant local copy is removed only
+after the CAFS mapping is published and a canonical copy is available. A legacy
+remote copy is retired only after a healthy canonical remote entry exists. When
+reusing an existing remote object, its registry path changes atomically with the
+CAFS attachment; the remote URL and bytes stay in place. Deletion of redundant
+remote objects follows the filestore retention policy (including
+**Never**). Disabled or read-only backends delay cleanup. It is safe to rerun the
+operation; tasks resume after a restart. This does not delete extracted preview
+originals or regenerate resized previews.
+
+Both media maintenance actions only queue work from the admin request. Durable
+background tasks perform the scan, hashing and cleanup, and resume after restarts.
+The **Maintenance** and **System status** pages show **Running**, **Queued / waiting**
+or **Idle** for each operation and refresh every five seconds. Deduplication remains
+pending while its per-medium or legacy-cleanup tasks remain, even after the scan
+finishes. These are task counts, not file counts. Idle means no maintenance tasks
+remain; remote objects already marked for deletion still follow filestore retention.

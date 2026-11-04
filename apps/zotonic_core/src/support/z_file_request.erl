@@ -22,6 +22,7 @@
 
 -export([
     delete_remote/2,
+    purge_previews/2,
     lookup_lib/2,
     lookup_file/2,
     lookup_file/4,
@@ -58,6 +59,20 @@ delete_remote(Path, Context) ->
             case m_config:get_boolean(site, filestore_used, Context) of
                 true -> {error, filestore_unavailable};
                 false -> absent
+            end;
+        Result -> Result
+    end.
+
+%% @doc Queue removal of legacy resizer files in a backend, never archive files.
+-spec purge_previews(Before, Context) -> ok | pending | {error, term()} when
+    Before :: binary(), Context :: z:context().
+purge_previews(Before, Context) ->
+    case z_notifier:first(#filestore{action=purge_previews,
+            path={prefix, <<"preview/">>}, older_than=Before}, Context) of
+        undefined ->
+            case m_config:get_boolean(site, filestore_used, Context) of
+                true -> {error, filestore_unavailable};
+                false -> ok
             end;
         Result -> Result
     end.

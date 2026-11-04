@@ -36,11 +36,13 @@ Type: [first](/id/doc_developerguide_notifications#notification-first).
 
 `#filestore{}` properties:
 
-* `action`: `lookup`, `upload`, `delete`, `delete_status`, or `cancel_delete`.
+* `action`: `lookup`, `upload`, `delete`, `delete_status`, `cancel_delete`, `purge_previews`, `cafs_adopt`, or `cafs_retire`.
 * `path`: path relative to the site's files directory, such as `archive/example.jpg`.
   Deletion and deletion-status requests also accept `{prefix, Prefix}`.
 * `local_path`: optional local filename used by `lookup` to prefer a retained local copy.
 * `mime`: optional MIME type for upload queue metadata.
+* `target_path`: canonical CAFS path for `cafs_adopt` and `cafs_retire`.
+* `older_than`: timestamp text used by `purge_previews` as a fixed cutoff.
 * `filename`: optional filename; the standard filestore handler does not use this field.
 
 Return values depend on the action:
@@ -53,10 +55,25 @@ Return values depend on the action:
   transfer file bytes. Queue insertion must participate in the caller's transaction.
 * `delete`: `ok` after marking matching entries for delayed deletion, or an error.
   This does not confirm remote absence. Repeated requests must preserve retention.
+* `cafs_adopt`: register an existing remote original at `target_path` without
+  downloading it. Return `ok` or `{error, Reason}`. The caller holds the CAFS
+  object lock and the handler must use the caller's transaction. The standard
+  backend retargets the registry entry, retaining its remote URL; the caller must
+  attach the logical filename in that same transaction.
+* `cafs_retire`: retire the redundant legacy `path` only once `target_path` is
+  healthy. Schedule normal retained deletion for redundant remote objects.
+  Return `ok` or `{error, Reason}`;
+  queued legacy uploads must finish first. Use the caller's transaction.
 * `delete_status`: request delayed deletion and return `absent` only when neither
   remote entries nor queued uploads remain. Return `pending` while work remains,
   or `{error, Reason}` when unavailable or read-only. Exact paths and prefixes are
   supported. Repeated requests must preserve retention deadlines.
+* `purge_previews`: delete a bounded batch of queued resizer uploads and mark remote
+  generated previews for deletion, restricted to `preview/` and the `older_than`
+  cutoff. Never delete `archive/preview/` images or medium originals. Return
+  `pending` while more batches may remain, `ok` once remote deletion is queued,
+  or `{error, Reason}`. Physical deletion follows backend retention. CAFS derivatives
+  are handled separately by their reference-aware collector.
 * `cancel_delete`: `true` when an undispatched deletion is cancelled or the path
   is absent; `false` once deletion may be in flight. Locking and cancellation must
   participate in the caller's transaction. An error is not confirmation of cancellation.

@@ -22,8 +22,9 @@
 -module(zotonic_filehandler_update).
 -behaviour(gen_server).
 -include_lib("kernel/include/logger.hrl").
+-include_lib("zotonic_notifier/include/zotonic_notifier.hrl").
 
--export([start_link/0, run/1, build/1, deploy/1, schema/1, try_idle/1, is_pending/0, status/0]).
+-export([start_link/0, run/1, build/1, deploy/1, schema/1, try_idle/1, is_pending/0, status/0, publish_status/0]).
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2]).
 
 -record(state, {
@@ -118,6 +119,10 @@ is_pending() ->
 status() ->
     gen_server:call(?MODULE, status).
 
+%% @doc Republish the current snapshot, for newly started sites or observers.
+-spec publish_status() -> ok.
+publish_status() -> gen_server:cast(?MODULE, publish_status).
+
 init([]) ->
     %% Retain failures if this coordinator alone is restarted by its supervisor.
     Failure = case persistent_term:get(?MODULE, undefined) of
@@ -125,15 +130,11 @@ init([]) ->
         _ -> coordinator_restarted
     end,
     persistent_term:put(?MODULE, coordinator_started),
+    self() ! publish_status,
     {ok, #state{failure = Failure}}.
 
-handle_call(status, _From, #state{owner = Owner, failure = Failure, deployment = Deployment} = State) ->
-    {reply, #{
-        active => Owner =/= undefined,
-        blocked => Failure =/= undefined,
-        deployment => Deployment,
-        restart_required => Failure =:= coordinator_restarted
-    }, State};
+handle_call(status, _From, State) ->
+    {reply, public_status(State), State};
 handle_call(is_pending, _From, State) ->
     {reply, State#state.owner =/= undefined orelse State#state.failure =/= undefined, State};
 %% A restarted coordinator has lost its leases. A VM restart is required;
@@ -151,6 +152,7 @@ handle_call({begin_update, Kind}, From, #state{owner = undefined, readers = Read
         owner = {Pid, Ref, From},
         deployment = Kind =:= deploy orelse State#state.deployment
     },
+    notify_status(State1),
     case map_size(Readers) of
         0 ->
             gen_server:reply(From, ok),
@@ -184,19 +186,28 @@ handle_call({release, Ref}, {Pid, _}, #state{readers = Readers} = State) ->
 handle_call({finish, Result}, {Pid, _}, #state{owner = {Pid, Ref, active}} = State) ->
     demonitor(Ref, [flush]),
     State1 = finish(Result, State#state{owner = undefined}),
+    notify_status(State1),
     {reply, ok, State1};
 handle_call(_Message, _From, State) ->
     {reply, {error, bad_request}, State}.
 
+handle_cast(publish_status, State) ->
+    notify_status(State),
+    {noreply, State};
 handle_cast(_Message, State) -> {noreply, State}.
 
 handle_info({'DOWN', Ref, process, _Pid, Reason}, #state{owner = {_, Ref, _}} = State) ->
-    {noreply, finish({error, {update_process_down, Reason}}, State#state{owner = undefined})};
+    State1 = finish({error, {update_process_down, Reason}}, State#state{owner = undefined}),
+    notify_status(State1),
+    {noreply, State1};
 handle_info({'DOWN', Ref, process, _Pid, _Reason}, State) ->
     {noreply, maybe_begin(State#state{
         readers = maps:remove(Ref, State#state.readers),
         waiting = lists:keydelete(Ref, 1, State#state.waiting)
     })};
+handle_info(publish_status, State) ->
+    notify_status(State),
+    {noreply, State};
 handle_info(_Message, State) -> {noreply, State}.
 
 maybe_begin(#state{owner = {Pid, Ref, From}, readers = Readers} = State)
@@ -241,3 +252,18 @@ finish({error, Reason}, #state{waiting = Waiting} = State) ->
         gen_server:reply(From, {error, {code_update_failed, Reason}})
     end, Waiting),
     State#state{failure = Reason, waiting = []}.
+
+public_status(#state{owner = Owner, failure = Failure, deployment = Deployment}) ->
+    #{active => Owner =/= undefined, blocked => Failure =/= undefined,
+      deployment => Deployment, restart_required => Failure =:= coordinator_restarted}.
+
+%% Synchronous delivery preserves transition order. Core owns the MQTT bridge;
+%% the standalone filehandler has no dependency on sites or the MQTT runtime.
+notify_status(State) ->
+    try
+        zotonic_notifier:notify_sync(?SYSTEM_NOTIFIER, code_update_status,
+            {code_update_status, public_status(State)}, undefined)
+    catch
+        %% Observability must never fail a deployment, including early startup.
+        _:_ -> ok
+    end.

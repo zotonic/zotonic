@@ -9,6 +9,14 @@
 {% include "_admin_status_alert.tpl" %}
 {% include "_admin_status_update.tpl" %}
 
+{% if m.acl.use.mod_admin_config %}
+    <section class="widget">
+        <h3 class="widget-header">{_ Media maintenance _}</h3>
+        <div class="widget-content" id="admin-status-media-maintenance" aria-live="polite">
+            {% include "_admin_status_media_maintenance.tpl" %}
+        </div>
+    </section>
+{% endif %}
 <h3>{_ Background work _} <small>{_ This site _}</small></h3>
 <div class="row">
     <div class="col-md-4">

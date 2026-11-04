@@ -99,6 +99,7 @@ Available Model API Paths
 -export([
     m_get/3,
 
+    cafs_migrate/4,
     queue/3,
     fetch_queue/1,
     fetch_queue/2,
@@ -111,6 +112,7 @@ Available Model API Paths
     health/1,
     mark_deleted/2,
     delete_status/2,
+    purge_previews/2,
     fetch_deleted/2,
     fetch_deleted/3,
     purge_deleted/2,
@@ -505,6 +507,86 @@ prolonged_errors(Page0, Context) ->
         next => case length(Rows) of 51 -> Page + 1; _ -> undefined end
     }.
 
+
+%% @doc Retarget a remote original into CAFS, or retire its redundant legacy path.
+%% Called with the CAFS object locked. Never fetch bytes, reset retention, or
+%% retire an object before a healthy canonical remote copy exists.
+-spec cafs_migrate(Action, Path, Target, Context) -> ok | {error, term()} when
+    Action :: cafs_adopt | cafs_retire, Path :: binary(), Target :: binary(), Context :: z:context().
+cafs_migrate(Action, Path, Target, Context) ->
+    case filestore_config:is_read_only(Context) of
+        true -> {error, read_only};
+        false ->
+            case z_db:q1("select 1 from filestore_queue where path=$1", [Path], Context) of
+                1 -> {error, busy};
+                undefined ->
+                    Rows = z_db:qmap("select * from filestore where path in ($1,$2)
+                        order by path for update", [Path, Target], [{keys, atom}], Context),
+                    case Rows of
+                        {ok, Entries} ->
+                            Source = lists:search(fun(#{path := P}) -> P =:= Path end, Entries),
+                            Dest = lists:search(fun(#{path := P}) -> P =:= Target end, Entries),
+                            cafs_migrate_1(Action, Source, Dest, Target, Context);
+                        {error, _} = Error -> Error
+                    end
+            end
+    end.
+
+cafs_migrate_1(cafs_retire, false, _Dest, _Target, _Context) -> ok;
+cafs_migrate_1(cafs_adopt, {value, #{id := Id, is_deleted := false,
+        delete_started := false, is_move_to_local := false, error := undefined}},
+        false, Target, Context) ->
+    %% Remote locations are unique. Move the registry path in the same
+    %% transaction as the caller's filename_cafs attachment; keep the URL.
+    1 = z_db:q("update filestore set path=$1, is_local=false, modified=now() where id=$2",
+        [Target, Id], Context),
+    ok;
+cafs_migrate_1(cafs_adopt, _Source, {value, #{is_deleted := false, delete_started := false, error := undefined}}, _Target, _Context) -> ok;
+cafs_migrate_1(cafs_retire, {value, #{id := Id, is_deleted := false,
+        is_move_to_local := false}},
+        {value, #{is_deleted := false, delete_started := false, error := undefined}}, _Target, Context) ->
+    z_db:q("update filestore set is_deleted=true, deleted=now(), modified=now(),
+        retry_after=null where id=$1", [Id], Context),
+    ok;
+cafs_migrate_1(cafs_retire, {value, #{is_deleted := true, location := Source}},
+        {value, #{is_deleted := false, delete_started := false, error := undefined, location := Dest}}, _Target, _Context)
+    when Source =/= Dest -> ok;
+cafs_migrate_1(_Action, _Source, _Dest, _Target, _Context) -> {error, unavailable}.
+
+%% @doc Remove old resizer uploads and mark legacy remote previews for deletion.
+%% Only the preview/ namespace is affected; extracted preview originals are stored
+%% under archive/ (or CAFS) and must never be selected here.
+-spec purge_previews(Before, Context) -> ok | pending | {error, term()} when
+    Before :: binary(), Context :: z:context().
+purge_previews(Before, Context) ->
+    case filestore_config:is_read_only(Context) of
+        true -> {error, read_only};
+        false ->
+            Result = z_db:transaction(fun(Ctx) ->
+                Queued = z_db:q("delete from filestore_queue where id in
+                    (select id from filestore_queue where starts_with(path, 'preview/')
+                     and created <= $1::text::timestamptz order by id limit 100)", [Before], Ctx),
+                Rows = z_db:q("update filestore set is_deleted=true, deleted=now(),
+                    modified=now(), retry_after=null where id in
+                    (select id from filestore where starts_with(path, 'preview/')
+                     and not is_deleted and modified <= $1::text::timestamptz
+                     order by id limit 100) returning path,location", [Before], Ctx),
+                {Queued, Rows}
+            end, Context),
+            case Result of
+                {Queued, Rows} when is_integer(Queued), is_list(Rows) ->
+                    lists:foreach(fun({Path, Location}) ->
+                        lists:foreach(fun(Pid) -> catch z_file_entry:stop(Pid) end,
+                            m_cafs:readers(Path, Context)),
+                        filezcache:delete(Location)
+                    end, Rows),
+                    case {Queued, Rows} of
+                        {0, []} -> ok;
+                        _ -> pending
+                    end;
+                {rollback, Reason} -> {error, Reason}
+            end
+    end.
 
 %% @doc Request deletion without restarting retention, then report pending work.
 %% Both queued uploads and remote entries count, including already deleted entries.

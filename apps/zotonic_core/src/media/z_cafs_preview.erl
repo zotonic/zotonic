@@ -20,7 +20,7 @@
 
 -module(z_cafs_preview).
 -export([install/1, schema/0, fingerprint/2, prepare/5, bind/5,
-    lookup/2, expired/2, maintenance/1, grace_days/1]).
+    lookup/2, expired/2, maintenance/1, grace_days/1, purge_batch/2]).
 
 -include_lib("zotonic.hrl").
 
@@ -235,5 +235,45 @@ collect(Hash, Ops, Version, Context) ->
             where source_hash=$1 and operations=$2 and renderer_version=$3", [Hash,Ops,Version], Ctx)
     end, Context),
     ok.
+
+%% @doc Remove a bounded batch of generated derivative references. Keep usage
+%% tombstones, filename mappings and pinned/shared bytes. Never scan originals.
+-spec purge_batch(Before, Context) -> more | busy | done when
+    Before :: binary(), Context :: z:context().
+purge_batch(Before, Context) ->
+    Rows = z_db:q("select source_hash,operations,renderer_version from cafs_derivative
+        where created <= $1::text::timestamptz
+          and (claim_until is null or claim_until < now()) limit 100", [Before], Context),
+    lists:foreach(fun({Hash, Ops, Version}) ->
+        Outputs = z_db:transaction(fun(Ctx) ->
+            z_db:q1("select hash from cafs where hash=$1 for update", [Hash], Ctx),
+            Removed = z_db:q("delete from cafs_derivative
+                where source_hash=$1 and operations=$2 and renderer_version=$3
+                  and created <= $4::text::timestamptz
+                  and (claim_until is null or claim_until < now())
+                returning output_hash", [Hash, Ops, Version, Before], Ctx),
+            lists:foreach(fun
+                ({undefined}) -> ok;
+                ({Output}) -> z_db:q("update cafs set gc_after=least(gc_after,now()) where hash=$1", [Output], Ctx)
+            end, Removed),
+            Removed
+        end, Context),
+        lists:foreach(fun
+            ({undefined}) -> ok;
+            ({Output}) ->
+                lists:foreach(fun(Pid) -> catch z_file_entry:stop(Pid) end,
+                    m_cafs:readers(m_cafs:path(Output), Context)),
+                m_cafs:collect_unused(Output, Context)
+        end, Outputs)
+    end, Rows),
+    case Rows of
+        [_ | _] -> more;
+        [] ->
+            case z_db:q1("select exists(select 1 from cafs_derivative
+                where created <= $1::text::timestamptz)", [Before], Context) of
+                true -> busy;
+                false -> done
+            end
+    end.
 
 digest(Data) -> binary:encode_hex(crypto:hash(sha256, Data), lowercase).
