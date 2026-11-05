@@ -21,6 +21,7 @@
     start_observers/0,
 
     filehandler_mappers_observer/3,
+    code_update_status_observer/2,
 
     app_file_check/1,
 
@@ -40,10 +41,26 @@
 
 -spec start_observers() -> ok | {error, term()}.
 start_observers() ->
-    zotonic_notifier:observe(
+    ok = zotonic_notifier:observe(
         ?SYSTEM_NOTIFIER, zotonic_filehandler_mappers,
         {?MODULE, filehandler_mappers_observer, []},
-        self(), ?NOTIFIER_DEFAULT_PRIORITY).
+        self(), ?NOTIFIER_DEFAULT_PRIORITY),
+    ok = zotonic_notifier:observe(?SYSTEM_NOTIFIER, code_update_status,
+        {?MODULE, code_update_status_observer, []}, self(), ?NOTIFIER_DEFAULT_PRIORITY),
+    zotonic_filehandler_update:publish_status().
+
+%% $SYS topics use the shared MQTT pool, so publish once for the entire node.
+%% Retention supplies the current state to new/reconnected admin pages.
+-spec code_update_status_observer({code_update_status, map()}, term()) -> ok | {error, term()}.
+code_update_status_observer({code_update_status, Status}, _Context) ->
+    case z_sites_manager:get_site_contexts() of
+        [Ctx | _] ->
+            %% Bound stale snapshots to two hours.
+            z_mqtt:publish(#{type => publish, topic => <<"$SYS/status/code-update">>,
+                payload => Status, retain => true, qos => 0,
+                properties => #{message_expiry_interval => 7200}}, z_acl:sudo(Ctx));
+        [] -> ok
+    end.
 
 filehandler_mappers_observer(zotonic_filehandler_mappers, Mappers, _Ctx) ->
     [

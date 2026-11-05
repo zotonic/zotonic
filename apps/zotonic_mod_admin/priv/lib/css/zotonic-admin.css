@@ -261,6 +261,10 @@ pre:empty {
   background-color: rgba(255, 255, 255, 0.7);
 }
 
+.admin-system-navigation {
+  margin-bottom: 16px;
+}
+
 .text-muted {
   color: #999;
 }

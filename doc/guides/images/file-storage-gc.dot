@@ -1,0 +1,17 @@
+digraph documentation {
+graph [bgcolor="white", pad="0.25", nodesep="0.35", ranksep="0.5", fontname="Helvetica", fontsize=16, dpi=150];
+node [shape=box, style="rounded,filled", fillcolor="#eef5fb", color="#51718c", fontname="Helvetica", fontsize=13, margin="0.18,0.12"];
+edge [color="#526574", fontname="Helvetica", fontsize=11, arrowsize=0.7];
+rankdir=TB;
+medium [label="Medium removed or replaced\nOld filename recovery period"];
+preview [label="Mediaclass or image edits changed\nObsolete preview grace period"];
+{rank=same; medium; preview;}
+retire [label="Maintenance retires eligible references"];
+refs [shape=diamond, label="Still referenced\nor pinned?", fillcolor="#fff4df"];
+keep [label="Keep shared bytes", fillcolor="#eef7ee"];
+collect [label="Collect when eligible\nRemove local object / queue remote deletion"];
+remote [label="Filestore retention and retries\nConfirm deletion before clearing state"];
+medium -> retire; preview -> retire; retire -> refs;
+refs -> keep [label="yes"]; refs -> collect [label="no"];
+collect -> remote;
+}

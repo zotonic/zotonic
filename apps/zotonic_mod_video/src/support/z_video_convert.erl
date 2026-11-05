@@ -34,10 +34,13 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 -record(state, {
+          task,
+          retry = #{},
           id,
           medium,
           upload,
           queue_filename,
+          source_hash,
           process_nr,
           site,
           pickled_context
@@ -46,18 +49,33 @@
 % Default timeout for video conversions - 6 hours
 -define(FFMPEG_TIMEOUT, 6*3600*1000).
 
+start_link({convert_v4, Task, _Retry} = Args, Context) ->
+    QueueFilename = element(5, Task),
+    gen_server:start_link({via, z_proc, {video_convert, z_convert:to_binary(QueueFilename)}},
+        ?MODULE, [Args, z_context:site(Context)], []);
 start_link({convert_v1, _Id, _Medium, _Upload, _QueueFilename, _PickledContext}, _Context) ->
                                                 % Flush old convert queue
     ok;
+start_link({convert_v3, _Id, _Medium, _Upload, QueueFilename, _ProcessNr, _PickledContext, _Hash} = Args, Context) ->
+    gen_server:start_link({via, z_proc, {video_convert, z_convert:to_binary(QueueFilename)}},
+        ?MODULE, [Args, z_context:site(Context)], []);
 start_link({convert_v2, _Id, _Medium, _Upload, QueueFilename, _ProcessNr, _PickledContext} = Args, Context) ->
     gen_server:start_link({via, z_proc, {video_convert, z_convert:to_binary(QueueFilename)}},
                           ?MODULE,
                           [Args, z_context:site(Context)],
                           []).
 
-init([{convert_v2, Id, Medium, Upload, QueueFilename, ProcessNr, PickledContext}, Site]) ->
+init([{convert_v4, Task, Retry}, Site]) ->
+    {ok, State} = init([Task, Site]),
+    {ok, State#state{retry=Retry}};
+init([{convert_v3, Id, Medium, Upload, QueueFilename, ProcessNr, PickledContext, Hash} = Task, Site]) ->
+    gen_server:cast(self(), convert),
+    {ok, #state{task=Task, id=Id, medium=Medium, upload=Upload, queue_filename=QueueFilename,
+        process_nr=ProcessNr, site=Site, pickled_context=PickledContext, source_hash=Hash}};
+init([{convert_v2, Id, Medium, Upload, QueueFilename, ProcessNr, PickledContext} = Task, Site]) ->
     gen_server:cast(self(), convert),
     {ok, #state{
+            task = Task,
             id = Id,
             medium = Medium,
             upload = Upload,
@@ -72,23 +90,49 @@ handle_call(_Msg, _From, State) ->
 
 handle_cast(convert, State) ->
     Context = z_context:depickle(State#state.pickled_context),
-    QueuePath = mod_video:queue_path(State#state.queue_filename, Context),
-    case is_current_upload(State, Context) andalso filelib:is_regular(QueuePath) of
+    case is_current_upload(State, Context) of
+        false -> finish(State);
         true ->
-            do_convert(QueuePath, State),
-            file:delete(QueuePath),
-            remove_task(State);
-        false ->
-            % Queue file was deleted, remove our task
-            ?LOG_NOTICE(#{
-                text => <<"Video conversion (startup): medium is not current or queue file missing">>,
-                in => zotonic_mod_video,
-                rsc_id => State#state.id,
-                filename => State#state.queue_filename
-            }),
-            remove_task(State)
+            case maps:get(paused, State#state.retry, false) of
+                true -> save_retry(State#state.retry, 3600, State);
+                false -> conversion_result(convert_source(State, Context), State)
+            end
     end,
     {stop, normal, State}.
+
+convert_source(#state{source_hash=Hash} = State, Context) when is_binary(Hash) ->
+    m_cafs:with_local_file(Hash, fun(File) -> do_convert(File, State) end, Context);
+convert_source(State, Context) ->
+    do_convert(mod_video:queue_path(State#state.queue_filename, Context), State).
+
+conversion_result({ok, _}, State) -> finish(State);
+conversion_result({error, stale_medium}, State) -> finish(State);
+conversion_result({error, Reason}, State) ->
+    Now = erlang:system_time(second),
+    Retry = State#state.retry,
+    Started = maps:get(started, Retry, Now),
+    Attempts = maps:get(attempts, Retry, 0) + 1,
+    Paused = z_media_error:classify(Reason) =:= pause orelse Now - Started >= 86400,
+    Delay = case Paused of
+        true -> 3600;
+        false -> min(3600, 30 * (1 bsl min(Attempts - 1, 7))) + rand:uniform(10)
+    end,
+    ?LOG_WARNING(#{text => <<"Video conversion retained for retry">>, in => zotonic_mod_video,
+        rsc_id => State#state.id, reason => Reason, paused => Paused, attempts => Attempts}),
+    save_retry(#{started => Started, attempts => Attempts, last_reason => Reason,
+        next_attempt => Now + Delay, paused => Paused}, Delay, State).
+
+save_retry(Retry, Delay, State) ->
+    z_pivot_rsc:insert_task_after(Delay, mod_video, convert_task, State#state.queue_filename,
+        [{convert_v4, State#state.task, Retry}], z_context:new(State#state.site)).
+
+finish(State) ->
+    remove_task(State),
+    case State#state.source_hash of
+        undefined -> file:delete(mod_video:queue_path(State#state.queue_filename,
+            z_context:new(State#state.site)));
+        _ -> ok
+    end.
 
 handle_info(_Info, State) ->
     {noreply, State}.
@@ -99,7 +143,7 @@ terminate(_Reason, _State) ->
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
 
--spec do_convert(file:filename_all(), #state{}) -> ok.
+-spec do_convert(file:filename_all(), #state{}) -> {ok, integer()} | {error, term()}.
 do_convert(QueuePath, State) ->
     Upload = State#state.upload,
     case video_convert(QueuePath, Upload#media_upload_preprocess.mime, z_context:new(State#state.site)) of
@@ -114,7 +158,10 @@ do_convert(QueuePath, State) ->
                 result => error,
                 reason => Reason
             }),
-            insert_broken(State)
+            case z_media_error:classify(Reason) of
+                terminal -> insert_broken(State);
+                _ -> {error, Reason}
+            end
     end.
 
 -spec insert_movie(file:filename_all(), #state{}) -> {ok, m_rsc:resource_id()} | {error, atom()}.
@@ -131,14 +178,16 @@ insert_movie(TmpFile, State) ->
                 State#state.id,
                 #{},
                 PropsMedia,
-                [no_touch, {update_reason, media_processing}],
+                [no_touch, {update_reason, media_processing},
+                    {expected_medium, {<<"video_processing_nr">>, State#state.process_nr}}],
                 Context);
         false ->
             ?LOG_INFO(#{
                 text => <<"Video conversion (ok): medium is not current anymore">>,
                 in => zotonic_mod_video,
                 rsc_id => State#state.id
-            })
+            }),
+            {error, stale_medium}
     end.
 
 -spec original_filename( #media_upload_preprocess{} ) -> binary().
@@ -156,13 +205,15 @@ insert_broken(State) ->
                 <<"mime">> => <<"video/x-mp4-broken">>,
                 <<"size">> => 0
             },
-            m_media:replace(State#state.id, PropsMedia, Context);
+            m_media:replace_medium(PropsMedia, State#state.id, #{},
+                [{expected_medium, {<<"video_processing_nr">>, State#state.process_nr}}], Context);
         false ->
             ?LOG_NOTICE(#{
                 text => <<"Video conversion (broken): medium is not current anymore">>,
                 in => zotonic_mod_video,
                 rsc_id => State#state.id
-            })
+            }),
+            {error, stale_medium}
     end.
 
 is_current_upload(State, Context) ->
@@ -180,7 +231,13 @@ is_current_upload(State, Context) ->
 
 remove_task(State) ->
     Context = z_context:new(State#state.site),
-    mod_video:remove_task(State#state.queue_filename, Context).
+    z_db:transaction(fun(Ctx) ->
+        mod_video:remove_task(State#state.queue_filename, Ctx),
+        case State#state.source_hash of
+            undefined -> ok;
+            Hash -> m_cafs:unpin(Hash, <<"video:", (State#state.queue_filename)/binary>>, Ctx)
+        end
+    end, Context).
 
 video_convert(QueuePath, Mime, Context) ->
     Info = z_video_info:info(QueuePath, Context),

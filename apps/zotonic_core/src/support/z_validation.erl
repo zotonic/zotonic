@@ -81,7 +81,7 @@ validate_query_args(Context) ->
     case z_context:get(q_validated, Context) of
         undefined ->
             QArgs = z_context:get_q_all(Context),
-            case z_notifier:foldl(#validate_query_args{}, {ok, QArgs}, Context) of
+            case z_notifier:foldl(#validate_query_args{}, z_media_upload:validate_args(QArgs, Context), Context) of
                 {ok, QArgsValidated} ->
                     ContextNotifier = z_context:set_q_all(QArgsValidated, Context),
 

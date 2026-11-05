@@ -27,6 +27,7 @@ isolated_tests() ->
     {foreach, fun setup/0, fun cleanup/1, [
         fun delayed_helper/0,
         fun public_status/0,
+        fun status_notifications/0,
         fun failed_build/0,
         fun automatic_failures/0,
         fun missing_compile_options/0,
@@ -381,3 +382,31 @@ forms([Token | Rest], Current, Acc) -> forms(Rest, [Token | Current], Acc).
 %% These modules are compiled and loaded by the test, not present in the PLT.
 fixture_call(Module, Function, Args) ->
     apply(Module, Function, Args).
+
+status_notifications() ->
+    {ok, _} = application:ensure_all_started(zotonic_notifier),
+    _ = zotonic_filehandler_update:status(),
+    ok = zotonic_notifier:observe(zotonic_system_notifier, code_update_status,
+        self(), self(), 500),
+    try
+        zotonic_filehandler_update:publish_status(),
+        ?assertMatch(#{active := false}, status_notification()),
+        ok = zotonic_filehandler_update:deploy(fun() -> ok end),
+        ?assertMatch(#{active := true, deployment := true}, status_notification()),
+        ?assertMatch(#{active := false, deployment := false}, status_notification()),
+        {error, private_reason} = zotonic_filehandler_update:deploy(fun() -> {error, private_reason} end),
+        ?assertMatch(#{active := true}, status_notification()),
+        ?assertEqual(#{active => false, deployment => true, blocked => true,
+            restart_required => false}, status_notification()),
+        ok = zotonic_filehandler_update:build(fun() -> ok end),
+        ?assertMatch(#{active := true}, status_notification()),
+        ?assertMatch(#{active := false, blocked := false}, status_notification())
+    after
+        zotonic_notifier:detach_all(zotonic_system_notifier, self())
+    end.
+
+status_notification() ->
+    receive
+        {'$gen_cast', {{code_update_status, Status}, undefined}} -> Status
+    after 1000 -> error(no_status_notification)
+    end.

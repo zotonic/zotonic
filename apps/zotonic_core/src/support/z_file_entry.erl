@@ -33,6 +33,7 @@
 %% API
 -export([
     where/2,
+    where/4,
     lookup/1,
     lookup/2,
     stop/1,
@@ -77,6 +78,8 @@
         gzip_part,              % gzip is always a single part (in memory or in cache)
         gzip_size,              % size of gzip encoded data
         gzipper,                % ref to identify gzip process
+        resolver,               % Monitored lifetime owner of cache locks/subscriptions
+        failure,
         waiting = [],           % List of waiting processes
         index_ref,
         pauser_pid :: pid() | undefined
@@ -112,13 +115,20 @@ start_link(InitialState, RequestPath, Root, OptFilterProps, Context)
          (InitialState =:= locate orelse InitialState =:= paused) ->
     Minify = z_convert:to_bool(z_context:get(minify, Context)),
     Args = [ InitialState, RequestPath, Root, OptFilterProps, Minify, z_context:site(Context) ],
-    gen_statem:start_link({via, z_proc, {reg_name(RequestPath), Context}}, ?MODULE, Args, []).
+    gen_statem:start_link({via, z_proc, {reg_name(RequestPath, Root, OptFilterProps), Context}}, ?MODULE, Args, []).
 
-reg_name(RequestPath) ->
-    {?MODULE, RequestPath}.
+%% Internal archive/filter lookups must never populate the public serving cache.
+reg_name(RequestPath, Root, Filters) ->
+    {?MODULE, RequestPath, normalize_options(Root), normalize_options(Filters)}.
+
+normalize_options(undefined) -> [];
+normalize_options(Options) -> Options.
 
 where(Path, Context) ->
-    z_proc:whereis(reg_name(Path), Context).
+    where(Path, [], [], Context).
+
+where(Path, Root, Filters, Context) ->
+    z_proc:whereis(reg_name(Path, Root, Filters), Context).
 
 stop(Pid) when is_pid(Pid) ->
     gen_statem:call(Pid, stop);
@@ -155,15 +165,19 @@ pause(RequestPath, Context) when is_binary(RequestPath) ->
     pause(where(RequestPath, Context)).
 
 lookup(Pid) when is_pid(Pid) ->
-    try
-        gen_statem:call(Pid, lookup)
-    catch
-        exit:{noproc, _} ->
-            {error, noproc}
-    end;
+    lookup(Pid, 60000);
 lookup(undefined) ->
     {error, noproc}.
 
+%% Browser waits are independent of the shared resolver lifetime.
+lookup(Pid, Timeout) when is_pid(Pid), is_integer(Timeout), Timeout > 0 ->
+    try gen_statem:call(Pid, lookup, Timeout)
+    catch
+        exit:{timeout, _} ->
+            gen_statem:cast(Pid, {cancel_wait, self()}),
+            {error, pending};
+        exit:{noproc, _} -> {error, noproc}
+    end;
 lookup(RequestPath, Context) when is_binary(RequestPath) ->
     lookup(where(RequestPath, Context)).
 
@@ -197,15 +211,65 @@ callback_mode() ->
 %%% ------------------------------------------------------------------------------------
 %%% gen_statem states
 %%% ------------------------------------------------------------------------------------
+locate({call, From}, lookup, #state{waiting=Waiting} = State) when length(Waiting) < 128 ->
+    Actions = case State#state.resolver of undefined -> [{timeout, 0, locate}]; _ -> [] end,
+    {keep_state, State#state{waiting = [From | Waiting]}, Actions};
 locate({call, From}, lookup, State) ->
-    {next_state, locate, State#state{waiting = [From | State#state.waiting]}};
+    {keep_state, State, [{reply, From, {error, pending}}]};
+locate(timeout, _, #state{resolver={_, _}} = State) ->
+    {keep_state, State};
 locate(timeout, _, State) ->
+    Parent = self(),
+    {Pid, Ref} = spawn_monitor(fun() -> resolve(Parent, State) end),
+    spawn(fun() ->
+        P = monitor(process, Parent),
+        W = monitor(process, Pid),
+        receive
+            {'DOWN', P, process, Parent, _} -> exit(Pid, kill);
+            {'DOWN', W, process, Pid, _} -> ok
+        end
+    end),
+    {keep_state, State#state{resolver={Pid, Ref}, failure=undefined}};
+locate(info, {resolved, Pid, Result}, #state{resolver={Pid, _}} = State) ->
+    located(Result, State);
+locate(EventType, EventContent, Data) ->
+    handle_event(EventType, EventContent, locate, Data).
+
+%% Keep process-owned filezcache locks, monitors and CAFS subscriptions alive for
+%% as long as the entry uses the parts. Forward invalidation calls to the entry.
+resolve(Parent, State) ->
+    Ref = monitor(process, Parent),
+    Result = try
+        Context = z_context:set(file_entry_owner, Parent, z_context:new(State#state.site)),
+        z_file_locate:locate_sources(State#state.root, State#state.image_filters,
+            z_lib_include:uncollapse(State#state.request_path), Context)
+    catch
+        error:checksum_invalid -> missing;
+        throw:preview_source_gone -> {error, pending};
+        throw:{file_unavailable, Reason} -> {error, Reason};
+        Class:Reason -> {error, {Class, Reason}}
+    end,
+    Parent ! {resolved, self(), Result},
+    hold_sources(Parent, Ref).
+
+hold_sources(Parent, Ref) ->
+    receive
+        {'DOWN', Ref, process, Parent, _} -> ok;
+        {'$gen_call', _, _} = Call -> Parent ! Call, hold_sources(Parent, Ref);
+        {'DOWN', _, process, _, _} -> gen_statem:cast(Parent, {source_stale, self()}), hold_sources(Parent, Ref)
+    end.
+
+located({error, Reason}, State) ->
+    lists:foreach(fun(From) -> gen_statem:reply(From, {error, Reason}) end, State#state.waiting),
+    {next_state, serving, State#state{waiting=[], failure=Reason}, [{state_timeout, 2000, retry}]};
+located(missing, State) ->
+    locate_enoent(State, z_module_indexer:index_ref(z_context:new(State#state.site)),
+        z_media_identify:guess_mime(State#state.request_path));
+located(Sources, State) ->
     Context = z_context:new(State#state.site),
     IndexRef = z_module_indexer:index_ref(Context),
     Mime = z_media_identify:guess_mime(State#state.request_path),
-    Files = z_lib_include:uncollapse(State#state.request_path),
     try
-        Sources = z_file_locate:locate_sources(State#state.root, State#state.image_filters, Files, Context),
         AllMissing = lists:all(fun(#part_missing{}) -> true; (_) -> false end, Sources),
         if
             AllMissing ->
@@ -232,9 +296,7 @@ locate(timeout, _, State) ->
             locate_enoent(State, IndexRef, Mime);
         throw:preview_source_gone ->
             {next_state, locate, State, 0}
-    end;
-locate(EventType, EventContent, Data) ->
-    handle_event(EventType, EventContent, locate, Data).
+    end.
 
 %% Add and cache the gzip content-encoded data (for now in memory)
 %% This streams all parts to the linked process, accumulating them in gzip buffer
@@ -250,6 +312,11 @@ content_encoding_gzip(timeout, _, State) ->
 content_encoding_gzip(EventType, EventContent, Data) ->
     handle_event(EventType, EventContent, content_encoding_gzip, Data).
 
+serving(state_timeout, _, #state{failure=Reason} = State) when Reason =/= undefined ->
+    unreg(State),
+    {stop, normal, State};
+serving({call, From}, lookup, #state{failure=Reason} = State) when Reason =/= undefined ->
+    {keep_state, State, [{reply, From, {error, Reason}}]};
 serving(timeout, _, State) ->
     unreg(State),
     {next_state, stopping, State, ?STOP_TIMEOUT};
@@ -261,8 +328,9 @@ paused(timeout, _, State) ->
 paused(EventType, EventContent, Data) ->
     handle_event(EventType, EventContent, paused, Data).
 
-stopping({call, _From}, lookup, State) ->
-    {next_state, stopping, lookup_file_info(State), ?STOP_TIMEOUT};
+stopping({call, From}, lookup, State) ->
+    gen_statem:reply(From, lookup_file_info(State)),
+    {keep_state, State, ?STOP_TIMEOUT};
 stopping(timeout, _, State) ->
     ?LOG_DEBUG(#{
         text => <<"Stop file entry">>,
@@ -276,6 +344,15 @@ stopping(EventType, EventContent, Data) ->
 %%% ------------------------------------------------------------------------------------
 %%% gen_statem events
 %%% ------------------------------------------------------------------------------------
+handle_event(cast, {cancel_wait, Pid}, _StateName, State) ->
+    Actions = case State#state.resolver of undefined -> [{timeout, 0, locate}]; _ -> [] end,
+    {keep_state, State#state{waiting=[F || {P, _} = F <- State#state.waiting, P =/= Pid]}, Actions};
+handle_event(cast, {source_stale, Pid}, _StateName, #state{resolver={Pid, _}} = State) ->
+    {next_state, locate, release_sources(State), 0};
+handle_event(cast, {source_stale, _}, _StateName, State) ->
+    {keep_state, State};
+handle_event(info, {resolved, _, _}, _StateName, State) ->
+    {keep_state, State};
 handle_event({call, From}, lookup, locate, State) ->
     {next_state, locate, State#state{waiting=[From|State#state.waiting]}, 0};
 handle_event({call, From}, lookup, paused, State) ->
@@ -287,15 +364,15 @@ handle_event({call, From}, lookup, StateName, State) ->
             gen_statem:reply(From, Reply),
             {next_state, StateName, State1, timeout(StateName, State1#state.is_found)};
         stale ->
-            State1 = State#state{waiting=[From|State#state.waiting]},
+            State1 = (release_sources(State))#state{waiting=[From|State#state.waiting]},
             {next_state, locate, State1, 0}
     end;
 handle_event({call, From}, force_stale, _StateName, State) ->
-    State1 = unlink_pauser(State),
+    State1 = release_sources(unlink_pauser(State)),
     gen_statem:reply(From, ok),
     {next_state, locate, State1, 0};
 handle_event({call, From}, {pause, PauserPid}, _StateName, State) ->
-    State1 = link_pauser(State, PauserPid),
+    State1 = link_pauser(release_sources(State), PauserPid),
     gen_statem:reply(From, ok),
     {next_state, paused, State1, ?PAUSED_TIMEOUT};
 handle_event({call, From}, stop, _StateName, State) ->
@@ -316,6 +393,9 @@ handle_event(info, {gzip, _Ref, _Data}, StateName, State) ->
         state => StateName
     }),
     {next_state, StateName, State};
+handle_event(info, {'DOWN', Ref, process, Pid, Reason}, _StateName,
+        #state{resolver={Pid, Ref}} = State) ->
+    located({error, {resolver, Reason}}, State#state{resolver=undefined});
 handle_event(info, {'DOWN', MRef, process, _Pid, _Info}, StateName, State) ->
     case is_mref_part(MRef, State#state.parts) of
         true ->
@@ -333,8 +413,21 @@ handle_event(EventType, EventContent, StateName, State) ->
     }),
     {next_state, StateName, State, timeout(StateName, State#state.is_found)}.
 
-terminate(_Reason, _StateName, _State) ->
+terminate(_Reason, _StateName, State) ->
+    release_sources(State),
     ok.
+
+release_sources(State) ->
+    case State#state.resolver of
+        undefined -> ok;
+        {Pid, Ref} -> demonitor(Ref, [flush]), exit(Pid, kill)
+    end,
+    case State#state.gzipper of
+        undefined -> ok;
+        {_, GzipPid} -> unlink(GzipPid), exit(GzipPid, kill)
+    end,
+    State#state{resolver=undefined, parts=[], failure=undefined, is_found=undefined,
+        gzipper=undefined, gzip_part=undefined, gzip_size=undefined}.
 
 %%% ------------------------------------------------------------------------------------
 %%% support routines
@@ -367,7 +460,7 @@ timeout(stopping, _IsFound) ->
     ?STOP_TIMEOUT.
 
 unreg(State) ->
-    z_proc:unregister(reg_name(State#state.request_path), State#state.site).
+    z_proc:unregister(reg_name(State#state.request_path, State#state.root, State#state.image_filters), State#state.site).
 
 is_mref_part(MRef, Parts) ->
     lists:any(fun(#part_cache{cache_monitor=Ref}) -> Ref =:= MRef ; (_) -> false end, Parts).
@@ -382,7 +475,9 @@ check_current(#state{index_ref=IndexRef} = State) ->
     end.
 
 check_current_1(Diff, Now, State) when Diff > ?STALE_TIMER_DIFF ->
-    case lists:any(fun is_stale_part/1, State#state.parts) of
+    Context = z_context:new(State#state.site),
+    case z_cafs_preview:expired(State#state.request_path, Context)
+            orelse lists:any(fun is_stale_part/1, State#state.parts) of
         true -> stale;
         false -> {ok, State#state{last_stale_check=Now}}
     end;
@@ -406,6 +501,10 @@ reply_waiting(State) ->
                   end, State#state.waiting),
     State#state{waiting=[], last_stale_check=os:timestamp()}.
 
+lookup_file_info(#state{failure = Reason}) when Reason =/= undefined ->
+    {error, Reason};
+lookup_file_info(#state{is_found = undefined}) ->
+    {error, pending};
 lookup_file_info(#state{is_found = false}) ->
     {error, enoent};
 lookup_file_info(State) ->
@@ -503,8 +602,8 @@ gzip_compress_1(M, [#part_data{data=B}|Ps], Z, Acc) ->
 gzip_compress_1(Minify, [#part_file{filepath=Filename}|Ps], Z, Acc) ->
     Acc1 = compress_file(Minify, Filename, Z, Acc),
     gzip_compress_1(Minify, Ps, Z, Acc1);
-gzip_compress_1(Minify, [#part_cache{cache_pid=Pid}|Ps], Z, Acc) ->
-    {ok, {file, _, Filename}} = filezcache:lookup_file(Pid),
+gzip_compress_1(Minify, [#part_cache{} = Part|Ps], Z, Acc) ->
+    {ok, {file, _, Filename}} = z_file_request:cache_file(Part),
     Acc1 = compress_file(Minify, Filename, Z, Acc),
     gzip_compress_1(Minify, Ps, Z, Acc1);
 gzip_compress_1(M, [#part_missing{}|Ps], Z, Acc) ->

@@ -25,18 +25,35 @@
         encodings :: list()
     }).
 
+%% @doc Synchronous (first) notification for managed filestore operations.
+%% delete_status requests deletion for an exact path or prefix and returns absent,
+%% pending (including queued uploads), or {error, Reason}. Repeated requests must
+%% preserve retention deadlines. Backends persist site.filestore_used on install.
+%% purge_previews removes queued legacy resizer uploads and schedules remote
+%% preview/ deletion up to older_than; returns ok, pending, or {error, Reason}.
+%% cafs_adopt retargets path to target_path without downloading; attach the CAFS
+%% filename in the same transaction. cafs_retire schedules redundant legacy
+%% deletion once the canonical remote copy is safe.
+%% Both use the caller's transaction with its CAFS lock; return ok or {error, Reason}.
+%% exists checks the remote registry only, without network I/O or cache writes.
+%% Returns true, false, or {error, Reason}; undefined means not handled.
+%% cancel_delete must use the caller's transaction and returns true only when
+%% deletion is safely cancelled or the path is absent; false means it may be in
+%% flight. An undefined response does not confirm cancellation.
 -record(filestore, {
-        action = upload :: lookup | upload | delete,
+        action = upload :: lookup | exists | upload | delete | cancel_delete | delete_status | purge_previews | cafs_adopt | cafs_retire,
         path :: file:filename_all() | {prefix, file:filename_all()},
         local_path :: file:filename_all() | undefined,
         filename :: file:filename_all() | undefined,
-        mime :: binary() | string() | undefined
+        mime :: binary() | string() | undefined,
+        target_path :: binary() | undefined,
+        older_than :: binary() | undefined
     }).
 
 %% @doc Synchronous (first) notification to download, upload or delete
 %% a file for a filestore service.
-%% Report the result to the handler_pid.
-%% Where Result is ok or {error, Reason}.
+%% Return ok or {error, Reason} synchronously. The standard handler ignores
+%% handler_pid; it does not send a separate completion message.
 -record(filestore_request, {
         action = upload :: upload | download | delete,
         remote :: file:filename_all(),
@@ -76,6 +93,7 @@
         modified,               % modification time for this entry
         cache_pid,              % pid of cache entry
         cache_monitor,          % monitor of cache entry
+        cache_key,              % stable key after the download process exits
         size,
         mime                    % optional mime type
     }).

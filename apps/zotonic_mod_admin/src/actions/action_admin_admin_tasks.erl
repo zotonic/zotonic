@@ -15,6 +15,7 @@
 Action module which provides postback handlers for the “status” view of the admin:
 
 *   Rebuild search index
+*   Delete generated previews (preserving medium preview originals)
 *   Flush cache
 *   Renumber categories
 ").
@@ -46,6 +47,26 @@ event(#postback{message={admin_tasks, [{task, <<"flush">>}]}}, Context) ->
        end,
        ?__(<<"Caches have been flushed.">>, Context),
        Context);
+
+%% @doc Queue migration of owned originals and preview originals into CAFS.
+event(#postback{message={admin_tasks, [{task, <<"migrate_to_cafs">>}]}}, Context) ->
+    case m_media:migrate_to_cafs(Context) of
+        ok -> z_render:growl(?__(<<"Media deduplication has been queued.">>, Context), Context);
+        {error, eacces} ->
+            z_render:growl_error(?__(<<"You don’t have permission to perform this action."/utf8>>, Context), Context);
+        {error, _} ->
+            z_render:growl_error(?__(<<"Could not queue media deduplication. Check the logs.">>, Context), Context)
+    end;
+
+%% @doc Queue removal of resized previews, including remote variants.
+event(#postback{message={admin_tasks, [{task, <<"delete_generated_previews">>}]}}, Context) ->
+    case m_media:delete_generated_previews(Context) of
+        ok -> z_render:growl(?__(<<"Generated preview cleanup has been queued. Preview originals are kept.">>, Context), Context);
+        {error, eacces} ->
+            z_render:growl_error(?__(<<"You don’t have permission to perform this action."/utf8>>, Context), Context);
+        {error, _} ->
+            z_render:growl_error(?__(<<"Could not queue generated preview cleanup. Check the logs.">>, Context), Context)
+    end;
 
 %% @doc Reset templates.
 event(#postback{message={admin_tasks, [{task, <<"templates_reset">>}]}}, Context) ->

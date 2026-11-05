@@ -1,0 +1,19 @@
+digraph documentation {
+graph [bgcolor="white", pad="0.25", nodesep="0.35", ranksep="0.5", fontname="Helvetica", fontsize=16, dpi=150];
+node [shape=box, style="rounded,filled", fillcolor="#eef5fb", color="#51718c", fontname="Helvetica", fontsize=13, margin="0.18,0.12"];
+edge [color="#526574", fontname="Helvetica", fontsize=11, arrowsize=0.7];
+rankdir=TB;
+a [label="Medium A\nLogical filename A"];
+b [label="Medium B\nLogical filename B"];
+{rank=same; a; b;}
+hash [label="CAFS mapping\nBoth filenames → same SHA-256"];
+object [label="One content object\narchive/cafs/sha256/ab/cd/<hash>", fillcolor="#eef7ee"];
+local [label="Local site disk", fillcolor="#eef7ee"];
+remote [label="Remote filestore\nSame physical key", fillcolor="#eef7ee"];
+cache [label="Local download cache\nProtected while in use", fillcolor="#fff4df"];
+a -> hash; b -> hash; hash -> object;
+object -> local [label="available locally"];
+object -> remote [label="offloaded"];
+remote -> cache [label="retrieve when needed"];
+{rank=same; local; remote;}
+}

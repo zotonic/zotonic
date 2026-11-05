@@ -112,7 +112,7 @@ templates_compile_test() ->
         ?assertMatch({ok, _}, template_compiler:compile_file(
             filename:join([Dir, "templates", Name]),
             [{runtime, z_template_compiler_runtime}], Context))
-    end, ["_filestore_health.tpl", "_filestore_prolonged_errors.tpl", "_admin_status_alert.tpl", "admin_filestore.tpl"]).
+    end, ["_filestore_health.tpl", "_filestore_prolonged_errors.tpl", "_admin_status_alert.tpl", "_filestore_statistics.tpl", "admin_filestore.tpl"]).
 
 cache_read_recovery_test_() ->
     [{atom_to_list(Mod) ++ " " ++ atom_to_list(Mode) ++ " " ++ binary_to_list(Expected),

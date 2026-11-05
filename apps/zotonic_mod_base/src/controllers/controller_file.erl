@@ -146,7 +146,9 @@ service_available(Context) ->
             {true, z_context:set(?MODULE, Error, Context3)};
         {error, _} = Error ->
             Context3 = z_context:set_noindex_header(Context2),
-            {false, z_context:set(?MODULE, Error, Context3)}
+            Context4 = z_context:set_resp_header(<<"retry-after">>, <<"2">>, Context3),
+            Context5 = z_context:set_resp_header(<<"cache-control">>, <<"no-store">>, Context4),
+            {false, z_context:set(?MODULE, Error, Context5)}
     end.
 
 allowed_methods(Context) ->
@@ -358,7 +360,7 @@ get_file_info_cfg(ConfiguredPath, Context) when is_list(ConfiguredPath); is_bina
 get_file_info_path(Path, Context) when is_binary(Path) ->
     Root = z_context:get(root, Context),
     OptFilters = z_context:get(media_tag_url2props, Context, undefined),
-    z_file_request:lookup_file(Path, Root, OptFilters, z_context:set(path, Path, Context)).
+    z_file_request:lookup_file(Path, Root, OptFilters, 5000, z_context:set(path, Path, Context)).
 
 %% @doc Ensure path is non-root
 rootless(undefined) -> <<>>;

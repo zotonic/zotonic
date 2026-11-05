@@ -1,4 +1,4 @@
-<nav aria-label="{_ System administration _}">
+<nav class="admin-system-navigation" aria-label="{_ System administration _}">
     <ul class="nav nav-tabs">
         <li {% if zotonic_dispatch == `admin_status` %}class="active"{% endif %}><a href="{% url admin_status %}" {% if zotonic_dispatch == `admin_status` %}aria-current="page"{% endif %}>{_ Status _}</a></li>
         {% if m.acl.use.mod_admin_config %}

@@ -262,7 +262,11 @@ service itself immutable.
 
 Use the admin's bulk actions to queue existing local media for upload or to move
 remote files back to the server's disk. These operations run in the background;
-watch the queues and logs. Moving files to disk requires enough disk space and
+watch the queues and logs. Each download request walks a fixed range of registry
+IDs once, including entries previously recorded as local so missing local files
+can be recovered. Keeping the remote copy does not cause completed entries to be
+queued again. Files registered after the walk starts require a new request.
+Moving files to disk requires enough disk space and
 working credentials for their existing locations. Disable uploads when bringing
 files back for a storage migration.
 
@@ -327,6 +331,18 @@ clear the unrecoverable state. A new successful upload of the path resets it.
 
 - `#media_update_done{}` queues inserted or updated media files.
 - `#filestore{}` handles file lookup, upload, and deletion through the file registry and cache.
+- `#filestore{action=cafs_adopt}` registers a known-checksum remote original under
+  its canonical CAFS path without downloading. `cafs_retire` retires a redundant
+  legacy path once the canonical remote copy is healthy. Adoption retargets the
+  registry entry while keeping its URL. Both use the caller's transaction.
+- `#filestore{action=purge_previews}` removes old generated-preview queue entries and
+  schedules deletion of remote `preview/` files. Archive preview originals are kept.
+- `#filestore{action=delete_status}` requests deletion and returns `absent`, `pending`,
+  or an error. Exact paths and prefixes include queued uploads and remote entries;
+  repeated requests preserve the deletion retention deadline.
+- `#filestore{action=cancel_delete}` cancels an undispatched deletion in the caller’s
+  transaction. It returns `true` when safe to reuse the path, and `false` once
+  deletion has been dispatched. No handler means cancellation is unconfirmed.
 - `#filestore_request{}` handles direct storage upload, download, and deletion requests.
 - `#filestore_credentials_lookup{}` maps a local path and optional resource ID to remote credentials and location.
 - `#filestore_credentials_revlookup{}` resolves credentials for an existing remote service and location.
@@ -342,7 +358,7 @@ for the configuration and statistics model. Storage requests use `s3filez`,
 -mod_title("File Storage").
 -mod_description("Store files on cloud storage services using FTP, S3 and WebDAV").
 -mod_prio(500).
--mod_schema(15).
+-mod_schema(17).
 -mod_provides([filestore]).
 -mod_depends([cron]).
 -mod_config([
@@ -410,6 +426,7 @@ for the configuration and statistics model. Storage requests use `s3filez`,
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_core/include/zotonic_file.hrl").
+-include_lib("kernel/include/file.hrl").
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
 
 -define(BATCH_SIZE, 500).  %% Max batch size for filestore batch operations (queue_all and upload/download/delete processing)
@@ -468,6 +485,13 @@ observe_media_update_done(#media_update_done{action=update, post_props=Props}, C
 observe_media_update_done(#media_update_done{}, _Context) ->
     ok.
 
+observe_filestore(#filestore{action=exists, path=Path}, Context) ->
+    case m_filestore:lookup(Path, Context) of
+        {ok, #{error := undefined, delete_started := false}} -> true;
+        {ok, _} -> {error, unavailable};
+        {error, enoent} -> false;
+        {error, _} = Error -> Error
+    end;
 observe_filestore(#filestore{action=lookup, path=Path, local_path=OptLocalPath}, Context) ->
     lookup(Path, OptLocalPath, Context);
 observe_filestore(#filestore{action=upload, path=Path, mime=undefined} = Upload, Context) ->
@@ -478,6 +502,16 @@ observe_filestore(#filestore{action=upload} = Request, Context) ->
         true -> {error, read_only};
         false -> queue_filestore_upload(Request, Context)
     end;
+observe_filestore(#filestore{action=Action, path=Path, target_path=Target}, Context)
+    when Action =:= cafs_adopt; Action =:= cafs_retire ->
+    m_filestore:cafs_migrate(Action, Path, Target, Context);
+observe_filestore(#filestore{action=purge_previews,
+        path={prefix, <<"preview/">>}, older_than=Before}, Context) ->
+    m_filestore:purge_previews(Before, Context);
+observe_filestore(#filestore{action=delete_status, path=Path}, Context) ->
+    m_filestore:delete_status(Path, Context);
+observe_filestore(#filestore{action=cancel_delete, path=Path}, Context) ->
+    m_filestore:cancel_pending_delete(Path, Context);
 observe_filestore(#filestore{action=delete, path=PathOrPrefix}, Context) ->
     mark_filestore_deleted(PathOrPrefix, Context).
 
@@ -854,6 +888,7 @@ testcred(Context) ->
     filestore_admin:testcred(Context).
 
 queue_all(Context) ->
+    ok = m_cafs:queue_all(Context),
     Max = z_db:q1("select count(*) from medium", Context),
     z_pivot_rsc:insert_task(?MODULE, task_queue_all, filestore_queue_all, [0, Max], Context).
 
@@ -920,7 +955,15 @@ maybe_queue_file(_Prefix, _Path, false, _MediaInfo, _Context) ->
     nop;
 maybe_queue_file(Prefix, Filename, true, MediaInfo, Context) ->
     FilenameBin = z_convert:to_binary(Filename),
-    case m_filestore:queue(<<Prefix/binary, FilenameBin/binary>>, MediaInfo, Context) of
+    Path = case Prefix of
+        <<"archive/">> ->
+            case m_cafs:lookup(FilenameBin, Context) of
+                {ok, Hash} -> m_cafs:path(Hash);
+                {error, enoent} -> <<Prefix/binary, FilenameBin/binary>>
+            end;
+        _ -> <<Prefix/binary, FilenameBin/binary>>
+    end,
+    case m_filestore:queue(Path, MediaInfo, Context) of
         ok -> ok;
         {error, duplicate} -> ok
     end.
@@ -984,6 +1027,7 @@ next_batch(BatchSize, Context) ->
     z_db:run_if_low_load(fun() -> next_batch_1(BatchSize, Context) end, Context).
 
 next_batch_1(BatchSize, Context) ->
+    ok = m_cafs:queue_uploads(Context),
     case filestore_config:is_upload_enabled(Context) of
         true ->
             start_uploaders(m_filestore:fetch_queue(BatchSize, Context), Context);
@@ -1070,11 +1114,16 @@ start_deleter_writable(#{
                     }),
                     ContextAsync = z_context:prune_for_async(Context),
                     Mod = filestore_request:filezmod(CredService),
-                    _ = Mod:queue_delete_id({?MODULE, delete, Id}, Cred, Location1, {?MODULE, delete_ready, [Id, Path, ContextAsync]});
+                    case m_filestore:claim_delete(Id, Context) of
+                        true ->
+                            _ = Mod:queue_delete_id({?MODULE, delete, Id}, Cred, Location1,
+                                {?MODULE, delete_ready, [Id, Path, ContextAsync]});
+                        false -> ok % Cancelled before dispatch (e.g. identical CAFS reupload).
+                    end;
                 false ->
                     ?LOG_WARNING(#{
                         in => zotonic_mod_filestore,
-                        text => <<"Not deleting remote file as it is not matching with service url - dropping local ref">>,
+                        text => <<"Not deleting remote file as it is not matching with service url - retaining for retry">>,
                         result => error,
                         reason => service_url_mismatch,
                         service => CredService,
@@ -1084,7 +1133,8 @@ start_deleter_writable(#{
                         path => Path,
                         action => delete
                     }),
-                    m_filestore:purge_deleted(Id, Context)
+                    m_filestore:defer_delete(Id, service_url_mismatch, Context),
+                    update_backoff(fail, Context)
             end;
         {ok, #filestore_credentials{ service = CredService }} ->
             ?LOG_DEBUG(#{
@@ -1095,7 +1145,8 @@ start_deleter_writable(#{
                 location => Location,
                 path => Path,
                 id => Id
-            });
+            }),
+            m_filestore:defer_delete(Id, service_mismatch, Context);
         undefined ->
             ?LOG_DEBUG(#{
                 text => <<"No credentials for queue delete.">>,
@@ -1104,7 +1155,8 @@ start_deleter_writable(#{
                 location => Location,
                 path => Path,
                 id => Id
-            })
+            }),
+            m_filestore:defer_delete(Id, no_credentials, Context)
     end.
 
 %% Filez callbacks run in library workers, without the caller's logger metadata.
@@ -1135,7 +1187,7 @@ delete_ready_1(Id, Path, Context, _Ref, {error, Reason})
     m_filestore:purge_deleted(Id, Context);
 delete_ready_1(Id, Path, Context, _Ref, {error, forbidden}) ->
     ?LOG_WARNING(#{
-        text => <<"Delete remote file was forbidden - dropping local ref">>,
+        text => <<"Delete remote file was forbidden - retaining for retry">>,
         in => zotonic_mod_filestore,
         path => Path,
         result => error,
@@ -1143,7 +1195,8 @@ delete_ready_1(Id, Path, Context, _Ref, {error, forbidden}) ->
         id => Id,
         action => delete
     }),
-    m_filestore:purge_deleted(Id, Context);
+    m_filestore:defer_delete(Id, forbidden, Context),
+    update_backoff(fail, Context);
 delete_ready_1(Id, Path, Context, _Ref, {error, Reason}) ->
     ?LOG_ERROR(#{
         text => <<"Delete remote file failed, will retry">>,
@@ -1154,6 +1207,7 @@ delete_ready_1(Id, Path, Context, _Ref, {error, Reason}) ->
         id => Id,
         action => delete
     }),
+    m_filestore:defer_delete(Id, delete_failed, Context),
     update_backoff(fail, Context).
 
 
@@ -1167,7 +1221,15 @@ start_downloaders({ok, Rs}, Context) ->
 start_downloaders({error, _}, _Context) ->
     ok.
 
-start_downloader(#{
+start_downloader(#{id := Id} = Entry, Context) ->
+    case m_filestore:claim_download(Id, Context) of
+        {ok, Claim} ->
+            Ctx = z_context:set(filestore_download_claim, Claim, Context),
+            start_downloader_claimed(Entry, Ctx);
+        {error, _} -> ok
+    end.
+
+start_downloader_claimed(#{
             id := Id,
             path := Path,
             service := Service,
@@ -1189,8 +1251,8 @@ start_downloader(#{
                 local_path => LocalPath,
                 id => Id
             }),
-            case filelib:is_file(LocalPath) of
-                true ->
+            case validate_download(Id, Path, LocalPath, Context) of
+                ok ->
                     % File is present - no download needed;
                     ?LOG_DEBUG(#{
                         text => <<"Download remote file skipped, file already downloaded">>,
@@ -1198,11 +1260,15 @@ start_downloader(#{
                         in => zotonic_mod_filestore,
                         local => LocalPath
                     }),
-                    download_done(Id, Path, Context);
-                false ->
+                    download_publish(Id, Path, LocalPath, LocalPath, Context);
+                {error, _} ->
                     ContextAsync = z_context:prune_for_async(Context),
                     Mod = filestore_request:filezmod(CredService),
-                    _ = Mod:queue_stream_id({?MODULE, stream, Id}, Cred, Location1, {?MODULE, download_stream, [Id, Path, LocalPath, ContextAsync]})
+                    case Mod:queue_stream_id({?MODULE, stream, Id}, Cred, Location1,
+                            {?MODULE, download_stream, [Id, Path, LocalPath, ContextAsync]}) of
+                        {error, Reason} -> download_stream(Id, Path, LocalPath, ContextAsync, {error, Reason});
+                        _ -> ok
+                    end
             end;
         undefined ->
             ?LOG_DEBUG(#{
@@ -1220,60 +1286,90 @@ download_stream(Id, Path, LocalPath, Context, Data) ->
     z_context:ensure_logger_md(Context),
     download_stream_1(Id, Path, LocalPath, Context, Data).
 
-download_stream_1(_Id, _Path, LocalPath, _Context, stream_start) ->
-    ?LOG_DEBUG(#{
-        text => <<"Download remote file stream started">>,
-        result => ok,
-        in => zotonic_mod_filestore,
-        local => LocalPath
-    }),
-    file:delete(temp_path(LocalPath));
-download_stream_1(_Id, _Path, LocalPath, _Context, {content_type, _}) ->
-    ?LOG_DEBUG(#{
-        text => <<"Download remote file stream started">>,
-        result => ok,
-        in => zotonic_mod_filestore,
-        local => LocalPath
-    }),
-    file:delete(temp_path(LocalPath));
-download_stream_1(_Id, _Path, LocalPath, _Context, Data) when is_binary(Data) ->
-    file:write_file(temp_path(LocalPath), Data, [append,raw,binary]);
+%% Each claim owns its temporary file. A stale callback must never publish over
+%% a newer attempt, and a write failure aborts the backend's stream callback.
+download_stream_1(Id, Path, LocalPath, Context, stream_start) ->
+    case file:write_file(download_temp(LocalPath, Context), <<>>, [raw, binary]) of
+        ok -> ok;
+        {error, Reason} -> download_write_error(Id, Path, LocalPath, Reason, Context)
+    end;
+download_stream_1(Id, Path, LocalPath, Context, {content_type, _}) ->
+    %% HTTP backends can start with a content-type callback instead of stream_start.
+    download_stream_1(Id, Path, LocalPath, Context, <<>>);
+download_stream_1(Id, Path, LocalPath, Context, Data) when is_binary(Data) ->
+    case file:write_file(download_temp(LocalPath, Context), Data, [append, raw, binary]) of
+        ok -> ok;
+        {error, Reason} -> download_write_error(Id, Path, LocalPath, Reason, Context)
+    end;
 download_stream_1(Id, Path, LocalPath, Context, eof) ->
-    ?LOG_DEBUG(#{
-        text => <<"Download remote file stream ended">>,
-        result => ok,
-        in => zotonic_mod_filestore,
-        local => LocalPath
-    }),
-    ok = file:rename(temp_path(LocalPath), LocalPath),
-    update_backoff(success, Context),
-    download_done(Id, Path, Context);
+    Temp = download_temp(LocalPath, Context),
+    case validate_download(Id, Path, Temp, Context) of
+        ok -> download_publish(Id, Path, Temp, LocalPath, Context);
+        {error, Reason} -> download_stream_1(Id, Path, LocalPath, Context, {error, Reason})
+    end;
 download_stream_1(Id, Path, LocalPath, Context, {error, Reason}) ->
     ?LOG_WARNING(#{
-        text => <<"Download error on file stream">>,
-        in => zotonic_mod_filestore,
-        result => error,
-        reason => Reason,
-        local => LocalPath,
-        id => Id,
-        path => Path
+        text => <<"Download error on file stream; retained for retry">>,
+        in => zotonic_mod_filestore, result => error, reason => Reason,
+        local => LocalPath, id => Id, path => Path
     }),
-    case Reason of
-        enoent -> ok;
-        eacces -> ok;
-        _ -> update_backoff(fail, Context)
-    end,
-    file:delete(temp_path(LocalPath)),
-    m_filestore:unmark_move_to_local(Id, Context);
+    update_backoff(fail, Context),
+    file:delete(download_temp(LocalPath, Context)),
+    Claim = z_context:get(filestore_download_claim, Context),
+    m_filestore:complete_download(Id, Claim, {error, Reason}, Context);
 download_stream_1(_Id, _Path, _LocalPath, _Context, _Other) ->
     ok.
 
-download_done(Id, Path, Context) ->
-    m_filestore:purge_move_to_local(Id, filestore_config:is_local_keep(Context), Context),
-    filezcache:delete({z_context:site(Context), Path}),
-    filestore_uploader:stale_file_entry(Path, Context).
+download_write_error(Id, Path, LocalPath, Reason, Context) ->
+    download_stream_1(Id, Path, LocalPath, Context, {error, Reason}),
+    error({download_write, Reason}).
 
-temp_path(F) when is_list(F) ->
-    F ++ ".downloading";
-temp_path(F) when is_binary(F) ->
-    <<F/binary, ".downloading">>.
+%% Check legacy sizes too. CAFS additionally verifies its immutable content key.
+validate_download(Id, Path, File, Context) ->
+    Size = z_db:q1("select size from filestore where id=$1", [Id], Context),
+    case file:read_file_info(File) of
+        {ok, #file_info{type=regular, size=Size}} when is_integer(Size) ->
+            case m_cafs:path_hash(Path) of
+                undefined -> ok;
+                Hash ->
+                    case z_crypto:hex_sha2_file(File) of
+                        {ok, Hash} -> ok;
+                        {ok, _} -> {error, checksum_mismatch};
+                        Error -> Error
+                    end
+            end;
+        {ok, _} -> {error, size_mismatch};
+        {error, _} = Error -> Error
+    end.
+
+download_publish(Id, Path, Temp, LocalPath, Context) ->
+    #{download_token := Token} = Claim = z_context:get(filestore_download_claim, Context),
+    Result = z_db:transaction(fun(Ctx) ->
+        case z_db:q1("select download_token from filestore where id=$1
+                and not is_deleted and not is_unrecoverable for update", [Id], Ctx) of
+            Token ->
+                case Temp =:= LocalPath orelse file:rename(Temp, LocalPath) of
+                    true -> download_published(Id, Path, Claim, Ctx);
+                    ok -> download_published(Id, Path, Claim, Ctx);
+                    Error -> Error
+                end;
+            _ -> {error, stale_download}
+        end
+    end, Context),
+    case Result of
+        ok ->
+            update_backoff(success, Context),
+            filezcache:delete({z_context:site(Context), Path}),
+            filestore_uploader:stale_file_entry(Path, Context);
+        {error, Reason} -> download_stream_1(Id, Path, LocalPath, Context, {error, Reason});
+        {rollback, Reason} -> download_stream_1(Id, Path, LocalPath, Context, {error, Reason})
+    end.
+
+download_published(Id, _Path, Claim, Context) ->
+    ok = m_filestore:complete_download(Id, Claim, ok, Context),
+    m_filestore:purge_move_to_local(Id, filestore_config:is_local_keep(Context), Context),
+    ok.
+
+download_temp(LocalPath, Context) ->
+    #{download_token := Token} = z_context:get(filestore_download_claim, Context),
+    <<(z_convert:to_binary(LocalPath))/binary, ".downloading-", Token/binary>>.

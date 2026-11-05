@@ -22,6 +22,7 @@
 -export([
     event/2,
     task_file_to_local/1,
+    task_file_to_local/3,
     task_file_to_remote/1,
     testcred/1
     ]).
@@ -293,25 +294,31 @@ queue_local_all(Context) ->
         ], Context).
 
 
+%% Keep the upper bound and cursor in the pivot task arguments. This also
+%% upgrades already queued tasks, which still call the one-argument function.
 task_file_to_local(Context) ->
-    case try m_filestore:mark_move_to_local_limit(?BATCH_MOVE, Context)
+    MaxId = z_db:q1("select coalesce(max(id), 0) from filestore", Context),
+    {delay, 0, [0, MaxId]}.
+
+task_file_to_local(AfterId, MaxId, Context) ->
+    case try m_filestore:mark_move_to_local_limit(?BATCH_MOVE, AfterId, MaxId, Context)
     catch
         throw:CatchReason -> CatchReason;
         exit:CatchReason -> {'EXIT', CatchReason};
         error:CatchReason:CatchStack -> {'EXIT', {CatchReason, CatchStack}}
     end of
-        {ok, 0} ->
+        {ok, {0, _}} ->
             ok;
-        {ok, N} ->
+        {ok, {N, LastId}} ->
             ?LOG_NOTICE(#{
                 text => <<"Marked files for move to local">>,
                 in => zotonic_mod_filestore,
                 result => ok,
                 count => N
             }),
-            {delay, 1};
+            {delay, 1, [LastId, MaxId]};
         _Other ->
-            {delay, 10}
+            {delay, 10, [AfterId, MaxId]}
     end.
 
 task_file_to_remote(Context) ->

@@ -1,92 +1,35 @@
-/* Fileuploader, using the fileuploader MQTT API */
+/* Fileuploader, using the fileuploader MQTT API. */
 
-function fileUploader( f ) {
-    const blockSize = 128*1024;
-    const fileSize = f.size;
-    let blocks = [];
-
-    for (offs = 0; offs < fileSize; offs += blockSize ) {
-        let end = Math.max(fileSize, offs + blockSize);
-        blocks.push({
-            start: offs,
-            bytes: end - offs + 1
-        })
-    }
-
-    reader = {
-        file: f,
-        filename: f.name,
-        size: f.size,
-        mime: f.type,
-        reader: new FileReader(),
-        received: 0,
-        blocks: blocks,
-        uploader: undefined
-    }
-
-    function upload() {
-        if (reader.blocks.length == 0) {
-            reader.resolve();
-        } else {
-            const b = reader.blocks.pop();
-            const blob = reader.slice(b.start, b.bytes);
-
-            cotonic.broker.mqtt
-                .publish("bridge/origin/model/fileuploader/post/upload/"+b.name+"/"+b.start, blob)
-                .then(
-                    function(msg) {
-                        if (msg.status == "ok") {
-                            upload();
-                        } else {
-                            console.log("Error uploading on data post result", reader, msg);
-                            reader.reject();
-                        }
-                    })
-                .catch(
-                    function(error) {
-                        console.log("Error uploading on data post", reader, error);
-                        reader.reject(new Error(msg));
-                    }
-                )
-        }
-    }
-
-    return new Promise(
-        function(resolve, reject) {
-            reader.resolve = resolve;
-            reader.reject = reject;
-
-            cotonic.broker
-                .call("$promised/bridge/origin/model/fileuploader/post/new", {
-                    filename: reader.filename,
-                    size: reader.size,
-                    mime: reader.mime
-                })
-                .then(
-                    function(msg) {
-                        if (msg.payload.status == "ok") {
-                            reader.name = msg.payload.result.name;
-                            upload(resolve, reject)
-                        } else {
-                            reject(new Error(msg));
-                        }
-                    }
-                )
-                .catch(
-                    function(error) {
-                        console.log("Error uploading on init ", reader, error);
-                        reject(new Error('upload-new'));
-                    }
-                )
+async function fileUploader(file) {
+    let worker;
+    let digest;
+    try {
+        digest = await new Promise((resolve, reject) => {
+            worker = new Worker("/lib/js/z.media-upload-hash.js");
+            worker.onmessage = event => event.data.digest ? resolve(event.data.digest) : reject();
+            worker.onerror = reject;
+            worker.postMessage({type: "media-upload-hash", file});
         });
+    } catch (_) {
+        // Hashing is an optimization; older browsers still upload normally.
+    } finally {
+        if (worker) worker.terminate();
+    }
+    const call = async (path, payload) => {
+        const response = await cotonic.broker.call("bridge/origin/model/fileuploader/post/" + path, payload);
+        if (response.payload.status !== "ok") throw new Error("upload-failed");
+        return response.payload.result;
+    };
+    let status = await call("new", {filename: file.name, size: file.size, mime: file.type, digest});
+    if (status.is_complete) return status;
+    const blockSize = 128*1024;
+    for (let offset=0; offset<file.size; offset+=blockSize) {
+        status = await call("upload/" + status.name + "/" + offset,
+            file.slice(offset, Math.min(file.size, offset+blockSize), "application/octet-stream"));
+    }
+    return status;
 }
 
-function fileInputUploader ( element ) {
-    const files = element.files;
-    let readers = [];
-
-    for (let i = 0; i < files.length; i++) {
-        readers[i] = fileUploader(files[i]);
-    }
-    return Promise.all(readers);
+function fileInputUploader(element) {
+    return Promise.all(Array.from(element.files, fileUploader));
 }

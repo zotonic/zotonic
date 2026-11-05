@@ -14,6 +14,8 @@
                 <p>{_ Check the storage service and its access permissions. Failed reads are retried when requested, with a delay of up to ten minutes. _}</p>
                 <a href="{% url admin_filestore %}">{_ Cloud file store configuration _}</a>
             </div>
+        {% elseif show_status %}
+            <p class="text-success"><span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span> {_ No cloud file store read errors detected. _}</p>
         {% endif %}
     {% endwith %}
 {% endif %}

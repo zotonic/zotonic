@@ -41,17 +41,34 @@ Uploading & conversion
 The video module hooks into the media model to intercept any video upload. If a video is uploaded the following steps
 are done:
 
-*   The video is moved to the site’s `files/video_queue/` directory.
+*   The original video is stored in CAFS and pinned by its persistent conversion task.
 *   A video conversion task is added to the pivot task queue, this task will restart a video conversion in case of any problems.
 *   A video conversion process is started, supervised by the video module.
 *   The uploaded medium is replaced by a static `lib/images/processing.png` image.
+
+The worker obtains a temporary local input from CAFS, including when the original
+has been moved to remote storage. Completion or cancellation releases the source
+pin. Existing tasks using `files/video_queue/` remain supported.
 
 Only a single video conversion process is allowed to run at any time. This to prevent overloading the server.
 
 After the video is converted the resource’s medium record is replaced with the converted video. The frame at 10
 seconds (at 1 second for movies shorter than 30 seconds) is added as the preview image of the video.
 
-If a video can’t be converted then the video is replaced with the error image, found in `lib/images/broken.png`.
+Validated terminal conversion failures replace the medium with `lib/images/broken.png`.
+Temporary runner failures retain the task and original (including legacy queue files),
+retrying with exponential backoff from 30 seconds to one hour, plus up to ten seconds
+of jitter. After 24 hours of failed automatic retries the task pauses. Invalid
+credentials, configuration, integrity errors and unclassified failures pause immediately.
+A failed medium commit also retains its input. Paused tasks reconcile hourly so a
+replaced or deleted medium releases its retained source.
+
+Retry metadata is stored in the pivot task's `{convert_v4, OriginalTask, RetryMap}`
+argument. It records `attempts`, `started`, `last_reason`, `next_attempt` and `paused`.
+Administrators can resume a stored task with `mod_video:retry_task(Task, Context)`.
+Retry preserves the processing identity and the expected-medium check; it cannot
+overwrite a newer upload. These retry policy values are fixed defaults, not site
+configuration keys.
 
 
 
@@ -104,6 +121,7 @@ This module handles the following notifier callbacks:
          post_insert_fun/5,
          remove_task/2,
          convert_task/2,
+         retry_task/2,
          queue_path/2
         ]).
 
@@ -305,19 +323,16 @@ ensure_job_queues_1() ->
 
 %% @doc The medium record has been inserted, queue a conversion
 post_insert_fun(Id, Medium, Upload, ProcessNr, Context) ->
-    % Move the temp file to the video_queue in the files folder
     UploadedFile = Upload#media_upload_preprocess.file,
-    QueueFilename = lists:flatten([integer_to_list(Id), $-, z_convert:to_list(ProcessNr)]),
-    QueuePath = queue_path(QueueFilename, Context),
-    ok = z_filelib:ensure_dir(QueuePath),
-    case z_tempfile:is_tempfile(UploadedFile) of
-        true ->
-            ok = z_filelib:rename(UploadedFile, QueuePath);
-        false ->
-            {ok, _BytesCopied} = file:copy(UploadedFile, QueuePath)
-    end,
-    Task = {convert_v2, Id, Medium, Upload, QueueFilename, ProcessNr, z_context:pickle(Context)},
-    z_pivot_rsc:insert_task_after(?TASK_DELAY, ?MODULE, convert_task, QueueFilename, [Task], Context),
+    QueueFilename = iolist_to_binary([integer_to_binary(Id), $-, ProcessNr]),
+    {ok, #{hash := Hash, token := Token}} = m_cafs:stage_file(UploadedFile, Context),
+    Owner = <<"video:", QueueFilename/binary>>,
+    Task = {convert_v3, Id, Medium, Upload, QueueFilename, ProcessNr, z_context:pickle(Context), Hash},
+    ok = z_db:transaction(fun(Ctx) ->
+        ok = m_cafs:pin(Hash, Owner, Ctx),
+        z_pivot_rsc:insert_task_after(?TASK_DELAY, ?MODULE, convert_task, QueueFilename, [Task], Ctx),
+        m_cafs:unpin(Hash, Token, Ctx)
+    end, Context),
     supervisor:start_child(z_utils:name_for_site(?SERVER, Context), [Task, z_context:prune_for_async(Context)]),
     ok.
 
@@ -325,9 +340,24 @@ post_insert_fun(Id, Medium, Upload, ProcessNr, Context) ->
 remove_task(QueueFilename, Context) ->
     z_pivot_rsc:delete_task(?MODULE, convert_task, QueueFilename, Context).
 
+%% The worker owns the next due date. Schedule recovery before starting it, so
+%% insert_task_after replaces the pivot row (and its id), so the scheduler's
+%% update of its original row cannot overwrite the worker's next attempt.
 convert_task(Task, Context) ->
+    Original = case Task of {convert_v4, T, _} -> T; _ -> Task end,
+    z_pivot_rsc:insert_task_after(?TASK_DELAY, ?MODULE, convert_task, element(5, Original), [Task], Context),
     _ = supervisor:start_child(z_utils:name_for_site(?SERVER, Context), [Task, Context]),
     {delay, ?TASK_DELAY}.
+
+%% @doc Resume a retained conversion using its stored task arguments (admin API).
+-spec retry_task(tuple(), z:context()) -> {delay, pos_integer()} | {error, eacces}.
+retry_task(Task, Context) ->
+    case z_acl:is_admin(Context) of
+        true ->
+            Original = case Task of {convert_v4, T, _} -> T; _ -> Task end,
+            convert_task(Original, Context);
+        false -> {error, eacces}
+    end.
 
 queue_path(Filename, Context) ->
     QueueDir = z_path:files_subdir("video_queue", Context),

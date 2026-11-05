@@ -41,7 +41,15 @@ The posted message must include the filename and the file size:
 }
 ```
 
-The upload URL and current status is returned:
+Clients can optionally send `digest`, the lowercase SHA-256 hash of the file.
+Before starting an uploader, the model checks for an accessible CAFS original.
+On a match it returns `is_complete: true` and `media_upload_token`, without an
+upload URL or upload process. Submit `{media_upload_token: Token}` as the form
+field value instead of a fileuploader reference. The bundled worker does this
+automatically. The token has the same permissions and expiry as `m_media`'s
+`/upload_check` API. On a miss the normal upload starts.
+
+The upload URL and current status is returned for a normal upload:
 
 
 ```json
@@ -117,13 +125,20 @@ m_post([ <<"new">> ], #{ payload := Payload }, Context) when is_map(Payload) ->
         #{
             <<"filename">> := Filename,
             <<"size">> := Size
-        } when is_binary(Filename), Size >= 0 ->
-            Name = maps:get(<<"name">>, Payload, z_ids:id()),
-            case start_upload(Name, Filename, Size, Context) of
-                {ok, Status} ->
-                    {ok, cleanup_status(Status, Context)};
-                {error, _} = Error ->
-                    Error
+        } when is_binary(Filename), is_integer(Size), Size >= 0 ->
+            case z_media_upload:check(Payload, Context) of
+                {ok, #{media_upload_token := Token}} ->
+                    {ok, #{name => z_ids:id(), filename => Filename, size => Size,
+                        received => Size, is_complete => true, missing => [],
+                        media_upload_token => Token}};
+                {ok, #{needed := true}} ->
+                    Name = maps:get(<<"name">>, Payload, z_ids:id()),
+                    case start_upload(Name, Filename, Size, Context) of
+                        {ok, Status} ->
+                            {ok, cleanup_status(Status, Context)};
+                        {error, _} = Error ->
+                            Error
+                    end
             end;
         _ ->
             {error, missing_fileinfo}

@@ -22,6 +22,177 @@
 -author("Marc Worrell <marc@worrell.nl").
 
 -include_lib("zotonic.hrl").
+-include_lib("zotonic_file.hrl").
+
+
+%% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "file_storage", "media_management"]
+}).
+-doc("""
+Resolve managed file storage operations. Records are defined in `zotonic_file.hrl`.
+
+Type: [first](/id/doc_developerguide_notifications#notification-first).
+
+`#filestore{}` properties:
+
+* `action`: `lookup`, `exists`, `upload`, `delete`, `delete_status`, `cancel_delete`, `purge_previews`, `cafs_adopt`, or `cafs_retire`.
+* `path`: path relative to the site's files directory, such as `archive/example.jpg`.
+  Deletion and deletion-status requests also accept `{prefix, Prefix}`.
+* `local_path`: optional local filename used by `lookup` to prefer a retained local copy.
+* `mime`: optional MIME type for upload queue metadata.
+* `target_path`: canonical CAFS path for `cafs_adopt` and `cafs_retire`.
+* `older_than`: timestamp text used by `purge_previews` as a fixed cutoff.
+* `filename`: optional filename; the standard filestore handler does not use this field.
+
+Return values depend on the action:
+
+* `lookup`: `{ok, {filename, Filename, StoreEntry}}` or
+  `{ok, {filezcache, Pid, StoreEntry}}`. `StoreEntry` is a map of backend metadata.
+  A cache miss may start a download. Return `undefined` to fall back to local storage
+  or another observer; it does not establish that the remote file is absent.
+* `exists`: read-only registry check, without network I/O or cache writes. Return
+  `true` for a non-deleted entry without a recorded read error, `false` if absent,
+  or `{error, Reason}` if availability is uncertain. This is not a remote probe.
+* `upload`: `ok` after queueing the upload, or `{error, Reason}`. This does not
+  transfer file bytes. Queue insertion must participate in the caller's transaction.
+* `delete`: `ok` after marking matching entries for delayed deletion, or an error.
+  This does not confirm remote absence. Repeated requests must preserve retention.
+* `cafs_adopt`: register an existing remote original at `target_path` without
+  downloading it. Return `ok` or `{error, Reason}`. The caller holds the CAFS
+  object lock and the handler must use the caller's transaction. The standard
+  backend retargets the registry entry, retaining its remote URL; the caller must
+  attach the logical filename in that same transaction.
+* `cafs_retire`: retire the redundant legacy `path` only once `target_path` is
+  healthy. Schedule normal retained deletion for redundant remote objects.
+  Return `ok` or `{error, Reason}`;
+  queued legacy uploads must finish first. Use the caller's transaction.
+* `delete_status`: request delayed deletion and return `absent` only when neither
+  remote entries nor queued uploads remain. Return `pending` while work remains,
+  or `{error, Reason}` when unavailable or read-only. Exact paths and prefixes are
+  supported. Repeated requests must preserve retention deadlines.
+* `purge_previews`: delete a bounded batch of queued resizer uploads and mark remote
+  generated previews for deletion, restricted to `preview/` and the `older_than`
+  cutoff. Never delete `archive/preview/` images or medium originals. Return
+  `pending` while more batches may remain, `ok` once remote deletion is queued,
+  or `{error, Reason}`. Physical deletion follows backend retention. CAFS derivatives
+  are handled separately by their reference-aware collector.
+* `cancel_delete`: `true` when an undispatched deletion is cancelled or the path
+  is absent; `false` once deletion may be in flight. Locking and cancellation must
+  participate in the caller's transaction. An error is not confirmation of cancellation.
+
+Return `undefined` for unhandled requests. A missing handler does not confirm
+cancellation or remote absence. Backends persist the internal `site.filestore_used`
+marker before accepting files. Core cleanup uses `z_file_request:delete_remote/2`
+to distinguish local-only sites from an unavailable previously used backend.
+
+Use a direct module observer for transaction-sensitive operations; passing work
+to a separate process must not lose the caller's transaction or its locks.
+See `module#mod_filestore` and `model#cafs` for storage and retention behavior.
+""").
+-callback observe_filestore(#filestore{}, z:context()) ->
+    undefined | ok | boolean() | absent | pending | {error, term()} | {rollback, term()}
+    | {ok, {filename, file:filename_all(), map()}} | {ok, {filezcache, pid(), map()}}.
+-callback pid_observe_filestore(pid(), #filestore{}, z:context()) ->
+    undefined | ok | boolean() | absent | pending | {error, term()} | {rollback, term()}
+    | {ok, {filename, file:filename_all(), map()}} | {ok, {filezcache, pid(), map()}}.
+-optional_callbacks([observe_filestore/2, pid_observe_filestore/3]).
+
+%% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "file_storage"]
+}).
+-doc("""
+Perform a direct, synchronous filestore upload, download or deletion.
+
+Type: [first](/id/doc_developerguide_notifications#notification-first).
+
+Unlike `#filestore{action=upload}`, this request performs network I/O and does not
+use the managed upload queue. Avoid sending it while holding database locks.
+Return `ok` or `{error, Reason}`; `undefined` means no observer handled the request.
+
+`#filestore_request{}` properties (defined in `zotonic_file.hrl`):
+
+* `action`: `upload`, `download`, or `delete`.
+* `remote`: backend-relative path, resolved through `#filestore_credentials_lookup{}`.
+* `local`: local source for upload or destination for download; unused for deletion.
+* `mime`: optional upload MIME type, guessed from the local file when omitted.
+* `handler_pid`: reserved field; the standard handler ignores it and returns the
+  result synchronously. It does not send a completion message to this PID.
+
+The standard handler rejects uploads and deletions in read-only mode. Direct
+requests do not establish managed media references or apply managed GC retention.
+See `module#mod_filestore` for backend configuration.
+""").
+-callback observe_filestore_request(#filestore_request{}, z:context()) ->
+    ok | {error, term()} | undefined.
+-callback pid_observe_filestore_request(pid(), #filestore_request{}, z:context()) ->
+    ok | {error, term()} | undefined.
+-optional_callbacks([observe_filestore_request/2, pid_observe_filestore_request/3]).
+
+%% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "file_storage"]
+}).
+-doc("""
+Resolve a local storage path to a remote service, destination and credentials.
+
+Type: [first](/id/doc_developerguide_notifications#notification-first).
+
+`#filestore_credentials_lookup{}` properties:
+
+* `id`: optional resource id, available for resource-specific backend selection.
+* `path`: backend-relative file path to store, read or delete.
+
+Return `{ok, #filestore_credentials{}}` or `undefined` when not handled or no
+credentials are configured. The standard handler selects the site's configured
+service using the path; custom observers can also use the resource id.
+
+The returned record contains `service` (backend identifier), `service_url` (base
+URL), `location` (full destination URL), and `credentials` (backend-specific secret
+configuration). These records are defined in `zotonic_file.hrl`. Do not expose
+credentials in templates, logs or public API responses. `#filestore_credentials{}`
+is a result record, not a separate notification.
+
+See `module#mod_filestore` for supported services and configuration.
+""").
+-callback observe_filestore_credentials_lookup(#filestore_credentials_lookup{}, z:context()) ->
+    {ok, #filestore_credentials{}} | undefined.
+-callback pid_observe_filestore_credentials_lookup(pid(), #filestore_credentials_lookup{}, z:context()) ->
+    {ok, #filestore_credentials{}} | undefined.
+-optional_callbacks([observe_filestore_credentials_lookup/2, pid_observe_filestore_credentials_lookup/3]).
+
+%% Type: first
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "file_storage"]
+}).
+-doc("""
+Resolve credentials for a file already registered at a remote service and location.
+
+Type: [first](/id/doc_developerguide_notifications#notification-first).
+
+`#filestore_credentials_revlookup{}` properties:
+
+* `service`: stored backend identifier, such as `<<"s3">>`.
+* `location`: stored full remote URL.
+
+Return `{ok, #filestore_credentials{}}` with `service`, `service_url`, `location`
+and backend-specific `credentials`, or `undefined` when the request cannot be
+handled. Records are defined in `zotonic_file.hrl`.
+
+This reverse lookup preserves the stored location instead of deriving a new URL
+from current upload settings. The standard handler only supplies credentials for
+its configured service. Deletion separately checks that the stored URL matches
+the configured service URL, protecting files after a database is copied to a
+site with different storage settings. Never log or publish returned credentials.
+
+See `module#mod_filestore` for service configuration and migration behavior.
+""").
+-callback observe_filestore_credentials_revlookup(#filestore_credentials_revlookup{}, z:context()) ->
+    {ok, #filestore_credentials{}} | undefined.
+-callback pid_observe_filestore_credentials_revlookup(pid(), #filestore_credentials_revlookup{}, z:context()) ->
+    {ok, #filestore_credentials{}} | undefined.
+-optional_callbacks([observe_filestore_credentials_revlookup/2, pid_observe_filestore_credentials_revlookup/3]).
 
 %% Try to find the site for the request
 %% Called when the request Host doesn't match any active site.
@@ -4001,6 +4172,31 @@ modified property list of image options
     ImageOptions :: proplists:proplist().
 
 -optional_callbacks([ observe_media_preview_options/3, pid_observe_media_preview_options/4 ]).
+
+%% Type: foldl
+-doc(#{
+    zotonic_keywords => ["reference", "backend_developer", "notification", "image_management", "transform"]
+}).
+-doc("""
+Contribute normalized resource edit settings to the signed preview revision.
+Return a list with `{Module, Settings}` prepended to the accumulator. Contributions
+must be stable terms and include every persistent setting affecting image edits.
+The core hashes the sorted contributions; they do not enter the rendering pipeline.
+
+Called when generating preview URLs and checking preview retention. This must be
+inexpensive and must not download or inspect source files. The `original` image
+option bypasses revision tracking. `#media_preview_revision.id` is the resource id.
+
+Type: [foldl](/id/doc_developerguide_notifications#notification-foldl).
+""").
+-callback observe_media_preview_revision(#media_preview_revision{}, Acc, z:context()) -> Result when
+    Acc :: [{module(), term()}],
+    Result :: [{module(), term()}].
+-callback pid_observe_media_preview_revision(pid(), #media_preview_revision{}, Acc, z:context()) -> Result when
+    Acc :: [{module(), term()}],
+    Result :: [{module(), term()}].
+
+-optional_callbacks([ observe_media_preview_revision/3, pid_observe_media_preview_revision/4 ]).
 
 %% Request a translation of a list of strings. The resulting translations must
 %% be in the same order as the request. This notification is handled by modules

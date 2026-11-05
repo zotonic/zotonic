@@ -660,6 +660,7 @@ do_sync_status(Sites) ->
     case IsChanged1 of
         true ->
             notify_status(),
+            zotonic_filehandler_update:publish_status(),
             z_sites_dispatcher:update_hosts();
         false ->
             ok

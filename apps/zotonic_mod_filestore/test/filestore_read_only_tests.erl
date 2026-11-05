@@ -43,6 +43,11 @@ writes_blocked_test() ->
             #filestore{action=upload, path= <<"missing">>, mime= <<"text/plain">>}, Context)),
         ?assertEqual({error, read_only}, filestore_uploader:upload_job(
             1, <<"missing">>, {error, enoent}, #{}, Context)),
+        lists:foreach(fun(Action) ->
+            ?assertEqual({error, read_only}, mod_filestore:observe_filestore(
+                #filestore{action=Action, path= <<"archive/legacy">>,
+                    target_path= <<"archive/cafs/sha256/target">>}, Context))
+        end, [cafs_adopt, cafs_retire]),
         lists:foreach(fun(Service) ->
             Cred = #filestore_credentials{
                 service = Service,

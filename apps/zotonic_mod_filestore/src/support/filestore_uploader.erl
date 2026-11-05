@@ -88,7 +88,17 @@ upload_job_2(QueueId, Path, MediaInfo, Context) ->
             }),
             % The lookup passed to upload_job/5 can be stale if this sidejob was
             % waiting to start while another uploader finished the same path.
-            try_upload(lookup(Path, Context), QueueId, Path, MediaInfo, Context);
+            case m_cafs:with_path_pin(Path, fun() ->
+                %% A delayed sidejob must not resurrect a retired legacy path.
+                case z_db:q1("select 1 from filestore_queue where id=$1 and path=$2",
+                        [QueueId, Path], Context) of
+                    1 -> try_upload(lookup(Path, Context), QueueId, Path, MediaInfo, Context);
+                    undefined -> ok
+                end
+            end, Context) of
+                {error, deleting} -> m_filestore:dequeue(QueueId, Context);
+                Result -> Result
+            end;
         {error, duplicate} ->
             ok
     end.
@@ -145,22 +155,40 @@ try_upload(MaybeEntry, QueueId, Path, MInfo, Context) ->
                     {error, no_credentials}
             end;
         false ->
-            case m_filestore:is_download_ok(MaybeEntry) of
-                true ->
-                    % Already uploaded - we can safely delete the file.
-                    case filestore_config:is_local_keep(Context) of
-                        true ->
-                            ok;
-                        false ->
-                            AbsPath = z_path:abspath(Path, Context),
-                            file:delete(AbsPath)
-                    end;
-                false ->
-                    ok
-            end,
-            m_filestore:dequeue(QueueId, Context),
-            ok
+            case offload_existing(MaybeEntry, Path, Context) of
+                ok -> m_filestore:dequeue(QueueId,Context), ok;
+                {error,_} -> retry_no_backoff
+            end
     end.
+
+%% Retargeted CAFS objects already exist remotely. Do not unlink their local
+%% bytes while another pin is hashing/converting them or a file entry uses them.
+offload_existing(#{is_move_to_local := true}, _Path, _Context) -> {error,busy};
+offload_existing(Entry, Path, Context) ->
+    case filestore_config:is_read_only(Context) of
+        true -> {error,read_only};
+        false -> offload_existing_writable(Entry,Path,Context)
+    end.
+
+offload_existing_writable(Entry, Path, Context) ->
+    case m_filestore:is_download_ok(Entry) andalso not filestore_config:is_local_keep(Context) of
+        false -> ok;
+        true ->
+            case m_cafs:path_hash(Path) of
+                undefined ->
+                    AbsPath = z_path:abspath(Path,Context),
+                    pause_file_entry(Path,Context),
+                    file:delete(AbsPath),
+                    stale_file_entry(Path,Context),
+                    ok;
+                _ ->
+                    case m_cafs:delete_uploaded_file(Path,Context) of
+                        ok -> m_filestore:mark_remote(Path,Context);
+                        Error -> Error
+                    end
+            end
+    end.
+
 
 handle_upload(Path, Mime, Cred, Context) ->
     case filestore_config:is_read_only(Context) of
@@ -291,10 +319,14 @@ start_empty_cache_entry(Location) ->
     end.
 
 pause_file_entry(Path, Context) ->
-    z_file_request:pause(file_entry_path(Path), Context).
+    lists:foreach(fun z_file_entry:pause/1, m_cafs:readers(Path, Context)),
+    lists:foreach(fun(P) -> z_file_request:pause(P, Context) end,
+        [file_entry_path(Path) | m_cafs:aliases(Path, Context)]).
 
 stale_file_entry(Path, Context) ->
-    z_file_request:force_stale(file_entry_path(Path), Context).
+    lists:foreach(fun z_file_entry:force_stale/1, m_cafs:readers(Path, Context)),
+    lists:foreach(fun(P) -> z_file_request:force_stale(P, Context) end,
+        [file_entry_path(Path) | m_cafs:aliases(Path, Context)]).
 
 file_entry_path(<<"archive/", Path/binary>>) ->
     Path;

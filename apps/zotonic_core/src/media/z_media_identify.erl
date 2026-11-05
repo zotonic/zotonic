@@ -80,9 +80,13 @@ identify(File, OriginalFilename, Context) ->
 
 identify(File, MediumFilename, OriginalFilename, Context) ->
     F = fun() ->
-        case m_media:identify(MediumFilename, Context) of
-            {ok, _Props} = Result -> Result;
-            {error, _Reason} -> identify_file(File, OriginalFilename, Context)
+        case m_cafs:is_enabled(Context) of
+            false -> identify_file(File, OriginalFilename, Context);
+            true ->
+                case m_media:identify(MediumFilename, Context) of
+                    {ok, _Props} = Result -> Result;
+                    {error, _Reason} -> identify_file(File, OriginalFilename, Context)
+                end
         end
     end,
     z_depcache:memo(F, {media_identify, MediumFilename}, ?DAY, [media_identify], Context).

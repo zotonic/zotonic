@@ -491,6 +491,12 @@ Delegate callbacks:
 %%====================================================================
 
 %% @doc Handle wired postback events.
+event(#postback{ message = {open_directory, Args} }, Context) ->
+    case m_development:open_directory(proplists:get_value(directory, Args), Context) of
+        ok -> Context;
+        {error, _} ->
+            z_render:growl_error(?__(<<"Could not open the directory on this computer.">>, Context), Context)
+    end;
 event(#postback{ message = {template_xref_check, Args} }, Context) ->
     {element_id, EltId} = proplists:lookup(element_id, Args),
     case z_acl:is_allowed(use, mod_development, Context) of

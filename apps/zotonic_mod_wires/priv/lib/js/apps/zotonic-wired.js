@@ -777,6 +777,18 @@ function z_notify(message, extraParams) {
 // Queue any data to be transported to the server
 function z_transport(delegate, content_type, data, options) {
   options = options || {};
+  const hasUploader = options.transport === "fileuploader" && cotonic.whereis("fileuploader");
+  if (!hasUploader && !options.media_preflight &&
+      (options.transport === "form" || options.transport === "fileuploader")) {
+    z_media_upload_preflight(options.post_form).catch(() => []).then(function(plans) {
+      const q = plans.flatMap(plan => plan.tokens.map(token => ({
+        name: plan.input.name, value: {media_upload_token: token}
+      })));
+      data.data.q = (data.data.q || []).concat(q);
+      z_transport(delegate, content_type, data, {...options, media_preflight: true, media_reuse: plans});
+    });
+    return;
+  }
   if (options.transport == "fileuploader" && cotonic.whereis("fileuploader")) {
     // Post via the fileuploader worker
     let fileInputs = $("input:file:not(.nosubmit)", options.post_form);
@@ -1552,6 +1564,50 @@ function z_init_postback_forms() {
     .attr("action", "#pb-installed");
 }
 
+// Hash outside the UI thread, before starting either multipart or chunk transfer.
+// A failed check is always a normal upload, never evidence about private files.
+async function z_media_upload_preflight(form) {
+  if (!window.Worker) return [];
+  const inputs = Array.from($("input[type=file]:not(.nosubmit):not(:disabled)", form));
+  const plans = [];
+  for (const input of inputs) {
+    const original = input.files;
+    const files = Array.from(original);
+    const results = [];
+    for (const file of files) {
+      let worker;
+      try {
+        const digest = await new Promise((resolve, reject) => {
+          worker = new Worker("/lib/js/z.media-upload-hash.js");
+          worker.onmessage = event => event.data.digest ? resolve(event.data.digest) : reject();
+          worker.onerror = reject;
+          worker.postMessage({type: "media-upload-hash", file});
+        });
+        const reply = await cotonic.broker.call("bridge/origin/model/media/post/upload_check", {
+          digest, size: file.size, filename: file.name
+        });
+        results.push(reply.payload.status === "ok" ? reply.payload.result.media_upload_token : undefined);
+      } catch (_) {
+        results.push(undefined);
+      } finally {
+        if (worker) worker.terminate();
+      }
+    }
+    // Do not apply a result to a file selection changed while hashing.
+    if (input.files !== original || !results.some(Boolean)) continue;
+    const remaining = files.filter((_, i) => !results[i]);
+    if (remaining.length && !window.DataTransfer) continue;
+    let replacement;
+    if (remaining.length) {
+      const transfer = new DataTransfer();
+      remaining.forEach(file => transfer.items.add(file));
+      replacement = transfer.files;
+    }
+    plans.push({input, original, replacement, tokens: results.filter(Boolean)});
+  }
+  return plans;
+}
+
 function z_transport_form(qmsg) {
   let options = {
     url: qmsg.url,
@@ -1693,8 +1749,16 @@ function z_transport_form(qmsg) {
       } else {
         io.addEventListener("load", cb, false);
       }
+      for (const plan of qmsg.options.media_reuse || []) {
+        if (plan.replacement) plan.input.files = plan.replacement;
+        else plan.input.disabled = true;
+      }
       form.submit();
     } finally {
+      for (const plan of qmsg.options.media_reuse || []) {
+        plan.input.files = plan.original;
+        plan.input.disabled = false;
+      }
       // reset attrs and remove "extra" input elements
       form.setAttribute("action", a);
       if (t) {

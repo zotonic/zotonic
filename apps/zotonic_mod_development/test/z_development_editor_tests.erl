@@ -48,6 +48,8 @@ container_precedes_configuration_test() ->
     Saved = application:get_env(zotonic, development_editor_browser_only),
     try
         application:set_env(zotonic, development_editor_browser_only, true),
+        ?assertEqual(false, z_development_editor:directory_opener()),
+        ?assertEqual({error, unavailable}, z_development_editor:open_directory("/tmp")),
         ?assertEqual(#{browser_only => true, candidates => [], selected => undefined},
             z_development_editor:detect("/nonexistent.tpl")),
         ?assertEqual({error, browser_only}, z_development_editor:open("/nonexistent.tpl", 1, 1, <<"configured">>)),

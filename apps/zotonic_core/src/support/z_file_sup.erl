@@ -25,6 +25,7 @@
 
 -export([
     ensure_file/4,
+    ensure_file/5,
     pause_file/4,
     refresh/0
     ]).
@@ -32,15 +33,18 @@
 -define(SERVER, ?MODULE).
 
 ensure_file(Path, Root, OptFilters, Context) ->
+    ensure_file(Path, Root, OptFilters, 60000, Context).
+
+ensure_file(Path, Root, OptFilters, Timeout, Context) ->
     {ok, Pid} = ensure_file_process(locate, Path, Root, OptFilters, Context),
-    lookup_file(Pid).
+    z_file_entry:lookup(Pid, Timeout).
 
 pause_file(Path, Root, OptFilters, Context) ->
     {ok, Pid} = ensure_file_process(paused, Path, Root, OptFilters, Context),
     z_file_entry:pause(Pid).
 
 ensure_file_process(InitialState, Path, Root, OptFilters, Context) ->
-    case z_file_entry:where(Path, Context) of
+    case z_file_entry:where(Path, Root, OptFilters, Context) of
         Pid when is_pid(Pid) ->
             {ok, Pid};
         undefined ->
@@ -52,8 +56,6 @@ ensure_file_process(InitialState, Path, Root, OptFilters, Context) ->
             end
     end.
 
-lookup_file(Pid) ->
-    z_file_entry:lookup(Pid).
 
 
 %% @doc Flush all cached file entries, needed if some missing files are now

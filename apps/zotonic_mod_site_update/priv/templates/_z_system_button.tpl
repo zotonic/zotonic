@@ -5,6 +5,7 @@
             {_ Review incoming changes and deploy the latest version of Zotonic _}
         </p>
     </a>
+    {% include "_site_deploy_status.tpl" %}
     {% wire id="vcs" delegate=`mod_site_update` postback={vcs_up zotonic} %}
 {% endif %}
 

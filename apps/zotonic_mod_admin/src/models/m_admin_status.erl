@@ -33,6 +33,8 @@ Available Model API Paths
 | `get` | `/zotonic_git_version/...` | Return the running Zotonic's git version string for admin users (ACL-protected). |
 | `get` | `/database_version/...` | Return the database server version string (admin ACL-gated via `m_get/3`). |
 | `get` | `/otp_version/...` | Return the exact Erlang/OTP version string (admin ACL-gated via `m_get/3`). |
+| `get` | `/zotonic_config_files/...` | Return Erlang init and Zotonic configuration file paths (admin only). |
+| `get` | `/site_config_files/...` | Return this site’s configuration file paths in load order (admin only). |
 | `get` | `/config_dir/...` | Return the active configuration directory path. |
 | `get` | `/security_dir/...` | Return the configured security directory path (`z_config:get(security_dir)`). |
 | `get` | `/log_dir/...` | Return the configured log directory path (`z_config:get(log_dir)`). |
@@ -53,6 +55,7 @@ Available Model API Paths
 | `get` | `/disks/alert/...` | Return whether any disk usage crosses configured alert thresholds. |
 | `get` | `/os_memory/...` | Return operating-system memory statistics. |
 | `get` | `/os_memory/alert/...` | Return whether OS memory pressure crosses alert thresholds. |
+| `get` | `/media_maintenance/...` | Return this site’s media deduplication and preview-cleanup task counts and running flags. Requires `use mod_admin_config`; includes queued work, retries and migration cleanup. |
 | `get` | `/task_queue/...` | Return pivot/task queue counters from `z_pivot_rsc:count_tasks/1`. |
 | `get` | `/media_processing/...` | Return local sandbox and cached media runner availability, without credentials. |
 | `get` | `/is_ssl_application_configured/...` | Return whether the `ssl` application has session settings configured. |
@@ -95,6 +98,15 @@ m_get([ <<"zotonic_git_version">> | Rest ], _Msg, Context) ->
         true -> {ok, {zotonic_git_version(), Rest}};
         false -> {error, eacces}
     end;
+m_get([ <<"media_maintenance">> | Rest ], _Msg, Context) ->
+    case z_acl:is_allowed(use, mod_admin_config, Context) of
+        true ->
+            case media_maintenance(Context) of
+                {ok, Status} -> {ok, {Status, Rest}};
+                {error, _} = Error -> Error
+            end;
+        false -> {error, eacces}
+    end;
 m_get(Path, Msg, Context) ->
     case z_acl:is_admin(Context) of
         true -> m_get_1(Path, Msg, Context);
@@ -118,6 +130,12 @@ m_get_1([ <<"otp_version">> | Rest ], _Msg, Context) ->
         true -> {ok, {otp_version(), Rest}};
         false -> {error, eacces}
     end;
+m_get_1([ <<"zotonic_config_files">> | Rest ], _Msg, _Context) ->
+    Files = proplists:get_value(config, init:get_arguments(), [])
+        ++ z_config_files:zotonic_config_files(),
+    {ok, {Files, Rest}};
+m_get_1([ <<"site_config_files">> | Rest ], _Msg, Context) ->
+    {ok, {z_sites_config:config_files(z_context:site(Context)), Rest}};
 m_get_1([ <<"config_dir">> | Rest ], _Msg, _Context) ->
     case z_config_files:config_dir() of
         {ok, Dir} ->
@@ -261,6 +279,34 @@ listener_address(IP, _Family) ->
 
 listener_port(none) -> undefined;
 listener_port(Port) -> Port.
+
+%% @doc Include all durable phases, including delayed retries and legacy cleanup.
+%% Task execution stays in the pivot sidejob; this only reads its status and queue.
+-spec media_maintenance(Context) -> {ok, map()} | {error, term()} when Context :: z:context().
+media_maintenance(Context) ->
+    Empty = #{pending => 0, running => false},
+    Initial = #{migration => Empty, previews => Empty},
+    case m_cafs:is_enabled(Context) of
+        false -> {ok, Initial};
+        true ->
+            {ok, Pivot} = z_pivot_rsc:status(Context),
+            TaskId = maps:get(task_id, Pivot, undefined),
+            case z_db:qmap("select module, count(*) as pending,
+                    coalesce(bool_or(id=$1), false) as running
+                from pivot_task_queue
+                where module in ('z_media_cafs_migrate', 'z_media_preview_purge')
+                group by module", [TaskId], [{keys, atom}], Context) of
+                {ok, Rows} ->
+                    {ok, lists:foldl(fun(#{module := Module} = Row, Acc) ->
+                        Key = case Module of
+                            <<"z_media_cafs_migrate">> -> migration;
+                            <<"z_media_preview_purge">> -> previews
+                        end,
+                        Acc#{Key => maps:remove(module, Row)}
+                    end, Initial, Rows)};
+                {error, _} = Error -> Error
+            end
+    end.
 
 %% @doc Summarize media execution without exposing runner credentials or raw errors.
 %% Remote probes share the bounded, configuration-aware ImageMagick cache.
