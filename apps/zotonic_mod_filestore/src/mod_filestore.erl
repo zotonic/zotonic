@@ -262,7 +262,11 @@ service itself immutable.
 
 Use the admin's bulk actions to queue existing local media for upload or to move
 remote files back to the server's disk. These operations run in the background;
-watch the queues and logs. Moving files to disk requires enough disk space and
+watch the queues and logs. Each download request walks a fixed range of registry
+IDs once, including entries previously recorded as local so missing local files
+can be recovered. Keeping the remote copy does not cause completed entries to be
+queued again. Files registered after the walk starts require a new request.
+Moving files to disk requires enough disk space and
 working credentials for their existing locations. Disable uploads when bringing
 files back for a storage migration.
 

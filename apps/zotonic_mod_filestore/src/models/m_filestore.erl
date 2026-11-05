@@ -123,6 +123,7 @@ Available Model API Paths
 
     mark_move_to_local_all/1,
     mark_move_to_local_limit/2,
+    mark_move_to_local_limit/4,
     mark_move_to_local/2,
 
     unmark_move_to_local_all/1,
@@ -834,6 +835,33 @@ mark_move_to_local_limit(Limit, Context) ->
                         {ok, N}
                      end,
                      Context).
+
+%% @doc Mark one batch within a fixed ID range. The returned cursor advances
+%% past completed entries, even when downloaders clear their move-to-local flag.
+%% Local entries are included so missing local files can also be recovered.
+-spec mark_move_to_local_limit(Limit, AfterId, MaxId, Context) -> {ok, {Count, LastId}}
+    when Limit :: pos_integer(), AfterId :: non_neg_integer(), MaxId :: non_neg_integer(),
+         Context :: z:context(), Count :: non_neg_integer(), LastId :: non_neg_integer().
+mark_move_to_local_limit(Limit, AfterId, MaxId, Context) ->
+    {Count, LastId} = z_db:q_row("
+        with marked as (
+            update filestore f
+            set is_move_to_local = true
+            from (
+                select id from filestore
+                where id > $2 and id <= $3
+                  and not is_move_to_local and not is_deleted and error is null
+                order by id
+                limit $1
+                for update
+            ) mv
+            where f.id = mv.id
+            returning f.id
+        )
+        select count(*), coalesce(max(id), $2) from marked",
+        [Limit, AfterId, MaxId], Context),
+    {ok, {Count, LastId}}.
+
 
 %% @doc Mark all filestore entries to be moved from the remote service
 %% to the local service. We mark all entries so that any missing files are
