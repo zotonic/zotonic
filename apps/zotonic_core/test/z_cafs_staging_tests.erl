@@ -1,11 +1,13 @@
 -module(z_cafs_staging_tests).
 -include_lib("eunit/include/eunit.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 %% Mock setup and teardown must not affect the live integration-test site.
 staging_test_() ->
     z_test_support:isolated(fun staging/0).
 
 staging() ->
+    Context = #context{site = zotonic_site_testsandbox},
     Root = filename:join("/tmp", "cafs-staging-test-" ++ binary_to_list(z_ids:id())),
     File = filename:join(Root, "source"),
     ok = filelib:ensure_dir(File),
@@ -20,18 +22,18 @@ staging() ->
         %% Stop at the publication boundary; inspect the real copy and hash work.
         meck:expect(z_db, transaction, fun(_, _) -> {error, publication_boundary} end),
         Medium = #{<<"filename">> => <<"upload">>, <<"is_deletable_file">> => true},
-        ?assertEqual({error, publication_boundary}, m_cafs:stage_medium(Medium, <<"upload">>, test)),
+        ?assertEqual({error, publication_boundary}, m_cafs:stage_medium(Medium, <<"upload">>, Context)),
         ?assertEqual(1, meck:num_calls(z_crypto, hex_sha2_file, '_')),
         ?assertEqual(0, meck:num_calls(z_crypto, hex_sha2_file, [File])),
         meck:reset(z_crypto),
-        ?assertEqual({error, publication_boundary}, m_cafs:stage_medium(Medium, test)),
+        ?assertEqual({error, publication_boundary}, m_cafs:stage_medium(Medium, Context)),
         ?assertEqual(2, meck:num_calls(z_crypto, hex_sha2_file, '_')),
         meck:reset(z_crypto),
-        ?assertEqual({error, publication_boundary}, m_cafs:stage_medium(Medium, <<"other-upload">>, test)),
+        ?assertEqual({error, publication_boundary}, m_cafs:stage_medium(Medium, <<"other-upload">>, Context)),
         ?assertEqual(2, meck:num_calls(z_crypto, hex_sha2_file, '_')),
         meck:reset(z_crypto),
         Poster = #{<<"preview_filename">> => <<"upload">>, <<"is_deletable_preview">> => true},
-        ?assertEqual({error, publication_boundary}, m_cafs:stage_medium(Poster, <<"upload">>, test)),
+        ?assertEqual({error, publication_boundary}, m_cafs:stage_medium(Poster, <<"upload">>, Context)),
         ?assertEqual(2, meck:num_calls(z_crypto, hex_sha2_file, '_')),
         meck:reset(z_db),
         meck:expect(z_crypto, hex_sha2_file, fun(Path) ->
@@ -42,7 +44,7 @@ staging() ->
             end,
             Result
         end),
-        ?assertEqual({error, source_changed}, m_cafs:stage_original(File, test)),
+        ?assertEqual({error, source_changed}, m_cafs:stage_original(File, Context)),
         ?assertEqual(0, meck:num_calls(z_db, transaction, '_')),
         ?assertEqual([], filelib:fold_files(Root, ".*\\.staging$", true,
             fun(Path, Acc) -> [Path|Acc] end, []))

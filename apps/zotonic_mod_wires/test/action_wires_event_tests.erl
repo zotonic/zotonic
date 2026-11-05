@@ -1,9 +1,13 @@
 -module(action_wires_event_tests).
 -include_lib("eunit/include/eunit.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 %% Quotes and newlines in generated actions must remain executable JavaScript
 %% inside the timer callback, including the continuation alias.
 timer_callback_test_() ->
+    z_test_support:isolated(timer_callback()).
+
+timer_callback() ->
     {setup,
         fun() ->
             meck:new(z_render, [no_link]),
@@ -14,8 +18,9 @@ timer_callback_test_() ->
         end,
         fun(_) -> meck:unload(z_render) end,
         [?_test(begin
-            {Script, context} = action_wires_event:render_action(undefined, undefined,
-                [{type, Type}, {interval, 5000}], context),
+            Context = #context{},
+            {Script, Context} = action_wires_event:render_action(undefined, undefined,
+                [{type, Type}, {interval, 5000}], Context),
             ?assertEqual(
                 <<"setTimeout(function() { postback('target');\nupdate(\"target\");\n }, 5000);\n">>,
                 iolist_to_binary(Script))

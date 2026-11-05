@@ -52,8 +52,7 @@ directory_opener() ->
                         true -> os:find_executable("xdg-open");
                         false -> false
                     end;
-                {win32, _} -> os:find_executable("explorer.exe");
-                _ -> false
+                {win32, _} -> os:find_executable("explorer.exe")
             end
     end.
 
