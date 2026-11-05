@@ -35,11 +35,13 @@
 %% filename in the same transaction. cafs_retire schedules redundant legacy
 %% deletion once the canonical remote copy is safe.
 %% Both use the caller's transaction with its CAFS lock; return ok or {error, Reason}.
+%% exists checks the remote registry only, without network I/O or cache writes.
+%% Returns true, false, or {error, Reason}; undefined means not handled.
 %% cancel_delete must use the caller's transaction and returns true only when
 %% deletion is safely cancelled or the path is absent; false means it may be in
 %% flight. An undefined response does not confirm cancellation.
 -record(filestore, {
-        action = upload :: lookup | upload | delete | cancel_delete | delete_status | purge_previews | cafs_adopt | cafs_retire,
+        action = upload :: lookup | exists | upload | delete | cancel_delete | delete_status | purge_previews | cafs_adopt | cafs_retire,
         path :: file:filename_all() | {prefix, file:filename_all()},
         local_path :: file:filename_all() | undefined,
         filename :: file:filename_all() | undefined,

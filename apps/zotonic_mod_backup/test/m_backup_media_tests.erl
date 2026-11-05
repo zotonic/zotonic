@@ -200,3 +200,55 @@ cache_eviction_race() ->
         meck:unload(filezcache)
     end,
     ok.
+
+media_preflight_test_() ->
+    {timeout, 60, fun media_preflight/0}.
+
+media_preflight() ->
+    C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    ok = z_module_manager:activate_await(mod_backup, C),
+    ok = m_filestore:install(install, C),
+    ok = z_notifier:observe(filestore, {mod_filestore, observe_filestore, []}, self(), 1, C),
+    Data = <<"preflight-", (z_ids:id())/binary>>,
+    Hash = z_crypto:hex_sha2(Data),
+    Physical = z_path:files_subdir(m_cafs:path(Hash), C),
+    try
+        Result = z_db:transaction(fun(Ctx) ->
+            {ok, Id} = m_media:insert_file(#upload{filename = <<"preflight.txt">>, data = Data}, Ctx),
+            Medium = m_media:get(Id, Ctx),
+            %% Notifications are deferred until commit; seed the log inside
+            %% this rollback-only fixture so pre-flight can see it.
+            ok = m_backup_revision:medium_insert(Id, Medium, Ctx),
+            ok = m_backup_revision:save_revision(Id, m_rsc:get(Id, Ctx), Ctx),
+            Rev = z_db:q1("select id from backup_revision where rsc_id=$1 order by id desc limit 1", [Id], Ctx),
+            Check = fun() -> maps:get(<<"media">>, m_backup_revision:restore_options(Rev, Ctx)) end,
+            ?assertEqual(#{original => local, preview => none}, Check()),
+            ?assertEqual(undefined, m_backup_revision:restore_options(Rev, z_acl:anondo(Ctx))),
+            Poster = <<"preflight/", (z_ids:id())/binary, ".jpg">>,
+            ok = m_backup_revision:medium_update(Id, Medium#{<<"preview_filename">> => Poster}, Ctx),
+            ?assertEqual(#{original => local, preview => missing}, Check()),
+            {Html, _} = z_template:render_to_iolist("_backup_restore_media_check.tpl", [{media, Check()}], Ctx),
+            ?assertNotEqual(nomatch, binary:match(iolist_to_binary(Html), <<"saved preview image">>)),
+            %% Remote checks inspect registry metadata without starting a download.
+            ok = file:delete(Physical),
+            {ok, _} = m_filestore:store(m_cafs:path(Hash), byte_size(Data), <<"s3">>,
+                <<"https://example.invalid/preflight/", Hash/binary>>, false, Ctx),
+            ?assertEqual(#{original => remote, preview => missing}, Check()),
+            z_db:q("update filestore set error='timeout' where path=$1", [m_cafs:path(Hash)], Ctx),
+            ?assertEqual(#{original => unknown, preview => missing}, Check()),
+            z_db:q("update filestore set is_deleted=true where path=$1", [m_cafs:path(Hash)], Ctx),
+            ?assertEqual(#{original => missing, preview => missing}, Check()),
+            %% Legacy revisions without CAFS mappings use their original path.
+            Legacy = z_media_archive:abspath(maps:get(<<"filename">>, Medium), Ctx),
+            z_db:q("delete from filename_cafs where filename=$1", [maps:get(<<"filename">>, Medium)], Ctx),
+            ok = z_filelib:ensure_dir(Legacy),
+            ok = file:write_file(Legacy, Data),
+            try ?assertEqual(#{original => local, preview => missing}, Check())
+            after file:delete(Legacy) end,
+            throw({rollback, checked})
+        end, C),
+        ?assertEqual({rollback, checked}, Result)
+    after
+        z_notifier:detach(filestore, self(), C),
+        file:delete(Physical)
+    end.

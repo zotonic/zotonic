@@ -36,7 +36,7 @@ Type: [first](/id/doc_developerguide_notifications#notification-first).
 
 `#filestore{}` properties:
 
-* `action`: `lookup`, `upload`, `delete`, `delete_status`, `cancel_delete`, `purge_previews`, `cafs_adopt`, or `cafs_retire`.
+* `action`: `lookup`, `exists`, `upload`, `delete`, `delete_status`, `cancel_delete`, `purge_previews`, `cafs_adopt`, or `cafs_retire`.
 * `path`: path relative to the site's files directory, such as `archive/example.jpg`.
   Deletion and deletion-status requests also accept `{prefix, Prefix}`.
 * `local_path`: optional local filename used by `lookup` to prefer a retained local copy.
@@ -51,6 +51,9 @@ Return values depend on the action:
   `{ok, {filezcache, Pid, StoreEntry}}`. `StoreEntry` is a map of backend metadata.
   A cache miss may start a download. Return `undefined` to fall back to local storage
   or another observer; it does not establish that the remote file is absent.
+* `exists`: read-only registry check, without network I/O or cache writes. Return
+  `true` for a non-deleted entry without a recorded read error, `false` if absent,
+  or `{error, Reason}` if availability is uncertain. This is not a remote probe.
 * `upload`: `ok` after queueing the upload, or `{error, Reason}`. This does not
   transfer file bytes. Queue insertion must participate in the caller's transaction.
 * `delete`: `ok` after marking matching entries for delayed deletion, or an error.

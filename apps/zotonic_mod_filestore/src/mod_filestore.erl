@@ -484,6 +484,13 @@ observe_media_update_done(#media_update_done{action=update, post_props=Props}, C
 observe_media_update_done(#media_update_done{}, _Context) ->
     ok.
 
+observe_filestore(#filestore{action=exists, path=Path}, Context) ->
+    case m_filestore:lookup(Path, Context) of
+        {ok, #{error := undefined, delete_started := false}} -> true;
+        {ok, _} -> {error, unavailable};
+        {error, enoent} -> false;
+        {error, _} = Error -> Error
+    end;
 observe_filestore(#filestore{action=lookup, path=Path, local_path=OptLocalPath}, Context) ->
     lookup(Path, OptLocalPath, Context);
 observe_filestore(#filestore{action=upload, path=Path, mime=undefined} = Upload, Context) ->
