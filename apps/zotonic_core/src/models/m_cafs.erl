@@ -792,7 +792,7 @@ collect(Hash, Context) ->
                     select exists(select 1 from filename_cafs where hash=$1)
                         or exists(select 1 from cafs_pin where hash=$1)
                         or exists(select 1 from cafs_derivative where output_hash=$1 and source_hash<>$1)",
-                    [Hash], Ctx)
+                    [Hash], Ctx) orelse readers(path(Hash), Ctx) =/= []
                 of
                     true ->
                         z_db:q("update cafs set gc_after=now()+interval '1 day' where hash=$1", [Hash], Ctx),
@@ -826,11 +826,17 @@ delete_object_locked(Hash, Context) ->
     %% read-only backend, or 'Never' retention leaves the tombstone intact.
     case z_file_request:delete_remote(Path, Context) of
         absent ->
-            case file:delete(z_path:files_subdir(Path, Context)) of
-                ok -> z_db:q("delete from cafs where hash=$1 and state='deleting'", [Hash], Context);
-                {error, enoent} -> z_db:q("delete from cafs where hash=$1 and state='deleting'", [Hash], Context);
+            case readers(Path, Context) of
+                [] -> delete_local_object(Hash, Path, Context);
                 _ -> ok
             end;
+        _ -> ok
+    end.
+
+delete_local_object(Hash, Path, Context) ->
+    case file:delete(z_path:files_subdir(Path, Context)) of
+        ok -> z_db:q("delete from cafs where hash=$1 and state='deleting'", [Hash], Context);
+        {error, enoent} -> z_db:q("delete from cafs where hash=$1 and state='deleting'", [Hash], Context);
         _ -> ok
     end.
 
@@ -1017,7 +1023,15 @@ track(Path, Context) ->
             %% Serialize registration with collection and local offloading.
             %% After this lock is released, the registered reader protects the
             %% file until its resolver exits, including before opening it.
-            transaction(fun(Ctx) -> lock(Hash, Ctx), Register() end, Context)
+            case transaction(fun(Ctx) ->
+                case lock(Hash, Ctx) of
+                    <<"ready">> -> Register();
+                    _ -> {error, deleting}
+                end
+            end, Context) of
+                ok -> ok;
+                {error, Reason} -> throw({file_unavailable, Reason})
+            end
     end.
 
 -spec readers(Path, Context) -> [pid()] when Path :: binary(), Context :: z:context().

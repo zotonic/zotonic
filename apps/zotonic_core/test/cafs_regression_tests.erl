@@ -335,3 +335,32 @@ anonymous() -> z_context:new(zotonic_site_testsandbox).
 unique() -> z_ids:id(24).
 digest(Bytes) -> binary:encode_hex(crypto:hash(sha256, Bytes), lowercase).
 store(Path, C) -> m_filestore:store(Path, 1, <<"s3">>, <<"https://example.test/", Path/binary>>, false, C).
+
+reader_collection_test_() -> {timeout, 60, fun reader_collection/0}.
+reader_collection() ->
+    C = context(),
+    File = z_tempfile:new(),
+    ok = file:write_file(File, unique()),
+    {ok, #{hash := Hash, token := Token}} = m_cafs:stage_file(File, C),
+    Path = m_cafs:path(Hash),
+    Local = z_path:files_subdir(Path, C),
+    Parent = self(),
+    {Pid, Ref} = spawn_monitor(fun() ->
+        ok = m_cafs:track(Path, C),
+        Parent ! tracked,
+        receive finish -> ok end
+    end),
+    try
+        receive tracked -> ok after 5000 -> error(reader_timeout) end,
+        ok = m_cafs:unpin(Hash, Token, C),
+        ok = m_cafs:collect_unused(Hash, C),
+        ?assertEqual(<<"ready">>, z_db:q1("select state from cafs where hash=$1", [Hash], C)),
+        ?assert(filelib:is_regular(Local)),
+        Pid ! finish,
+        receive {'DOWN', Ref, process, Pid, normal} -> ok after 5000 -> error(reader_timeout) end,
+        z_db:q("update cafs set state='deleting' where hash=$1", [Hash], C),
+        ?assertThrow({file_unavailable, deleting}, m_cafs:track(Path, C))
+    after
+        exit(Pid, kill), file:delete(File), file:delete(Local),
+        z_db:q("delete from cafs where hash=$1", [Hash], C)
+    end.

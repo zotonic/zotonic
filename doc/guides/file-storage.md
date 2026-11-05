@@ -109,7 +109,10 @@ and permissions need to allow both layouts during migration.
 After upload, a site can retain the local copy or let it be removed. A later read
 of a remote-only object obtains a local cached copy. Processing holds the required
 file protection while reading, so cache eviction does not remove an active input.
-The registry and retry queues survive temporary storage failures.
+The registry and retry queues survive temporary storage failures. Bulk downloads
+verify the recorded size and, for CAFS objects, the SHA-256 hash before publishing
+the local file or scheduling removal of the remote copy. Failed downloads remain
+queued with backoff; restarting the bulk operation is not required.
 
 Use Zotonic's supported bulk upload and move operations when changing storage.
 Avoid moving or deleting objects by hand: database mappings, shared references,

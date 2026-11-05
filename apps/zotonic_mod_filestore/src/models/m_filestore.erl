@@ -530,10 +530,13 @@ cafs_migrate(Action, Path, Target, Context) ->
                             Dest = lists:search(fun(#{path := P}) -> P =:= Target end, Entries),
                             case cafs_migrate_1(Action, Source, Dest, Target, Context) of
                                 ok when Action =:= cafs_adopt ->
+                                    IsLocal = filelib:is_regular(z_path:files_subdir(Target, Context)),
+                                    z_db:q("update filestore set is_local=$2 where path=$1
+                                        and is_local is distinct from $2", [Target, IsLocal], Context),
                                     %% The existing-object uploader branch only
                                     %% offloads the local copy; it does not PUT.
                                     case not filestore_config:is_local_keep(Context)
-                                            andalso filelib:is_regular(z_path:files_subdir(Target,Context)) of
+                                            andalso IsLocal of
                                         true -> _ = queue(Target,#{},Context), ok;
                                         false -> ok
                                     end;
@@ -551,7 +554,7 @@ cafs_migrate_1(cafs_adopt, {value, #{id := Id, is_deleted := false,
         false, Target, Context) ->
     %% Remote locations are unique. Move the registry path in the same
     %% transaction as the caller's filename_cafs attachment; keep the URL.
-    1 = z_db:q("update filestore set path=$1, is_local=false, modified=now() where id=$2",
+    1 = z_db:q("update filestore set path=$1, modified=now() where id=$2",
         [Target, Id], Context),
     ok;
 cafs_migrate_1(cafs_adopt, _Source, {value, #{is_deleted := false, delete_started := false, error := undefined}}, _Target, _Context) -> ok;
@@ -948,7 +951,8 @@ fetch_move_to_local(BatchSize, Context) ->
             from filestore
             where is_move_to_local = true
               and is_deleted = false
-              and error is null
+              and not is_unrecoverable
+              and (retry_after is null or retry_after <= now())
             limit $1",
             [ BatchSize ],
             [ {keys, atom} ],
@@ -976,6 +980,7 @@ purge_move_to_local(Id, true, Context) ->
 purge_move_to_local(Id, false, Context) ->
     z_db:q1("update filestore
              set is_move_to_local = false,
+                 is_local = true,
                  is_deleted = true,
                  deleted = now()
              where id = $1", [Id], Context).
@@ -1010,12 +1015,16 @@ stats(Context) ->
     {InCloudOnly, InCloudOnlySize} = z_db:q_row("
                             select count(*), coalesce(sum(m.size), 0)::bigint
                             from medium m
+                                    left join filename_cafs c on c.filename = m.filename
                                     join filestore f
-                                    on f.path = 'archive/' || m.filename
+                                    on f.path = case when c.hash is null
+                                        then 'archive/' || m.filename
+                                        else 'archive/cafs/sha256/' || substr(c.hash,1,2)
+                                            || '/' || substr(c.hash,3,2) || '/' || c.hash end
                                     and f.is_local = false
-                            where filename is not null
-                              and filename <> ''
-                              and is_deletable_file = true",
+                            where m.filename is not null
+                              and m.filename <> ''
+                              and m.is_deletable_file = true",
                             Context),
     #{
         archived => Archived,
