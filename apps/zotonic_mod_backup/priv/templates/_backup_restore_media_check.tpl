@@ -7,7 +7,9 @@
         {% if media.preview == `missing` %}
             <p>{_ The saved preview image for this version is no longer available. _}</p>
         {% endif %}
-        <p>{_ Restoring this version can replace the media currently attached to the page. _}</p>
+        {% if page_exists %}
+            <p>{_ Restoring this version can replace the media currently attached to the page. _}</p>
+        {% endif %}
     </div>
 {% endif %}
 {% if media.original == `unknown` or media.preview == `unknown` %}
