@@ -34,9 +34,46 @@ whose runtime is not automatically recognised. Browser settings are separate.
 
 -export([
     detect/1, open/4, edit/1, edit/2, browser_only/0,
+    directory_opener/0, open_directory/1,
      select/1, split_command/1, arguments/4, save_preference/2,
      source_location/1, source_location/2
 ]).
+
+%% @doc Discover the desktop directory launcher without starting a process.
+-spec directory_opener() -> false | file:filename().
+directory_opener() ->
+    case browser_only() of
+        true -> false;
+        false ->
+            case os:type() of
+                {unix, darwin} -> os:find_executable("open");
+                {unix, _} ->
+                    case env("DISPLAY") =/= false orelse env("WAYLAND_DISPLAY") =/= false of
+                        true -> os:find_executable("xdg-open");
+                        false -> false
+                    end;
+                {win32, _} -> os:find_executable("explorer.exe");
+                _ -> false
+            end
+    end.
+
+%% @doc Open an existing directory on the server desktop. Callers must authorize
+%% the request and resolve the path from server-owned configuration.
+-spec open_directory(file:filename_all()) -> ok | {error, term()}.
+open_directory(Directory) ->
+    case directory_opener() of
+        false -> {error, unavailable};
+        Exe ->
+            case filelib:is_dir(Directory) of
+                true ->
+                    Path = unicode:characters_to_list(filename:absname(Directory)),
+                    case run(Exe, [Path], 5000) of
+                        {ok, _} -> ok;
+                        {error, _} = Error -> Error
+                    end;
+                false -> {error, enoent}
+            end
+    end.
 
 %% @doc Check whether configuration or container markers require browser-only editor launches.
 -spec browser_only() -> boolean().

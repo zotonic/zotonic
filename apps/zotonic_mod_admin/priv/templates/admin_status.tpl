@@ -6,8 +6,13 @@
     <p>{_ Health, background work and services for _} <strong>{{ m.site.site|escape }}</strong>.</p>
 </div>
 {% include "_admin_system_navigation.tpl" %}
-{% include "_admin_status_alert.tpl" %}
 {% include "_admin_status_update.tpl" %}
+<section class="widget">
+    <h3 class="widget-header">{_ Health checks _}</h3>
+    <div class="widget-content">
+        {% all include "_admin_status_alert.tpl" show_status %}
+    </div>
+</section>
 
 {% if m.acl.use.mod_admin_config %}
     <section class="widget">

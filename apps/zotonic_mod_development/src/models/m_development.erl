@@ -39,14 +39,25 @@ Available Model API Paths
 | `get` | `/reindex/...` | Return config flag controlling whether reindex action is enabled. |
 | `get` | `/dispatch_info/...` | Return dispatch rule info/inspection data for development diagnostics. |
 | `get` | `/editor` | Detect editors on development sites; requires use of mod_development. Other environments use browser launches without local probes. |
+| `get` | `/can_open_directory` | Whether an administrator on a development site can open installation directories on the server desktop. Requires mod_development access, a desktop opener, and no container/browser-only restriction. |
+| `get` | `/config_source/+file` | Return a signed editor location for an existing Erlang init, Zotonic, or current-site config file. Administrator and development-site access required. Other paths are rejected. |
 | `post` | `/editor/preference` | Save the machine editor choice; development environment and module ACL required; disabled in containers. |
-| `post` | `/editor/open` | Open an indexed template or signed source location; development environment and module ACL required; disabled in containers. |
+| `post` | `/editor/open` | Open an indexed template or signed source/config location; development environment and module ACL required; disabled in containers. Config locations additionally require administrator access and must still be listed among the node’s Erlang init, Zotonic, or current-site config files. |
 | `get` | `/show_trace_button/...` | Check if the trace button for debugging templates can be shown. |
 | `get` | `/template_trace_parents/...` | Return traced parent relations for a template source location. |
 | `get` | `/template_trace_children/...` | Return traced templates included from a template source location. |
 | `get` | `/template_trace_filename_menu/...` | Return grouped filename-menu relations for a traced template. |
 
 `/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
+
+The System Information directory buttons call `open_directory/2` through a signed
+postback. It requires administrator and development-module access on a site whose
+environment is `development`. Only the installation keys `files_dir`, `data_dir`,
+`log_dir`, `config_dir`, `security_dir`, `work_dir`, `home`, and `root` are accepted;
+paths are resolved on the server. The local desktop opens the directory, not the
+browser's computer. Containers and `development_editor_browser_only` disable
+launches. macOS uses `open`, Linux desktop sessions use `xdg-open`, and Windows
+uses `explorer.exe`, with arguments passed directly to the executable.
 ").
 
 -behaviour (zotonic_model).
@@ -54,6 +65,7 @@ Available Model API Paths
 -export([
     m_get/3,
     m_post/3,
+    open_directory/2,
     dispatch_trace_sources/2,
 
     lookup_record/1,
@@ -66,6 +78,18 @@ Available Model API Paths
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ <<"can_open_directory">> | Rest ], _Msg, Context) ->
+    CanOpen = directory_access(Context) andalso z_development_editor:directory_opener() =/= false,
+    {ok, {CanOpen, Rest}};
+m_get([ <<"config_source">>, File | Rest ], _Msg, Context) ->
+    case directory_access(Context) of
+        true ->
+            case config_source(File, Context) of
+                {ok, Source} -> {ok, {Source, Rest}};
+                {error, _} = Error -> Error
+            end;
+        false -> {error, eacces}
+    end;
 m_get([ <<"editor">> | Rest ], _Msg, Context) ->
     case z_acl:is_allowed(use, mod_development, Context) of
         true ->
@@ -228,6 +252,11 @@ editor_open(#{<<"source">> := Token, <<"editor">> := Editor}, Context)
              is_binary(Editor), byte_size(Editor) > 0, byte_size(Editor) < 128 ->
     Location = try z_crypto:depickle(Token, Context) catch error:_ -> invalid end,
     case Location of
+        {development_editor_config, File} when is_binary(File) ->
+            case directory_access(Context) andalso is_config_file(File, Context) of
+                true -> z_development_editor:open(File, 1, 1, Editor);
+                false -> {error, eacces}
+            end;
         {development_editor_source, File, Line}
                 when is_binary(File), byte_size(File) > 0, byte_size(File) < 4096,
                      is_integer(Line), Line > 0, Line < 10000000 ->
@@ -639,3 +668,59 @@ concrete(Expr) ->
         z_convert:to_binary(
             io_lib:format("~p", [erl_syntax:concrete(Expr)])
         ) ).
+
+%% @doc Open an allowlisted installation directory. Recheck access on every
+%% request; never accept a filesystem path from the browser.
+-spec open_directory(binary(), z:context()) -> ok | {error, term()}.
+open_directory(Key, Context) ->
+    case directory_access(Context) of
+        true ->
+            case installation_directory(Key, Context) of
+                {ok, {Path, []}} when is_binary(Path), Path =/= <<>> ->
+                    z_development_editor:open_directory(Path);
+                {ok, {Path, []}} when is_list(Path), Path =/= [] ->
+                    z_development_editor:open_directory(Path);
+                _ -> {error, enoent}
+            end;
+        false -> {error, eacces}
+    end.
+
+directory_access(Context) ->
+    z_acl:is_admin(Context)
+    andalso z_acl:is_allowed(use, mod_development, Context)
+    andalso m_site:environment(Context) =:= development.
+
+installation_directory(Key, Context)
+    when Key =:= <<"files_dir">>; Key =:= <<"data_dir">>;
+         Key =:= <<"log_dir">>; Key =:= <<"config_dir">>;
+         Key =:= <<"security_dir">>; Key =:= <<"work_dir">> ->
+    m_admin_status:m_get([Key], undefined, Context);
+installation_directory(<<"home">>, _Context) ->
+    case init:get_argument(home) of
+        {ok, [[Dir]]} -> {ok, {Dir, []}};
+        _ -> {error, enoent}
+    end;
+installation_directory(<<"root">>, _Context) ->
+    {ok, {code:root_dir(), []}};
+installation_directory(_, _Context) ->
+    {error, enoent}.
+
+%% @doc Config edit links use their own token purpose so opening them also
+%% requires administrator access, even if a token is passed to another user.
+config_source(File, Context) when is_binary(File); is_list(File) ->
+    FileB = unicode:characters_to_binary(File),
+    case is_binary(FileB) andalso is_config_file(FileB, Context) andalso filelib:is_regular(FileB) of
+        true ->
+            {ok, #{file => FileB, line => 1,
+                token => z_crypto:pickle({development_editor_config, FileB}, Context)}};
+        false -> {error, enoent}
+    end;
+config_source(_, _) ->
+    {error, enoent}.
+
+is_config_file(File, Context) ->
+    lists:any(
+        fun(Config) -> unicode:characters_to_binary(Config) =:= File end,
+        proplists:get_value(config, init:get_arguments(), [])
+            ++ z_config_files:zotonic_config_files()
+            ++ z_sites_config:config_files(z_context:site(Context))).

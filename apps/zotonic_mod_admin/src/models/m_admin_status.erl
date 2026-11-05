@@ -33,6 +33,8 @@ Available Model API Paths
 | `get` | `/zotonic_git_version/...` | Return the running Zotonic's git version string for admin users (ACL-protected). |
 | `get` | `/database_version/...` | Return the database server version string (admin ACL-gated via `m_get/3`). |
 | `get` | `/otp_version/...` | Return the exact Erlang/OTP version string (admin ACL-gated via `m_get/3`). |
+| `get` | `/zotonic_config_files/...` | Return Erlang init and Zotonic configuration file paths (admin only). |
+| `get` | `/site_config_files/...` | Return this site’s configuration file paths in load order (admin only). |
 | `get` | `/config_dir/...` | Return the active configuration directory path. |
 | `get` | `/security_dir/...` | Return the configured security directory path (`z_config:get(security_dir)`). |
 | `get` | `/log_dir/...` | Return the configured log directory path (`z_config:get(log_dir)`). |
@@ -128,6 +130,12 @@ m_get_1([ <<"otp_version">> | Rest ], _Msg, Context) ->
         true -> {ok, {otp_version(), Rest}};
         false -> {error, eacces}
     end;
+m_get_1([ <<"zotonic_config_files">> | Rest ], _Msg, _Context) ->
+    Files = proplists:get_value(config, init:get_arguments(), [])
+        ++ z_config_files:zotonic_config_files(),
+    {ok, {Files, Rest}};
+m_get_1([ <<"site_config_files">> | Rest ], _Msg, Context) ->
+    {ok, {z_sites_config:config_files(z_context:site(Context)), Rest}};
 m_get_1([ <<"config_dir">> | Rest ], _Msg, _Context) ->
     case z_config_files:config_dir() of
         {ok, Dir} ->

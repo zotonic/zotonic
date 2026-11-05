@@ -24,14 +24,14 @@ check(Site) ->
     ?assertEqual(nomatch, binary:match(render("admin_maintenance.tpl", Anonymous), <<"Delete generated previews">>)),
     ?assertEqual(nomatch, binary:match(Maintenance, <<"Close excess connections">>)),
     Information = render("admin_system_info.tpl", Context),
-    ?assertNotEqual(nomatch, binary:match(Information, <<"Erlang init files">>)),
+    ?assertNotEqual(nomatch, binary:match(Information, <<"Zotonic init files">>)),
     ?assertNotEqual(nomatch, binary:match(render("admin_imports.tpl", Context), <<"dropupload">>)),
     ?assertEqual({error, eacces}, m_admin_status:m_get([<<"code_update">>], undefined, Anonymous)),
     ?assertEqual({error, eacces}, m_admin_status:m_get([<<"media_maintenance">>], undefined, Anonymous)),
     ?assertNotEqual(nomatch, binary:match(Maintenance, <<"admin-status-media-maintenance">>)),
     ?assertNotEqual(nomatch, binary:match(Status, <<"admin-status-media-maintenance">>)),
     ?assertEqual(nomatch, binary:match(render("_admin_status_media_maintenance.tpl", Anonymous), <<"Media deduplication">>)),
-    ?assertEqual(nomatch, binary:match(render("admin_system_info.tpl", Anonymous), <<"Erlang init files">>)),
+    ?assertEqual(nomatch, binary:match(render("admin_system_info.tpl", Anonymous), <<"Zotonic init files">>)),
     ?assertEqual(nomatch, binary:match(render("_admin_status_task_queue.tpl", Anonymous), <<"<table">>)),
     ok.
 
@@ -70,4 +70,31 @@ maintenance_status_test() ->
         ?assertEqual({rollback, checked}, Result)
     after
         meck:unload(z_pivot_rsc)
+    end.
+
+system_info_without_development_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    Context = z_acl:sudo(z_context:set_language(en, z_context:new(zotonic_site_testsandbox))),
+    meck:new(m_modules, [passthrough, no_link]),
+    meck:new(m_development, [no_link]),
+    try
+        meck:expect(m_modules, m_get, fun
+            ([<<"active">>, <<"mod_development">> | Rest], _, _) -> {ok, {false, Rest}};
+            (Path, Msg, C) -> meck:passthrough([Path, Msg, C])
+        end),
+        Html = render("admin_system_info.tpl", Context),
+        ?assertNotEqual(nomatch, binary:match(Html, <<"Site files directory">>)),
+        ?assertNotEqual(nomatch, binary:match(Html, <<"Zotonic init files">>)),
+        ?assertNotEqual(nomatch, binary:match(Html, <<"Site config files">>)),
+        lists:foreach(fun(File) ->
+            ?assertNotEqual(nomatch, binary:match(Html, unicode:characters_to_binary(File)))
+        end, z_sites_config:config_files(zotonic_site_testsandbox)),
+        ?assertEqual(nomatch, binary:match(Html, <<"glyphicon-folder-open">>)),
+        {Config, _} = z_template:render_to_iolist("_admin_system_info_config.tpl",
+            [{file, <<"/example/erlang.config">>}], Context),
+        ?assertNotEqual(nomatch, binary:match(iolist_to_binary(Config), <<"/example/erlang.config">>)),
+        ?assertEqual(nomatch, binary:match(iolist_to_binary(Config), <<"data-editor-file">>)),
+        ?assertEqual(0, meck:num_calls(m_development, m_get, '_'))
+    after
+        meck:unload([m_modules, m_development])
     end.
