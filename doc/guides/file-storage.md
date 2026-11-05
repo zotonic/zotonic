@@ -49,12 +49,22 @@ Paths below are relative to the site's files directory, normally beneath
 | `archive/<logical-filename>` | An older file that has not been promoted to CAFS |
 | `preview/<preview-filename>` | Legacy previews and previews on database-free sites |
 
+Before a browser uploads a file, Zotonic hashes it in a worker and checks for a
+matching current medium that the user can view. A match skips the browser transfer;
+a miss uploads normally. Older originals with a known matching checksum are
+lazily promoted to CAFS; files without a checksum upload normally. Reuse still runs the normal validation and media processing,
+and may fetch remote-only bytes on the server. See [m_media](model#media) for the
+upload preflight API and its short-lived, user-bound token.
+
 The CAFS path uses `cafs` **without a leading dot**. Its first two directory levels
 come from the first four hash characters. The complete hash is 64 lowercase
 hexadecimal characters, and the object path has no file extension. MIME type and
 the logical filename remain part of the media metadata.
 
-New files are hashed when staged, then attached to their logical filenames. Copying
+New files are hashed when staged, then attached to their logical filenames. Fresh
+private upload copies are hashed once, and the medium digest reuses that hash.
+Legacy files and other potentially mutable sources are hashed before copying and
+again afterward, rejecting changes during copying. Copying
 an existing CAFS-backed medium can share the mapping without copying or downloading
 its bytes. A medium copy also brings its owned original and poster into CAFS where
 needed; it preserves independent resource metadata and permissions. See

@@ -124,9 +124,20 @@ Available Model API Paths
 | Method | Path pattern | Description |
 | --- | --- | --- |
 | `get` | `/+id/...` | Return medium record for resource `+id` when the resource is visible; returns `enoent` for unknown resource and `eacces` when not visible. |
+| `post` | `/upload_check` | Check payload `digest` (SHA-256), `size`, and `filename` for a visible current CAFS original. Returns `needed: true` on a miss, or `needed: false` plus `media_upload_token`. |
 | `post` | `/+id` | Replace medium of existing resource `+id` from payload `url` or uploaded `file` (`#upload`); optional payload `rsc` map updates resource props. No further lookups. |
 | `post` | `/` | Create a new resource+medium from payload `url` or uploaded `file` (`#upload`), with optional payload `rsc` properties for the new resource. No further lookups. |
 | `delete` | `/+id` | Delete medium linked to resource `+id` (queues file cleanup, emits media events); requires editable resource access. No further lookups. |
+
+Upload clients can first call `/upload_check`. Unknown, inaccessible and unavailable
+files return the same miss response. A successful token is signed, user-bound,
+and valid for one hour. Pass `file: {media_upload_token: Token}` to the insert or
+replace API, or use this map as a wired form field value. Source visibility and
+its current CAFS mapping are rechecked at submission. Destination ACLs, scanning,
+sanitization and media observers still run normally. Remote-only CAFS bytes can
+be fetched server-side for this processing. Visible legacy originals with a
+matching checksum are lazily promoted before reuse. Originals without a known checksum and files changed by previous
+conversion require a normal upload.
 
 `/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
@@ -254,6 +265,13 @@ m_get(_Vs, _Msg, _Context) ->
 
 %% @doc API to update or insert resources.
 -spec m_post( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> {ok, term()} | ok | {error, term()}.
+m_post([ <<"upload_check">> ], #{payload := Payload}, Context) when is_map(Payload) ->
+    z_media_upload:check(Payload, Context);
+m_post(Path, #{payload := #{<<"file">> := #{<<"media_upload_token">> := _} = File} = Payload}, Context) ->
+    case z_media_upload:materialize(File, Context) of
+        {ok, Upload} -> m_post(Path, #{payload => Payload#{<<"file">> => Upload}}, Context);
+        Error -> Error
+    end;
 m_post([ Id ], #{ payload := Payload }, Context) when is_map(Payload) ->
     case m_rsc:rid(Id, Context) of
         undefined ->
@@ -1178,7 +1196,13 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
             PropsM
     end,
 
-    case m_cafs:stage_medium(Medium1, Context) of
+    %% Only the fresh archive copy made by this upload is exclusively ours.
+    %% Existing archive files and observer-supplied filenames keep verification.
+    ControlledFilename = case is_deletable_file(PreProc#media_upload_preprocess.file, Context) of
+        true -> ArchiveFile;
+        false -> undefined
+    end,
+    case m_cafs:stage_medium(Medium1, ControlledFilename, Context) of
         {ok, Staged} ->
             replace_file_staged(RscId, PreProc, Props, PropsM1, Medium1, Opts, Staged, Context);
         {error, _} = Error -> Error

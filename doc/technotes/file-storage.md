@@ -8,8 +8,8 @@ needs their bytes. Database-free sites keep local library previews in the legacy
 preview directory and do not use CAFS or preview garbage collection.
 
 The server-side implementation covers uploads, duplication, shared previews,
-filestore integration, retention, and CAFS-backed video tasks. Browser-side instant
-upload remains an optional follow-up.
+filestore integration, retention, CAFS-backed video tasks, and browser-side
+checksum preflight for uploads.
 
 
 Sites without a database
@@ -455,25 +455,27 @@ The source used for processing need not be exposed as the resource's downloadabl
 medium while conversion is pending.
 
 
-Optional instant upload
------------------------
+Upload preflight
+----------------
 
-Client-side hashing is a later optimization, not a prerequisite for deduplication.
-Treat client hashes as hints, never as authorization or verified file contents.
+The chunked uploader and wired multipart forms calculate SHA-256 in a worker,
+reading at most 1 MiB per chunk. The browser checks before transmitting bytes.
+`m_media` exposes `/upload_check`; `m_fileuploader` accepts the same optional
+`digest` in `/new` and only starts an upload process on a miss.
 
-Only offer reuse through an accessible source medium. Recheck source visibility,
-destination permissions, and applicable processing/scanning policy when attaching.
-Unknown and inaccessible hashes should return the same response. A raw upload hash
-may differ from the stored hash after sanitization or conversion; do not assume
-they identify the same bytes.
+Reuse requires a current medium original with the CAFS hash and a visible source
+resource. Visible legacy originals with a matching checksum are lazily promoted
+and rechecked. Unknown, inaccessible and unavailable content returns the same
+miss; originals without a known checksum upload normally. Signed reuse tokens are user-bound and expire after one hour. Source
+visibility and mapping are rechecked at submission; the normal upload pipeline
+still enforces destination ACLs, scans and processes bytes. Remote-only objects
+may need a server-side download for that processing. Client hashes never grant
+access by themselves. A raw upload changed by sanitization or conversion will
+not match the resulting stored bytes and uploads normally.
 
-Browser hashing references to investigate:
-
- - https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest
- - https://github.com/browserify/sha.js
-
-For large videos, investigate incremental hashing without loading the entire file
-into browser memory.
+Browsers without worker support, failed checks and unmatched files use the normal
+upload path. Mixed multipart selections omit only the matched files when the
+browser supports constructing FileLists; otherwise that selection uploads normally.
 
 
 Verification and operational notes
@@ -499,8 +501,7 @@ cache identities from public requests; an internal lookup cannot remove a public
 request's resource ACL.
 
 Legacy copies retained during promotion are left for the existing filename cleanup
-path; promotion itself does not remove a remote legacy object. Optional instant
-upload is not exposed by the current model API.
+path; promotion itself does not remove a remote legacy object. Upload preflight is exposed by the media and fileuploader models.
 
 Verify fresh installs and upgrades, concurrent identical uploads, duplication
 without file reads for mapped sources, lazy promotion of legacy sources, and

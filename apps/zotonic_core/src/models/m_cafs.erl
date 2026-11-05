@@ -85,6 +85,13 @@ for owned originals and posters. `stage_medium/2` returns `{ok, Staged}` or a
 controlled error and releases partial staging pins on failure. `release/2` releases remaining staging pins from
 a list of `{Filename, Stage}` pairs, including after failure.
 
+`stage_medium/3` accepts the logical filename of a fresh private archive copy
+created by the upload routine. Only that original uses a single hash pass over
+its staging copy; the medium digest reuses this hash. The default staging APIs,
+legacy migration, extracted previews and observer-supplied replacement filenames
+hash both source and copy to detect changes while copying. Publication always
+uses the hash of the staged bytes, with an atomic rename on the CAFS filesystem.
+
 Attachment can return `{error, expired}` for an expired staging token or
 `{error, deleting}` while dispatched physical deletion is pending. Staging an
 identical file can cancel an undispatched deletion using the filestore row fence;
@@ -178,7 +185,7 @@ Neither function discovers or downloads legacy files.
 """).
 
 -export([delete_uploaded_file/2, is_enabled/1, install/1, schema/0, stage_file/2, stage_original/2, stage_remote/4, attach/3, attach_original/3, lookup/2,
-    clone_filename/3, promote/3, stage_medium/2, attach_medium/2,
+    clone_filename/3, promote/3, stage_medium/2, stage_medium/3, attach_medium/2,
     release/2, pin/3, unpin/3, with_local_file/3, with_path_pin/3,
     path/1, path_hash/1, aliases/2, retire_filename/2, maintenance/1,
     queue_uploads/1, queue_all/1, collect_unused/2, derivative/5, derivative/6, track/2, readers/2]).
@@ -231,6 +238,8 @@ schema() -> [
         retired_at timestamptz
     )",
     "create index if not exists filename_cafs_hash on filename_cafs(hash)",
+    "create index if not exists medium_upload_digest on medium(digest, size)
+        where is_deletable_file and digest is not null",
     "create table if not exists cafs_pin (
         owner varchar(200) not null,
         hash varchar(64) not null references cafs(hash),
@@ -372,15 +381,28 @@ stage_file_db(File, UploadPending, Context) ->
         {error, _} = Error -> Error
     end.
 
-stage_hashed(File, Hash, UploadPending, Context) ->
-    Target = z_path:files_subdir(path(Hash), Context),
+stage_hashed(File, ExpectedHash, UploadPending, Context) ->
     Token = z_ids:id(),
-    Tmp = <<(z_convert:to_binary(Target))/binary, ".", Token/binary, ".staging">>,
+    %% An upload has no hash yet. Place its private copy on the CAFS filesystem
+    %% in the existing staging layout, so interrupted copies remain GC-visible.
+    StagingHash = case ExpectedHash of
+        undefined -> z_crypto:hex_sha2(Token);
+        _ -> ExpectedHash
+    end,
+    StagingPath = z_path:files_subdir(path(StagingHash), Context),
+    Tmp = <<(z_convert:to_binary(StagingPath))/binary, ".", Token/binary, ".staging">>,
     try
         ok = z_filelib:ensure_dir(Tmp),
         {ok, Size} = file:copy(File, Tmp),
-        %% Detect a changing input; never publish bytes under the wrong hash.
         {ok, Hash} = z_crypto:hex_sha2_file(Tmp),
+        %% Mutable sources must still match the hash taken before copying.
+        case ExpectedHash of
+            undefined -> ok;
+            Hash -> ok;
+            _ -> throw(source_changed)
+        end,
+        Target = z_path:files_subdir(path(Hash), Context),
+        ok = z_filelib:ensure_dir(Target),
         transaction(fun(Ctx) ->
             z_db:q("
                 insert into cafs (hash, size, upload_pending)
@@ -403,7 +425,7 @@ stage_hashed(File, Hash, UploadPending, Context) ->
         end, Context)
     catch
         error:{badmatch, {error, Reason}} -> {error, Reason};
-        error:{badmatch, {ok, _OtherHash}} -> {error, source_changed}
+        throw:source_changed -> {error, source_changed}
     after
         file:delete(Tmp)
     end.
@@ -553,25 +575,33 @@ promote(Filename, File, Context) ->
 -spec stage_medium(Medium, Context) -> {ok, [{binary(), map()}]} | {error, term()}
     when Medium :: map(), Context :: z:context().
 stage_medium(Medium, Context) ->
+    stage_medium(Medium, undefined, Context).
+
+%% @doc Stage a freshly archived upload with one hash pass. ControlledFilename
+%% must identify a new private copy owned by this upload; legacy files and
+%% observer-supplied replacements must use the verified default path.
+-spec stage_medium(Medium, ControlledFilename, Context) -> {ok, [{binary(), map()}]} | {error, term()}
+    when Medium :: map(), ControlledFilename :: binary() | undefined, Context :: z:context().
+stage_medium(Medium, ControlledFilename, Context) ->
     stage_medium([
             {<<"filename">>, <<"is_deletable_file">>},
             {<<"preview_filename">>, <<"is_deletable_preview">>}
-        ], Medium, [], Context).
+        ], Medium, ControlledFilename, [], Context).
 
-stage_medium([], _Medium, Staged, _Context) -> {ok, lists:reverse(Staged)};
-stage_medium([{Key, Owned} | Rest], Medium, Acc, Context) ->
+stage_medium([], _Medium, _Controlled, Staged, _Context) -> {ok, lists:reverse(Staged)};
+stage_medium([{Key, Owned} | Rest], Medium, Controlled, Acc, Context) ->
     case {maps:get(Key, Medium, undefined), maps:get(Owned, Medium, false)} of
         {Name, true} when is_binary(Name), Name =/= <<>> ->
-            case stage_medium_file(Name, Key, Medium, Context) of
-                {ok, Staged} -> stage_medium(Rest, Medium, [{Name, Staged} | Acc], Context);
+            case stage_medium_file(Name, Key, Medium, Controlled, Context) of
+                {ok, Staged} -> stage_medium(Rest, Medium, Controlled, [{Name, Staged} | Acc], Context);
                 {error, _} = Error ->
                     release(Acc, Context),
                     Error
             end;
-        _ -> stage_medium(Rest, Medium, Acc, Context)
+        _ -> stage_medium(Rest, Medium, Controlled, Acc, Context)
     end.
 
-stage_medium_file(Name, Key, Medium, Context) ->
+stage_medium_file(Name, Key, Medium, Controlled, Context) ->
     case lookup(Name, Context) of
         {ok, Hash} ->
             Token = z_ids:id(),
@@ -587,7 +617,14 @@ stage_medium_file(Name, Key, Medium, Context) ->
                 Error -> Error
             end;
         {error, enoent} ->
-            case stage_file(z_media_archive:abspath(Name, Context), Context) of
+            File = z_media_archive:abspath(Name, Context),
+            Result = case Key =:= <<"filename">> andalso Name =:= Controlled
+                andalso is_enabled(Context)
+            of
+                true -> stage_hashed(File, undefined, true, Context);
+                false -> stage_file(File, Context)
+            end,
+            case Result of
                 {ok, Staged} ->
                     Props = case Key of
                         <<"filename">> -> maps:with([<<"mime">>, <<"width">>, <<"height">>,

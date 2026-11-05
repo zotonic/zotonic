@@ -1,7 +1,12 @@
 -module(z_development_directory_tests).
 -include_lib("eunit/include/eunit.hrl").
 
+%% These mocks replace core modules used by live site workers (including logging).
+%% Isolate setup and cleanup as well as the assertions from the integration VM.
 directory_access_test_() ->
+    z_test_support:isolated(directory_access()).
+
+directory_access() ->
     {setup,
         fun() ->
             meck:new([z_acl, m_site, z_development_editor, m_admin_status, z_crypto], [no_link]),

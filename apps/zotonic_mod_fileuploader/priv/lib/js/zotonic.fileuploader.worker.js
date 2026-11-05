@@ -16,6 +16,8 @@
 
 "use strict";
 
+import "/lib/js/z.media-upload-hash.js";
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Model
@@ -182,13 +184,15 @@ model.present = function(data) {
                 req.wait_count++;
                 req.total_size += f.file.size;
 
-                self.call("bridge/origin/model/fileuploader/post/new", {
+                self.z_media_upload_hash(f.file).catch(() => undefined).then(digest =>
+                    self.call("bridge/origin/model/fileuploader/post/new", {
+                        digest: digest,
                         name: f.upload,
                         filename: f.file.name,
                         size: f.file.size,
                         mime: f.file.type
                     }, { qos: 2 }
-                ).then(function(resp) {
+                )).then(function(resp) {
                     const max_error = MAX_ERROR_COUNT + Math.floor((f.file.size / UPLOAD_BLOCKSIZE) * MAX_ERROR_RATE);
                     let upload = {
                         start: Date.now(),
@@ -217,6 +221,10 @@ model.present = function(data) {
                     if (data.upload.start_topic) {
                         self.publish(data.upload.start_topic, upload);
                     }
+                }).catch(function() {
+                    req.wait_count--;
+                    req.error_count++;
+                    actions.nextUpload();
                 });
             }
             if (data.response_topic) {
@@ -271,8 +279,10 @@ model.present = function(data) {
             // remove it from the uploading files.
             f.req.uploads.push({
                 name: f.name,
-                upload: f.status.name
+                upload: f.status.name,
+                ...(f.status.media_upload_token ? {media_upload_token: f.status.media_upload_token} : {})
             });
+            if (f.status.media_upload_token) f.req.uploaded_size += f.file.size;
             f.req.upload_count--;
         } else {
             // Start uploading missing blocks if the last block has been uploaded
@@ -309,10 +319,9 @@ model.present = function(data) {
                     for (let k = 0; k < r.uploads.length; k++) {
                         q.push({
                             name: r.uploads[k].name,
-                            value: {
-                                _type: 'fileuploader',
-                                name: r.uploads[k].upload
-                            }
+                            value: r.uploads[k].media_upload_token
+                                ? {media_upload_token: r.uploads[k].media_upload_token}
+                                : {_type: 'fileuploader', name: r.uploads[k].upload}
                         })
                     }
                 } else {

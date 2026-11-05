@@ -118,8 +118,16 @@ Delegate callbacks:
 event(#z_msg_v1{ data = Data }, Context) ->
     ExtraData = proplists:get_value(<<"data">>, Data),
     Context1 = lists:foldl(
-        fun(#{ <<"upload">> := Upload }, Ctx) ->
-            do_upload(z_fileuploader:status(Upload), ExtraData, Ctx)
+        fun
+            (#{<<"media_upload_token">> := Token} = Reuse, Ctx) when is_binary(Token) ->
+                case z_media_upload:materialize(Reuse, Ctx) of
+                    {ok, #upload{filename=Filename, tmpfile=Temp}} ->
+                        do_upload({ok, #{name => <<>>, is_complete => true,
+                            filename => Filename, uploaded_file => Temp}}, ExtraData, Ctx);
+                    Error -> do_upload(Error, ExtraData, Ctx)
+                end;
+            (#{ <<"upload">> := Upload }, Ctx) ->
+                do_upload(z_fileuploader:status(Upload), ExtraData, Ctx)
         end,
         Context,
         proplists:get_value(<<"fileuploader">>, Data)),
