@@ -74,7 +74,9 @@ check_connections(Context) ->
     {ok, A} = m_rsc:insert(#{<<"category_id">> => text}, Context),
     {ok, B} = m_rsc:insert(#{<<"category_id">> => text}, Context),
     Topic = [<<"model">>, <<"rsc">>, <<"event">>, Id, <<"update">>],
+    EdgeTopic = [<<"model">>, <<"edge">>, <<"event">>, Id, <<"o">>, <<"hasmenupart">>],
     ok = z_mqtt:subscribe(Topic, Context),
+    ok = z_mqtt:subscribe(EdgeTopic, Context),
     try
         V = m_rsc:p(Id, version, Context),
         {ok, _} = m_edge:insert(Id, relation, A, Context),
@@ -90,15 +92,25 @@ check_connections(Context) ->
         {ok, Id} = mod_menu:set_menu(Id, [#rsc_tree{id = A}], Context),
         V2 = m_rsc:p(Id, version, Context),
         receive
-            {mqtt_msg, #{message := #{payload := Payload}}} ->
+            {mqtt_msg, #{message := #{payload := #{id := Id} = Payload}}} ->
                 ?assertMatch(#{id := Id, version := V2, previous_version := V1, reason := menu}, Payload)
         after 5000 -> error(missing_menu_notification)
         end,
+        %% The menu observer inserts the edge synchronously, but its cached
+        %% empty object list is invalidated by the asynchronous edge-log worker.
+        %% The resource update notification is not a barrier for that worker.
+        receive
+            {mqtt_msg, #{message := #{payload := [#edge_insert{
+                subject_id = Id, predicate = hasmenupart, object_id = A}]}}} -> ok
+        after 5000 -> error(missing_menu_edge_notification)
+        end,
         ?assertEqual([A], m_edge:objects(Id, hasmenupart, Context)),
+        ?assertEqual(V2, m_rsc:p(Id, version, Context)),
         {ok, _} = admin_edit_version:save(Id, V2,
             fun(Ctx) -> m_rsc:update(Id, #{<<"title">> => <<"Saved after menu change">>}, Ctx) end, Context),
         ok
     after
         z_mqtt:unsubscribe(Topic, Context),
+        z_mqtt:unsubscribe(EdgeTopic, Context),
         [m_rsc:delete(R, Context) || R <- [Id, A, B]]
     end.
