@@ -6,5 +6,5 @@
     <span class="text-muted">{_ Idle _}</span>
 {% endif %}
 {% if status.pending %}
-    <span>{% trans "{count} background tasks remaining" count=status.pending %}</span>
+    <span>{% trans "{n} background task remaining" "{n} background tasks remaining" n=status.pending %}</span>
 {% endif %}

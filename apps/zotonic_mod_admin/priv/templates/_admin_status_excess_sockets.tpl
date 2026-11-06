@@ -1,10 +1,10 @@
 {% if m.acl.is_admin %}
     {% with m.admin_status.excess_sockets as peers %}
         {% if peers %}
-            <p class="text-warning"><strong>{{ peers|length }}</strong> {_ IP addresses have more than 250 open sockets. _}</p>
+            <p class="text-warning">{% trans "<strong>{n}</strong> IP address has more than 250 open sockets." "<strong>{n}</strong> IP addresses have more than 250 open sockets." n=peers|length %}</p>
             <ul>
                 {% for peer in peers|sort:'desc' %}
-                    <li><code>{{ peer.ip|escape }}</code>: {{ peer.count }} {_ open sockets _}</li>
+                    <li><code>{{ peer.ip|escape }}</code>: {% trans "{n} open socket" "{n} open sockets" n=peer.count %}</li>
                 {% endfor %}
             </ul>
         {% else %}
