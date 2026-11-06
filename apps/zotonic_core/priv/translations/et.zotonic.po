@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-06 07:31\n"
+"PO-Revision-Date: 2026-11-06 08:38\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -1102,6 +1102,30 @@ msgstr "kasutage mõnda muud brauserit (nt Chrome, kui kasutate nüüd Firefoxi)
 msgid "view (acl action)"
 msgstr "vaade (acl-toiming)"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:4
+msgid "<strong>{n}</strong> IP address has more than 250 open sockets."
+msgid_plural "<strong>{n}</strong> IP addresses have more than 250 open sockets."
+msgstr[0] "<strong>{n}</strong> IP-aadressil on rohkem kui 250 avatud pistikupesa."
+msgstr[1] "<strong>{n}</strong> IP-aadressidel on üle 250 avatud pistikupesa."
+
+#: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:2
+msgid "<strong>{n}</strong> page waiting to be indexed"
+msgid_plural "<strong>{n}</strong> pages waiting to be indexed"
+msgstr[0] "<strong>{n}</strong> indekseerimist ootav lehekülg"
+msgstr[1] "<strong>{n}</strong> indekseerimist ootavad leheküljed"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:9
+msgid "{n} background task remaining"
+msgid_plural "{n} background tasks remaining"
+msgstr[0] "{n} järelejäänud taustülesanne"
+msgstr[1] "{n} järelejäänud taustategevused"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:7
+msgid "{n} open socket"
+msgid_plural "{n} open sockets"
+msgstr[0] "{n} avatud pistikupesa"
+msgstr[1] "{n} avatud pistikupesad"
+
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:219
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:221
 msgid "&lt; Prev"
@@ -1496,7 +1520,7 @@ msgstr "Märkige lehed, mida soovite värskendada."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_check.tpl:5
 msgid "Checking…"
-msgstr ""
+msgstr "Kontrollimine…"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:10
 msgid "Choose a media item from this page to insert in the body text."
@@ -1565,7 +1589,7 @@ msgstr "Konfiguratsioonikataloog"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:2
 msgid "Configuration files"
-msgstr ""
+msgstr "Konfiguratsioonifailid"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:24
 msgid "Configured"
@@ -1665,7 +1689,7 @@ msgstr "Veebisaidiga ei saanud ühendust luua."
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:27
 msgid "Could not contact the media runner."
-msgstr ""
+msgstr "Meediatöötlusteenusega ei õnnestunud ühendust luua."
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:11
 msgid "Could not detect anything to import on that URL or embed code."
@@ -1673,11 +1697,11 @@ msgstr "Sellelt URL-ilt või manustuskoodist ei leitud midagi importimiseks."
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:68
 msgid "Could not queue generated preview cleanup. Check the logs."
-msgstr ""
+msgstr "Loodud eelvaadete puhastamist ei õnnestunud järjekorda panna. Kontrollige logifaile."
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:58
 msgid "Could not queue media deduplication. Check the logs."
-msgstr ""
+msgstr "Meediafailide duplikaatide eemaldamist ei õnnestunud järjekorda panna. Kontrollige logifaile."
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:119
 msgid "Could not reload the site configuration, check the logs."
@@ -1750,7 +1774,7 @@ msgstr "Andmekataloog"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:61
 msgid "Datamodel upgrades and reinstalls preserve your existing data. No content or uploaded files will be deleted."
-msgstr ""
+msgstr "Andmemudeli uuendamine ja uuesti paigaldamine säilitab teie olemasolevad andmed. Ühtegi sisu ega üleslaaditud faili ei kustutata."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:6
 msgid "Date range"
@@ -1767,7 +1791,7 @@ msgstr "Alguse/lõpu kuupäev"
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:23
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:25
 msgid "Deduplicate media files"
-msgstr ""
+msgstr "Eemaldage meediafailide duplikaadid"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:20
 msgid "Define the query using the query arguments or JSON."
@@ -1775,16 +1799,16 @@ msgstr "Määrake päring, kasutades päringu argumente või JSONi."
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:31
 msgid "Delete all generated image sizes? Preview originals are kept. Image requests may be slower while previews regenerate."
-msgstr ""
+msgstr "Kas soovite kustutada kõik loodud pildisuurused? Eelvaadete originaalid säilitatakse. Piltide laadimine võib eelvaadete uuesti genereerimise ajal aeglasemaks muutuda."
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:28
 msgid "Delete all resized image variants, including variants in remote storage. Uploaded originals and preview images extracted from movies, PDFs and embeds are kept. Previews regenerate when requested. Remote deletion follows the filestore retention policy."
-msgstr ""
+msgstr "Kustutage kõik muudetud suurusega pildivariandid, sealhulgas kaugsalvestuses olevad variandid. Üleslaaditud originaalid ning videotest, PDF-failidest ja manustatud elementidest eraldatud eelvaatepildid säilitatakse. Eelvaatepildid genereeritakse uuesti vastava taotluse korral. Kaugkustutamine toimub vastavalt failisalvestuse säilitamispoliitikale."
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:30
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:31
 msgid "Delete generated previews"
-msgstr ""
+msgstr "Kustutage loodud eelvaated"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:23
 msgid "Delete if no other page is connected to this page."
@@ -1964,7 +1988,7 @@ msgstr "Redigeeri märkust"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config.tpl:7
 msgid "Edit this configuration file"
-msgstr ""
+msgstr "Muutke seda konfiguratsioonifaili"
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:122
 msgid "Edit:"
@@ -2228,11 +2252,11 @@ msgstr "Funktsioon"
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:64
 msgid "Generated preview cleanup has been queued. Preview originals are kept."
-msgstr ""
+msgstr "Loodud eelvaadete puhastamine on järjekorda pandud. Eelvaadete originaalid säilitatakse."
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:28
 msgid "Generated previews"
-msgstr ""
+msgstr "Loodud eelvaated"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:78
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:41
@@ -2263,7 +2287,7 @@ msgstr "Päis | suur päis"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:11
 msgid "Health checks"
-msgstr ""
+msgstr "Süsteemi seisundi kontrollid"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:6
 msgid "Health, background work and services for"
@@ -2297,10 +2321,6 @@ msgstr "Host"
 msgid "IP Address"
 msgstr "IP-aadress"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:4
-msgid "IP addresses have more than 250 open sockets."
-msgstr "IP-aadressil on üle 250 avatud sokli."
-
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:269
 msgid "Id, newest first"
 msgstr "Id, uusim esimene"
@@ -2311,7 +2331,7 @@ msgstr "Id, vanim esimene"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:6
 msgid "Idle"
-msgstr ""
+msgstr "Tühikäik"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:11
 msgid "If a page has a publication date range then it will only be visible between the two dates. Note that if you are allowed to edit the page then you can always see it."
@@ -2327,11 +2347,11 @@ msgstr "Kui see pole märgitud, suunatakse külastaja alati selle lehe kanoonili
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:21
 msgid "ImageMagick (local)"
-msgstr ""
+msgstr "ImageMagick (kohalik)"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:24
 msgid "ImageMagick (media runner)"
-msgstr ""
+msgstr "ImageMagick (meediatöötlusteenus)"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:141
 #: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:17
@@ -2441,7 +2461,7 @@ msgstr "Reaalaja vaade"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:42
 msgid "Local"
-msgstr ""
+msgstr "Kohalik"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:43
 msgid "Local ImageMagick"
@@ -2555,11 +2575,11 @@ msgstr "Meedia sisu"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:5
 msgid "Media deduplication"
-msgstr ""
+msgstr "Meediafailide duplikaatide eemaldamine"
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:54
 msgid "Media deduplication has been queued."
-msgstr ""
+msgstr "Meediafailide duplikaatide eemaldamine on järjekorda pandud."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:112
 msgid "Media details"
@@ -2586,11 +2606,11 @@ msgstr "Meedia hooldus"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:18
 msgid "Media maintenance runs in the background. Waiting tasks resume automatically. Remote deletion follows the filestore retention policy."
-msgstr ""
+msgstr "Meedia hooldus toimub taustal. Ootel olevad ülesanded jätkuvad automaatselt. Kaugkustutamine toimub vastavalt failide säilitamise eeskirjadele."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:15
 msgid "Media maintenance status is unavailable."
-msgstr ""
+msgstr "Meedia hooldusstaatus ei ole kättesaadav."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:4
 msgid "Media on this page"
@@ -2700,7 +2720,7 @@ msgstr "Liigutage plokk üles"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:23
 msgid "Move originals and extracted preview images into content-addressable storage. Redundant local and remote copies are cleaned up in the background. Remote files without a checksum are skipped; no files are downloaded to calculate checksums."
-msgstr ""
+msgstr "Teisaldage originaalfailid ja eraldatud eelvaatepildid sisu järgi adresseeritavasse salvestusse. Ülemäärased kohalikud ja kaugkoopiad kustutatakse taustal. Kontrollsummateta kaugfailid jäetakse vahele; kontrollsummade arvutamiseks ei laadita ühtegi faili alla."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:205
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:206
@@ -2761,7 +2781,7 @@ msgstr "Ühelgi IP-aadressil ei ole üle 250 avatud sokli."
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:10
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:20
 msgid "No configuration files found."
-msgstr ""
+msgstr "Konfiguratsioonifaile ei leitud."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_depictions.tpl:21
 msgid "No connected images."
@@ -2807,7 +2827,7 @@ msgstr "Ühtegi lehte pole valitud"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:5
 msgid "No problems found."
-msgstr ""
+msgstr "Probleeme ei leitud."
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:49
 msgid "No results."
@@ -2857,7 +2877,7 @@ msgstr "Ainult süsteemiadministraatorid saavad sõlmede ühendusi sulgeda."
 
 #: zotonic_mod_admin/priv/templates/_admin_system_info_directory.tpl:3
 msgid "Open"
-msgstr ""
+msgstr "Avage"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:63
 msgid "Open Modules list"
@@ -3006,7 +3026,7 @@ msgstr "Eelvaade"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:9
 msgid "Preview cleanup"
-msgstr ""
+msgstr "Eelvaadete puhastamine"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:30
 msgid "Previous in category:"
@@ -3106,7 +3126,7 @@ msgstr "Lisage iga leht otsinguindekseerimise järjekorda. Suurte veebisaitide p
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:4
 msgid "Queued / waiting"
-msgstr ""
+msgstr "Järjekorras / ootab"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:14
 msgid "Ranch limit"
@@ -3184,11 +3204,11 @@ msgstr "Märkused"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:40
 msgid "Remote runners only"
-msgstr ""
+msgstr "Ainult kaugmeediatöötlusteenused"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:40
 msgid "Remote runners with local fallback"
-msgstr ""
+msgstr "Kaugmeediatöötlusteenused kohaliku varutöötlusega"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:70
 msgid "Remote sandbox isolation and queue details are available on each runner’s dashboard."
@@ -3255,7 +3275,7 @@ msgstr "Käivitage selle veebisaidi andmebaasi jaoks uuesti Zotonicu tuuma andme
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:75
 msgid "Run the Zotonic core datamodel installation again for this site's database? Your existing data will be preserved."
-msgstr ""
+msgstr "Kas soovite käivitada Zotonicu põhilise andmemudeli paigaldamise selle saidi andmebaasi jaoks uuesti? Teie olemasolevad andmed jäävad alles."
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:65
 msgid "Run the site's schema installation again. The site will stop and restart."
@@ -3328,7 +3348,7 @@ msgstr "Salvesta see leht."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:11
 msgid "Save to see your changes"
-msgstr ""
+msgstr "Salvestage, et näha oma muudatusi"
 
 #: zotonic_mod_admin/src/mod_admin.erl:999
 msgid "Scheduled a background task to check all refers connections."
@@ -3499,7 +3519,7 @@ msgstr "Veebisaidi vahemälud"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:14
 msgid "Site config files"
-msgstr ""
+msgstr "Veebisaidi konfiguratsioonifailid"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:65
 msgid "Site datamodel"
@@ -3727,7 +3747,7 @@ msgstr "Süsteemiandmed"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:3
 msgid "System resources and configuration"
-msgstr ""
+msgstr "Süsteemiressursid ja konfiguratsioon"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:2
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:5
@@ -3964,7 +3984,7 @@ msgstr "Selle ressursi lõi moodul"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:68
 msgid "This runs the site's schema installation again and stops and restarts the site. Your existing data will be preserved. Continue?"
-msgstr ""
+msgstr "See käivitab saidi skeemi paigaldamise uuesti ning peatab ja taaskäivitab saidi. Teie olemasolevad andmed säilivad. Kas soovite jätkata?"
 
 #: zotonic_mod_admin/priv/templates/_admin_maintenance_panel.tpl:3
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:25
@@ -4255,7 +4275,7 @@ msgstr "Kuva olek"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_info_directory.tpl:3
 msgid "View this directory in the file manager on the Zotonic server's desktop"
-msgstr ""
+msgstr "Vaadake seda kataloogi Zotonicu serveri töölaua failihalduris"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:29
 msgid "Visible from"
@@ -4383,7 +4403,7 @@ msgstr "Zotonicu andmemudel"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:4
 msgid "Zotonic init files"
-msgstr ""
+msgstr "Zotonicu algseadistusfailid"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:30
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:27
@@ -4489,10 +4509,6 @@ msgstr "muutja:"
 msgid "name"
 msgstr "nimi"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:7
-msgid "open sockets"
-msgstr "avatud soklid"
-
 #: zotonic_mod_admin/priv/templates/_admin_view_types.tpl:3
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:104
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:55
@@ -4504,10 +4520,6 @@ msgstr "lehele"
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:24
 msgid "page block"
 msgstr "leheplokk"
-
-#: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:2
-msgid "pages waiting to be indexed"
-msgstr "indekseerimist ootavad leheküljed"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:28
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:10
@@ -4556,10 +4568,6 @@ msgstr "vaata"
 #: zotonic_mod_admin/priv/templates/_admin_navbar_brand.tpl:1
 msgid "visit site"
 msgstr "külasta saiti"
-
-#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:9
-msgid "{count} background tasks remaining"
-msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:25
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:201
@@ -7774,11 +7782,11 @@ msgstr "Tehke andmebaasist igapäevane varukoopia."
 
 #: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:17
 msgid "Media file availability could not be confirmed. You can continue restoring the page, but its media or saved preview image might not be recovered."
-msgstr ""
+msgstr "Meediafailide kättesaadavust ei õnnestunud kinnitada. Võite lehe taastamisega jätkata, kuid selle meediafailid või salvestatud eelvaatepilt ei pruugi taastuda."
 
 #: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:22
 msgid "Media files are registered in the remote file store. Their availability has not been checked with the storage server."
-msgstr ""
+msgstr "Meediafailid on registreeritud kaugfailide hoidlas. Nende kättesaadavust ei ole salvestusserveriga kontrollitud."
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:65
 msgid "Media files can only be recovered if they are not yet deleted from the file storage. Zotonic will keep media for at least 5 weeks."
@@ -7853,7 +7861,7 @@ msgstr "Taasta see lehekülg..."
 
 #: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:11
 msgid "Restoring this version can replace the media currently attached to the page."
-msgstr ""
+msgstr "Selle versiooni taastamine võib asendada lehele praegu lisatud meediafailid."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:36
 msgid "Revert page to earlier version"
@@ -7917,7 +7925,7 @@ msgstr "Kuva importimise/ekspordi paneel administraatori redigeerimislehtedel."
 
 #: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:3
 msgid "Some media files cannot be recovered."
-msgstr ""
+msgstr "Mõningaid meediafaile ei ole võimalik taastada."
 
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:143
 msgid "Sorry, a global Zotonic configuration is set and cannot be changed."
@@ -7996,11 +8004,11 @@ msgstr "Algset kategooriat või sisurühma pole enam olemas. Kinnitage soovitatu
 
 #: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:5
 msgid "The original file for this version is no longer available. The page can be restored, but its media may be empty."
-msgstr ""
+msgstr "Selle versiooni algne fail ei ole enam kättesaadav. Lehekülge on võimalik taastada, kuid selle meediaosa võib olla tühi."
 
 #: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:8
 msgid "The saved preview image for this version is no longer available."
-msgstr ""
+msgstr "Selle versiooni salvestatud eelvaatepilt ei ole enam kättesaadav."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:5
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:19
@@ -8663,11 +8671,11 @@ msgstr "Palun võtke ühendust oma süsteemiadministraatoriga."
 
 #: zotonic_mod_clamav/priv/templates/_admin_status_alert.tpl:3
 msgid "Virus scanner"
-msgstr ""
+msgstr "Viirusetõrje"
 
 #: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:9
 msgid "Virus scanner available."
-msgstr ""
+msgstr "Saadaval on viirusetõrje."
 
 #: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:4
 msgid "Virus scanner unavailable"
@@ -9187,7 +9195,7 @@ msgstr "Ei saanud laadida malle"
 
 #: zotonic_mod_development/src/mod_development.erl:498
 msgid "Could not open the directory on this computer."
-msgstr ""
+msgstr "Sellel arvutil ei õnnestunud kataloogi avada."
 
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:9
 msgid "Could not open the editor. Check the editor and path mapping."
@@ -10843,7 +10851,7 @@ msgstr "Pilvefailid"
 
 #: zotonic_mod_filestore/priv/templates/_admin_status_alert.tpl:3
 msgid "Cloud file store"
-msgstr ""
+msgstr "Pilvepõhine failide salvestuskoht"
 
 #: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:15
 msgid "Cloud file store configuration"
@@ -11021,7 +11029,7 @@ msgstr "Mitte kunagi"
 
 #: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:18
 msgid "No cloud file store read errors detected."
-msgstr ""
+msgstr "Pilvefailide salvestusruumis ei tuvastatud ühtegi lugemisviga."
 
 #: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:47
 msgid "No errors on this page."
@@ -15877,7 +15885,7 @@ msgstr "Kasutuselevõtt ebaõnnestus. Täpsema teabe saamiseks vaadake serveri l
 
 #: zotonic_mod_site_update/priv/templates/_site_deploy_status_value.tpl:5
 msgid "Deployment running on this node"
-msgstr ""
+msgstr "Selles sõlmes toimub juurutamine"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:5
 msgid "Deployment updates the entire Git repository, including any other modules it contains."
