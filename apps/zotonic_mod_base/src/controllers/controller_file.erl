@@ -360,7 +360,9 @@ get_file_info_cfg(ConfiguredPath, Context) when is_list(ConfiguredPath); is_bina
 get_file_info_path(Path, Context) when is_binary(Path) ->
     Root = z_context:get(root, Context),
     OptFilters = z_context:get(media_tag_url2props, Context, undefined),
-    z_file_request:lookup_file(Path, Root, OptFilters, 5000, z_context:set(path, Path, Context)).
+    %% A cold preview can need a remote download and conversion. Keep the first
+    %% browser request waiting; browsers do not retry failed images themselves.
+    z_file_request:lookup_file(Path, Root, OptFilters, 60000, z_context:set(path, Path, Context)).
 
 %% @doc Ensure path is non-root
 rootless(undefined) -> <<>>;

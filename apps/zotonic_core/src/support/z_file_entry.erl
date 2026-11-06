@@ -261,7 +261,8 @@ hold_sources(Parent, Ref) ->
 
 located({error, Reason}, State) ->
     lists:foreach(fun(From) -> gen_statem:reply(From, {error, Reason}) end, State#state.waiting),
-    {next_state, serving, State#state{waiting=[], failure=Reason}, [{state_timeout, 2000, retry}]};
+    State1 = release_sources(State),
+    {next_state, serving, State1#state{waiting=[], failure=Reason}, [{state_timeout, 2000, retry}]};
 located(missing, State) ->
     locate_enoent(State, z_module_indexer:index_ref(z_context:new(State#state.site)),
         z_media_identify:guess_mime(State#state.request_path));
@@ -348,7 +349,9 @@ handle_event(cast, {cancel_wait, Pid}, _StateName, State) ->
     Actions = case State#state.resolver of undefined -> [{timeout, 0, locate}]; _ -> [] end,
     {keep_state, State#state{waiting=[F || {P, _} = F <- State#state.waiting, P =/= Pid]}, Actions};
 handle_event(cast, {source_stale, Pid}, _StateName, #state{resolver={Pid, _}} = State) ->
-    {next_state, locate, release_sources(State), 0};
+    %% A failed remote stream must not cause an autonomous resolve/download
+    %% loop. Retire this entry after the error cooldown; a new request can retry.
+    located({error, pending}, State);
 handle_event(cast, {source_stale, _}, _StateName, State) ->
     {keep_state, State};
 handle_event(info, {resolved, _, _}, _StateName, State) ->
@@ -399,7 +402,7 @@ handle_event(info, {'DOWN', Ref, process, Pid, Reason}, _StateName,
 handle_event(info, {'DOWN', MRef, process, _Pid, _Info}, StateName, State) ->
     case is_mref_part(MRef, State#state.parts) of
         true ->
-            {next_state, locate, State, 0};
+            located({error, pending}, State);
         false ->
             {next_state, StateName, State, timeout(StateName, State#state.is_found)}
     end;
