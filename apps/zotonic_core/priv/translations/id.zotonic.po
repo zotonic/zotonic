@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-02 21:24\n"
+"PO-Revision-Date: 2026-11-06 07:31\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -356,7 +356,7 @@ msgstr "Apakah Anda yakin ingin mengembalikan semua peraturan ACL ke versi yang 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:90
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:161
 #: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:31
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:68
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:70
 #: zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7
 #: zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:10
@@ -386,8 +386,8 @@ msgstr "Apakah Anda yakin ingin mengembalikan semua peraturan ACL ke versi yang 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:26
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:85
 #: zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:58
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:10
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:59
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:11
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:229
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:237
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70
@@ -422,7 +422,7 @@ msgstr "Batal"
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:22
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:11
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:22
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:24
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:28
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:12
 #: zotonic_mod_survey/src/mod_survey.erl:656
@@ -523,7 +523,7 @@ msgstr "Konten"
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_visible_for.tpl:2
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:58
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:51
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:32
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:34
 #: zotonic_mod_content_groups/priv/templates/_admin_overview_filter_panel.tpl:6
 #: zotonic_mod_content_groups/priv/templates/_dialog_admin_bulk_update.tpl:5
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:62
@@ -562,7 +562,7 @@ msgstr "Tidak dapat memindahkan ke grup kolaborasi."
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:118
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:53
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:8
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:67
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:81
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:30
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:53
 #: zotonic_mod_admin_identity/src/mod_admin_identity.erl:330
@@ -722,7 +722,7 @@ msgstr "Anggota dari kelompok pengguna yang sama"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:8
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:9
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:42
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:21
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:35
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:28
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:84
@@ -834,7 +834,7 @@ msgid "Published rules"
 msgstr "Aturan yang telah diterbitkan"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:41
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:69
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:71
 msgid "Revert"
 msgstr "Pulihkan"
 
@@ -1218,7 +1218,7 @@ msgstr "Tambah catatan"
 msgid "Added the connection to"
 msgstr "Koneksi telah ditambahkan ke"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:53
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:66
 msgid "Additional module tools"
 msgstr "Alat-alat modul tambahan"
 
@@ -1238,7 +1238,7 @@ msgstr "Admin"
 msgid "Advanced"
 msgstr "Lanjutan"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:38
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:58
 msgid "Advanced repair"
 msgstr "Perbaikan tingkat lanjut"
 
@@ -1269,13 +1269,13 @@ msgstr "Semua media"
 msgid "All pages"
 msgstr "Semua Halaman"
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:38
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:39
 msgid "All sites have been flushed."
 msgstr "Cache semua situs telah dikosongkan."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:36
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:2
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:37
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:50
 msgid "All sites on this node"
 msgstr "Semua situs di node ini"
 
@@ -1411,7 +1411,7 @@ msgstr "Tersedia"
 msgid "Back"
 msgstr "Kembali"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:12
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:25
 msgid "Background work"
 msgstr "Pekerjaan latar belakang"
 
@@ -1447,7 +1447,7 @@ msgstr "Disimpan dalam cache"
 msgid "Caches"
 msgstr "Cache"
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:47
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:48
 msgid "Caches have been flushed."
 msgstr "Cache telah dikosongkan."
 
@@ -1476,6 +1476,10 @@ msgstr "Centang halaman yang ingin Anda hapus."
 msgid "Check the pages you want to update."
 msgstr "Centang halaman yang ingin Anda perbarui."
 
+#: zotonic_mod_admin/priv/templates/_admin_status_check.tpl:5
+msgid "Checking…"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:10
 msgid "Choose a media item from this page to insert in the body text."
 msgstr "Pilih item media dari halaman ini untuk disisipkan ke dalam isi teks."
@@ -1500,10 +1504,6 @@ msgstr "Bersihkan"
 msgid "Clear cached templates, dispatch rules and in-memory site data. The shared file index is also refreshed."
 msgstr "Hapus templat dalam cache, aturan perutean, dan data situs dalam memori. Indeks file bersama juga diperbarui."
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:10
-msgid "Click \"Save\" to see your changes."
-msgstr "Klik \"Simpan\" untuk melihat perubahan yang Anda buat."
-
 #: zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:11
 msgid "Click here for more information"
 msgstr "Klik disini untuk informasi lebih lanjut"
@@ -1512,7 +1512,7 @@ msgstr "Klik disini untuk informasi lebih lanjut"
 msgid "Click to preview."
 msgstr "Klik untuk melihat pratinjau."
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:15
 msgid "Close Live view"
 msgstr "Tutup Tampilan Langsung"
 
@@ -1541,9 +1541,13 @@ msgstr "Kode sedang diperbarui. Perubahan latar belakang akan dilanjutkan setela
 msgid "Code updates need attention"
 msgstr "Pembaruan kode perlu diperhatikan"
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:32
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:59
 msgid "Config directory"
 msgstr "Direktori konfigurasi"
+
+#: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:2
+msgid "Configuration files"
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:24
 msgid "Configured"
@@ -1596,7 +1600,7 @@ msgstr "Koneksi"
 msgid "Content origin"
 msgstr "Sumber konten"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:28
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:48
 msgid "Content repair"
 msgstr "Perbaikan konten"
 
@@ -1641,11 +1645,23 @@ msgstr "Salin checksum SHA-256 ke papan klip."
 msgid "Could not connect to the website."
 msgstr "Tidak dapat terhubung ke situs web."
 
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:27
+msgid "Could not contact the media runner."
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:11
 msgid "Could not detect anything to import on that URL or embed code."
 msgstr "Tidak ditemukan konten yang dapat diimpor pada URL atau kode sematan tersebut."
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:98
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:68
+msgid "Could not queue generated preview cleanup. Check the logs."
+msgstr ""
+
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:58
+msgid "Could not queue media deduplication. Check the logs."
+msgstr ""
+
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:119
 msgid "Could not reload the site configuration, check the logs."
 msgstr "Tidak dapat memuat ulang konfigurasi situs, periksa log."
 
@@ -1710,9 +1726,13 @@ msgstr "Tanggal pembuatan, tertua dulu"
 msgid "Dashboard"
 msgstr "Dasbor"
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:30
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:57
 msgid "Data directory"
 msgstr "Direktori data"
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:61
+msgid "Datamodel upgrades and reinstalls preserve your existing data. No content or uploaded files will be deleted."
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:6
 msgid "Date range"
@@ -1726,9 +1746,27 @@ msgstr "Rentang tanggal"
 msgid "Date start/end"
 msgstr "Tanggal mulai/akhir"
 
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:23
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:25
+msgid "Deduplicate media files"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:20
 msgid "Define the query using the query arguments or JSON."
 msgstr "Tentukan kueri menggunakan argumen kueri atau JSON."
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:31
+msgid "Delete all generated image sizes? Preview originals are kept. Image requests may be slower while previews regenerate."
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:28
+msgid "Delete all resized image variants, including variants in remote storage. Uploaded originals and preview images extracted from movies, PDFs and embeds are kept. Previews regenerate when requested. Remote deletion follows the filestore retention policy."
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:30
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:31
+msgid "Delete generated previews"
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:23
 msgid "Delete if no other page is connected to this page."
@@ -1873,9 +1911,10 @@ msgstr "Alamat surel"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers_list.tpl:10
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:34
+#: zotonic_mod_admin/priv/templates/_admin_system_info_config.tpl:7
 #: zotonic_mod_admin/priv/templates/_rsc_edge.tpl:19
 #: zotonic_mod_admin/priv/templates/admin_edit.tpl:3
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:68
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:82
 #: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:70
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:23
@@ -1904,6 +1943,10 @@ msgstr "Sunting"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:16
 msgid "Edit note"
 msgstr "Sunting catatan"
+
+#: zotonic_mod_admin/priv/templates/_admin_system_info_config.tpl:7
+msgid "Edit this configuration file"
+msgstr ""
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:122
 msgid "Edit:"
@@ -1941,7 +1984,7 @@ msgstr "Sematkan halaman | kutipan, popup, atau tautan ke halaman lain"
 msgid "Embedded Content"
 msgstr "Konten Tertanam"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:30
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:50
 msgid "Embedded-page references"
 msgstr "Referensi halaman tertanam"
 
@@ -1958,11 +2001,7 @@ msgstr "Titik akhir"
 msgid "Enter a URL or embed code. It will be analyzed and you can choose how to import the data."
 msgstr "Masukkan URL atau kode embed. Itu akan dianalisis dan Anda dapat memilih cara untuk mengimpor data."
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:37
-msgid "Erlang init files"
-msgstr "Berkas inisialisasi Erlang"
-
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:36
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:63
 msgid "Erlang installation root"
 msgstr "Direktori akar instalasi Erlang"
 
@@ -2020,7 +2059,7 @@ msgstr "Kategori tepat"
 msgid "Excess connections"
 msgstr "Koneksi berlebih"
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:85
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:106
 msgid "Excess connections have been closed."
 msgstr "Koneksi yang berlebih telah ditutup."
 
@@ -2119,7 +2158,7 @@ msgstr "Temukan Media"
 msgid "Find Page"
 msgstr "Temukan Halaman"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:30
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:50
 msgid "Find embedded page references and rebuild their refers connections. This runs in the background."
 msgstr "Temukan referensi ke halaman yang disematkan dan bangun ulang koneksi refers-nya. Proses ini berjalan di latar belakang."
 
@@ -2169,6 +2208,14 @@ msgstr "Bebas"
 msgid "Function"
 msgstr "Fungsi"
 
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:64
+msgid "Generated preview cleanup has been queued. Preview originals are kept."
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:28
+msgid "Generated previews"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:78
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:41
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:76
@@ -2196,6 +2243,10 @@ msgstr "Judul"
 msgid "Header | a big header"
 msgstr "Header | header besar"
 
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:11
+msgid "Health checks"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:6
 msgid "Health, background work and services for"
 msgstr "Kondisi sistem, pekerjaan latar belakang, dan layanan untuk"
@@ -2212,7 +2263,7 @@ msgstr "Di sini Anda dapat mengedit argumen kueri penelusuran. Setiap argumen be
 msgid "Hide page from searches (depends on the search query)"
 msgstr "Sembunyikan halaman dari pencarian (bergantung pada permintaan pencarian)"
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:34
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:61
 msgid "Home directory"
 msgstr "Direktori utama"
 
@@ -2240,6 +2291,10 @@ msgstr "Id, yang terbaru terlebih dahulu"
 msgid "Id, oldest first"
 msgstr "Id, tertua pertama"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:6
+msgid "Idle"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:11
 msgid "If a page has a publication date range then it will only be visible between the two dates. Note that if you are allowed to edit the page then you can always see it."
 msgstr "Jika halaman memiliki rentang tanggal publikasi, maka itu hanya akan terlihat di antara dua tanggal. Perhatikan bahwa jika Anda diizinkan untuk mengedit halaman, Anda selalu dapat melihatnya."
@@ -2251,6 +2306,14 @@ msgstr "Jika tidak ada bahasa yang memiliki jalur halaman maka jalur lengkapnya 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:61
 msgid "If not checked then a visitor is always redirected to the canonical URL of this page."
 msgstr "Jika tidak dicentang maka pengunjung selalu diarahkan ke URL kanonik halaman ini."
+
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:21
+msgid "ImageMagick (local)"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:24
+msgid "ImageMagick (media runner)"
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:141
 #: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:17
@@ -2280,7 +2343,7 @@ msgstr "Impor"
 msgid "Indexed by search engines"
 msgstr "Diindeks oleh mesin pencari"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:42
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:63
 msgid "Individual modules can be reinstalled from the Modules list."
 msgstr "Setiap modul dapat dipasang ulang dari daftar Modul."
 
@@ -2298,11 +2361,11 @@ msgstr "Info link dengan modal popup"
 msgid "Inline block"
 msgstr "Blok inline"
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:26
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:52
 msgid "Installation"
 msgstr "Pemasangan"
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:44
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:72
 msgid "Installation details are available to system administrators."
 msgstr "Rincian pemasangan tersedia bagi para administrator sistem."
 
@@ -2354,9 +2417,13 @@ msgid "Live query, send notifications when matching items are updated or inserte
 msgstr "Kueri langsung, kirim pemberitahuan saat item yang cocok diperbarui atau ditambahkan."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:2
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:17
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:18
 msgid "Live view"
 msgstr "Tampilan langsung"
+
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:42
+msgid "Local"
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:43
 msgid "Local ImageMagick"
@@ -2384,7 +2451,7 @@ msgstr "Sandbox lokal"
 msgid "Log Off"
 msgstr "Keluar"
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:31
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:58
 msgid "Log directory"
 msgstr "Direktori log"
 
@@ -2440,6 +2507,7 @@ msgstr "Mencocokkan id, nama, jalur halaman atau pengalihan"
 msgid "Matching search text"
 msgstr "Teks pencarian yang cocok"
 
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:18
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:3
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:86
 #: zotonic_mod_admin/src/mod_admin.erl:525
@@ -2467,6 +2535,14 @@ msgstr "Perintah media menggunakan runner jarak jauh."
 msgid "Media content"
 msgstr "Konten media"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:5
+msgid "Media deduplication"
+msgstr ""
+
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:54
+msgid "Media deduplication has been queued."
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:112
 msgid "Media details"
 msgstr "Rincian media"
@@ -2485,11 +2561,25 @@ msgstr "Berkas Media"
 msgid "Media item created."
 msgstr "Item media dibuat."
 
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:19
+#: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:2
+msgid "Media maintenance"
+msgstr "Pemeliharaan media"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:18
+msgid "Media maintenance runs in the background. Waiting tasks resume automatically. Remote deletion follows the filestore retention policy."
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:15
+msgid "Media maintenance status is unavailable."
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:4
 msgid "Media on this page"
 msgstr "Media di halaman ini"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:4
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:35
 msgid "Media processing"
 msgstr "Pemrosesan media"
 
@@ -2549,7 +2639,7 @@ msgid "Modification date, oldest first"
 msgstr "Tanggal modifikasi, tertua dulu"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:134
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:24
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:38
 msgid "Modified"
 msgstr "Diubah"
 
@@ -2590,6 +2680,10 @@ msgstr "Pindahkan blok ke bawah"
 msgid "Move block up"
 msgstr "Pindahkan blok ke atas"
 
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:23
+msgid "Move originals and extracted preview images into content-addressable storage. Redundant local and remote copies are cleaned up in the background. Remote files without a checksum are skipped; no files are downloaded to calculate checksums."
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:205
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:206
 msgid "Name for invoices"
@@ -2616,7 +2710,7 @@ msgstr "Butuh lebih banyak bantuan?"
 msgid "Network Connections"
 msgstr "Koneksi jaringan"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:40
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:53
 msgid "Network listeners and connections"
 msgstr "Penerima jaringan dan koneksi"
 
@@ -2645,6 +2739,11 @@ msgstr "Selanjutnya dalam kategori:"
 #: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:11
 msgid "No IP addresses have more than 250 open sockets."
 msgstr "Tidak ada alamat IP yang memiliki lebih dari 250 soket terbuka."
+
+#: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:10
+#: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:20
+msgid "No configuration files found."
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_depictions.tpl:21
 msgid "No connected images."
@@ -2688,6 +2787,10 @@ msgstr "Halaman tidak ditemukan."
 msgid "No pages selected"
 msgstr "Tidak ada halaman yang dipilih"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:5
+msgid "No problems found."
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:49
 msgid "No results."
 msgstr "Tidak ada hasil."
@@ -2730,19 +2833,23 @@ msgstr "Memori sistem operasi"
 msgid "Ongoing"
 msgstr "Sedang berlangsung"
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:87
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:108
 msgid "Only system administrators can close node connections."
 msgstr "Hanya administrator sistem yang dapat menutup koneksi node."
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:42
+#: zotonic_mod_admin/priv/templates/_admin_system_info_directory.tpl:3
+msgid "Open"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:63
 msgid "Open Modules list"
 msgstr "Buka daftar modul"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:13
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
 msgid "Open in new tab"
 msgstr "Buka di tab baru"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:57
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:70
 msgid "Open maintenance tools"
 msgstr "Buka alat pemeliharaan"
 
@@ -2879,6 +2986,10 @@ msgstr "Predikat"
 msgid "Preview"
 msgstr "Pratinjau"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:9
+msgid "Preview cleanup"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:30
 msgid "Previous in category:"
 msgstr "Sebelumnya dalam kategori:"
@@ -2971,9 +3082,13 @@ msgstr "Kueri"
 msgid "Query results"
 msgstr "Hasil kueri"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:21
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:41
 msgid "Queue every page for search indexing. Large sites can take a long time to finish."
 msgstr "Masukkan setiap halaman ke dalam antrian untuk diindeks dalam pencarian. Situs yang besar mungkin membutuhkan waktu lama untuk selesai."
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:4
+msgid "Queued / waiting"
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:14
 msgid "Ranch limit"
@@ -2983,11 +3098,11 @@ msgstr "Batas Ranch"
 msgid "Rebuild derived data and maintain this site. Queued work can be followed on the Status page."
 msgstr "Bangun ulang data turunan dan lakukan pemeliharaan situs ini. Pekerjaan dalam antrean dapat dipantau di halaman Status."
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:31
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:51
 msgid "Rebuild references"
 msgstr "Bangun ulang referensi"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:22
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:42
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:169
 msgid "Rebuild search indices"
 msgstr "Bangun ulang indeks pencarian"
@@ -3013,7 +3128,7 @@ msgstr "Perujuk"
 msgid "Referrers to"
 msgstr "Perujuk untuk"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:12
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:13
 #: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:13
 #: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:51
@@ -3025,13 +3140,13 @@ msgstr "Segarkan"
 msgid "Refreshed every 30 minutes."
 msgstr "Di-refresh setiap 30 menit."
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:53
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:54
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:74
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:75
 msgid "Reinstall Zotonic datamodel"
 msgstr "Instal ulang model data Zotonic"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:46
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:47
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:67
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:68
 msgid "Reinstall site datamodel"
 msgstr "Pasang ulang datamodel situs"
 
@@ -3048,6 +3163,14 @@ msgstr "Memuat ulang akan menghapus semua perubahan yang belum disimpan di formu
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:29
 msgid "Remarks"
 msgstr "Catatan"
+
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:40
+msgid "Remote runners only"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:40
+msgid "Remote runners with local fallback"
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:70
 msgid "Remote sandbox isolation and queue details are available on each runner’s dashboard."
@@ -3080,7 +3203,7 @@ msgstr "Ganti media saat ini"
 msgid "Resize Live view"
 msgstr "Ubah Ukuran Tampilan Langsung"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:46
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:59
 msgid "Resources"
 msgstr "Sumber Daya"
 
@@ -3108,15 +3231,15 @@ msgstr "Diputar 270 derajat"
 msgid "Rotated 90 degrees"
 msgstr "Diputar 90 derajat"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:51
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:72
 msgid "Run the Zotonic core datamodel installation again for this site's database."
 msgstr "Jalankan kembali proses instalasi model data inti Zotonic untuk basis data situs ini."
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:54
-msgid "Run the Zotonic core datamodel installation again for this site's database?"
-msgstr "Apakah ingin menjalankan instalasi model data inti Zotonic lagi untuk basis data situs ini?"
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:75
+msgid "Run the Zotonic core datamodel installation again for this site's database? Your existing data will be preserved."
+msgstr ""
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:44
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:65
 msgid "Run the site's schema installation again. The site will stop and restart."
 msgstr "Jalankan kembali proses instalasi skema situs tersebut. Situs akan berhenti sejenak dan kemudian dimulai kembali."
 
@@ -3125,6 +3248,7 @@ msgid "Runner availability and ImageMagick versions are cached for up to one min
 msgstr "Ketersediaan runner dan versi ImageMagick disimpan dalam cache hingga satu menit. Pemeriksaan yang gagal akan dicoba kembali setelah lima detik. Segarkan halaman ini untuk memeriksa kembali."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:29
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:2
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:64
 #: zotonic_site_status/priv/templates/_sites.tpl:15
 msgid "Running"
@@ -3139,7 +3263,7 @@ msgstr "SEO"
 msgid "SHA-256 checksum"
 msgstr "Checksum SHA-256"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:5
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:11
 msgid "SSL Application uses Erlang defaults, it is recommended to change this configuration in your <tt>erlang.config</tt>."
 msgstr "Aplikasi SSL menggunakan default Erlang, disarankan untuk mengubah konfigurasi ini di <tt>erlang.config</tt>."
 
@@ -3184,21 +3308,25 @@ msgstr "Simpan dan lihat halamannya."
 msgid "Save this page."
 msgstr "Simpan halaman ini."
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:11
+msgid "Save to see your changes"
+msgstr ""
+
 #: zotonic_mod_admin/src/mod_admin.erl:999
 msgid "Scheduled a background task to check all refers connections."
 msgstr "Tugas latar belakang untuk memeriksa semua koneksi refers telah dijadwalkan."
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:24
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:37
 msgid "Scheduled tasks"
 msgstr "Tugas terjadwal"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:294
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:17
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:37
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user_dialog.tpl:9
 msgid "Search"
 msgstr "Cari"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:16
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:29
 msgid "Search indexing"
 msgstr "Pengindeksan pencarian"
 
@@ -3206,7 +3334,7 @@ msgstr "Pengindeksan pencarian"
 msgid "Search indexing runs separately from the scheduled task queue."
 msgstr "Proses pengindeksan pencarian berjalan secara terpisah dari antrian tugas terjadwal."
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:21
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:41
 msgid "Search indices"
 msgstr "Indeks pencarian"
 
@@ -3235,11 +3363,11 @@ msgstr "Hasil Pencarian"
 msgid "Search..."
 msgstr "Cari..."
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:33
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:60
 msgid "Security directory"
 msgstr "Direktori keamanan"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:7
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:13
 msgid "See also: <a href=\"https://zotonic.com/en/stable/ref/configuration/zotonic-configuration.html#the-erlang-config-file\">The erlang.config file</a>"
 msgstr "Lihat juga: <a href=\"https://zotonic.com/en/stable/ref/configuration/zotonic-configuration.html#the-erlang-config-file\">File erlang.config</a>"
 
@@ -3292,7 +3420,7 @@ msgstr "Memilih file akan membuat halaman tersebut menjadi item media."
 msgid "Service"
 msgstr "Layanan"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:37
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:50
 msgid "Services"
 msgstr "Layanan"
 
@@ -3351,11 +3479,15 @@ msgstr "Menampilkan halaman yang dapat Anda sambungkan menggunakan <b>{predicate
 msgid "Site caches"
 msgstr "Cache situs"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:44
+#: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:14
+msgid "Site config files"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:65
 msgid "Site datamodel"
 msgstr "Model data situs"
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:29
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:56
 msgid "Site files directory"
 msgstr "Direktori berkas situs"
 
@@ -3367,7 +3499,7 @@ msgstr "Perangkat Lunak"
 msgid "Software versions and installation paths. Runtime and host information is shared by all sites on this node."
 msgstr "Versi perangkat lunak dan jalur instalasi. Informasi runtime dan host dibagikan oleh semua situs di node ini."
 
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:15
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:21
 msgid "Some disks are almost full."
 msgstr "Beberapa disk hampir penuh."
 
@@ -3575,16 +3707,20 @@ msgstr "Administrasi sistem"
 msgid "System information"
 msgstr "Informasi sistem"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:3
+msgid "System resources and configuration"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:2
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:5
 msgid "System status"
 msgstr "Status sistem"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:30
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:43
 msgid "Task details are available to system administrators."
 msgstr "Rincian tugas dapat diakses oleh administrator sistem."
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:28
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:41
 msgid "Tasks with errors retry up to 10 times before being dropped."
 msgstr "Tugas yang mengalami kesalahan akan dicoba ulang hingga 10 kali sebelum akhirnya dibatalkan."
 
@@ -3595,7 +3731,7 @@ msgstr "Tugas yang mengalami kesalahan akan dicoba ulang hingga 10 kali sebelum 
 msgid "Telephone"
 msgstr "Telepon"
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:53
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:74
 msgid "Templates will be recompiled."
 msgstr "Template akan dikompilasi ulang."
 
@@ -3612,7 +3748,7 @@ msgstr "Teks"
 msgid "Text | a (rich) text block"
 msgstr "Teks | blok teks (kaya)"
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:71
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:92
 msgid "The Zotonic datamodel is being reinstalled. Watch the console for messages"
 msgstr "Model data Zotonic sedang diinstal ulang. Perhatikan konsol untuk melihat pesan"
 
@@ -3624,11 +3760,12 @@ msgstr "Alamat 0.0.0.0 dan :: masing-masing merujuk pada semua antarmuka IPv4 da
 msgid "The billing address is only visible for people who can edit this page."
 msgstr "Alamat penagihan hanya dapat dilihat oleh orang yang dapat mengedit halaman ini."
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:77
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:98
 msgid "The category tree is rebuilding. This can take a long time."
 msgstr "Pohon kategori sedang dibangun ulang. Proses ini dapat memakan waktu lama."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:7
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:38
 msgid "The media runner configuration is invalid."
 msgstr "Konfigurasi media runner tidak valid."
 
@@ -3664,19 +3801,19 @@ msgstr "Kueri tidak dapat diuraikan, periksa sintaksnya."
 msgid "The query text is empty."
 msgstr "Teks kueri kosong."
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:59
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:80
 msgid "The search index is rebuilding. Depending on the database size, this can take a long time."
 msgstr "Indeks pencarian sedang dibangun ulang. Bergantung pada ukuran basis data, proses ini dapat memakan waktu lama."
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:96
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:117
 msgid "The site configuration has been reloaded."
 msgstr "Konfigurasi situs telah dimuat ulang."
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:65
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:86
 msgid "The site’s data is being reinstalled. Watch the console for messages"
 msgstr "Data situs sedang dipasang ulang. Pantau konsol untuk melihat pesan."
 
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:26
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:32
 msgid "The system has allocated more than the specified threshold of available memory, as reported by the underlying operating system."
 msgstr "Sistem telah mengalokasikan lebih dari ambang batas memori yang tersedia, seperti yang dilaporkan oleh sistem operasi yang mendasarinya."
 
@@ -3771,7 +3908,7 @@ msgstr "Catatan ini hanya dapat dilihat oleh orang yang dapat mengedit halaman."
 msgid "This page can be connected from other pages. For example it could be an author of an article."
 msgstr "Halaman ini dapat dihubungkan dari halaman lain. Misalnya bisa menjadi penulis artikel."
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:16
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:17
 msgid "This page cannot be previewed here. Use “Open in new tab” if available."
 msgstr "Halaman ini tidak dapat dipratinjau di sini. Gunakan opsi “Buka di tab baru” jika tersedia."
 
@@ -3807,12 +3944,12 @@ msgstr "Jalur halaman ini digunakan oleh halaman lain."
 msgid "This resource was created by the module"
 msgstr "Sumber daya ini diciptakan oleh modul"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:47
-msgid "This runs the site's schema installation again and stops and restarts the site. Continue?"
-msgstr "Tindakan ini akan menjalankan instalasi skema situs sekali lagi serta menghentikan dan memulai ulang situs. Lanjutkan?"
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:68
+msgid "This runs the site's schema installation again and stops and restarts the site. Your existing data will be preserved. Continue?"
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_maintenance_panel.tpl:3
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:12
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:25
 msgid "This site"
 msgstr "Situs ini"
 
@@ -3879,6 +4016,8 @@ msgstr "Ketik untuk memfilter daftar di bawah."
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:47
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:62
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:63
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:22
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:31
 msgid "Unavailable"
 msgstr "Tidak tersedia"
 
@@ -4011,8 +4150,8 @@ msgid "Upload to drop folder"
 msgstr "Unggah ke folder drop"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:135
-#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:147
-#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:177
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:155
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:185
 msgid "Uploaded"
 msgstr "Unggahan"
 
@@ -4034,7 +4173,7 @@ msgstr "Gunakan autocompleter untuk mencari media di situs ini."
 msgid "Use the title of the base content for the display name of this person."
 msgstr "Gunakan judul konten dasar sebagai nama tampilan orang ini."
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:40
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:60
 msgid "Use these operations to repair installation data, not for routine maintenance."
 msgstr "Gunakan operasi ini untuk memperbaiki data instalasi, bukan untuk pemeliharaan rutin."
 
@@ -4091,10 +4230,14 @@ msgstr "Melihat grafik koneksi"
 msgid "View format (opens in a new tab)"
 msgstr "Lihat format (terbuka di tab baru)"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:17
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:28
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:23
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:34
 msgid "View status"
 msgstr "Lihat status"
+
+#: zotonic_mod_admin/priv/templates/_admin_system_info_directory.tpl:3
+msgid "View this directory in the file manager on the Zotonic server's desktop"
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:29
 msgid "Visible from"
@@ -4113,9 +4256,9 @@ msgstr "Kunjungi halaman sunting penuh"
 msgid "Visiting address"
 msgstr "Alamat kunjungan"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:4
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:14
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:25
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:10
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:20
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:31
 #: zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:10
 msgid "Warning!"
 msgstr "Peringatan!"
@@ -4130,7 +4273,7 @@ msgstr "Situs web yang dibuka saat gambar diklik"
 msgid "Website or Embed"
 msgstr "Situs web atau sematan"
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:35
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:62
 msgid "Work directory"
 msgstr "Direktori kerja"
 
@@ -4186,7 +4329,7 @@ msgid "You don't have permission to create this page."
 msgstr "Anda tidak memiliki izin untuk membuat halaman ini."
 
 #: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:186
-#: zotonic_mod_image_edit/src/mod_image_edit.erl:94
+#: zotonic_mod_image_edit/src/mod_image_edit.erl:96
 msgid "You don't have permission to edit this page."
 msgstr "Anda tidak memiliki izin untuk mengedit halaman ini."
 
@@ -4197,8 +4340,10 @@ msgstr "Anda tidak memiliki izin untuk mengedit halaman ini."
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "Anda tidak memiliki hak akses untuk mengunggah jenis file ini."
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:101
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:110
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:56
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:66
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:122
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:131
 msgid "You don’t have permission to perform this action."
 msgstr "Anda tidak memiliki izin untuk melakukan tindakan ini."
 
@@ -4214,9 +4359,13 @@ msgstr "Kueri penelusuran Anda tidak valid. Harap perbaiki sebelum menyimpan."
 msgid "Zotonic"
 msgstr "Zotonic"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:51
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:72
 msgid "Zotonic datamodel"
 msgstr "Model data Zotonic"
+
+#: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:4
+msgid "Zotonic init files"
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:30
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:27
@@ -4245,7 +4394,7 @@ msgstr "oleh"
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:165
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:168
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:70
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:84
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:32
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:33
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:76
@@ -4390,6 +4539,10 @@ msgstr "tampilkan"
 msgid "visit site"
 msgstr "kunjungi situs"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:9
+msgid "{count} background tasks remaining"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:25
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:201
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:141
@@ -4529,6 +4682,7 @@ msgid "Config"
 msgstr "Konfigurasi"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:3
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:24
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:32
 #: zotonic_mod_admin_config/src/mod_admin_config.erl:96
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:79
@@ -4688,11 +4842,11 @@ msgstr "Biasanya diatur ke nama DNS terbalik dari mesin."
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:13
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:14
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:43
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:22
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:36
 msgid "Key"
 msgstr "Kunci"
 
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:14
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:27
 msgid "Make a new config setting"
 msgstr "Buatlah pengaturan konfigurasi baru"
 
@@ -4700,7 +4854,7 @@ msgstr "Buatlah pengaturan konfigurasi baru"
 msgid "No configuration keys found."
 msgstr "Tidak ditemukan kunci konfigurasi."
 
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:81
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:95
 msgid "No configurations found."
 msgstr "Tidak ada konfigurasi yang ditemukan."
 
@@ -4785,11 +4939,11 @@ msgstr "Relay nama host"
 msgid "Relay port"
 msgstr "Port relai"
 
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:12
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:17
 msgid "Reload site configuration"
 msgstr "Muat ulang konfigurasi situs"
 
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:13
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:14
 msgid "Reload the site configuration files. Some changes require a restart."
 msgstr "Muat ulang berkas konfigurasi situs. Beberapa perubahan memerlukan proses restart."
 
@@ -4957,7 +5111,7 @@ msgstr "Berlaku sampai"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:19
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:20
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:21
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:23
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:37
 #: zotonic_mod_base/src/support/z_chart_svg.erl:1352
 #: zotonic_mod_development/priv/templates/_development_dispatch_options.tpl:2
 msgid "Value"
@@ -5993,12 +6147,12 @@ msgstr "Instal ulang"
 msgid "Reinstalled the data model."
 msgstr "Model data telah diinstal ulang."
 
-#: zotonic_mod_admin_modules/priv/templates/_admin_modules_tools.tpl:3
+#: zotonic_mod_admin_modules/priv/templates/_admin_modules_tools.tpl:6
 #: zotonic_mod_development/priv/templates/admin_development.tpl:219
 msgid "Rescan modules"
 msgstr "Pindai ulang modul"
 
-#: zotonic_mod_admin_modules/priv/templates/_admin_modules_tools.tpl:4
+#: zotonic_mod_admin_modules/priv/templates/_admin_modules_tools.tpl:3
 msgid "Rescanning will rebuild the index of all modules, actions, templates etc. It will also reload all dispatch rules."
 msgstr "Pemindaian ulang akan membangun kembali indeks semua modul, tindakan, templat, dan sebagainya. Semua aturan perutean juga akan dimuat ulang."
 
@@ -7424,7 +7578,7 @@ msgstr "user@example.com"
 msgid "Admin Backups"
 msgstr "Cadangan admin"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:64
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:66
 msgid "After the page has been restored, you will be redirected to the edit page."
 msgstr "Setelah halaman dipulihkan, Anda akan diarahkan ke halaman edit."
 
@@ -7578,7 +7732,7 @@ msgstr "Bantuan tentang pencadangan &amp; pemulihan"
 msgid "If the Cloud File Store module is used, then deleted files can be retained indefinitely."
 msgstr "Jika modul Cloud File Store digunakan, maka file yang dihapus dapat disimpan tanpa batas waktu."
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:44
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:46
 msgid "It could be that a connected dependent page was deleted because of the deletion of this page, such a deleted dependent page can also be recovered."
 msgstr "Bisa jadi halaman dependen yang terhubung terhapus karena penghapusan halaman ini, halaman dependen yang terhapus tersebut juga dapat dipulihkan."
 
@@ -7598,7 +7752,15 @@ msgstr "Buat cadangan harian basis data dan berkas yang diunggah."
 msgid "Make a daily backup of the database."
 msgstr "Membuat cadangan harian database."
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:63
+#: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:17
+msgid "Media file availability could not be confirmed. You can continue restoring the page, but its media or saved preview image might not be recovered."
+msgstr ""
+
+#: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:22
+msgid "Media files are registered in the remote file store. Their availability has not been checked with the storage server."
+msgstr ""
+
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:65
 msgid "Media files can only be recovered if they are not yet deleted from the file storage. Zotonic will keep media for at least 5 weeks."
 msgstr "File media hanya dapat dipulihkan jika belum dihapus dari penyimpanan file. Zotonic akan menyimpan media setidaknya selama 5 minggu."
 
@@ -7622,8 +7784,8 @@ msgstr "Catatan:"
 msgid "Only administrators can start a backup."
 msgstr "Hanya administrator yang dapat memulai pencadangan."
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:23
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:33
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:25
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:35
 msgid "Original"
 msgstr "Asli"
 
@@ -7635,11 +7797,11 @@ msgstr "Pastikan Anda menyimpan kata sandi enkripsi cadangan di lokasi <u>ekster
 msgid "Previous versions"
 msgstr "Versi sebelumnya"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:54
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:56
 msgid "Recover incoming connections from other pages"
 msgstr "Pulihkan koneksi masuk dari halaman lain"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:50
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:52
 msgid "Recover outgoing connections to other pages"
 msgstr "Pulihkan koneksi keluar ke halaman lain"
 
@@ -7653,7 +7815,7 @@ msgstr "Untuk memulihkan halaman yang telah dihapus, diperlukan izin untuk membu
 msgid "Restore backup"
 msgstr "Kembalikan cadangan"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:58
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:60
 msgid "Restore deleted <em>dependent</em> pages that were referred by this page"
 msgstr "Pulihkan halaman <em>dependen</em> yang telah dihapus dan sebelumnya dirujuk oleh halaman ini"
 
@@ -7661,13 +7823,17 @@ msgstr "Pulihkan halaman <em>dependen</em> yang telah dihapus dan sebelumnya dir
 msgid "Restore deleted page"
 msgstr "Kembalikan halaman yang terhapus"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:69
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:71
 msgid "Restore page"
 msgstr "Pulihkan halaman"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:44
 msgid "Restore this page..."
 msgstr "Pulihkan halaman ini..."
+
+#: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:11
+msgid "Restoring this version can replace the media currently attached to the page."
+msgstr ""
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:36
 msgid "Revert page to earlier version"
@@ -7709,11 +7875,11 @@ msgstr "Revisi pengguna aktif disimpan selama {n} hari."
 msgid "Revisions of deleted users are kept for {n} days."
 msgstr "Revisi pengguna yang dihapus disimpan selama {n} hari."
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:25
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:27
 msgid "Select a category"
 msgstr "Pilih kategori"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:35
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:37
 msgid "Select a content group"
 msgstr "Pilih grup konten"
 
@@ -7728,6 +7894,10 @@ msgstr "Pilih file cadangan yang ingin Anda unggah. File tersebut harus berupa f
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:8
 msgid "Show import/export panel on the edit pages in the admin."
 msgstr "Tampilkan panel impor/ekspor pada halaman edit di admin."
+
+#: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:3
+msgid "Some media files cannot be recovered."
+msgstr ""
 
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:143
 msgid "Sorry, a global Zotonic configuration is set and cannot be changed."
@@ -7800,9 +7970,17 @@ msgstr "Modul cadangan menggunakan konfigurasi Zotonic global. Konfigurasi tidak
 msgid "The encryption configuration is set to:"
 msgstr "Konfigurasi enkripsi diatur ke:"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:18
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:20
 msgid "The original category or content group no longer exists. Confirm the suggested replacement or select another one."
 msgstr "Kategori atau kelompok konten asli tersebut sudah tidak ada lagi. Silakan konfirmasi pengganti yang disarankan atau pilih yang lain."
+
+#: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:5
+msgid "The original file for this version is no longer available. The page can be restored, but its media may be empty."
+msgstr ""
+
+#: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:8
+msgid "The saved preview image for this version is no longer available."
+msgstr ""
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:5
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:19
@@ -7859,7 +8037,7 @@ msgstr "Anda dapat menemukannya di <a href=\"{url}\">Konfigurasi Sistem</a> atau
 msgid "You can have one backup per day of the week, older ones will be overwritten."
 msgstr "Anda dapat memiliki satu cadangan per hari dalam seminggu, yang lebih lama akan ditimpa."
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:43
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:45
 msgid "You can recover incoming and outgoing connections to other pages."
 msgstr "Anda dapat memulihkan koneksi masuk dan keluar ke halaman lain."
 
@@ -8463,6 +8641,14 @@ msgstr "ClamAV tidak dapat diakses. File tidak dapat diunggah sampai pemindai vi
 msgid "Please contact your system administrator."
 msgstr "Silakan hubungi administrator sistem Anda."
 
+#: zotonic_mod_clamav/priv/templates/_admin_status_alert.tpl:3
+msgid "Virus scanner"
+msgstr ""
+
+#: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:9
+msgid "Virus scanner available."
+msgstr ""
+
 #: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:4
 msgid "Virus scanner unavailable"
 msgstr "Pemindai virus tidak tersedia"
@@ -8793,7 +8979,7 @@ msgstr "Tahun"
 
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
 #: zotonic_mod_development/priv/templates/_development_template_matches.tpl:8
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:266
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:226
 #: zotonic_site_status/priv/templates/_sites.tpl:6
 msgid "Actions"
 msgstr "Tindakan"
@@ -8835,11 +9021,11 @@ msgstr "Lokasi baru dapat berupa jalur lokal atau URL lengkap. Kosongkan host un
 msgid "You are not allowed to change this."
 msgstr "Anda tidak diizinkan untuk mengubah ini."
 
-#: zotonic_mod_development/src/mod_development.erl:693
+#: zotonic_mod_development/src/mod_development.erl:699
 msgid "<i>Function name does not exist.</i>"
 msgstr "<i>Nama fungsi tidak ada.</i>"
 
-#: zotonic_mod_development/src/mod_development.erl:696
+#: zotonic_mod_development/src/mod_development.erl:702
 msgid "<i>Module not found.</i>"
 msgstr "<i>Modul tidak ditemukan.</i>"
 
@@ -8906,8 +9092,8 @@ msgstr "Hitung dan visualisasikan graf dependensi semua templat."
 msgid "Check debug points in the template source to see debug data here."
 msgstr "Periksa titik debug di sumber template untuk melihat data debug di sini."
 
-#: zotonic_mod_development/src/mod_development.erl:501
-#: zotonic_mod_development/src/mod_development.erl:516
+#: zotonic_mod_development/src/mod_development.erl:507
+#: zotonic_mod_development/src/mod_development.erl:522
 msgid "Checking all templates..."
 msgstr "Memeriksa semua templat..."
 
@@ -8979,6 +9165,10 @@ msgstr "Tidak dapat memuat atau menyimpan pengaturan editor."
 msgid "Could not load templates"
 msgstr "Tidak dapat memuat templat"
 
+#: zotonic_mod_development/src/mod_development.erl:498
+msgid "Could not open the directory on this computer."
+msgstr ""
+
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:9
 msgid "Could not open the editor. Check the editor and path mapping."
 msgstr "Tidak dapat membuka editor. Periksa editor dan pemetaan jalur."
@@ -9039,7 +9229,7 @@ msgid "Detecting editors…"
 msgstr "Mendeteksi editor…"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:7
-#: zotonic_mod_development/src/mod_development.erl:1362
+#: zotonic_mod_development/src/mod_development.erl:1368
 msgid "Development"
 msgstr "Pengembangan"
 
@@ -9159,11 +9349,11 @@ msgstr "Pelacakan kueri database diaktifkan"
 msgid "Enter the module and function you want to trace. If no function is given, all functions in the module will be traced. Enter how many calls to trace before stopping."
 msgstr "Masukkan modul dan fungsi yang ingin Anda lacak. Jika tidak ada fungsi yang diberikan, semua fungsi dalam modul akan dilacak. Masukkan jumlah panggilan yang akan dilacak sebelum berhenti."
 
-#: zotonic_mod_development/src/mod_development.erl:665
+#: zotonic_mod_development/src/mod_development.erl:671
 msgid "Error changing the console logs."
 msgstr "Terjadi kesalahan saat mengubah log konsol."
 
-#: zotonic_mod_development/src/mod_development.erl:759
+#: zotonic_mod_development/src/mod_development.erl:765
 msgid "Error parsing template."
 msgstr "Kesalahan saat mengurai templat."
 
@@ -9225,7 +9415,7 @@ msgstr "Penelusuran Panggilan Fungsi"
 msgid "Function call tracing has been disabled. Use the following to enable function call tracing:"
 msgstr "Penelusuran panggilan fungsi telah dinonaktifkan. Gunakan langkah berikut ini untuk mengaktifkan penelusuran panggilan fungsi:"
 
-#: zotonic_mod_development/src/mod_development.erl:699
+#: zotonic_mod_development/src/mod_development.erl:705
 msgid "Function tracing has been disabled in the Zotonic config."
 msgstr "Pelacakan fungsi telah dinonaktifkan dalam konfigurasi Zotonic."
 
@@ -9370,18 +9560,18 @@ msgstr "Tidak ditemukan aturan perutean yang cocok"
 msgid "No matching templates found."
 msgstr "Tidak ditemukan templat yang sesuai."
 
-#: zotonic_mod_development/src/mod_development.erl:663
+#: zotonic_mod_development/src/mod_development.erl:669
 msgid "No permission to access the console logs."
 msgstr "Tidak ada izin untuk mengakses log konsol."
 
-#: zotonic_mod_development/src/mod_development.erl:506
-#: zotonic_mod_development/src/mod_development.erl:521
-#: zotonic_mod_development/src/mod_development.erl:536
-#: zotonic_mod_development/src/mod_development.erl:544
-#: zotonic_mod_development/src/mod_development.erl:571
-#: zotonic_mod_development/src/mod_development.erl:613
-#: zotonic_mod_development/src/mod_development.erl:630
-#: zotonic_mod_development/src/mod_development.erl:647
+#: zotonic_mod_development/src/mod_development.erl:512
+#: zotonic_mod_development/src/mod_development.erl:527
+#: zotonic_mod_development/src/mod_development.erl:542
+#: zotonic_mod_development/src/mod_development.erl:550
+#: zotonic_mod_development/src/mod_development.erl:577
+#: zotonic_mod_development/src/mod_development.erl:619
+#: zotonic_mod_development/src/mod_development.erl:636
+#: zotonic_mod_development/src/mod_development.erl:653
 msgid "No permission to use mod_development."
 msgstr "Tidak ada izin untuk menggunakan mod_development."
 
@@ -9390,7 +9580,7 @@ msgstr "Tidak ada izin untuk menggunakan mod_development."
 msgid "No references found."
 msgstr "Tidak ditemukan referensi."
 
-#: zotonic_mod_development/src/mod_development.erl:625
+#: zotonic_mod_development/src/mod_development.erl:631
 msgid "No template found in the context."
 msgstr "Tidak ada templat yang ditemukan dalam konteks."
 
@@ -9415,7 +9605,7 @@ msgstr "Tidak ditemukan"
 msgid "Observers"
 msgstr "Pengamat"
 
-#: zotonic_mod_development/src/mod_development.erl:702
+#: zotonic_mod_development/src/mod_development.erl:708
 msgid "Only the admin user can set traces."
 msgstr "Hanya pengguna admin yang dapat mengatur jejak."
 
@@ -9553,19 +9743,19 @@ msgstr "Mulai Melacak"
 msgid "Start matching dispatch rules"
 msgstr "Mulai mencocokkan aturan perutean"
 
-#: zotonic_mod_development/src/mod_development.erl:659
+#: zotonic_mod_development/src/mod_development.erl:665
 msgid "Started logging to the console of your browser tab."
 msgstr "Pencatatan log ke konsol tab browser Anda telah dimulai."
 
-#: zotonic_mod_development/src/mod_development.erl:533
+#: zotonic_mod_development/src/mod_development.erl:539
 msgid "Started tracing all template inclusions."
 msgstr "Mulai menelusuri semua penyertaan template."
 
-#: zotonic_mod_development/src/mod_development.erl:608
+#: zotonic_mod_development/src/mod_development.erl:614
 msgid "Started tracing template inclusions by rendering the page."
 msgstr "Mulai menelusuri penyertaan templat dengan merender halaman."
 
-#: zotonic_mod_development/src/mod_development.erl:530
+#: zotonic_mod_development/src/mod_development.erl:536
 msgid "Started tracing template inclusions for your session."
 msgstr "Mulai menelusuri penyertaan templat untuk sesi Anda."
 
@@ -9575,11 +9765,11 @@ msgstr "Mulai menelusuri penyertaan templat untuk sesi Anda."
 msgid "Stop"
 msgstr "Berhenti"
 
-#: zotonic_mod_development/src/mod_development.erl:661
+#: zotonic_mod_development/src/mod_development.erl:667
 msgid "Stopped logging to the console of all browser tabs."
 msgstr "Pencatatan log ke konsol semua tab browser dihentikan."
 
-#: zotonic_mod_development/src/mod_development.erl:542
+#: zotonic_mod_development/src/mod_development.erl:548
 msgid "Stopped tracing template inclusions for all sessions."
 msgstr "Menghentikan pelacakan penyertaan template untuk semua sesi."
 
@@ -9618,7 +9808,7 @@ msgstr "Template"
 msgid "Template debugging"
 msgstr "Template debugging"
 
-#: zotonic_mod_development/src/mod_development.erl:762
+#: zotonic_mod_development/src/mod_development.erl:768
 msgid "Template file not found."
 msgstr "File template tidak ditemukan."
 
@@ -9638,7 +9828,7 @@ msgstr "Template path"
 msgid "Test with this template"
 msgstr "Coba gunakan templat ini"
 
-#: zotonic_mod_development/src/mod_development.erl:610
+#: zotonic_mod_development/src/mod_development.erl:616
 msgid "The path must be a local URL."
 msgstr "Jalur harus berupa URL lokal."
 
@@ -9731,7 +9921,7 @@ msgstr "Pola URI"
 msgid "Uncheck to debug only your current session."
 msgstr "Hapus centang untuk men-debug hanya sesi Anda saat ini."
 
-#: zotonic_mod_development/src/mod_development.erl:644
+#: zotonic_mod_development/src/mod_development.erl:650
 msgid "Updated template debug points."
 msgstr "Titik debug templat telah diperbarui."
 
@@ -10570,35 +10760,35 @@ msgstr "Setelah 1 minggu"
 msgid "After 3 months"
 msgstr "Setelah 3 bulan"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:314
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:274
 msgid "All cloud files can be moved back to the file system on the server."
 msgstr "Semua file cloud dapat dipindahkan kembali ke sistem file di server."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:322
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:282
 msgid "All cloud files will be queued for download."
 msgstr "Semua berkas awan akan diantri untuk diunduh."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:279
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:239
 msgid "All files will be queued, uploads will start in the background within 10 minutes."
 msgstr "Semua berkas akan dimasukkan ke antrean. Pengunggahan di latar belakang akan dimulai dalam 10 menit."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:269
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:229
 msgid "All local uploaded and preview files can be moved to the cloud."
 msgstr "Semua berkas unggahan dan pratinjau lokal dapat dipindahkan ke awan."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:288
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:248
 msgid "Are you sure you want to copy all files to the cloud?"
 msgstr "Apakah Anda yakin ingin menyalin semua file ke cloud?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:331
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:291
 msgid "Are you sure you want to copy all files to the disk of the server?"
 msgstr "Apakah Anda yakin ingin menyalin semua berkas ke disk server?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:299
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:259
 msgid "Are you sure you want to move all files to the cloud?"
 msgstr "Anda yakin ingin memindahkan semua file ke cloud?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:342
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:302
 msgid "Are you sure you want to move all files to the disk of the server?"
 msgstr "Apakah Anda yakin ingin memindahkan semua file ke disk server?"
 
@@ -10614,7 +10804,7 @@ msgstr "Sebelum pengaturan disimpan mereka akan diperiksa dengan mengunggah (dan
 msgid "Check the storage service and its access permissions. Failed reads are retried when requested, with a delay of up to ten minutes."
 msgstr "Periksa layanan penyimpanan dan izin aksesnya. Upaya pembacaan yang gagal akan dicoba kembali saat diminta, dengan jeda hingga sepuluh menit."
 
-#: zotonic_mod_filestore/src/mod_filestore.erl:585
+#: zotonic_mod_filestore/src/mod_filestore.erl:619
 msgid "Cloud File Store"
 msgstr "Penyimpanan Berkas Cloud"
 
@@ -10627,9 +10817,13 @@ msgstr "Konfigurasi Penyimpanan Berkas Cloud"
 msgid "Cloud File Store Utilities and Statistics"
 msgstr "Utilitas dan Statistik Penyimpanan File Cloud"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:228
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:9
 msgid "Cloud Files"
 msgstr "File awan"
+
+#: zotonic_mod_filestore/priv/templates/_admin_status_alert.tpl:3
+msgid "Cloud file store"
+msgstr ""
 
 #: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:15
 msgid "Cloud file store configuration"
@@ -10643,23 +10837,23 @@ msgstr "Penyimpanan file berbasis cloud perlu diperhatikan"
 msgid "Consecutive failures"
 msgstr "Kegagalan berturut-turut"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:285
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:245
 msgid "Copy all local files to the remote storage"
 msgstr "Salin semua file lokal ke penyimpanan jarak jauh"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:328
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:288
 msgid "Copy all remote files to local"
 msgstr "Salin semua file jarak jauh ke lokal"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:289
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:249
 msgid "Copy files to cloud"
 msgstr "Salin file ke cloud"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:332
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:292
 msgid "Copy files to server disk"
 msgstr "Salin file ke disk server"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:278
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:238
 msgid "Could not access the service, double check your settings and try again."
 msgstr "Tidak bisa mengakses layanan, periksa pengaturan Anda dan coba lagi."
 
@@ -10676,11 +10870,11 @@ msgstr "Saat ini Zotonic mendukung FTP, WebDAV, dan layanan yang kompatibel deng
 msgid "Delete files from the cloud file store"
 msgstr "Hapus file dari penyimpanan file awan"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:251
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:32
 msgid "Deletion queue"
 msgstr "Antrian penghapusan"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:250
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:31
 msgid "Download Queue"
 msgstr "Antrian Download"
 
@@ -10688,7 +10882,7 @@ msgstr "Antrian Download"
 msgid "Enable this to let the filestore act as a backup of  your local media files."
 msgstr "Aktifkan ini untuk membiarkan filestore bertindak sebagai cadangan file media lokal Anda."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:315
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:275
 msgid "Ensure yourself there is enough disk space before starting this process."
 msgstr "Pastikan Anda memiliki cukup ruang disk sebelum memulai proses ini."
 
@@ -10712,8 +10906,8 @@ msgstr "Pembacaan yang gagal dalam 15 menit terakhir:"
 msgid "Failing since"
 msgstr "Gagal sejak"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:233
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:256
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:14
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:37
 msgid "Files"
 msgstr "Berkas"
 
@@ -10733,11 +10927,11 @@ msgstr "Untuk S3 URL harus dimulai dengan <b><tt>https:</tt></b> atau <b><tt>htt
 msgid "For WebDAV the URL must start with <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>"
 msgstr "Untuk WebDAV, URL harus dimulai dengan <b><tt>webdavs:</tt></b> atau <b><tt>webdav:</tt></b>"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:275
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:235
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "Jika Anda telah memilih \"Simpan file lokal setelah diunggah ke penyimpanan file cloud\" maka file lokal tidak dihapus, karena file jarak jauh dianggap sebagai cadangan file lokal."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:319
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:279
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "Jika Anda telah memilih \"Simpan file lokal setelah diunggah ke penyimpanan file cloud\" maka file jarak jauh tidak dihapus, karena file jarak jauh dianggap sebagai cadangan file lokal."
 
@@ -10765,7 +10959,12 @@ msgstr "Simpan berkas lokal?"
 msgid "Last error"
 msgstr "Kesalahan terakhir"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:227
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:222
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:20
+msgid "Loading…"
+msgstr "Sedang dimuat…"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:8
 msgid "Local Files"
 msgstr "Berkas Lokal"
 
@@ -10774,23 +10973,23 @@ msgstr "Berkas Lokal"
 msgid "Mark unrecoverable"
 msgstr "Tandai sebagai tidak dapat dipulihkan"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:226
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:7
 msgid "Media Resources"
 msgstr "Sumber Daya Media"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:296
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:256
 msgid "Move all local files to the remote storage"
 msgstr "Pindahkan semua file lokal ke penyimpanan jarak jauh"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:339
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:299
 msgid "Move all remote files to local"
 msgstr "Pindahkan semua file jarak jauh ke lokal"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:300
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:260
 msgid "Move files to cloud"
 msgstr "Pindahkan file ke cloud"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:343
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:303
 msgid "Move files to server disk"
 msgstr "Pindahkan file ke disk server"
 
@@ -10799,6 +10998,10 @@ msgstr "Pindahkan file ke disk server"
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:62
 msgid "Never"
 msgstr "Tidak pernah"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:18
+msgid "No cloud file store read errors detected."
+msgstr ""
 
 #: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:47
 msgid "No errors on this page."
@@ -10820,7 +11023,7 @@ msgstr "Belum ditetapkan (Signature V2)"
 msgid "Now"
 msgstr "Sekarang"
 
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:38
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:39
 msgid "Only the admin account (user 1) can mark files unrecoverable."
 msgstr "Hanya akun admin (pengguna 1) yang dapat menandai berkas sebagai tidak dapat dipulihkan."
 
@@ -10891,7 +11094,7 @@ msgstr "Pengaturan disimpan tanpa uji penulisan."
 msgid "Stop retrying this file and mark it unrecoverable? Its record and error details will be kept. No files will be deleted."
 msgstr "Apakah Anda ingin menghentikan upaya pemulihan berkas ini dan menandainya sebagai tidak dapat dipulihkan? Catatan dan rincian kesalahannya akan tetap disimpan. Tidak ada berkas yang akan dihapus."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:239
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:20
 msgid "Storage"
 msgstr "Penyimpanan"
 
@@ -10899,7 +11102,7 @@ msgstr "Penyimpanan"
 msgid "Test Cloud File Store Settings"
 msgstr "Menguji Pengaturan Penyimpanan File Cloud"
 
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:255
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:256
 msgid "The cloud file store is read-only."
 msgstr "Penyimpanan file di cloud bersifat hanya baca."
 
@@ -10915,7 +11118,7 @@ msgstr "Penyimpanan berkas berbasis cloud menggunakan konfigurasi Zotonic global
 msgid "The configuration is:"
 msgstr "Konfigurasinya adalah:"
 
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:85
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:86
 msgid "The settings are locked by the system configuration."
 msgstr "Pengaturan dikunci oleh konfigurasi sistem."
 
@@ -10923,7 +11126,7 @@ msgstr "Pengaturan dikunci oleh konfigurasi sistem."
 msgid "The settings are tested by uploading (and removing) a small file."
 msgstr "Pengaturan diuji dengan mengunggah (dan menghapus) file kecil."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:271
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:231
 msgid "There is a 1 minute wait before files are uploaded."
 msgstr "Ada 1 menit menunggu sebelum file diunggah."
 
@@ -10931,11 +11134,11 @@ msgstr "Ada 1 menit menunggu sebelum file diunggah."
 msgid "This extra deletion delay extends the period files can be recovered."
 msgstr "Penundaan penghapusan tambahan ini memperpanjang periode file dapat dipulihkan."
 
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:40
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:41
 msgid "This file no longer has an eligible error older than 24 hours. Reload the page."
 msgstr "Berkas ini tidak lagi memiliki kesalahan yang memenuhi syarat yang berusia lebih dari 24 jam. Silakan muat ulang halaman ini."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:270
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:230
 msgid "This will queue the files for later asynchronous upload."
 msgstr "Ini akan mengantri file untuk upload asinkron selanjutnya."
 
@@ -10955,7 +11158,7 @@ msgstr "Tidak dapat dipulihkan"
 msgid "Unresolved files are listed oldest first. The error shown is the most recent recorded error for each file."
 msgstr "File yang belum terselesaikan ditampilkan berdasarkan urutan dari yang paling lama terlebih dahulu. Kesalahan yang ditampilkan adalah kesalahan terbaru yang tercatat untuk setiap file."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:249
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:30
 msgid "Upload Queue"
 msgstr "Antrean Unggahan"
 
@@ -10979,14 +11182,14 @@ msgstr "Dengan WebDAV, nama pengguna dan kata sandi dikirim sebagai teks biasa t
 msgid "Yes, keep local files after upload"
 msgstr "Ya, simpan file lokal setelah diunggah"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:360
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:88
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:95
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:102
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:320
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:89
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:96
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:103
 msgid "You are not allowed to change these settings."
 msgstr "Anda tidak diizinkan untuk mengubah pengaturan ini."
 
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:126
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:127
 msgid "You are not allowed to use this."
 msgstr "Anda tidak diizinkan untuk menggunakan ini."
 
@@ -10994,8 +11197,8 @@ msgstr "Anda tidak diizinkan untuk menggunakan ini."
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
 msgstr "Zotonic dapat menyimpan file yang diunggah dan diubah ukurannya di cloud. Di sini Anda dapat mengonfigurasi lokasi dan kunci akses untuk layanan cloud."
 
-#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:150
-#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:180
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:158
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:188
 msgid "Could not upload"
 msgstr "Tidak dapat mengupload"
 
@@ -11019,7 +11222,7 @@ msgstr "Kontras"
 msgid "Contrast &amp; Brightness"
 msgstr "Kontras &amp; Kecerahan"
 
-#: zotonic_mod_image_edit/src/mod_image_edit.erl:91
+#: zotonic_mod_image_edit/src/mod_image_edit.erl:93
 msgid "Could not save the image settings."
 msgstr "Tidak dapat menyimpan setelan gambar."
 
@@ -11075,7 +11278,7 @@ msgstr "Putar pada sumbu optik, miringkan &amp; putar horizontal"
 msgid "Rotate"
 msgstr "Putar"
 
-#: zotonic_mod_image_edit/src/mod_image_edit.erl:88
+#: zotonic_mod_image_edit/src/mod_image_edit.erl:90
 msgid "Saved the image settings."
 msgstr "Pengaturan gambar telah disimpan."
 
@@ -12797,10 +13000,6 @@ msgstr "Bahasa jika preferensi tidak diketahui:"
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:19
 msgid "Language:"
 msgstr "Bahasa:"
-
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:20
-msgid "Loading…"
-msgstr "Sedang dimuat…"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:2
 msgid "Mailing"
@@ -14956,10 +15155,6 @@ msgstr "Penyematan item media gagal dengan kode HTTP"
 msgid "Fix embedded videos"
 msgstr "Perbaiki video tersemat"
 
-#: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:2
-msgid "Media maintenance"
-msgstr "Pemeliharaan media"
-
 #: zotonic_mod_oembed/src/mod_oembed.erl:458
 msgid "No embedded videos found which need fixing."
 msgstr "Tidak ditemukan video tertanam yang memerlukan perbaikan."
@@ -15606,11 +15801,11 @@ msgstr "Anda harus menyetujui Persyaratan untuk mendaftar."
 msgid "Your signup code"
 msgstr "Kode pendaftaran Anda"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:264
+#: zotonic_mod_site_update/src/mod_site_update.erl:276
 msgid "Another deployment is in progress. Please try again when it finishes."
 msgstr "Penerapan lain sedang berlangsung. Silakan coba lagi setelah selesai."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:164
+#: zotonic_mod_site_update/src/mod_site_update.erl:176
 msgid "Building Zotonic in the background..."
 msgstr "Membangun Zotonic di latar belakang..."
 
@@ -15622,9 +15817,9 @@ msgstr "Tidak dapat mengambil log perubahan dari server jarak jauh. Periksa kone
 msgid "Current commit"
 msgstr "Commit saat ini"
 
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:60
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:62
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:11
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:61
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:63
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:12
 msgid "Deploy"
 msgstr "Terapkan"
 
@@ -15638,27 +15833,31 @@ msgstr "Terapkan versi terbaru"
 msgid "Deploy latest Zotonic"
 msgstr "Terapkan versi terbaru Zotonic"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:217
+#: zotonic_mod_site_update/src/mod_site_update.erl:229
 msgid "Deploy latest version"
 msgstr "Terapkan versi terbaru"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:251
+#: zotonic_mod_site_update/src/mod_site_update.erl:263
 msgid "Deploying the latest version..."
 msgstr "Menerapkan versi terbaru..."
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:2
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:5
-#: zotonic_mod_site_update/src/mod_site_update.erl:128
+#: zotonic_mod_site_update/src/mod_site_update.erl:140
 msgid "Deployment"
 msgstr "Penerapan"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:262
+#: zotonic_mod_site_update/src/mod_site_update.erl:274
 msgid "Deployment completed."
 msgstr "Penerapan telah selesai."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:266
+#: zotonic_mod_site_update/src/mod_site_update.erl:278
 msgid "Deployment failed. Check the server log for details."
 msgstr "Penerapan gagal. Periksa log server untuk detailnya."
+
+#: zotonic_mod_site_update/priv/templates/_site_deploy_status_value.tpl:5
+msgid "Deployment running on this node"
+msgstr ""
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:5
 msgid "Deployment updates the entire Git repository, including any other modules it contains."
@@ -15668,7 +15867,7 @@ msgstr "Penerapan memperbarui seluruh repositori Git, termasuk semua modul lain 
 msgid "Fetching remote changes…"
 msgstr "Mengambil perubahan dari server jarak jauh…"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:162
+#: zotonic_mod_site_update/src/mod_site_update.erl:174
 msgid "Finished rebuilding Zotonic."
 msgstr "Selesai membangun kembali Zotonic."
 
@@ -15684,11 +15883,11 @@ msgstr "Daftar modul"
 msgid "No deployable version control repository was found."
 msgstr "Tidak ditemukan repositori kontrol versi yang dapat diterapkan."
 
-#: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:12
+#: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:13
 msgid "Rebuild Zotonic"
 msgstr "Bangun kembali Zotonic"
 
-#: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:14
+#: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:15
 msgid "Recompile changed Erlang files in the background"
 msgstr "Kompilasi ulang berkas Erlang yang berubah di latar belakang"
 
@@ -15708,7 +15907,7 @@ msgstr "Tinjau perubahan yang masuk dan terapkan repositori Git modul ini."
 msgid "Review incoming changes and deploy this site's code. Compilation and activation are coordinated across all sites on this node."
 msgstr "Tinjau perubahan yang masuk dan terapkan kode situs ini. Proses kompilasi dan aktivasi dikoordinasikan di seluruh situs pada node ini."
 
-#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:5
+#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:6
 msgid "Review incoming changes before deploying the latest version."
 msgstr "Tinjau perubahan yang masuk sebelum menerapkan versi terbaru."
 
@@ -15729,11 +15928,11 @@ msgstr "Penerapan situs"
 msgid "Site update API token"
 msgstr "Token API pembaruan situs"
 
-#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:9
+#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:10
 msgid "Site update is not available as the site does not use a known version control system, like git."
 msgstr "Pembaruan situs tidak tersedia karena situs tidak menggunakan sistem kontrol versi yang dikenal, seperti git."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:166
+#: zotonic_mod_site_update/src/mod_site_update.erl:178
 msgid "Sorry this can only be run from the Zotonic status site"
 msgstr "Maaf ini hanya dapat dijalankan dari situs status Zotonic"
 
@@ -15774,8 +15973,8 @@ msgid "View system status"
 msgstr "Lihat status sistem"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:20
-#: zotonic_mod_site_update/src/mod_site_update.erl:221
-#: zotonic_mod_site_update/src/mod_site_update.erl:256
+#: zotonic_mod_site_update/src/mod_site_update.erl:233
+#: zotonic_mod_site_update/src/mod_site_update.erl:268
 msgid "You are not allowed to deploy this code."
 msgstr "Anda tidak diperbolehkan untuk menerapkan kode ini."
 
