@@ -17,7 +17,7 @@ trap 'rm -rf "$runner_test_dir"' EXIT
 export ERL_LIBS="$PWD/deps"
 "$runner_erlc" -Werror -DTEST -Dnamespaced_dicts -Drand_only -I include -pa deps/lager/ebin \
     +'{parse_transform,lager_transform}' -o "$runner_test_dir" \
-    src/support/z_config.erl src/support/z_media_runner*.erl \
+    src/support/z_config.erl src/support/z_media_deadline.erl src/support/z_media_runner*.erl \
     src/support/z_media_imagemagick.erl src/support/z_exec.erl \
     src/support/z_media_identify.erl src/support/z_media_preview.erl \
     modules/mod_video/mod_video.erl modules/mod_video/support/z_video_convert.erl \

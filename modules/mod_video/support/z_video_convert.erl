@@ -113,6 +113,12 @@ do_convert(QueuePath, State) ->
 
 %% Preserve the queued source when infrastructure or configuration can be fixed.
 %% A confirmed processing failure follows the existing broken-video path.
+retryable({error, {media_runner_processing, Reason}}) when
+        Reason =:= <<"command_failed">>; Reason =:= <<"command_timeout">>;
+        Reason =:= <<"output_limit">> -> false;
+%% Runner worker/expiry failures and unknown runner errors preserve the source.
+retryable({error, {media_runner_processing, _}}) -> true;
+retryable({error, {media_worker, _}}) -> true;
 retryable({error, {media_runner_unavailable, _}}) -> true;
 retryable({error, {media_runner_http, _}}) -> true;
 retryable({error, {media_runner_protocol, _}}) -> true;

@@ -19,7 +19,7 @@
 
 -export([endpoint/1, endpoint/2, http_options/1, callback_limit/0, https_url/1, pack/3, unpack/2, unpack/3, validate/1, rewrite/2,
     hash_file/1, hash_file/2, input_limit/0, output_limit/0, profile/1,
-    control_url/2, http_url/1, request/3, request/4, upload/5, hex/1]).
+    control_url/2, http_url/1, request/3, request/4, upload/5, upload/6, hex/1]).
 
 -include_lib("kernel/include/file.hrl").
 -include("z_media_limits.hrl").
@@ -328,6 +328,11 @@ http_url(_) ->
 -spec upload(binary(), binary(), binary(), file:filename_all(), non_neg_integer()) ->
     {ok, integer()} | {error, term()}.
 upload(Url, Token, Lease, Path, Size) ->
+    upload(Url, Token, Lease, Path, Size, ?UPLOAD_TIMEOUT).
+
+-spec upload(binary(), binary(), binary(), file:filename_all(), non_neg_integer(), pos_integer()) ->
+    {ok, integer()} | {error, term()}.
+upload(Url, Token, Lease, Path, Size, Timeout) ->
     case http_url(Url) of
         false ->
             {error, invalid_url};
@@ -346,7 +351,7 @@ upload(Url, Token, Lease, Path, Size) ->
                         },
                         %% A dedicated connection keeps long uploads independent
                         %% of job requests and callbacks to the same host.
-                        case z_media_runner_http:request(put, Request, ?UPLOAD_TIMEOUT) of
+                        case z_media_runner_http:request(put, Request, Timeout) of
                             {ok, Status, _} ->
                                 {ok, Status};
                             {error, _} = Error ->

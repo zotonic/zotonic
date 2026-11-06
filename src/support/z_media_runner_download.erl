@@ -25,6 +25,7 @@
 -spec install(list(), list(), map(), function()) -> ok.
 install(Files, Paths, Options, Fetch) ->
     Pending = [pending_file(F, Paths) || F <- Files],
+    Guards = [z_media_runner_temp:guard(Temp) || {_, _, Temp} <- Pending],
     try
         lists:foreach(fun({F, _, Temp}) ->
             Size = maps:get(<<"size">>, F),
@@ -42,9 +43,12 @@ install(Files, Paths, Options, Fetch) ->
                 _ -> error(invalid_download)
             end
         end, Pending),
-        lists:foreach(fun({_, Path, Temp}) -> ok = file:rename(Temp, Path) end, Pending)
+        case z_media_deadline:remaining(Options, 1) of
+            0 -> throw({media_runner_download, timeout});
+            _ -> lists:foreach(fun({_, Path, Temp}) -> ok = file:rename(Temp, Path) end, Pending)
+        end
     after
-        lists:foreach(fun({_, _, Temp}) -> file:delete(Temp) end, Pending)
+        lists:foreach(fun z_media_runner_temp:release/1, Guards)
     end.
 
 pending_file(File, Paths) ->
@@ -57,11 +61,14 @@ pending_file(File, Paths) ->
 %% @doc Stream only from the configured runner; never forward OAuth credentials to callback-supplied hosts.
 -spec fetch(map(), file:filename_all(), map()) -> {ok, non_neg_integer(), binary()} | {error, term()}.
 fetch(#{<<"url">> := Url, <<"size">> := Size, <<"sha256">> := Hash}, Temp,
-        #{media_runner_endpoint := Base, media_runner_token := Token}) ->
+        #{media_runner_endpoint := Base, media_runner_token := Token} = Options) ->
     Url = <<Base/binary, "/results/", Hash/binary>>,
     true = z_media_runner_protocol:http_url(Url),
     Headers = [{"authorization", "Bearer " ++ binary_to_list(Token)}],
-    z_media_runner_http:download(Url, Headers, Temp, Size, 3600000).
+    case z_media_deadline:remaining(Options, 3600000) of
+        0 -> {error, timeout};
+        Left -> z_media_runner_http:download(Url, Headers, Temp, Size, Left)
+    end.
 
 %% Only transport failures are retryable. Invalid headers, sizes and hashes,
 %% authentication failures and local file errors must not trigger another render.

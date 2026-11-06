@@ -5,9 +5,9 @@ media runner's version 3 protocol. It includes submission, cached input uploads,
 authenticated callbacks, polling recovery, verified output downloads, and image
 and video integration. It does not host runner jobs or add a local sandbox.
 
-Client updates through master commit `b0b9e6909` (#4543) are included: overload
-backoff, deadline-bounded submission/reservation requests, and short temporary
-download names. The earlier HTTP/HTTPS selection update (#4539) is also included.
+Client updates through master commit `becf16162` (#4654) are included. The wire
+protocol remains version 3; the newer deadline, download retry and receipt
+handling are backported without the content-addressable storage migration.
 
 ## Execution contract
 
@@ -63,17 +63,20 @@ tokens, duplicate endpoint/credential pairs or invalid entries reject the whole
 pool. `{media_runners, []}` explicitly selects local mode, overriding a configured
 single hostname. Without a pool, an unset or empty hostname selects local mode.
 
-Optional limits, with their defaults:
+Optional limits (the wait timeout shown is an override; byte limits show defaults):
 
 ```erlang
-{media_runner_wait_timeout, 43500},             % seconds: 12 hours + 5 minutes
+{media_runner_wait_timeout, 43500},             % optional seconds: override operation budget
 {media_runner_max_input_bytes, 17179869184},    % per input: 16 GiB
 {media_runner_max_output_bytes, 17179869184},   % outputs: also capped by profile
 {media_runner_max_callback_bytes, 135266304}   % encoded JSON: may be reduced
 ```
 
 Profile timeouts and output limits are defined in `z_media_limits.hrl` and
-`z_exec:profile/1`. Transfers have separate one-hour timeouts. Existing local
+`z_exec:profile/1`. Without a wait-timeout override, the operation budget is the
+requested profile runtime plus five minutes. It includes hashing, capability
+lookup, queueing, submission and transfers. Transfers have a one-hour ceiling
+and are also bounded by the remaining operation budget. Existing local
 preview/video queue limits still apply. No CA dependency or native helper is
 added; the branch's existing Rebar 2 dependency lock is retained.
 
@@ -89,7 +92,11 @@ and uploads only inputs the runner reports missing. Upload reservations avoid
 concurrent duplicate transfers. Results stream into private temporary files;
 size and SHA-256 must match before publication. All outputs are verified before
 any destination is replaced; each rename is atomic, not a multi-file transaction.
-Successful receipt is acknowledged to the runner.
+Transient result-download failures retry the same result twice before remote
+failover, without resubmitting the render. Successful receipt is acknowledged
+asynchronously, with at most one second of the remaining budget. A failed or
+slow acknowledgement cannot invalidate installed output. Private download files
+are guarded for cleanup if their owning worker is killed.
 
 Successful control responses and file downloads are streamed with limits. OTP 22
 `httpc` buffers non-streamed HTTP error bodies before the client can size-check
@@ -104,8 +111,7 @@ HTTP 429 and `full` responses to submission or upload reservation retry the same
 request with randomized backoff for up to one minute, bounded by the remaining
 job deadline. Busy upload reservations use a short randomized wait before
 reserving again. Submission, reservation and submission-recovery HTTP timeouts
-are capped by the remaining deadline; file transfers retain their separate
-one-hour timeout. Persistent overload can still cause remote failover.
+are capped by the remaining deadline, as are upload and download requests. Persistent overload can still cause remote failover.
 
 ImageMagick capabilities are cached and probed concurrently with a bounded wait.
 The selected major version and executable determine command generation and
@@ -168,7 +174,7 @@ never the incoming request's Host header. The route requires HTTPS. Configure
 `mod_ssl` and the externally reachable site hostname/port accordingly, including
 when using a reverse proxy. The runner must reach this endpoint. In a cluster,
 callbacks must reach the submitting node: registrations are in memory and are
-lost on restart. Polling every 15 seconds recovers lost callbacks and detects
+lost on restart. Polling at most every 15 seconds (earlier for short budgets) recovers lost callbacks and detects
 unavailable runners while the submitting process remains alive.
 
 ## Logging

@@ -173,7 +173,7 @@
    %%     #{hostname => <<"media-b.example.com:8080">>, protocol => <<"http">>,
    %%       oauth2_key => <<"TOKEN-B">>}
    %% ]},
-   %% Pending job lifetime in seconds (12 hours plus 5 minutes).
+   %% Optional whole-operation budget in seconds; defaults to profile runtime + 5 minutes.
    %% {media_runner_wait_timeout, 43500},
    %% Input/output file limits in bytes; profile limits also apply.
    %% {media_runner_max_input_bytes, 17179869184},

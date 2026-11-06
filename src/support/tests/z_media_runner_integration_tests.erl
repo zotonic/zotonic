@@ -5,6 +5,9 @@
 
 integration_test_() ->
     {foreach, fun setup/0, fun cleanup/1, [
+        fun(S) -> {"download retry", fun() -> download_retry(S) end} end,
+        fun(S) -> {"transfer deadlines", {timeout, 10, fun() -> transfer_deadlines(S) end}} end,
+        fun(S) -> {"best effort receipt", fun() -> best_effort_receipt(S) end} end,
         fun(S) -> {"capacity bursts", {timeout, 30, fun() -> capacity_bursts(S) end}} end,
         fun(S) -> {"sustained capacity", {timeout, 30, fun() -> sustained_capacity(S) end}} end,
         fun(S) -> {"capacity deadlines", {timeout, 15, fun() -> capacity_deadlines(S) end}} end,
@@ -128,8 +131,34 @@ failures(#{table := T, output := Out} = S) ->
     ?assertEqual(#{}, sys:get_state(z_media_runner)).
 
 polling(#{table := T} = S) ->
+    application:set_env(zotonic, media_runner_wait_timeout, 2),
     ets:insert(T, {mode, polling}),
     ?assertEqual({ok, <<"done">>}, run(S)).
+
+download_retry(#{table := T} = S) ->
+    ets:insert(T, {mode, download_retry}),
+    ?assertEqual({ok, <<"done">>}, run(S)),
+    ?assertEqual(3, value(T, downloads)),
+    ?assertEqual(2, value(T, submits)),
+    ?assertEqual(1, value(T, uploads)).
+
+transfer_deadlines(#{table := T, output := Out} = S) ->
+    application:set_env(zotonic, media_runner_wait_timeout, 1),
+    lists:foreach(fun(Mode) ->
+        ets:insert(T, {mode, Mode}),
+        ok = file:write_file(Out, <<"original">>),
+        Start = erlang:monotonic_time(millisecond),
+        ?assertMatch({error, {media_runner_unavailable, _}}, run(S)),
+        ?assert(erlang:monotonic_time(millisecond) - Start < 1500),
+        ?assertEqual({ok, <<"original">>}, file:read_file(Out))
+    end, [stalled_upload, stalled_download]).
+
+best_effort_receipt(#{table := T, output := Out} = S) ->
+    ets:insert(T, {mode, {stall_operation, "received"}}),
+    Start = erlang:monotonic_time(millisecond),
+    ?assertEqual({ok, <<"done">>}, run(S)),
+    ?assert(erlang:monotonic_time(millisecond) - Start < 1000),
+    ?assertEqual({ok, <<"converted">>}, file:read_file(Out)).
 
 failover(#{table := T, input := In, output := Out, base := Base} = S) ->
     Runners = [#{url => Base, token => <<"one">>}, #{url => Base, token => <<"two">>}],
@@ -288,7 +317,7 @@ capacity_deadlines(#{table := T} = S) ->
     lists:foreach(fun(Operation) ->
         ets:insert(T, {mode, {stall_operation, Operation}}),
         Start = erlang:monotonic_time(millisecond),
-        ?assertEqual({error, {media_runner_unavailable, timeout}}, run(S)),
+        ?assertMatch({error, {media_runner_unavailable, _}}, run(S)),
         ?assert(erlang:monotonic_time(millisecond) - Start < 2500),
         ?assertEqual(#{}, sys:get_state(z_media_runner))
     end, ["submit", "reserve"]),
@@ -354,6 +383,15 @@ capacity_route(Mode, Method, "/api/model/mediarunner_job/post/" ++ Operation = P
 capacity_route({stall_operation, Operation}, _, "/api/model/mediarunner_job/post/" ++ Operation, _, Req, _) ->
     timer:sleep(3000),
     reply(503, <<>>, Req);
+capacity_route(stalled_upload, 'PUT', _, _, Req, _) ->
+    timer:sleep(2000), reply(503, <<>>, Req);
+capacity_route(stalled_download, 'GET', _, _, Req, _) ->
+    timer:sleep(2000), reply(503, <<>>, Req);
+capacity_route(download_retry, 'GET', Path, Body, Req, T) ->
+    case ets:update_counter(T, downloads, 1, {downloads, 0}) of
+        N when N < 3 -> reply(503, <<>>, Req);
+        _ -> route('GET', Path, Body, Req, T)
+    end;
 capacity_route(_, Method, Path, Body, Req, T) -> route(Method, Path, Body, Req, T).
 
 route('PUT', "/media-runner/jobs/files/" ++ Hash, Body, Req, T) ->
