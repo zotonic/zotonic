@@ -66,8 +66,13 @@ http_cold_preview_wait_test_() -> {timeout, 15, fun http_cold_preview_wait/0}.
 http_cold_preview_wait() ->
     C0 = z_context:new(zotonic_site_testsandbox),
     Path = <<"http-cold-preview-", (z_ids:id())/binary, ".jpg">>,
-    Req = #{method => <<"GET">>, path => <<"/image/", Path/binary>>, qs => <<>>,
-        scheme => <<"https">>, headers => #{}, peer => {{127,0,0,1}, 12345}},
+    %% Include all required cowboy_req:req() fields, even those unused by this controller.
+    Req = #{method => <<"GET">>, version => 'HTTP/1.1',
+        path => <<"/image/", Path/binary>>, qs => <<>>,
+        scheme => <<"https">>, host => <<"localhost">>, port => 443,
+        headers => #{}, peer => {{127,0,0,1}, 12345}, sock => {{127,0,0,1}, 443},
+        cert => undefined, ref => test_listener, pid => self(), streamid => 1,
+        has_body => false, body_length => 0},
     Env = #{cowmachine_remote => <<"127.0.0.1">>, cowmachine_proxy => false,
         cowmachine_forwarded_proto => <<"https">>},
     C = z_context:set([{q, []}, {path, Path}], C0#context{cowreq = Req, cowenv = Env}),
