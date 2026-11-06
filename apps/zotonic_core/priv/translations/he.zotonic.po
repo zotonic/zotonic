@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-06 08:37\n"
+"PO-Revision-Date: 2026-11-06 10:37\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -1123,30 +1123,30 @@ msgstr "צפייה"
 #: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:4
 msgid "<strong>{n}</strong> IP address has more than 250 open sockets."
 msgid_plural "<strong>{n}</strong> IP addresses have more than 250 open sockets."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "מספר כתובות ה-IP שלכל אחת מהן יותר מ-250 סוקטים פתוחים: <strong>{n}</strong>."
+msgstr[1] "מספר כתובות ה-IP שלכל אחת מהן יותר מ-250 סוקטים פתוחים: <strong>{n}</strong>."
+msgstr[2] "מספר כתובות ה-IP שלכל אחת מהן יותר מ-250 סוקטים פתוחים: <strong>{n}</strong>."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:2
 msgid "<strong>{n}</strong> page waiting to be indexed"
 msgid_plural "<strong>{n}</strong> pages waiting to be indexed"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "מספר הדפים הממתינים לאינדוקס: <strong>{n}</strong>"
+msgstr[1] "<strong>{n}</strong> דפים הממתינים לאינדוקס"
+msgstr[2] "<strong>{n}</strong> דפים הממתינים לאינדוקס"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:9
 msgid "{n} background task remaining"
 msgid_plural "{n} background tasks remaining"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "מספר משימות הרקע שנותרו: {n}"
+msgstr[1] "{n} משימות רקע שנותרו"
+msgstr[2] "{n} משימות רקע שנותרו"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:7
 msgid "{n} open socket"
 msgid_plural "{n} open sockets"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "מספר הסוקטים הפתוחים: {n}"
+msgstr[1] "{n} סוקטים פתוחים"
+msgstr[2] "{n} סוקטים פתוחים"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:219
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:221
