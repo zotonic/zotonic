@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-06 07:32\n"
+"PO-Revision-Date: 2026-11-06 08:38\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "MIME-Version: 1.0\n"
@@ -1084,6 +1084,26 @@ msgstr "다른 브라우저를 사용하십시오(예: 현재 Firefox를 사용 
 msgid "view (acl action)"
 msgstr "보기(ACL 작업)"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:4
+msgid "<strong>{n}</strong> IP address has more than 250 open sockets."
+msgid_plural "<strong>{n}</strong> IP addresses have more than 250 open sockets."
+msgstr[0] "<strong>{n}</strong> IP 주소마다 250개 이상의 열린 소켓이 있습니다."
+
+#: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:2
+msgid "<strong>{n}</strong> page waiting to be indexed"
+msgid_plural "<strong>{n}</strong> pages waiting to be indexed"
+msgstr[0] "<strong>{n}</strong> 색인될 대기 중인 페이지"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:9
+msgid "{n} background task remaining"
+msgid_plural "{n} background tasks remaining"
+msgstr[0] "{n} 남은 백그라운드 작업"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:7
+msgid "{n} open socket"
+msgid_plural "{n} open sockets"
+msgstr[0] "{n} 소켓 열기"
+
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:219
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:221
 msgid "&lt; Prev"
@@ -1478,7 +1498,7 @@ msgstr "업데이트할 페이지를 선택하십시오."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_check.tpl:5
 msgid "Checking…"
-msgstr ""
+msgstr "확인 중…"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:10
 msgid "Choose a media item from this page to insert in the body text."
@@ -1547,7 +1567,7 @@ msgstr "설정 디렉터리"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:2
 msgid "Configuration files"
-msgstr ""
+msgstr "구성 파일"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:24
 msgid "Configured"
@@ -1647,7 +1667,7 @@ msgstr "웹사이트에 연결할 수 없습니다."
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:27
 msgid "Could not contact the media runner."
-msgstr ""
+msgstr "미디어 실행기에 연결할 수 없습니다."
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:11
 msgid "Could not detect anything to import on that URL or embed code."
@@ -1655,11 +1675,11 @@ msgstr "해당 URL이나 임베드 코드에서 가져올 항목을 찾을 수 �
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:68
 msgid "Could not queue generated preview cleanup. Check the logs."
-msgstr ""
+msgstr "생성된 미리보기 정리 작업을 대기열에 추가할 수 없습니다. 로그를 확인하십시오."
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:58
 msgid "Could not queue media deduplication. Check the logs."
-msgstr ""
+msgstr "미디어 중복 제거를 대기열에 추가할 수 없습니다. 로그를 확인하십시오."
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:119
 msgid "Could not reload the site configuration, check the logs."
@@ -1732,7 +1752,7 @@ msgstr "데이터 디렉터리"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:61
 msgid "Datamodel upgrades and reinstalls preserve your existing data. No content or uploaded files will be deleted."
-msgstr ""
+msgstr "데이터 모델 업그레이드 및 재설치 시 기존 데이터는 그대로 유지됩니다. 콘텐츠나 업로드된 파일은 삭제되지 않습니다."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:6
 msgid "Date range"
@@ -1749,7 +1769,7 @@ msgstr "시작/종료 날짜"
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:23
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:25
 msgid "Deduplicate media files"
-msgstr ""
+msgstr "미디어 파일 중복 제거"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:20
 msgid "Define the query using the query arguments or JSON."
@@ -1757,16 +1777,16 @@ msgstr "쿼리 인자 또는 JSON을 사용하여 쿼리를 정의하십시오."
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:31
 msgid "Delete all generated image sizes? Preview originals are kept. Image requests may be slower while previews regenerate."
-msgstr ""
+msgstr "생성된 모든 이미지 크기를 삭제하시겠습니까? 원본 미리보기는 유지됩니다. 미리보기가 다시 생성되는 동안 이미지 요청 속도가 느려질 수 있습니다."
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:28
 msgid "Delete all resized image variants, including variants in remote storage. Uploaded originals and preview images extracted from movies, PDFs and embeds are kept. Previews regenerate when requested. Remote deletion follows the filestore retention policy."
-msgstr ""
+msgstr "크기가 조정된 모든 이미지 변형본(원격 저장소의 변형본 포함)을 삭제합니다. 업로드된 원본 파일과 동영상, PDF, 임베드 콘텐츠에서 추출된 미리보기 이미지는 유지됩니다. 미리보기는 요청 시 다시 생성됩니다. 원격 삭제는 파일 저장소 보존 정책에 따라 수행됩니다."
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:30
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:31
 msgid "Delete generated previews"
-msgstr ""
+msgstr "생성된 미리보기 삭제"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:23
 msgid "Delete if no other page is connected to this page."
@@ -1946,7 +1966,7 @@ msgstr "메모 편집"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config.tpl:7
 msgid "Edit this configuration file"
-msgstr ""
+msgstr "이 설정 파일 편집"
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:122
 msgid "Edit:"
@@ -2210,11 +2230,11 @@ msgstr "함수"
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:64
 msgid "Generated preview cleanup has been queued. Preview originals are kept."
-msgstr ""
+msgstr "생성된 미리보기 정리 작업이 대기열에 추가되었습니다. 미리보기 원본 파일은 그대로 유지됩니다."
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:28
 msgid "Generated previews"
-msgstr ""
+msgstr "생성된 미리보기"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:78
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:41
@@ -2245,7 +2265,7 @@ msgstr "헤더 | 큰 헤더"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:11
 msgid "Health checks"
-msgstr ""
+msgstr "시스템 상태 검사"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:6
 msgid "Health, background work and services for"
@@ -2279,10 +2299,6 @@ msgstr "호스트"
 msgid "IP Address"
 msgstr "IP 주소"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:4
-msgid "IP addresses have more than 250 open sockets."
-msgstr "개의 IP 주소에 열린 소켓이 250개를 초과합니다."
-
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:269
 msgid "Id, newest first"
 msgstr "ID, 최신순"
@@ -2293,7 +2309,7 @@ msgstr "ID, 가장 오래된 순서"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:6
 msgid "Idle"
-msgstr ""
+msgstr "유휴"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:11
 msgid "If a page has a publication date range then it will only be visible between the two dates. Note that if you are allowed to edit the page then you can always see it."
@@ -2309,11 +2325,11 @@ msgstr "이 옵션을 선택하지 않으면 방문자는 항상 이 페이지�
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:21
 msgid "ImageMagick (local)"
-msgstr ""
+msgstr "ImageMagick (로컬)"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:24
 msgid "ImageMagick (media runner)"
-msgstr ""
+msgstr "ImageMagick (미디어 실행기)"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:141
 #: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:17
@@ -2423,7 +2439,7 @@ msgstr "실시간 보기"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:42
 msgid "Local"
-msgstr ""
+msgstr "로컬"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:43
 msgid "Local ImageMagick"
@@ -2537,11 +2553,11 @@ msgstr "미디어 콘텐츠"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:5
 msgid "Media deduplication"
-msgstr ""
+msgstr "미디어 중복 제거"
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:54
 msgid "Media deduplication has been queued."
-msgstr ""
+msgstr "미디어 중복 제거 작업이 대기열에 추가되었습니다."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:112
 msgid "Media details"
@@ -2568,11 +2584,11 @@ msgstr "미디어 유지보수"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:18
 msgid "Media maintenance runs in the background. Waiting tasks resume automatically. Remote deletion follows the filestore retention policy."
-msgstr ""
+msgstr "미디어 유지 관리는 백그라운드에서 실행됩니다. 대기 중인 작업은 자동으로 재개됩니다. 원격 삭제는 파일 스토어 보존 정책에 따라 수행됩니다."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:15
 msgid "Media maintenance status is unavailable."
-msgstr ""
+msgstr "미디어 유지 관리 상태를 확인할 수 없습니다."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:4
 msgid "Media on this page"
@@ -2682,7 +2698,7 @@ msgstr "블록을 위로 이동"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:23
 msgid "Move originals and extracted preview images into content-addressable storage. Redundant local and remote copies are cleaned up in the background. Remote files without a checksum are skipped; no files are downloaded to calculate checksums."
-msgstr ""
+msgstr "원본 파일과 추출된 미리보기 이미지를 콘텐츠 주소 지정형 스토리지로 이동합니다. 로컬 및 원격에 중복으로 존재하는 사본은 백그라운드에서 정리됩니다. 체크섬이 없는 원격 파일은 건너뛰며, 체크섬을 계산하기 위해 파일을 다운로드하지 않습니다."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:205
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:206
@@ -2743,7 +2759,7 @@ msgstr "열린 소켓이 250개를 초과하는 IP 주소가 없습니다."
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:10
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:20
 msgid "No configuration files found."
-msgstr ""
+msgstr "구성 파일을 찾을 수 없습니다."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_depictions.tpl:21
 msgid "No connected images."
@@ -2789,7 +2805,7 @@ msgstr "선택된 페이지가 없습니다"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:5
 msgid "No problems found."
-msgstr ""
+msgstr "문제가 발견되지 않았습니다."
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:49
 msgid "No results."
@@ -2839,7 +2855,7 @@ msgstr "노드 연결을 종료할 수 있는 사람은 시스템 관리자뿐�
 
 #: zotonic_mod_admin/priv/templates/_admin_system_info_directory.tpl:3
 msgid "Open"
-msgstr ""
+msgstr "열기"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:63
 msgid "Open Modules list"
@@ -2988,7 +3004,7 @@ msgstr "미리보기"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:9
 msgid "Preview cleanup"
-msgstr ""
+msgstr "미리보기 정리"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:30
 msgid "Previous in category:"
@@ -3088,7 +3104,7 @@ msgstr "모든 페이지를 검색 색인화 대기열에 추가합니다. 규�
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:4
 msgid "Queued / waiting"
-msgstr ""
+msgstr "대기열에 추가됨 / 대기 중"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:14
 msgid "Ranch limit"
@@ -3166,11 +3182,11 @@ msgstr "비고"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:40
 msgid "Remote runners only"
-msgstr ""
+msgstr "원격 실행기만 사용"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:40
 msgid "Remote runners with local fallback"
-msgstr ""
+msgstr "로컬 대체 실행을 지원하는 원격 실행기"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:70
 msgid "Remote sandbox isolation and queue details are available on each runner’s dashboard."
@@ -3237,7 +3253,7 @@ msgstr "이 사이트의 데이터베이스에 대해 Zotonic 핵심 데이터 �
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:75
 msgid "Run the Zotonic core datamodel installation again for this site's database? Your existing data will be preserved."
-msgstr ""
+msgstr "이 사이트의 데이터베이스에 대해 Zotonic 핵심 데이터 모델 설치를 다시 실행하시겠습니까? 기존 데이터는 그대로 유지됩니다."
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:65
 msgid "Run the site's schema installation again. The site will stop and restart."
@@ -3310,7 +3326,7 @@ msgstr "이 페이지를 저장합니다."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:11
 msgid "Save to see your changes"
-msgstr ""
+msgstr "저장하여 변경 사항 확인"
 
 #: zotonic_mod_admin/src/mod_admin.erl:999
 msgid "Scheduled a background task to check all refers connections."
@@ -3481,7 +3497,7 @@ msgstr "사이트 캐시"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:14
 msgid "Site config files"
-msgstr ""
+msgstr "사이트 구성 파일"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:65
 msgid "Site datamodel"
@@ -3709,7 +3725,7 @@ msgstr "시스템 정보"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:3
 msgid "System resources and configuration"
-msgstr ""
+msgstr "시스템 리소스 및 구성"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:2
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:5
@@ -3946,7 +3962,7 @@ msgstr "이 리소스를 생성한 모듈:"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:68
 msgid "This runs the site's schema installation again and stops and restarts the site. Your existing data will be preserved. Continue?"
-msgstr ""
+msgstr "이 작업을 수행하면 사이트의 스키마 설치가 다시 실행되고, 사이트가 중지된 후 다시 시작됩니다. 기존 데이터는 그대로 유지됩니다. 계속하시겠습니까?"
 
 #: zotonic_mod_admin/priv/templates/_admin_maintenance_panel.tpl:3
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:25
@@ -4237,7 +4253,7 @@ msgstr "상태 보기"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_info_directory.tpl:3
 msgid "View this directory in the file manager on the Zotonic server's desktop"
-msgstr ""
+msgstr "Zotonic 서버 데스크탑의 파일 관리자에서 이 디렉터리 보기"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:29
 msgid "Visible from"
@@ -4365,7 +4381,7 @@ msgstr "Zotonic 데이터 모델"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:4
 msgid "Zotonic init files"
-msgstr ""
+msgstr "Zotonic 초기화 파일"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:30
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:27
@@ -4471,10 +4487,6 @@ msgstr "수정한 사용자"
 msgid "name"
 msgstr "이름"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:7
-msgid "open sockets"
-msgstr "개의 열린 소켓"
-
 #: zotonic_mod_admin/priv/templates/_admin_view_types.tpl:3
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:104
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:55
@@ -4486,10 +4498,6 @@ msgstr "페이지"
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:24
 msgid "page block"
 msgstr "페이지 블록"
-
-#: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:2
-msgid "pages waiting to be indexed"
-msgstr "색인될 대기 중인 페이지"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:28
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:10
@@ -4538,10 +4546,6 @@ msgstr "보기"
 #: zotonic_mod_admin/priv/templates/_admin_navbar_brand.tpl:1
 msgid "visit site"
 msgstr "사이트 방문하기"
-
-#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:9
-msgid "{count} background tasks remaining"
-msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:25
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:201
@@ -7755,11 +7759,11 @@ msgstr "데이터베이스를 매일 백업하십시오."
 
 #: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:17
 msgid "Media file availability could not be confirmed. You can continue restoring the page, but its media or saved preview image might not be recovered."
-msgstr ""
+msgstr "미디어 파일의 유무를 확인할 수 없습니다. 페이지 복원을 계속할 수는 있지만, 해당 페이지의 미디어 또는 저장된 미리보기 이미지는 복구되지 않을 수 있습니다."
 
 #: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:22
 msgid "Media files are registered in the remote file store. Their availability has not been checked with the storage server."
-msgstr ""
+msgstr "미디어 파일이 원격 파일 저장소에 등록되었습니다. 스토리지 서버를 통해 해당 파일의 가용성 여부는 확인되지 않았습니다."
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:65
 msgid "Media files can only be recovered if they are not yet deleted from the file storage. Zotonic will keep media for at least 5 weeks."
@@ -7834,7 +7838,7 @@ msgstr "이 페이지 복원..."
 
 #: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:11
 msgid "Restoring this version can replace the media currently attached to the page."
-msgstr ""
+msgstr "이 버전을 복원하면 현재 해당 페이지에 연결된 미디어가 대체될 수 있습니다."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:36
 msgid "Revert page to earlier version"
@@ -7898,7 +7902,7 @@ msgstr "관리자 페이지의 편집 화면에 가져오기/내보내기 패널
 
 #: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:3
 msgid "Some media files cannot be recovered."
-msgstr ""
+msgstr "일부 미디어 파일은 복구할 수 없습니다."
 
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:143
 msgid "Sorry, a global Zotonic configuration is set and cannot be changed."
@@ -7977,11 +7981,11 @@ msgstr "원래 카테고리 또는 콘텐츠 그룹이 더 이상 존재하지 �
 
 #: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:5
 msgid "The original file for this version is no longer available. The page can be restored, but its media may be empty."
-msgstr ""
+msgstr "이 버전의 원본 파일은 더 이상 사용할 수 없습니다. 이 페이지는 복원할 수 있지만, 해당 페이지의 미디어는 비어 있을 수 있습니다."
 
 #: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:8
 msgid "The saved preview image for this version is no longer available."
-msgstr ""
+msgstr "이 버전에 대해 저장된 미리보기 이미지는 더 이상 확인할 수 없습니다."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:5
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:19
@@ -8644,11 +8648,11 @@ msgstr "시스템 관리자에게 문의하십시오."
 
 #: zotonic_mod_clamav/priv/templates/_admin_status_alert.tpl:3
 msgid "Virus scanner"
-msgstr ""
+msgstr "바이러스 검사기"
 
 #: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:9
 msgid "Virus scanner available."
-msgstr ""
+msgstr "바이러스 검사기를 사용할 수 있습니다."
 
 #: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:4
 msgid "Virus scanner unavailable"
@@ -9168,7 +9172,7 @@ msgstr "템플릿을 불러올 수 없습니다."
 
 #: zotonic_mod_development/src/mod_development.erl:498
 msgid "Could not open the directory on this computer."
-msgstr ""
+msgstr "이 컴퓨터에서 해당 디렉터리를 열 수 없습니다."
 
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:9
 msgid "Could not open the editor. Check the editor and path mapping."
@@ -10824,7 +10828,7 @@ msgstr "클라우드 파일"
 
 #: zotonic_mod_filestore/priv/templates/_admin_status_alert.tpl:3
 msgid "Cloud file store"
-msgstr ""
+msgstr "클라우드 파일 저장소"
 
 #: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:15
 msgid "Cloud file store configuration"
@@ -11002,7 +11006,7 @@ msgstr "하지 않음"
 
 #: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:18
 msgid "No cloud file store read errors detected."
-msgstr ""
+msgstr "클라우드 파일 저장소에서 읽기 오류가 감지되지 않았습니다."
 
 #: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:47
 msgid "No errors on this page."
@@ -15850,7 +15854,7 @@ msgstr "배포에 실패했습니다. 자세한 내용은 서버 로그를 확�
 
 #: zotonic_mod_site_update/priv/templates/_site_deploy_status_value.tpl:5
 msgid "Deployment running on this node"
-msgstr ""
+msgstr "이 노드에서 실행 중인 배포"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:5
 msgid "Deployment updates the entire Git repository, including any other modules it contains."
