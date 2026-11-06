@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-06 07:30\n"
+"PO-Revision-Date: 2026-11-06 08:37\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -1120,6 +1120,34 @@ msgstr "השתמש בדפדפן אחר (למשל, Chrome אם אתה משתמש 
 msgid "view (acl action)"
 msgstr "צפייה"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:4
+msgid "<strong>{n}</strong> IP address has more than 250 open sockets."
+msgid_plural "<strong>{n}</strong> IP addresses have more than 250 open sockets."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:2
+msgid "<strong>{n}</strong> page waiting to be indexed"
+msgid_plural "<strong>{n}</strong> pages waiting to be indexed"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:9
+msgid "{n} background task remaining"
+msgid_plural "{n} background tasks remaining"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:7
+msgid "{n} open socket"
+msgid_plural "{n} open sockets"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:219
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:221
 msgid "&lt; Prev"
@@ -1514,7 +1542,7 @@ msgstr "סמן את הדפים שברצונך לעדכן."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_check.tpl:5
 msgid "Checking…"
-msgstr ""
+msgstr "הבדיקה מתבצעת…"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:10
 msgid "Choose a media item from this page to insert in the body text."
@@ -1583,7 +1611,7 @@ msgstr "ספריית התצורה"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:2
 msgid "Configuration files"
-msgstr ""
+msgstr "קובצי תצורה"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:24
 msgid "Configured"
@@ -1683,7 +1711,7 @@ msgstr "לא ניתן היה להתחבר לאתר."
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:27
 msgid "Could not contact the media runner."
-msgstr ""
+msgstr "לא ניתן להתחבר למנוע עיבוד המדיה."
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:11
 msgid "Could not detect anything to import on that URL or embed code."
@@ -1691,11 +1719,11 @@ msgstr "לא נמצא תוכן שניתן לייבא בכתובת ה-URL או ב
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:68
 msgid "Could not queue generated preview cleanup. Check the logs."
-msgstr ""
+msgstr "לא ניתן היה להוסיף לתור את ניקוי התצוגה המקדימה שנוצרה. בדוק את היומנים."
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:58
 msgid "Could not queue media deduplication. Check the logs."
-msgstr ""
+msgstr "לא ניתן היה להוסיף את תהליך ביטול הכפילויות במדיה לתור. בדוק את היומנים."
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:119
 msgid "Could not reload the site configuration, check the logs."
@@ -1768,7 +1796,7 @@ msgstr "ספריית הנתונים"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:61
 msgid "Datamodel upgrades and reinstalls preserve your existing data. No content or uploaded files will be deleted."
-msgstr ""
+msgstr "שדרוגים והתקנות מחדש של מודל הנתונים שומרים על הנתונים הקיימים. לא יימחקו תוכן או קבצים שהועלו."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:6
 msgid "Date range"
@@ -1785,7 +1813,7 @@ msgstr "תאריך התחלה/סיום"
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:23
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:25
 msgid "Deduplicate media files"
-msgstr ""
+msgstr "הסרת כפילויות בקבצי מדיה"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:20
 msgid "Define the query using the query arguments or JSON."
@@ -1793,16 +1821,16 @@ msgstr "הגדר את השאילתה באמצעות ארגומנטים של שא
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:31
 msgid "Delete all generated image sizes? Preview originals are kept. Image requests may be slower while previews regenerate."
-msgstr ""
+msgstr "האם למחוק את כל גדלי התמונות שנוצרו? תמונות המקור של התצוגה המקדימה נשמרות. ייתכן שבקשות לתמונות יהיו איטיות יותר בזמן יצירת התצוגה המקדימה מחדש."
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:28
 msgid "Delete all resized image variants, including variants in remote storage. Uploaded originals and preview images extracted from movies, PDFs and embeds are kept. Previews regenerate when requested. Remote deletion follows the filestore retention policy."
-msgstr ""
+msgstr "מחק את כל הגרסאות של התמונות שעברו שינוי גודל, כולל הגרסאות הנמצאות באחסון מרוחק. קבצי המקור שהועלו ותמונות התצוגה המקדימה שהופקו מסרטים, קבצי PDF ותכנים משובצים נשמרים. תמונות התצוגה המקדימה נוצרות מחדש לפי דרישה. המחיקה המרוחקת מתבצעת בהתאם למדיניות שמירת הקבצים."
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:30
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:31
 msgid "Delete generated previews"
-msgstr ""
+msgstr "מחיקת תצוגות מקדימות שנוצרו"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:23
 msgid "Delete if no other page is connected to this page."
@@ -1982,7 +2010,7 @@ msgstr "ערוך הערה"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config.tpl:7
 msgid "Edit this configuration file"
-msgstr ""
+msgstr "ערוך את קובץ התצורה הזה"
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:122
 msgid "Edit:"
@@ -2246,11 +2274,11 @@ msgstr "פוּנקצִיָה"
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:64
 msgid "Generated preview cleanup has been queued. Preview originals are kept."
-msgstr ""
+msgstr "ניקוי התצוגה המקדימה שנוצרה הוכנס לתור. קבצי המקור של התצוגה המקדימה נשמרים."
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:28
 msgid "Generated previews"
-msgstr ""
+msgstr "תצוגות מקדימות שנוצרו"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:78
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:41
@@ -2281,7 +2309,7 @@ msgstr "כותרת | כותרת גדולה"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:11
 msgid "Health checks"
-msgstr ""
+msgstr "בדיקות תקינות המערכת"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:6
 msgid "Health, background work and services for"
@@ -2315,10 +2343,6 @@ msgstr "מארח"
 msgid "IP Address"
 msgstr "כתובת ה - IP"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:4
-msgid "IP addresses have more than 250 open sockets."
-msgstr "כתובות IP עם יותר מ-250 סוקטים פתוחים."
-
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:269
 msgid "Id, newest first"
 msgstr "מזהה, מהחדש לישן"
@@ -2329,7 +2353,7 @@ msgstr "מזהה, מהישן לחדש"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:6
 msgid "Idle"
-msgstr ""
+msgstr "לא פעיל"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:11
 msgid "If a page has a publication date range then it will only be visible between the two dates. Note that if you are allowed to edit the page then you can always see it."
@@ -2345,11 +2369,11 @@ msgstr "אם לא מסומן, מבקר תמיד מופנה לכתובת האתר
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:21
 msgid "ImageMagick (local)"
-msgstr ""
+msgstr "ImageMagick (מקומי)"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:24
 msgid "ImageMagick (media runner)"
-msgstr ""
+msgstr "ImageMagick (מנוע עיבוד מדיה)"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:141
 #: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:17
@@ -2459,7 +2483,7 @@ msgstr "תצוגה חיה"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:42
 msgid "Local"
-msgstr ""
+msgstr "מקומי"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:43
 msgid "Local ImageMagick"
@@ -2573,11 +2597,11 @@ msgstr "תוכן מדיה"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:5
 msgid "Media deduplication"
-msgstr ""
+msgstr "ביטול כפילויות במדיה"
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:54
 msgid "Media deduplication has been queued."
-msgstr ""
+msgstr "הסרת כפילויות במדיה נוספה לתור."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:112
 msgid "Media details"
@@ -2604,11 +2628,11 @@ msgstr "תחזוקת מדיה"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:18
 msgid "Media maintenance runs in the background. Waiting tasks resume automatically. Remote deletion follows the filestore retention policy."
-msgstr ""
+msgstr "תחזוקת המדיה מתבצעת ברקע. משימות בהמתנה מתחדשות באופן אוטומטי. המחיקה מרחוק מתבצעת בהתאם למדיניות השמירה של מאגר הקבצים."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:15
 msgid "Media maintenance status is unavailable."
-msgstr ""
+msgstr "סטטוס תחזוקת המדיה אינו זמין."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:4
 msgid "Media on this page"
@@ -2718,7 +2742,7 @@ msgstr "הזיז את הבלוק למעלה"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:23
 msgid "Move originals and extracted preview images into content-addressable storage. Redundant local and remote copies are cleaned up in the background. Remote files without a checksum are skipped; no files are downloaded to calculate checksums."
-msgstr ""
+msgstr "העבר את קובצי המקור ואת תמונות התצוגה המקדימה שחולצו לאחסון מבוסס כתובת תוכן. עותקים מיותרים מקומיים ומרוחקים מנוקים ברקע. המערכת מדלגת על קבצים מרוחקים ללא סכום ביקורת; לא יורדו קבצים לצורך חישוב סכומי ביקורת."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:205
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:206
@@ -2779,7 +2803,7 @@ msgstr "אין כתובות IP עם יותר מ-250 סוקטים פתוחים."
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:10
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:20
 msgid "No configuration files found."
-msgstr ""
+msgstr "לא נמצאו קבצי תצורה."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_depictions.tpl:21
 msgid "No connected images."
@@ -2825,7 +2849,7 @@ msgstr "לא נבחרו דפים"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:5
 msgid "No problems found."
-msgstr ""
+msgstr "לא נמצאו בעיות."
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:49
 msgid "No results."
@@ -2875,7 +2899,7 @@ msgstr "רק מנהלי מערכת יכולים לסגור חיבורי צמתי
 
 #: zotonic_mod_admin/priv/templates/_admin_system_info_directory.tpl:3
 msgid "Open"
-msgstr ""
+msgstr "פתח"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:63
 msgid "Open Modules list"
@@ -3024,7 +3048,7 @@ msgstr "תצוגה מקדימה"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:9
 msgid "Preview cleanup"
-msgstr ""
+msgstr "ניקוי תצוגה מקדימה"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:30
 msgid "Previous in category:"
@@ -3124,7 +3148,7 @@ msgstr "הוסף כל דף לתור האינדוקס של החיפוש. באתר
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:4
 msgid "Queued / waiting"
-msgstr ""
+msgstr "בתור / בהמתנה"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:14
 msgid "Ranch limit"
@@ -3202,11 +3226,11 @@ msgstr "הערות"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:40
 msgid "Remote runners only"
-msgstr ""
+msgstr "מנועי עיבוד מרוחקים בלבד"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:40
 msgid "Remote runners with local fallback"
-msgstr ""
+msgstr "מנועי עיבוד מרוחקים עם עיבוד מקומי כחלופה"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:70
 msgid "Remote sandbox isolation and queue details are available on each runner’s dashboard."
@@ -3273,7 +3297,7 @@ msgstr "הפעל שוב את ההתקנה של מודל הנתונים המרכ�
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:75
 msgid "Run the Zotonic core datamodel installation again for this site's database? Your existing data will be preserved."
-msgstr ""
+msgstr "האם ברצונך להריץ שוב את ההתקנה של מודל הנתונים הבסיסי של Zotonic עבור מסד הנתונים של אתר זה? הנתונים הקיימים שלך יישמרו."
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:65
 msgid "Run the site's schema installation again. The site will stop and restart."
@@ -3346,7 +3370,7 @@ msgstr "שמור דף זה."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:11
 msgid "Save to see your changes"
-msgstr ""
+msgstr "שמור כדי לראות את השינויים שלך"
 
 #: zotonic_mod_admin/src/mod_admin.erl:999
 msgid "Scheduled a background task to check all refers connections."
@@ -3517,7 +3541,7 @@ msgstr "מטמון האתר"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:14
 msgid "Site config files"
-msgstr ""
+msgstr "קובצי תצורת האתר"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:65
 msgid "Site datamodel"
@@ -3745,7 +3769,7 @@ msgstr "מידע על המערכת"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:3
 msgid "System resources and configuration"
-msgstr ""
+msgstr "משאבי מערכת ותצורה"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:2
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:5
@@ -3982,7 +4006,7 @@ msgstr "משאב זה נוצר על ידי המודול"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:68
 msgid "This runs the site's schema installation again and stops and restarts the site. Your existing data will be preserved. Continue?"
-msgstr ""
+msgstr "פעולה זו תריץ שוב את התקנת הסכמה של האתר, ותעצור ותפעיל מחדש את האתר. הנתונים הקיימים שלך יישמרו. להמשיך?"
 
 #: zotonic_mod_admin/priv/templates/_admin_maintenance_panel.tpl:3
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:25
@@ -4273,7 +4297,7 @@ msgstr "צפה בסטטוס"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_info_directory.tpl:3
 msgid "View this directory in the file manager on the Zotonic server's desktop"
-msgstr ""
+msgstr "הצג ספרייה זו במנהל הקבצים בשולחן העבודה של שרת Zotonic"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:29
 msgid "Visible from"
@@ -4401,7 +4425,7 @@ msgstr "מודל הנתונים של Zotonic"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:4
 msgid "Zotonic init files"
-msgstr ""
+msgstr "קובצי ההפעלה של Zotonic"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:30
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:27
@@ -4507,10 +4531,6 @@ msgstr "שונה על ידי"
 msgid "name"
 msgstr "שֵׁם"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:7
-msgid "open sockets"
-msgstr "סוקטים פתוחים"
-
 #: zotonic_mod_admin/priv/templates/_admin_view_types.tpl:3
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:104
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:55
@@ -4522,10 +4542,6 @@ msgstr "עמוד"
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:24
 msgid "page block"
 msgstr "בלוק עמוד"
-
-#: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:2
-msgid "pages waiting to be indexed"
-msgstr "דפים הממתינים לאינדוקס"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:28
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:10
@@ -4574,10 +4590,6 @@ msgstr "צפייה"
 #: zotonic_mod_admin/priv/templates/_admin_navbar_brand.tpl:1
 msgid "visit site"
 msgstr "בקר באתר"
-
-#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:9
-msgid "{count} background tasks remaining"
-msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:25
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:201
@@ -7792,11 +7804,11 @@ msgstr "בצע גיבוי יומי של מסד הנתונים."
 
 #: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:17
 msgid "Media file availability could not be confirmed. You can continue restoring the page, but its media or saved preview image might not be recovered."
-msgstr ""
+msgstr "לא ניתן היה לאמת את זמינות קובץ המדיה. באפשרותך להמשיך בשחזור הדף, אך ייתכן שתוכן המדיה או תמונת התצוגה המקדימה השמורה לא ישוחזרו."
 
 #: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:22
 msgid "Media files are registered in the remote file store. Their availability has not been checked with the storage server."
-msgstr ""
+msgstr "קובצי המדיה נרשמו במאגר הקבצים המרוחק. זמינותם לא נבדקה מול שרת האחסון."
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:65
 msgid "Media files can only be recovered if they are not yet deleted from the file storage. Zotonic will keep media for at least 5 weeks."
@@ -7871,7 +7883,7 @@ msgstr "שחזר דף זה..."
 
 #: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:11
 msgid "Restoring this version can replace the media currently attached to the page."
-msgstr ""
+msgstr "שחזור גרסה זו עלול להחליף את המדיה המצורפת כרגע לדף."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:36
 msgid "Revert page to earlier version"
@@ -7935,7 +7947,7 @@ msgstr "הצג את חלונית הייבוא/ייצוא בדפי העריכה �
 
 #: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:3
 msgid "Some media files cannot be recovered."
-msgstr ""
+msgstr "לא ניתן לשחזר חלק מקבצי המדיה."
 
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:143
 msgid "Sorry, a global Zotonic configuration is set and cannot be changed."
@@ -8014,11 +8026,11 @@ msgstr "הקטגוריה או קבוצת התוכן המקורית כבר אינ
 
 #: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:5
 msgid "The original file for this version is no longer available. The page can be restored, but its media may be empty."
-msgstr ""
+msgstr "הקובץ המקורי של גרסה זו כבר אינו זמין. ניתן לשחזר את העמוד, אך ייתכן שתכני המדיה שלו יהיו ריקים."
 
 #: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:8
 msgid "The saved preview image for this version is no longer available."
-msgstr ""
+msgstr "תמונת התצוגה המקדימה שנשמרה עבור גרסה זו כבר אינה זמינה."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:5
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:19
@@ -8681,11 +8693,11 @@ msgstr "אנא פנה למנהל המערכת שלך."
 
 #: zotonic_mod_clamav/priv/templates/_admin_status_alert.tpl:3
 msgid "Virus scanner"
-msgstr ""
+msgstr "סורק וירוסים"
 
 #: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:9
 msgid "Virus scanner available."
-msgstr ""
+msgstr "קיים סורק וירוסים."
 
 #: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:4
 msgid "Virus scanner unavailable"
@@ -9205,7 +9217,7 @@ msgstr "לא ניתן לטעון את התבניות"
 
 #: zotonic_mod_development/src/mod_development.erl:498
 msgid "Could not open the directory on this computer."
-msgstr ""
+msgstr "לא ניתן לפתוח את התיקייה במחשב זה."
 
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:9
 msgid "Could not open the editor. Check the editor and path mapping."
@@ -10861,7 +10873,7 @@ msgstr "קבצי ענן"
 
 #: zotonic_mod_filestore/priv/templates/_admin_status_alert.tpl:3
 msgid "Cloud file store"
-msgstr ""
+msgstr "אחסון קבצים בענן"
 
 #: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:15
 msgid "Cloud file store configuration"
@@ -11039,7 +11051,7 @@ msgstr "לעולם לא"
 
 #: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:18
 msgid "No cloud file store read errors detected."
-msgstr ""
+msgstr "לא אותרו שגיאות קריאה במאגר הקבצים בענן."
 
 #: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:47
 msgid "No errors on this page."
@@ -15895,7 +15907,7 @@ msgstr "הפריסה נכשלה. בדוק את יומן השרת לקבלת פר
 
 #: zotonic_mod_site_update/priv/templates/_site_deploy_status_value.tpl:5
 msgid "Deployment running on this node"
-msgstr ""
+msgstr "פריסה הפועלת על צומת זה"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:5
 msgid "Deployment updates the entire Git repository, including any other modules it contains."
