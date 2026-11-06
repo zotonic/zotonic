@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-06 07:31\n"
+"PO-Revision-Date: 2026-11-06 08:37\n"
 "Last-Translator: \n"
 "Language-Team: English\n"
 "MIME-Version: 1.0\n"
@@ -1102,6 +1102,30 @@ msgstr "use another browser (eg. Chrome if you are now using Firefox)"
 msgid "view (acl action)"
 msgstr "view"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:4
+msgid "<strong>{n}</strong> IP address has more than 250 open sockets."
+msgid_plural "<strong>{n}</strong> IP addresses have more than 250 open sockets."
+msgstr[0] ""
+msgstr[1] ""
+
+#: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:2
+msgid "<strong>{n}</strong> page waiting to be indexed"
+msgid_plural "<strong>{n}</strong> pages waiting to be indexed"
+msgstr[0] ""
+msgstr[1] ""
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:9
+msgid "{n} background task remaining"
+msgid_plural "{n} background tasks remaining"
+msgstr[0] ""
+msgstr[1] ""
+
+#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:7
+msgid "{n} open socket"
+msgid_plural "{n} open sockets"
+msgstr[0] ""
+msgstr[1] ""
+
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:219
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:221
 msgid "&lt; Prev"
@@ -1496,7 +1520,7 @@ msgstr "Check the pages you want to update."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_check.tpl:5
 msgid "Checking…"
-msgstr ""
+msgstr "Checking…"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:10
 msgid "Choose a media item from this page to insert in the body text."
@@ -1565,7 +1589,7 @@ msgstr "Config directory"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:2
 msgid "Configuration files"
-msgstr ""
+msgstr "Configuration files"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:24
 msgid "Configured"
@@ -1665,7 +1689,7 @@ msgstr "Could not connect to the website."
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:27
 msgid "Could not contact the media runner."
-msgstr ""
+msgstr "Could not contact the media runner."
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:11
 msgid "Could not detect anything to import on that URL or embed code."
@@ -1673,11 +1697,11 @@ msgstr "Could not detect anything to import on that URL or embed code."
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:68
 msgid "Could not queue generated preview cleanup. Check the logs."
-msgstr ""
+msgstr "Could not queue generated preview cleanup. Check the logs."
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:58
 msgid "Could not queue media deduplication. Check the logs."
-msgstr ""
+msgstr "Could not queue media deduplication. Check the logs."
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:119
 msgid "Could not reload the site configuration, check the logs."
@@ -1750,7 +1774,7 @@ msgstr "Data directory"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:61
 msgid "Datamodel upgrades and reinstalls preserve your existing data. No content or uploaded files will be deleted."
-msgstr ""
+msgstr "Datamodel upgrades and reinstalls preserve your existing data. No content or uploaded files will be deleted."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:6
 msgid "Date range"
@@ -1767,7 +1791,7 @@ msgstr "Date start/end"
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:23
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:25
 msgid "Deduplicate media files"
-msgstr ""
+msgstr "Deduplicate media files"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:20
 msgid "Define the query using the query arguments or JSON."
@@ -1775,16 +1799,16 @@ msgstr "Define the query using the query arguments or JSON."
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:31
 msgid "Delete all generated image sizes? Preview originals are kept. Image requests may be slower while previews regenerate."
-msgstr ""
+msgstr "Delete all generated image sizes? Preview originals are kept. Image requests may be slower while previews regenerate."
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:28
 msgid "Delete all resized image variants, including variants in remote storage. Uploaded originals and preview images extracted from movies, PDFs and embeds are kept. Previews regenerate when requested. Remote deletion follows the filestore retention policy."
-msgstr ""
+msgstr "Delete all resized image variants, including variants in remote storage. Uploaded originals and preview images extracted from movies, PDFs and embeds are kept. Previews regenerate when requested. Remote deletion follows the filestore retention policy."
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:30
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:31
 msgid "Delete generated previews"
-msgstr ""
+msgstr "Delete generated previews"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:23
 msgid "Delete if no other page is connected to this page."
@@ -1964,7 +1988,7 @@ msgstr "Edit note"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config.tpl:7
 msgid "Edit this configuration file"
-msgstr ""
+msgstr "Edit this configuration file"
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:122
 msgid "Edit:"
@@ -2228,11 +2252,11 @@ msgstr "Function"
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:64
 msgid "Generated preview cleanup has been queued. Preview originals are kept."
-msgstr ""
+msgstr "Generated preview cleanup has been queued. Preview originals are kept."
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:28
 msgid "Generated previews"
-msgstr ""
+msgstr "Generated previews"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:78
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:41
@@ -2263,7 +2287,7 @@ msgstr "Header | a big header"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:11
 msgid "Health checks"
-msgstr ""
+msgstr "Health checks"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:6
 msgid "Health, background work and services for"
@@ -2297,10 +2321,6 @@ msgstr "Host"
 msgid "IP Address"
 msgstr "IP Address"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:4
-msgid "IP addresses have more than 250 open sockets."
-msgstr "IP addresses have more than 250 open sockets."
-
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:269
 msgid "Id, newest first"
 msgstr "Id, newest first"
@@ -2311,7 +2331,7 @@ msgstr "Id, oldest first"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:6
 msgid "Idle"
-msgstr ""
+msgstr "Idle"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:11
 msgid "If a page has a publication date range then it will only be visible between the two dates. Note that if you are allowed to edit the page then you can always see it."
@@ -2327,11 +2347,11 @@ msgstr "If not checked then a visitor is always redirected to the canonical URL 
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:21
 msgid "ImageMagick (local)"
-msgstr ""
+msgstr "ImageMagick (local)"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:24
 msgid "ImageMagick (media runner)"
-msgstr ""
+msgstr "ImageMagick (media runner)"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:141
 #: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:17
@@ -2441,7 +2461,7 @@ msgstr "Live view"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:42
 msgid "Local"
-msgstr ""
+msgstr "Local"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:43
 msgid "Local ImageMagick"
@@ -2555,11 +2575,11 @@ msgstr "Media content"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:5
 msgid "Media deduplication"
-msgstr ""
+msgstr "Media deduplication"
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:54
 msgid "Media deduplication has been queued."
-msgstr ""
+msgstr "Media deduplication has been queued."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:112
 msgid "Media details"
@@ -2586,11 +2606,11 @@ msgstr "Media maintenance"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:18
 msgid "Media maintenance runs in the background. Waiting tasks resume automatically. Remote deletion follows the filestore retention policy."
-msgstr ""
+msgstr "Media maintenance runs in the background. Waiting tasks resume automatically. Remote deletion follows the filestore retention policy."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:15
 msgid "Media maintenance status is unavailable."
-msgstr ""
+msgstr "Media maintenance status is unavailable."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:4
 msgid "Media on this page"
@@ -2700,7 +2720,7 @@ msgstr "Move block up"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:23
 msgid "Move originals and extracted preview images into content-addressable storage. Redundant local and remote copies are cleaned up in the background. Remote files without a checksum are skipped; no files are downloaded to calculate checksums."
-msgstr ""
+msgstr "Move originals and extracted preview images into content-addressable storage. Redundant local and remote copies are cleaned up in the background. Remote files without a checksum are skipped; no files are downloaded to calculate checksums."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:205
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:206
@@ -2761,7 +2781,7 @@ msgstr "No IP addresses have more than 250 open sockets."
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:10
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:20
 msgid "No configuration files found."
-msgstr ""
+msgstr "No configuration files found."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_depictions.tpl:21
 msgid "No connected images."
@@ -2807,7 +2827,7 @@ msgstr "No pages selected"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:5
 msgid "No problems found."
-msgstr ""
+msgstr "No problems found."
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:49
 msgid "No results."
@@ -2857,7 +2877,7 @@ msgstr "Only system administrators can close node connections."
 
 #: zotonic_mod_admin/priv/templates/_admin_system_info_directory.tpl:3
 msgid "Open"
-msgstr ""
+msgstr "Open"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:63
 msgid "Open Modules list"
@@ -3006,7 +3026,7 @@ msgstr "Preview"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:9
 msgid "Preview cleanup"
-msgstr ""
+msgstr "Preview cleanup"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:30
 msgid "Previous in category:"
@@ -3106,7 +3126,7 @@ msgstr "Queue every page for search indexing. Large sites can take a long time t
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:4
 msgid "Queued / waiting"
-msgstr ""
+msgstr "Queued / waiting"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:14
 msgid "Ranch limit"
@@ -3184,11 +3204,11 @@ msgstr "Remarks"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:40
 msgid "Remote runners only"
-msgstr ""
+msgstr "Remote runners only"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:40
 msgid "Remote runners with local fallback"
-msgstr ""
+msgstr "Remote runners with local fallback"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:70
 msgid "Remote sandbox isolation and queue details are available on each runner’s dashboard."
@@ -3255,7 +3275,7 @@ msgstr "Run the Zotonic core datamodel installation again for this site's databa
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:75
 msgid "Run the Zotonic core datamodel installation again for this site's database? Your existing data will be preserved."
-msgstr ""
+msgstr "Run the Zotonic core datamodel installation again for this site's database? Your existing data will be preserved."
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:65
 msgid "Run the site's schema installation again. The site will stop and restart."
@@ -3328,7 +3348,7 @@ msgstr "Save this page."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:11
 msgid "Save to see your changes"
-msgstr ""
+msgstr "Save to see your changes"
 
 #: zotonic_mod_admin/src/mod_admin.erl:999
 msgid "Scheduled a background task to check all refers connections."
@@ -3499,7 +3519,7 @@ msgstr "Site caches"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:14
 msgid "Site config files"
-msgstr ""
+msgstr "Site config files"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:65
 msgid "Site datamodel"
@@ -3727,7 +3747,7 @@ msgstr "System information"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:3
 msgid "System resources and configuration"
-msgstr ""
+msgstr "System resources and configuration"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:2
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:5
@@ -3964,7 +3984,7 @@ msgstr "This resource was created by the module"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:68
 msgid "This runs the site's schema installation again and stops and restarts the site. Your existing data will be preserved. Continue?"
-msgstr ""
+msgstr "This runs the site's schema installation again and stops and restarts the site. Your existing data will be preserved. Continue?"
 
 #: zotonic_mod_admin/priv/templates/_admin_maintenance_panel.tpl:3
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:25
@@ -4255,7 +4275,7 @@ msgstr "View status"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_info_directory.tpl:3
 msgid "View this directory in the file manager on the Zotonic server's desktop"
-msgstr ""
+msgstr "View this directory in the file manager on the Zotonic server's desktop"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:29
 msgid "Visible from"
@@ -4383,7 +4403,7 @@ msgstr "Zotonic datamodel"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:4
 msgid "Zotonic init files"
-msgstr ""
+msgstr "Zotonic init files"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:30
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:27
@@ -4489,10 +4509,6 @@ msgstr "modified by"
 msgid "name"
 msgstr "name"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:7
-msgid "open sockets"
-msgstr "open sockets"
-
 #: zotonic_mod_admin/priv/templates/_admin_view_types.tpl:3
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:104
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:55
@@ -4504,10 +4520,6 @@ msgstr "page"
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:24
 msgid "page block"
 msgstr "page block"
-
-#: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:2
-msgid "pages waiting to be indexed"
-msgstr "pages waiting to be indexed"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:28
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:10
@@ -4556,10 +4568,6 @@ msgstr "view"
 #: zotonic_mod_admin/priv/templates/_admin_navbar_brand.tpl:1
 msgid "visit site"
 msgstr "visit site"
-
-#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:9
-msgid "{count} background tasks remaining"
-msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:25
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:201
@@ -7776,11 +7784,11 @@ msgstr "Make a daily backup of the database."
 
 #: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:17
 msgid "Media file availability could not be confirmed. You can continue restoring the page, but its media or saved preview image might not be recovered."
-msgstr ""
+msgstr "Media file availability could not be confirmed. You can continue restoring the page, but its media or saved preview image might not be recovered."
 
 #: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:22
 msgid "Media files are registered in the remote file store. Their availability has not been checked with the storage server."
-msgstr ""
+msgstr "Media files are registered in the remote file store. Their availability has not been checked with the storage server."
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:65
 msgid "Media files can only be recovered if they are not yet deleted from the file storage. Zotonic will keep media for at least 5 weeks."
@@ -7855,7 +7863,7 @@ msgstr "Restore this page..."
 
 #: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:11
 msgid "Restoring this version can replace the media currently attached to the page."
-msgstr ""
+msgstr "Restoring this version can replace the media currently attached to the page."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:36
 msgid "Revert page to earlier version"
@@ -7919,7 +7927,7 @@ msgstr "Show import/export panel on the edit pages in the admin."
 
 #: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:3
 msgid "Some media files cannot be recovered."
-msgstr ""
+msgstr "Some media files cannot be recovered."
 
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:143
 msgid "Sorry, a global Zotonic configuration is set and cannot be changed."
@@ -7998,11 +8006,11 @@ msgstr "The original category or content group no longer exists. Confirm the sug
 
 #: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:5
 msgid "The original file for this version is no longer available. The page can be restored, but its media may be empty."
-msgstr ""
+msgstr "The original file for this version is no longer available. The page can be restored, but its media may be empty."
 
 #: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:8
 msgid "The saved preview image for this version is no longer available."
-msgstr ""
+msgstr "The saved preview image for this version is no longer available."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:5
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:19
@@ -8665,11 +8673,11 @@ msgstr "Please contact your system administrator."
 
 #: zotonic_mod_clamav/priv/templates/_admin_status_alert.tpl:3
 msgid "Virus scanner"
-msgstr ""
+msgstr "Virus scanner"
 
 #: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:9
 msgid "Virus scanner available."
-msgstr ""
+msgstr "Virus scanner available."
 
 #: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:4
 msgid "Virus scanner unavailable"
@@ -9189,7 +9197,7 @@ msgstr "Could not load templates"
 
 #: zotonic_mod_development/src/mod_development.erl:498
 msgid "Could not open the directory on this computer."
-msgstr ""
+msgstr "Could not open the directory on this computer."
 
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:9
 msgid "Could not open the editor. Check the editor and path mapping."
@@ -10845,7 +10853,7 @@ msgstr "Cloud Files"
 
 #: zotonic_mod_filestore/priv/templates/_admin_status_alert.tpl:3
 msgid "Cloud file store"
-msgstr ""
+msgstr "Cloud file store"
 
 #: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:15
 msgid "Cloud file store configuration"
@@ -11023,7 +11031,7 @@ msgstr "Never"
 
 #: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:18
 msgid "No cloud file store read errors detected."
-msgstr ""
+msgstr "No cloud file store read errors detected."
 
 #: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:47
 msgid "No errors on this page."
@@ -15880,7 +15888,7 @@ msgstr "Deployment failed. Check the server log for details."
 
 #: zotonic_mod_site_update/priv/templates/_site_deploy_status_value.tpl:5
 msgid "Deployment running on this node"
-msgstr ""
+msgstr "Deployment running on this node"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:5
 msgid "Deployment updates the entire Git repository, including any other modules it contains."
