@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-06 08:37\n"
+"PO-Revision-Date: 2026-11-06 10:36\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -1105,26 +1105,26 @@ msgstr "ver"
 #: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:4
 msgid "<strong>{n}</strong> IP address has more than 250 open sockets."
 msgid_plural "<strong>{n}</strong> IP addresses have more than 250 open sockets."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<strong>{n}</strong> dirección IP tiene más de 250 sockets abiertos."
+msgstr[1] "<strong>{n}</strong> direcciones IP tienen más de 250 sockets abiertos cada una."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:2
 msgid "<strong>{n}</strong> page waiting to be indexed"
 msgid_plural "<strong>{n}</strong> pages waiting to be indexed"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<strong>{n}</strong> página pendiente de indexación"
+msgstr[1] "<strong>{n}</strong> páginas pendientes de indexar"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:9
 msgid "{n} background task remaining"
 msgid_plural "{n} background tasks remaining"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{n} tarea en segundo plano pendiente"
+msgstr[1] "{n} tareas en segundo plano pendientes"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:7
 msgid "{n} open socket"
 msgid_plural "{n} open sockets"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{n} socket abierto"
+msgstr[1] "{n} sockets abiertos"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:219
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:221
