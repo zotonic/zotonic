@@ -238,7 +238,9 @@ attach_stage(Result, Id, Key, Owned, Filename, Medium, Context) ->
                 Other -> Other
             end;
         skipped ->
-            ?LOG_NOTICE(#{text => <<"CAFS migration skipped file without local bytes or checksum">>,
+            %% Legacy thumbnail requests can retry this until the original is
+            %% downloaded. This expected deferral must not fill normal logs.
+            ?LOG_DEBUG(#{text => <<"CAFS migration deferred until file is downloaded; no local bytes or usable checksum available">>,
                 in => zotonic_core, id => Id, filename => Filename}),
             ok;
         {error, _} = StageError -> StageError
