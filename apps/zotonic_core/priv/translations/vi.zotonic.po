@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-06 08:38\n"
+"PO-Revision-Date: 2026-11-06 10:38\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
 "MIME-Version: 1.0\n"
@@ -1087,22 +1087,22 @@ msgstr "xem"
 #: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:4
 msgid "<strong>{n}</strong> IP address has more than 250 open sockets."
 msgid_plural "<strong>{n}</strong> IP addresses have more than 250 open sockets."
-msgstr[0] "<strong>{n}</strong> Các địa chỉ IP có hơn 250 cổng mở."
+msgstr[0] "Có <strong>{n}</strong> địa chỉ IP, mỗi địa chỉ có hơn 250 socket đang mở."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:2
 msgid "<strong>{n}</strong> page waiting to be indexed"
 msgid_plural "<strong>{n}</strong> pages waiting to be indexed"
-msgstr[0] "<strong>{n}</strong> các trang đang chờ được lập chỉ mục"
+msgstr[0] "<strong>{n}</strong> trang đang chờ lập chỉ mục"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:9
 msgid "{n} background task remaining"
 msgid_plural "{n} background tasks remaining"
-msgstr[0] "{n} các tác vụ nền còn lại"
+msgstr[0] "Còn {n} tác vụ nền"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:7
 msgid "{n} open socket"
 msgid_plural "{n} open sockets"
-msgstr[0] "{n} mở các socket"
+msgstr[0] "{n} socket đang mở"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:219
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:221
