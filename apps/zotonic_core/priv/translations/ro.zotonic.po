@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-02 21:24\n"
+"PO-Revision-Date: 2026-11-06 07:31\n"
 "Last-Translator: \n"
 "Language-Team: Romanian\n"
 "MIME-Version: 1.0\n"
@@ -392,7 +392,7 @@ msgstr "Sigur doriți să restabiliți toate regulile ACL la versiunea publicat�
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:90
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:161
 #: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:31
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:68
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:70
 #: zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7
 #: zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:10
@@ -422,8 +422,8 @@ msgstr "Sigur doriți să restabiliți toate regulile ACL la versiunea publicat�
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:26
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:85
 #: zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:58
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:10
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:59
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:11
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:229
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:237
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70
@@ -458,7 +458,7 @@ msgstr "Anulați"
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:22
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:11
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:22
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:24
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:28
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:12
 #: zotonic_mod_survey/src/mod_survey.erl:656
@@ -559,7 +559,7 @@ msgstr "Conținut"
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_visible_for.tpl:2
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:58
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:51
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:32
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:34
 #: zotonic_mod_content_groups/priv/templates/_admin_overview_filter_panel.tpl:6
 #: zotonic_mod_content_groups/priv/templates/_dialog_admin_bulk_update.tpl:5
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:62
@@ -598,7 +598,7 @@ msgstr "Mutarea în grupul de colaborare nu a reușit."
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:118
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:53
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:8
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:67
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:81
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:30
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:53
 #: zotonic_mod_admin_identity/src/mod_admin_identity.erl:330
@@ -758,7 +758,7 @@ msgstr "Membrii aceluiași grup de utilizatori"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:8
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:9
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:42
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:21
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:35
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:28
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:84
@@ -870,7 +870,7 @@ msgid "Published rules"
 msgstr "Reguli publicate"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:41
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:69
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:71
 msgid "Revert"
 msgstr "Reveniți"
 
@@ -1254,7 +1254,7 @@ msgstr "Adăugați o notă"
 msgid "Added the connection to"
 msgstr "A fost adăugată legătura către"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:53
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:66
 msgid "Additional module tools"
 msgstr "Instrumente suplimentare pentru module"
 
@@ -1274,7 +1274,7 @@ msgstr "Administrare"
 msgid "Advanced"
 msgstr "Avansat"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:38
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:58
 msgid "Advanced repair"
 msgstr "Reparații avansate"
 
@@ -1305,13 +1305,13 @@ msgstr "Toate elementele media"
 msgid "All pages"
 msgstr "Toate paginile"
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:38
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:39
 msgid "All sites have been flushed."
 msgstr "Cache-ul tuturor site-urilor a fost golit."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:36
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:2
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:37
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:50
 msgid "All sites on this node"
 msgstr "Toate site-urile de pe acest nod"
 
@@ -1447,7 +1447,7 @@ msgstr "Disponibil"
 msgid "Back"
 msgstr "Înapoi"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:12
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:25
 msgid "Background work"
 msgstr "Activități în fundal"
 
@@ -1483,7 +1483,7 @@ msgstr "În cache"
 msgid "Caches"
 msgstr "Memoriile cache"
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:47
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:48
 msgid "Caches have been flushed."
 msgstr "Memoriile cache au fost golite."
 
@@ -1512,6 +1512,10 @@ msgstr "Bifați paginile pe care doriți să le ștergeți."
 msgid "Check the pages you want to update."
 msgstr "Bifați paginile pe care doriți să le actualizați."
 
+#: zotonic_mod_admin/priv/templates/_admin_status_check.tpl:5
+msgid "Checking…"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:10
 msgid "Choose a media item from this page to insert in the body text."
 msgstr "Alegeți un element media din această pagină pentru a-l insera în corpul textului."
@@ -1536,10 +1540,6 @@ msgstr "Goliți"
 msgid "Clear cached templates, dispatch rules and in-memory site data. The shared file index is also refreshed."
 msgstr "Ștergeți șabloanele din cache, regulile de rutare și datele site-ului stocate în memorie. Indexul comun al fișierelor este, de asemenea, actualizat."
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:10
-msgid "Click \"Save\" to see your changes."
-msgstr "Faceți clic pe „Salvați” pentru a vedea modificările."
-
 #: zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:11
 msgid "Click here for more information"
 msgstr "Faceți clic aici pentru mai multe informații"
@@ -1548,7 +1548,7 @@ msgstr "Faceți clic aici pentru mai multe informații"
 msgid "Click to preview."
 msgstr "Faceți clic pentru previzualizare."
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:15
 msgid "Close Live view"
 msgstr "Închideți vizualizarea în timp real"
 
@@ -1577,9 +1577,13 @@ msgstr "Codul este în curs de actualizare. Modificările de fundal vor fi relua
 msgid "Code updates need attention"
 msgstr "Actualizările de cod necesită atenție"
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:32
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:59
 msgid "Config directory"
 msgstr "Directorul de configurare"
+
+#: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:2
+msgid "Configuration files"
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:24
 msgid "Configured"
@@ -1632,7 +1636,7 @@ msgstr "Legături"
 msgid "Content origin"
 msgstr "Originea conținutului"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:28
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:48
 msgid "Content repair"
 msgstr "Corectarea conținutului"
 
@@ -1677,11 +1681,23 @@ msgstr "Copiați suma de control SHA-256 în clipboard."
 msgid "Could not connect to the website."
 msgstr "Conectarea la site nu a reușit."
 
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:27
+msgid "Could not contact the media runner."
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:11
 msgid "Could not detect anything to import on that URL or embed code."
 msgstr "Nu a fost detectat niciun conținut de importat la acel URL sau în codul de încorporare."
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:98
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:68
+msgid "Could not queue generated preview cleanup. Check the logs."
+msgstr ""
+
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:58
+msgid "Could not queue media deduplication. Check the logs."
+msgstr ""
+
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:119
 msgid "Could not reload the site configuration, check the logs."
 msgstr "Configurarea site-ului nu a putut fi reîncărcată. Verificați jurnalele."
 
@@ -1746,9 +1762,13 @@ msgstr "Data creării, cele mai vechi întâi"
 msgid "Dashboard"
 msgstr "Panou de control"
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:30
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:57
 msgid "Data directory"
 msgstr "Directorul de date"
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:61
+msgid "Datamodel upgrades and reinstalls preserve your existing data. No content or uploaded files will be deleted."
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:6
 msgid "Date range"
@@ -1762,9 +1782,27 @@ msgstr "Intervale de date"
 msgid "Date start/end"
 msgstr "Data de început/sfârșit"
 
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:23
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:25
+msgid "Deduplicate media files"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:20
 msgid "Define the query using the query arguments or JSON."
 msgstr "Definiți interogarea folosind argumente de interogare sau JSON."
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:31
+msgid "Delete all generated image sizes? Preview originals are kept. Image requests may be slower while previews regenerate."
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:28
+msgid "Delete all resized image variants, including variants in remote storage. Uploaded originals and preview images extracted from movies, PDFs and embeds are kept. Previews regenerate when requested. Remote deletion follows the filestore retention policy."
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:30
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:31
+msgid "Delete generated previews"
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:23
 msgid "Delete if no other page is connected to this page."
@@ -1909,9 +1947,10 @@ msgstr "Adresă de e-mail"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers_list.tpl:10
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:34
+#: zotonic_mod_admin/priv/templates/_admin_system_info_config.tpl:7
 #: zotonic_mod_admin/priv/templates/_rsc_edge.tpl:19
 #: zotonic_mod_admin/priv/templates/admin_edit.tpl:3
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:68
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:82
 #: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:70
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:23
@@ -1940,6 +1979,10 @@ msgstr "Editați"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:16
 msgid "Edit note"
 msgstr "Editați nota"
+
+#: zotonic_mod_admin/priv/templates/_admin_system_info_config.tpl:7
+msgid "Edit this configuration file"
+msgstr ""
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:122
 msgid "Edit:"
@@ -1977,7 +2020,7 @@ msgstr "Pagină încorporată | un citat, o fereastră popup sau o legătură c�
 msgid "Embedded Content"
 msgstr "Conținut încorporat"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:30
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:50
 msgid "Embedded-page references"
 msgstr "Referințe la pagini încorporate"
 
@@ -1994,11 +2037,7 @@ msgstr "Punct de acces"
 msgid "Enter a URL or embed code. It will be analyzed and you can choose how to import the data."
 msgstr "Introduceți un URL sau un cod de încorporare. Acesta va fi analizat și veți putea alege modul de import al datelor."
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:37
-msgid "Erlang init files"
-msgstr "Fișiere de inițializare Erlang"
-
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:36
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:63
 msgid "Erlang installation root"
 msgstr "Directorul rădăcină al instalării Erlang"
 
@@ -2056,7 +2095,7 @@ msgstr "Categorie exactă"
 msgid "Excess connections"
 msgstr "Conexiuni în exces"
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:85
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:106
 msgid "Excess connections have been closed."
 msgstr "Conexiunile în exces au fost închise."
 
@@ -2155,7 +2194,7 @@ msgstr "Găsiți conținut media"
 msgid "Find Page"
 msgstr "Găsiți o pagină"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:30
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:50
 msgid "Find embedded page references and rebuild their refers connections. This runs in the background."
 msgstr "Găsiți referințele la pagini încorporate și reconstruiți conexiunile lor refers. Acest proces se desfășoară în fundal."
 
@@ -2205,6 +2244,14 @@ msgstr "Liberă"
 msgid "Function"
 msgstr "Funcție"
 
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:64
+msgid "Generated preview cleanup has been queued. Preview originals are kept."
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:28
+msgid "Generated previews"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:78
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:41
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:76
@@ -2232,6 +2279,10 @@ msgstr "Titlu"
 msgid "Header | a big header"
 msgstr "Titlu | un titlu mare"
 
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:11
+msgid "Health checks"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:6
 msgid "Health, background work and services for"
 msgstr "Starea de funcționare, activitățile în fundal și serviciile pentru"
@@ -2248,7 +2299,7 @@ msgstr "Aici puteți edita argumentele interogării de căutare. Fiecare argumen
 msgid "Hide page from searches (depends on the search query)"
 msgstr "Ascundeți pagina din căutări (depinde de interogare)"
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:34
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:61
 msgid "Home directory"
 msgstr "Directorul de bază"
 
@@ -2276,6 +2327,10 @@ msgstr "ID, cele mai noi întâi"
 msgid "Id, oldest first"
 msgstr "ID, cele mai vechi întâi"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:6
+msgid "Idle"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:11
 msgid "If a page has a publication date range then it will only be visible between the two dates. Note that if you are allowed to edit the page then you can always see it."
 msgstr "Dacă o pagină are un interval de publicare, aceasta va fi vizibilă numai între cele două date. Rețineți că, dacă aveți permisiunea de a edita pagina, o puteți vedea oricând."
@@ -2287,6 +2342,14 @@ msgstr "Dacă nicio limbă nu are o cale de pagină, calea completă va fi:"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:61
 msgid "If not checked then a visitor is always redirected to the canonical URL of this page."
 msgstr "Dacă nu este bifat, vizitatorul este întotdeauna redirecționat la URL-ul canonic al paginii."
+
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:21
+msgid "ImageMagick (local)"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:24
+msgid "ImageMagick (media runner)"
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:141
 #: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:17
@@ -2316,7 +2379,7 @@ msgstr "Importuri"
 msgid "Indexed by search engines"
 msgstr "Indexat de motoarele de căutare"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:42
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:63
 msgid "Individual modules can be reinstalled from the Modules list."
 msgstr "Modulele individuale pot fi reinstalate din lista de module."
 
@@ -2334,11 +2397,11 @@ msgstr "Legătură informativă cu fereastră modală"
 msgid "Inline block"
 msgstr "Bloc în text"
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:26
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:52
 msgid "Installation"
 msgstr "Instalare"
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:44
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:72
 msgid "Installation details are available to system administrators."
 msgstr "Detaliile privind instalarea sunt disponibile pentru administratorii de sistem."
 
@@ -2390,9 +2453,13 @@ msgid "Live query, send notifications when matching items are updated or inserte
 msgstr "Interogare în timp real: trimite notificări când sunt actualizate sau inserate elemente care corespund criteriilor."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:2
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:17
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:18
 msgid "Live view"
 msgstr "Vizualizare în timp real"
+
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:42
+msgid "Local"
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:43
 msgid "Local ImageMagick"
@@ -2420,7 +2487,7 @@ msgstr "Mediu local izolat"
 msgid "Log Off"
 msgstr "Deconectați-vă"
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:31
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:58
 msgid "Log directory"
 msgstr "Directorul jurnalelor"
 
@@ -2476,6 +2543,7 @@ msgstr "ID, nume, cale de pagină sau redirecționare corespunzătoare"
 msgid "Matching search text"
 msgstr "Text de căutare corespunzător"
 
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:18
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:3
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:86
 #: zotonic_mod_admin/src/mod_admin.erl:525
@@ -2503,6 +2571,14 @@ msgstr "Comenzile media folosesc executori la distanță."
 msgid "Media content"
 msgstr "Conținut media"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:5
+msgid "Media deduplication"
+msgstr ""
+
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:54
+msgid "Media deduplication has been queued."
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:112
 msgid "Media details"
 msgstr "Detalii media"
@@ -2521,11 +2597,25 @@ msgstr "Fișier media"
 msgid "Media item created."
 msgstr "Elementul media a fost creat."
 
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:19
+#: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:2
+msgid "Media maintenance"
+msgstr "Întreținerea conținutului media"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:18
+msgid "Media maintenance runs in the background. Waiting tasks resume automatically. Remote deletion follows the filestore retention policy."
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:15
+msgid "Media maintenance status is unavailable."
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:4
 msgid "Media on this page"
 msgstr "Conținut media pe această pagină"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:4
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:35
 msgid "Media processing"
 msgstr "Procesare media"
 
@@ -2585,7 +2675,7 @@ msgid "Modification date, oldest first"
 msgstr "Data modificării, cele mai vechi întâi"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:134
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:24
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:38
 msgid "Modified"
 msgstr "Modificat"
 
@@ -2626,6 +2716,10 @@ msgstr "Mutați blocul în jos"
 msgid "Move block up"
 msgstr "Mutați blocul în sus"
 
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:23
+msgid "Move originals and extracted preview images into content-addressable storage. Redundant local and remote copies are cleaned up in the background. Remote files without a checksum are skipped; no files are downloaded to calculate checksums."
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:205
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:206
 msgid "Name for invoices"
@@ -2652,7 +2746,7 @@ msgstr "Aveți nevoie de ajutor suplimentar?"
 msgid "Network Connections"
 msgstr "Conexiuni de rețea"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:40
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:53
 msgid "Network listeners and connections"
 msgstr "Ascultători și conexiuni de rețea"
 
@@ -2681,6 +2775,11 @@ msgstr "Următoarea pagină din categorie:"
 #: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:11
 msgid "No IP addresses have more than 250 open sockets."
 msgstr "Nicio adresă IP nu are mai mult de 250 de socket-uri deschise."
+
+#: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:10
+#: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:20
+msgid "No configuration files found."
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_depictions.tpl:21
 msgid "No connected images."
@@ -2724,6 +2823,10 @@ msgstr "Nu au fost găsite pagini."
 msgid "No pages selected"
 msgstr "Nicio pagină selectată"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:5
+msgid "No problems found."
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:49
 msgid "No results."
 msgstr "Niciun rezultat."
@@ -2766,19 +2869,23 @@ msgstr "Memoria sistemului de operare"
 msgid "Ongoing"
 msgstr "În desfășurare"
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:87
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:108
 msgid "Only system administrators can close node connections."
 msgstr "Doar administratorii de sistem pot închide conexiunile nodurilor."
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:42
+#: zotonic_mod_admin/priv/templates/_admin_system_info_directory.tpl:3
+msgid "Open"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:63
 msgid "Open Modules list"
 msgstr "Deschide lista de module"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:13
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
 msgid "Open in new tab"
 msgstr "Deschideți într-o filă nouă"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:57
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:70
 msgid "Open maintenance tools"
 msgstr "Deschide instrumentele de întreținere"
 
@@ -2915,6 +3022,10 @@ msgstr "Predicat"
 msgid "Preview"
 msgstr "Previzualizare"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:9
+msgid "Preview cleanup"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:30
 msgid "Previous in category:"
 msgstr "Pagina anterioară din categorie:"
@@ -3007,9 +3118,13 @@ msgstr "Interogare"
 msgid "Query results"
 msgstr "Rezultatele interogării"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:21
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:41
 msgid "Queue every page for search indexing. Large sites can take a long time to finish."
 msgstr "Adăugați fiecare pagină în coada de indexare pentru căutare. În cazul site-urilor mari, procesul poate dura mult timp."
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:4
+msgid "Queued / waiting"
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:14
 msgid "Ranch limit"
@@ -3019,11 +3134,11 @@ msgstr "Limită Ranch"
 msgid "Rebuild derived data and maintain this site. Queued work can be followed on the Status page."
 msgstr "Reconstruirea datelor derivate și întreținerea acestui site. Activitățile aflate în așteptare pot fi urmărite pe pagina „Stare”."
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:31
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:51
 msgid "Rebuild references"
 msgstr "Reconstruiește referințele"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:22
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:42
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:169
 msgid "Rebuild search indices"
 msgstr "Reconstruiți indicii de căutare"
@@ -3049,7 +3164,7 @@ msgstr "Pagini care fac trimitere"
 msgid "Referrers to"
 msgstr "Pagini care trimit către"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:12
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:13
 #: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:13
 #: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:51
@@ -3061,13 +3176,13 @@ msgstr "Reîmprospătați"
 msgid "Refreshed every 30 minutes."
 msgstr "Actualizat la fiecare 30 de minute."
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:53
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:54
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:74
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:75
 msgid "Reinstall Zotonic datamodel"
 msgstr "Reinstalați modelul de date Zotonic"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:46
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:47
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:67
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:68
 msgid "Reinstall site datamodel"
 msgstr "Reinstalați modelul de date al site-ului"
 
@@ -3084,6 +3199,14 @@ msgstr "Reîncărcarea elimină modificările nesalvate din formular. Continuaț
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:29
 msgid "Remarks"
 msgstr "Observații"
+
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:40
+msgid "Remote runners only"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:40
+msgid "Remote runners with local fallback"
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:70
 msgid "Remote sandbox isolation and queue details are available on each runner’s dashboard."
@@ -3116,7 +3239,7 @@ msgstr "Înlocuiți elementul media actual"
 msgid "Resize Live view"
 msgstr "Redimensionați vizualizarea în timp real"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:46
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:59
 msgid "Resources"
 msgstr "Resurse"
 
@@ -3144,15 +3267,15 @@ msgstr "Rotit cu 270 de grade"
 msgid "Rotated 90 degrees"
 msgstr "Rotit cu 90 de grade"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:51
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:72
 msgid "Run the Zotonic core datamodel installation again for this site's database."
 msgstr "Rulați din nou instalarea modelului de date de bază Zotonic pentru baza de date a acestui site."
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:54
-msgid "Run the Zotonic core datamodel installation again for this site's database?"
-msgstr "Să rulez din nou instalarea modelului de date de bază Zotonic pentru baza de date a acestui site?"
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:75
+msgid "Run the Zotonic core datamodel installation again for this site's database? Your existing data will be preserved."
+msgstr ""
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:44
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:65
 msgid "Run the site's schema installation again. The site will stop and restart."
 msgstr "Rulați din nou instalarea schemei site-ului. Site-ul se va opri și va reporni."
 
@@ -3161,6 +3284,7 @@ msgid "Runner availability and ImageMagick versions are cached for up to one min
 msgstr "Disponibilitatea executorilor și versiunile ImageMagick sunt păstrate în cache cel mult un minut. Verificările eșuate se reiau după cinci secunde. Reîmprospătați pagina pentru a verifica din nou."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:29
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:2
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:64
 #: zotonic_site_status/priv/templates/_sites.tpl:15
 msgid "Running"
@@ -3175,7 +3299,7 @@ msgstr "SEO"
 msgid "SHA-256 checksum"
 msgstr "Sumă de control SHA-256"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:5
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:11
 msgid "SSL Application uses Erlang defaults, it is recommended to change this configuration in your <tt>erlang.config</tt>."
 msgstr "Aplicația SSL folosește valorile implicite Erlang. Se recomandă schimbarea acestei configurări în <tt>erlang.config</tt>."
 
@@ -3220,21 +3344,25 @@ msgstr "Salvați și vizualizați pagina."
 msgid "Save this page."
 msgstr "Salvați această pagină."
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:11
+msgid "Save to see your changes"
+msgstr ""
+
 #: zotonic_mod_admin/src/mod_admin.erl:999
 msgid "Scheduled a background task to check all refers connections."
 msgstr "A fost programată o sarcină în fundal pentru verificarea tuturor legăturilor refers."
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:24
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:37
 msgid "Scheduled tasks"
 msgstr "Sarcini programate"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:294
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:17
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:37
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user_dialog.tpl:9
 msgid "Search"
 msgstr "Căutați"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:16
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:29
 msgid "Search indexing"
 msgstr "Indexarea căutărilor"
 
@@ -3242,7 +3370,7 @@ msgstr "Indexarea căutărilor"
 msgid "Search indexing runs separately from the scheduled task queue."
 msgstr "Indexarea pentru căutare se execută separat de coada de sarcini programate."
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:21
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:41
 msgid "Search indices"
 msgstr "Indici de căutare"
 
@@ -3271,11 +3399,11 @@ msgstr "Rezultatele căutării"
 msgid "Search..."
 msgstr "Căutați..."
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:33
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:60
 msgid "Security directory"
 msgstr "Directorul de securitate"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:7
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:13
 msgid "See also: <a href=\"https://zotonic.com/en/stable/ref/configuration/zotonic-configuration.html#the-erlang-config-file\">The erlang.config file</a>"
 msgstr "Consultați și: <a href=\"https://zotonic.com/en/stable/ref/configuration/zotonic-configuration.html#the-erlang-config-file\">Fișierul erlang.config</a>"
 
@@ -3328,7 +3456,7 @@ msgstr "Selectarea unui fișier va transforma pagina într-un element media."
 msgid "Service"
 msgstr "Serviciu"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:37
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:50
 msgid "Services"
 msgstr "Servicii"
 
@@ -3387,11 +3515,15 @@ msgstr "Sunt afișate paginile la care vă puteți conecta folosind <b>{predicat
 msgid "Site caches"
 msgstr "Cache-urile site-ului"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:44
+#: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:14
+msgid "Site config files"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:65
 msgid "Site datamodel"
 msgstr "Modelul de date al site-ului"
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:29
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:56
 msgid "Site files directory"
 msgstr "Directorul cu fișierele site-ului"
 
@@ -3403,7 +3535,7 @@ msgstr "Software"
 msgid "Software versions and installation paths. Runtime and host information is shared by all sites on this node."
 msgstr "Versiunile software-ului și căile de instalare. Informațiile privind mediul de execuție și gazda sunt partajate de toate site-urile de pe acest nod."
 
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:15
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:21
 msgid "Some disks are almost full."
 msgstr "Unele discuri sunt aproape pline."
 
@@ -3611,16 +3743,20 @@ msgstr "Administrarea sistemului"
 msgid "System information"
 msgstr "Informații despre sistem"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:3
+msgid "System resources and configuration"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:2
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:5
 msgid "System status"
 msgstr "Starea sistemului"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:30
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:43
 msgid "Task details are available to system administrators."
 msgstr "Detaliile privind sarcinile sunt disponibile pentru administratorii de sistem."
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:28
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:41
 msgid "Tasks with errors retry up to 10 times before being dropped."
 msgstr "Sarcinile care prezintă erori sunt reluate de până la 10 ori înainte de a fi abandonate."
 
@@ -3631,7 +3767,7 @@ msgstr "Sarcinile care prezintă erori sunt reluate de până la 10 ori înainte
 msgid "Telephone"
 msgstr "Telefon"
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:53
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:74
 msgid "Templates will be recompiled."
 msgstr "Șabloanele vor fi recompilate."
 
@@ -3648,7 +3784,7 @@ msgstr "Text"
 msgid "Text | a (rich) text block"
 msgstr "Text | un bloc de text formatat"
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:71
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:92
 msgid "The Zotonic datamodel is being reinstalled. Watch the console for messages"
 msgstr "Modelul de date Zotonic se reinstalează. Urmăriți mesajele din consolă"
 
@@ -3660,11 +3796,12 @@ msgstr "Adresele 0.0.0.0 și :: reprezintă toate interfețele locale IPv4, resp
 msgid "The billing address is only visible for people who can edit this page."
 msgstr "Adresa de facturare este vizibilă numai persoanelor care pot edita această pagină."
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:77
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:98
 msgid "The category tree is rebuilding. This can take a long time."
 msgstr "Arborele de categorii se reconstruiește. Această operație poate dura mult."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:7
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:38
 msgid "The media runner configuration is invalid."
 msgstr "Configurarea executorului media nu este validă."
 
@@ -3700,19 +3837,19 @@ msgstr "Interogarea nu a putut fi analizată. Verificați sintaxa."
 msgid "The query text is empty."
 msgstr "Textul interogării este gol."
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:59
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:80
 msgid "The search index is rebuilding. Depending on the database size, this can take a long time."
 msgstr "Indicele de căutare se reconstruiește. În funcție de dimensiunea bazei de date, această operație poate dura mult."
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:96
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:117
 msgid "The site configuration has been reloaded."
 msgstr "Configurarea site-ului a fost reîncărcată."
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:65
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:86
 msgid "The site’s data is being reinstalled. Watch the console for messages"
 msgstr "Datele site-ului se reinstalează. Urmăriți mesajele din consolă"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:26
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:32
 msgid "The system has allocated more than the specified threshold of available memory, as reported by the underlying operating system."
 msgstr "Sistemul a alocat o proporție din memoria disponibilă mai mare decât pragul specificat, conform sistemului de operare."
 
@@ -3807,7 +3944,7 @@ msgstr "Această notă este vizibilă numai persoanelor care pot edita pagina."
 msgid "This page can be connected from other pages. For example it could be an author of an article."
 msgstr "Alte pagini pot fi conectate la această pagină. De exemplu, aceasta ar putea reprezenta autorul unui articol."
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:16
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:17
 msgid "This page cannot be previewed here. Use “Open in new tab” if available."
 msgstr "Această pagină nu poate fi previzualizată aici. Folosiți „Deschideți într-o filă nouă”, dacă este disponibil."
 
@@ -3843,12 +3980,12 @@ msgstr "Această cale este folosită de altă pagină."
 msgid "This resource was created by the module"
 msgstr "Această resursă a fost creată de modulul"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:47
-msgid "This runs the site's schema installation again and stops and restarts the site. Continue?"
-msgstr "Această acțiune va rula din nou instalarea schemei site-ului și va opri și reporni site-ul. Doriți să continuați?"
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:68
+msgid "This runs the site's schema installation again and stops and restarts the site. Your existing data will be preserved. Continue?"
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_maintenance_panel.tpl:3
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:12
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:25
 msgid "This site"
 msgstr "Acest site"
 
@@ -3915,6 +4052,8 @@ msgstr "Tastați pentru a filtra lista de mai jos."
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:47
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:62
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:63
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:22
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:31
 msgid "Unavailable"
 msgstr "Indisponibil"
 
@@ -4047,8 +4186,8 @@ msgid "Upload to drop folder"
 msgstr "Încarcă în folderul de depunere"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:135
-#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:147
-#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:177
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:155
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:185
 msgid "Uploaded"
 msgstr "Încărcat"
 
@@ -4070,7 +4209,7 @@ msgstr "Folosiți completarea automată pentru a căuta conținut media pe acest
 msgid "Use the title of the base content for the display name of this person."
 msgstr "Folosiți titlul conținutului de bază ca nume afișat pentru această persoană."
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:40
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:60
 msgid "Use these operations to repair installation data, not for routine maintenance."
 msgstr "Utilizați aceste operațiuni pentru a repara datele de instalare, nu pentru întreținerea de rutină."
 
@@ -4127,10 +4266,14 @@ msgstr "Vizualizați graful legăturilor"
 msgid "View format (opens in a new tab)"
 msgstr "Format de vizualizare (se deschide într-o filă nouă)"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:17
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:28
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:23
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:34
 msgid "View status"
 msgstr "Vizualizați starea"
+
+#: zotonic_mod_admin/priv/templates/_admin_system_info_directory.tpl:3
+msgid "View this directory in the file manager on the Zotonic server's desktop"
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:29
 msgid "Visible from"
@@ -4149,9 +4292,9 @@ msgstr "Deschideți pagina completă de editare"
 msgid "Visiting address"
 msgstr "Adresă fizică"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:4
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:14
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:25
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:10
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:20
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:31
 #: zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:10
 msgid "Warning!"
 msgstr "Atenție!"
@@ -4166,7 +4309,7 @@ msgstr "Site deschis la clic pe imagine"
 msgid "Website or Embed"
 msgstr "Site web sau cod de încorporare"
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:35
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:62
 msgid "Work directory"
 msgstr "Directorul de lucru"
 
@@ -4222,7 +4365,7 @@ msgid "You don't have permission to create this page."
 msgstr "Nu aveți permisiunea de a crea această pagină."
 
 #: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:186
-#: zotonic_mod_image_edit/src/mod_image_edit.erl:94
+#: zotonic_mod_image_edit/src/mod_image_edit.erl:96
 msgid "You don't have permission to edit this page."
 msgstr "Nu aveți permisiunea de a edita această pagină."
 
@@ -4233,8 +4376,10 @@ msgstr "Nu aveți permisiunea de a edita această pagină."
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "Nu aveți permisiunile necesare pentru a încărca acest tip de fișier."
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:101
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:110
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:56
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:66
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:122
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:131
 msgid "You don’t have permission to perform this action."
 msgstr "Nu aveți permisiunea de a efectua această acțiune."
 
@@ -4250,9 +4395,13 @@ msgstr "Interogarea de căutare nu este validă. Corectați-o înainte de salvar
 msgid "Zotonic"
 msgstr "Zotonic"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:51
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:72
 msgid "Zotonic datamodel"
 msgstr "Modelul de date Zotonic"
+
+#: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:4
+msgid "Zotonic init files"
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:30
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:27
@@ -4281,7 +4430,7 @@ msgstr "de"
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:165
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:168
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:70
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:84
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:32
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:33
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:76
@@ -4426,6 +4575,10 @@ msgstr "vizualizați"
 msgid "visit site"
 msgstr "vizitați site-ul"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:9
+msgid "{count} background tasks remaining"
+msgstr ""
+
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:25
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:201
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:141
@@ -4565,6 +4718,7 @@ msgid "Config"
 msgstr "Configurare"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:3
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:24
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:32
 #: zotonic_mod_admin_config/src/mod_admin_config.erl:96
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:79
@@ -4724,11 +4878,11 @@ msgstr "De obicei se folosește numele DNS invers al mașinii."
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:13
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:14
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:43
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:22
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:36
 msgid "Key"
 msgstr "Cheie"
 
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:14
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:27
 msgid "Make a new config setting"
 msgstr "Creați o configurare nouă"
 
@@ -4736,7 +4890,7 @@ msgstr "Creați o configurare nouă"
 msgid "No configuration keys found."
 msgstr "Nu au fost găsite chei de configurare."
 
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:81
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:95
 msgid "No configurations found."
 msgstr "Nu au fost găsite configurări."
 
@@ -4821,11 +4975,11 @@ msgstr "Numele de gazdă al releului"
 msgid "Relay port"
 msgstr "Portul releului"
 
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:12
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:17
 msgid "Reload site configuration"
 msgstr "Reîncărcați configurarea site-ului"
 
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:13
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:14
 msgid "Reload the site configuration files. Some changes require a restart."
 msgstr "Reîncărcați fișierele de configurare ale site-ului. Anumite modificări necesită o repornire."
 
@@ -4993,7 +5147,7 @@ msgstr "Valabil până la"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:19
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:20
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:21
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:23
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:37
 #: zotonic_mod_base/src/support/z_chart_svg.erl:1352
 #: zotonic_mod_development/priv/templates/_development_dispatch_options.tpl:2
 msgid "Value"
@@ -6029,12 +6183,12 @@ msgstr "Reinstalați"
 msgid "Reinstalled the data model."
 msgstr "Modelul de date a fost reinstalat."
 
-#: zotonic_mod_admin_modules/priv/templates/_admin_modules_tools.tpl:3
+#: zotonic_mod_admin_modules/priv/templates/_admin_modules_tools.tpl:6
 #: zotonic_mod_development/priv/templates/admin_development.tpl:219
 msgid "Rescan modules"
 msgstr "Rescanați modulele"
 
-#: zotonic_mod_admin_modules/priv/templates/_admin_modules_tools.tpl:4
+#: zotonic_mod_admin_modules/priv/templates/_admin_modules_tools.tpl:3
 msgid "Rescanning will rebuild the index of all modules, actions, templates etc. It will also reload all dispatch rules."
 msgstr "Rescanarea va reconstrui indicele tuturor modulelor, acțiunilor, șabloanelor etc. De asemenea, va reîncărca toate regulile de rutare."
 
@@ -7462,7 +7616,7 @@ msgstr "user@example.com"
 msgid "Admin Backups"
 msgstr "Administrarea copiilor de siguranță"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:64
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:66
 msgid "After the page has been restored, you will be redirected to the edit page."
 msgstr "După restaurarea paginii, veți fi redirecționat către pagina de editare."
 
@@ -7618,7 +7772,7 @@ msgstr "Ajutor despre copii de siguranță &amp; restaurare"
 msgid "If the Cloud File Store module is used, then deleted files can be retained indefinitely."
 msgstr "Dacă este folosit modulul de stocare în cloud, fișierele șterse pot fi păstrate pe termen nelimitat."
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:44
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:46
 msgid "It could be that a connected dependent page was deleted because of the deletion of this page, such a deleted dependent page can also be recovered."
 msgstr "Este posibil ca o pagină dependentă conectată să fi fost ștearsă odată cu această pagină. Și acea pagină dependentă poate fi recuperată."
 
@@ -7638,7 +7792,15 @@ msgstr "Creați zilnic o copie de siguranță a bazei de date și a fișierelor 
 msgid "Make a daily backup of the database."
 msgstr "Creați zilnic o copie de siguranță a bazei de date."
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:63
+#: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:17
+msgid "Media file availability could not be confirmed. You can continue restoring the page, but its media or saved preview image might not be recovered."
+msgstr ""
+
+#: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:22
+msgid "Media files are registered in the remote file store. Their availability has not been checked with the storage server."
+msgstr ""
+
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:65
 msgid "Media files can only be recovered if they are not yet deleted from the file storage. Zotonic will keep media for at least 5 weeks."
 msgstr "Fișierele media pot fi recuperate numai dacă nu au fost încă șterse din stocare. Zotonic păstrează conținutul media cel puțin 5 săptămâni."
 
@@ -7662,8 +7824,8 @@ msgstr "Notă:"
 msgid "Only administrators can start a backup."
 msgstr "Numai administratorii pot porni copierea de siguranță."
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:23
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:33
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:25
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:35
 msgid "Original"
 msgstr "Original"
 
@@ -7675,11 +7837,11 @@ msgstr "Păstrați parola de criptare a copiilor de siguranță într-o locație
 msgid "Previous versions"
 msgstr "Versiuni anterioare"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:54
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:56
 msgid "Recover incoming connections from other pages"
 msgstr "Recuperați legăturile primite de la alte pagini"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:50
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:52
 msgid "Recover outgoing connections to other pages"
 msgstr "Recuperați legăturile către alte pagini"
 
@@ -7693,7 +7855,7 @@ msgstr "Recuperarea unei pagini șterse necesită permisiunea de a crea pagini �
 msgid "Restore backup"
 msgstr "Restaurați copia de siguranță"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:58
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:60
 msgid "Restore deleted <em>dependent</em> pages that were referred by this page"
 msgstr "Restaurați paginile <em>dependente</em> șterse la care făcea trimitere această pagină"
 
@@ -7701,13 +7863,17 @@ msgstr "Restaurați paginile <em>dependente</em> șterse la care făcea trimiter
 msgid "Restore deleted page"
 msgstr "Restaurați pagina ștearsă"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:69
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:71
 msgid "Restore page"
 msgstr "Restaurați pagina"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:44
 msgid "Restore this page..."
 msgstr "Restaurați această pagină..."
+
+#: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:11
+msgid "Restoring this version can replace the media currently attached to the page."
+msgstr ""
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:36
 msgid "Revert page to earlier version"
@@ -7749,11 +7915,11 @@ msgstr "Perioada de păstrare a reviziilor utilizatorilor activi, în zile: {n}.
 msgid "Revisions of deleted users are kept for {n} days."
 msgstr "Perioada de păstrare a reviziilor utilizatorilor șterși, în zile: {n}."
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:25
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:27
 msgid "Select a category"
 msgstr "Selectați o categorie"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:35
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:37
 msgid "Select a content group"
 msgstr "Selectați un grup de conținut"
 
@@ -7768,6 +7934,10 @@ msgstr "Selectați fișierul copiei de siguranță pe care doriți să-l încăr
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:8
 msgid "Show import/export panel on the edit pages in the admin."
 msgstr "Afișați panoul de import/export pe paginile de editare din administrare."
+
+#: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:3
+msgid "Some media files cannot be recovered."
+msgstr ""
 
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:143
 msgid "Sorry, a global Zotonic configuration is set and cannot be changed."
@@ -7840,9 +8010,17 @@ msgstr "Modulul de copii de siguranță folosește o configurare globală Zotoni
 msgid "The encryption configuration is set to:"
 msgstr "Configurarea criptării este:"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:18
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:20
 msgid "The original category or content group no longer exists. Confirm the suggested replacement or select another one."
 msgstr "Categoria sau grupul de conținut original nu mai există. Confirmați înlocuirea sugerată sau selectați alta."
+
+#: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:5
+msgid "The original file for this version is no longer available. The page can be restored, but its media may be empty."
+msgstr ""
+
+#: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:8
+msgid "The saved preview image for this version is no longer available."
+msgstr ""
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:5
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:19
@@ -7899,7 +8077,7 @@ msgstr "O puteți găsi în <a href=\"{url}\">Configurarea sistemului</a> sau î
 msgid "You can have one backup per day of the week, older ones will be overwritten."
 msgstr "Puteți avea câte o copie de siguranță pentru fiecare zi a săptămânii; cele mai vechi vor fi suprascrise."
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:43
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:45
 msgid "You can recover incoming and outgoing connections to other pages."
 msgstr "Puteți recupera legăturile primite de la alte pagini și cele către alte pagini."
 
@@ -8503,6 +8681,14 @@ msgstr "ClamAV nu a putut fi contactat. Fișierele nu pot fi încărcate până 
 msgid "Please contact your system administrator."
 msgstr "Contactați administratorul sistemului."
 
+#: zotonic_mod_clamav/priv/templates/_admin_status_alert.tpl:3
+msgid "Virus scanner"
+msgstr ""
+
+#: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:9
+msgid "Virus scanner available."
+msgstr ""
+
 #: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:4
 msgid "Virus scanner unavailable"
 msgstr "Scaner antivirus indisponibil"
@@ -8833,7 +9019,7 @@ msgstr "An"
 
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
 #: zotonic_mod_development/priv/templates/_development_template_matches.tpl:8
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:266
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:226
 #: zotonic_site_status/priv/templates/_sites.tpl:6
 msgid "Actions"
 msgstr "Acțiuni"
@@ -8875,11 +9061,11 @@ msgstr "Noua locație poate fi o cale locală sau un URL complet. Lăsați gazda
 msgid "You are not allowed to change this."
 msgstr "Nu aveți permisiunea de a modifica acest element."
 
-#: zotonic_mod_development/src/mod_development.erl:693
+#: zotonic_mod_development/src/mod_development.erl:699
 msgid "<i>Function name does not exist.</i>"
 msgstr "<i>Numele funcției nu există.</i>"
 
-#: zotonic_mod_development/src/mod_development.erl:696
+#: zotonic_mod_development/src/mod_development.erl:702
 msgid "<i>Module not found.</i>"
 msgstr "<i>Modulul nu a fost găsit.</i>"
 
@@ -8946,8 +9132,8 @@ msgstr "Calculați și vizualizați un graf al dependențelor tuturor șabloanel
 msgid "Check debug points in the template source to see debug data here."
 msgstr "Bifați punctele de depanare din sursa șablonului pentru a vedea aici datele de depanare."
 
-#: zotonic_mod_development/src/mod_development.erl:501
-#: zotonic_mod_development/src/mod_development.erl:516
+#: zotonic_mod_development/src/mod_development.erl:507
+#: zotonic_mod_development/src/mod_development.erl:522
 msgid "Checking all templates..."
 msgstr "Se verifică toate șabloanele..."
 
@@ -9019,6 +9205,10 @@ msgstr "Configurările editorului nu au putut fi încărcate sau salvate."
 msgid "Could not load templates"
 msgstr "Șabloanele nu au putut fi încărcate"
 
+#: zotonic_mod_development/src/mod_development.erl:498
+msgid "Could not open the directory on this computer."
+msgstr ""
+
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:9
 msgid "Could not open the editor. Check the editor and path mapping."
 msgstr "Editorul nu a putut fi deschis. Verificați editorul și maparea căilor."
@@ -9079,7 +9269,7 @@ msgid "Detecting editors…"
 msgstr "Se detectează editorii…"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:7
-#: zotonic_mod_development/src/mod_development.erl:1362
+#: zotonic_mod_development/src/mod_development.erl:1368
 msgid "Development"
 msgstr "Dezvoltare"
 
@@ -9199,11 +9389,11 @@ msgstr "Urmărirea interogărilor bazei de date a fost activată"
 msgid "Enter the module and function you want to trace. If no function is given, all functions in the module will be traced. Enter how many calls to trace before stopping."
 msgstr "Introduceți modulul și funcția pe care doriți să le urmăriți. Dacă nu indicați o funcție, vor fi urmărite toate funcțiile din modul. Introduceți numărul de apeluri de urmărit înainte de oprire."
 
-#: zotonic_mod_development/src/mod_development.erl:665
+#: zotonic_mod_development/src/mod_development.erl:671
 msgid "Error changing the console logs."
 msgstr "Eroare la modificarea jurnalelor consolei."
 
-#: zotonic_mod_development/src/mod_development.erl:759
+#: zotonic_mod_development/src/mod_development.erl:765
 msgid "Error parsing template."
 msgstr "Eroare la analizarea șablonului."
 
@@ -9265,7 +9455,7 @@ msgstr "Urmărirea apelurilor de funcții"
 msgid "Function call tracing has been disabled. Use the following to enable function call tracing:"
 msgstr "Urmărirea apelurilor de funcții a fost dezactivată. Folosiți următoarele pentru a o activa:"
 
-#: zotonic_mod_development/src/mod_development.erl:699
+#: zotonic_mod_development/src/mod_development.erl:705
 msgid "Function tracing has been disabled in the Zotonic config."
 msgstr "Urmărirea funcțiilor a fost dezactivată în configurarea Zotonic."
 
@@ -9410,18 +9600,18 @@ msgstr "Nu a fost găsită nicio regulă de rutare corespunzătoare"
 msgid "No matching templates found."
 msgstr "Nu au fost găsite șabloane corespunzătoare."
 
-#: zotonic_mod_development/src/mod_development.erl:663
+#: zotonic_mod_development/src/mod_development.erl:669
 msgid "No permission to access the console logs."
 msgstr "Nu aveți permisiunea de a accesa jurnalele consolei."
 
-#: zotonic_mod_development/src/mod_development.erl:506
-#: zotonic_mod_development/src/mod_development.erl:521
-#: zotonic_mod_development/src/mod_development.erl:536
-#: zotonic_mod_development/src/mod_development.erl:544
-#: zotonic_mod_development/src/mod_development.erl:571
-#: zotonic_mod_development/src/mod_development.erl:613
-#: zotonic_mod_development/src/mod_development.erl:630
-#: zotonic_mod_development/src/mod_development.erl:647
+#: zotonic_mod_development/src/mod_development.erl:512
+#: zotonic_mod_development/src/mod_development.erl:527
+#: zotonic_mod_development/src/mod_development.erl:542
+#: zotonic_mod_development/src/mod_development.erl:550
+#: zotonic_mod_development/src/mod_development.erl:577
+#: zotonic_mod_development/src/mod_development.erl:619
+#: zotonic_mod_development/src/mod_development.erl:636
+#: zotonic_mod_development/src/mod_development.erl:653
 msgid "No permission to use mod_development."
 msgstr "Nu aveți permisiunea de a folosi mod_development."
 
@@ -9430,7 +9620,7 @@ msgstr "Nu aveți permisiunea de a folosi mod_development."
 msgid "No references found."
 msgstr "Nu au fost găsite referințe."
 
-#: zotonic_mod_development/src/mod_development.erl:625
+#: zotonic_mod_development/src/mod_development.erl:631
 msgid "No template found in the context."
 msgstr "Nu a fost găsit niciun șablon în context."
 
@@ -9455,7 +9645,7 @@ msgstr "Nu a fost găsit"
 msgid "Observers"
 msgstr "Observatori"
 
-#: zotonic_mod_development/src/mod_development.erl:702
+#: zotonic_mod_development/src/mod_development.erl:708
 msgid "Only the admin user can set traces."
 msgstr "Numai utilizatorul admin poate configura urmăriri."
 
@@ -9593,19 +9783,19 @@ msgstr "Porniți urmărirea"
 msgid "Start matching dispatch rules"
 msgstr "Începeți verificarea regulilor de rutare"
 
-#: zotonic_mod_development/src/mod_development.erl:659
+#: zotonic_mod_development/src/mod_development.erl:665
 msgid "Started logging to the console of your browser tab."
 msgstr "A început jurnalizarea în consola filei browserului."
 
-#: zotonic_mod_development/src/mod_development.erl:533
+#: zotonic_mod_development/src/mod_development.erl:539
 msgid "Started tracing all template inclusions."
 msgstr "A început urmărirea tuturor includerilor de șabloane."
 
-#: zotonic_mod_development/src/mod_development.erl:608
+#: zotonic_mod_development/src/mod_development.erl:614
 msgid "Started tracing template inclusions by rendering the page."
 msgstr "A început urmărirea includerilor de șabloane prin randarea paginii."
 
-#: zotonic_mod_development/src/mod_development.erl:530
+#: zotonic_mod_development/src/mod_development.erl:536
 msgid "Started tracing template inclusions for your session."
 msgstr "A început urmărirea includerilor de șabloane pentru sesiunea dumneavoastră."
 
@@ -9615,11 +9805,11 @@ msgstr "A început urmărirea includerilor de șabloane pentru sesiunea dumneavo
 msgid "Stop"
 msgstr "Opriți"
 
-#: zotonic_mod_development/src/mod_development.erl:661
+#: zotonic_mod_development/src/mod_development.erl:667
 msgid "Stopped logging to the console of all browser tabs."
 msgstr "Jurnalizarea în consolele tuturor filelor browserului a fost oprită."
 
-#: zotonic_mod_development/src/mod_development.erl:542
+#: zotonic_mod_development/src/mod_development.erl:548
 msgid "Stopped tracing template inclusions for all sessions."
 msgstr "Urmărirea includerilor de șabloane pentru toate sesiunile a fost oprită."
 
@@ -9658,7 +9848,7 @@ msgstr "Șablon"
 msgid "Template debugging"
 msgstr "Depanarea șabloanelor"
 
-#: zotonic_mod_development/src/mod_development.erl:762
+#: zotonic_mod_development/src/mod_development.erl:768
 msgid "Template file not found."
 msgstr "Fișierul șablon nu a fost găsit."
 
@@ -9678,7 +9868,7 @@ msgstr "Calea șablonului"
 msgid "Test with this template"
 msgstr "Testați cu acest șablon"
 
-#: zotonic_mod_development/src/mod_development.erl:610
+#: zotonic_mod_development/src/mod_development.erl:616
 msgid "The path must be a local URL."
 msgstr "Calea trebuie să fie un URL local."
 
@@ -9771,7 +9961,7 @@ msgstr "Model URI"
 msgid "Uncheck to debug only your current session."
 msgstr "Debifați pentru a depana numai sesiunea curentă."
 
-#: zotonic_mod_development/src/mod_development.erl:644
+#: zotonic_mod_development/src/mod_development.erl:650
 msgid "Updated template debug points."
 msgstr "Punctele de depanare ale șablonului au fost actualizate."
 
@@ -10610,35 +10800,35 @@ msgstr "După 1 săptămână"
 msgid "After 3 months"
 msgstr "După 3 luni"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:314
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:274
 msgid "All cloud files can be moved back to the file system on the server."
 msgstr "Toate fișierele din cloud pot fi mutate înapoi în sistemul de fișiere al serverului."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:322
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:282
 msgid "All cloud files will be queued for download."
 msgstr "Toate fișierele din cloud vor fi adăugate în coada de descărcare."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:279
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:239
 msgid "All files will be queued, uploads will start in the background within 10 minutes."
 msgstr "Toate fișierele vor fi adăugate în coadă, iar încărcările vor începe în fundal în cel mult 10 minute."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:269
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:229
 msgid "All local uploaded and preview files can be moved to the cloud."
 msgstr "Toate fișierele locale încărcate și cele de previzualizare pot fi mutate în cloud."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:288
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:248
 msgid "Are you sure you want to copy all files to the cloud?"
 msgstr "Sigur doriți să copiați toate fișierele în cloud?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:331
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:291
 msgid "Are you sure you want to copy all files to the disk of the server?"
 msgstr "Sigur doriți să copiați toate fișierele pe discul serverului?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:299
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:259
 msgid "Are you sure you want to move all files to the cloud?"
 msgstr "Sigur doriți să mutați toate fișierele în cloud?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:342
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:302
 msgid "Are you sure you want to move all files to the disk of the server?"
 msgstr "Sigur doriți să mutați toate fișierele pe discul serverului?"
 
@@ -10654,7 +10844,7 @@ msgstr "Înainte de salvare, configurările vor fi verificate prin încărcarea 
 msgid "Check the storage service and its access permissions. Failed reads are retried when requested, with a delay of up to ten minutes."
 msgstr "Verificați serviciul de stocare și permisiunile sale de acces. Citirile eșuate sunt reîncercate la cerere, cu o întârziere de până la zece minute."
 
-#: zotonic_mod_filestore/src/mod_filestore.erl:585
+#: zotonic_mod_filestore/src/mod_filestore.erl:619
 msgid "Cloud File Store"
 msgstr "Stocarea fișierelor în cloud"
 
@@ -10667,9 +10857,13 @@ msgstr "Configurarea stocării fișierelor în cloud"
 msgid "Cloud File Store Utilities and Statistics"
 msgstr "Instrumente și statistici pentru stocarea fișierelor în cloud"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:228
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:9
 msgid "Cloud Files"
 msgstr "Fișiere în cloud"
+
+#: zotonic_mod_filestore/priv/templates/_admin_status_alert.tpl:3
+msgid "Cloud file store"
+msgstr ""
 
 #: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:15
 msgid "Cloud file store configuration"
@@ -10683,23 +10877,23 @@ msgstr "Stocarea fișierelor în cloud necesită atenție"
 msgid "Consecutive failures"
 msgstr "Erori consecutive"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:285
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:245
 msgid "Copy all local files to the remote storage"
 msgstr "Copiați toate fișierele locale în spațiul de stocare la distanță"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:328
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:288
 msgid "Copy all remote files to local"
 msgstr "Copiați toate fișierele la distanță în stocarea locală"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:289
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:249
 msgid "Copy files to cloud"
 msgstr "Copiați fișierele în cloud"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:332
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:292
 msgid "Copy files to server disk"
 msgstr "Copiați fișierele pe discul serverului"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:278
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:238
 msgid "Could not access the service, double check your settings and try again."
 msgstr "Serviciul nu a putut fi accesat. Verificați configurările și încercați din nou."
 
@@ -10716,11 +10910,11 @@ msgstr "În prezent, Zotonic acceptă FTP, WebDAV și servicii compatibile cu AP
 msgid "Delete files from the cloud file store"
 msgstr "Ștergeți fișierele din spațiul de stocare în cloud"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:251
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:32
 msgid "Deletion queue"
 msgstr "Coadă de ștergere"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:250
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:31
 msgid "Download Queue"
 msgstr "Coadă de descărcare"
 
@@ -10728,7 +10922,7 @@ msgstr "Coadă de descărcare"
 msgid "Enable this to let the filestore act as a backup of  your local media files."
 msgstr "Activați această opțiune pentru ca depozitul de fișiere să servească drept copie de siguranță a fișierelor media locale."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:315
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:275
 msgid "Ensure yourself there is enough disk space before starting this process."
 msgstr "Asigurați-vă că există suficient spațiu pe disc înainte de a începe acest proces."
 
@@ -10752,8 +10946,8 @@ msgstr "Citiri eșuate în ultimele 15 minute:"
 msgid "Failing since"
 msgstr "Erori începând de la"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:233
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:256
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:14
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:37
 msgid "Files"
 msgstr "Fișiere"
 
@@ -10773,11 +10967,11 @@ msgstr "Pentru S3, URL-ul trebuie să înceapă cu <b><tt>https:</tt></b> sau <b
 msgid "For WebDAV the URL must start with <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>"
 msgstr "Pentru WebDAV, URL-ul trebuie să înceapă cu <b><tt>webdavs:</tt></b> sau <b><tt>webdav:</tt></b>"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:275
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:235
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "Dacă ați selectat „Păstrați fișierele locale după încărcarea în cloud”, fișierele locale nu sunt șterse, deoarece fișierele la distanță sunt considerate copii de siguranță ale celor locale."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:319
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:279
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "Dacă ați selectat „Păstrați fișierele locale după încărcarea în cloud”, fișierele la distanță nu sunt șterse, deoarece sunt considerate copii de siguranță ale fișierelor locale."
 
@@ -10805,7 +10999,12 @@ msgstr "Păstrați fișierele locale?"
 msgid "Last error"
 msgstr "Ultima eroare"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:227
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:222
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:20
+msgid "Loading…"
+msgstr "Se încarcă…"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:8
 msgid "Local Files"
 msgstr "Fișiere locale"
 
@@ -10814,23 +11013,23 @@ msgstr "Fișiere locale"
 msgid "Mark unrecoverable"
 msgstr "Marcați ca irecuperabil"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:226
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:7
 msgid "Media Resources"
 msgstr "Resurse media"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:296
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:256
 msgid "Move all local files to the remote storage"
 msgstr "Mutați toate fișierele locale în spațiul de stocare la distanță"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:339
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:299
 msgid "Move all remote files to local"
 msgstr "Mutați toate fișierele la distanță în stocarea locală"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:300
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:260
 msgid "Move files to cloud"
 msgstr "Mutați fișierele în cloud"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:343
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:303
 msgid "Move files to server disk"
 msgstr "Mutați fișierele pe discul serverului"
 
@@ -10839,6 +11038,10 @@ msgstr "Mutați fișierele pe discul serverului"
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:62
 msgid "Never"
 msgstr "Niciodată"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:18
+msgid "No cloud file store read errors detected."
+msgstr ""
 
 #: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:47
 msgid "No errors on this page."
@@ -10860,7 +11063,7 @@ msgstr "Nestabilit (Signature V2)"
 msgid "Now"
 msgstr "Acum"
 
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:38
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:39
 msgid "Only the admin account (user 1) can mark files unrecoverable."
 msgstr "Numai contul admin (utilizatorul 1) poate marca fișierele ca irecuperabile."
 
@@ -10931,7 +11134,7 @@ msgstr "Configurări salvate fără test de scriere."
 msgid "Stop retrying this file and mark it unrecoverable? Its record and error details will be kept. No files will be deleted."
 msgstr "Opriți reîncercările pentru acest fișier și îl marcați ca irecuperabil? Înregistrarea și detaliile erorii vor fi păstrate. Nu va fi șters niciun fișier."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:239
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:20
 msgid "Storage"
 msgstr "Stocare"
 
@@ -10939,7 +11142,7 @@ msgstr "Stocare"
 msgid "Test Cloud File Store Settings"
 msgstr "Testați configurările stocării în cloud"
 
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:255
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:256
 msgid "The cloud file store is read-only."
 msgstr "Stocarea fișierelor în cloud permite numai citirea."
 
@@ -10955,7 +11158,7 @@ msgstr "Stocarea în cloud folosește o configurare globală Zotonic care nu poa
 msgid "The configuration is:"
 msgstr "Configurarea este:"
 
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:85
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:86
 msgid "The settings are locked by the system configuration."
 msgstr "Configurările sunt blocate de configurarea sistemului."
 
@@ -10963,7 +11166,7 @@ msgstr "Configurările sunt blocate de configurarea sistemului."
 msgid "The settings are tested by uploading (and removing) a small file."
 msgstr "Configurările sunt testate prin încărcarea și eliminarea unui fișier mic."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:271
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:231
 msgid "There is a 1 minute wait before files are uploaded."
 msgstr "Există o așteptare de 1 minut înainte de încărcarea fișierelor."
 
@@ -10971,11 +11174,11 @@ msgstr "Există o așteptare de 1 minut înainte de încărcarea fișierelor."
 msgid "This extra deletion delay extends the period files can be recovered."
 msgstr "Această întârziere suplimentară a ștergerii prelungește perioada în care fișierele pot fi recuperate."
 
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:40
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:41
 msgid "This file no longer has an eligible error older than 24 hours. Reload the page."
 msgstr "Acest fișier nu mai are o eroare eligibilă mai veche de 24 de ore. Reîncărcați pagina."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:270
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:230
 msgid "This will queue the files for later asynchronous upload."
 msgstr "Fișierele vor fi adăugate în coadă pentru încărcare asincronă ulterioară."
 
@@ -10995,7 +11198,7 @@ msgstr "Irecuperabil"
 msgid "Unresolved files are listed oldest first. The error shown is the most recent recorded error for each file."
 msgstr "Fișierele cu probleme nerezolvate sunt listate începând cu cele mai vechi. Eroarea afișată este cea mai recentă înregistrată pentru fiecare fișier."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:249
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:30
 msgid "Upload Queue"
 msgstr "Coadă de încărcare"
 
@@ -11019,14 +11222,14 @@ msgstr "Cu WebDAV, numele de utilizator și parola sunt transmise în clar. Folo
 msgid "Yes, keep local files after upload"
 msgstr "Da, păstrați fișierele locale după încărcare"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:360
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:88
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:95
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:102
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:320
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:89
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:96
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:103
 msgid "You are not allowed to change these settings."
 msgstr "Nu aveți permisiunea de a modifica aceste configurări."
 
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:126
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:127
 msgid "You are not allowed to use this."
 msgstr "Nu aveți permisiunea de a folosi această funcție."
 
@@ -11034,8 +11237,8 @@ msgstr "Nu aveți permisiunea de a folosi această funcție."
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
 msgstr "Zotonic poate stoca în cloud fișierele încărcate și redimensionate. Aici puteți configura locația și cheile de acces pentru serviciul cloud."
 
-#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:150
-#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:180
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:158
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:188
 msgid "Could not upload"
 msgstr "Încărcarea nu a reușit"
 
@@ -11059,7 +11262,7 @@ msgstr "Contrast"
 msgid "Contrast &amp; Brightness"
 msgstr "Contrast &amp; luminozitate"
 
-#: zotonic_mod_image_edit/src/mod_image_edit.erl:91
+#: zotonic_mod_image_edit/src/mod_image_edit.erl:93
 msgid "Could not save the image settings."
 msgstr "Configurările imaginii nu au putut fi salvate."
 
@@ -11115,7 +11318,7 @@ msgstr "Rotire în plan și înclinare verticală &amp; orizontală"
 msgid "Rotate"
 msgstr "Rotiți"
 
-#: zotonic_mod_image_edit/src/mod_image_edit.erl:88
+#: zotonic_mod_image_edit/src/mod_image_edit.erl:90
 msgid "Saved the image settings."
 msgstr "Configurările imaginii au fost salvate."
 
@@ -12837,10 +13040,6 @@ msgstr "Limba folosită când preferința nu este cunoscută:"
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:19
 msgid "Language:"
 msgstr "Limbă:"
-
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:20
-msgid "Loading…"
-msgstr "Se încarcă…"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:2
 msgid "Mailing"
@@ -14997,10 +15196,6 @@ msgstr "Încorporarea elementului media a eșuat cu codul HTTP"
 msgid "Fix embedded videos"
 msgstr "Remediați videoclipurile încorporate"
 
-#: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:2
-msgid "Media maintenance"
-msgstr "Întreținerea conținutului media"
-
 #: zotonic_mod_oembed/src/mod_oembed.erl:458
 msgid "No embedded videos found which need fixing."
 msgstr "Nu au fost găsite videoclipuri încorporate care necesită remediere."
@@ -15647,11 +15842,11 @@ msgstr "Trebuie să acceptați condițiile pentru a vă înregistra."
 msgid "Your signup code"
 msgstr "Codul dumneavoastră de înregistrare"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:264
+#: zotonic_mod_site_update/src/mod_site_update.erl:276
 msgid "Another deployment is in progress. Please try again when it finishes."
 msgstr "O altă implementare este în curs de desfășurare. Vă rugăm să încercați din nou după finalizarea acesteia."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:164
+#: zotonic_mod_site_update/src/mod_site_update.erl:176
 msgid "Building Zotonic in the background..."
 msgstr "Se construiește Zotonic în fundal..."
 
@@ -15663,9 +15858,9 @@ msgstr "Nu s-a putut prelua jurnalul de modificări de la serverul la distanță
 msgid "Current commit"
 msgstr "Commit-ul curent"
 
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:60
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:62
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:11
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:61
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:63
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:12
 msgid "Deploy"
 msgstr "Implementează"
 
@@ -15679,27 +15874,31 @@ msgstr "Implementează cea mai recentă versiune"
 msgid "Deploy latest Zotonic"
 msgstr "Implementează cea mai recentă versiune Zotonic"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:217
+#: zotonic_mod_site_update/src/mod_site_update.erl:229
 msgid "Deploy latest version"
 msgstr "Implementează cea mai recentă versiune"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:251
+#: zotonic_mod_site_update/src/mod_site_update.erl:263
 msgid "Deploying the latest version..."
 msgstr "Se implementează cea mai recentă versiune..."
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:2
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:5
-#: zotonic_mod_site_update/src/mod_site_update.erl:128
+#: zotonic_mod_site_update/src/mod_site_update.erl:140
 msgid "Deployment"
 msgstr "Implementare"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:262
+#: zotonic_mod_site_update/src/mod_site_update.erl:274
 msgid "Deployment completed."
 msgstr "Implementarea s-a finalizat."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:266
+#: zotonic_mod_site_update/src/mod_site_update.erl:278
 msgid "Deployment failed. Check the server log for details."
 msgstr "Implementarea a eșuat. Verificați jurnalul serverului pentru detalii."
+
+#: zotonic_mod_site_update/priv/templates/_site_deploy_status_value.tpl:5
+msgid "Deployment running on this node"
+msgstr ""
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:5
 msgid "Deployment updates the entire Git repository, including any other modules it contains."
@@ -15709,7 +15908,7 @@ msgstr "Procesul de implementare actualizează întregul depozit Git, inclusiv o
 msgid "Fetching remote changes…"
 msgstr "Se preiau modificările de la distanță…"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:162
+#: zotonic_mod_site_update/src/mod_site_update.erl:174
 msgid "Finished rebuilding Zotonic."
 msgstr "Reconstruirea Zotonic s-a încheiat."
 
@@ -15725,11 +15924,11 @@ msgstr "Lista modulelor"
 msgid "No deployable version control repository was found."
 msgstr "Nu s-a găsit niciun depozit de control al versiunilor care să poată fi implementat."
 
-#: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:12
+#: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:13
 msgid "Rebuild Zotonic"
 msgstr "Reconstruiți Zotonic"
 
-#: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:14
+#: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:15
 msgid "Recompile changed Erlang files in the background"
 msgstr "Recompilați în fundal fișierele Erlang modificate"
 
@@ -15749,7 +15948,7 @@ msgstr "Verificați modificările primite și implementați depozitul Git al ace
 msgid "Review incoming changes and deploy this site's code. Compilation and activation are coordinated across all sites on this node."
 msgstr "Verificați modificările primite și implementați codul acestui site. Compilarea și activarea sunt coordonate la nivelul tuturor site-urilor de pe acest nod."
 
-#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:5
+#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:6
 msgid "Review incoming changes before deploying the latest version."
 msgstr "Verificați modificările primite înainte de a implementa cea mai recentă versiune."
 
@@ -15770,11 +15969,11 @@ msgstr "Implementarea site-ului"
 msgid "Site update API token"
 msgstr "Token API pentru actualizarea site-ului"
 
-#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:9
+#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:10
 msgid "Site update is not available as the site does not use a known version control system, like git."
 msgstr "Actualizarea site-ului nu este disponibilă deoarece site-ul nu folosește un sistem cunoscut de control al versiunilor, precum git."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:166
+#: zotonic_mod_site_update/src/mod_site_update.erl:178
 msgid "Sorry this can only be run from the Zotonic status site"
 msgstr "Această acțiune poate fi executată numai de pe site-ul de stare Zotonic"
 
@@ -15815,8 +16014,8 @@ msgid "View system status"
 msgstr "Vizualizează starea sistemului"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:20
-#: zotonic_mod_site_update/src/mod_site_update.erl:221
-#: zotonic_mod_site_update/src/mod_site_update.erl:256
+#: zotonic_mod_site_update/src/mod_site_update.erl:233
+#: zotonic_mod_site_update/src/mod_site_update.erl:268
 msgid "You are not allowed to deploy this code."
 msgstr "Nu aveți voie să implementați acest cod."
 
