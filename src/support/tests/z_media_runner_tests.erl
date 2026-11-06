@@ -211,3 +211,41 @@ configuration_limits_test() ->
     ?assertNot(z_media_runner_protocol:https_url(<<"http://example.com/media-runner/callback">>)),
     ?assertNot(z_media_runner_protocol:https_url(<<"https://user:pass@example.com/callback">>)),
     ?assertEqual({error, media_runner_configuration}, z_media_runner:callback_url(undefined)).
+
+operation_deadline_cleanup_test() ->
+    Parent = self(),
+    Path = "/tmp/runner-deadline-" ++ integer_to_list(erlang:unique_integer([positive])),
+    try
+        Result = z_media_deadline:run(fun() ->
+            Guard = z_media_runner_temp:guard(Path),
+            ok = file:write_file(Path, <<"partial">>),
+            Parent ! {guard, Guard},
+            receive never -> ok end
+        end, erlang:monotonic_time(millisecond) + 100),
+        ?assertEqual({error, {media_runner_unavailable, operation_timeout}}, Result),
+        receive {guard, Guard} ->
+            Ref = monitor(process, Guard),
+            receive {'DOWN', Ref, process, Guard, _} -> ok after 1000 -> error(guard_not_stopped) end
+        after 1000 -> error(guard_not_started)
+        end,
+        ?assertNot(filelib:is_file(Path))
+    after file:delete(Path)
+    end.
+
+operation_caller_death_test() ->
+    Parent = self(),
+    Caller = spawn(fun() ->
+        z_media_deadline:run(fun() ->
+            Parent ! {worker, self()},
+            receive never -> ok end
+        end, erlang:monotonic_time(millisecond) + 60000)
+    end),
+    receive {worker, Worker} ->
+        Ref = monitor(process, Worker),
+        exit(Caller, kill),
+        receive {'DOWN', Ref, process, Worker, killed} -> ok after 1000 -> error(worker_not_stopped) end
+    after 1000 -> exit(Caller, kill), error(worker_not_started)
+    end,
+    ?assert(z_video_convert:retryable({error, {media_runner_processing, <<"worker_failed">>}})),
+    ?assert(z_video_convert:retryable({error, {media_runner_processing, <<"job_expired">>}})),
+    ?assertNot(z_video_convert:retryable({error, {media_runner_processing, <<"command_failed">>}})).
