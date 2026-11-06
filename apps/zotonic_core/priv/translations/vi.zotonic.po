@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-06 07:32\n"
+"PO-Revision-Date: 2026-11-06 08:38\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
 "MIME-Version: 1.0\n"
@@ -1084,6 +1084,26 @@ msgstr "dùng trình duyệt khác (ví dụ: Chrome nếu hiện đang dùng Fi
 msgid "view (acl action)"
 msgstr "xem"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:4
+msgid "<strong>{n}</strong> IP address has more than 250 open sockets."
+msgid_plural "<strong>{n}</strong> IP addresses have more than 250 open sockets."
+msgstr[0] "<strong>{n}</strong> Các địa chỉ IP có hơn 250 cổng mở."
+
+#: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:2
+msgid "<strong>{n}</strong> page waiting to be indexed"
+msgid_plural "<strong>{n}</strong> pages waiting to be indexed"
+msgstr[0] "<strong>{n}</strong> các trang đang chờ được lập chỉ mục"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:9
+msgid "{n} background task remaining"
+msgid_plural "{n} background tasks remaining"
+msgstr[0] "{n} các tác vụ nền còn lại"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:7
+msgid "{n} open socket"
+msgid_plural "{n} open sockets"
+msgstr[0] "{n} mở các socket"
+
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:219
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:221
 msgid "&lt; Prev"
@@ -1478,7 +1498,7 @@ msgstr "Đánh dấu các trang muốn cập nhật."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_check.tpl:5
 msgid "Checking…"
-msgstr ""
+msgstr "Đang kiểm tra…"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:10
 msgid "Choose a media item from this page to insert in the body text."
@@ -1547,7 +1567,7 @@ msgstr "Thư mục cấu hình"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:2
 msgid "Configuration files"
-msgstr ""
+msgstr "Tệp cấu hình"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:24
 msgid "Configured"
@@ -1647,7 +1667,7 @@ msgstr "Không thể kết nối đến website."
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:27
 msgid "Could not contact the media runner."
-msgstr ""
+msgstr "Không thể kết nối với trình xử lý đa phương tiện."
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:11
 msgid "Could not detect anything to import on that URL or embed code."
@@ -1655,11 +1675,11 @@ msgstr "Không tìm thấy nội dung có thể nhập từ URL hoặc mã nhún
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:68
 msgid "Could not queue generated preview cleanup. Check the logs."
-msgstr ""
+msgstr "Không thể đưa tác vụ dọn dẹp bản xem trước đã tạo vào hàng đợi. Vui lòng kiểm tra nhật ký."
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:58
 msgid "Could not queue media deduplication. Check the logs."
-msgstr ""
+msgstr "Không thể đưa quá trình loại trừ trùng lặp phương tiện vào hàng đợi. Vui lòng kiểm tra nhật ký."
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:119
 msgid "Could not reload the site configuration, check the logs."
@@ -1732,7 +1752,7 @@ msgstr "Thư mục dữ liệu"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:61
 msgid "Datamodel upgrades and reinstalls preserve your existing data. No content or uploaded files will be deleted."
-msgstr ""
+msgstr "Việc nâng cấp và cài đặt lại mô hình dữ liệu sẽ giữ nguyên dữ liệu hiện có của bạn. Không có nội dung hay tệp tin nào đã tải lên bị xóa."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:6
 msgid "Date range"
@@ -1749,7 +1769,7 @@ msgstr "Ngày bắt đầu/kết thúc"
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:23
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:25
 msgid "Deduplicate media files"
-msgstr ""
+msgstr "Loại bỏ các tệp đa phương tiện trùng lặp"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:20
 msgid "Define the query using the query arguments or JSON."
@@ -1757,16 +1777,16 @@ msgstr "Định nghĩa truy vấn bằng đối số truy vấn hoặc JSON."
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:31
 msgid "Delete all generated image sizes? Preview originals are kept. Image requests may be slower while previews regenerate."
-msgstr ""
+msgstr "Xóa tất cả các kích thước hình ảnh đã tạo? Các bản xem trước gốc sẽ được giữ lại. Việc tải hình ảnh có thể chậm hơn trong khi các bản xem trước đang được tạo lại."
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:28
 msgid "Delete all resized image variants, including variants in remote storage. Uploaded originals and preview images extracted from movies, PDFs and embeds are kept. Previews regenerate when requested. Remote deletion follows the filestore retention policy."
-msgstr ""
+msgstr "Xóa tất cả các biến thể hình ảnh đã được thay đổi kích thước, bao gồm cả các biến thể trên bộ lưu trữ từ xa. Các tệp gốc đã tải lên và hình ảnh xem trước được trích xuất từ video, tệp PDF và nội dung nhúng sẽ được giữ lại. Hình ảnh xem trước sẽ được tạo lại khi có yêu cầu. Việc xóa trên bộ lưu trữ từ xa tuân theo chính sách lưu giữ của bộ lưu trữ tệp."
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:30
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:31
 msgid "Delete generated previews"
-msgstr ""
+msgstr "Xóa các bản xem trước đã tạo"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:23
 msgid "Delete if no other page is connected to this page."
@@ -1946,7 +1966,7 @@ msgstr "Chỉnh sửa ghi chú"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config.tpl:7
 msgid "Edit this configuration file"
-msgstr ""
+msgstr "Chỉnh sửa tệp cấu hình này"
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:122
 msgid "Edit:"
@@ -2210,11 +2230,11 @@ msgstr "Hàm"
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:64
 msgid "Generated preview cleanup has been queued. Preview originals are kept."
-msgstr ""
+msgstr "Việc dọn dẹp các bản xem trước đã tạo đã được đưa vào hàng đợi. Các bản gốc của bản xem trước vẫn được giữ lại."
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:28
 msgid "Generated previews"
-msgstr ""
+msgstr "Các bản xem trước được tạo ra"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:78
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:41
@@ -2245,7 +2265,7 @@ msgstr "Tiêu đề | tiêu đề lớn"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:11
 msgid "Health checks"
-msgstr ""
+msgstr "Kiểm tra tình trạng hệ thống"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:6
 msgid "Health, background work and services for"
@@ -2279,10 +2299,6 @@ msgstr "Máy chủ"
 msgid "IP Address"
 msgstr "Địa chỉ IP"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:4
-msgid "IP addresses have more than 250 open sockets."
-msgstr "địa chỉ IP có hơn 250 socket đang mở."
-
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:269
 msgid "Id, newest first"
 msgstr "ID, mới nhất trước"
@@ -2293,7 +2309,7 @@ msgstr "ID, cũ nhất trước"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:6
 msgid "Idle"
-msgstr ""
+msgstr "Không hoạt động"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:11
 msgid "If a page has a publication date range then it will only be visible between the two dates. Note that if you are allowed to edit the page then you can always see it."
@@ -2309,11 +2325,11 @@ msgstr "Nếu không đánh dấu, khách truy cập luôn được chuyển hư
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:21
 msgid "ImageMagick (local)"
-msgstr ""
+msgstr "ImageMagick (trên máy)"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:24
 msgid "ImageMagick (media runner)"
-msgstr ""
+msgstr "ImageMagick (trình xử lý phương tiện)"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:141
 #: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:17
@@ -2423,7 +2439,7 @@ msgstr "Chế độ xem trực tiếp"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:42
 msgid "Local"
-msgstr ""
+msgstr "Cục bộ"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:43
 msgid "Local ImageMagick"
@@ -2537,11 +2553,11 @@ msgstr "Nội dung đa phương tiện"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:5
 msgid "Media deduplication"
-msgstr ""
+msgstr "Loại bỏ dữ liệu đa phương tiện trùng lặp"
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:54
 msgid "Media deduplication has been queued."
-msgstr ""
+msgstr "Quá trình loại trừ trùng lặp dữ liệu đa phương tiện đã được đưa vào hàng đợi."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:112
 msgid "Media details"
@@ -2568,11 +2584,11 @@ msgstr "Bảo trì nội dung đa phương tiện"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:18
 msgid "Media maintenance runs in the background. Waiting tasks resume automatically. Remote deletion follows the filestore retention policy."
-msgstr ""
+msgstr "Quá trình bảo trì phương tiện diễn ra ở chế độ nền. Các tác vụ đang chờ xử lý sẽ tự động tiếp tục. Việc xóa từ xa tuân theo chính sách lưu giữ của kho tệp."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:15
 msgid "Media maintenance status is unavailable."
-msgstr ""
+msgstr "Không thể truy cập trạng thái bảo trì phương tiện."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:4
 msgid "Media on this page"
@@ -2682,7 +2698,7 @@ msgstr "Di chuyển khối lên"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:23
 msgid "Move originals and extracted preview images into content-addressable storage. Redundant local and remote copies are cleaned up in the background. Remote files without a checksum are skipped; no files are downloaded to calculate checksums."
-msgstr ""
+msgstr "Chuyển các tệp gốc và ảnh xem trước đã trích xuất vào bộ lưu trữ định địa chỉ theo nội dung. Các bản sao dư thừa ở cục bộ và từ xa sẽ được dọn dẹp ở chế độ nền. Bỏ qua các tệp từ xa không có tổng kiểm tra; không tải xuống tệp nào để tính tổng kiểm tra."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:205
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:206
@@ -2743,7 +2759,7 @@ msgstr "Không có địa chỉ IP nào có hơn 250 socket đang mở."
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:10
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:20
 msgid "No configuration files found."
-msgstr ""
+msgstr "Không tìm thấy tệp cấu hình nào."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_depictions.tpl:21
 msgid "No connected images."
@@ -2789,7 +2805,7 @@ msgstr "Chưa chọn trang nào"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:5
 msgid "No problems found."
-msgstr ""
+msgstr "Không phát hiện thấy vấn đề nào."
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:49
 msgid "No results."
@@ -2839,7 +2855,7 @@ msgstr "Chỉ các quản trị viên hệ thống mới có thể ngắt kết 
 
 #: zotonic_mod_admin/priv/templates/_admin_system_info_directory.tpl:3
 msgid "Open"
-msgstr ""
+msgstr "Mở"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:63
 msgid "Open Modules list"
@@ -2988,7 +3004,7 @@ msgstr "Xem trước"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:9
 msgid "Preview cleanup"
-msgstr ""
+msgstr "Dọn dẹp bản xem trước"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:30
 msgid "Previous in category:"
@@ -3088,7 +3104,7 @@ msgstr "Đưa từng trang vào hàng đợi để lập chỉ mục tìm kiếm
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:4
 msgid "Queued / waiting"
-msgstr ""
+msgstr "Đang xếp hàng / đang chờ"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:14
 msgid "Ranch limit"
@@ -3166,11 +3182,11 @@ msgstr "Ghi chú"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:40
 msgid "Remote runners only"
-msgstr ""
+msgstr "Chỉ dùng trình xử lý từ xa"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:40
 msgid "Remote runners with local fallback"
-msgstr ""
+msgstr "Trình xử lý từ xa với xử lý cục bộ dự phòng"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:70
 msgid "Remote sandbox isolation and queue details are available on each runner’s dashboard."
@@ -3237,7 +3253,7 @@ msgstr "Hãy chạy lại quá trình cài đặt mô hình dữ liệu cốt l�
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:75
 msgid "Run the Zotonic core datamodel installation again for this site's database? Your existing data will be preserved."
-msgstr ""
+msgstr "Có muốn chạy lại quá trình cài đặt mô hình dữ liệu cốt lõi của Zotonic cho cơ sở dữ liệu của trang web này không? Dữ liệu hiện có của bạn sẽ được giữ nguyên."
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:65
 msgid "Run the site's schema installation again. The site will stop and restart."
@@ -3310,7 +3326,7 @@ msgstr "Lưu trang này."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:11
 msgid "Save to see your changes"
-msgstr ""
+msgstr "Lưu để xem thay đổi"
 
 #: zotonic_mod_admin/src/mod_admin.erl:999
 msgid "Scheduled a background task to check all refers connections."
@@ -3481,7 +3497,7 @@ msgstr "Bộ nhớ đệm trang web"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:14
 msgid "Site config files"
-msgstr ""
+msgstr "Tệp cấu hình trang web"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:65
 msgid "Site datamodel"
@@ -3709,7 +3725,7 @@ msgstr "Thông tin hệ thống"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:3
 msgid "System resources and configuration"
-msgstr ""
+msgstr "Tài nguyên hệ thống và cấu hình"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:2
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:5
@@ -3946,7 +3962,7 @@ msgstr "Tài nguyên này được tạo bởi mô-đun"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:68
 msgid "This runs the site's schema installation again and stops and restarts the site. Your existing data will be preserved. Continue?"
-msgstr ""
+msgstr "Thao tác này sẽ chạy lại quá trình cài đặt lược đồ của trang web và dừng rồi khởi động lại trang web. Dữ liệu hiện có của bạn sẽ được giữ nguyên. Tiếp tục chứ?"
 
 #: zotonic_mod_admin/priv/templates/_admin_maintenance_panel.tpl:3
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:25
@@ -4237,7 +4253,7 @@ msgstr "Xem trạng thái"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_info_directory.tpl:3
 msgid "View this directory in the file manager on the Zotonic server's desktop"
-msgstr ""
+msgstr "Xem thư mục này trong trình quản lý tệp trên màn hình nền của máy chủ Zotonic"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:29
 msgid "Visible from"
@@ -4365,7 +4381,7 @@ msgstr "Mô hình dữ liệu Zotonic"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:4
 msgid "Zotonic init files"
-msgstr ""
+msgstr "Các tệp khởi tạo của Zotonic"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:30
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:27
@@ -4471,10 +4487,6 @@ msgstr "người sửa"
 msgid "name"
 msgstr "tên"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:7
-msgid "open sockets"
-msgstr "socket đang mở"
-
 #: zotonic_mod_admin/priv/templates/_admin_view_types.tpl:3
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:104
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:55
@@ -4486,10 +4498,6 @@ msgstr "trang"
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:24
 msgid "page block"
 msgstr "khối trang"
-
-#: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:2
-msgid "pages waiting to be indexed"
-msgstr "các trang đang chờ được lập chỉ mục"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:28
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:10
@@ -4538,10 +4546,6 @@ msgstr "xem"
 #: zotonic_mod_admin/priv/templates/_admin_navbar_brand.tpl:1
 msgid "visit site"
 msgstr "truy cập website"
-
-#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:9
-msgid "{count} background tasks remaining"
-msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:25
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:201
@@ -7751,11 +7755,11 @@ msgstr "Sao lưu cơ sở dữ liệu hằng ngày."
 
 #: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:17
 msgid "Media file availability could not be confirmed. You can continue restoring the page, but its media or saved preview image might not be recovered."
-msgstr ""
+msgstr "Không thể xác nhận tính khả dụng của tệp phương tiện. Bạn có thể tiếp tục khôi phục trang, nhưng các tệp phương tiện hoặc hình ảnh xem trước đã lưu của trang đó có thể không được khôi phục."
 
 #: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:22
 msgid "Media files are registered in the remote file store. Their availability has not been checked with the storage server."
-msgstr ""
+msgstr "Các tệp phương tiện đã được đăng ký trong kho tệp từ xa. Tình trạng sẵn có của chúng chưa được kiểm tra với máy chủ lưu trữ."
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:65
 msgid "Media files can only be recovered if they are not yet deleted from the file storage. Zotonic will keep media for at least 5 weeks."
@@ -7830,7 +7834,7 @@ msgstr "Khôi phục trang này..."
 
 #: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:11
 msgid "Restoring this version can replace the media currently attached to the page."
-msgstr ""
+msgstr "Việc khôi phục phiên bản này có thể thay thế nội dung đa phương tiện hiện đang được gắn vào trang."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:36
 msgid "Revert page to earlier version"
@@ -7894,7 +7898,7 @@ msgstr "Hiển thị bảng nhập/xuất trên các trang chỉnh sửa trong t
 
 #: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:3
 msgid "Some media files cannot be recovered."
-msgstr ""
+msgstr "Một số tệp phương tiện không thể khôi phục được."
 
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:143
 msgid "Sorry, a global Zotonic configuration is set and cannot be changed."
@@ -7972,11 +7976,11 @@ msgstr "Danh mục hoặc nhóm nội dung gốc không còn tồn tại. Xác n
 
 #: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:5
 msgid "The original file for this version is no longer available. The page can be restored, but its media may be empty."
-msgstr ""
+msgstr "Tệp gốc của phiên bản này hiện không còn nữa. Trang này có thể được khôi phục, nhưng các tệp đa phương tiện của nó có thể bị trống."
 
 #: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:8
 msgid "The saved preview image for this version is no longer available."
-msgstr ""
+msgstr "Hình ảnh xem trước đã lưu cho phiên bản này hiện không còn nữa."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:5
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:19
@@ -8639,11 +8643,11 @@ msgstr "Hãy liên hệ quản trị viên hệ thống."
 
 #: zotonic_mod_clamav/priv/templates/_admin_status_alert.tpl:3
 msgid "Virus scanner"
-msgstr ""
+msgstr "Phần mềm quét virus"
 
 #: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:9
 msgid "Virus scanner available."
-msgstr ""
+msgstr "Có sẵn trình quét virus."
 
 #: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:4
 msgid "Virus scanner unavailable"
@@ -9163,7 +9167,7 @@ msgstr "Không thể tải mẫu"
 
 #: zotonic_mod_development/src/mod_development.erl:498
 msgid "Could not open the directory on this computer."
-msgstr ""
+msgstr "Không thể mở thư mục trên máy tính này."
 
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:9
 msgid "Could not open the editor. Check the editor and path mapping."
@@ -10819,7 +10823,7 @@ msgstr "Tệp trên đám mây"
 
 #: zotonic_mod_filestore/priv/templates/_admin_status_alert.tpl:3
 msgid "Cloud file store"
-msgstr ""
+msgstr "Dịch vụ lưu trữ tệp trên đám mây"
 
 #: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:15
 msgid "Cloud file store configuration"
@@ -10997,7 +11001,7 @@ msgstr "Không bao giờ"
 
 #: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:18
 msgid "No cloud file store read errors detected."
-msgstr ""
+msgstr "Không phát hiện thấy lỗi đọc tệp trên dịch vụ lưu trữ đám mây."
 
 #: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:47
 msgid "No errors on this page."
@@ -15844,7 +15848,7 @@ msgstr "Quá trình triển khai đã thất bại. Vui lòng kiểm tra nhật 
 
 #: zotonic_mod_site_update/priv/templates/_site_deploy_status_value.tpl:5
 msgid "Deployment running on this node"
-msgstr ""
+msgstr "Việc triển khai đang chạy trên nút này"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:5
 msgid "Deployment updates the entire Git repository, including any other modules it contains."
