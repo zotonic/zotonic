@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-02 21:24\n"
+"PO-Revision-Date: 2026-11-06 08:37\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -374,7 +374,7 @@ msgstr "Sind Sie sicher, dass Sie alle ACL-Regeln in ihrer aktuell veröffentlic
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:90
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:161
 #: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:31
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:68
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:70
 #: zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7
 #: zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:10
@@ -404,8 +404,8 @@ msgstr "Sind Sie sicher, dass Sie alle ACL-Regeln in ihrer aktuell veröffentlic
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:26
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:85
 #: zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:58
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:10
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:59
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:11
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:229
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:237
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70
@@ -440,7 +440,7 @@ msgstr "Abbrechen"
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:22
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:11
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:22
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:24
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:28
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:12
 #: zotonic_mod_survey/src/mod_survey.erl:656
@@ -541,7 +541,7 @@ msgstr "Inhalt"
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_visible_for.tpl:2
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:58
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:51
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:32
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:34
 #: zotonic_mod_content_groups/priv/templates/_admin_overview_filter_panel.tpl:6
 #: zotonic_mod_content_groups/priv/templates/_dialog_admin_bulk_update.tpl:5
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:62
@@ -580,7 +580,7 @@ msgstr "Verschieben in die Kollaborationsgruppe nicht möglich."
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:118
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:53
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:8
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:67
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:81
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:30
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:53
 #: zotonic_mod_admin_identity/src/mod_admin_identity.erl:330
@@ -740,7 +740,7 @@ msgstr "Mitglieder der gleichen Benutzergruppe"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:8
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:9
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:42
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:21
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:35
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:28
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:84
@@ -852,7 +852,7 @@ msgid "Published rules"
 msgstr "Veröffentlichte Regeln"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:41
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:69
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:71
 msgid "Revert"
 msgstr "Zurücksetzen"
 
@@ -1102,6 +1102,30 @@ msgstr "einen anderen Browser verwenden (z. B. Chrome, wenn Sie jetzt Firefox ve
 msgid "view (acl action)"
 msgstr "Ansehen"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:4
+msgid "<strong>{n}</strong> IP address has more than 250 open sockets."
+msgid_plural "<strong>{n}</strong> IP addresses have more than 250 open sockets."
+msgstr[0] ""
+msgstr[1] ""
+
+#: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:2
+msgid "<strong>{n}</strong> page waiting to be indexed"
+msgid_plural "<strong>{n}</strong> pages waiting to be indexed"
+msgstr[0] ""
+msgstr[1] ""
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:9
+msgid "{n} background task remaining"
+msgid_plural "{n} background tasks remaining"
+msgstr[0] ""
+msgstr[1] ""
+
+#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:7
+msgid "{n} open socket"
+msgid_plural "{n} open sockets"
+msgstr[0] ""
+msgstr[1] ""
+
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:219
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:221
 msgid "&lt; Prev"
@@ -1236,7 +1260,7 @@ msgstr "Notiz hinzufügen"
 msgid "Added the connection to"
 msgstr "Verbindung hinzugefügt zu"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:53
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:66
 msgid "Additional module tools"
 msgstr "Zusätzliche Modul-Tools"
 
@@ -1256,7 +1280,7 @@ msgstr "Admin"
 msgid "Advanced"
 msgstr "Erweitert"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:38
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:58
 msgid "Advanced repair"
 msgstr "Erweiterte Reparatur"
 
@@ -1287,13 +1311,13 @@ msgstr "Alle Medien"
 msgid "All pages"
 msgstr "Alle Seiten"
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:38
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:39
 msgid "All sites have been flushed."
 msgstr "Alle Websitecachespeicher wurden geleert."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:36
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:2
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:37
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:50
 msgid "All sites on this node"
 msgstr "Alle Websites auf diesem Knoten"
 
@@ -1429,7 +1453,7 @@ msgstr "Verfügbar"
 msgid "Back"
 msgstr "Zurück"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:12
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:25
 msgid "Background work"
 msgstr "Hintergrundaufgaben"
 
@@ -1465,7 +1489,7 @@ msgstr "Zwischengespeichert"
 msgid "Caches"
 msgstr "Caches"
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:47
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:48
 msgid "Caches have been flushed."
 msgstr "Die Cachespeicher wurden geleert."
 
@@ -1494,6 +1518,10 @@ msgstr "Markieren Sie die Seiten, die Sie löschen möchten."
 msgid "Check the pages you want to update."
 msgstr "Markieren Sie die Seiten, die Sie aktualisieren möchten."
 
+#: zotonic_mod_admin/priv/templates/_admin_status_check.tpl:5
+msgid "Checking…"
+msgstr "Wird überprüft…"
+
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:10
 msgid "Choose a media item from this page to insert in the body text."
 msgstr "Wählen Sie ein Medienelement dieser Seite aus, das in den Text eingefügt werden soll."
@@ -1518,10 +1546,6 @@ msgstr "Löschen"
 msgid "Clear cached templates, dispatch rules and in-memory site data. The shared file index is also refreshed."
 msgstr "Leeren Sie die zwischengespeicherten Vorlagen, Dispatch-Regeln und Website-Daten im Arbeitsspeicher. Der gemeinsame Dateiindex wird ebenfalls aktualisiert."
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:10
-msgid "Click \"Save\" to see your changes."
-msgstr "Klicken Sie auf „Speichern“, um Ihre Änderungen anzuzeigen."
-
 #: zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:11
 msgid "Click here for more information"
 msgstr "Klicken Sie hier für weitere Informationen"
@@ -1530,7 +1554,7 @@ msgstr "Klicken Sie hier für weitere Informationen"
 msgid "Click to preview."
 msgstr "Zur Vorschau anklicken."
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:15
 msgid "Close Live view"
 msgstr "Live-Ansicht schließen"
 
@@ -1559,9 +1583,13 @@ msgstr "Der Code wird gerade aktualisiert. Die Änderungen im Hintergrund werden
 msgid "Code updates need attention"
 msgstr "Code-Aktualisierungen erfordern Aufmerksamkeit"
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:32
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:59
 msgid "Config directory"
 msgstr "Konfigurationsverzeichnis"
+
+#: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:2
+msgid "Configuration files"
+msgstr "Konfigurationsdateien"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:24
 msgid "Configured"
@@ -1614,7 +1642,7 @@ msgstr "Verbindungen"
 msgid "Content origin"
 msgstr "Herkunft des Inhalts"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:28
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:48
 msgid "Content repair"
 msgstr "Inhaltskorrektur"
 
@@ -1659,11 +1687,23 @@ msgstr "Kopieren Sie die SHA-256-Prüfsumme in die Zwischenablage."
 msgid "Could not connect to the website."
 msgstr "Die Verbindung zur Website konnte nicht hergestellt werden."
 
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:27
+msgid "Could not contact the media runner."
+msgstr "Der Medien-Runner konnte nicht kontaktiert werden."
+
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:11
 msgid "Could not detect anything to import on that URL or embed code."
 msgstr "Konnte nichts zum Importieren auf dieser URL oder dem Einbettungscode erkennen."
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:98
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:68
+msgid "Could not queue generated preview cleanup. Check the logs."
+msgstr "Die Bereinigung der generierten Vorschau konnte nicht in die Warteschlange gestellt werden. Überprüfen Sie die Protokolle."
+
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:58
+msgid "Could not queue media deduplication. Check the logs."
+msgstr "Die Mediendeduplizierung konnte nicht in die Warteschlange gestellt werden. Überprüfen Sie die Protokolle."
+
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:119
 msgid "Could not reload the site configuration, check the logs."
 msgstr "Die Site-Konfiguration konnte nicht neu geladen werden. Überprüfen Sie die Protokolle."
 
@@ -1728,9 +1768,13 @@ msgstr "Erstellungsdatum, Ältestes zuerst"
 msgid "Dashboard"
 msgstr "Übersicht"
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:30
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:57
 msgid "Data directory"
 msgstr "Datenverzeichnis"
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:61
+msgid "Datamodel upgrades and reinstalls preserve your existing data. No content or uploaded files will be deleted."
+msgstr "Bei Aktualisierungen und Neuinstallationen des Datenmodells bleiben Ihre vorhandenen Daten erhalten. Es werden weder Inhalte noch hochgeladene Dateien gelöscht."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:6
 msgid "Date range"
@@ -1744,9 +1788,27 @@ msgstr "Zeiträume"
 msgid "Date start/end"
 msgstr "Datum Beginn/Ende"
 
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:23
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:25
+msgid "Deduplicate media files"
+msgstr "Mediendateien deduplizieren"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:20
 msgid "Define the query using the query arguments or JSON."
 msgstr "Definieren Sie die Abfrage mit Hilfe der Abfrageargumente oder JSON."
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:31
+msgid "Delete all generated image sizes? Preview originals are kept. Image requests may be slower while previews regenerate."
+msgstr "Alle generierten Bildgrößen löschen? Die Original-Vorschau wird beibehalten. Bildabrufe können während der Neugenerierung der Vorschauen etwas langsamer sein."
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:28
+msgid "Delete all resized image variants, including variants in remote storage. Uploaded originals and preview images extracted from movies, PDFs and embeds are kept. Previews regenerate when requested. Remote deletion follows the filestore retention policy."
+msgstr "Alle in der Größe angepassten Bildvarianten werden gelöscht, einschließlich der Varianten im Remote-Speicher. Hochgeladene Originale und aus Videos, PDFs und Einbettungen extrahierte Vorschaubilder bleiben erhalten. Vorschaubilder werden bei Bedarf neu generiert. Das Löschen im Remote-Speicher erfolgt gemäß den Aufbewahrungsrichtlinien für den Dateispeicher."
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:30
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:31
+msgid "Delete generated previews"
+msgstr "Generierte Vorschauen löschen"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:23
 msgid "Delete if no other page is connected to this page."
@@ -1891,9 +1953,10 @@ msgstr "E-Mail-Adresse"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers_list.tpl:10
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:34
+#: zotonic_mod_admin/priv/templates/_admin_system_info_config.tpl:7
 #: zotonic_mod_admin/priv/templates/_rsc_edge.tpl:19
 #: zotonic_mod_admin/priv/templates/admin_edit.tpl:3
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:68
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:82
 #: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:70
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:23
@@ -1922,6 +1985,10 @@ msgstr "Bearbeiten"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:16
 msgid "Edit note"
 msgstr "Notiz bearbeiten"
+
+#: zotonic_mod_admin/priv/templates/_admin_system_info_config.tpl:7
+msgid "Edit this configuration file"
+msgstr "Diese Konfigurationsdatei bearbeiten"
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:122
 msgid "Edit:"
@@ -1959,7 +2026,7 @@ msgstr "Seite einbetten | ein Zitat, ein Popup oder ein Link zu einer anderen Se
 msgid "Embedded Content"
 msgstr "Eingebettete Inhalte"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:30
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:50
 msgid "Embedded-page references"
 msgstr "Verweise auf eingebettete Seiten"
 
@@ -1976,11 +2043,7 @@ msgstr "Endpunkt"
 msgid "Enter a URL or embed code. It will be analyzed and you can choose how to import the data."
 msgstr "Geben Sie eine URL oder einen Einbettungscode ein. Er wird analysiert und Sie können wählen, wie die Daten importiert werden sollen."
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:37
-msgid "Erlang init files"
-msgstr "Erlang-Initialisierungsdateien"
-
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:36
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:63
 msgid "Erlang installation root"
 msgstr "Erlang-Installationsverzeichnis"
 
@@ -2038,7 +2101,7 @@ msgstr "Genaue Kategorie"
 msgid "Excess connections"
 msgstr "Überzählige Verbindungen"
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:85
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:106
 msgid "Excess connections have been closed."
 msgstr "Überflüssige Verbindungen wurden geschlossen."
 
@@ -2137,7 +2200,7 @@ msgstr "Medien finden"
 msgid "Find Page"
 msgstr "Seite finden"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:30
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:50
 msgid "Find embedded page references and rebuild their refers connections. This runs in the background."
 msgstr "Suchen Sie Verweise auf eingebettete Seiten und erstellen Sie deren refers-Verbindungen neu. Dies läuft im Hintergrund ab."
 
@@ -2187,6 +2250,14 @@ msgstr "Frei"
 msgid "Function"
 msgstr "Funktion"
 
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:64
+msgid "Generated preview cleanup has been queued. Preview originals are kept."
+msgstr "Die Bereinigung der generierten Vorschau wurde in die Warteschlange gestellt. Die Originaldateien der Vorschau bleiben erhalten."
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:28
+msgid "Generated previews"
+msgstr "Generierte Vorschauen"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:78
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:41
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:76
@@ -2214,6 +2285,10 @@ msgstr "Überschrift"
 msgid "Header | a big header"
 msgstr "Überschrift | eine große Überschrift"
 
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:11
+msgid "Health checks"
+msgstr "Systemzustandsprüfungen"
+
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:6
 msgid "Health, background work and services for"
 msgstr "Systemzustand, Hintergrundaufgaben und Dienste für"
@@ -2230,7 +2305,7 @@ msgstr "Hier können Sie die Argumente der Suchanfrage bearbeiten. Jedes Argumen
 msgid "Hide page from searches (depends on the search query)"
 msgstr "Seite aus Suchen ausblenden (abhängig von der Suchanfrage)"
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:34
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:61
 msgid "Home directory"
 msgstr "Home-Verzeichnis"
 
@@ -2246,10 +2321,6 @@ msgstr "Host"
 msgid "IP Address"
 msgstr "IP-Adresse"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:4
-msgid "IP addresses have more than 250 open sockets."
-msgstr "IP-Adressen weisen mehr als 250 offene Sockets auf."
-
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:269
 msgid "Id, newest first"
 msgstr "Id, neueste zuerst"
@@ -2257,6 +2328,10 @@ msgstr "Id, neueste zuerst"
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:270
 msgid "Id, oldest first"
 msgstr "Id, älteste zuerst"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:6
+msgid "Idle"
+msgstr "Leerlauf"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:11
 msgid "If a page has a publication date range then it will only be visible between the two dates. Note that if you are allowed to edit the page then you can always see it."
@@ -2269,6 +2344,14 @@ msgstr "Wenn keine der Sprachen einen Seitenpfad hat, wird der vollständige Pfa
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:61
 msgid "If not checked then a visitor is always redirected to the canonical URL of this page."
 msgstr "Wenn diese Option nicht aktiviert ist, wird ein Besucher immer auf die kanonische URL dieser Seite umgeleitet."
+
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:21
+msgid "ImageMagick (local)"
+msgstr "ImageMagick (lokal)"
+
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:24
+msgid "ImageMagick (media runner)"
+msgstr "ImageMagick (Medien-Runner)"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:141
 #: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:17
@@ -2298,7 +2381,7 @@ msgstr "Importe"
 msgid "Indexed by search engines"
 msgstr "Von Suchmaschinen indiziert"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:42
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:63
 msgid "Individual modules can be reinstalled from the Modules list."
 msgstr "Einzelne Module können über die Modulliste erneut installiert werden."
 
@@ -2316,11 +2399,11 @@ msgstr "Info-Link mit modalem Popup"
 msgid "Inline block"
 msgstr "Inline-Block"
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:26
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:52
 msgid "Installation"
 msgstr "Installation"
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:44
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:72
 msgid "Installation details are available to system administrators."
 msgstr "Installationsdetails stehen Systemadministratoren zur Verfügung."
 
@@ -2372,9 +2455,13 @@ msgid "Live query, send notifications when matching items are updated or inserte
 msgstr "Live-Abfrage, Senden von Benachrichtigungen, wenn übereinstimmende Elemente aktualisiert oder eingefügt werden."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:2
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:17
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:18
 msgid "Live view"
 msgstr "Live-Ansicht"
+
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:42
+msgid "Local"
+msgstr "Lokal"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:43
 msgid "Local ImageMagick"
@@ -2402,7 +2489,7 @@ msgstr "Lokale Sandbox"
 msgid "Log Off"
 msgstr "Abmelden"
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:31
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:58
 msgid "Log directory"
 msgstr "Protokollverzeichnis"
 
@@ -2458,6 +2545,7 @@ msgstr "Passende ID, Name, Seitenpfad oder Umleitung"
 msgid "Matching search text"
 msgstr "Übereinstimmender Suchtext"
 
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:18
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:3
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:86
 #: zotonic_mod_admin/src/mod_admin.erl:525
@@ -2485,6 +2573,14 @@ msgstr "Medienbefehle nutzen Remote-Runner."
 msgid "Media content"
 msgstr "Medieninhalt"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:5
+msgid "Media deduplication"
+msgstr "Mediendeduplizierung"
+
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:54
+msgid "Media deduplication has been queued."
+msgstr "Die Deduplizierung der Medien wurde in die Warteschlange gestellt."
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:112
 msgid "Media details"
 msgstr "Angaben zu den Medien"
@@ -2503,11 +2599,25 @@ msgstr "Mediendatei"
 msgid "Media item created."
 msgstr "Medienelement angelegt."
 
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:19
+#: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:2
+msgid "Media maintenance"
+msgstr "Medienpflege"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:18
+msgid "Media maintenance runs in the background. Waiting tasks resume automatically. Remote deletion follows the filestore retention policy."
+msgstr "Die Medienwartung läuft im Hintergrund. Ausgesetzte Aufgaben werden automatisch fortgesetzt. Das Löschen aus der Ferne erfolgt gemäß den Aufbewahrungsrichtlinien für den Dateispeicher."
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:15
+msgid "Media maintenance status is unavailable."
+msgstr "Der Wartungsstatus der Medien ist nicht verfügbar."
+
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:4
 msgid "Media on this page"
 msgstr "Auf dieser Seite benutzte Mediendateien"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:4
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:35
 msgid "Media processing"
 msgstr "Medienverarbeitung"
 
@@ -2567,7 +2677,7 @@ msgid "Modification date, oldest first"
 msgstr "Änderungsdatum, ältestes zuerst"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:134
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:24
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:38
 msgid "Modified"
 msgstr "Geändert"
 
@@ -2608,6 +2718,10 @@ msgstr "Block nach unten verschieben"
 msgid "Move block up"
 msgstr "Block nach oben verschieben"
 
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:23
+msgid "Move originals and extracted preview images into content-addressable storage. Redundant local and remote copies are cleaned up in the background. Remote files without a checksum are skipped; no files are downloaded to calculate checksums."
+msgstr "Verschieben Sie Originaldateien und extrahierte Vorschaubilder in einen inhaltsadressierbaren Speicher. Redundante lokale und entfernte Kopien werden im Hintergrund bereinigt. Entfernte Dateien ohne Prüfsumme werden übersprungen; es werden keine Dateien heruntergeladen, um Prüfsummen zu berechnen."
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:205
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:206
 msgid "Name for invoices"
@@ -2634,7 +2748,7 @@ msgstr "Benötigen Sie weitere Hilfe?"
 msgid "Network Connections"
 msgstr "Netzwerk-Verbindungen"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:40
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:53
 msgid "Network listeners and connections"
 msgstr "Netzwerk-Listener und Verbindungen"
 
@@ -2663,6 +2777,11 @@ msgstr "Nächster in der Kategorie:"
 #: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:11
 msgid "No IP addresses have more than 250 open sockets."
 msgstr "Keine IP-Adresse hat mehr als 250 offene Sockets."
+
+#: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:10
+#: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:20
+msgid "No configuration files found."
+msgstr "Es wurden keine Konfigurationsdateien gefunden."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_depictions.tpl:21
 msgid "No connected images."
@@ -2706,6 +2825,10 @@ msgstr "Keine Seiten gefunden."
 msgid "No pages selected"
 msgstr "Keine Seiten ausgewählt"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:5
+msgid "No problems found."
+msgstr "Es wurden keine Probleme festgestellt."
+
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:49
 msgid "No results."
 msgstr "Keine Ergebnisse."
@@ -2748,19 +2871,23 @@ msgstr "Betriebssystemspeicher"
 msgid "Ongoing"
 msgstr "Laufend"
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:87
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:108
 msgid "Only system administrators can close node connections."
 msgstr "Nur Systemadministratoren können Knotenverbindungen schließen."
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:42
+#: zotonic_mod_admin/priv/templates/_admin_system_info_directory.tpl:3
+msgid "Open"
+msgstr "Öffnen"
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:63
 msgid "Open Modules list"
 msgstr "Modulliste öffnen"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:13
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
 msgid "Open in new tab"
 msgstr "In einem neuen Tab öffnen"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:57
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:70
 msgid "Open maintenance tools"
 msgstr "Wartungswerkzeuge öffnen"
 
@@ -2897,6 +3024,10 @@ msgstr "Prädikat"
 msgid "Preview"
 msgstr "Vorschau"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:9
+msgid "Preview cleanup"
+msgstr "Vorschaubereinigung"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:30
 msgid "Previous in category:"
 msgstr "Vorherige in Kategorie:"
@@ -2989,9 +3120,13 @@ msgstr "Suchanfrage"
 msgid "Query results"
 msgstr "Abfrageergebnisse"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:21
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:41
 msgid "Queue every page for search indexing. Large sites can take a long time to finish."
 msgstr "Stellen Sie jede Seite für die Suchindexierung in die Warteschlange. Bei großen Websites kann dies einige Zeit dauern."
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:4
+msgid "Queued / waiting"
+msgstr "In der Warteschlange / wartend"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:14
 msgid "Ranch limit"
@@ -3001,11 +3136,11 @@ msgstr "Ranch-Limit"
 msgid "Rebuild derived data and maintain this site. Queued work can be followed on the Status page."
 msgstr "Abgeleitete Daten neu erstellen und diese Website pflegen. Die anstehenden Aufgaben können auf der Statusseite verfolgt werden."
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:31
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:51
 msgid "Rebuild references"
 msgstr "Referenzen neu erstellen"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:22
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:42
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:169
 msgid "Rebuild search indices"
 msgstr "Such-Indizes neu berechnen"
@@ -3031,7 +3166,7 @@ msgstr "Verweisende Seiten"
 msgid "Referrers to"
 msgstr "Querverweise auf"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:12
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:13
 #: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:13
 #: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:51
@@ -3043,13 +3178,13 @@ msgstr "Aktualisieren"
 msgid "Refreshed every 30 minutes."
 msgstr "Alle 30 Minuten aktualisiert."
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:53
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:54
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:74
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:75
 msgid "Reinstall Zotonic datamodel"
 msgstr "Installieren Sie das Zotonic-Datenmodell neu"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:46
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:47
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:67
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:68
 msgid "Reinstall site datamodel"
 msgstr "Site-Datenmodell neu installieren"
 
@@ -3066,6 +3201,14 @@ msgstr "Durch das Neuladen gehen alle nicht gespeicherten Änderungen in diesem 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:29
 msgid "Remarks"
 msgstr "Anmerkungen"
+
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:40
+msgid "Remote runners only"
+msgstr "Nur Remote-Medien-Runner"
+
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:40
+msgid "Remote runners with local fallback"
+msgstr "Remote-Medien-Runner mit lokalem Fallback"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:70
 msgid "Remote sandbox isolation and queue details are available on each runner’s dashboard."
@@ -3098,7 +3241,7 @@ msgstr "Aktuelles Medium austauschen"
 msgid "Resize Live view"
 msgstr "Größe der Live-Ansicht anpassen"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:46
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:59
 msgid "Resources"
 msgstr "Ressourcen"
 
@@ -3126,15 +3269,15 @@ msgstr "Um 270 Grad gedreht"
 msgid "Rotated 90 degrees"
 msgstr "Um 90 Grad gedreht"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:51
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:72
 msgid "Run the Zotonic core datamodel installation again for this site's database."
 msgstr "Führen Sie die Installation des Zotonic-Kern-Datenmodells für die Datenbank dieser Website erneut durch."
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:54
-msgid "Run the Zotonic core datamodel installation again for this site's database?"
-msgstr "Soll die Installation des Zotonic-Kern-Datenmodells für die Datenbank dieser Website erneut durchgeführt werden?"
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:75
+msgid "Run the Zotonic core datamodel installation again for this site's database? Your existing data will be preserved."
+msgstr "Möchten Sie die Installation des Zotonic-Kern-Datenmodells für die Datenbank dieser Website erneut durchführen? Ihre vorhandenen Daten bleiben dabei erhalten."
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:44
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:65
 msgid "Run the site's schema installation again. The site will stop and restart."
 msgstr "Führen Sie die Schema-Installation der Website erneut durch. Die Website wird angehalten und anschließend neu gestartet."
 
@@ -3143,6 +3286,7 @@ msgid "Runner availability and ImageMagick versions are cached for up to one min
 msgstr "Die Verfügbarkeit der Runner und die ImageMagick-Versionen werden bis zu einer Minute lang zwischengespeichert. Fehlgeschlagene Abfragen werden nach fünf Sekunden erneut versucht. Aktualisieren Sie diese Seite, um es erneut zu versuchen."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:29
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:2
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:64
 #: zotonic_site_status/priv/templates/_sites.tpl:15
 msgid "Running"
@@ -3157,7 +3301,7 @@ msgstr "SEO"
 msgid "SHA-256 checksum"
 msgstr "SHA-256-Prüfsumme"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:5
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:11
 msgid "SSL Application uses Erlang defaults, it is recommended to change this configuration in your <tt>erlang.config</tt>."
 msgstr "Die SSL-Anwendung verwendet die Erlang-Standardwerte. Es wird empfohlen, diese Konfiguration in Ihrer <tt>erlang.config</tt> zu ändern."
 
@@ -3202,21 +3346,25 @@ msgstr "Seite speichern und anzeigen."
 msgid "Save this page."
 msgstr "Seite speichern."
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:11
+msgid "Save to see your changes"
+msgstr "Speichern, um Ihre Änderungen anzuzeigen"
+
 #: zotonic_mod_admin/src/mod_admin.erl:999
 msgid "Scheduled a background task to check all refers connections."
 msgstr "Eine Hintergrundaufgabe wurde geplant, um alle refers-Verbindungen zu prüfen."
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:24
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:37
 msgid "Scheduled tasks"
 msgstr "Geplante Aufgaben"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:294
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:17
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:37
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user_dialog.tpl:9
 msgid "Search"
 msgstr "Suchen"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:16
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:29
 msgid "Search indexing"
 msgstr "Suchindexierung"
 
@@ -3224,7 +3372,7 @@ msgstr "Suchindexierung"
 msgid "Search indexing runs separately from the scheduled task queue."
 msgstr "Die Suchindizierung läuft unabhängig von der Warteschlange der geplanten Aufgaben ab."
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:21
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:41
 msgid "Search indices"
 msgstr "Suchindizes"
 
@@ -3253,11 +3401,11 @@ msgstr "Suchergebnisse"
 msgid "Search..."
 msgstr "Suche..."
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:33
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:60
 msgid "Security directory"
 msgstr "Sicherheitsverzeichnis"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:7
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:13
 msgid "See also: <a href=\"https://zotonic.com/en/stable/ref/configuration/zotonic-configuration.html#the-erlang-config-file\">The erlang.config file</a>"
 msgstr "Siehe auch: <a href=\"https://zotonic.com/en/stable/ref/configuration/zotonic-configuration.html#the-erlang-config-file\">Die erlang.config-Datei</a>"
 
@@ -3310,7 +3458,7 @@ msgstr "Wenn Sie eine Datei auswählen, wird die Seite zu einem Medienelement."
 msgid "Service"
 msgstr "Dienst"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:37
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:50
 msgid "Services"
 msgstr "Dienste"
 
@@ -3369,11 +3517,15 @@ msgstr "Es werden Seiten angezeigt, zu denen Sie über <b>{predicate}</b> eine V
 msgid "Site caches"
 msgstr "Website-Caches"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:44
+#: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:14
+msgid "Site config files"
+msgstr "Konfigurationsdateien der Website"
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:65
 msgid "Site datamodel"
 msgstr "Datenmodell der Website"
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:29
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:56
 msgid "Site files directory"
 msgstr "Verzeichnis für Website-Dateien"
 
@@ -3385,7 +3537,7 @@ msgstr "Software"
 msgid "Software versions and installation paths. Runtime and host information is shared by all sites on this node."
 msgstr "Softwareversionen und Installationspfade. Laufzeit- und Host-Informationen werden von allen Websites auf diesem Knoten gemeinsam genutzt."
 
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:15
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:21
 msgid "Some disks are almost full."
 msgstr "Einige Festplatten sind fast voll."
 
@@ -3593,16 +3745,20 @@ msgstr "Systemadministration"
 msgid "System information"
 msgstr "Systeminformationen"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:3
+msgid "System resources and configuration"
+msgstr "Systemressourcen und Konfiguration"
+
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:2
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:5
 msgid "System status"
 msgstr "Systemstatus"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:30
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:43
 msgid "Task details are available to system administrators."
 msgstr "Aufgaben-Details stehen Systemadministratoren zur Verfügung."
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:28
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:41
 msgid "Tasks with errors retry up to 10 times before being dropped."
 msgstr "Aufgaben, bei denen Fehler auftreten, werden bis zu 10 Mal erneut versucht, bevor sie abgebrochen werden."
 
@@ -3613,7 +3769,7 @@ msgstr "Aufgaben, bei denen Fehler auftreten, werden bis zu 10 Mal erneut versuc
 msgid "Telephone"
 msgstr "Telefon"
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:53
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:74
 msgid "Templates will be recompiled."
 msgstr "Templates werden neu kompiliert."
 
@@ -3630,7 +3786,7 @@ msgstr "Text"
 msgid "Text | a (rich) text block"
 msgstr "Text | ein (Rich-)Textblock"
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:71
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:92
 msgid "The Zotonic datamodel is being reinstalled. Watch the console for messages"
 msgstr "Das Zotonic-Datenmodell wird neu installiert. Beachten Sie die Meldungen in der Konsole."
 
@@ -3642,11 +3798,12 @@ msgstr "Die Adressen 0.0.0.0 und :: stehen für alle lokalen IPv4- bzw. IPv6-Sch
 msgid "The billing address is only visible for people who can edit this page."
 msgstr "Die Rechnungsadresse ist nur für Personen sichtbar, die diese Seite bearbeiten können."
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:77
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:98
 msgid "The category tree is rebuilding. This can take a long time."
 msgstr "Der Kategoriebaum wird gerade neu aufgebaut. Dies kann sehr lange dauern."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:7
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:38
 msgid "The media runner configuration is invalid."
 msgstr "Die Konfiguration der Medien-Runner ist ungültig."
 
@@ -3682,19 +3839,19 @@ msgstr "Die Abfrage konnte nicht geparst werden, überprüfen Sie die Syntax."
 msgid "The query text is empty."
 msgstr "Der Abfragetext ist leer."
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:59
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:80
 msgid "The search index is rebuilding. Depending on the database size, this can take a long time."
 msgstr "Der Suchindex wird neu aufgebaut. Je nach Datenbankgröße kann dies sehr lange dauern."
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:96
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:117
 msgid "The site configuration has been reloaded."
 msgstr "Die Site-Konfiguration wurde neu geladen."
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:65
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:86
 msgid "The site’s data is being reinstalled. Watch the console for messages"
 msgstr "Die Daten der Website werden neu installiert. Beobachten Sie die Konsole auf Meldungen"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:26
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:32
 msgid "The system has allocated more than the specified threshold of available memory, as reported by the underlying operating system."
 msgstr "Das System hat mehr als den angegebenen Schwellenwert an verfügbarem Speicher zugewiesen, wie vom zugrunde liegenden Betriebssystem gemeldet."
 
@@ -3789,7 +3946,7 @@ msgstr "Dieser Hinweis ist nur für Personen sichtbar, die die Seite bearbeiten 
 msgid "This page can be connected from other pages. For example it could be an author of an article."
 msgstr "Diese Seite kann von anderen Seiten verbunden werden. Zum Beispiel könnte es ein Autor eines Artikels sein."
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:16
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:17
 msgid "This page cannot be previewed here. Use “Open in new tab” if available."
 msgstr "Diese Seite kann hier nicht in der Vorschau angezeigt werden. Verwenden Sie die Option „In neuem Tab öffnen“, sofern verfügbar."
 
@@ -3825,12 +3982,12 @@ msgstr "Dieser Seitenpfad wird bereits von einer anderen Seite verwendet."
 msgid "This resource was created by the module"
 msgstr "Diese Resource wurde erzeugt durch das Modul"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:47
-msgid "This runs the site's schema installation again and stops and restarts the site. Continue?"
-msgstr "Dadurch wird die Schema-Installation der Website erneut ausgeführt und die Website wird angehalten und neu gestartet. Möchten Sie fortfahren?"
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:68
+msgid "This runs the site's schema installation again and stops and restarts the site. Your existing data will be preserved. Continue?"
+msgstr "Dadurch wird die Schema-Installation der Website erneut ausgeführt und die Website wird angehalten und neu gestartet. Ihre vorhandenen Daten bleiben erhalten. Möchten Sie fortfahren?"
 
 #: zotonic_mod_admin/priv/templates/_admin_maintenance_panel.tpl:3
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:12
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:25
 msgid "This site"
 msgstr "Diese Website"
 
@@ -3897,6 +4054,8 @@ msgstr "Tippen Sie, um die folgende Liste zu filtern."
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:47
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:62
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:63
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:22
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:31
 msgid "Unavailable"
 msgstr "Nicht verfügbar"
 
@@ -4029,8 +4188,8 @@ msgid "Upload to drop folder"
 msgstr "In den Ablageordner hochladen"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:135
-#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:147
-#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:177
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:155
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:185
 msgid "Uploaded"
 msgstr "Hochgeladen"
 
@@ -4052,7 +4211,7 @@ msgstr "Benutzen Sie den Autovervollständiger, um nach Medieninhalten auf der S
 msgid "Use the title of the base content for the display name of this person."
 msgstr "Verwenden Sie den Titel der Basisdaten als Anzeigenamen dieser Person."
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:40
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:60
 msgid "Use these operations to repair installation data, not for routine maintenance."
 msgstr "Verwenden Sie diese Vorgänge zur Reparatur von Installationsdaten, nicht zur routinemäßigen Wartung."
 
@@ -4109,10 +4268,14 @@ msgstr "Verbindungsdiagramm anzeigen"
 msgid "View format (opens in a new tab)"
 msgstr "Ansichtsformat (wird in einem neuen Tab geöffnet)"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:17
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:28
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:23
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:34
 msgid "View status"
 msgstr "Status anzeigen"
+
+#: zotonic_mod_admin/priv/templates/_admin_system_info_directory.tpl:3
+msgid "View this directory in the file manager on the Zotonic server's desktop"
+msgstr "Dieses Verzeichnis im Dateimanager auf dem Desktop des Zotonic-Servers anzeigen"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:29
 msgid "Visible from"
@@ -4131,9 +4294,9 @@ msgstr "Vollständige Editierseite aufrufen"
 msgid "Visiting address"
 msgstr "Besucheradresse"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:4
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:14
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:25
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:10
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:20
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:31
 #: zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:10
 msgid "Warning!"
 msgstr "Warnung!"
@@ -4148,7 +4311,7 @@ msgstr "Webseite, die bei Clicks auf das Bild aufgerufen werden soll"
 msgid "Website or Embed"
 msgstr "Website oder Einbetten"
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:35
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:62
 msgid "Work directory"
 msgstr "Arbeitsverzeichnis"
 
@@ -4204,7 +4367,7 @@ msgid "You don't have permission to create this page."
 msgstr "Sie haben nicht die Berechtigung, diese Seite zu erstellen."
 
 #: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:186
-#: zotonic_mod_image_edit/src/mod_image_edit.erl:94
+#: zotonic_mod_image_edit/src/mod_image_edit.erl:96
 msgid "You don't have permission to edit this page."
 msgstr "Sie sind nicht berechtigt, diese Seite zu bearbeiten."
 
@@ -4215,8 +4378,10 @@ msgstr "Sie sind nicht berechtigt, diese Seite zu bearbeiten."
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "Sie haben nicht die richtigen Berechtigungen, um diesen Dateityp hochzuladen."
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:101
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:110
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:56
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:66
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:122
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:131
 msgid "You don’t have permission to perform this action."
 msgstr "Sie haben nicht die Berechtigung, diese Aktion auszuführen."
 
@@ -4232,9 +4397,13 @@ msgstr "Ihre Suchanfrage ist ungültig. Bitte korrigieren Sie diese vor dem Spei
 msgid "Zotonic"
 msgstr "Zotonic"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:51
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:72
 msgid "Zotonic datamodel"
 msgstr "Zotonic-Datenmodell"
+
+#: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:4
+msgid "Zotonic init files"
+msgstr "Zotonic-Initialisierungsdateien"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:30
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:27
@@ -4263,7 +4432,7 @@ msgstr "von"
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:165
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:168
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:70
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:84
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:32
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:33
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:76
@@ -4340,10 +4509,6 @@ msgstr "geändert von"
 msgid "name"
 msgstr "Name"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:7
-msgid "open sockets"
-msgstr "offene Sockets"
-
 #: zotonic_mod_admin/priv/templates/_admin_view_types.tpl:3
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:104
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:55
@@ -4355,10 +4520,6 @@ msgstr "Seite"
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:24
 msgid "page block"
 msgstr "Seitenblock"
-
-#: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:2
-msgid "pages waiting to be indexed"
-msgstr "Seiten, die noch auf ihre Indizierung warten"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:28
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:10
@@ -4547,6 +4708,7 @@ msgid "Config"
 msgstr "Konfig"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:3
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:24
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:32
 #: zotonic_mod_admin_config/src/mod_admin_config.erl:96
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:79
@@ -4706,11 +4868,11 @@ msgstr "Normalerweise wird es auf den Reverse-DNS-Namen der Maschine eingestellt
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:13
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:14
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:43
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:22
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:36
 msgid "Key"
 msgstr "Schlüssel"
 
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:14
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:27
 msgid "Make a new config setting"
 msgstr "Neue Konfigurationseinstellung erstellen"
 
@@ -4718,7 +4880,7 @@ msgstr "Neue Konfigurationseinstellung erstellen"
 msgid "No configuration keys found."
 msgstr "Keine Konfigurationsschlüssel gefunden."
 
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:81
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:95
 msgid "No configurations found."
 msgstr "Keine Konfigurationen gefunden."
 
@@ -4803,11 +4965,11 @@ msgstr "Relay Hostname"
 msgid "Relay port"
 msgstr "Relay-Port"
 
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:12
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:17
 msgid "Reload site configuration"
 msgstr "Site-Konfiguration neu laden"
 
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:13
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:14
 msgid "Reload the site configuration files. Some changes require a restart."
 msgstr "Laden Sie die Konfigurationsdateien der Website neu. Einige Änderungen erfordern einen Neustart."
 
@@ -4975,7 +5137,7 @@ msgstr "Gültig bis"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:19
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:20
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:21
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:23
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:37
 #: zotonic_mod_base/src/support/z_chart_svg.erl:1352
 #: zotonic_mod_development/priv/templates/_development_dispatch_options.tpl:2
 msgid "Value"
@@ -6011,12 +6173,12 @@ msgstr "Neu installieren"
 msgid "Reinstalled the data model."
 msgstr "Datenmodell neu installiert."
 
-#: zotonic_mod_admin_modules/priv/templates/_admin_modules_tools.tpl:3
+#: zotonic_mod_admin_modules/priv/templates/_admin_modules_tools.tpl:6
 #: zotonic_mod_development/priv/templates/admin_development.tpl:219
 msgid "Rescan modules"
 msgstr "Module neu scannen"
 
-#: zotonic_mod_admin_modules/priv/templates/_admin_modules_tools.tpl:4
+#: zotonic_mod_admin_modules/priv/templates/_admin_modules_tools.tpl:3
 msgid "Rescanning will rebuild the index of all modules, actions, templates etc. It will also reload all dispatch rules."
 msgstr "Beim erneuten Scannen wird der Index aller Module, Aktionen, Templates usw. neu aufgebaut. Außerdem werden alle Dispatchregeln neu geladen."
 
@@ -7440,7 +7602,7 @@ msgstr "user@example.com"
 msgid "Admin Backups"
 msgstr "Backups administrieren"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:64
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:66
 msgid "After the page has been restored, you will be redirected to the edit page."
 msgstr "Nachdem die Seite wiederhergestellt wurde, werden Sie zur Bearbeitungsseite weitergeleitet."
 
@@ -7596,7 +7758,7 @@ msgstr "Hilfe zur Sicherung &amp; Wiederherstellung"
 msgid "If the Cloud File Store module is used, then deleted files can be retained indefinitely."
 msgstr "Wenn das Modul Cloud File Store verwendet wird, können gelöschte Dateien auf unbestimmte Zeit aufbewahrt werden."
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:44
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:46
 msgid "It could be that a connected dependent page was deleted because of the deletion of this page, such a deleted dependent page can also be recovered."
 msgstr "Es könnte sein, dass eine verbundene abhängige Seite aufgrund der Löschung dieser Seite gelöscht wurde, eine solche gelöschte abhängige Seite kann ebenfalls wiederhergestellt werden."
 
@@ -7616,7 +7778,15 @@ msgstr "Erstellen Sie täglich ein Backup der Datenbank und der hochgeladenen Da
 msgid "Make a daily backup of the database."
 msgstr "Erstellen Sie eine tägliche Sicherung der Datenbank."
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:63
+#: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:17
+msgid "Media file availability could not be confirmed. You can continue restoring the page, but its media or saved preview image might not be recovered."
+msgstr "Die Verfügbarkeit der Mediendatei konnte nicht bestätigt werden. Sie können mit der Wiederherstellung der Seite fortfahren, allerdings werden die Medien oder das gespeicherte Vorschaubild möglicherweise nicht wiederhergestellt."
+
+#: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:22
+msgid "Media files are registered in the remote file store. Their availability has not been checked with the storage server."
+msgstr "Mediendateien sind im Remote-Dateispeicher registriert. Ihre Verfügbarkeit wurde noch nicht beim Speicherserver überprüft."
+
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:65
 msgid "Media files can only be recovered if they are not yet deleted from the file storage. Zotonic will keep media for at least 5 weeks."
 msgstr "Mediendateien können nur wiederhergestellt werden, wenn sie noch nicht aus dem Dateispeicher gelöscht sind. Zotonic bewahrt Medien für mindestens 5 Wochen auf."
 
@@ -7640,8 +7810,8 @@ msgstr "Hinweis:"
 msgid "Only administrators can start a backup."
 msgstr "Nur Administratoren können ein Backup starten."
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:23
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:33
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:25
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:35
 msgid "Original"
 msgstr "Original"
 
@@ -7653,11 +7823,11 @@ msgstr "Bitte stellen Sie sicher, dass Sie das Backup-Verschlüsselungskennwort 
 msgid "Previous versions"
 msgstr "Frühere Versionen"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:54
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:56
 msgid "Recover incoming connections from other pages"
 msgstr "Eingehende Verbindungen von anderen Seiten wiederherstellen"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:50
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:52
 msgid "Recover outgoing connections to other pages"
 msgstr "Ausgehende Verbindungen zu anderen Seiten wiederherstellen"
 
@@ -7671,7 +7841,7 @@ msgstr "Um eine gelöschte Seite wiederherzustellen, ist die Berechtigung zum Er
 msgid "Restore backup"
 msgstr "Sicherung wiederherstellen"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:58
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:60
 msgid "Restore deleted <em>dependent</em> pages that were referred by this page"
 msgstr "Gelöschte <em>abhängige</em> Seiten wiederherstellen, auf die diese Seite verwiesen hat"
 
@@ -7679,13 +7849,17 @@ msgstr "Gelöschte <em>abhängige</em> Seiten wiederherstellen, auf die diese Se
 msgid "Restore deleted page"
 msgstr "Gelöschte Seite wiederherstellen"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:69
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:71
 msgid "Restore page"
 msgstr "Seite wiederherstellen"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:44
 msgid "Restore this page..."
 msgstr "Diese Seite wiederherstellen..."
+
+#: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:11
+msgid "Restoring this version can replace the media currently attached to the page."
+msgstr "Durch das Wiederherstellen dieser Version können die derzeit auf der Seite eingebundenen Medien ersetzt werden."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:36
 msgid "Revert page to earlier version"
@@ -7727,11 +7901,11 @@ msgstr "Revisionen aktiver Nutzer werden für {n} Tage aufbewahrt."
 msgid "Revisions of deleted users are kept for {n} days."
 msgstr "Revisionen gelöschter Benutzer werden {n} Tage lang aufbewahrt."
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:25
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:27
 msgid "Select a category"
 msgstr "Wählen Sie eine Kategorie aus"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:35
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:37
 msgid "Select a content group"
 msgstr "Wählen Sie eine Inhaltsgruppe aus"
 
@@ -7746,6 +7920,10 @@ msgstr "Wählen Sie die Sicherungsdatei aus, die Sie hochladen möchten. Die Dat
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:8
 msgid "Show import/export panel on the edit pages in the admin."
 msgstr "Import-/Exportfenster auf den Bearbeitungsseiten im Adminbereich anzeigen."
+
+#: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:3
+msgid "Some media files cannot be recovered."
+msgstr "Einige Mediendateien lassen sich nicht wiederherstellen."
 
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:143
 msgid "Sorry, a global Zotonic configuration is set and cannot be changed."
@@ -7818,9 +7996,17 @@ msgstr "Das Backup-Modul verwendet eine globale Zotonic-Konfiguration. Die Konfi
 msgid "The encryption configuration is set to:"
 msgstr "Aktuelle Verschlüsselungskonfiguration:"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:18
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:20
 msgid "The original category or content group no longer exists. Confirm the suggested replacement or select another one."
 msgstr "Die ursprüngliche Kategorie oder Inhaltsgruppe existiert nicht mehr. Bestätigen Sie den vorgeschlagenen Ersatz oder wählen Sie einen anderen aus."
+
+#: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:5
+msgid "The original file for this version is no longer available. The page can be restored, but its media may be empty."
+msgstr "Die Originaldatei für diese Version ist nicht mehr verfügbar. Die Seite kann wiederhergestellt werden, ihre Medien sind jedoch möglicherweise leer."
+
+#: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:8
+msgid "The saved preview image for this version is no longer available."
+msgstr "Das für diese Version gespeicherte Vorschaubild ist nicht mehr verfügbar."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:5
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:19
@@ -7877,7 +8063,7 @@ msgstr "Sie finden es in <a href=\"{url}\">der Systemkonfiguration</a> oder in d
 msgid "You can have one backup per day of the week, older ones will be overwritten."
 msgstr "Sie können pro Wochentag ein Backup erstellen, ältere werden überschrieben."
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:43
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:45
 msgid "You can recover incoming and outgoing connections to other pages."
 msgstr "Sie können eingehende und ausgehende Verbindungen zu anderen Seiten wiederherstellen."
 
@@ -8481,6 +8667,14 @@ msgstr "ClamAV war nicht erreichbar. Dateien können erst wieder hochgeladen wer
 msgid "Please contact your system administrator."
 msgstr "Bitte wenden Sie sich an Ihren Systemadministrator."
 
+#: zotonic_mod_clamav/priv/templates/_admin_status_alert.tpl:3
+msgid "Virus scanner"
+msgstr "Virenscanner"
+
+#: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:9
+msgid "Virus scanner available."
+msgstr "Virenscanner verfügbar."
+
 #: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:4
 msgid "Virus scanner unavailable"
 msgstr "Virenscanner nicht verfügbar"
@@ -8811,7 +9005,7 @@ msgstr "Jahr"
 
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
 #: zotonic_mod_development/priv/templates/_development_template_matches.tpl:8
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:266
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:226
 #: zotonic_site_status/priv/templates/_sites.tpl:6
 msgid "Actions"
 msgstr "Aktionen"
@@ -8853,11 +9047,11 @@ msgstr "Der neue Standort kann ein lokaler Pfad oder eine vollständige URL sein
 msgid "You are not allowed to change this."
 msgstr "Sie dürfen das nicht ändern."
 
-#: zotonic_mod_development/src/mod_development.erl:693
+#: zotonic_mod_development/src/mod_development.erl:699
 msgid "<i>Function name does not exist.</i>"
 msgstr "<i>Der Funktionsname existiert nicht.</i>"
 
-#: zotonic_mod_development/src/mod_development.erl:696
+#: zotonic_mod_development/src/mod_development.erl:702
 msgid "<i>Module not found.</i>"
 msgstr "<i>Modul nicht gefunden.</i>"
 
@@ -8924,8 +9118,8 @@ msgstr "Berechnen und visualisieren Sie ein Abhängigkeitsdiagramm aller Vorlage
 msgid "Check debug points in the template source to see debug data here."
 msgstr "Prüfen Sie die Debug-Punkte im Quelltext der Vorlage, um hier Debug-Daten zu sehen."
 
-#: zotonic_mod_development/src/mod_development.erl:501
-#: zotonic_mod_development/src/mod_development.erl:516
+#: zotonic_mod_development/src/mod_development.erl:507
+#: zotonic_mod_development/src/mod_development.erl:522
 msgid "Checking all templates..."
 msgstr "Alle Vorlagen werden überprüft..."
 
@@ -8997,6 +9191,10 @@ msgstr "Die Editor-Einstellungen konnten nicht geladen oder gespeichert werden."
 msgid "Could not load templates"
 msgstr "Vorlagen können nicht geladen werden"
 
+#: zotonic_mod_development/src/mod_development.erl:498
+msgid "Could not open the directory on this computer."
+msgstr "Das Verzeichnis auf diesem Computer konnte nicht geöffnet werden."
+
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:9
 msgid "Could not open the editor. Check the editor and path mapping."
 msgstr "Der Editor konnte nicht geöffnet werden. Überprüfen Sie den Editor und die Pfadzuordnung."
@@ -9057,7 +9255,7 @@ msgid "Detecting editors…"
 msgstr "Erkennung von Editoren…"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:7
-#: zotonic_mod_development/src/mod_development.erl:1362
+#: zotonic_mod_development/src/mod_development.erl:1368
 msgid "Development"
 msgstr "Entwicklung"
 
@@ -9177,11 +9375,11 @@ msgstr "Ablaufverfolgung von Datenbankabfragen aktiviert"
 msgid "Enter the module and function you want to trace. If no function is given, all functions in the module will be traced. Enter how many calls to trace before stopping."
 msgstr "Geben Sie das Modul und die Funktion an, die Sie verfolgen möchten. Wenn keine Funktion angegeben wird, werden alle Funktionen des Moduls verfolgt. Geben Sie an, wie viele Aufrufe verfolgt werden sollen, bevor Sie aufhören."
 
-#: zotonic_mod_development/src/mod_development.erl:665
+#: zotonic_mod_development/src/mod_development.erl:671
 msgid "Error changing the console logs."
 msgstr "Fehler beim Ändern der Konsolenprotokolle."
 
-#: zotonic_mod_development/src/mod_development.erl:759
+#: zotonic_mod_development/src/mod_development.erl:765
 msgid "Error parsing template."
 msgstr "Fehler beim Parsen der Vorlage."
 
@@ -9243,7 +9441,7 @@ msgstr "Verfolgung von Funktionsaufrufen"
 msgid "Function call tracing has been disabled. Use the following to enable function call tracing:"
 msgstr "Die Verfolgung von Funktionsaufrufen wurde deaktiviert. Gehen Sie wie folgt vor, um die Verfolgung von Funktionsaufrufen zu aktivieren:"
 
-#: zotonic_mod_development/src/mod_development.erl:699
+#: zotonic_mod_development/src/mod_development.erl:705
 msgid "Function tracing has been disabled in the Zotonic config."
 msgstr "Die Funktionsverfolgung wurde in der Zotonic-Konfiguration deaktiviert."
 
@@ -9388,18 +9586,18 @@ msgstr "Keine passende Dispatchregel gefunden"
 msgid "No matching templates found."
 msgstr "Es wurden keine passenden Vorlagen gefunden."
 
-#: zotonic_mod_development/src/mod_development.erl:663
+#: zotonic_mod_development/src/mod_development.erl:669
 msgid "No permission to access the console logs."
 msgstr "Keine Berechtigung zum Zugriff auf die Konsolenprotokolle."
 
-#: zotonic_mod_development/src/mod_development.erl:506
-#: zotonic_mod_development/src/mod_development.erl:521
-#: zotonic_mod_development/src/mod_development.erl:536
-#: zotonic_mod_development/src/mod_development.erl:544
-#: zotonic_mod_development/src/mod_development.erl:571
-#: zotonic_mod_development/src/mod_development.erl:613
-#: zotonic_mod_development/src/mod_development.erl:630
-#: zotonic_mod_development/src/mod_development.erl:647
+#: zotonic_mod_development/src/mod_development.erl:512
+#: zotonic_mod_development/src/mod_development.erl:527
+#: zotonic_mod_development/src/mod_development.erl:542
+#: zotonic_mod_development/src/mod_development.erl:550
+#: zotonic_mod_development/src/mod_development.erl:577
+#: zotonic_mod_development/src/mod_development.erl:619
+#: zotonic_mod_development/src/mod_development.erl:636
+#: zotonic_mod_development/src/mod_development.erl:653
 msgid "No permission to use mod_development."
 msgstr "Keine Berechtigung zur Verwendung von mod_development."
 
@@ -9408,7 +9606,7 @@ msgstr "Keine Berechtigung zur Verwendung von mod_development."
 msgid "No references found."
 msgstr "Es wurden keine Verweise gefunden."
 
-#: zotonic_mod_development/src/mod_development.erl:625
+#: zotonic_mod_development/src/mod_development.erl:631
 msgid "No template found in the context."
 msgstr "Keine Vorlage im Kontext gefunden."
 
@@ -9433,7 +9631,7 @@ msgstr "Nicht gefunden"
 msgid "Observers"
 msgstr "Observer"
 
-#: zotonic_mod_development/src/mod_development.erl:702
+#: zotonic_mod_development/src/mod_development.erl:708
 msgid "Only the admin user can set traces."
 msgstr "Nur der Benutzer admin kann Traces einrichten."
 
@@ -9571,19 +9769,19 @@ msgstr "Tracing starten"
 msgid "Start matching dispatch rules"
 msgstr "Abgleich der Dispatchregeln starten"
 
-#: zotonic_mod_development/src/mod_development.erl:659
+#: zotonic_mod_development/src/mod_development.erl:665
 msgid "Started logging to the console of your browser tab."
 msgstr "Die Protokollierung in der Konsole Ihres Browser-Tabs wurde gestartet."
 
-#: zotonic_mod_development/src/mod_development.erl:533
+#: zotonic_mod_development/src/mod_development.erl:539
 msgid "Started tracing all template inclusions."
 msgstr "Mit der Verfolgung aller Vorlageneinschlüsse begonnen."
 
-#: zotonic_mod_development/src/mod_development.erl:608
+#: zotonic_mod_development/src/mod_development.erl:614
 msgid "Started tracing template inclusions by rendering the page."
 msgstr "Mit der Verfolgung von Vorlageneinschlüssen wurde begonnen, indem die Seite gerendert wurde."
 
-#: zotonic_mod_development/src/mod_development.erl:530
+#: zotonic_mod_development/src/mod_development.erl:536
 msgid "Started tracing template inclusions for your session."
 msgstr "Mit der Verfolgung von Vorlageneinschlüssen für Ihre Sitzung begonnen."
 
@@ -9593,11 +9791,11 @@ msgstr "Mit der Verfolgung von Vorlageneinschlüssen für Ihre Sitzung begonnen.
 msgid "Stop"
 msgstr "Stopp"
 
-#: zotonic_mod_development/src/mod_development.erl:661
+#: zotonic_mod_development/src/mod_development.erl:667
 msgid "Stopped logging to the console of all browser tabs."
 msgstr "Die Protokollierung in der Konsole aller Browser-Tabs wurde gestoppt."
 
-#: zotonic_mod_development/src/mod_development.erl:542
+#: zotonic_mod_development/src/mod_development.erl:548
 msgid "Stopped tracing template inclusions for all sessions."
 msgstr "Die Verfolgung von Vorlageneinschlüssen wurde für alle Sitzungen gestoppt."
 
@@ -9636,7 +9834,7 @@ msgstr "Vorlage"
 msgid "Template debugging"
 msgstr "Debuggen von Vorlagen"
 
-#: zotonic_mod_development/src/mod_development.erl:762
+#: zotonic_mod_development/src/mod_development.erl:768
 msgid "Template file not found."
 msgstr "Vorlagendatei nicht gefunden."
 
@@ -9656,7 +9854,7 @@ msgstr "Template-Pfad"
 msgid "Test with this template"
 msgstr "Testen Sie diese Vorlage"
 
-#: zotonic_mod_development/src/mod_development.erl:610
+#: zotonic_mod_development/src/mod_development.erl:616
 msgid "The path must be a local URL."
 msgstr "Der Pfad muss eine lokale URL sein."
 
@@ -9749,7 +9947,7 @@ msgstr "URI-Muster"
 msgid "Uncheck to debug only your current session."
 msgstr "Deaktivieren Sie dieses Kontrollkästchen, um nur Ihre aktuelle Sitzung zu debuggen."
 
-#: zotonic_mod_development/src/mod_development.erl:644
+#: zotonic_mod_development/src/mod_development.erl:650
 msgid "Updated template debug points."
 msgstr "Debug-Punkte der Vorlagen aktualisiert."
 
@@ -10588,35 +10786,35 @@ msgstr "Nach 1 Woche"
 msgid "After 3 months"
 msgstr "Nach 3 Monaten"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:314
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:274
 msgid "All cloud files can be moved back to the file system on the server."
 msgstr "Alle Cloud-Dateien können zurück in das Dateisystem auf dem Server verschoben werden."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:322
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:282
 msgid "All cloud files will be queued for download."
 msgstr "Alle Cloud-Dateien werden in eine Warteschlange zum Herunterladen gestellt."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:279
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:239
 msgid "All files will be queued, uploads will start in the background within 10 minutes."
 msgstr "Alle Dateien werden in eine Warteschlange gestellt, der Upload beginnt im Hintergrund innerhalb von 10 Minuten."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:269
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:229
 msgid "All local uploaded and preview files can be moved to the cloud."
 msgstr "Alle lokal hochgeladenen Dateien und Vorschaudateien können in die Cloud verschoben werden."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:288
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:248
 msgid "Are you sure you want to copy all files to the cloud?"
 msgstr "Sind Sie sicher, dass Sie alle Dateien in die Cloud kopieren wollen?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:331
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:291
 msgid "Are you sure you want to copy all files to the disk of the server?"
 msgstr "Sind Sie sicher, dass Sie alle Dateien auf die Festplatte des Servers kopieren wollen?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:299
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:259
 msgid "Are you sure you want to move all files to the cloud?"
 msgstr "Sind Sie sicher, dass Sie alle Dateien in die Cloud verschieben möchten?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:342
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:302
 msgid "Are you sure you want to move all files to the disk of the server?"
 msgstr "Möchten Sie wirklich alle Dateien auf die Festplatte des Servers verschieben?"
 
@@ -10632,7 +10830,7 @@ msgstr "Bevor die Einstellungen gespeichert werden, werden sie durch Hochladen (
 msgid "Check the storage service and its access permissions. Failed reads are retried when requested, with a delay of up to ten minutes."
 msgstr "Überprüfen Sie den Speicherdienst und dessen Zugriffsberechtigungen. Fehlgeschlagene Lesevorgänge werden auf Anfrage mit einer Verzögerung von bis zu zehn Minuten erneut versucht."
 
-#: zotonic_mod_filestore/src/mod_filestore.erl:585
+#: zotonic_mod_filestore/src/mod_filestore.erl:619
 msgid "Cloud File Store"
 msgstr "Cloud-Dateispeicher"
 
@@ -10645,9 +10843,13 @@ msgstr "Konfiguration des Cloud-Dateispeichers"
 msgid "Cloud File Store Utilities and Statistics"
 msgstr "Cloud File Store-Dienstprogramme und -Statistiken"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:228
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:9
 msgid "Cloud Files"
 msgstr "Cloud-Dateien"
+
+#: zotonic_mod_filestore/priv/templates/_admin_status_alert.tpl:3
+msgid "Cloud file store"
+msgstr "Cloud-Dateispeicher"
 
 #: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:15
 msgid "Cloud file store configuration"
@@ -10661,23 +10863,23 @@ msgstr "Der Cloud-Dateispeicher erfordert Aufmerksamkeit"
 msgid "Consecutive failures"
 msgstr "Aufeinanderfolgende Ausfälle"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:285
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:245
 msgid "Copy all local files to the remote storage"
 msgstr "Kopieren aller lokalen Dateien auf den entfernten Speicher"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:328
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:288
 msgid "Copy all remote files to local"
 msgstr "Alle Remote-Dateien in den lokalen Speicher kopieren"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:289
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:249
 msgid "Copy files to cloud"
 msgstr "Dateien in die Cloud kopieren"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:332
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:292
 msgid "Copy files to server disk"
 msgstr "Kopieren von Dateien auf die Serverfestplatte"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:278
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:238
 msgid "Could not access the service, double check your settings and try again."
 msgstr "Konnte nicht auf den Dienst zugreifen, überprüfen Sie Ihre Einstellungen und versuchen Sie es erneut."
 
@@ -10694,11 +10896,11 @@ msgstr "Derzeit unterstützt Zotonic FTP, WebDAV und Dienste, die mit der API de
 msgid "Delete files from the cloud file store"
 msgstr "Dateien aus dem Cloud-Dateispeicher löschen"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:251
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:32
 msgid "Deletion queue"
 msgstr "Löschwarteschlange"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:250
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:31
 msgid "Download Queue"
 msgstr "Download-Warteschlange"
 
@@ -10706,7 +10908,7 @@ msgstr "Download-Warteschlange"
 msgid "Enable this to let the filestore act as a backup of  your local media files."
 msgstr "Aktivieren Sie dies, damit der Dateispeicher als Backup Ihrer lokalen Mediendateien fungiert."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:315
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:275
 msgid "Ensure yourself there is enough disk space before starting this process."
 msgstr "Vergewissern Sie sich, dass genügend Speicherplatz vorhanden ist, bevor Sie diesen Vorgang starten."
 
@@ -10730,8 +10932,8 @@ msgstr "Fehlgeschlagene Lesevorgänge in den letzten 15 Minuten:"
 msgid "Failing since"
 msgstr "Fehler seit"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:233
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:256
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:14
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:37
 msgid "Files"
 msgstr "Dateien"
 
@@ -10751,11 +10953,11 @@ msgstr "Für S3 muss die URL mit <b><tt>https:</tt></b> oder <b><tt>http:</tt></
 msgid "For WebDAV the URL must start with <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>"
 msgstr "Für WebDAV muss die URL mit <b><tt>webdavs:</tt></b> oder <b><tt>webdav:</tt></b> beginnen."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:275
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:235
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "Wenn Sie „Lokale Dateien nach dem Hochladen in den Cloud-Dateispeicher beibehalten“ ausgewählt haben, werden die lokalen Dateien nicht gelöscht, da die Remote-Dateien als Backup der lokalen Dateien betrachtet werden."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:319
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:279
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "Wenn Sie „Lokale Dateien nach dem Hochladen in den Cloud-Dateispeicher beibehalten“ ausgewählt haben, werden die Remote-Dateien nicht gelöscht, da die Remote-Dateien als Backup der lokalen Dateien betrachtet werden."
 
@@ -10783,7 +10985,12 @@ msgstr "Lokale Dateien behalten?"
 msgid "Last error"
 msgstr "Letzter Fehler"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:227
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:222
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:20
+msgid "Loading…"
+msgstr "Wird geladen…"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:8
 msgid "Local Files"
 msgstr "Lokale Dateien"
 
@@ -10792,23 +10999,23 @@ msgstr "Lokale Dateien"
 msgid "Mark unrecoverable"
 msgstr "Als nicht wiederherstellbar markieren"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:226
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:7
 msgid "Media Resources"
 msgstr "Medien-Ressourcen"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:296
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:256
 msgid "Move all local files to the remote storage"
 msgstr "Verschieben Sie alle lokalen Dateien in den Remotespeicher"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:339
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:299
 msgid "Move all remote files to local"
 msgstr "Verschieben Sie alle Remote-Dateien auf lokal"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:300
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:260
 msgid "Move files to cloud"
 msgstr "Dateien in die Cloud verschieben"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:343
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:303
 msgid "Move files to server disk"
 msgstr "Verschieben Sie Dateien auf die Serverfestplatte"
 
@@ -10817,6 +11024,10 @@ msgstr "Verschieben Sie Dateien auf die Serverfestplatte"
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:62
 msgid "Never"
 msgstr "Niemals"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:18
+msgid "No cloud file store read errors detected."
+msgstr "Es wurden keine Lesefehler im Cloud-Dateispeicher festgestellt."
 
 #: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:47
 msgid "No errors on this page."
@@ -10838,7 +11049,7 @@ msgstr "Nicht festgelegt (Signatur V2)"
 msgid "Now"
 msgstr "Jetzt"
 
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:38
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:39
 msgid "Only the admin account (user 1) can mark files unrecoverable."
 msgstr "Nur das Administratorkonto (Benutzer 1) kann Dateien als nicht wiederherstellbar kennzeichnen."
 
@@ -10909,7 +11120,7 @@ msgstr "Einstellungen wurden ohne Schreibtest gespeichert."
 msgid "Stop retrying this file and mark it unrecoverable? Its record and error details will be kept. No files will be deleted."
 msgstr "Soll der Wiederholungsversuch für diese Datei beendet und sie als nicht wiederherstellbar markiert werden? Der Datensatz und die Fehlerdetails bleiben erhalten. Es werden keine Dateien gelöscht."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:239
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:20
 msgid "Storage"
 msgstr "Speicher"
 
@@ -10917,7 +11128,7 @@ msgstr "Speicher"
 msgid "Test Cloud File Store Settings"
 msgstr "Einstellungen des Cloud-Dateispeichers testen"
 
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:255
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:256
 msgid "The cloud file store is read-only."
 msgstr "Der Cloud-Dateispeicher ist schreibgeschützt."
 
@@ -10933,7 +11144,7 @@ msgstr "Der Cloud-Dateispeicher verwendet eine globale Zotonic-Konfiguration. Di
 msgid "The configuration is:"
 msgstr "Die Konfiguration lautet:"
 
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:85
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:86
 msgid "The settings are locked by the system configuration."
 msgstr "Die Einstellungen sind durch die Systemkonfiguration gesperrt."
 
@@ -10941,7 +11152,7 @@ msgstr "Die Einstellungen sind durch die Systemkonfiguration gesperrt."
 msgid "The settings are tested by uploading (and removing) a small file."
 msgstr "Die Einstellungen werden durch Hochladen (und Entfernen) einer kleinen Datei getestet."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:271
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:231
 msgid "There is a 1 minute wait before files are uploaded."
 msgstr "Es gibt eine Wartezeit von 1 Minute, bevor Dateien hochgeladen werden."
 
@@ -10949,11 +11160,11 @@ msgstr "Es gibt eine Wartezeit von 1 Minute, bevor Dateien hochgeladen werden."
 msgid "This extra deletion delay extends the period files can be recovered."
 msgstr "Diese zusätzliche Löschverzögerung verlängert den Zeitraum, in dem Dateien wiederhergestellt werden können."
 
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:40
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:41
 msgid "This file no longer has an eligible error older than 24 hours. Reload the page."
 msgstr "Diese Datei enthält keine Fehlermeldung mehr, die älter als 24 Stunden ist. Bitte laden Sie die Seite neu."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:270
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:230
 msgid "This will queue the files for later asynchronous upload."
 msgstr "Dadurch werden die Dateien für ein späteres asynchrones Hochladen in eine Warteschlange gestellt."
 
@@ -10973,7 +11184,7 @@ msgstr "Unwiederherstellbar"
 msgid "Unresolved files are listed oldest first. The error shown is the most recent recorded error for each file."
 msgstr "Ungelöste Dateien werden beginnend mit der ältesten aufgelistet. Der angezeigte Fehler ist der zuletzt für die jeweilige Datei protokollierte Fehler."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:249
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:30
 msgid "Upload Queue"
 msgstr "Upload-Warteschlange"
 
@@ -10997,14 +11208,14 @@ msgstr "Bei WebDAV werden Benutzername und Passwort im Klartext übertragen, ste
 msgid "Yes, keep local files after upload"
 msgstr "Ja, lokale Dateien nach dem Hochladen behalten"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:360
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:88
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:95
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:102
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:320
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:89
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:96
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:103
 msgid "You are not allowed to change these settings."
 msgstr "Diese Einstellungen dürfen Sie nicht ändern."
 
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:126
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:127
 msgid "You are not allowed to use this."
 msgstr "Sie dürfen dies nicht verwenden."
 
@@ -11012,8 +11223,8 @@ msgstr "Sie dürfen dies nicht verwenden."
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
 msgstr "Zotonic kann hochgeladene und in der Größe veränderte Dateien in der Cloud speichern. Hier können Sie den Speicherort und die Zugriffsschlüssel für den Cloud-Dienst konfigurieren."
 
-#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:150
-#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:180
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:158
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:188
 msgid "Could not upload"
 msgstr "Konnte nicht hochgeladen werden"
 
@@ -11037,7 +11248,7 @@ msgstr "Kontrast"
 msgid "Contrast &amp; Brightness"
 msgstr "Kontrast &amp; Helligkeit"
 
-#: zotonic_mod_image_edit/src/mod_image_edit.erl:91
+#: zotonic_mod_image_edit/src/mod_image_edit.erl:93
 msgid "Could not save the image settings."
 msgstr "Die Bildeinstellungen konnten nicht gespeichert werden."
 
@@ -11093,7 +11304,7 @@ msgstr "Drehung, vertikale und horizontale Neigung"
 msgid "Rotate"
 msgstr "Drehen"
 
-#: zotonic_mod_image_edit/src/mod_image_edit.erl:88
+#: zotonic_mod_image_edit/src/mod_image_edit.erl:90
 msgid "Saved the image settings."
 msgstr "Bildeinstellungen gespeichert."
 
@@ -12815,10 +13026,6 @@ msgstr "Sprache, wenn keine Präferenz bekannt ist:"
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:19
 msgid "Language:"
 msgstr "Sprache:"
-
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:20
-msgid "Loading…"
-msgstr "Wird geladen…"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:2
 msgid "Mailing"
@@ -14974,10 +15181,6 @@ msgstr "Einbetten des Medienelements fehlgeschlagen, HTTP-Code:"
 msgid "Fix embedded videos"
 msgstr "Eingebettete Videos reparieren"
 
-#: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:2
-msgid "Media maintenance"
-msgstr "Medienpflege"
-
 #: zotonic_mod_oembed/src/mod_oembed.erl:458
 msgid "No embedded videos found which need fixing."
 msgstr "Es wurden keine eingebetteten Videos gefunden, die repariert werden müssen."
@@ -15624,11 +15827,11 @@ msgstr "Sie müssen den Bedingungen zustimmen, um sich zu registrieren."
 msgid "Your signup code"
 msgstr "Ihr Registrierungscode"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:264
+#: zotonic_mod_site_update/src/mod_site_update.erl:276
 msgid "Another deployment is in progress. Please try again when it finishes."
 msgstr "Derzeit läuft eine weitere Bereitstellung. Bitte versuchen Sie es erneut, sobald diese abgeschlossen ist."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:164
+#: zotonic_mod_site_update/src/mod_site_update.erl:176
 msgid "Building Zotonic in the background..."
 msgstr "Zotonic wird im Hintergrund gebaut..."
 
@@ -15640,9 +15843,9 @@ msgstr "Das Remote-Änderungsprotokoll konnte nicht abgerufen werden. Überprüf
 msgid "Current commit"
 msgstr "Aktueller Commit"
 
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:60
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:62
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:11
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:61
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:63
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:12
 msgid "Deploy"
 msgstr "Bereitstellen"
 
@@ -15656,27 +15859,31 @@ msgstr "Neueste Version bereitstellen"
 msgid "Deploy latest Zotonic"
 msgstr "Neueste Version von Zotonic bereitstellen"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:217
+#: zotonic_mod_site_update/src/mod_site_update.erl:229
 msgid "Deploy latest version"
 msgstr "Neueste Version bereitstellen"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:251
+#: zotonic_mod_site_update/src/mod_site_update.erl:263
 msgid "Deploying the latest version..."
 msgstr "Die neueste Version wird bereitgestellt..."
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:2
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:5
-#: zotonic_mod_site_update/src/mod_site_update.erl:128
+#: zotonic_mod_site_update/src/mod_site_update.erl:140
 msgid "Deployment"
 msgstr "Bereitstellung"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:262
+#: zotonic_mod_site_update/src/mod_site_update.erl:274
 msgid "Deployment completed."
 msgstr "Bereitstellung abgeschlossen."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:266
+#: zotonic_mod_site_update/src/mod_site_update.erl:278
 msgid "Deployment failed. Check the server log for details."
 msgstr "Die Bereitstellung ist fehlgeschlagen. Weitere Informationen finden Sie im Serverprotokoll."
+
+#: zotonic_mod_site_update/priv/templates/_site_deploy_status_value.tpl:5
+msgid "Deployment running on this node"
+msgstr "Auf diesem Knoten ausgeführte Bereitstellung"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:5
 msgid "Deployment updates the entire Git repository, including any other modules it contains."
@@ -15686,7 +15893,7 @@ msgstr "Durch die Bereitstellung wird das gesamte Git-Repository aktualisiert, e
 msgid "Fetching remote changes…"
 msgstr "Remote-Änderungen abrufen…"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:162
+#: zotonic_mod_site_update/src/mod_site_update.erl:174
 msgid "Finished rebuilding Zotonic."
 msgstr "Zotonic wurde neu gebaut."
 
@@ -15702,11 +15909,11 @@ msgstr "Modulliste"
 msgid "No deployable version control repository was found."
 msgstr "Es wurde kein bereitstellbares Versionskontroll-Repository gefunden."
 
-#: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:12
+#: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:13
 msgid "Rebuild Zotonic"
 msgstr "Zotonic neu bauen"
 
-#: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:14
+#: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:15
 msgid "Recompile changed Erlang files in the background"
 msgstr "Geänderte Erlang-Dateien im Hintergrund neu kompilieren"
 
@@ -15726,7 +15933,7 @@ msgstr "Überprüfen Sie die eingehenden Änderungen und stellen Sie das Git-Rep
 msgid "Review incoming changes and deploy this site's code. Compilation and activation are coordinated across all sites on this node."
 msgstr "Überprüfen Sie eingehende Änderungen und stellen Sie den Code dieser Website bereit. Die Kompilierung und Aktivierung werden für alle Websites auf diesem Knoten koordiniert."
 
-#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:5
+#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:6
 msgid "Review incoming changes before deploying the latest version."
 msgstr "Überprüfen Sie die eingehenden Änderungen, bevor Sie die neueste Version bereitstellen."
 
@@ -15747,11 +15954,11 @@ msgstr "Bereitstellung der Website"
 msgid "Site update API token"
 msgstr "Site Update API-Token"
 
-#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:9
+#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:10
 msgid "Site update is not available as the site does not use a known version control system, like git."
 msgstr "Das Site-Update ist nicht verfügbar, da die Site kein bekanntes Versionskontrollsystem wie git verwendet."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:166
+#: zotonic_mod_site_update/src/mod_site_update.erl:178
 msgid "Sorry this can only be run from the Zotonic status site"
 msgstr "Dies kann leider nur von der Zotonic-Statusseite ausgeführt werden"
 
@@ -15792,8 +15999,8 @@ msgid "View system status"
 msgstr "Systemstatus anzeigen"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:20
-#: zotonic_mod_site_update/src/mod_site_update.erl:221
-#: zotonic_mod_site_update/src/mod_site_update.erl:256
+#: zotonic_mod_site_update/src/mod_site_update.erl:233
+#: zotonic_mod_site_update/src/mod_site_update.erl:268
 msgid "You are not allowed to deploy this code."
 msgstr "Sie dürfen diesen Code nicht bereitstellen."
 

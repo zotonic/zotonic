@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-02 21:24\n"
+"PO-Revision-Date: 2026-11-06 08:37\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -374,7 +374,7 @@ msgstr "Är du säker på att du vill återställa alla ACL-regler till deras nu
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:90
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:161
 #: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:31
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:68
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:70
 #: zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7
 #: zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:10
@@ -404,8 +404,8 @@ msgstr "Är du säker på att du vill återställa alla ACL-regler till deras nu
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:26
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:85
 #: zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:58
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:10
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:59
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:11
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:229
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:237
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70
@@ -440,7 +440,7 @@ msgstr "Avbryt"
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:22
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:11
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:22
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:24
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:28
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:12
 #: zotonic_mod_survey/src/mod_survey.erl:656
@@ -541,7 +541,7 @@ msgstr "Innehåll"
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_visible_for.tpl:2
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:58
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:51
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:32
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:34
 #: zotonic_mod_content_groups/priv/templates/_admin_overview_filter_panel.tpl:6
 #: zotonic_mod_content_groups/priv/templates/_dialog_admin_bulk_update.tpl:5
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_edit.tpl:62
@@ -580,7 +580,7 @@ msgstr "Kunde inte flytta till samarbetsgruppen."
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:118
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:53
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:8
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:67
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:81
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:30
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:53
 #: zotonic_mod_admin_identity/src/mod_admin_identity.erl:330
@@ -740,7 +740,7 @@ msgstr "Medlemmar i samma användargrupp"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:8
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:9
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:42
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:21
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:35
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:28
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:84
@@ -852,7 +852,7 @@ msgid "Published rules"
 msgstr "Publicerade regler"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:41
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:69
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:71
 msgid "Revert"
 msgstr "Återgå"
 
@@ -1102,6 +1102,30 @@ msgstr "använd en annan webbläsare (tex. Chrome om du nu använder Firefox)"
 msgid "view (acl action)"
 msgstr "visa (acl-åtgärd)"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:4
+msgid "<strong>{n}</strong> IP address has more than 250 open sockets."
+msgid_plural "<strong>{n}</strong> IP addresses have more than 250 open sockets."
+msgstr[0] ""
+msgstr[1] ""
+
+#: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:2
+msgid "<strong>{n}</strong> page waiting to be indexed"
+msgid_plural "<strong>{n}</strong> pages waiting to be indexed"
+msgstr[0] ""
+msgstr[1] ""
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:9
+msgid "{n} background task remaining"
+msgid_plural "{n} background tasks remaining"
+msgstr[0] ""
+msgstr[1] ""
+
+#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:7
+msgid "{n} open socket"
+msgid_plural "{n} open sockets"
+msgstr[0] ""
+msgstr[1] ""
+
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:219
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:221
 msgid "&lt; Prev"
@@ -1236,7 +1260,7 @@ msgstr "Lägg till anteckning"
 msgid "Added the connection to"
 msgstr "Lade till anslutningen till"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:53
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:66
 msgid "Additional module tools"
 msgstr "Ytterligare modulverktyg"
 
@@ -1256,7 +1280,7 @@ msgstr "Admin"
 msgid "Advanced"
 msgstr "Avancerad"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:38
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:58
 msgid "Advanced repair"
 msgstr "Avancerad reparation"
 
@@ -1287,13 +1311,13 @@ msgstr "Alla medier"
 msgid "All pages"
 msgstr "Alla sidor"
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:38
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:39
 msgid "All sites have been flushed."
 msgstr "Cacheminnena för alla webbplatser har tömts."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:36
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:2
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:37
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:50
 msgid "All sites on this node"
 msgstr "Alla webbplatser på denna nod"
 
@@ -1429,7 +1453,7 @@ msgstr "Tillgänglig"
 msgid "Back"
 msgstr "Tillbaka"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:12
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:25
 msgid "Background work"
 msgstr "Bakgrundsarbete"
 
@@ -1465,7 +1489,7 @@ msgstr "Cachad"
 msgid "Caches"
 msgstr "Cacher"
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:47
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:48
 msgid "Caches have been flushed."
 msgstr "Cachar har rensats."
 
@@ -1494,6 +1518,10 @@ msgstr "Markera de sidor du vill ta bort."
 msgid "Check the pages you want to update."
 msgstr "Markera de sidor du vill uppdatera."
 
+#: zotonic_mod_admin/priv/templates/_admin_status_check.tpl:5
+msgid "Checking…"
+msgstr "Kontrollerar…"
+
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:10
 msgid "Choose a media item from this page to insert in the body text."
 msgstr "Välj ett medieobjekt från denna sida att infoga i brödtexten."
@@ -1518,10 +1546,6 @@ msgstr "Rensa"
 msgid "Clear cached templates, dispatch rules and in-memory site data. The shared file index is also refreshed."
 msgstr "Rensa cachade mallar, routningsregler och webbplatsdata i minnet. Det gemensamma filindexet uppdateras också."
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:10
-msgid "Click \"Save\" to see your changes."
-msgstr "Klicka på ”Spara” för att se dina ändringar."
-
 #: zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:11
 msgid "Click here for more information"
 msgstr "Klicka här för mer information"
@@ -1530,7 +1554,7 @@ msgstr "Klicka här för mer information"
 msgid "Click to preview."
 msgstr "Klicka för att förhandsgranska."
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:15
 msgid "Close Live view"
 msgstr "Stäng livevyn"
 
@@ -1559,9 +1583,13 @@ msgstr "Koden uppdateras just nu. Bakgrundsändringarna återupptas när aktiver
 msgid "Code updates need attention"
 msgstr "Koduppdateringar kräver uppmärksamhet"
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:32
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:59
 msgid "Config directory"
 msgstr "Konfigurationskatalogen"
+
+#: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:2
+msgid "Configuration files"
+msgstr "Konfigurationsfiler"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:24
 msgid "Configured"
@@ -1614,7 +1642,7 @@ msgstr "Anslutningar"
 msgid "Content origin"
 msgstr "Innehållets källa"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:28
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:48
 msgid "Content repair"
 msgstr "Innehållsreparation"
 
@@ -1659,11 +1687,23 @@ msgstr "Kopiera SHA-256-kontrollsumman till urklipp."
 msgid "Could not connect to the website."
 msgstr "Kunde inte ansluta till webbplatsen."
 
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:27
+msgid "Could not contact the media runner."
+msgstr "Det gick inte att ansluta till mediebearbetningstjänsten."
+
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:11
 msgid "Could not detect anything to import on that URL or embed code."
 msgstr "Kunde inte hitta något att importera från denna URL eller inbäddningskod."
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:98
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:68
+msgid "Could not queue generated preview cleanup. Check the logs."
+msgstr "Det gick inte att köa rensningen av genererade förhandsvisningar. Kontrollera loggarna."
+
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:58
+msgid "Could not queue media deduplication. Check the logs."
+msgstr "Det gick inte att lägga till mediededuplicering i kön. Kontrollera loggarna."
+
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:119
 msgid "Could not reload the site configuration, check the logs."
 msgstr "Det gick inte att ladda om webbplatsens konfiguration, kontrollera loggarna."
 
@@ -1728,9 +1768,13 @@ msgstr "Skapandedatum, äldst först"
 msgid "Dashboard"
 msgstr "Instrumentpanel"
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:30
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:57
 msgid "Data directory"
 msgstr "Datakatalog"
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:61
+msgid "Datamodel upgrades and reinstalls preserve your existing data. No content or uploaded files will be deleted."
+msgstr "Vid uppgraderingar och ominstallationer av datamodellen bevaras dina befintliga data. Inget innehåll och inga uppladdade filer kommer att raderas."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:6
 msgid "Date range"
@@ -1744,9 +1788,27 @@ msgstr "Datumintervall"
 msgid "Date start/end"
 msgstr "Datum start/slut"
 
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:23
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:25
+msgid "Deduplicate media files"
+msgstr "Ta bort dubbletter av mediefiler"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:20
 msgid "Define the query using the query arguments or JSON."
 msgstr "Definiera frågan med hjälp av frågeargumenten eller JSON."
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:31
+msgid "Delete all generated image sizes? Preview originals are kept. Image requests may be slower while previews regenerate."
+msgstr "Ska alla genererade bildstorlekar raderas? Förhandsvisningsoriginalen sparas. Bildförfrågningar kan ta längre tid medan förhandsvisningarna genereras på nytt."
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:28
+msgid "Delete all resized image variants, including variants in remote storage. Uploaded originals and preview images extracted from movies, PDFs and embeds are kept. Previews regenerate when requested. Remote deletion follows the filestore retention policy."
+msgstr "Ta bort alla bildvarianter som har ändrats i storlek, inklusive varianter i fjärrlagringen. Uppladdade originalbilder och förhandsgranskningsbilder som hämtats från filmer, PDF-filer och inbäddade objekt behålls. Förhandsgranskningarna genereras på nytt vid begäran. Borttagning från fjärrlagringen sker i enlighet med lagringspolicyn för filarkivet."
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:30
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:31
+msgid "Delete generated previews"
+msgstr "Ta bort genererade förhandsvisningar"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:23
 msgid "Delete if no other page is connected to this page."
@@ -1891,9 +1953,10 @@ msgstr "E-postadress"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers_list.tpl:10
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:34
+#: zotonic_mod_admin/priv/templates/_admin_system_info_config.tpl:7
 #: zotonic_mod_admin/priv/templates/_rsc_edge.tpl:19
 #: zotonic_mod_admin/priv/templates/admin_edit.tpl:3
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:68
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:82
 #: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:70
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:23
@@ -1922,6 +1985,10 @@ msgstr "Redigera"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:16
 msgid "Edit note"
 msgstr "Redigera anteckning"
+
+#: zotonic_mod_admin/priv/templates/_admin_system_info_config.tpl:7
+msgid "Edit this configuration file"
+msgstr "Redigera den här konfigurationsfilen"
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:122
 msgid "Edit:"
@@ -1959,7 +2026,7 @@ msgstr "Bädda in sida | ett citat, popup-fönster eller länk till en annan sid
 msgid "Embedded Content"
 msgstr "Inbäddat innehåll"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:30
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:50
 msgid "Embedded-page references"
 msgstr "Referenser till inbäddade sidor"
 
@@ -1976,11 +2043,7 @@ msgstr "Slutpunkt"
 msgid "Enter a URL or embed code. It will be analyzed and you can choose how to import the data."
 msgstr "Ange en URL eller inbäddningskod. Den analyseras och du kan välja hur uppgifterna ska importeras."
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:37
-msgid "Erlang init files"
-msgstr "Erlang-startfiler"
-
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:36
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:63
 msgid "Erlang installation root"
 msgstr "Erlangs installationskatalog"
 
@@ -2038,7 +2101,7 @@ msgstr "Exakt kategori"
 msgid "Excess connections"
 msgstr "Överflödiga anslutningar"
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:85
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:106
 msgid "Excess connections have been closed."
 msgstr "Överflödiga anslutningar har stängts."
 
@@ -2137,7 +2200,7 @@ msgstr "Hitta media"
 msgid "Find Page"
 msgstr "Hitta sida"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:30
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:50
 msgid "Find embedded page references and rebuild their refers connections. This runs in the background."
 msgstr "Hitta referenser till inbäddade sidor och bygg om deras refers-kopplingar. Detta körs i bakgrunden."
 
@@ -2187,6 +2250,14 @@ msgstr "Ledigt"
 msgid "Function"
 msgstr "Funktion"
 
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:64
+msgid "Generated preview cleanup has been queued. Preview originals are kept."
+msgstr "Rensningen av genererade förhandsvisningar har lagts i kö. Originalfilerna för förhandsvisningarna sparas."
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:28
+msgid "Generated previews"
+msgstr "Genererade förhandsvisningar"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:78
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:41
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:76
@@ -2214,6 +2285,10 @@ msgstr "Rubrik"
 msgid "Header | a big header"
 msgstr "Rubrik | en stor rubrik"
 
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:11
+msgid "Health checks"
+msgstr "Hälsokontroller"
+
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:6
 msgid "Health, background work and services for"
 msgstr "Status, bakgrundsarbete och tjänster för"
@@ -2230,7 +2305,7 @@ msgstr "Här kan du redigera sökfrågans argument. Skriv varje argument på en 
 msgid "Hide page from searches (depends on the search query)"
 msgstr "Dölj sida från sökningar (beror på sökfrågan)"
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:34
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:61
 msgid "Home directory"
 msgstr "Hemkatalogen"
 
@@ -2246,10 +2321,6 @@ msgstr "Värd"
 msgid "IP Address"
 msgstr "IP-adress"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:4
-msgid "IP addresses have more than 250 open sockets."
-msgstr "IP-adresser har fler än 250 öppna socketar."
-
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:269
 msgid "Id, newest first"
 msgstr "Id, nyast först"
@@ -2257,6 +2328,10 @@ msgstr "Id, nyast först"
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:270
 msgid "Id, oldest first"
 msgstr "Id, äldst först"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:6
+msgid "Idle"
+msgstr "Inaktiv"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:11
 msgid "If a page has a publication date range then it will only be visible between the two dates. Note that if you are allowed to edit the page then you can always see it."
@@ -2269,6 +2344,14 @@ msgstr "Om inget av språken har en sökväg till sidan blir den fullständiga s
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:61
 msgid "If not checked then a visitor is always redirected to the canonical URL of this page."
 msgstr "Om inte markerat omdirigeras en besökare alltid till den kanoniska URL:en för den här sidan."
+
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:21
+msgid "ImageMagick (local)"
+msgstr "ImageMagick (lokalt)"
+
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:24
+msgid "ImageMagick (media runner)"
+msgstr "ImageMagick (mediebearbetningstjänst)"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:141
 #: zotonic_mod_admin/priv/templates/_dialog_rsc_import_options.tpl:17
@@ -2298,7 +2381,7 @@ msgstr "Import"
 msgid "Indexed by search engines"
 msgstr "Indexeras av sökmotorer"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:42
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:63
 msgid "Individual modules can be reinstalled from the Modules list."
 msgstr "Enskilda moduler kan installeras om från listan över moduler."
 
@@ -2316,11 +2399,11 @@ msgstr "Info-länk med modala popupfönster"
 msgid "Inline block"
 msgstr "Inbyggt block"
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:26
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:52
 msgid "Installation"
 msgstr "Installation"
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:44
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:72
 msgid "Installation details are available to system administrators."
 msgstr "Information om installationen finns tillgänglig för systemadministratörer."
 
@@ -2372,9 +2455,13 @@ msgid "Live query, send notifications when matching items are updated or inserte
 msgstr "Realtidsfråga: skicka aviseringar när matchande poster uppdateras eller läggs till."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:2
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:17
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:18
 msgid "Live view"
 msgstr "Live-vy"
+
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:42
+msgid "Local"
+msgstr "Lokalt"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:43
 msgid "Local ImageMagick"
@@ -2402,7 +2489,7 @@ msgstr "Lokal sandlåda"
 msgid "Log Off"
 msgstr "Logga ut"
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:31
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:58
 msgid "Log directory"
 msgstr "Loggkatalogen"
 
@@ -2458,6 +2545,7 @@ msgstr "Matchande id, namn, sidsökväg eller omdirigering"
 msgid "Matching search text"
 msgstr "Matchande söktext"
 
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:18
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:3
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:86
 #: zotonic_mod_admin/src/mod_admin.erl:525
@@ -2485,6 +2573,14 @@ msgstr "Mediekommandon använder fjärrkörare."
 msgid "Media content"
 msgstr "Medieinnehåll"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:5
+msgid "Media deduplication"
+msgstr "Deduplicering av media"
+
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:54
+msgid "Media deduplication has been queued."
+msgstr "Deduplicering av media har lagts i kö."
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:112
 msgid "Media details"
 msgstr "Medieuppgifter"
@@ -2503,11 +2599,25 @@ msgstr "Mediefil"
 msgid "Media item created."
 msgstr "Media-objekt skapat."
 
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:19
+#: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:2
+msgid "Media maintenance"
+msgstr "Underhåll av media"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:18
+msgid "Media maintenance runs in the background. Waiting tasks resume automatically. Remote deletion follows the filestore retention policy."
+msgstr "Medieunderhåll körs i bakgrunden. Väntande uppgifter återupptas automatiskt. Fjärrradering sker i enlighet med lagringspolicyn för filarkivet."
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:15
+msgid "Media maintenance status is unavailable."
+msgstr "Information om underhållsstatus för media är inte tillgänglig."
+
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:4
 msgid "Media on this page"
 msgstr "Media på denna sida"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:4
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:35
 msgid "Media processing"
 msgstr "Mediebehandling"
 
@@ -2567,7 +2677,7 @@ msgid "Modification date, oldest first"
 msgstr "Ändringsdatum, äldst först"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:134
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:24
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:38
 msgid "Modified"
 msgstr "Ändrad"
 
@@ -2608,6 +2718,10 @@ msgstr "Flytta blocket nedåt"
 msgid "Move block up"
 msgstr "Flytta blocket uppåt"
 
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:23
+msgid "Move originals and extracted preview images into content-addressable storage. Redundant local and remote copies are cleaned up in the background. Remote files without a checksum are skipped; no files are downloaded to calculate checksums."
+msgstr "Flytta originalfilerna och de extraherade förhandsgranskningsbilderna till ett innehållsadresserbart lagringssystem. Redundanta lokala och fjärrkopior rensas bort i bakgrunden. Fjärrfiler utan kontrollsumma hoppas över; inga filer laddas ned för att beräkna kontrollsummor."
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:205
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:206
 msgid "Name for invoices"
@@ -2634,7 +2748,7 @@ msgstr "Behöver du mer hjälp?"
 msgid "Network Connections"
 msgstr "Nätverkskopplingar"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:40
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:53
 msgid "Network listeners and connections"
 msgstr "Nätverkslyssnare och anslutningar"
 
@@ -2663,6 +2777,11 @@ msgstr "Nästa i kategorin:"
 #: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:11
 msgid "No IP addresses have more than 250 open sockets."
 msgstr "Ingen IP-adress har fler än 250 öppna socketar."
+
+#: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:10
+#: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:20
+msgid "No configuration files found."
+msgstr "Inga konfigurationsfiler hittades."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_depictions.tpl:21
 msgid "No connected images."
@@ -2706,6 +2825,10 @@ msgstr "Inga sidor hittades."
 msgid "No pages selected"
 msgstr "Inga sidor har valts"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:5
+msgid "No problems found."
+msgstr "Inga problem hittades."
+
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:49
 msgid "No results."
 msgstr "Inga resultat."
@@ -2748,19 +2871,23 @@ msgstr "Operativsystemets minne"
 msgid "Ongoing"
 msgstr "Pågående"
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:87
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:108
 msgid "Only system administrators can close node connections."
 msgstr "Endast systemadministratörer kan stänga nodanslutningar."
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:42
+#: zotonic_mod_admin/priv/templates/_admin_system_info_directory.tpl:3
+msgid "Open"
+msgstr "Öppna"
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:63
 msgid "Open Modules list"
 msgstr "Öppna listan över moduler"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:13
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
 msgid "Open in new tab"
 msgstr "Öppna i en ny flik"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:57
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:70
 msgid "Open maintenance tools"
 msgstr "Öppna underhållsverktyg"
 
@@ -2897,6 +3024,10 @@ msgstr "Predikat"
 msgid "Preview"
 msgstr "Förhandsgranska"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance.tpl:9
+msgid "Preview cleanup"
+msgstr "Rensning av förhandsvisningar"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:30
 msgid "Previous in category:"
 msgstr "Tidigare i kategori:"
@@ -2989,9 +3120,13 @@ msgstr "Fråga"
 msgid "Query results"
 msgstr "Sökresultat"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:21
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:41
 msgid "Queue every page for search indexing. Large sites can take a long time to finish."
 msgstr "Lägg till varje sida i kön för sökindexering. Det kan ta lång tid att slutföra indexeringen av stora webbplatser."
+
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:4
+msgid "Queued / waiting"
+msgstr "I kö / väntar"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:14
 msgid "Ranch limit"
@@ -3001,11 +3136,11 @@ msgstr "Ranchgräns"
 msgid "Rebuild derived data and maintain this site. Queued work can be followed on the Status page."
 msgstr "Bygg om härledda data och underhåll den här webbplatsen. Du kan följa köade arbeten på sidan Status."
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:31
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:51
 msgid "Rebuild references"
 msgstr "Bygg om referenser"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:22
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:42
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:169
 msgid "Rebuild search indices"
 msgstr "Bygg om sökindex"
@@ -3031,7 +3166,7 @@ msgstr "Refererande sidor"
 msgid "Referrers to"
 msgstr "Sidor som länkar till"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:12
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:13
 #: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:13
 #: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:51
@@ -3043,13 +3178,13 @@ msgstr "Uppdatera"
 msgid "Refreshed every 30 minutes."
 msgstr "Uppfriskas var 30: e minut."
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:53
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:54
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:74
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:75
 msgid "Reinstall Zotonic datamodel"
 msgstr "Installera om Zotonic datamodell"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:46
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:47
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:67
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:68
 msgid "Reinstall site datamodel"
 msgstr "Installera om webbplatsens datamodell"
 
@@ -3066,6 +3201,14 @@ msgstr "Om du laddar om sidan raderas alla ändringar som inte har sparats i det
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:29
 msgid "Remarks"
 msgstr "Anmärkningar"
+
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:40
+msgid "Remote runners only"
+msgstr "Endast fjärrtjänster för mediebearbetning"
+
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:40
+msgid "Remote runners with local fallback"
+msgstr "Fjärrtjänster för mediebearbetning med lokal bearbetning som reserv"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:70
 msgid "Remote sandbox isolation and queue details are available on each runner’s dashboard."
@@ -3098,7 +3241,7 @@ msgstr "Ersätt nuvarande medieobjekt"
 msgid "Resize Live view"
 msgstr "Ändra storlek på Live-vyn"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:46
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:59
 msgid "Resources"
 msgstr "Resurser"
 
@@ -3126,15 +3269,15 @@ msgstr "Vridet 270 grader"
 msgid "Rotated 90 degrees"
 msgstr "Vridet 90 grader"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:51
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:72
 msgid "Run the Zotonic core datamodel installation again for this site's database."
 msgstr "Kör installationen av Zotonics kärndatamodell igen för den här webbplatsens databas."
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:54
-msgid "Run the Zotonic core datamodel installation again for this site's database?"
-msgstr "Ska jag köra installationen av Zotonics kärndatamodell igen för den här webbplatsens databas?"
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:75
+msgid "Run the Zotonic core datamodel installation again for this site's database? Your existing data will be preserved."
+msgstr "Vill du köra installationen av Zotonics kärndatamodell igen för den här webbplatsens databas? Dina befintliga data kommer att bevaras."
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:44
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:65
 msgid "Run the site's schema installation again. The site will stop and restart."
 msgstr "Kör webbplatsens schemainstallation igen. Webbplatsen kommer att stängas av och startas om."
 
@@ -3143,6 +3286,7 @@ msgid "Runner availability and ImageMagick versions are cached for up to one min
 msgstr "Information om tillgängliga runner och ImageMagick-versioner lagras i cachen i upp till en minut. Misslyckade kontroller försöks igen efter fem sekunder. Uppdatera sidan för att kontrollera igen."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:29
+#: zotonic_mod_admin/priv/templates/_admin_status_media_maintenance_state.tpl:2
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:64
 #: zotonic_site_status/priv/templates/_sites.tpl:15
 msgid "Running"
@@ -3157,7 +3301,7 @@ msgstr "SEO"
 msgid "SHA-256 checksum"
 msgstr "SHA-256-kontrollsumma"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:5
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:11
 msgid "SSL Application uses Erlang defaults, it is recommended to change this configuration in your <tt>erlang.config</tt>."
 msgstr "SSL-applikationen använder Erlang-standardvärden, det rekommenderas att ändra denna konfiguration i din <tt>erlang.config</tt>."
 
@@ -3202,21 +3346,25 @@ msgstr "Spara och visa sidan."
 msgid "Save this page."
 msgstr "Spara den här sidan."
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:11
+msgid "Save to see your changes"
+msgstr "Spara för att se dina ändringar"
+
 #: zotonic_mod_admin/src/mod_admin.erl:999
 msgid "Scheduled a background task to check all refers connections."
 msgstr "En bakgrundsuppgift har schemalagts för att kontrollera alla refers-kopplingar."
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:24
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:37
 msgid "Scheduled tasks"
 msgstr "Schemalagda uppgifter"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:294
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:17
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:37
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user_dialog.tpl:9
 msgid "Search"
 msgstr "Sök"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:16
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:29
 msgid "Search indexing"
 msgstr "Sökindexering"
 
@@ -3224,7 +3372,7 @@ msgstr "Sökindexering"
 msgid "Search indexing runs separately from the scheduled task queue."
 msgstr "Sökindexeringen körs separat från kön för schemalagda uppgifter."
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:21
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:41
 msgid "Search indices"
 msgstr "Sökindex"
 
@@ -3253,11 +3401,11 @@ msgstr "Sökresultat"
 msgid "Search..."
 msgstr "Sök..."
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:33
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:60
 msgid "Security directory"
 msgstr "Säkerhetskatalog"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:7
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:13
 msgid "See also: <a href=\"https://zotonic.com/en/stable/ref/configuration/zotonic-configuration.html#the-erlang-config-file\">The erlang.config file</a>"
 msgstr "Se även: <a href=\"https://zotonic.com/en/stable/ref/configuration/zotonic-configuration.html#the-erlang-config-file\">Filen erlang.config</a>"
 
@@ -3310,7 +3458,7 @@ msgstr "Om du väljer en fil blir sidan till ett medieobjekt."
 msgid "Service"
 msgstr "Service"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:37
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:50
 msgid "Services"
 msgstr "Tjänster"
 
@@ -3369,11 +3517,15 @@ msgstr "Visar sidor som du kan ansluta till med <b>{predicate}</b>."
 msgid "Site caches"
 msgstr "Webbplatscacher"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:44
+#: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:14
+msgid "Site config files"
+msgstr "Konfigurationsfiler för webbplatsen"
+
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:65
 msgid "Site datamodel"
 msgstr "Webbplatsens datamodell"
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:29
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:56
 msgid "Site files directory"
 msgstr "Katalog för webbplatsfiler"
 
@@ -3385,7 +3537,7 @@ msgstr "Programvara"
 msgid "Software versions and installation paths. Runtime and host information is shared by all sites on this node."
 msgstr "Programvaruversioner och installationsvägar. Information om körmiljö och värd delas av alla webbplatser på denna nod."
 
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:15
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:21
 msgid "Some disks are almost full."
 msgstr "Vissa diskar är nästan fulla."
 
@@ -3593,16 +3745,20 @@ msgstr "Systemadministration"
 msgid "System information"
 msgstr "Systeminformation"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:3
+msgid "System resources and configuration"
+msgstr "Systemresurser och konfiguration"
+
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:2
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:5
 msgid "System status"
 msgstr "Systemstatus"
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:30
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:43
 msgid "Task details are available to system administrators."
 msgstr "Uppgiftsdetaljerna är tillgängliga för systemadministratörer."
 
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:28
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:41
 msgid "Tasks with errors retry up to 10 times before being dropped."
 msgstr "Uppgifter med fel försöks utföras på nytt upp till 10 gånger innan de avbryts."
 
@@ -3613,7 +3769,7 @@ msgstr "Uppgifter med fel försöks utföras på nytt upp till 10 gånger innan 
 msgid "Telephone"
 msgstr "Telefon"
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:53
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:74
 msgid "Templates will be recompiled."
 msgstr "Mallar kommer att byggas om."
 
@@ -3630,7 +3786,7 @@ msgstr "Text"
 msgid "Text | a (rich) text block"
 msgstr "Text | ett block med formaterad text"
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:71
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:92
 msgid "The Zotonic datamodel is being reinstalled. Watch the console for messages"
 msgstr "Zotonic-datamodellen installeras om. Titta på konsolen för meddelanden"
 
@@ -3642,11 +3798,12 @@ msgstr "Adresserna 0.0.0.0 och :: avser alla lokala IPv4- respektive IPv6-gräns
 msgid "The billing address is only visible for people who can edit this page."
 msgstr "Faktureringsadressen är endast synlig för personer som kan redigera den här sidan."
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:77
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:98
 msgid "The category tree is rebuilding. This can take a long time."
 msgstr "Kategoriträdet byggs om. Detta kan ta lång tid."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:7
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:38
 msgid "The media runner configuration is invalid."
 msgstr "Konfigurationen för körmiljön för mediebehandling är ogiltig."
 
@@ -3682,19 +3839,19 @@ msgstr "Frågan kunde inte tolkas, kontrollera syntaxen."
 msgid "The query text is empty."
 msgstr "Frågetexten är tom."
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:59
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:80
 msgid "The search index is rebuilding. Depending on the database size, this can take a long time."
 msgstr "Sökindexet byggs om. Beroende på databasens storlek kan detta ta lång tid."
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:96
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:117
 msgid "The site configuration has been reloaded."
 msgstr "Webbplatskonfigurationen har laddats om."
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:65
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:86
 msgid "The site’s data is being reinstalled. Watch the console for messages"
 msgstr "Webbplatsens data installeras om. Se konsolen för meddelanden"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:26
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:32
 msgid "The system has allocated more than the specified threshold of available memory, as reported by the underlying operating system."
 msgstr "Systemet har allokerat mer än den specificerade tröskeln för tillgängligt minne, som rapporterats av det underliggande operativsystemet."
 
@@ -3789,7 +3946,7 @@ msgstr "Den här anteckningen är endast synlig för personer som kan redigera s
 msgid "This page can be connected from other pages. For example it could be an author of an article."
 msgstr "Denna sida kan anslutas från andra sidor. Det kan till exempel vara författare till en artikel."
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:16
+#: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:17
 msgid "This page cannot be previewed here. Use “Open in new tab” if available."
 msgstr "Den här sidan kan inte förhandsvisas här. Använd ”Öppna i ny flik” om det finns som alternativ."
 
@@ -3825,12 +3982,12 @@ msgstr "Den här sidsökvägen används av en annan sida."
 msgid "This resource was created by the module"
 msgstr "Denna resurs skapades av modulen"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:47
-msgid "This runs the site's schema installation again and stops and restarts the site. Continue?"
-msgstr "Detta kör webbplatsens schema-installation på nytt och stänger av och startar om webbplatsen. Vill du fortsätta?"
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:68
+msgid "This runs the site's schema installation again and stops and restarts the site. Your existing data will be preserved. Continue?"
+msgstr "Detta kör webbplatsens schema-installation på nytt och stänger av och startar om webbplatsen. Dina befintliga data kommer att bevaras. Vill du fortsätta?"
 
 #: zotonic_mod_admin/priv/templates/_admin_maintenance_panel.tpl:3
-#: zotonic_mod_admin/priv/templates/admin_status.tpl:12
+#: zotonic_mod_admin/priv/templates/admin_status.tpl:25
 msgid "This site"
 msgstr "Den här webbplatsen"
 
@@ -3897,6 +4054,8 @@ msgstr "Skriv för att filtrera listan nedan."
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:47
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:62
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:63
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:22
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:31
 msgid "Unavailable"
 msgstr "Ej tillgängligt"
 
@@ -4029,8 +4188,8 @@ msgid "Upload to drop folder"
 msgstr "Ladda upp till inlämningsmappen"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:135
-#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:147
-#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:177
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:155
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:185
 msgid "Uploaded"
 msgstr "Uppladdad"
 
@@ -4052,7 +4211,7 @@ msgstr "Använd automatisk komplettering för att söka efter media på webbplat
 msgid "Use the title of the base content for the display name of this person."
 msgstr "Använd grundinnehållets titel som visningsnamn för denna person."
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:40
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:60
 msgid "Use these operations to repair installation data, not for routine maintenance."
 msgstr "Använd dessa åtgärder för att reparera installationsdata, inte för rutinmässigt underhåll."
 
@@ -4109,10 +4268,14 @@ msgstr "Visa anslutningsdiagram"
 msgid "View format (opens in a new tab)"
 msgstr "Visningsformat (öppnas i en ny flik)"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:17
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:28
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:23
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:34
 msgid "View status"
 msgstr "Visa status"
+
+#: zotonic_mod_admin/priv/templates/_admin_system_info_directory.tpl:3
+msgid "View this directory in the file manager on the Zotonic server's desktop"
+msgstr "Visa den här katalogen i filhanteraren på Zotonic-serverns skrivbord"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:29
 msgid "Visible from"
@@ -4131,9 +4294,9 @@ msgstr "Besök hela redigeringssidan"
 msgid "Visiting address"
 msgstr "Besöksadress"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:4
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:14
-#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:25
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:10
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:20
+#: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:31
 #: zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:10
 msgid "Warning!"
 msgstr "Varning!"
@@ -4148,7 +4311,7 @@ msgstr "Webbplats för klick på bilden"
 msgid "Website or Embed"
 msgstr "Webbplats eller Bädda in"
 
-#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:35
+#: zotonic_mod_admin/priv/templates/admin_system_info.tpl:62
 msgid "Work directory"
 msgstr "Arbetsmapp"
 
@@ -4204,7 +4367,7 @@ msgid "You don't have permission to create this page."
 msgstr "Du har inte behörighet att skapa den här sidan."
 
 #: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:186
-#: zotonic_mod_image_edit/src/mod_image_edit.erl:94
+#: zotonic_mod_image_edit/src/mod_image_edit.erl:96
 msgid "You don't have permission to edit this page."
 msgstr "Du har inte behörighet att redigera den här sidan."
 
@@ -4215,8 +4378,10 @@ msgstr "Du har inte behörighet att redigera den här sidan."
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "Du har inte rätt behörighet att ladda upp denna typ av fil."
 
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:101
-#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:110
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:56
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:66
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:122
+#: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:131
 msgid "You don’t have permission to perform this action."
 msgstr "Du har inte behörighet att utföra den här åtgärden."
 
@@ -4232,9 +4397,13 @@ msgstr "Din sökfråga är ogiltig. Korrigera den innan du sparar."
 msgid "Zotonic"
 msgstr "Zotonic"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:51
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:72
 msgid "Zotonic datamodel"
 msgstr "Zotonics datamodell"
+
+#: zotonic_mod_admin/priv/templates/_admin_system_info_config_panel.tpl:4
+msgid "Zotonic init files"
+msgstr "Zotonics startfiler"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:30
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:27
@@ -4263,7 +4432,7 @@ msgstr "av"
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:165
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:168
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:70
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:84
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:32
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:33
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:76
@@ -4340,10 +4509,6 @@ msgstr "modifierad av"
 msgid "name"
 msgstr "namn"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:7
-msgid "open sockets"
-msgstr "öppna socketar"
-
 #: zotonic_mod_admin/priv/templates/_admin_view_types.tpl:3
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:104
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:55
@@ -4355,10 +4520,6 @@ msgstr "sida"
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:24
 msgid "page block"
 msgstr "sidblock"
-
-#: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:2
-msgid "pages waiting to be indexed"
-msgstr "sidor som väntar på att indexeras"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:28
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:10
@@ -4547,6 +4708,7 @@ msgid "Config"
 msgstr "Konfig"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:3
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:24
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:32
 #: zotonic_mod_admin_config/src/mod_admin_config.erl:96
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:79
@@ -4706,11 +4868,11 @@ msgstr "Det är vanligtvis inställt på maskinens omvända DNS-namn."
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:13
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:14
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:43
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:22
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:36
 msgid "Key"
 msgstr "Nyckel"
 
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:14
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:27
 msgid "Make a new config setting"
 msgstr "Skapa en ny konfigurationsinställning"
 
@@ -4718,7 +4880,7 @@ msgstr "Skapa en ny konfigurationsinställning"
 msgid "No configuration keys found."
 msgstr "Inga konfigurationsnycklar hittades."
 
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:81
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:95
 msgid "No configurations found."
 msgstr "Inga konfigurationer hittades."
 
@@ -4803,11 +4965,11 @@ msgstr "Relä värdnamn"
 msgid "Relay port"
 msgstr "Reläport"
 
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:12
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:17
 msgid "Reload site configuration"
 msgstr "Ladda om webbplatskonfigurationen"
 
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:13
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:14
 msgid "Reload the site configuration files. Some changes require a restart."
 msgstr "Ladda om webbplatsens konfigurationsfiler. Vissa ändringar kräver en omstart."
 
@@ -4975,7 +5137,7 @@ msgstr "Giltig till"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:19
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:20
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:21
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:23
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:37
 #: zotonic_mod_base/src/support/z_chart_svg.erl:1352
 #: zotonic_mod_development/priv/templates/_development_dispatch_options.tpl:2
 msgid "Value"
@@ -6011,12 +6173,12 @@ msgstr "Installera om"
 msgid "Reinstalled the data model."
 msgstr "Installerade om datamodellen."
 
-#: zotonic_mod_admin_modules/priv/templates/_admin_modules_tools.tpl:3
+#: zotonic_mod_admin_modules/priv/templates/_admin_modules_tools.tpl:6
 #: zotonic_mod_development/priv/templates/admin_development.tpl:219
 msgid "Rescan modules"
 msgstr "Skanna om moduler"
 
-#: zotonic_mod_admin_modules/priv/templates/_admin_modules_tools.tpl:4
+#: zotonic_mod_admin_modules/priv/templates/_admin_modules_tools.tpl:3
 msgid "Rescanning will rebuild the index of all modules, actions, templates etc. It will also reload all dispatch rules."
 msgstr "En ny skanning bygger om indexet över alla moduler, åtgärder, mallar med mera. Alla dirigeringsregler läses också in på nytt."
 
@@ -7441,7 +7603,7 @@ msgstr "user@example.com"
 msgid "Admin Backups"
 msgstr "Admin-säkerhetskopior"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:64
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:66
 msgid "After the page has been restored, you will be redirected to the edit page."
 msgstr "Efter att sidan har återställts omdirigeras du till redigeringssidan."
 
@@ -7597,7 +7759,7 @@ msgstr "Hjälp om säkerhetskopiering &amp; återställning"
 msgid "If the Cloud File Store module is used, then deleted files can be retained indefinitely."
 msgstr "Om Cloud File Store-modulen används kan raderade filer sparas på obestämd tid."
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:44
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:46
 msgid "It could be that a connected dependent page was deleted because of the deletion of this page, such a deleted dependent page can also be recovered."
 msgstr "Det kan vara så att en ansluten beroende sida raderades på grund av borttagningen av denna sida, en sådan raderad beroende sida kan också återställas."
 
@@ -7617,7 +7779,15 @@ msgstr "Gör en daglig backup av databasen och uppladdade filer."
 msgid "Make a daily backup of the database."
 msgstr "Gör en daglig säkerhetskopia av databasen."
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:63
+#: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:17
+msgid "Media file availability could not be confirmed. You can continue restoring the page, but its media or saved preview image might not be recovered."
+msgstr "Det gick inte att bekräfta om mediefilen finns tillgänglig. Du kan fortsätta återställa sidan, men mediefilen eller den sparade förhandsgranskningsbilden kanske inte återställs."
+
+#: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:22
+msgid "Media files are registered in the remote file store. Their availability has not been checked with the storage server."
+msgstr "Mediefilerna är registrerade i det externa filarkivet. Deras tillgänglighet har inte kontrollerats mot lagringsservern."
+
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:65
 msgid "Media files can only be recovered if they are not yet deleted from the file storage. Zotonic will keep media for at least 5 weeks."
 msgstr "Mediefiler kan bara återställas om de ännu inte har raderats från fillagringen. Zotonic kommer att behålla media i minst 5 veckor."
 
@@ -7641,8 +7811,8 @@ msgstr "Notera:"
 msgid "Only administrators can start a backup."
 msgstr "Endast administratörer kan starta en säkerhetskopia."
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:23
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:33
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:25
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:35
 msgid "Original"
 msgstr "Original"
 
@@ -7654,11 +7824,11 @@ msgstr "Se till att du lagrar säkerhetskopieringskrypteringslösenordet på en 
 msgid "Previous versions"
 msgstr "Tidigare versioner"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:54
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:56
 msgid "Recover incoming connections from other pages"
 msgstr "Återställ inkommande anslutningar från andra sidor"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:50
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:52
 msgid "Recover outgoing connections to other pages"
 msgstr "Återställ utgående anslutningar till andra sidor"
 
@@ -7672,7 +7842,7 @@ msgstr "För att återställa en raderad sida krävs behörighet att skapa sidor
 msgid "Restore backup"
 msgstr "Återställ säkerhetskopia"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:58
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:60
 msgid "Restore deleted <em>dependent</em> pages that were referred by this page"
 msgstr "Återställ borttagna <em>beroende</em> sidor som hänvisades av denna sida"
 
@@ -7680,13 +7850,17 @@ msgstr "Återställ borttagna <em>beroende</em> sidor som hänvisades av denna s
 msgid "Restore deleted page"
 msgstr "Återställ raderad sida"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:69
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:71
 msgid "Restore page"
 msgstr "Återställ sidan"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:44
 msgid "Restore this page..."
 msgstr "Återställ den här sidan..."
+
+#: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:11
+msgid "Restoring this version can replace the media currently attached to the page."
+msgstr "Om du återställer den här versionen kan det leda till att det media som för närvarande är kopplat till sidan ersätts."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:36
 msgid "Revert page to earlier version"
@@ -7728,11 +7902,11 @@ msgstr "Revisioner av aktiva användare sparas i {n} dagar."
 msgid "Revisions of deleted users are kept for {n} days."
 msgstr "Revisioner av raderade användare sparas i {n} dagar."
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:25
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:27
 msgid "Select a category"
 msgstr "Välj en kategori"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:35
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:37
 msgid "Select a content group"
 msgstr "Välj en innehållsgrupp"
 
@@ -7747,6 +7921,10 @@ msgstr "Välj den säkerhetskopieringsfil du vill ladda upp. Filen måste vara e
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:8
 msgid "Show import/export panel on the edit pages in the admin."
 msgstr "Visa import/exportpanelen på redigeringssidorna i admin."
+
+#: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:3
+msgid "Some media files cannot be recovered."
+msgstr "Vissa mediefiler går inte att återställa."
 
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:143
 msgid "Sorry, a global Zotonic configuration is set and cannot be changed."
@@ -7819,9 +7997,17 @@ msgstr "Backupmodulen använder en global Zotonic-konfiguration. Konfigurationen
 msgid "The encryption configuration is set to:"
 msgstr "Krypteringskonfigurationen är inställd på:"
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:18
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:20
 msgid "The original category or content group no longer exists. Confirm the suggested replacement or select another one."
 msgstr "Den ursprungliga kategorin eller innehållsgruppen finns inte längre. Bekräfta den föreslagna ersättningen eller välj en annan."
+
+#: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:5
+msgid "The original file for this version is no longer available. The page can be restored, but its media may be empty."
+msgstr "Originalfilen för den här versionen är inte längre tillgänglig. Sidan kan återställas, men dess medieinnehåll kan saknas."
+
+#: zotonic_mod_backup/priv/templates/_backup_restore_media_check.tpl:8
+msgid "The saved preview image for this version is no longer available."
+msgstr "Den sparade förhandsgranskningsbilden för den här versionen är inte längre tillgänglig."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:5
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:19
@@ -7878,7 +8064,7 @@ msgstr "Du hittar den i <a href=\"{url}\">Systemkonfigurationen</a> eller i Zoto
 msgid "You can have one backup per day of the week, older ones will be overwritten."
 msgstr "Du kan ha en säkerhetskopia per dag i veckan, äldre kommer att skrivas över."
 
-#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:43
+#: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:45
 msgid "You can recover incoming and outgoing connections to other pages."
 msgstr "Du kan återställa inkommande och utgående anslutningar till andra sidor."
 
@@ -8482,6 +8668,14 @@ msgstr "Det gick inte att ansluta till ClamAV. Filer kan inte laddas upp förrä
 msgid "Please contact your system administrator."
 msgstr "Vänligen kontakta din systemadministratör."
 
+#: zotonic_mod_clamav/priv/templates/_admin_status_alert.tpl:3
+msgid "Virus scanner"
+msgstr "Virusskanner"
+
+#: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:9
+msgid "Virus scanner available."
+msgstr "Virusskanner finns tillgänglig."
+
 #: zotonic_mod_clamav/priv/templates/_clamav_admin_status_alert.tpl:4
 msgid "Virus scanner unavailable"
 msgstr "Virusskannern är inte tillgänglig"
@@ -8812,7 +9006,7 @@ msgstr "År"
 
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
 #: zotonic_mod_development/priv/templates/_development_template_matches.tpl:8
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:266
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:226
 #: zotonic_site_status/priv/templates/_sites.tpl:6
 msgid "Actions"
 msgstr "Åtgärder"
@@ -8854,11 +9048,11 @@ msgstr "Den nya platsen kan vara en lokal sökväg eller en fullständig URL. L�
 msgid "You are not allowed to change this."
 msgstr "Du får inte ändra detta."
 
-#: zotonic_mod_development/src/mod_development.erl:693
+#: zotonic_mod_development/src/mod_development.erl:699
 msgid "<i>Function name does not exist.</i>"
 msgstr "<i>Funktionsnamnet finns inte.</i>"
 
-#: zotonic_mod_development/src/mod_development.erl:696
+#: zotonic_mod_development/src/mod_development.erl:702
 msgid "<i>Module not found.</i>"
 msgstr "<i>Modulen hittades inte.</i>"
 
@@ -8925,8 +9119,8 @@ msgstr "Beräkna och visualisera en beroendegraf över alla mallar."
 msgid "Check debug points in the template source to see debug data here."
 msgstr "Markera felsökningspunkter i mallens källkod för att se felsökningsdata här."
 
-#: zotonic_mod_development/src/mod_development.erl:501
-#: zotonic_mod_development/src/mod_development.erl:516
+#: zotonic_mod_development/src/mod_development.erl:507
+#: zotonic_mod_development/src/mod_development.erl:522
 msgid "Checking all templates..."
 msgstr "Kontrollerar alla mallar..."
 
@@ -8998,6 +9192,10 @@ msgstr "Det gick inte att ladda eller spara redigeringsinställningarna."
 msgid "Could not load templates"
 msgstr "Det gick inte att ladda mallar"
 
+#: zotonic_mod_development/src/mod_development.erl:498
+msgid "Could not open the directory on this computer."
+msgstr "Det gick inte att öppna mappen på den här datorn."
+
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:9
 msgid "Could not open the editor. Check the editor and path mapping."
 msgstr "Det gick inte att öppna redigeraren. Kontrollera redigeraren och sökvägsinställningarna."
@@ -9058,7 +9256,7 @@ msgid "Detecting editors…"
 msgstr "Identifierar kodredigerare…"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:7
-#: zotonic_mod_development/src/mod_development.erl:1362
+#: zotonic_mod_development/src/mod_development.erl:1368
 msgid "Development"
 msgstr "Utveckling"
 
@@ -9178,11 +9376,11 @@ msgstr "Aktiverad spårning av databasfrågor"
 msgid "Enter the module and function you want to trace. If no function is given, all functions in the module will be traced. Enter how many calls to trace before stopping."
 msgstr "Ange den modul och funktion som du vill spåra. Om ingen funktion anges kommer alla funktioner i modulen att spåras. Ange hur många anrop som ska spåras innan du stoppar."
 
-#: zotonic_mod_development/src/mod_development.erl:665
+#: zotonic_mod_development/src/mod_development.erl:671
 msgid "Error changing the console logs."
 msgstr "Fel vid ändring av konsolloggarna."
 
-#: zotonic_mod_development/src/mod_development.erl:759
+#: zotonic_mod_development/src/mod_development.erl:765
 msgid "Error parsing template."
 msgstr "Fel vid tolkning av mall."
 
@@ -9244,7 +9442,7 @@ msgstr "Spårning av funktionsanrop"
 msgid "Function call tracing has been disabled. Use the following to enable function call tracing:"
 msgstr "Spårning av funktionsanrop har inaktiverats. Använd följande för att aktivera spårning av funktionsanrop:"
 
-#: zotonic_mod_development/src/mod_development.erl:699
+#: zotonic_mod_development/src/mod_development.erl:705
 msgid "Function tracing has been disabled in the Zotonic config."
 msgstr "Funktionsspårning har inaktiverats i Zotonic-konfigurationen."
 
@@ -9389,18 +9587,18 @@ msgstr "Ingen matchande routningsregel hittades"
 msgid "No matching templates found."
 msgstr "Inga matchande mallar hittades."
 
-#: zotonic_mod_development/src/mod_development.erl:663
+#: zotonic_mod_development/src/mod_development.erl:669
 msgid "No permission to access the console logs."
 msgstr "Ingen behörighet att komma åt konsolloggarna."
 
-#: zotonic_mod_development/src/mod_development.erl:506
-#: zotonic_mod_development/src/mod_development.erl:521
-#: zotonic_mod_development/src/mod_development.erl:536
-#: zotonic_mod_development/src/mod_development.erl:544
-#: zotonic_mod_development/src/mod_development.erl:571
-#: zotonic_mod_development/src/mod_development.erl:613
-#: zotonic_mod_development/src/mod_development.erl:630
-#: zotonic_mod_development/src/mod_development.erl:647
+#: zotonic_mod_development/src/mod_development.erl:512
+#: zotonic_mod_development/src/mod_development.erl:527
+#: zotonic_mod_development/src/mod_development.erl:542
+#: zotonic_mod_development/src/mod_development.erl:550
+#: zotonic_mod_development/src/mod_development.erl:577
+#: zotonic_mod_development/src/mod_development.erl:619
+#: zotonic_mod_development/src/mod_development.erl:636
+#: zotonic_mod_development/src/mod_development.erl:653
 msgid "No permission to use mod_development."
 msgstr "Ingen behörighet att använda mod_development."
 
@@ -9409,7 +9607,7 @@ msgstr "Ingen behörighet att använda mod_development."
 msgid "No references found."
 msgstr "Inga referenser hittades."
 
-#: zotonic_mod_development/src/mod_development.erl:625
+#: zotonic_mod_development/src/mod_development.erl:631
 msgid "No template found in the context."
 msgstr "Ingen mall hittades i sammanhanget."
 
@@ -9434,7 +9632,7 @@ msgstr "Hittades inte"
 msgid "Observers"
 msgstr "Observatörer"
 
-#: zotonic_mod_development/src/mod_development.erl:702
+#: zotonic_mod_development/src/mod_development.erl:708
 msgid "Only the admin user can set traces."
 msgstr "Endast användaren admin kan aktivera spårning."
 
@@ -9572,19 +9770,19 @@ msgstr "Starta spårning"
 msgid "Start matching dispatch rules"
 msgstr "Börja matcha routningsregler"
 
-#: zotonic_mod_development/src/mod_development.erl:659
+#: zotonic_mod_development/src/mod_development.erl:665
 msgid "Started logging to the console of your browser tab."
 msgstr "Började logga till konsolen på webbläsarfliken."
 
-#: zotonic_mod_development/src/mod_development.erl:533
+#: zotonic_mod_development/src/mod_development.erl:539
 msgid "Started tracing all template inclusions."
 msgstr "Spårning av alla mallinkluderingar har startats."
 
-#: zotonic_mod_development/src/mod_development.erl:608
+#: zotonic_mod_development/src/mod_development.erl:614
 msgid "Started tracing template inclusions by rendering the page."
 msgstr "Började spåra mallinkluderingar genom att rendera sidan."
 
-#: zotonic_mod_development/src/mod_development.erl:530
+#: zotonic_mod_development/src/mod_development.erl:536
 msgid "Started tracing template inclusions for your session."
 msgstr "Spårning av mallinkluderingar för din session har startats."
 
@@ -9594,11 +9792,11 @@ msgstr "Spårning av mallinkluderingar för din session har startats."
 msgid "Stop"
 msgstr "Sluta"
 
-#: zotonic_mod_development/src/mod_development.erl:661
+#: zotonic_mod_development/src/mod_development.erl:667
 msgid "Stopped logging to the console of all browser tabs."
 msgstr "Slutade logga till konsolen för alla webbläsarflikar."
 
-#: zotonic_mod_development/src/mod_development.erl:542
+#: zotonic_mod_development/src/mod_development.erl:548
 msgid "Stopped tracing template inclusions for all sessions."
 msgstr "Spårning av mallinkluderingar för alla sessioner har stoppats."
 
@@ -9637,7 +9835,7 @@ msgstr "Mall"
 msgid "Template debugging"
 msgstr "Mallfelsökning"
 
-#: zotonic_mod_development/src/mod_development.erl:762
+#: zotonic_mod_development/src/mod_development.erl:768
 msgid "Template file not found."
 msgstr "Mallfilen hittades inte."
 
@@ -9657,7 +9855,7 @@ msgstr "Mallsökväg"
 msgid "Test with this template"
 msgstr "Testa med den här mallen"
 
-#: zotonic_mod_development/src/mod_development.erl:610
+#: zotonic_mod_development/src/mod_development.erl:616
 msgid "The path must be a local URL."
 msgstr "Sökvägen måste vara en lokal URL."
 
@@ -9750,7 +9948,7 @@ msgstr "URI-mönster"
 msgid "Uncheck to debug only your current session."
 msgstr "Avmarkera om du bara vill felsöka din aktuella session."
 
-#: zotonic_mod_development/src/mod_development.erl:644
+#: zotonic_mod_development/src/mod_development.erl:650
 msgid "Updated template debug points."
 msgstr "Uppdaterade felsökningspunkter för mallar."
 
@@ -10589,35 +10787,35 @@ msgstr "Efter 1 vecka"
 msgid "After 3 months"
 msgstr "Efter 3 månader"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:314
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:274
 msgid "All cloud files can be moved back to the file system on the server."
 msgstr "Alla molnfiler kan flyttas tillbaka till filsystemet på servern."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:322
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:282
 msgid "All cloud files will be queued for download."
 msgstr "Alla molnfiler kommer i kö för nedladdning."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:279
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:239
 msgid "All files will be queued, uploads will start in the background within 10 minutes."
 msgstr "Alla filer kommer att köas, uppladdningar börjar i bakgrunden inom tio minuter."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:269
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:229
 msgid "All local uploaded and preview files can be moved to the cloud."
 msgstr "Alla lokala uppladdade och förhandsgranskningsfiler kan flyttas till molnet."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:288
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:248
 msgid "Are you sure you want to copy all files to the cloud?"
 msgstr "Är du säker på att du vill kopiera alla filer till molnet?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:331
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:291
 msgid "Are you sure you want to copy all files to the disk of the server?"
 msgstr "Är du säker på att du vill kopiera alla filer till disken på servern?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:299
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:259
 msgid "Are you sure you want to move all files to the cloud?"
 msgstr "Är du säker på att du vill flytta alla filer till molnet?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:342
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:302
 msgid "Are you sure you want to move all files to the disk of the server?"
 msgstr "Är du säker på att du vill flytta alla filer till disken på servern?"
 
@@ -10633,7 +10831,7 @@ msgstr "Innan inställningarna sparas kontrolleras de genom att ladda upp (och t
 msgid "Check the storage service and its access permissions. Failed reads are retried when requested, with a delay of up to ten minutes."
 msgstr "Kontrollera lagringstjänsten och dess åtkomstbehörigheter. Misslyckade läsförsök görs på nytt vid begäran, med en fördröjning på upp till tio minuter."
 
-#: zotonic_mod_filestore/src/mod_filestore.erl:585
+#: zotonic_mod_filestore/src/mod_filestore.erl:619
 msgid "Cloud File Store"
 msgstr "Molnlagring av filer"
 
@@ -10646,9 +10844,13 @@ msgstr "Konfiguration av molnlagring"
 msgid "Cloud File Store Utilities and Statistics"
 msgstr "Verktyg och statistik för molnlagring"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:228
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:9
 msgid "Cloud Files"
 msgstr "Molnfiler"
+
+#: zotonic_mod_filestore/priv/templates/_admin_status_alert.tpl:3
+msgid "Cloud file store"
+msgstr "Molnbaserad fillagring"
 
 #: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:15
 msgid "Cloud file store configuration"
@@ -10662,23 +10864,23 @@ msgstr "Molnbaserad fillagring kräver uppmärksamhet"
 msgid "Consecutive failures"
 msgstr "Flera misslyckanden i rad"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:285
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:245
 msgid "Copy all local files to the remote storage"
 msgstr "Kopiera alla lokala filer till fjärrlagringen"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:328
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:288
 msgid "Copy all remote files to local"
 msgstr "Kopiera alla fjärrfiler till den lokala disken"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:289
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:249
 msgid "Copy files to cloud"
 msgstr "Kopiera filer till molnet"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:332
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:292
 msgid "Copy files to server disk"
 msgstr "Kopiera filer till serverdisken"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:278
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:238
 msgid "Could not access the service, double check your settings and try again."
 msgstr "Kunde inte komma åt tjänsten, dubbelkolla dina inställningar och försök igen."
 
@@ -10695,11 +10897,11 @@ msgstr "För närvarande stöder Zotonic FTP, WebDAV och tjänster som är kompa
 msgid "Delete files from the cloud file store"
 msgstr "Ta bort filer från molnfillagret"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:251
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:32
 msgid "Deletion queue"
 msgstr "Raderingskö"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:250
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:31
 msgid "Download Queue"
 msgstr "Nedladdningskö"
 
@@ -10707,7 +10909,7 @@ msgstr "Nedladdningskö"
 msgid "Enable this to let the filestore act as a backup of  your local media files."
 msgstr "Aktivera detta för att låta filarkivet fungera som en säkerhetskopia av dina lokala mediefiler."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:315
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:275
 msgid "Ensure yourself there is enough disk space before starting this process."
 msgstr "Se till att det finns tillräckligt med diskutrymme innan du börjar processen."
 
@@ -10731,8 +10933,8 @@ msgstr "Misslyckade läsningar under de senaste 15 minuterna:"
 msgid "Failing since"
 msgstr "Har inte fungerat sedan"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:233
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:256
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:14
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:37
 msgid "Files"
 msgstr "Filer"
 
@@ -10752,11 +10954,11 @@ msgstr "För S3 måste webbadressen börja med <b><tt>https:</tt></b> eller <b><
 msgid "For WebDAV the URL must start with <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>"
 msgstr "För WebDAV måste URL:en börja med <b><tt>webdavs:</tt></b> eller <b><tt>webdav:</tt></b>"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:275
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:235
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "Om du har valt ”Behåll lokala filer efter uppladdning till molnfilarkivet” raderas inte de lokala filerna, eftersom fjärrfilerna betraktas som en säkerhetskopia av de lokala filerna."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:319
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:279
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "Om du har valt ”Behåll lokala filer efter uppladdning till molnets filarkiv” raderas inte fjärrfilerna, eftersom fjärrfilerna betraktas som en säkerhetskopia av de lokala filerna."
 
@@ -10784,7 +10986,12 @@ msgstr "Behålla lokala filer?"
 msgid "Last error"
 msgstr "Senaste felet"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:227
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:222
+#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:20
+msgid "Loading…"
+msgstr "Laddar…"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:8
 msgid "Local Files"
 msgstr "Lokala filer"
 
@@ -10793,23 +11000,23 @@ msgstr "Lokala filer"
 msgid "Mark unrecoverable"
 msgstr "Markera som oåterställbar"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:226
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:7
 msgid "Media Resources"
 msgstr "Medieresurser"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:296
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:256
 msgid "Move all local files to the remote storage"
 msgstr "Flytta alla lokala filer till fjärrlagringen"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:339
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:299
 msgid "Move all remote files to local"
 msgstr "Flytta alla fjärrfiler till den lokala disken"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:300
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:260
 msgid "Move files to cloud"
 msgstr "Flytta filer till molnet"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:343
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:303
 msgid "Move files to server disk"
 msgstr "Flytta filer till serverdisken"
 
@@ -10818,6 +11025,10 @@ msgstr "Flytta filer till serverdisken"
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:62
 msgid "Never"
 msgstr "Aldrig"
+
+#: zotonic_mod_filestore/priv/templates/_filestore_health.tpl:18
+msgid "No cloud file store read errors detected."
+msgstr "Inga läsfel i molnbaserade filförvaringssystem har upptäckts."
 
 #: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:47
 msgid "No errors on this page."
@@ -10839,7 +11050,7 @@ msgstr "Ej angivet (Signature V2)"
 msgid "Now"
 msgstr "Nu"
 
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:38
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:39
 msgid "Only the admin account (user 1) can mark files unrecoverable."
 msgstr "Endast administratörskontot (användare 1) kan markera filer som oåterställbara."
 
@@ -10910,7 +11121,7 @@ msgstr "Inställningarna har sparats utan skrivtest."
 msgid "Stop retrying this file and mark it unrecoverable? Its record and error details will be kept. No files will be deleted."
 msgstr "Ska vi sluta försöka återställa den här filen och markera den som oåterställbar? Uppgifterna om filen och felet kommer att sparas. Inga filer kommer att raderas."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:239
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:20
 msgid "Storage"
 msgstr "Lagring"
 
@@ -10918,7 +11129,7 @@ msgstr "Lagring"
 msgid "Test Cloud File Store Settings"
 msgstr "Testa inställningar för Cloud File Store"
 
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:255
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:256
 msgid "The cloud file store is read-only."
 msgstr "Molnlagringsplatsen är skrivskyddad."
 
@@ -10934,7 +11145,7 @@ msgstr "Molnfilarkivet använder en global Zotonic-konfiguration. Konfiguratione
 msgid "The configuration is:"
 msgstr "Konfigurationen är:"
 
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:85
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:86
 msgid "The settings are locked by the system configuration."
 msgstr "Inställningarna låses av systemkonfigurationen."
 
@@ -10942,7 +11153,7 @@ msgstr "Inställningarna låses av systemkonfigurationen."
 msgid "The settings are tested by uploading (and removing) a small file."
 msgstr "Inställningarna testas genom att en liten fil laddas upp (och tas bort)."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:271
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:231
 msgid "There is a 1 minute wait before files are uploaded."
 msgstr "Det är en minuts väntetid innan filer laddas upp."
 
@@ -10950,11 +11161,11 @@ msgstr "Det är en minuts väntetid innan filer laddas upp."
 msgid "This extra deletion delay extends the period files can be recovered."
 msgstr "Denna extra raderingsfördröjning förlänger den period som filer kan återställas."
 
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:40
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:41
 msgid "This file no longer has an eligible error older than 24 hours. Reload the page."
 msgstr "Den här filen har inte längre något giltigt fel som är äldre än 24 timmar. Ladda om sidan."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:270
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:230
 msgid "This will queue the files for later asynchronous upload."
 msgstr "Detta köar filerna för senare asynkron uppladdning."
 
@@ -10974,7 +11185,7 @@ msgstr "Oåterställbar"
 msgid "Unresolved files are listed oldest first. The error shown is the most recent recorded error for each file."
 msgstr "Obehandlade filer visas i ordning efter äldsta först. Det fel som visas är det senaste registrerade felet för varje fil."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:249
+#: zotonic_mod_filestore/priv/templates/_filestore_statistics.tpl:30
 msgid "Upload Queue"
 msgstr "Uppladdningskö"
 
@@ -10998,14 +11209,14 @@ msgstr "Med WebDAV överförs användarnamnet och lösenordet i klartext, så se
 msgid "Yes, keep local files after upload"
 msgstr "Ja, behåll lokala filer efter uppladdning"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:360
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:88
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:95
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:102
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:320
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:89
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:96
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:103
 msgid "You are not allowed to change these settings."
 msgstr "Du får inte ändra dessa inställningar."
 
-#: zotonic_mod_filestore/src/support/filestore_admin.erl:126
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:127
 msgid "You are not allowed to use this."
 msgstr "Du får inte använda den här."
 
@@ -11013,8 +11224,8 @@ msgstr "Du får inte använda den här."
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
 msgstr "Zotonic kan lagra uppladdade och storleksändrade filer i molnet. Här kan du konfigurera plats- och åtkomstnycklar för molntjänsten."
 
-#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:150
-#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:180
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:158
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:188
 msgid "Could not upload"
 msgstr "Det gick inte att ladda upp"
 
@@ -11038,7 +11249,7 @@ msgstr "Kontrast"
 msgid "Contrast &amp; Brightness"
 msgstr "Kontrast &amp; Ljusstyrka"
 
-#: zotonic_mod_image_edit/src/mod_image_edit.erl:91
+#: zotonic_mod_image_edit/src/mod_image_edit.erl:93
 msgid "Could not save the image settings."
 msgstr "Det gick inte att spara bildinställningarna."
 
@@ -11094,7 +11305,7 @@ msgstr "Rotation, lutning och panorering"
 msgid "Rotate"
 msgstr "Rotera"
 
-#: zotonic_mod_image_edit/src/mod_image_edit.erl:88
+#: zotonic_mod_image_edit/src/mod_image_edit.erl:90
 msgid "Saved the image settings."
 msgstr "Sparade bildinställningarna."
 
@@ -12816,10 +13027,6 @@ msgstr "Språk när ingen preferens är känd:"
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:19
 msgid "Language:"
 msgstr "Språk:"
-
-#: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:20
-msgid "Loading…"
-msgstr "Laddar…"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:2
 msgid "Mailing"
@@ -14976,10 +15183,6 @@ msgstr "Inbäddning av medieobjekt misslyckades med HTTP-kod"
 msgid "Fix embedded videos"
 msgstr "Fixa inbäddade videor"
 
-#: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:2
-msgid "Media maintenance"
-msgstr "Underhåll av media"
-
 #: zotonic_mod_oembed/src/mod_oembed.erl:458
 msgid "No embedded videos found which need fixing."
 msgstr "Inga inbäddade videor hittades som behöver åtgärdas."
@@ -15626,11 +15829,11 @@ msgstr "Du måste godkänna villkoren för att kunna registrera dig."
 msgid "Your signup code"
 msgstr "Din registreringskod"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:264
+#: zotonic_mod_site_update/src/mod_site_update.erl:276
 msgid "Another deployment is in progress. Please try again when it finishes."
 msgstr "En annan driftsättning pågår. Försök igen när den är klar."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:164
+#: zotonic_mod_site_update/src/mod_site_update.erl:176
 msgid "Building Zotonic in the background..."
 msgstr "Bygga Zotonic i bakgrunden ..."
 
@@ -15642,9 +15845,9 @@ msgstr "Det gick inte att hämta ändringsloggen från fjärrservern. Kontroller
 msgid "Current commit"
 msgstr "Aktuell commit"
 
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:60
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:62
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:11
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:61
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:63
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:12
 msgid "Deploy"
 msgstr "Driftsätt"
 
@@ -15658,27 +15861,31 @@ msgstr "Driftsätt den senaste versionen"
 msgid "Deploy latest Zotonic"
 msgstr "Driftsätt den senaste versionen av Zotonic"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:217
+#: zotonic_mod_site_update/src/mod_site_update.erl:229
 msgid "Deploy latest version"
 msgstr "Driftsätt den senaste versionen"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:251
+#: zotonic_mod_site_update/src/mod_site_update.erl:263
 msgid "Deploying the latest version..."
 msgstr "Driftsätter den senaste versionen..."
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:2
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:5
-#: zotonic_mod_site_update/src/mod_site_update.erl:128
+#: zotonic_mod_site_update/src/mod_site_update.erl:140
 msgid "Deployment"
 msgstr "Driftsättning"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:262
+#: zotonic_mod_site_update/src/mod_site_update.erl:274
 msgid "Deployment completed."
 msgstr "Driftsättningen är klar."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:266
+#: zotonic_mod_site_update/src/mod_site_update.erl:278
 msgid "Deployment failed. Check the server log for details."
 msgstr "Driftsättningen misslyckades. Kontrollera serverloggen för mer information."
+
+#: zotonic_mod_site_update/priv/templates/_site_deploy_status_value.tpl:5
+msgid "Deployment running on this node"
+msgstr "Distribution som körs på denna nod"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:5
 msgid "Deployment updates the entire Git repository, including any other modules it contains."
@@ -15688,7 +15895,7 @@ msgstr "Driftsättningen uppdaterar hela Git-repositoryt, inklusive alla andra m
 msgid "Fetching remote changes…"
 msgstr "Hämtar ändringar från fjärrservern…"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:162
+#: zotonic_mod_site_update/src/mod_site_update.erl:174
 msgid "Finished rebuilding Zotonic."
 msgstr "Ombyggnaden av Zotonic är klar."
 
@@ -15704,11 +15911,11 @@ msgstr "Lista över moduler"
 msgid "No deployable version control repository was found."
 msgstr "Inget versionshanteringsrepository som kan driftsättas hittades."
 
-#: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:12
+#: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:13
 msgid "Rebuild Zotonic"
 msgstr "Bygg om Zotonic"
 
-#: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:14
+#: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:15
 msgid "Recompile changed Erlang files in the background"
 msgstr "Kompilera om ändrade Erlang-filer i bakgrunden"
 
@@ -15728,7 +15935,7 @@ msgstr "Granska inkommande ändringar och driftsätt modulens Git-repository."
 msgid "Review incoming changes and deploy this site's code. Compilation and activation are coordinated across all sites on this node."
 msgstr "Granska inkommande ändringar och driftsätt webbplatsens kod. Kompilering och aktivering samordnas för alla webbplatser på denna nod."
 
-#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:5
+#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:6
 msgid "Review incoming changes before deploying the latest version."
 msgstr "Granska inkommande ändringar innan du driftsätter den senaste versionen."
 
@@ -15749,11 +15956,11 @@ msgstr "Driftsättning av webbplatsen"
 msgid "Site update API token"
 msgstr "API-token för webbplatsuppdatering"
 
-#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:9
+#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:10
 msgid "Site update is not available as the site does not use a known version control system, like git."
 msgstr "Webbplatsuppdatering är inte tillgänglig eftersom webbplatsen inte använder ett känt versionskontrollsystem, som git."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:166
+#: zotonic_mod_site_update/src/mod_site_update.erl:178
 msgid "Sorry this can only be run from the Zotonic status site"
 msgstr "Tyvärr kan detta bara köras från Zotonic-statuswebbplatsen"
 
@@ -15794,8 +16001,8 @@ msgid "View system status"
 msgstr "Visa systemstatus"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:20
-#: zotonic_mod_site_update/src/mod_site_update.erl:221
-#: zotonic_mod_site_update/src/mod_site_update.erl:256
+#: zotonic_mod_site_update/src/mod_site_update.erl:233
+#: zotonic_mod_site_update/src/mod_site_update.erl:268
 msgid "You are not allowed to deploy this code."
 msgstr "Du har inte behörighet att driftsätta den här koden."
 
