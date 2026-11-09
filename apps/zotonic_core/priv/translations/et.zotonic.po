@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-09 12:23\n"
+"PO-Revision-Date: 2026-11-09 12:31\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -6630,7 +6630,7 @@ msgstr "Umbes 5 aastat"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:26
 msgid "Active and paused analytics measurements both count towards this limit. A new analytics measurement also needs enough free storage capacity for its group limit."
-msgstr ""
+msgstr "Selle piirangu arvestamisel võetakse arvesse nii aktiivseid kui ka peatatud analüütilisi mõõtmisi. Uue analüütilise mõõtmise jaoks on vaja ka piisavalt vaba salvestusruumi, et täita selle rühma piirangut."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:48
 msgid "Activity counters are unavailable until analytics resumes."
@@ -6638,7 +6638,7 @@ msgstr "Aktiivsuse loendurid ei ole kättesaadavad, kuni analüütika taastub."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:40
 msgid "Add analytics measurement"
-msgstr ""
+msgstr "Lisage analüütiline mõõtmine"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:39
 msgid "All breakdown values"
@@ -6658,7 +6658,7 @@ msgstr "Lubatud väärtused:"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:267
 msgid "An equivalent analytics measurement already exists."
-msgstr ""
+msgstr "Sellele vastav analüütiline näitaja on juba olemas."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
@@ -6681,15 +6681,15 @@ msgstr "Analüütika ei ole kättesaadav"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:8
 msgid "Analytics measurement ID"
-msgstr ""
+msgstr "Analüütika mõõtmis-ID"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:23
 msgid "Analytics measurement information"
-msgstr ""
+msgstr "Analüütilise mõõtmise teave"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:12
 msgid "Analytics measurements"
-msgstr ""
+msgstr "Analüütilised mõõtmised"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:2
 msgid "Analytics status"
@@ -6719,11 +6719,11 @@ msgstr "Puhvri olek ei ole kättesaadav."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:20
 msgid "Capacity is reserved for the full history of every group in an analytics measurement. This is a planning limit, not disk usage. Pausing keeps the reservation; deleting an analytics measurement releases it."
-msgstr ""
+msgstr "Analüütilise mõõtmise raames on igale rühmale reserveeritud ruum kogu ajaloo jaoks. Tegemist on planeerimispiiranguga, mitte kettaruumi kasutamisega. Peatamine säilitab reserveeringu; analüütilise mõõtmise kustutamine vabastab selle."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
 msgid "Choose which activity to measure and arrange your dashboard."
-msgstr ""
+msgstr "Valige, millist tegevust soovite mõõta, ja kujundage oma juhtpaneel."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:4
 msgid "Classified requests — pages, APIs and other dispatch types"
@@ -6731,11 +6731,11 @@ msgstr "Salastatud päringud — leheküljed, API-d ja muud edastustüübid"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:9
 msgid "Configure analytics measurements"
-msgstr ""
+msgstr "Analüütiliste mõõtmiste seadistamine"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:235
 msgid "Could not delete the analytics measurement."
-msgstr ""
+msgstr "Analüütilist mõõdikut ei õnnestunud kustutada."
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:268
 msgid "Could not save. Check the event, breakdown and filter values."
@@ -6760,23 +6760,23 @@ msgstr "Andmebaasi kirjutamistoiminguid proovitakse uuesti. Sündmuste töötlem
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:36
 msgid "Dates show the start of each stored time interval, not the first or last event. Different resolutions contain overlapping history. Pausing an analytics measurement preserves its stored history and reserved capacity. Figures are a snapshot taken when this dialog opens."
-msgstr ""
+msgstr "Kuupäevad näitavad iga salvestatud ajavahemiku algust, mitte esimest ega viimast sündmust. Erinevad resolutsioonid sisaldavad üksteisega kattuvat ajalugu. Analüütilise mõõtmise peatamine säilitab selle salvestatud ajaloo ja reserveeritud mahu. Arvud on hetkeolukorra ülevaade, mis on jäädvustatud selle dialoogakna avamisel."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:30
 msgid "Delete analytics measurement"
-msgstr ""
+msgstr "Kustutage analüütiline mõõtmine"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:27
 msgid "Delete analytics measurement?"
-msgstr ""
+msgstr "Kas kustutada analüütiline mõõtmine?"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_delete_confirm.tpl:1
 msgid "Delete this analytics measurement?"
-msgstr ""
+msgstr "Kas soovite selle analüütilise mõõtmise kustutada?"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
 msgid "Describe the activity this analytics measurement tracks"
-msgstr ""
+msgstr "Kirjeldage tegevust, mida see analüütiline näitaja jälgib"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:55
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
@@ -6797,7 +6797,7 @@ msgstr "Kuvamisjärjekord on salvestatud."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:14
 msgid "Drag analytics measurements to set their order on the dashboard. Changes are saved immediately."
-msgstr ""
+msgstr "Lohistage analüütilisi näitajaid, et määrata nende järjekord juhtpaneelil. Muudatused salvestatakse kohe."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:21
 msgid "Drag to reorder"
@@ -6813,7 +6813,7 @@ msgstr "Iga rühm reserveerib 3 578 ajavahemikku. Leheküljel esitatud jaotustes
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:52
 msgid "Each stored time interval holds the counts for all groups in one analytics measurement. Storage slots for older intervals are reused, so history stays bounded instead of growing with every visit. Only aggregate counts are stored, not individual events."
-msgstr ""
+msgstr "Iga salvestatud ajavahemik sisaldab ühe analüütilise mõõtmise raames kõigi rühmade loendusi. Vanemate ajavahemike salvestuskohti kasutatakse uuesti, mistõttu ajalugu jääb piiratuks ega kasva iga külastusega. Salvestatakse ainult koondloendused, mitte üksikud sündmused."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:9
 msgid "Email outcome — sent, retry, failed or bounced"
@@ -6846,7 +6846,7 @@ msgstr "Sündmused koondatakse enne salvestamist mälus loenduritesse, tavalisel
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:23
 msgid "Events must satisfy both filters to be counted. New analytics measurements start without historical data."
-msgstr ""
+msgstr "Sündmused peavad vastama mõlemale filtrile, et neid arvestataks. Uued analüütilised mõõtmised algavad ilma varasemate andmeteta."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:18
 msgid "Fixed filter"
@@ -6908,7 +6908,7 @@ msgstr "Viimased kuus tundi"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:23
 msgid "Maximum number of analytics measurements"
-msgstr ""
+msgstr "Analüütiliste mõõtmiste maksimaalne arv"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
 msgid "Most popular content in this period"
@@ -6949,7 +6949,7 @@ msgstr "Seejärel vali selle sündmustüübi puhul toetatud jaotus ja filtrid."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:22
 msgid "No analytics measurements to display. Configure or resume an analytics measurement to get started."
-msgstr ""
+msgstr "Kuvada pole ühtegi analüütilist mõõtmist. Alustamiseks seadistage analüütiline mõõtmine või jätkake peatatud mõõtmist."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:12
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:14
@@ -6978,11 +6978,11 @@ msgstr "Vanim salvestatud ajavahemik"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:46
 msgid "One event can update several analytics measurements, so these are not visitor or page-view totals. Counters reset when analytics restarts."
-msgstr ""
+msgstr "Üks sündmus võib uuendada mitut analüütilist näitajat, seega ei ole tegemist külastajate ega lehevaatamiste koguarvudega. Loendurid nullitakse analüütika taaskäivitamisel."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
 msgid "Optional. Shown with the analytics measurement on the dashboard."
-msgstr ""
+msgstr "Valikuline. Näidatakse koos analüütiliste näitajatega juhtpaneelil."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:5
 msgid "Page ID present — true or false"
@@ -7077,7 +7077,7 @@ msgstr "Hetkeseis lehe laadimisel. Värskenda, et andmeid uuendada."
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:29
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:25
 msgid "Start analytics measurement"
-msgstr ""
+msgstr "Alusta analüütiliste näitajate mõõtmist"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:15
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_mailing_runs_panel.tpl:18
@@ -7092,7 +7092,7 @@ msgstr "Seisund"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:5
 msgid "Step 1 of 2: Choose which activity to measure"
-msgstr ""
+msgstr "1. samm 2-st: Valige, millist tegevust soovite mõõta"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:34
 msgid "Step 2 of 2: Breakdown and filters"
@@ -7108,7 +7108,7 @@ msgstr "Salvestatud andmete maht"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:24
 msgid "Stored data size measures the database space used by the aggregate counts and analytics measurement definition. It excludes row headers, indexes, shared table space and unsaved events. Reserved capacity is a planning limit, not disk usage."
-msgstr ""
+msgstr "Salvestatud andmete maht näitab andmebaasi ruumi, mida kasutavad koondarvud ja analüütiliste mõõtmiste määratlused. See ei hõlma ridade päiseid, indekseid, jagatud tabeliruumi ega salvestamata sündmusi. Reserveeritud maht on planeerimispiirang, mitte kettaruumi kasutamine."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
 msgid "Stored intervals / capacity"
@@ -7120,15 +7120,15 @@ msgstr "Salvestatud ajavahemikud"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:243
 msgid "The analytics measurements changed. Reloading their current display order."
-msgstr ""
+msgstr "Analüütilised näitajad on muutunud. Laaditakse uuesti praegune kuvamisjärjekord."
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:266
 msgid "This analytics measurement exceeds the storage budget."
-msgstr ""
+msgstr "See analüütiline mõõtmine ületab salvestusruumi eelarvet."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:38
 msgid "This analytics measurement is no longer available."
-msgstr ""
+msgstr "See analüütiline näitaja ei ole enam kättesaadav."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:11
 msgid "This event schema is unavailable."
@@ -7148,11 +7148,11 @@ msgstr "Teie veebileht lühidalt."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:44
 msgid "analytics measurement updates since startup"
-msgstr ""
+msgstr "analüütiliste näitajate mõõtmise uuendused alates käivitamisest"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:24
 msgid "analytics measurements"
-msgstr ""
+msgstr "analüütilised mõõtmised"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:20
 msgid "bytes"
