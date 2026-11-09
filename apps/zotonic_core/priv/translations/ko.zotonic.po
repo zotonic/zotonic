@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-09 11:26\n"
+"PO-Revision-Date: 2026-11-09 12:14\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "MIME-Version: 1.0\n"
@@ -6575,206 +6575,215 @@ msgstr "1시간"
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:57
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:29
 msgid "1 minute"
-msgstr ""
+msgstr "1분"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:58
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:29
 msgid "15 minutes"
-msgstr ""
+msgstr "15분"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:59
 msgid "30 days"
-msgstr ""
+msgstr "30일"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:57
 msgid "6 hours"
-msgstr ""
+msgstr "6시간"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:58
 msgid "7 days"
-msgstr ""
+msgstr "7일"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:34
 msgid "A batch is waiting to be saved."
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:52
-msgid "A bucket holds the counts for all groups in one recording and time interval. Older slots are reused, so history stays bounded instead of growing with every visit. Only aggregate counts are stored, not individual events."
-msgstr ""
+msgstr "저장 대기 중인 일괄 처리가 있습니다."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:3
 msgid "API requests — HTTP calls, including errors"
-msgstr ""
+msgstr "API 요청 — 오류 포함 HTTP 호출"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:60
 msgid "About 5 years"
-msgstr ""
+msgstr "약 5년"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:26
 msgid "Active and paused recordings both count towards this limit. A new recording also needs enough free storage capacity for its group limit."
-msgstr ""
+msgstr "진행 중인 녹화와 일시 중지된 녹화 모두 이 제한에 포함됩니다. 또한 새로운 녹화를 시작하려면 해당 그룹의 제한 용량을 충족할 만큼의 충분한 저장 공간이 필요합니다."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:48
 msgid "Activity counters are unavailable until analytics resumes."
-msgstr ""
+msgstr "분석 기능이 재개될 때까지 활동 카운터는 사용할 수 없습니다."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:40
 msgid "Add recording"
-msgstr ""
+msgstr "녹화 추가"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:39
 msgid "All breakdown values"
-msgstr ""
+msgstr "모든 세부 항목 값"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_delete_confirm.tpl:2
 msgid "All recorded history will be permanently deleted and its storage reservation released. This cannot be undone."
-msgstr ""
+msgstr "기록된 모든 역사가 영구적으로 삭제되며, 해당 저장 공간 할당이 해제됩니다. 이 작업은 되돌릴 수 없습니다."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:19
 msgid "Allowed values (comma separated)"
-msgstr ""
+msgstr "허용되는 값 (쉼표로 구분)"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:35
 msgid "Allowed values:"
-msgstr ""
+msgstr "허용되는 값:"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:267
 msgid "An equivalent recording already exists."
-msgstr ""
+msgstr "이미 이와 동일한 녹음본이 존재합니다."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
 #: zotonic_mod_analytics/src/mod_analytics.erl:196
 msgid "Analytics configuration"
-msgstr ""
+msgstr "분석 설정"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:10
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:9
+msgid "Analytics event type"
+msgstr "분석 이벤트 유형"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:6
 msgid "Analytics is running"
-msgstr ""
+msgstr "분석이 실행 중입니다"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:8
 msgid "Analytics is unavailable"
-msgstr ""
+msgstr "분석 기능을 사용할 수 없습니다."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:2
 msgid "Analytics status"
-msgstr ""
+msgstr "분석 현황"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
 msgid "Bars show the lower bound. Counts are ranges, ordered by their lower bound. Overlapping ranges may change order. Content outside the retained candidates has at most"
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:23
-msgid "Both filters must match. New recordings start without historical data."
-msgstr ""
+msgstr "막대는 하한을 나타냅니다. 개수는 범위이며, 하한 순으로 정렬되어 있습니다. 범위가 겹치는 경우 순서가 바뀔 수 있습니다. 유지된 후보 집합 외부의 내용은 최대"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:50
 msgid "Bounded history"
-msgstr ""
+msgstr "제한된 역사"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:12
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:14
 msgid "Break down by"
-msgstr ""
+msgstr "분류 기준:"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:40
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "Breakdown"
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
-msgid "Buckets / slots"
-msgstr ""
+msgstr "내역"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:36
 msgid "Buffer status is unavailable."
-msgstr ""
+msgstr "버퍼 상태를 확인할 수 없습니다."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:20
 msgid "Capacity is reserved for the full history of every group in a recording. This is a planning limit, not disk usage. Pausing keeps the reservation; deleting a recording releases it."
-msgstr ""
+msgstr "녹화본에 포함된 각 그룹의 전체 기록에 대해 용량이 예약됩니다. 이는 계획상의 제한이며, 디스크 사용량과는 무관합니다. 일시 정지 시에는 예약이 유지되며, 녹화본을 삭제하면 예약이 해제됩니다."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
 msgid "Choose what to record and arrange your dashboard."
-msgstr ""
+msgstr "기록할 항목을 선택하고 대시보드를 구성하세요."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:4
 msgid "Classified requests — pages, APIs and other dispatch types"
-msgstr ""
+msgstr "비공개 요청 — 페이지, API 및 기타 디스패치 유형"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:9
 msgid "Configure recordings"
-msgstr ""
+msgstr "녹화 설정"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:235
 msgid "Could not delete the recording."
-msgstr ""
+msgstr "녹화 파일을 삭제할 수 없습니다."
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:268
 msgid "Could not save. Check the event, breakdown and filter values."
-msgstr ""
+msgstr "저장할 수 없습니다. 이벤트, 세부 내역 및 필터 값을 확인해 주세요."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:3
 msgid "Country — two-letter code, e.g. NL"
-msgstr ""
+msgstr "국가 — 두 글자 코드(예: NL)"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:14
 #: zotonic_mod_survey/src/models/m_survey.erl:1498
 msgid "Created"
 msgstr "생성됨"
 
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
+msgid "Data size"
+msgstr "데이터 크기"
+
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:13
 msgid "Database writes are being retried. Event processing can continue while buffer capacity remains available; prolonged failures can cause data loss."
-msgstr ""
+msgstr "데이터베이스 쓰기 작업이 재시도되고 있습니다. 버퍼 용량이 남아 있는 동안에는 이벤트 처리를 계속할 수 있지만, 오류가 장기간 지속될 경우 데이터 손실이 발생할 수 있습니다."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:36
-msgid "Dates show the start of each bucket, not the first or last event. Different resolutions contain overlapping history. Pausing preserves stored history and its reservation. Figures are a snapshot when this dialog opens."
-msgstr ""
+msgid "Dates show the start of each stored time interval, not the first or last event. Different resolutions contain overlapping history. Pausing a recording preserves its stored history and reserved capacity. Figures are a snapshot taken when this dialog opens."
+msgstr "날짜는 저장된 각 시간 구간의 시작 시점을 나타내며, 첫 번째 또는 마지막 이벤트를 의미하지는 않습니다. 해상도에 따라 중복되는 기록이 포함될 수 있습니다. 녹화를 일시 중지해도 저장된 기록과 할당된 용량은 유지됩니다. 수치는 이 대화 상자가 열렸을 때 캡처된 순간의 정보입니다."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:30
 msgid "Delete recording"
-msgstr ""
+msgstr "녹화 내용 삭제"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:27
 msgid "Delete recording?"
-msgstr ""
+msgstr "녹화 내용을 삭제하시겠습니까?"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_delete_confirm.tpl:1
 msgid "Delete this recording?"
-msgstr ""
+msgstr "이 녹화 파일을 삭제하시겠습니까?"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:55
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
 msgid "Detail"
-msgstr ""
+msgstr "상세 정보"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:4
 msgid "Device — phone, tablet, desktop or unknown"
-msgstr ""
+msgstr "기기 — 휴대폰, 태블릿, 데스크톱 또는 알 수 없음"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
+msgid "Display order"
+msgstr "표시 순서"
+
+#: zotonic_mod_analytics/src/mod_analytics.erl:241
+msgid "Display order saved."
+msgstr "정렬 순서가 저장되었습니다."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:14
 msgid "Drag recordings to set their order on the dashboard. Changes are saved immediately."
-msgstr ""
+msgstr "녹화 파일을 대시보드에서 드래그하여 순서를 정하세요. 변경 사항은 즉시 저장됩니다."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:21
 msgid "Drag to reorder"
-msgstr ""
+msgstr "드래그하여 순서 변경"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:47
 msgid "Dropped updates can result from overload, expired events, configuration changes or failed writes. This is a diagnostic count, not an exact count of lost page views. Incomplete periods are marked in reports."
-msgstr ""
+msgstr "업데이트 누락은 과부하, 만료된 이벤트, 구성 변경 또는 쓰기 실패로 인해 발생할 수 있습니다. 이는 진단용 집계 수치일 뿐, 손실된 페이지 뷰의 정확한 수치를 나타내는 것은 아닙니다. 보고서에 미완료 기간은 별도로 표시됩니다."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:15
 msgid "Each group reserves 3,578 time slots. Page breakdowns use candidates with approximate counts; other breakdowns reserve a group for excess values."
-msgstr ""
+msgstr "각 그룹은 3,578개의 시간대를 배정받습니다. 페이지별 내역은 대략적인 수치를 바탕으로 한 후보자 수를 사용하며, 그 외의 내역에서는 초과 값을 처리하기 위해 한 그룹을 별도로 배정합니다."
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:52
+msgid "Each stored time interval holds the counts for all groups in one analytics recording. Storage slots for older intervals are reused, so history stays bounded instead of growing with every visit. Only aggregate counts are stored, not individual events."
+msgstr "저장된 각 시간 구간에는 하나의 분석 기록에 포함된 모든 그룹의 집계 횟수가 저장됩니다. 오래된 시간 구간의 저장 공간은 재사용되므로, 방문 횟수가 늘어날 때마다 기록이 무한정 늘어나는 대신 일정 범위 내에서 유지됩니다. 개별 이벤트가 아닌 집계된 횟수만 저장됩니다."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:9
 msgid "Email outcome — sent, retry, failed or bounced"
-msgstr ""
+msgstr "이메일 처리 결과 — 발송됨, 재시도, 실패 또는 반송됨"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:36
 msgid "Enter one or more values, separated by commas."
-msgstr ""
+msgstr "쉼표로 구분하여 하나 이상의 값을 입력하십시오."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:19
@@ -6783,106 +6792,89 @@ msgstr "이벤트"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:29
 msgid "Event buffer"
-msgstr ""
+msgstr "이벤트 버퍼"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:42
 msgid "Event processing"
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:10
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:9
-msgid "Event type"
-msgstr ""
+msgstr "이벤트 처리"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:40
 msgid "Events"
-msgstr ""
+msgstr "이벤트"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:33
 msgid "Events are combined into counters in memory before saving, normally every 10 seconds. A low value is normal. This buffer is separate from a batch currently being saved."
-msgstr ""
+msgstr "이벤트는 저장되기 전에 메모리 내에서 카운터로 합산되며, 일반적으로 10초마다 이루어집니다. 값이 낮은 것은 정상입니다. 이 버퍼는 현재 저장 중인 배치와는 별개입니다."
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:23
+msgid "Events must satisfy both filters to be recorded. New recordings start without historical data."
+msgstr "이벤트가 기록되려면 두 필터 조건을 모두 충족해야 합니다. 새로운 기록은 과거 데이터 없이 시작됩니다."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
 msgid "Explain what this recording measures"
-msgstr ""
+msgstr "이 측정값이 무엇을 나타내는지 설명해 주세요"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:18
 msgid "Fixed filter"
-msgstr ""
+msgstr "고정형 필터"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:16
 msgid "Fixed filters"
-msgstr ""
+msgstr "고정형 필터"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:25
 msgid "Gaps are unrecorded intervals. Partial intervals may undercount activity. Request counts include automation, exclude editor activity and do not measure unique visitors."
-msgstr ""
+msgstr "‘공백’은 기록되지 않은 구간을 의미합니다. 부분 구간은 활동량을 과소 집계할 수 있습니다. 요청 횟수에는 자동화 작업이 포함되며, 편집자 활동은 제외되고, 고유 방문자 수는 측정되지 않습니다."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:13
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:15
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "Group limit"
-msgstr ""
+msgstr "그룹 인원 제한"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:8
 msgid "HTTP method — GET, POST, HEAD and others"
-msgstr ""
+msgstr "HTTP 메서드 — GET, POST, HEAD 등"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:12
 msgid "HTTP status class — 2xx success, 4xx client errors, 5xx server errors"
-msgstr ""
+msgstr "HTTP 상태 코드 분류 — 2xx 성공, 4xx 클라이언트 오류, 5xx 서버 오류"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:6
 msgid "HTTP status code — e.g. 200, 404 or 500"
-msgstr ""
+msgstr "HTTP 상태 코드 — 예: 200, 404 또는 500"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:54
 msgid "History detail and retention"
-msgstr ""
+msgstr "이력 상세 정보 및 보존"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:45
 msgid "Includes incomplete or unrecorded intervals"
-msgstr ""
+msgstr "불완전하거나 기록되지 않은 간격이 포함됩니다"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:7
 msgid "Language — language code, e.g. en or nl"
-msgstr ""
+msgstr "언어 — 언어 코드(예: en 또는 nl)"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
 msgid "Last 24 hours"
-msgstr ""
+msgstr "지난 24시간"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
 msgid "Last five years"
-msgstr ""
+msgstr "지난 5년"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
 msgid "Last hour"
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
-msgid "Last month"
-msgstr ""
+msgstr "지난 1시간"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
 msgid "Last six hours"
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
-msgid "Last week"
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
-msgid "Last year"
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
-msgid "Latest bucket"
-msgstr ""
+msgstr "지난 6시간"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
 msgid "Most popular content in this period"
-msgstr ""
+msgstr "이 기간 동안 가장 인기 있는 콘텐츠"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:7
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
@@ -6896,7 +6888,11 @@ msgstr "이름"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:12
 msgid "New events cannot currently be processed. Previously saved history is still available."
-msgstr ""
+msgstr "현재 새로운 이벤트는 처리할 수 없습니다. 이전에 저장된 내역은 여전히 확인할 수 있습니다."
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
+msgid "Newest stored interval"
+msgstr "가장 최근에 저장된 구간"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:28
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:210
@@ -6911,155 +6907,155 @@ msgstr "다음"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:10
 msgid "Next, choose a breakdown and filters supported by this event type."
-msgstr ""
+msgstr "다음으로, 이 이벤트 유형에서 지원하는 세부 분류와 필터를 선택하세요."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:12
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:14
 msgid "No breakdown (total)"
-msgstr ""
+msgstr "분류 없음 (합계)"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:18
 msgid "No filter — include all values"
-msgstr ""
+msgstr "필터 적용하지 않음 — 모든 값 포함"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:29
 msgid "No leading content identified in this period."
-msgstr ""
+msgstr "이 기간 동안 주요 콘텐츠가 확인되지 않았습니다."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:36
 msgid "No recorded events yet."
-msgstr ""
+msgstr "아직 기록된 이벤트가 없습니다."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:22
 msgid "No recordings to display. Configure or resume a recording to get started."
-msgstr ""
+msgstr "표시할 녹화 항목이 없습니다. 시작하려면 녹화를 설정하거나 재개하세요."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:16
 msgid "None — all matching events"
-msgstr ""
+msgstr "없음 — 일치하는 모든 이벤트"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
-msgid "Oldest bucket"
-msgstr ""
+msgid "Oldest stored interval"
+msgstr "저장된 간격 중 가장 오래된 것"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:46
 msgid "One event can update several recordings, so these are not visitor or page-view totals. Counters reset when analytics restarts."
-msgstr ""
+msgstr "한 번의 이벤트로 여러 건의 기록이 업데이트될 수 있으므로, 이 수치는 방문자 수나 페이지 조회수 총계가 아닙니다. 분석 기능이 다시 시작되면 카운터가 초기화됩니다."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
 msgid "Optional. Shown with the recording on the dashboard."
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
-msgid "Order"
-msgstr ""
+msgstr "선택 사항입니다. 대시보드에 녹화 화면이 표시된 모습입니다."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:5
 msgid "Page ID present — true or false"
-msgstr ""
+msgstr "페이지 ID 존재 여부 — 참 또는 거짓"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:2
 msgid "Page requests — successful public HTML pages"
-msgstr ""
+msgstr "페이지 요청 — 성공적으로 표시된 공개 HTML 페이지"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:10
 msgid "Page — public resource ID"
-msgstr ""
+msgstr "페이지 — 공개 리소스 ID"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
+msgid "Past 30 days"
+msgstr "지난 30일"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
+msgid "Past 365 days"
+msgstr "지난 365일"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
+msgid "Past 7 days"
+msgstr "지난 7일"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:24
 msgid "Pause"
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
-msgid "Payload"
-msgstr ""
+msgstr "일시 정지"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:12
 msgid "Period"
-msgstr ""
+msgstr "기간"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:26
 msgid "Rank"
-msgstr ""
+msgstr "순위"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
 msgid "Ranked by recorded requests in the selected moving period. The window advances in steps of"
-msgstr ""
+msgstr "선택한 이동 기간 동안 기록된 요청 수를 기준으로 순위를 매깁니다. 이 기간은 다음 단계별로 진행됩니다."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:8
 msgid "Recording ID"
-msgstr ""
+msgstr "기록 ID"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:23
+msgid "Recording capacity"
+msgstr "녹화 용량"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:23
 msgid "Recording information"
-msgstr ""
-
-#: zotonic_mod_analytics/src/mod_analytics.erl:241
-msgid "Recording order saved."
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:23
-msgid "Recording slots"
-msgstr ""
+msgstr "녹음 정보"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:12
 msgid "Recordings"
-msgstr ""
+msgstr "녹음 자료"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:11
 msgid "Referrer — referring hostname, internal or direct/unknown"
-msgstr ""
+msgstr "리퍼러 — 참조 호스트 이름, 내부 또는 직접/알 수 없음"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:14
 msgid "Request type — page, api or a custom dispatch type"
-msgstr ""
+msgstr "요청 유형 — 페이지, API 또는 사용자 정의 디스패치 유형"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:22
 msgid "Request types found in this site's dispatch rules:"
-msgstr ""
+msgstr "이 사이트의 디스패치 규칙에서 발견되는 요청 유형:"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:26
 msgid "Requests"
-msgstr ""
+msgstr "요청 사항"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:22
 msgid "Reserved capacity"
-msgstr ""
+msgstr "예약 용량"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:17
 msgid "Reserved storage capacity"
-msgstr ""
+msgstr "예약된 저장 용량"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:55
-msgid "Retained for"
-msgstr ""
+msgid "Retention period"
+msgstr "보존 기간"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:5
 msgid "SMTP (Email) — sent, retries, failures and bounces"
-msgstr ""
+msgstr "SMTP (이메일) — 발송, 재시도, 실패 및 반송"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:11
 msgid "Schema version"
-msgstr ""
+msgstr "스키마 버전"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
 msgid "Short description"
-msgstr ""
+msgstr "간략한 설명"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
 #: zotonic_mod_analytics/src/mod_analytics.erl:188
 msgid "Site Analytics"
-msgstr ""
+msgstr "사이트 분석"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:10
 msgid "Snapshot at page load. Refresh to update."
-msgstr ""
+msgstr "페이지 로드 시의 스냅샷입니다. 새로 고침을 하면 내용이 업데이트됩니다."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:29
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:25
 msgid "Start recording"
-msgstr ""
+msgstr "녹화 시작"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:15
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_mailing_runs_panel.tpl:18
@@ -7070,100 +7066,104 @@ msgstr "시작됨"
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:9
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "State"
-msgstr ""
+msgstr "주"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:5
 msgid "Step 1 of 2: Choose what to record"
-msgstr ""
+msgstr "2단계 중 1단계: 녹화할 내용 선택하기"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:34
 msgid "Step 2 of 2: Breakdown and filters"
-msgstr ""
+msgstr "2단계 중 2단계: 세부 분석 및 필터"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:18
 msgid "Storage usage"
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:21
-msgid "Stored buckets"
-msgstr ""
+msgstr "저장 공간 사용량"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:20
-msgid "Stored payload"
-msgstr ""
+msgid "Stored data size"
+msgstr "저장된 데이터 크기"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:24
-msgid "Stored payload is the database size of the aggregate counts and recording definition. It excludes row headers, indexes, shared table space and unsaved events. Reserved capacity is a planning limit, not disk usage."
-msgstr ""
+msgid "Stored data size measures the database space used by the aggregate counts and recording definition. It excludes row headers, indexes, shared table space and unsaved events. Reserved capacity is a planning limit, not disk usage."
+msgstr "저장된 데이터 크기는 집계 카운트 및 레코드 정의가 차지하는 데이터베이스 공간을 측정합니다. 여기에는 행 헤더, 인덱스, 공유 테이블 공간 및 저장되지 않은 이벤트는 포함되지 않습니다. 예약 용량은 계획상의 제한값일 뿐, 디스크 사용량을 나타내는 것은 아닙니다."
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
+msgid "Stored intervals / capacity"
+msgstr "저장된 간격 / 용량"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:21
+msgid "Stored time intervals"
+msgstr "저장된 시간 간격"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:243
-msgid "The recordings changed. Reloading the current order."
-msgstr ""
+msgid "The recordings changed. Reloading their current display order."
+msgstr "녹화 내용이 변경되었습니다. 현재 표시 순서를 다시 불러오고 있습니다."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:11
 msgid "This event schema is unavailable."
-msgstr ""
+msgstr "이 이벤트 스키마는 사용할 수 없습니다."
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:266
 msgid "This recording exceeds the storage budget."
-msgstr ""
+msgstr "이 녹화 파일의 용량이 할당된 저장 용량을 초과합니다."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:38
 msgid "This recording is no longer available."
-msgstr ""
+msgstr "이 녹음 파일은 더 이상 이용할 수 없습니다."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:13
 msgid "Traffic — crawler, other or unknown"
-msgstr ""
+msgstr "트래픽 — 크롤러, 기타 또는 알 수 없음"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:8
 msgid "View analytics"
-msgstr ""
+msgstr "분석 데이터 보기"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
 msgid "Your site at a glance."
-msgstr ""
+msgstr "귀하의 사이트를 한눈에 살펴보세요."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:20
 msgid "bytes"
-msgstr ""
+msgstr "바이트"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:31
 msgid "counters"
-msgstr ""
+msgstr "카운터"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:45
 msgid "dropped updates since startup"
-msgstr ""
+msgstr "시작 이후 누락된 업데이트"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:8
 msgid "events"
-msgstr ""
+msgstr "이벤트"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:18
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:22
 msgid "group/time slots"
-msgstr ""
+msgstr "그룹/시간대"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:44
 msgid "recording updates since startup"
-msgstr ""
+msgstr "시작 이후의 기록 업데이트"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:24
 msgid "recordings"
-msgstr ""
+msgstr "녹음 자료"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
 msgid "requests."
-msgstr ""
+msgstr "요청."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
 msgid "seconds."
-msgstr ""
+msgstr "초."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:51
-msgid "stored time buckets"
-msgstr ""
+msgid "stored time intervals"
+msgstr "저장된 시간 간격"
 
 #: zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:13
 #: zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:14
