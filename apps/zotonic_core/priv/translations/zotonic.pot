@@ -6948,13 +6948,6 @@ msgstr ""
 msgid "A batch is waiting to be saved."
 msgstr ""
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:52
-msgid ""
-"A bucket holds the counts for all groups in one recording and time interval. "
-"Older slots are reused, so history stays bounded instead of growing with "
-"every visit. Only aggregate counts are stored, not individual events."
-msgstr ""
-
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:3
 msgid "API requests — HTTP calls, including errors"
 msgstr ""
@@ -7005,6 +6998,11 @@ msgstr ""
 msgid "Analytics configuration"
 msgstr ""
 
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:10
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:9
+msgid "Analytics event type"
+msgstr ""
+
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:6
 msgid "Analytics is running"
 msgstr ""
@@ -7024,10 +7022,6 @@ msgid ""
 "has at most"
 msgstr ""
 
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:23
-msgid "Both filters must match. New recordings start without historical data."
-msgstr ""
-
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:50
 msgid "Bounded history"
 msgstr ""
@@ -7040,10 +7034,6 @@ msgstr ""
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:40
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "Breakdown"
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
-msgid "Buckets / slots"
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:36
@@ -7086,6 +7076,10 @@ msgstr ""
 msgid "Created"
 msgstr ""
 
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
+msgid "Data size"
+msgstr ""
+
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:13
 msgid ""
 "Database writes are being retried. Event processing can continue while "
@@ -7094,9 +7088,10 @@ msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:36
 msgid ""
-"Dates show the start of each bucket, not the first or last event. Different "
-"resolutions contain overlapping history. Pausing preserves stored history "
-"and its reservation. Figures are a snapshot when this dialog opens."
+"Dates show the start of each stored time interval, not the first or last "
+"event. Different resolutions contain overlapping history. Pausing a "
+"recording preserves its stored history and reserved capacity. Figures are a "
+"snapshot taken when this dialog opens."
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:30
@@ -7118,6 +7113,14 @@ msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:4
 msgid "Device — phone, tablet, desktop or unknown"
+msgstr ""
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
+msgid "Display order"
+msgstr ""
+
+#: zotonic_mod_analytics/src/mod_analytics.erl:241
+msgid "Display order saved."
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:14
@@ -7143,6 +7146,14 @@ msgid ""
 "approximate counts; other breakdowns reserve a group for excess values."
 msgstr ""
 
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:52
+msgid ""
+"Each stored time interval holds the counts for all groups in one analytics "
+"recording. Storage slots for older intervals are reused, so history stays "
+"bounded instead of growing with every visit. Only aggregate counts are "
+"stored, not individual events."
+msgstr ""
+
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:9
 msgid "Email outcome — sent, retry, failed or bounced"
 msgstr ""
@@ -7164,11 +7175,6 @@ msgstr ""
 msgid "Event processing"
 msgstr ""
 
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:10
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:9
-msgid "Event type"
-msgstr ""
-
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:40
 msgid "Events"
 msgstr ""
@@ -7178,6 +7184,12 @@ msgid ""
 "Events are combined into counters in memory before saving, normally every 10 "
 "seconds. A low value is normal. This buffer is separate from a batch "
 "currently being saved."
+msgstr ""
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:23
+msgid ""
+"Events must satisfy both filters to be recorded. New recordings start "
+"without historical data."
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
@@ -7242,23 +7254,7 @@ msgid "Last hour"
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
-msgid "Last month"
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
 msgid "Last six hours"
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
-msgid "Last week"
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
-msgid "Last year"
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
-msgid "Latest bucket"
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
@@ -7279,6 +7275,10 @@ msgstr ""
 msgid ""
 "New events cannot currently be processed. Previously saved history is still "
 "available."
+msgstr ""
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
+msgid "Newest stored interval"
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:28
@@ -7323,7 +7323,7 @@ msgid "None — all matching events"
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
-msgid "Oldest bucket"
+msgid "Oldest stored interval"
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:46
@@ -7334,10 +7334,6 @@ msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
 msgid "Optional. Shown with the recording on the dashboard."
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
-msgid "Order"
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:5
@@ -7352,12 +7348,20 @@ msgstr ""
 msgid "Page — public resource ID"
 msgstr ""
 
-#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:24
-msgid "Pause"
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
+msgid "Past 30 days"
 msgstr ""
 
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
-msgid "Payload"
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
+msgid "Past 365 days"
+msgstr ""
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
+msgid "Past 7 days"
+msgstr ""
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:24
+msgid "Pause"
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:12
@@ -7378,16 +7382,12 @@ msgstr ""
 msgid "Recording ID"
 msgstr ""
 
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:23
+msgid "Recording capacity"
+msgstr ""
+
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:23
 msgid "Recording information"
-msgstr ""
-
-#: zotonic_mod_analytics/src/mod_analytics.erl:241
-msgid "Recording order saved."
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:23
-msgid "Recording slots"
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:12
@@ -7419,7 +7419,7 @@ msgid "Reserved storage capacity"
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:55
-msgid "Retained for"
+msgid "Retention period"
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:5
@@ -7472,23 +7472,28 @@ msgstr ""
 msgid "Storage usage"
 msgstr ""
 
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:21
-msgid "Stored buckets"
-msgstr ""
-
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:20
-msgid "Stored payload"
+msgid "Stored data size"
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:24
 msgid ""
-"Stored payload is the database size of the aggregate counts and recording "
-"definition. It excludes row headers, indexes, shared table space and unsaved "
-"events. Reserved capacity is a planning limit, not disk usage."
+"Stored data size measures the database space used by the aggregate counts "
+"and recording definition. It excludes row headers, indexes, shared table "
+"space and unsaved events. Reserved capacity is a planning limit, not disk "
+"usage."
+msgstr ""
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
+msgid "Stored intervals / capacity"
+msgstr ""
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:21
+msgid "Stored time intervals"
 msgstr ""
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:243
-msgid "The recordings changed. Reloading the current order."
+msgid "The recordings changed. Reloading their current display order."
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:11
@@ -7553,7 +7558,7 @@ msgid "seconds."
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:51
-msgid "stored time buckets"
+msgid "stored time intervals"
 msgstr ""
 
 #: zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:13
