@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-09 12:23\n"
+"PO-Revision-Date: 2026-11-09 12:31\n"
 "Last-Translator: \n"
 "Language-Team: Romanian\n"
 "MIME-Version: 1.0\n"
@@ -6662,7 +6662,7 @@ msgstr "Contorul de activitate nu este disponibil până la reluarea analizei."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:40
 msgid "Add analytics measurement"
-msgstr "Adăugați indicatori de analiză"
+msgstr "Adăugați o măsurătoare analitică"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:39
 msgid "All breakdown values"
@@ -6788,15 +6788,15 @@ msgstr "Datele indică momentul de început al fiecărui interval de timp stocat
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:30
 msgid "Delete analytics measurement"
-msgstr "Ștergeți datele de analiză"
+msgstr "Ștergeți măsurătoarea analitică"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:27
 msgid "Delete analytics measurement?"
-msgstr "Să șterg datele de analiză?"
+msgstr "Ștergeți măsurătoarea analitică?"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_delete_confirm.tpl:1
 msgid "Delete this analytics measurement?"
-msgstr "Să ștergi această măsurătoare analitică?"
+msgstr "Doriți să ștergeți această măsurătoare analitică?"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
 msgid "Describe the activity this analytics measurement tracks"
@@ -7172,7 +7172,7 @@ msgstr "Prezentare generală a site-ului dumneavoastră."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:44
 msgid "analytics measurement updates since startup"
-msgstr "Actualizări privind măsurarea datelor analitice de la înființare"
+msgstr "actualizări ale măsurătorilor analitice de la pornirea modulului de analiză"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:24
 msgid "analytics measurements"
