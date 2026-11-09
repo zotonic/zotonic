@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-06 10:37\n"
+"PO-Revision-Date: 2026-11-09 12:31\n"
 "Last-Translator: \n"
 "Language-Team: Czech\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "X-Crowdin-File-ID: 8692\n"
 "Language: cs_CZ\n"
 
-#: zotonic_core/src/support/z_datetime.erl:452
+#: zotonic_core/src/support/z_datetime.erl:467
 msgctxt "relative time: duration"
 msgid "{n} day"
 msgid_plural "{n} days"
@@ -25,7 +25,7 @@ msgstr[1] "{n} dny"
 msgstr[2] "{n} dne"
 msgstr[3] "{n} dní"
 
-#: zotonic_core/src/support/z_datetime.erl:450
+#: zotonic_core/src/support/z_datetime.erl:465
 msgctxt "relative time: duration"
 msgid "{n} hour"
 msgid_plural "{n} hours"
@@ -34,7 +34,7 @@ msgstr[1] "{n} hodiny"
 msgstr[2] "{n} hodiny"
 msgstr[3] "{n} hodin"
 
-#: zotonic_core/src/support/z_datetime.erl:448
+#: zotonic_core/src/support/z_datetime.erl:463
 msgctxt "relative time: duration"
 msgid "{n} minute"
 msgid_plural "{n} minutes"
@@ -43,7 +43,7 @@ msgstr[1] "{n} minuty"
 msgstr[2] "{n} minuty"
 msgstr[3] "{n} minut"
 
-#: zotonic_core/src/support/z_datetime.erl:454
+#: zotonic_core/src/support/z_datetime.erl:469
 msgctxt "relative time: duration"
 msgid "{n} month"
 msgid_plural "{n} months"
@@ -52,7 +52,7 @@ msgstr[1] "{n} měsíce"
 msgstr[2] "{n} měsíce"
 msgstr[3] "{n} měsíců"
 
-#: zotonic_core/src/support/z_datetime.erl:446
+#: zotonic_core/src/support/z_datetime.erl:461
 msgctxt "relative time: duration"
 msgid "{n} second"
 msgid_plural "{n} seconds"
@@ -61,7 +61,7 @@ msgstr[1] "{n} sekundy"
 msgstr[2] "{n} sekundy"
 msgstr[3] "{n} sekund"
 
-#: zotonic_core/src/support/z_datetime.erl:456
+#: zotonic_core/src/support/z_datetime.erl:471
 msgctxt "relative time: duration"
 msgid "{n} year"
 msgid_plural "{n} years"
@@ -70,7 +70,7 @@ msgstr[1] "{n} roky"
 msgstr[2] "{n} roku"
 msgstr[3] "{n} let"
 
-#: zotonic_core/src/support/z_datetime.erl:440
+#: zotonic_core/src/support/z_datetime.erl:455
 msgctxt "relative time: future"
 msgid "{n} day"
 msgid_plural "{n} days"
@@ -79,7 +79,7 @@ msgstr[1] "{n} dny"
 msgstr[2] "{n} dne"
 msgstr[3] "{n} dní"
 
-#: zotonic_core/src/support/z_datetime.erl:438
+#: zotonic_core/src/support/z_datetime.erl:453
 msgctxt "relative time: future"
 msgid "{n} hour"
 msgid_plural "{n} hours"
@@ -88,7 +88,7 @@ msgstr[1] "{n} hodiny"
 msgstr[2] "{n} hodiny"
 msgstr[3] "{n} hodin"
 
-#: zotonic_core/src/support/z_datetime.erl:436
+#: zotonic_core/src/support/z_datetime.erl:451
 msgctxt "relative time: future"
 msgid "{n} minute"
 msgid_plural "{n} minutes"
@@ -97,7 +97,7 @@ msgstr[1] "{n} minuty"
 msgstr[2] "{n} minuty"
 msgstr[3] "{n} minut"
 
-#: zotonic_core/src/support/z_datetime.erl:442
+#: zotonic_core/src/support/z_datetime.erl:457
 msgctxt "relative time: future"
 msgid "{n} month"
 msgid_plural "{n} months"
@@ -106,7 +106,7 @@ msgstr[1] "{n} měsíce"
 msgstr[2] "{n} měsíce"
 msgstr[3] "{n} měsíců"
 
-#: zotonic_core/src/support/z_datetime.erl:434
+#: zotonic_core/src/support/z_datetime.erl:449
 msgctxt "relative time: future"
 msgid "{n} second"
 msgid_plural "{n} seconds"
@@ -115,7 +115,7 @@ msgstr[1] "{n} sekundy"
 msgstr[2] "{n} sekundy"
 msgstr[3] "{n} sekund"
 
-#: zotonic_core/src/support/z_datetime.erl:444
+#: zotonic_core/src/support/z_datetime.erl:459
 msgctxt "relative time: future"
 msgid "{n} year"
 msgid_plural "{n} years"
@@ -124,7 +124,7 @@ msgstr[1] "{n} roky"
 msgstr[2] "{n} roku"
 msgstr[3] "{n} let"
 
-#: zotonic_core/src/support/z_datetime.erl:428
+#: zotonic_core/src/support/z_datetime.erl:443
 msgctxt "relative time: past"
 msgid "{n} day"
 msgid_plural "{n} days"
@@ -133,7 +133,7 @@ msgstr[1] "{n} dny"
 msgstr[2] "{n} dne"
 msgstr[3] "{n} dny"
 
-#: zotonic_core/src/support/z_datetime.erl:426
+#: zotonic_core/src/support/z_datetime.erl:441
 msgctxt "relative time: past"
 msgid "{n} hour"
 msgid_plural "{n} hours"
@@ -142,7 +142,7 @@ msgstr[1] "{n} hodinami"
 msgstr[2] "{n} hodiny"
 msgstr[3] "{n} hodinami"
 
-#: zotonic_core/src/support/z_datetime.erl:424
+#: zotonic_core/src/support/z_datetime.erl:439
 msgctxt "relative time: past"
 msgid "{n} minute"
 msgid_plural "{n} minutes"
@@ -151,7 +151,7 @@ msgstr[1] "{n} minutami"
 msgstr[2] "{n} minuty"
 msgstr[3] "{n} minutami"
 
-#: zotonic_core/src/support/z_datetime.erl:430
+#: zotonic_core/src/support/z_datetime.erl:445
 msgctxt "relative time: past"
 msgid "{n} month"
 msgid_plural "{n} months"
@@ -160,7 +160,7 @@ msgstr[1] "{n} měsíci"
 msgstr[2] "{n} měsíce"
 msgstr[3] "{n} měsíci"
 
-#: zotonic_core/src/support/z_datetime.erl:422
+#: zotonic_core/src/support/z_datetime.erl:437
 msgctxt "relative time: past"
 msgid "{n} second"
 msgid_plural "{n} seconds"
@@ -169,7 +169,7 @@ msgstr[1] "{n} sekundami"
 msgstr[2] "{n} sekundy"
 msgstr[3] "{n} sekundami"
 
-#: zotonic_core/src/support/z_datetime.erl:432
+#: zotonic_core/src/support/z_datetime.erl:447
 msgctxt "relative time: past"
 msgid "{n} year"
 msgid_plural "{n} years"
@@ -226,32 +226,32 @@ msgstr "K přístupu k adrese URL vzdáleného zdroje nemáte oprávnění."
 msgid "Website"
 msgstr "Web"
 
-#: zotonic_core/src/support/z_datetime.erl:399
+#: zotonic_core/src/support/z_datetime.erl:414
 msgid "in a few moments"
 msgstr "za okamžik"
 
-#: zotonic_core/src/support/z_datetime.erl:406
+#: zotonic_core/src/support/z_datetime.erl:421
 msgid "in {duration}"
 msgstr "za {duration}"
 
-#: zotonic_core/src/support/z_datetime.erl:400
+#: zotonic_core/src/support/z_datetime.erl:415
 msgid "moments"
 msgstr "okamžiky"
 
-#: zotonic_core/src/support/z_datetime.erl:398
+#: zotonic_core/src/support/z_datetime.erl:413
 msgid "moments ago"
 msgstr "před chvílí"
 
-#: zotonic_core/src/support/z_datetime.erl:368
-#: zotonic_core/src/support/z_datetime.erl:376
+#: zotonic_core/src/support/z_datetime.erl:383
+#: zotonic_core/src/support/z_datetime.erl:391
 msgid "now"
 msgstr "nyní"
 
-#: zotonic_core/src/support/z_datetime.erl:405
+#: zotonic_core/src/support/z_datetime.erl:420
 msgid "{duration} ago"
 msgstr "před {duration}"
 
-#: zotonic_core/src/support/z_datetime.erl:412
+#: zotonic_core/src/support/z_datetime.erl:427
 msgid "{first}, {second}"
 msgstr "{first}, {second}"
 
@@ -402,6 +402,7 @@ msgstr "Opravdu chcete obnovit aktuálně publikovanou verzi všech pravidel ACL
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:30
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:46
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:15
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:26
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:68
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:33
 #: zotonic_mod_authentication/priv/templates/_dialog_session_close.tpl:16
@@ -508,6 +509,7 @@ msgstr "Konfigurace byla změněna."
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:72
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:74
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_filter_predicates.tpl:20
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:40
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:79
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:43
 #: zotonic_mod_development/priv/templates/_development_template_matches.tpl:27
@@ -568,6 +570,7 @@ msgstr "Považujte autory zdrojů za vlastníky."
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4
 #: zotonic_mod_admin/src/mod_admin.erl:516
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:70
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:26
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 msgid "Content"
 msgstr "Obsah"
@@ -621,6 +624,7 @@ msgstr "Přesun do skupiny spolupráce se nezdařil."
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:53
 #: zotonic_mod_admin_identity/src/mod_admin_identity.erl:330
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:47
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:26
 #: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:51
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:52
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:75
@@ -1485,6 +1489,7 @@ msgstr "K dispozici"
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:207
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:18
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:41
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:27
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:3
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_count_back.tpl:2
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:100
@@ -2430,6 +2435,7 @@ msgid "Individual modules can be reinstalled from the Modules list."
 msgstr "Jednotlivé moduly lze znovu nainstalovat ze seznamu modulů."
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:133
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:23
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:21
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:145
 msgid "Info"
@@ -4078,6 +4084,7 @@ msgstr "Příliš mnoho spojení, zobrazena jsou pouze první a poslední."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:13
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:33
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:21
 msgid "Total"
 msgstr "Celkem"
 
@@ -5182,7 +5189,7 @@ msgstr "Platnost do"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:20
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:21
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:37
-#: zotonic_mod_base/src/support/z_chart_svg.erl:1352
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1390
 #: zotonic_mod_development/priv/templates/_development_dispatch_options.tpl:2
 msgid "Value"
 msgstr "Hodnota"
@@ -6622,6 +6629,609 @@ msgstr "Využití systému"
 msgid "This page shows (real-time) system statistics like memory use and requests."
 msgstr "Tato stránka zobrazuje statistiky systému (v reálném čase), jako je využití paměti a požadavky."
 
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:60
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:29
+msgid "1 day"
+msgstr "1 den"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:59
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:29
+msgid "1 hour"
+msgstr "1 hodina"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:57
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:29
+msgid "1 minute"
+msgstr "1 minuta"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:58
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:29
+msgid "15 minutes"
+msgstr "15 minut"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:59
+msgid "30 days"
+msgstr "30 dní"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:57
+msgid "6 hours"
+msgstr "6 hodin"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:58
+msgid "7 days"
+msgstr "7 dní"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:34
+msgid "A batch is waiting to be saved."
+msgstr "Dávka čeká na uložení."
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:3
+msgid "API requests — HTTP calls, including errors"
+msgstr "Žádosti API — HTTP volání, včetně chyb"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:60
+msgid "About 5 years"
+msgstr "Asi 5 let"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:26
+msgid "Active and paused analytics measurements both count towards this limit. A new analytics measurement also needs enough free storage capacity for its group limit."
+msgstr "Do tohoto limitu se započítávají jak aktivní, tak pozastavená analytická měření. Nové analytické měření také vyžaduje dostatek volné úložné kapacity pro limit své skupiny."
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:48
+msgid "Activity counters are unavailable until analytics resumes."
+msgstr "Počítadla aktivit nebudou k dispozici, dokud se neobnoví sběr analytických údajů."
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:40
+msgid "Add analytics measurement"
+msgstr "Přidat analytické měření"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:39
+msgid "All breakdown values"
+msgstr "Všechny dílčí hodnoty"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_delete_confirm.tpl:2
+msgid "All recorded history will be permanently deleted and its storage reservation released. This cannot be undone."
+msgstr "Veškerá zaznamenaná historie bude trvale smazána a místo vyhrazené pro její uložení bude uvolněno. Tento úkon nelze vrátit zpět."
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:19
+msgid "Allowed values (comma separated)"
+msgstr "Přípustné hodnoty (oddělené čárkami)"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:35
+msgid "Allowed values:"
+msgstr "Přípustné hodnoty:"
+
+#: zotonic_mod_analytics/src/mod_analytics.erl:267
+msgid "An equivalent analytics measurement already exists."
+msgstr "Obdobná analytická metrika již existuje."
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
+#: zotonic_mod_analytics/src/mod_analytics.erl:196
+msgid "Analytics configuration"
+msgstr "Nastavení analytiky"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:10
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:9
+msgid "Analytics event type"
+msgstr "Typ analytické události"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:6
+msgid "Analytics is running"
+msgstr "Analytika je spuštěna"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:8
+msgid "Analytics is unavailable"
+msgstr "Analytika není k dispozici"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:8
+msgid "Analytics measurement ID"
+msgstr "Identifikátor měření analytiky"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:23
+msgid "Analytics measurement information"
+msgstr "Informace o měření analytických údajů"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:12
+msgid "Analytics measurements"
+msgstr "Analytická měření"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:2
+msgid "Analytics status"
+msgstr "Stav analytiky"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
+msgid "Bars show the lower bound. Counts are ranges, ordered by their lower bound. Overlapping ranges may change order. Content outside the retained candidates has at most"
+msgstr "Sloupce znázorňují dolní hranici. Počty představují rozsahy seřazené podle jejich dolní hranice. Překrývající se rozsahy mohou změnit pořadí. Obsah mimo zachované kandidáty má nanejvýš"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:50
+msgid "Bounded history"
+msgstr "Omezená historie"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:12
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:14
+msgid "Break down by"
+msgstr "Rozčlenění podle"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:40
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
+msgid "Breakdown"
+msgstr "Rozpis"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:36
+msgid "Buffer status is unavailable."
+msgstr "Stav vyrovnávací paměti není k dispozici."
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:20
+msgid "Capacity is reserved for the full history of every group in an analytics measurement. This is a planning limit, not disk usage. Pausing keeps the reservation; deleting an analytics measurement releases it."
+msgstr "Pro celou historii každé skupiny v analytickém měření je vyhrazena kapacita. Jedná se o plánovací limit, nikoli o využití diskového prostoru. Pozastavení zachová tuto rezervaci; smazání analytického měření ji uvolní."
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
+msgid "Choose which activity to measure and arrange your dashboard."
+msgstr "Vyberte, kterou aktivitu chcete měřit, a upravte si svůj přehled."
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:4
+msgid "Classified requests — pages, APIs and other dispatch types"
+msgstr "Klasifikované požadavky – stránky, API a další typy odeslání"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:9
+msgid "Configure analytics measurements"
+msgstr "Nastavení analytických měření"
+
+#: zotonic_mod_analytics/src/mod_analytics.erl:235
+msgid "Could not delete the analytics measurement."
+msgstr "Měření analytiky se nepodařilo odstranit."
+
+#: zotonic_mod_analytics/src/mod_analytics.erl:268
+msgid "Could not save. Check the event, breakdown and filter values."
+msgstr "Uložení se nezdařilo. Zkontrolujte hodnoty události, členění a filtru."
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:3
+msgid "Country — two-letter code, e.g. NL"
+msgstr "Země – dvoumístný kód, např. NL"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:14
+#: zotonic_mod_survey/src/models/m_survey.erl:1498
+msgid "Created"
+msgstr "Vytvořeno"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
+msgid "Data size"
+msgstr "Velikost dat"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:13
+msgid "Database writes are being retried. Event processing can continue while buffer capacity remains available; prolonged failures can cause data loss."
+msgstr "Probíhá opakování zápisů do databáze. Zpracování událostí může pokračovat, dokud je k dispozici kapacita vyrovnávací paměti; dlouhodobé výpadky mohou způsobit ztrátu dat."
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:36
+msgid "Dates show the start of each stored time interval, not the first or last event. Different resolutions contain overlapping history. Pausing an analytics measurement preserves its stored history and reserved capacity. Figures are a snapshot taken when this dialog opens."
+msgstr "Data udávají začátek každého uloženého časového intervalu, nikoli první či poslední událost. Různá rozlišení obsahují překrývající se historii. Pozastavení analytického měření zachová jeho uloženou historii i vyhrazenou kapacitu. Údaje představují momentální snímek pořízený v okamžiku otevření tohoto dialogového okna."
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:30
+msgid "Delete analytics measurement"
+msgstr "Odstranit analytické měření"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:27
+msgid "Delete analytics measurement?"
+msgstr "Smazat analytické měření?"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_delete_confirm.tpl:1
+msgid "Delete this analytics measurement?"
+msgstr "Chcete tuto analytickou metriku smazat?"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
+msgid "Describe the activity this analytics measurement tracks"
+msgstr "Popište činnost, kterou tato analytická metrika sleduje"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:55
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
+msgid "Detail"
+msgstr "Podrobnosti"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:4
+msgid "Device — phone, tablet, desktop or unknown"
+msgstr "Zařízení – telefon, tablet, stolní počítač nebo neznámé"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
+msgid "Display order"
+msgstr "Pořadí zobrazení"
+
+#: zotonic_mod_analytics/src/mod_analytics.erl:241
+msgid "Display order saved."
+msgstr "Pořadí zobrazení bylo uloženo."
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:14
+msgid "Drag analytics measurements to set their order on the dashboard. Changes are saved immediately."
+msgstr "Přetáhněte analytické ukazatele a nastavte tak jejich pořadí na řídicím panelu. Změny se uloží okamžitě."
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:21
+msgid "Drag to reorder"
+msgstr "Přetažením změňte pořadí"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:47
+msgid "Dropped updates can result from overload, expired events, configuration changes or failed writes. This is a diagnostic count, not an exact count of lost page views. Incomplete periods are marked in reports."
+msgstr "Ztráta aktualizací může být způsobena přetížením, událostmi, jejichž platnost vypršela, změnami konfigurace nebo neúspěšnými zápisy. Jedná se o diagnostický údaj, nikoli o přesný počet ztracených zobrazení stránek. Neúplná období jsou ve zprávách označena."
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:15
+msgid "Each group reserves 3,578 time slots. Page breakdowns use candidates with approximate counts; other breakdowns reserve a group for excess values."
+msgstr "Každá skupina si rezervuje 3 578 časových úseků. V rozčlenění na stránkách jsou uvedeni kandidáti s přibližnými počty; v ostatních rozčleněních je jedna skupina vyhrazena pro nadbytečné hodnoty."
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:52
+msgid "Each stored time interval holds the counts for all groups in one analytics measurement. Storage slots for older intervals are reused, so history stays bounded instead of growing with every visit. Only aggregate counts are stored, not individual events."
+msgstr "Každý uložený časový interval obsahuje počty pro všechny skupiny v rámci jednoho analytického měření. Úložné pozice pro starší intervaly se znovu využívají, takže historická data zůstávají ohraničená a nerostou s každou návštěvou. Ukládají se pouze souhrnné počty, nikoli jednotlivé události."
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:9
+msgid "Email outcome — sent, retry, failed or bounced"
+msgstr "Stav e-mailu — odesláno, opakovat, selhalo nebo vráceno"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:36
+msgid "Enter one or more values, separated by commas."
+msgstr "Zadejte jednu nebo více hodnot oddělených čárkami."
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
+#: zotonic_mod_development/priv/templates/admin_development_observers.tpl:19
+msgid "Event"
+msgstr "Událost"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:29
+msgid "Event buffer"
+msgstr "Buffer událostí"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:42
+msgid "Event processing"
+msgstr "Zpracování událostí"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:40
+msgid "Events"
+msgstr "Události"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:33
+msgid "Events are combined into counters in memory before saving, normally every 10 seconds. A low value is normal. This buffer is separate from a batch currently being saved."
+msgstr "Události se před uložením sdružují do čítačů v paměti, obvykle každých 10 sekund. Nízká hodnota je normální. Tento vyrovnávací paměťový blok je oddělený od právě ukládané dávky."
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:23
+msgid "Events must satisfy both filters to be counted. New analytics measurements start without historical data."
+msgstr "Aby byly události započítány, musí splňovat oba filtry. Nová analytická měření začínají bez historických dat."
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:18
+msgid "Fixed filter"
+msgstr "Pevný filtr"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:16
+msgid "Fixed filters"
+msgstr "Pevné filtry"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:25
+msgid "Gaps are unrecorded intervals. Partial intervals may undercount activity. Request counts include automation, exclude editor activity and do not measure unique visitors."
+msgstr "Mezery jsou nezaznamenané intervaly. Částečné intervaly mohou vést k podhodnocení aktivity. Počty požadavků zahrnují automatizované operace, nezahrnují aktivitu editorů a neměří počet jedinečných návštěvníků."
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:13
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:15
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
+msgid "Group limit"
+msgstr "Limit pro skupinu"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:8
+msgid "HTTP method — GET, POST, HEAD and others"
+msgstr "Metody HTTP — GET, POST, HEAD a další"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:12
+msgid "HTTP status class — 2xx success, 4xx client errors, 5xx server errors"
+msgstr "Třída stavových kódů HTTP — 2xx (úspěšné), 4xx (chyby na straně klienta), 5xx (chyby na straně serveru)"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:6
+msgid "HTTP status code — e.g. 200, 404 or 500"
+msgstr "HTTP stavový kód – např. 200, 404 nebo 500"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:54
+msgid "History detail and retention"
+msgstr "Podrobnosti o historii a uchovávání"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:45
+msgid "Includes incomplete or unrecorded intervals"
+msgstr "Zahrnuje neúplné nebo nezaznamenané intervaly"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:7
+msgid "Language — language code, e.g. en or nl"
+msgstr "Jazyk — kód jazyka, např. en nebo nl"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
+msgid "Last 24 hours"
+msgstr "Posledních 24 hodin"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
+msgid "Last five years"
+msgstr "Posledních pět let"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
+msgid "Last hour"
+msgstr "Poslední hodina"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
+msgid "Last six hours"
+msgstr "Posledních šest hodin"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:23
+msgid "Maximum number of analytics measurements"
+msgstr "Maximální počet analytických měření"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
+msgid "Most popular content in this period"
+msgstr "Nejoblíbenější obsah v tomto období"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:7
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
+#: zotonic_mod_comment/priv/templates/_comments_form.tpl:23
+#: zotonic_mod_comment/priv/templates/admin_comments.tpl:22
+#: zotonic_mod_contact/priv/templates/contact.tpl:11
+#: zotonic_mod_contact/priv/templates/email_contact.tpl:10
+#: zotonic_mod_survey/src/models/m_survey.erl:982
+msgid "Name"
+msgstr "Jméno"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:12
+msgid "New events cannot currently be processed. Previously saved history is still available."
+msgstr "Nové události nelze v současné době zpracovat. Dříve uložená historie je stále k dispozici."
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
+msgid "Newest stored interval"
+msgstr "Nejnovější uložený interval"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:28
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:210
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:55
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:88
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:33
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:55
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:206
+msgid "Next"
+msgstr "Další"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:10
+msgid "Next, choose a breakdown and filters supported by this event type."
+msgstr "Dále vyberte rozčlenění a filtry, které tento typ události podporuje."
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:22
+msgid "No analytics measurements to display. Configure or resume an analytics measurement to get started."
+msgstr "Nejsou k dispozici žádná analytická měření. Chcete-li začít, nakonfigurujte nebo obnovte analytické měření."
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:12
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:14
+msgid "No breakdown (total)"
+msgstr "Bez rozčlenění (celkem)"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:18
+msgid "No filter — include all values"
+msgstr "Bez filtru – zahrnout všechny hodnoty"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:29
+msgid "No leading content identified in this period."
+msgstr "V tomto období nebyl zjištěn žádný významný obsah."
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:36
+msgid "No recorded events yet."
+msgstr "Zatím nejsou zaznamenány žádné události."
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:16
+msgid "None — all matching events"
+msgstr "Žádné — všechny odpovídající události"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
+msgid "Oldest stored interval"
+msgstr "Nejstarší zaznamenaný interval"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:46
+msgid "One event can update several analytics measurements, so these are not visitor or page-view totals. Counters reset when analytics restarts."
+msgstr "Jedna událost může aktualizovat několik analytických metrik, takže se nejedná o celkové počty návštěvníků ani zobrazení stránek. Počítadla se vynulují při restartu analytického systému."
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
+msgid "Optional. Shown with the analytics measurement on the dashboard."
+msgstr "Volitelné. Zobrazeno spolu s analytickými údaji na řídicím panelu."
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:5
+msgid "Page ID present — true or false"
+msgstr "ID stránky je k dispozici — true nebo false"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:2
+msgid "Page requests — successful public HTML pages"
+msgstr "Požadavky na stránky — úspěšně načtené veřejné HTML stránky"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:10
+msgid "Page — public resource ID"
+msgstr "Stránka — identifikátor veřejného zdroje"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
+msgid "Past 30 days"
+msgstr "Posledních 30 dní"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
+msgid "Past 365 days"
+msgstr "Posledních 365 dní"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
+msgid "Past 7 days"
+msgstr "Posledních 7 dní"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:24
+msgid "Pause"
+msgstr "Pauza"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:12
+msgid "Period"
+msgstr "Období"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:26
+msgid "Rank"
+msgstr "Pořadí"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
+msgid "Ranked by recorded requests in the selected moving period. The window advances in steps of"
+msgstr "Seřazeno podle zaznamenaných požadavků ve vybraném časovém období. Okno se posouvá v krocích po"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:11
+msgid "Referrer — referring hostname, internal or direct/unknown"
+msgstr "Referrer — název hostitele, ze kterého byl uživatel přesměrován, interní nebo přímý/neznámý"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:14
+msgid "Request type — page, api or a custom dispatch type"
+msgstr "Typ požadavku — stránka, API nebo vlastní typ odeslání"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:22
+msgid "Request types found in this site's dispatch rules:"
+msgstr "Typy požadavků obsažené v pravidlech pro odesílání na tomto webu:"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:26
+msgid "Requests"
+msgstr "Žádosti"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:22
+msgid "Reserved capacity"
+msgstr "Rezervovaná kapacita"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:17
+msgid "Reserved storage capacity"
+msgstr "Rezervovaná úložná kapacita"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:55
+msgid "Retention period"
+msgstr "Doba uchovávání"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:5
+msgid "SMTP (Email) — sent, retries, failures and bounces"
+msgstr "SMTP (e-mail) — odeslané zprávy, opakované pokusy, selhání a vrácené zprávy"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:11
+msgid "Schema version"
+msgstr "Verze schématu"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
+msgid "Short description"
+msgstr "Stručný popis"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:2
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
+#: zotonic_mod_analytics/src/mod_analytics.erl:188
+msgid "Site Analytics"
+msgstr "Analýza webu"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:10
+msgid "Snapshot at page load. Refresh to update."
+msgstr "Snímek obrazovky při načtení stránky. Pro aktualizaci stránku obnovte."
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:29
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:25
+msgid "Start analytics measurement"
+msgstr "Spustit měření analytických údajů"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:15
+#: zotonic_mod_mailinglist/priv/templates/_admin_edit_mailing_runs_panel.tpl:18
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:41
+msgid "Started"
+msgstr "Zahájeno"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:9
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
+msgid "State"
+msgstr "Stát"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:5
+msgid "Step 1 of 2: Choose which activity to measure"
+msgstr "Krok 1 ze 2: Vyberte aktivitu, kterou chcete měřit"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:34
+msgid "Step 2 of 2: Breakdown and filters"
+msgstr "Krok 2 z 2: Rozčlenění a filtry"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:18
+msgid "Storage usage"
+msgstr "Využití úložného prostoru"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:20
+msgid "Stored data size"
+msgstr "Velikost uložených dat"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:24
+msgid "Stored data size measures the database space used by the aggregate counts and analytics measurement definition. It excludes row headers, indexes, shared table space and unsaved events. Reserved capacity is a planning limit, not disk usage."
+msgstr "Velikost uložených dat udává, kolik místa v databázi zabírají souhrnné počty a definice analytických měření. Nezahrnuje záhlaví řádků, indexy, sdílený tabulkový prostor a neuložené události. Rezervovaná kapacita představuje plánovací limit, nikoli využití diskového prostoru."
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
+msgid "Stored intervals / capacity"
+msgstr "Uložené intervaly / kapacita"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:21
+msgid "Stored time intervals"
+msgstr "Uložené časové intervaly"
+
+#: zotonic_mod_analytics/src/mod_analytics.erl:243
+msgid "The analytics measurements changed. Reloading their current display order."
+msgstr "Metriky analýzy se změnily. Probíhá obnovení aktuálního pořadí zobrazení."
+
+#: zotonic_mod_analytics/src/mod_analytics.erl:266
+msgid "This analytics measurement exceeds the storage budget."
+msgstr "Toto analytické měření překračuje limit úložného prostoru."
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:38
+msgid "This analytics measurement is no longer available."
+msgstr "Tato analytická metrika již není k dispozici."
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:11
+msgid "This event schema is unavailable."
+msgstr "Toto schéma události není k dispozici."
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:13
+msgid "Traffic — crawler, other or unknown"
+msgstr "Provoz — robot, jiný nebo neznámý"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:8
+msgid "View analytics"
+msgstr "Zobrazit analytické údaje"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
+msgid "Your site at a glance."
+msgstr "Váš web v kostce."
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:44
+msgid "analytics measurement updates since startup"
+msgstr "aktualizace analytických měření od spuštění"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:24
+msgid "analytics measurements"
+msgstr "analytická měření"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:20
+msgid "bytes"
+msgstr "bajtů"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:31
+msgid "counters"
+msgstr "počítadla"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:45
+msgid "dropped updates since startup"
+msgstr "vynechané aktualizace od spuštění systému"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:8
+msgid "events"
+msgstr "události"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:18
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:22
+msgid "group/time slots"
+msgstr "skupiny/časové úseky"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
+msgid "requests."
+msgstr "žádosti."
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
+msgid "seconds."
+msgstr "sekund."
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:51
+msgid "stored time intervals"
+msgstr "uložené časové intervaly"
+
 #: zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:13
 #: zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:14
 msgid "Album"
@@ -7260,16 +7870,6 @@ msgstr "Ujistěte se, že jste ověřili svou e-mailovou adresu."
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:125
 msgid "Multiple accounts"
 msgstr "Více účtů"
-
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:210
-#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:55
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:88
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:33
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:55
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:206
-msgid "Next"
-msgstr "Další"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_title.tpl:11
 msgid "Next time, enter your email address first to log in faster."
@@ -8199,12 +8799,12 @@ msgstr "Údaje o podílu prohlížečů"
 msgid "CSV"
 msgstr "CSV"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:440
-#: zotonic_mod_base/src/support/z_chart_svg.erl:442
+#: zotonic_mod_base/src/support/z_chart_svg.erl:446
+#: zotonic_mod_base/src/support/z_chart_svg.erl:448
 msgid "Chart"
 msgstr "Graf"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:1342
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1380
 msgid "Chart legend"
 msgstr "Legenda grafu"
 
@@ -8238,7 +8838,7 @@ msgstr "Připojování…"
 msgid "Connection Test"
 msgstr "Test připojení"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:584
+#: zotonic_mod_base/src/support/z_chart_svg.erl:590
 msgid "Data points"
 msgstr "Datové body"
 
@@ -8352,7 +8952,7 @@ msgstr "červenec"
 msgid "June"
 msgstr "červen"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:1348
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1386
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:41
 msgid "Label"
 msgstr "Označení"
@@ -8419,7 +9019,7 @@ msgstr "Čistá změna"
 msgid "No"
 msgstr "Ne"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:1293
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1330
 msgid "No data"
 msgstr "Žádná data"
 
@@ -8458,7 +9058,7 @@ msgstr "říjen"
 msgid "On this page you can test the connection of your browser to our server and to the internet in general."
 msgstr "Na této stránce si můžete otestovat připojení vašeho prohlížeče k našemu serveru a k internetu obecně."
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:347
+#: zotonic_mod_base/src/support/z_chart_svg.erl:353
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:134
 msgid "Other"
 msgstr "Ostatní"
@@ -8775,14 +9375,6 @@ msgstr "Zpráva"
 #: zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:28
 msgid "Moderate comments"
 msgstr "Moderovat komentáře"
-
-#: zotonic_mod_comment/priv/templates/_comments_form.tpl:23
-#: zotonic_mod_comment/priv/templates/admin_comments.tpl:22
-#: zotonic_mod_contact/priv/templates/contact.tpl:11
-#: zotonic_mod_contact/priv/templates/email_contact.tpl:10
-#: zotonic_mod_survey/src/models/m_survey.erl:982
-msgid "Name"
-msgstr "Jméno"
 
 #: zotonic_mod_comment/priv/templates/_comments_form.tpl:16
 msgid "Note: Comments are moderated"
@@ -9429,10 +10021,6 @@ msgstr "Chyba při změně protokolů konzole."
 #: zotonic_mod_development/src/mod_development.erl:765
 msgid "Error parsing template."
 msgstr "Chyba při analýze šablony."
-
-#: zotonic_mod_development/priv/templates/admin_development_observers.tpl:19
-msgid "Event"
-msgstr "Událost"
 
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:18
 msgid "Every URL which is reachable in the site is defined with dispatch rules. This page shows all available dispatch rules in this site."
@@ -13859,11 +14447,6 @@ msgstr "Omlouváme se, něco se pokazilo. Zkuste to prosím znovu později."
 msgid "Sorry, something went wrong. Please try to re-subscribe."
 msgstr "Omlouváme se, něco se pokazilo. Zkuste se prosím znovu přihlásit k odběru."
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_edit_mailing_runs_panel.tpl:18
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:41
-msgid "Started"
-msgstr "Zahájeno"
-
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:66
 msgid "Starts after recipients are prepared."
 msgstr "Začíná po přípravě příjemců."
@@ -16489,10 +17072,6 @@ msgstr "Vytvořit nový seznam adresátů"
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:101
 msgid "Create new person"
 msgstr "Vytvořit novou osobu"
-
-#: zotonic_mod_survey/src/models/m_survey.erl:1498
-msgid "Created"
-msgstr "Vytvořeno"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:43
 msgid "Danger"

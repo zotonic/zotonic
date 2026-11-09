@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-06 10:37\n"
+"PO-Revision-Date: 2026-11-09 12:31\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "MIME-Version: 1.0\n"
@@ -16,109 +16,109 @@ msgstr ""
 "X-Crowdin-File-ID: 8692\n"
 "Language: ja_JP\n"
 
-#: zotonic_core/src/support/z_datetime.erl:452
+#: zotonic_core/src/support/z_datetime.erl:467
 msgctxt "relative time: duration"
 msgid "{n} day"
 msgid_plural "{n} days"
 msgstr[0] "{n}日"
 
-#: zotonic_core/src/support/z_datetime.erl:450
+#: zotonic_core/src/support/z_datetime.erl:465
 msgctxt "relative time: duration"
 msgid "{n} hour"
 msgid_plural "{n} hours"
 msgstr[0] "{n}時間"
 
-#: zotonic_core/src/support/z_datetime.erl:448
+#: zotonic_core/src/support/z_datetime.erl:463
 msgctxt "relative time: duration"
 msgid "{n} minute"
 msgid_plural "{n} minutes"
 msgstr[0] "{n}分"
 
-#: zotonic_core/src/support/z_datetime.erl:454
+#: zotonic_core/src/support/z_datetime.erl:469
 msgctxt "relative time: duration"
 msgid "{n} month"
 msgid_plural "{n} months"
 msgstr[0] "{n}か月"
 
-#: zotonic_core/src/support/z_datetime.erl:446
+#: zotonic_core/src/support/z_datetime.erl:461
 msgctxt "relative time: duration"
 msgid "{n} second"
 msgid_plural "{n} seconds"
 msgstr[0] "{n}秒"
 
-#: zotonic_core/src/support/z_datetime.erl:456
+#: zotonic_core/src/support/z_datetime.erl:471
 msgctxt "relative time: duration"
 msgid "{n} year"
 msgid_plural "{n} years"
 msgstr[0] "{n}年"
 
-#: zotonic_core/src/support/z_datetime.erl:440
+#: zotonic_core/src/support/z_datetime.erl:455
 msgctxt "relative time: future"
 msgid "{n} day"
 msgid_plural "{n} days"
 msgstr[0] "{n}日"
 
-#: zotonic_core/src/support/z_datetime.erl:438
+#: zotonic_core/src/support/z_datetime.erl:453
 msgctxt "relative time: future"
 msgid "{n} hour"
 msgid_plural "{n} hours"
 msgstr[0] "{n}時間"
 
-#: zotonic_core/src/support/z_datetime.erl:436
+#: zotonic_core/src/support/z_datetime.erl:451
 msgctxt "relative time: future"
 msgid "{n} minute"
 msgid_plural "{n} minutes"
 msgstr[0] "{n}分"
 
-#: zotonic_core/src/support/z_datetime.erl:442
+#: zotonic_core/src/support/z_datetime.erl:457
 msgctxt "relative time: future"
 msgid "{n} month"
 msgid_plural "{n} months"
 msgstr[0] "{n}か月"
 
-#: zotonic_core/src/support/z_datetime.erl:434
+#: zotonic_core/src/support/z_datetime.erl:449
 msgctxt "relative time: future"
 msgid "{n} second"
 msgid_plural "{n} seconds"
 msgstr[0] "{n}秒"
 
-#: zotonic_core/src/support/z_datetime.erl:444
+#: zotonic_core/src/support/z_datetime.erl:459
 msgctxt "relative time: future"
 msgid "{n} year"
 msgid_plural "{n} years"
 msgstr[0] "{n}年"
 
-#: zotonic_core/src/support/z_datetime.erl:428
+#: zotonic_core/src/support/z_datetime.erl:443
 msgctxt "relative time: past"
 msgid "{n} day"
 msgid_plural "{n} days"
 msgstr[0] "{n}日"
 
-#: zotonic_core/src/support/z_datetime.erl:426
+#: zotonic_core/src/support/z_datetime.erl:441
 msgctxt "relative time: past"
 msgid "{n} hour"
 msgid_plural "{n} hours"
 msgstr[0] "{n}時間"
 
-#: zotonic_core/src/support/z_datetime.erl:424
+#: zotonic_core/src/support/z_datetime.erl:439
 msgctxt "relative time: past"
 msgid "{n} minute"
 msgid_plural "{n} minutes"
 msgstr[0] "{n}分"
 
-#: zotonic_core/src/support/z_datetime.erl:430
+#: zotonic_core/src/support/z_datetime.erl:445
 msgctxt "relative time: past"
 msgid "{n} month"
 msgid_plural "{n} months"
 msgstr[0] "{n}か月"
 
-#: zotonic_core/src/support/z_datetime.erl:422
+#: zotonic_core/src/support/z_datetime.erl:437
 msgctxt "relative time: past"
 msgid "{n} second"
 msgid_plural "{n} seconds"
 msgstr[0] "{n}秒"
 
-#: zotonic_core/src/support/z_datetime.erl:432
+#: zotonic_core/src/support/z_datetime.erl:447
 msgctxt "relative time: past"
 msgid "{n} year"
 msgid_plural "{n} years"
@@ -172,32 +172,32 @@ msgstr "リモートリソースURLへのアクセス権限がありません。
 msgid "Website"
 msgstr "Webサイト"
 
-#: zotonic_core/src/support/z_datetime.erl:399
+#: zotonic_core/src/support/z_datetime.erl:414
 msgid "in a few moments"
 msgstr "まもなく"
 
-#: zotonic_core/src/support/z_datetime.erl:406
+#: zotonic_core/src/support/z_datetime.erl:421
 msgid "in {duration}"
 msgstr "{duration}後"
 
-#: zotonic_core/src/support/z_datetime.erl:400
+#: zotonic_core/src/support/z_datetime.erl:415
 msgid "moments"
 msgstr "少し"
 
-#: zotonic_core/src/support/z_datetime.erl:398
+#: zotonic_core/src/support/z_datetime.erl:413
 msgid "moments ago"
 msgstr "少し前"
 
-#: zotonic_core/src/support/z_datetime.erl:368
-#: zotonic_core/src/support/z_datetime.erl:376
+#: zotonic_core/src/support/z_datetime.erl:383
+#: zotonic_core/src/support/z_datetime.erl:391
 msgid "now"
 msgstr "今"
 
-#: zotonic_core/src/support/z_datetime.erl:405
+#: zotonic_core/src/support/z_datetime.erl:420
 msgid "{duration} ago"
 msgstr "{duration}前"
 
-#: zotonic_core/src/support/z_datetime.erl:412
+#: zotonic_core/src/support/z_datetime.erl:427
 msgid "{first}, {second}"
 msgstr "{first}、{second}"
 
@@ -348,6 +348,7 @@ msgstr "すべてのACLルールを現在公開されているバージョンに
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:30
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:46
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:15
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:26
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:68
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:33
 #: zotonic_mod_authentication/priv/templates/_dialog_session_close.tpl:16
@@ -454,6 +455,7 @@ msgstr "設定を変更しました。"
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:72
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:74
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_filter_predicates.tpl:20
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:40
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:79
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:43
 #: zotonic_mod_development/priv/templates/_development_template_matches.tpl:27
@@ -514,6 +516,7 @@ msgstr "リソースの作成者を所有者とみなしてください。"
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4
 #: zotonic_mod_admin/src/mod_admin.erl:516
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:70
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:26
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 msgid "Content"
 msgstr "コンテンツ"
@@ -567,6 +570,7 @@ msgstr "コラボレーショングループに移動できませんでした。
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:53
 #: zotonic_mod_admin_identity/src/mod_admin_identity.erl:330
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:47
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:26
 #: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:51
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:52
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:75
@@ -1419,6 +1423,7 @@ msgstr "利用可能"
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:207
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:18
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:41
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:27
 #: zotonic_mod_development/priv/templates/_overlay_template.tpl:3
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_count_back.tpl:2
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:100
@@ -2364,6 +2369,7 @@ msgid "Individual modules can be reinstalled from the Modules list."
 msgstr "個々のモジュールは、「モジュール」リストから再インストールできます。"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:133
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:23
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:21
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:145
 msgid "Info"
@@ -4012,6 +4018,7 @@ msgstr "接続が多すぎるため、最初と最後の接続のみが表示さ
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:13
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:33
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:21
 msgid "Total"
 msgstr "合計"
 
@@ -5116,7 +5123,7 @@ msgstr "有効期限"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:20
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:21
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:37
-#: zotonic_mod_base/src/support/z_chart_svg.erl:1352
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1390
 #: zotonic_mod_development/priv/templates/_development_dispatch_options.tpl:2
 msgid "Value"
 msgstr "値"
@@ -6555,6 +6562,609 @@ msgstr "システム使用状況"
 msgid "This page shows (real-time) system statistics like memory use and requests."
 msgstr "このページには、メモリ使用量やリクエスト数などの（リアルタイムの）システム統計情報が表示されます。"
 
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:60
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:29
+msgid "1 day"
+msgstr "1日"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:59
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:29
+msgid "1 hour"
+msgstr "1時間"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:57
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:29
+msgid "1 minute"
+msgstr "1分"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:58
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:29
+msgid "15 minutes"
+msgstr "15分"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:59
+msgid "30 days"
+msgstr "30日間"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:57
+msgid "6 hours"
+msgstr "6時間"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:58
+msgid "7 days"
+msgstr "7日間"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:34
+msgid "A batch is waiting to be saved."
+msgstr "保存待ちのバッチがあります。"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:3
+msgid "API requests — HTTP calls, including errors"
+msgstr "APIリクエスト — HTTP呼び出し（エラーを含む）"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:60
+msgid "About 5 years"
+msgstr "約5年"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:26
+msgid "Active and paused analytics measurements both count towards this limit. A new analytics measurement also needs enough free storage capacity for its group limit."
+msgstr "アクティブな分析測定と一時停止中の分析測定は、いずれもこの制限の対象となります。また、新しい分析測定を行うには、そのグループ制限を満たすのに十分な空きストレージ容量も必要です。"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:48
+msgid "Activity counters are unavailable until analytics resumes."
+msgstr "分析機能が再開されるまで、アクティビティカウンターは利用できません。"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:40
+msgid "Add analytics measurement"
+msgstr "分析指標を追加する"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:39
+msgid "All breakdown values"
+msgstr "すべての内訳値"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_delete_confirm.tpl:2
+msgid "All recorded history will be permanently deleted and its storage reservation released. This cannot be undone."
+msgstr "記録されたすべての履歴は永久に削除され、その保存領域は解放されます。この操作は元に戻すことができません。"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:19
+msgid "Allowed values (comma separated)"
+msgstr "許容値（カンマ区切り）"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:35
+msgid "Allowed values:"
+msgstr "許容値："
+
+#: zotonic_mod_analytics/src/mod_analytics.erl:267
+msgid "An equivalent analytics measurement already exists."
+msgstr "これと同等の分析指標はすでに存在しています。"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
+#: zotonic_mod_analytics/src/mod_analytics.erl:196
+msgid "Analytics configuration"
+msgstr "分析の設定"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:10
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:9
+msgid "Analytics event type"
+msgstr "分析イベントの種類"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:6
+msgid "Analytics is running"
+msgstr "アナリティクスが実行中です"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:8
+msgid "Analytics is unavailable"
+msgstr "分析機能はご利用いただけません"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:8
+msgid "Analytics measurement ID"
+msgstr "アナリティクスの測定ID"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:23
+msgid "Analytics measurement information"
+msgstr "分析測定情報"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:12
+msgid "Analytics measurements"
+msgstr "分析指標"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:2
+msgid "Analytics status"
+msgstr "分析状況"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
+msgid "Bars show the lower bound. Counts are ranges, ordered by their lower bound. Overlapping ranges may change order. Content outside the retained candidates has at most"
+msgstr "棒グラフは下限値を示しています。カウント値は範囲であり、下限値の昇順に並べられています。範囲が重なっている場合、順序が変わる可能性があります。保持された候補の範囲外にあるコンテンツは、最大で"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:50
+msgid "Bounded history"
+msgstr "範囲指定された履歴"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:12
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:14
+msgid "Break down by"
+msgstr "内訳（分類別）"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:40
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
+msgid "Breakdown"
+msgstr "内訳"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:36
+msgid "Buffer status is unavailable."
+msgstr "バッファの状態は確認できません。"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:20
+msgid "Capacity is reserved for the full history of every group in an analytics measurement. This is a planning limit, not disk usage. Pausing keeps the reservation; deleting an analytics measurement releases it."
+msgstr "アナリティクス測定内の各グループの全履歴に対して、容量が予約されています。これは計画上の制限であり、ディスク使用量ではありません。一時停止しても予約は維持されますが、アナリティクス測定を削除すると予約は解放されます。"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
+msgid "Choose which activity to measure and arrange your dashboard."
+msgstr "測定するアクティビティを選択し、ダッシュボードを構成してください。"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:4
+msgid "Classified requests — pages, APIs and other dispatch types"
+msgstr "機密扱いのリクエスト — ページ、API、およびその他のディスパッチタイプ"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:9
+msgid "Configure analytics measurements"
+msgstr "分析測定の設定"
+
+#: zotonic_mod_analytics/src/mod_analytics.erl:235
+msgid "Could not delete the analytics measurement."
+msgstr "アナリティクスの測定項目を削除できませんでした。"
+
+#: zotonic_mod_analytics/src/mod_analytics.erl:268
+msgid "Could not save. Check the event, breakdown and filter values."
+msgstr "保存できませんでした。イベント、内訳、およびフィルタの値を確認してください。"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:3
+msgid "Country — two-letter code, e.g. NL"
+msgstr "国 — 2文字のコード（例：NL）"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:14
+#: zotonic_mod_survey/src/models/m_survey.erl:1498
+msgid "Created"
+msgstr "作成済み"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
+msgid "Data size"
+msgstr "データサイズ"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:13
+msgid "Database writes are being retried. Event processing can continue while buffer capacity remains available; prolonged failures can cause data loss."
+msgstr "データベースへの書き込みが再試行されています。バッファの空き容量がある限り、イベント処理は継続できますが、障害が長引くとデータが失われる可能性があります。"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:36
+msgid "Dates show the start of each stored time interval, not the first or last event. Different resolutions contain overlapping history. Pausing an analytics measurement preserves its stored history and reserved capacity. Figures are a snapshot taken when this dialog opens."
+msgstr "日付は、保存されている各時間区間の開始日を示しており、最初のイベントや最後のイベントの日付ではありません。解像度が異なる場合、履歴は重複して含まれます。分析測定を一時停止しても、保存されている履歴と予約済みの容量は維持されます。数値は、このダイアログが開かれた時点でのスナップショットです。"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:30
+msgid "Delete analytics measurement"
+msgstr "アナリティクスの測定を削除する"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:27
+msgid "Delete analytics measurement?"
+msgstr "アナリティクスの測定を削除しますか？"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_delete_confirm.tpl:1
+msgid "Delete this analytics measurement?"
+msgstr "この分析指標を削除しますか？"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
+msgid "Describe the activity this analytics measurement tracks"
+msgstr "この分析指標が追跡するアクティビティについて説明してください"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:55
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
+msgid "Detail"
+msgstr "詳細"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:4
+msgid "Device — phone, tablet, desktop or unknown"
+msgstr "デバイス — スマートフォン、タブレット、デスクトップ、または不明"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
+msgid "Display order"
+msgstr "表示順序"
+
+#: zotonic_mod_analytics/src/mod_analytics.erl:241
+msgid "Display order saved."
+msgstr "表示順序が保存されました。"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:14
+msgid "Drag analytics measurements to set their order on the dashboard. Changes are saved immediately."
+msgstr "ダッシュボード上で分析指標をドラッグして、表示順を設定します。変更は即座に反映されます。"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:21
+msgid "Drag to reorder"
+msgstr "ドラッグして並べ替え"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:47
+msgid "Dropped updates can result from overload, expired events, configuration changes or failed writes. This is a diagnostic count, not an exact count of lost page views. Incomplete periods are marked in reports."
+msgstr "更新データの欠落は、過負荷、有効期限が切れたイベント、設定の変更、または書き込みの失敗によって発生する可能性があります。これは診断用の集計値であり、失われたページビューの正確な数ではありません。不完全な期間については、レポート内で明示されています。"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:15
+msgid "Each group reserves 3,578 time slots. Page breakdowns use candidates with approximate counts; other breakdowns reserve a group for excess values."
+msgstr "各グループは3,578のタイムスロットを確保します。ページごとの内訳には概算値に基づく候補数が使用されており、その他の内訳では、超過分については「グループ」として扱われます。"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:52
+msgid "Each stored time interval holds the counts for all groups in one analytics measurement. Storage slots for older intervals are reused, so history stays bounded instead of growing with every visit. Only aggregate counts are stored, not individual events."
+msgstr "保存された各時間間隔には、1つの分析指標におけるすべてのグループの集計値が格納されています。古い時間間隔の保存スロットは再利用されるため、履歴は訪問ごとに増加することなく、一定の範囲内に収まります。保存されるのは集計値のみであり、個々のイベントは保存されません。"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:9
+msgid "Email outcome — sent, retry, failed or bounced"
+msgstr "メールの処理結果 — 送信済み、再送信中、失敗、または配信不能"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:36
+msgid "Enter one or more values, separated by commas."
+msgstr "1つ以上の値を、コンマで区切って入力してください。"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
+#: zotonic_mod_development/priv/templates/admin_development_observers.tpl:19
+msgid "Event"
+msgstr "イベント"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:29
+msgid "Event buffer"
+msgstr "イベントバッファ"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:42
+msgid "Event processing"
+msgstr "イベント処理"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:40
+msgid "Events"
+msgstr "イベント"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:33
+msgid "Events are combined into counters in memory before saving, normally every 10 seconds. A low value is normal. This buffer is separate from a batch currently being saved."
+msgstr "イベントは、保存される前にメモリ内のカウンタに集計されます。通常、これは10秒ごとに実行されます。値が低いのは正常です。このバッファは、現在保存中のバッチとは別のものです。"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:23
+msgid "Events must satisfy both filters to be counted. New analytics measurements start without historical data."
+msgstr "イベントがカウントされるには、両方のフィルターを満たす必要があります。新しい分析指標は、過去のデータがない状態から開始されます。"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:18
+msgid "Fixed filter"
+msgstr "固定フィルター"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:16
+msgid "Fixed filters"
+msgstr "固定フィルター"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:25
+msgid "Gaps are unrecorded intervals. Partial intervals may undercount activity. Request counts include automation, exclude editor activity and do not measure unique visitors."
+msgstr "ギャップとは、記録されていない期間のことです。部分的な期間では、アクティビティ数が過小評価される可能性があります。リクエスト数には自動化が含まれ、編集者のアクティビティは除外されており、ユニーク訪問者数は計測されていません。"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:13
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:15
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
+msgid "Group limit"
+msgstr "グループの人数制限"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:8
+msgid "HTTP method — GET, POST, HEAD and others"
+msgstr "HTTPメソッド — GET、POST、HEADなど"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:12
+msgid "HTTP status class — 2xx success, 4xx client errors, 5xx server errors"
+msgstr "HTTPステータスクラス — 2xx（成功）、4xx（クライアントエラー）、5xx（サーバーエラー）"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:6
+msgid "HTTP status code — e.g. 200, 404 or 500"
+msgstr "HTTPステータスコード — 例：200、404、500など"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:54
+msgid "History detail and retention"
+msgstr "履歴の詳細と保存期間"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:45
+msgid "Includes incomplete or unrecorded intervals"
+msgstr "不完全な間隔や記録されていない間隔が含まれます"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:7
+msgid "Language — language code, e.g. en or nl"
+msgstr "言語 — 言語コード（例：en や nl）"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
+msgid "Last 24 hours"
+msgstr "過去24時間"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
+msgid "Last five years"
+msgstr "過去5年間"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
+msgid "Last hour"
+msgstr "直近1時間"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
+msgid "Last six hours"
+msgstr "過去6時間"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:23
+msgid "Maximum number of analytics measurements"
+msgstr "分析測定の最大数"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
+msgid "Most popular content in this period"
+msgstr "この期間で最も人気があったコンテンツ"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:7
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
+#: zotonic_mod_comment/priv/templates/_comments_form.tpl:23
+#: zotonic_mod_comment/priv/templates/admin_comments.tpl:22
+#: zotonic_mod_contact/priv/templates/contact.tpl:11
+#: zotonic_mod_contact/priv/templates/email_contact.tpl:10
+#: zotonic_mod_survey/src/models/m_survey.erl:982
+msgid "Name"
+msgstr "名前"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:12
+msgid "New events cannot currently be processed. Previously saved history is still available."
+msgstr "現在、新しいイベントの処理は行えません。以前に保存された履歴は引き続きご利用いただけます。"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
+msgid "Newest stored interval"
+msgstr "保存済みの最新の時間区間"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:28
+#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:210
+#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:55
+#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:88
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:33
+#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:55
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:206
+msgid "Next"
+msgstr "次"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:10
+msgid "Next, choose a breakdown and filters supported by this event type."
+msgstr "次に、このイベントタイプでサポートされている内訳とフィルターを選択してください。"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:22
+msgid "No analytics measurements to display. Configure or resume an analytics measurement to get started."
+msgstr "表示する分析測定データがありません。分析測定の設定を行うか、再開して開始してください。"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:12
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:14
+msgid "No breakdown (total)"
+msgstr "内訳なし（合計）"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:18
+msgid "No filter — include all values"
+msgstr "フィルタなし — すべての値を含める"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:29
+msgid "No leading content identified in this period."
+msgstr "この期間に主要なコンテンツは確認されませんでした。"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:36
+msgid "No recorded events yet."
+msgstr "まだ記録されたイベントはありません。"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:16
+msgid "None — all matching events"
+msgstr "なし — 一致するイベントはすべて"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
+msgid "Oldest stored interval"
+msgstr "保存済みの最も古い時間区間"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:46
+msgid "One event can update several analytics measurements, so these are not visitor or page-view totals. Counters reset when analytics restarts."
+msgstr "1回のイベントで複数の分析指標が更新されるため、これらは訪問者数やページビュー数の合計値ではありません。分析が再起動されると、カウンターはリセットされます。"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
+msgid "Optional. Shown with the analytics measurement on the dashboard."
+msgstr "オプションです。ダッシュボード上の分析指標とともに表示されています。"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:5
+msgid "Page ID present — true or false"
+msgstr "ページIDが存在するか — true または false"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:2
+msgid "Page requests — successful public HTML pages"
+msgstr "ページリクエスト — 正常に表示された公開HTMLページ"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:10
+msgid "Page — public resource ID"
+msgstr "ページ — 公開リソースID"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
+msgid "Past 30 days"
+msgstr "過去30日間"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
+msgid "Past 365 days"
+msgstr "過去365日間"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
+msgid "Past 7 days"
+msgstr "過去7日間"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:24
+msgid "Pause"
+msgstr "一時停止"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:12
+msgid "Period"
+msgstr "期間"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:26
+msgid "Rank"
+msgstr "ランク"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
+msgid "Ranked by recorded requests in the selected moving period. The window advances in steps of"
+msgstr "選択した移動期間内に記録されたリクエスト数に基づいてランク付けされます。この期間の範囲は、"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:11
+msgid "Referrer — referring hostname, internal or direct/unknown"
+msgstr "リファラー — 参照元ホスト名、内部、または直接／不明"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:14
+msgid "Request type — page, api or a custom dispatch type"
+msgstr "リクエストの種類 — ページ、API、またはカスタムディスパッチタイプ"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:22
+msgid "Request types found in this site's dispatch rules:"
+msgstr "このサイトのディスパッチルールに見られるリクエストの種類："
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:26
+msgid "Requests"
+msgstr "リクエスト"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:22
+msgid "Reserved capacity"
+msgstr "予約容量"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:17
+msgid "Reserved storage capacity"
+msgstr "予約済みストレージ容量"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:55
+msgid "Retention period"
+msgstr "保存期間"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:5
+msgid "SMTP (Email) — sent, retries, failures and bounces"
+msgstr "SMTP（電子メール） — 送信済み、再試行、失敗、およびバウンス"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:11
+msgid "Schema version"
+msgstr "スキーマのバージョン"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
+msgid "Short description"
+msgstr "概要"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:2
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
+#: zotonic_mod_analytics/src/mod_analytics.erl:188
+msgid "Site Analytics"
+msgstr "サイト分析"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:10
+msgid "Snapshot at page load. Refresh to update."
+msgstr "ページ読み込み時のスナップショットです。更新するにはページをリロードしてください。"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:29
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:25
+msgid "Start analytics measurement"
+msgstr "分析の計測を開始する"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:15
+#: zotonic_mod_mailinglist/priv/templates/_admin_edit_mailing_runs_panel.tpl:18
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:41
+msgid "Started"
+msgstr "開始しました"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:9
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
+msgid "State"
+msgstr "州"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:5
+msgid "Step 1 of 2: Choose which activity to measure"
+msgstr "全2ステップのうちのステップ1：測定するアクティビティを選択する"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:34
+msgid "Step 2 of 2: Breakdown and filters"
+msgstr "全2ステップのうちのステップ2：内訳とフィルター"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:18
+msgid "Storage usage"
+msgstr "ストレージの使用状況"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:20
+msgid "Stored data size"
+msgstr "保存データサイズ"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:24
+msgid "Stored data size measures the database space used by the aggregate counts and analytics measurement definition. It excludes row headers, indexes, shared table space and unsaved events. Reserved capacity is a planning limit, not disk usage."
+msgstr "「保存データサイズ」は、集計カウントおよび分析測定定義によって使用されるデータベース領域のサイズを表します。これには、行ヘッダー、インデックス、共有テーブル領域、および未保存のイベントは含まれません。「予約容量」は計画上の制限であり、ディスク使用量ではありません。"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
+msgid "Stored intervals / capacity"
+msgstr "保存済み時間区間／容量"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:21
+msgid "Stored time intervals"
+msgstr "保存済み時間区間"
+
+#: zotonic_mod_analytics/src/mod_analytics.erl:243
+msgid "The analytics measurements changed. Reloading their current display order."
+msgstr "分析の測定値が変更されました。現在の表示順序を再読み込みしています。"
+
+#: zotonic_mod_analytics/src/mod_analytics.erl:266
+msgid "This analytics measurement exceeds the storage budget."
+msgstr "この分析測定値は、ストレージ予算を超えています。"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:38
+msgid "This analytics measurement is no longer available."
+msgstr "この分析指標は、現在利用できなくなりました。"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:11
+msgid "This event schema is unavailable."
+msgstr "このイベントスキーマは利用できません。"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:13
+msgid "Traffic — crawler, other or unknown"
+msgstr "トラフィック — クローラー、その他、または不明"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:8
+msgid "View analytics"
+msgstr "分析データを表示する"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
+msgid "Your site at a glance."
+msgstr "サイトの概要。"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:44
+msgid "analytics measurement updates since startup"
+msgstr "分析モジュールの起動以降の測定更新数"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:24
+msgid "analytics measurements"
+msgstr "分析指標"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:20
+msgid "bytes"
+msgstr "バイト"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:31
+msgid "counters"
+msgstr "カウンター"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:45
+msgid "dropped updates since startup"
+msgstr "起動以来の更新を削除しました"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:8
+msgid "events"
+msgstr "イベント"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:18
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:22
+msgid "group/time slots"
+msgstr "グループ／時間帯"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
+msgid "requests."
+msgstr "リクエスト。"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
+msgid "seconds."
+msgstr "秒。"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:51
+msgid "stored time intervals"
+msgstr "保存済み時間区間"
+
 #: zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:13
 #: zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:14
 msgid "Album"
@@ -7193,16 +7803,6 @@ msgstr "メールアドレスが認証済みであることを確認してくだ
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:125
 msgid "Multiple accounts"
 msgstr "複数のアカウント"
-
-#: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:210
-#: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:55
-#: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:88
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:33
-#: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:55
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:206
-msgid "Next"
-msgstr "次"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_title.tpl:11
 msgid "Next time, enter your email address first to log in faster."
@@ -8128,12 +8728,12 @@ msgstr "ブラウザのシェアのデータ"
 msgid "CSV"
 msgstr "CSV"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:440
-#: zotonic_mod_base/src/support/z_chart_svg.erl:442
+#: zotonic_mod_base/src/support/z_chart_svg.erl:446
+#: zotonic_mod_base/src/support/z_chart_svg.erl:448
 msgid "Chart"
 msgstr "チャート"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:1342
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1380
 msgid "Chart legend"
 msgstr "チャート凡例"
 
@@ -8167,7 +8767,7 @@ msgstr "接続中..."
 msgid "Connection Test"
 msgstr "接続テスト"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:584
+#: zotonic_mod_base/src/support/z_chart_svg.erl:590
 msgid "Data points"
 msgstr "データポイント"
 
@@ -8281,7 +8881,7 @@ msgstr "7月"
 msgid "June"
 msgstr "6月"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:1348
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1386
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:41
 msgid "Label"
 msgstr "ラベル"
@@ -8348,7 +8948,7 @@ msgstr "純変化"
 msgid "No"
 msgstr "いいえ"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:1293
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1330
 msgid "No data"
 msgstr "データなし"
 
@@ -8387,7 +8987,7 @@ msgstr "10月"
 msgid "On this page you can test the connection of your browser to our server and to the internet in general."
 msgstr "このページでは、お使いのブラウザと当社のサーバー、そしてインターネット全般との接続状況をテストできます。"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:347
+#: zotonic_mod_base/src/support/z_chart_svg.erl:353
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:134
 msgid "Other"
 msgstr "その他"
@@ -8704,14 +9304,6 @@ msgstr "メッセージ"
 #: zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:28
 msgid "Moderate comments"
 msgstr "コメントを承認制にする"
-
-#: zotonic_mod_comment/priv/templates/_comments_form.tpl:23
-#: zotonic_mod_comment/priv/templates/admin_comments.tpl:22
-#: zotonic_mod_contact/priv/templates/contact.tpl:11
-#: zotonic_mod_contact/priv/templates/email_contact.tpl:10
-#: zotonic_mod_survey/src/models/m_survey.erl:982
-msgid "Name"
-msgstr "名前"
 
 #: zotonic_mod_comment/priv/templates/_comments_form.tpl:16
 msgid "Note: Comments are moderated"
@@ -9358,10 +9950,6 @@ msgstr "コンソールログの変更中にエラーが発生しました。"
 #: zotonic_mod_development/src/mod_development.erl:765
 msgid "Error parsing template."
 msgstr "テンプレートの解析中にエラーが発生しました。"
-
-#: zotonic_mod_development/priv/templates/admin_development_observers.tpl:19
-msgid "Event"
-msgstr "イベント"
 
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:18
 msgid "Every URL which is reachable in the site is defined with dispatch rules. This page shows all available dispatch rules in this site."
@@ -13788,11 +14376,6 @@ msgstr "申し訳ありません。エラーが発生しました。しばらく
 msgid "Sorry, something went wrong. Please try to re-subscribe."
 msgstr "申し訳ありません、エラーが発生しました。再度ご登録をお試しください。"
 
-#: zotonic_mod_mailinglist/priv/templates/_admin_edit_mailing_runs_panel.tpl:18
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:41
-msgid "Started"
-msgstr "開始しました"
-
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:66
 msgid "Starts after recipients are prepared."
 msgstr "受取人の準備が整った後に開始します。"
@@ -16418,10 +17001,6 @@ msgstr "新しいメーリングリストを作成する"
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:101
 msgid "Create new person"
 msgstr "新しい人物を作成する"
-
-#: zotonic_mod_survey/src/models/m_survey.erl:1498
-msgid "Created"
-msgstr "作成済み"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:43
 msgid "Danger"
