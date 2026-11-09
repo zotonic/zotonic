@@ -1076,7 +1076,8 @@ render_line([{_FirstLabel, _FirstValue, LineColor} | _] = Data, Width, Height) -
             {<<"stroke">>, <<"#777777">>}, {<<"stroke-width">>, 1}
         ], <<>>)
     ],
-    Polyline = render_line_segments(Points, LineColor, []),
+    Polyline = [render_line_segments(Points, LineColor, []),
+        render_line_gaps(Points, LineColor, undefined, false)],
     [
         Grid,
         Axis,
@@ -1096,8 +1097,8 @@ line_points([{Label, Value, _Color} | Rest], Index, Step, Left, Bottom, PlotHeig
     Y = Bottom - (Value - Minimum) / Span * PlotHeight,
     line_points(Rest, Index + 1, Step, Left, Bottom, PlotHeight, Minimum, Span, [{Label, Value, X, Y} | Acc]).
 
-%% Missing samples retain their x-position and break the line instead of
-%% inventing zero values or connecting across collection outages.
+%% Missing samples retain their x-position and split solid line segments.
+%% A separate dotted bridge connects known endpoints without inventing samples.
 render_line_segments([], Color, Acc) ->
     line_segment(lists:reverse(Acc), Color);
 render_line_segments([{_, undefined, _, _} | Rest], Color, Acc) ->
@@ -1105,8 +1106,26 @@ render_line_segments([{_, undefined, _, _} | Rest], Color, Acc) ->
 render_line_segments([Point | Rest], Color, Acc) ->
     render_line_segments(Rest, Color, [Point | Acc]).
 
+%% Only bridge gaps with a known value on both sides; never extrapolate.
+render_line_gaps([], _Color, _Previous, _HasGap) -> [];
+render_line_gaps([{_, undefined, _, _} | Rest], Color, Previous, _HasGap) ->
+    render_line_gaps(Rest, Color, Previous, true);
+render_line_gaps([Point | Rest], Color, undefined, _HasGap) ->
+    render_line_gaps(Rest, Color, Point, false);
+render_line_gaps([Point | Rest], Color, Previous, true) ->
+    [line_segment([Previous, Point], Color, [
+        {<<"class">>, <<"z-chart-line-gap">>},
+        {<<"stroke-dasharray">>, <<"1 5">>},
+        {<<"stroke-linecap">>, <<"round">>}
+    ]), render_line_gaps(Rest, Color, Point, false)];
+render_line_gaps([Point | Rest], Color, _Previous, false) ->
+    render_line_gaps(Rest, Color, Point, false).
+
 line_segment([], _Color) -> <<>>;
 line_segment(Points, Color) ->
+    line_segment(Points, Color, []).
+
+line_segment(Points, Color, Attributes) ->
     Coordinates = iolist_to_binary(lists:join($\s, [
         [coordinate(X), $,, coordinate(Y)] || {_, _, X, Y} <- Points
     ])),
@@ -1114,7 +1133,7 @@ line_segment(Points, Color) ->
         {<<"points">>, Coordinates}, {<<"fill">>, <<"none">>},
         {<<"stroke">>, Color}, {<<"stroke-width">>, 2},
         {<<"stroke-linejoin">>, <<"round">>}
-    ], <<>>).
+    ] ++ Attributes, <<>>).
 
 render_line_markers(Points, Color) ->
     [
