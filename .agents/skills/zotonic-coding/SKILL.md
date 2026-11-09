@@ -51,6 +51,11 @@ description: Use when working in Zotonic projects, especially Erlang modules, Zo
 - Put reusable implementation details in `src/support/`. Support modules should own focused domain logic, parsing/recombination, protocol handling, worker `gen_server`s, and helpers that are not themselves template APIs.
 - Prefer the model as the boundary between Zotonic callers and support processes. Keep process startup, batching, timeouts, and result normalization close to the public model API unless the logic is truly generic.
 
+## SQL and Persistence
+
+- Normally put SQL and database persistence in models (`src/models/m_*.erl`), including schema installation, queries, writes and transaction handling. Workers, controllers and the main `mod_*.erl` should call model functions instead of owning SQL.
+- Keep ACL-checked public model APIs distinct from trusted internal persistence functions. Moving SQL into a model must not expose internal writes through model routes or remove existing access checks.
+
 ## Database Schema Changes
 
 - Keep fresh-install `CREATE TABLE` definitions complete: include every current column, type, default, nullability rule, and table constraint. When adding a column in an upgrade, update the fresh-install definition in the same change.

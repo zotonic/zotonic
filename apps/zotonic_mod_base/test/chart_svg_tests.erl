@@ -508,3 +508,14 @@ assert_in_order(Html, Needles) ->
 
 context() ->
     #context{site = zotonic_site_testsandbox}.
+
+line_missing_values_preserve_gaps_test() ->
+    {ok,Html}=render([{type,line},{data,[[<<"A">>,1],[<<"B">>,null],[<<"C">>,3]]}]),
+    ?assertEqual(2,length(binary:matches(Html,<<"<polyline ">>))),
+    ?assertEqual(2,length(binary:matches(Html,<<"<circle ">>))),
+    ?assertEqual(3,length(binary:matches(Html,<<"class='z-chart-grid-line-vertical'">>)) +
+        length(binary:matches(Html,<<"class='z-chart-grid-line z-chart-grid-line-vertical'">>))),
+    ?assertMatch({_,_},binary:match(Html,<<"—"/utf8>>)),
+    {ok,Empty}=render([{type,line},{data,[[<<"A">>,null],[<<"B">>,undefined]]}]),
+    ?assertEqual(nomatch,binary:match(Empty,<<"<polyline ">>)),
+    ?assertEqual(nomatch,binary:match(Empty,<<"<circle ">>)).

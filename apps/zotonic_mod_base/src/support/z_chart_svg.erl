@@ -74,8 +74,8 @@
 ]).
 
 -type chart_type() :: pie | donut | horizontal_bar | vertical_bar | line.
--type data_point() :: {binary(), number(), binary() | undefined}.
--type colored_data_point() :: {binary(), number(), binary()}.
+-type data_point() :: {binary(), number() | undefined, binary() | undefined}.
+-type colored_data_point() :: {binary(), number() | undefined, binary()}.
 
 -spec render(Params, Context) -> {ok, binary()} | {error, badarg}
     when
@@ -84,7 +84,11 @@
 render(Params, Context) when is_list(Params) ->
     case normalize_type(proplists:get_value(type, Params, pie)) of
         {ok, Type} ->
-            Data0 = normalize_params_data(Params, Context),
+            Normalized = normalize_params_data(Params, Context),
+            Data0 = case Type of
+                line -> Normalized;
+                _ -> [P || {_, V, _} = P <- Normalized, is_number(V)]
+            end,
             LabelMinPercent = normalize_percentage(proplists:get_value(label_min_percent, Params)),
             MaxPieValues = normalize_max_pie_values(proplists:get_value(max_pie_values, Params)),
             {Data1, OtherValue} = compact_pie_data(Type, Data0, LabelMinPercent, MaxPieValues),
@@ -266,6 +270,8 @@ normalize_row_color(Color) ->
         error -> undefined
     end.
 
+normalize_number(null) -> {ok, undefined};
+normalize_number(undefined) -> {ok, undefined};
 normalize_number(Value) when is_integer(Value),
         Value >= -?MAX_VALUE,
         Value =< ?MAX_VALUE ->
@@ -1046,9 +1052,6 @@ render_line([{_FirstLabel, _FirstValue, LineColor} | _] = Data, Width, Height) -
         _ -> PlotWidth / (Count - 1)
     end,
     Points = line_points(Data, 0, Step, Left, Bottom, PlotHeight, Minimum, Span, []),
-    PolylinePoints = iolist_to_binary(lists:join($\s, [
-        [coordinate(X), $,, coordinate(Y)] || {_Label, _Value, X, Y} <- Points
-    ])),
     LabelPoints = line_label_points(Points),
     Grid = render_line_grid(
         Ticks,
@@ -1073,16 +1076,7 @@ render_line([{_FirstLabel, _FirstValue, LineColor} | _] = Data, Width, Height) -
             {<<"stroke">>, <<"#777777">>}, {<<"stroke-width">>, 1}
         ], <<>>)
     ],
-    Polyline = z_tags:render_tag(
-        <<"polyline">>,
-        [
-            {<<"points">>, PolylinePoints},
-            {<<"fill">>, <<"none">>},
-            {<<"stroke">>, LineColor},
-            {<<"stroke-width">>, 2},
-            {<<"stroke-linejoin">>, <<"round">>}
-        ],
-        <<>>),
+    Polyline = render_line_segments(Points, LineColor, []),
     [
         Grid,
         Axis,
@@ -1093,10 +1087,34 @@ render_line([{_FirstLabel, _FirstValue, LineColor} | _] = Data, Width, Height) -
 
 line_points([], _Index, _Step, _Left, _Bottom, _PlotHeight, _Minimum, _Span, Acc) ->
     lists:reverse(Acc);
+line_points([{Label, undefined, _Color} | Rest], Index, Step, Left, Bottom, PlotHeight, Minimum, Span, Acc) ->
+    X = Left + Index * Step,
+    line_points(Rest, Index + 1, Step, Left, Bottom, PlotHeight, Minimum, Span,
+        [{Label, undefined, X, Bottom} | Acc]);
 line_points([{Label, Value, _Color} | Rest], Index, Step, Left, Bottom, PlotHeight, Minimum, Span, Acc) ->
     X = Left + Index * Step,
     Y = Bottom - (Value - Minimum) / Span * PlotHeight,
     line_points(Rest, Index + 1, Step, Left, Bottom, PlotHeight, Minimum, Span, [{Label, Value, X, Y} | Acc]).
+
+%% Missing samples retain their x-position and break the line instead of
+%% inventing zero values or connecting across collection outages.
+render_line_segments([], Color, Acc) ->
+    line_segment(lists:reverse(Acc), Color);
+render_line_segments([{_, undefined, _, _} | Rest], Color, Acc) ->
+    [line_segment(lists:reverse(Acc), Color), render_line_segments(Rest, Color, [])];
+render_line_segments([Point | Rest], Color, Acc) ->
+    render_line_segments(Rest, Color, [Point | Acc]).
+
+line_segment([], _Color) -> <<>>;
+line_segment(Points, Color) ->
+    Coordinates = iolist_to_binary(lists:join($\s, [
+        [coordinate(X), $,, coordinate(Y)] || {_, _, X, Y} <- Points
+    ])),
+    z_tags:render_tag(<<"polyline">>, [
+        {<<"points">>, Coordinates}, {<<"fill">>, <<"none">>},
+        {<<"stroke">>, Color}, {<<"stroke-width">>, 2},
+        {<<"stroke-linejoin">>, <<"round">>}
+    ], <<>>).
 
 render_line_markers(Points, Color) ->
     [
@@ -1109,7 +1127,7 @@ render_line_markers(Points, Color) ->
                 {<<"fill">>, Color}
             ],
             z_tags:render_tag(<<"title">>, [], escape(tooltip(Label, Value, undefined))))
-        || {Label, Value, X, Y} <- Points
+        || {Label, Value, X, Y} <- Points, is_number(Value)
     ].
 
 render_line_grid(Ticks, TickStep, Points, Left, Right, Top, Bottom, PlotHeight, Minimum, Span) ->
@@ -1305,7 +1323,8 @@ render_no_data_1(Width, Height, Text) ->
         escape(Text)).
 
 value_range(Values) ->
-    {erlang:min(0, lists:min(Values)), erlang:max(0, lists:max(Values))}.
+    Numbers = [0 | [V || V <- Values, is_number(V)]],
+    {lists:min(Numbers), lists:max(Numbers)}.
 
 nonzero_span(Span) when Span == 0 -> 1;
 nonzero_span(Span) -> Span.
@@ -1499,6 +1518,7 @@ coordinate(Value) when is_integer(Value) ->
 coordinate(Value) when is_float(Value) ->
     float_to_binary(Value, [{decimals, 3}, compact]).
 
+format_number(undefined) -> <<"—"/utf8>>;
 format_number(Value) when is_integer(Value) ->
     integer_to_binary(Value);
 format_number(Value) when is_float(Value) ->

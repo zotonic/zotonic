@@ -27,6 +27,8 @@
     "lists, or maps with `label` and `value` keys and an optional `color`. Numeric\n",
     "values can be numbers or strings. It can also be a map where each key is a\n",
     "label and each value is its chart value:\n\n",
+    "Line charts preserve null/undefined samples as gaps, without connecting across them.\n",
+    "Their data table shows a dash for missing values. Other chart types omit them.\n\n",
     "For example:\n\n",
     "```django\n",
     "{% chart type=\"pie\"\n",
