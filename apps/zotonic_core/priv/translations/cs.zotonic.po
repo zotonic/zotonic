@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-09 11:26\n"
+"PO-Revision-Date: 2026-11-09 12:14\n"
 "Last-Translator: \n"
 "Language-Team: Czech\n"
 "MIME-Version: 1.0\n"
@@ -6665,10 +6665,6 @@ msgstr "7 dní"
 msgid "A batch is waiting to be saved."
 msgstr "Dávka čeká na uložení."
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:52
-msgid "A bucket holds the counts for all groups in one recording and time interval. Older slots are reused, so history stays bounded instead of growing with every visit. Only aggregate counts are stored, not individual events."
-msgstr "V „bucket“ jsou uloženy počty pro všechny skupiny v rámci jednoho záznamu a časového intervalu. Starší pozice se znovu využívají, takže historie zůstává ohraničená a nerostou s každou návštěvou. Ukládají se pouze souhrnné počty, nikoli jednotlivé události."
-
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:3
 msgid "API requests — HTTP calls, including errors"
 msgstr "Žádosti API — HTTP volání, včetně chyb"
@@ -6715,6 +6711,11 @@ msgstr "Obdobný záznam již existuje."
 msgid "Analytics configuration"
 msgstr "Nastavení analytiky"
 
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:10
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:9
+msgid "Analytics event type"
+msgstr "Typ analytické události"
+
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:6
 msgid "Analytics is running"
 msgstr "Analytika je spuštěna"
@@ -6731,10 +6732,6 @@ msgstr "Stav analytiky"
 msgid "Bars show the lower bound. Counts are ranges, ordered by their lower bound. Overlapping ranges may change order. Content outside the retained candidates has at most"
 msgstr "Sloupce znázorňují dolní hranici. Počty představují rozsahy seřazené podle jejich dolní hranice. Překrývající se rozsahy mohou změnit pořadí. Obsah mimo zachované kandidáty má nanejvýš"
 
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:23
-msgid "Both filters must match. New recordings start without historical data."
-msgstr "Oba filtry se musí shodovat. Nové záznamy začínají bez historických údajů."
-
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:50
 msgid "Bounded history"
 msgstr "Omezená historie"
@@ -6748,10 +6745,6 @@ msgstr "Rozčlenění podle"
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "Breakdown"
 msgstr "Rozpis"
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
-msgid "Buckets / slots"
-msgstr "Kbelíky / přihrádky"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:36
 msgid "Buffer status is unavailable."
@@ -6790,13 +6783,17 @@ msgstr "Země – dvoumístný kód, např. NL"
 msgid "Created"
 msgstr "Vytvořeno"
 
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
+msgid "Data size"
+msgstr "Velikost dat"
+
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:13
 msgid "Database writes are being retried. Event processing can continue while buffer capacity remains available; prolonged failures can cause data loss."
 msgstr "Probíhá opakování zápisů do databáze. Zpracování událostí může pokračovat, dokud je k dispozici kapacita vyrovnávací paměti; dlouhodobé výpadky mohou způsobit ztrátu dat."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:36
-msgid "Dates show the start of each bucket, not the first or last event. Different resolutions contain overlapping history. Pausing preserves stored history and its reservation. Figures are a snapshot when this dialog opens."
-msgstr "Data udávají začátek každého úseku, nikoli první či poslední událost. Různá rozlišení obsahují překrývající se historii. Pozastavení zachová uloženou historii i její rezervaci. Údaje představují momentální stav v okamžiku otevření tohoto dialogového okna."
+msgid "Dates show the start of each stored time interval, not the first or last event. Different resolutions contain overlapping history. Pausing a recording preserves its stored history and reserved capacity. Figures are a snapshot taken when this dialog opens."
+msgstr "Data udávají začátek každého uloženého časového intervalu, nikoli první či poslední událost. Různá rozlišení obsahují překrývající se historii. Pozastavení záznamu zachová jeho uloženou historii i vyhrazenou kapacitu. Údaje představují momentální snímek pořízený v okamžiku otevření tohoto dialogového okna."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:30
 msgid "Delete recording"
@@ -6819,6 +6816,14 @@ msgstr "Podrobnosti"
 msgid "Device — phone, tablet, desktop or unknown"
 msgstr "Zařízení – telefon, tablet, stolní počítač nebo neznámé"
 
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
+msgid "Display order"
+msgstr "Pořadí zobrazení"
+
+#: zotonic_mod_analytics/src/mod_analytics.erl:241
+msgid "Display order saved."
+msgstr "Pořadí zobrazení bylo uloženo."
+
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:14
 msgid "Drag recordings to set their order on the dashboard. Changes are saved immediately."
 msgstr "Záznamy přetáhněte myší a určete tak jejich pořadí na ovládacím panelu. Změny se uloží okamžitě."
@@ -6834,6 +6839,10 @@ msgstr "Ztráta aktualizací může být způsobena přetížením, událostmi, 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:15
 msgid "Each group reserves 3,578 time slots. Page breakdowns use candidates with approximate counts; other breakdowns reserve a group for excess values."
 msgstr "Každá skupina si rezervuje 3 578 časových úseků. V rozčlenění na stránkách jsou uvedeni kandidáti s přibližnými počty; v ostatních rozčleněních je jedna skupina vyhrazena pro nadbytečné hodnoty."
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:52
+msgid "Each stored time interval holds the counts for all groups in one analytics recording. Storage slots for older intervals are reused, so history stays bounded instead of growing with every visit. Only aggregate counts are stored, not individual events."
+msgstr "Každý uložený časový interval obsahuje počty pro všechny skupiny v rámci jednoho analytického záznamu. Úložná místa pro starší intervaly se znovu využívají, takže historie zůstává ohraničená a nerostou s každou návštěvou. Ukládají se pouze souhrnné počty, nikoli jednotlivé události."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:9
 msgid "Email outcome — sent, retry, failed or bounced"
@@ -6856,11 +6865,6 @@ msgstr "Buffer událostí"
 msgid "Event processing"
 msgstr "Zpracování událostí"
 
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:10
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:9
-msgid "Event type"
-msgstr "Typ události"
-
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:40
 msgid "Events"
 msgstr "Události"
@@ -6868,6 +6872,10 @@ msgstr "Události"
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:33
 msgid "Events are combined into counters in memory before saving, normally every 10 seconds. A low value is normal. This buffer is separate from a batch currently being saved."
 msgstr "Události se před uložením sdružují do čítačů v paměti, obvykle každých 10 sekund. Nízká hodnota je normální. Tento vyrovnávací paměťový blok je oddělený od právě ukládané dávky."
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:23
+msgid "Events must satisfy both filters to be recorded. New recordings start without historical data."
+msgstr "Aby byly události zaznamenány, musí splňovat oba filtry. Nové záznamy začínají bez historických dat."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
 msgid "Explain what this recording measures"
@@ -6928,24 +6936,8 @@ msgid "Last hour"
 msgstr "Poslední hodina"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
-msgid "Last month"
-msgstr "Minulý měsíc"
-
-#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
 msgid "Last six hours"
 msgstr "Posledních šest hodin"
-
-#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
-msgid "Last week"
-msgstr "Minulý týden"
-
-#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
-msgid "Last year"
-msgstr "V loňském roce"
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
-msgid "Latest bucket"
-msgstr "Nejnovější kbelík"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
 msgid "Most popular content in this period"
@@ -6964,6 +6956,10 @@ msgstr "Jméno"
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:12
 msgid "New events cannot currently be processed. Previously saved history is still available."
 msgstr "Nové události nelze v současné době zpracovat. Dříve uložená historie je stále k dispozici."
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
+msgid "Newest stored interval"
+msgstr "Nejnovější uložený interval"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:28
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:210
@@ -7006,8 +7002,8 @@ msgid "None — all matching events"
 msgstr "Žádné — všechny odpovídající události"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
-msgid "Oldest bucket"
-msgstr "Nejstarší kbelík"
+msgid "Oldest stored interval"
+msgstr "Nejstarší zaznamenaný interval"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:46
 msgid "One event can update several recordings, so these are not visitor or page-view totals. Counters reset when analytics restarts."
@@ -7016,10 +7012,6 @@ msgstr "Jedna událost může aktualizovat několik záznamů, takže se nejedn�
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
 msgid "Optional. Shown with the recording on the dashboard."
 msgstr "Volitelné. Na obrázku je zobrazeno s nahrávkou na palubní desce."
-
-#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
-msgid "Order"
-msgstr "Objednávka"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:5
 msgid "Page ID present — true or false"
@@ -7033,13 +7025,21 @@ msgstr "Požadavky na stránky — úspěšně načtené veřejné HTML stránky
 msgid "Page — public resource ID"
 msgstr "Stránka — identifikátor veřejného zdroje"
 
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
+msgid "Past 30 days"
+msgstr "Posledních 30 dní"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
+msgid "Past 365 days"
+msgstr "Posledních 365 dní"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
+msgid "Past 7 days"
+msgstr "Posledních 7 dní"
+
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:24
 msgid "Pause"
 msgstr "Pauza"
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
-msgid "Payload"
-msgstr "Užitečné zatížení"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:12
 msgid "Period"
@@ -7057,17 +7057,13 @@ msgstr "Seřazeno podle zaznamenaných požadavků ve vybraném časovém obdob�
 msgid "Recording ID"
 msgstr "Identifikační číslo záznamu"
 
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:23
+msgid "Recording capacity"
+msgstr "Kapacita záznamu"
+
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:23
 msgid "Recording information"
 msgstr "Informace o nahrávce"
-
-#: zotonic_mod_analytics/src/mod_analytics.erl:241
-msgid "Recording order saved."
-msgstr "Pořadí nahrávek bylo uloženo."
-
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:23
-msgid "Recording slots"
-msgstr "Časové sloty pro nahrávání"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:12
 msgid "Recordings"
@@ -7098,8 +7094,8 @@ msgid "Reserved storage capacity"
 msgstr "Rezervovaná úložná kapacita"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:55
-msgid "Retained for"
-msgstr "Zadržen za"
+msgid "Retention period"
+msgstr "Doba uchovávání"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:5
 msgid "SMTP (Email) — sent, retries, failures and bounces"
@@ -7151,21 +7147,25 @@ msgstr "Krok 2 z 2: Rozčlenění a filtry"
 msgid "Storage usage"
 msgstr "Využití úložného prostoru"
 
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:21
-msgid "Stored buckets"
-msgstr "Uložené skupiny"
-
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:20
-msgid "Stored payload"
-msgstr "Uložené užitečné zatížení"
+msgid "Stored data size"
+msgstr "Velikost uložených dat"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:24
-msgid "Stored payload is the database size of the aggregate counts and recording definition. It excludes row headers, indexes, shared table space and unsaved events. Reserved capacity is a planning limit, not disk usage."
-msgstr "Uložená užitečná data představují velikost databáze tvořenou souhrnnými počty a definicemi záznamů. Nezahrnují záhlaví řádků, indexy, sdílený tabulkový prostor ani neuložené události. Rezervovaná kapacita je plánovací limit, nikoli skutečné využití disku."
+msgid "Stored data size measures the database space used by the aggregate counts and recording definition. It excludes row headers, indexes, shared table space and unsaved events. Reserved capacity is a planning limit, not disk usage."
+msgstr "Velikost uložených dat udává, kolik místa v databázi zabírají souhrnné počty a definice záznamů. Nezahrnuje záhlaví řádků, indexy, sdílený tabulkový prostor ani neuložené události. Rezervovaná kapacita představuje plánovací limit, nikoli skutečné využití diskového prostoru."
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
+msgid "Stored intervals / capacity"
+msgstr "Uložené intervaly / kapacita"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:21
+msgid "Stored time intervals"
+msgstr "Uložené časové intervaly"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:243
-msgid "The recordings changed. Reloading the current order."
-msgstr "Záznamy se změnily. Probíhá načítání aktuální objednávky."
+msgid "The recordings changed. Reloading their current display order."
+msgstr "Záznamy se změnily. Načítá se aktuální pořadí zobrazení."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:11
 msgid "This event schema is unavailable."
@@ -7229,8 +7229,8 @@ msgid "seconds."
 msgstr "sekund."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:51
-msgid "stored time buckets"
-msgstr "uložené časové úseky"
+msgid "stored time intervals"
+msgstr "uložené časové intervaly"
 
 #: zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:13
 #: zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:14
