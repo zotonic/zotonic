@@ -27,10 +27,10 @@
     {media_runner_callback, ["media-runner", "callback"], controller_media_runner_callback, [{anonymous, true}]},
 
     %% API access
-    {api, ["api", '*'], controller_api, []},
+    {api, ["api", '*'], controller_api, [{analytics, api}]},
 
     % Used for redirects by controller_id - change this if another model should be used.
-    {api_rsc_export, [ "api", "model", "rsc_export", "get", id ], controller_api, []},
+    {api_rsc_export, [ "api", "model", "rsc_export", "get", id ], controller_api, [{analytics, api}]},
 
     %% Serves the favicon.ico from "lib/images/favicon.ico" in the modules.
     {favicon, ["favicon.ico"], controller_file, [ {path, "images/favicon.ico"}, {root,[lib]}, {content_disposition, inline}]},

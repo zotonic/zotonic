@@ -508,3 +508,29 @@ assert_in_order(Html, Needles) ->
 
 context() ->
     #context{site = zotonic_site_testsandbox}.
+
+line_missing_values_use_dotted_bridges_test() ->
+    {ok,Html}=render([{type,line},{data,[[<<"A">>,1],[<<"B">>,null],[<<"C">>,3]]}]),
+    ?assertEqual(3,length(binary:matches(Html,<<"<polyline ">>))),
+    ?assertEqual(1,length(binary:matches(Html,<<"class='z-chart-line-gap'">>))),
+    ?assertMatch({_,_},binary:match(Html,<<"stroke-dasharray='1 5'">>)),
+    ?assertEqual(2,length(binary:matches(Html,<<"<circle ">>))),
+    ?assertEqual(3,length(binary:matches(Html,<<"class='z-chart-grid-line-vertical'">>)) +
+        length(binary:matches(Html,<<"class='z-chart-grid-line z-chart-grid-line-vertical'">>))),
+    ?assertMatch({_,_},binary:match(Html,<<"—"/utf8>>)),
+    {ok,Empty}=render([{type,line},{data,[[<<"A">>,null],[<<"B">>,undefined]]}]),
+    ?assertEqual(nomatch,binary:match(Empty,<<"<polyline ">>)),
+    ?assertEqual(nomatch,binary:match(Empty,<<"<circle ">>)).
+
+
+line_gap_boundaries_test() ->
+    {ok,Html}=render([{type,line},{data,[
+        [<<"A">>,null],[<<"B">>,1],[<<"C">>,undefined],
+        [<<"D">>,null],[<<"E">>,4],[<<"F">>,5],[<<"G">>,undefined]
+    ]}]),
+    ?assertEqual(1,length(binary:matches(Html,<<"class='z-chart-line-gap'">>))),
+    ?assertEqual(3,length(binary:matches(Html,<<"<circle ">>))),
+    {ok,Solid}=render([{type,line},{data,[[<<"A">>,1],[<<"B">>,2]]}]),
+    ?assertEqual(nomatch,binary:match(Solid,<<"z-chart-line-gap">>)),
+    {ok,Single}=render([{type,line},{data,[[<<"A">>,null],[<<"B">>,2],[<<"C">>,null]]}]),
+    ?assertEqual(nomatch,binary:match(Single,<<"z-chart-line-gap">>)).
