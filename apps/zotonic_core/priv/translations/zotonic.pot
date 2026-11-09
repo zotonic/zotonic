@@ -6958,8 +6958,9 @@ msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:26
 msgid ""
-"Active and paused recordings both count towards this limit. A new recording "
-"also needs enough free storage capacity for its group limit."
+"Active and paused analytics measurements both count towards this limit. A "
+"new analytics measurement also needs enough free storage capacity for its "
+"group limit."
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:48
@@ -6967,7 +6968,7 @@ msgid "Activity counters are unavailable until analytics resumes."
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:40
-msgid "Add recording"
+msgid "Add analytics measurement"
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:39
@@ -6989,7 +6990,7 @@ msgid "Allowed values:"
 msgstr ""
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:267
-msgid "An equivalent recording already exists."
+msgid "An equivalent analytics measurement already exists."
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
@@ -7009,6 +7010,18 @@ msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:8
 msgid "Analytics is unavailable"
+msgstr ""
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:8
+msgid "Analytics measurement ID"
+msgstr ""
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:23
+msgid "Analytics measurement information"
+msgstr ""
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:12
+msgid "Analytics measurements"
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:2
@@ -7042,13 +7055,13 @@ msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:20
 msgid ""
-"Capacity is reserved for the full history of every group in a recording. "
-"This is a planning limit, not disk usage. Pausing keeps the reservation; "
-"deleting a recording releases it."
+"Capacity is reserved for the full history of every group in an analytics "
+"measurement. This is a planning limit, not disk usage. Pausing keeps the "
+"reservation; deleting an analytics measurement releases it."
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
-msgid "Choose what to record and arrange your dashboard."
+msgid "Choose which activity to measure and arrange your dashboard."
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:4
@@ -7056,11 +7069,11 @@ msgid "Classified requests — pages, APIs and other dispatch types"
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:9
-msgid "Configure recordings"
+msgid "Configure analytics measurements"
 msgstr ""
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:235
-msgid "Could not delete the recording."
+msgid "Could not delete the analytics measurement."
 msgstr ""
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:268
@@ -7089,21 +7102,25 @@ msgstr ""
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:36
 msgid ""
 "Dates show the start of each stored time interval, not the first or last "
-"event. Different resolutions contain overlapping history. Pausing a "
-"recording preserves its stored history and reserved capacity. Figures are a "
-"snapshot taken when this dialog opens."
+"event. Different resolutions contain overlapping history. Pausing an "
+"analytics measurement preserves its stored history and reserved capacity. "
+"Figures are a snapshot taken when this dialog opens."
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:30
-msgid "Delete recording"
+msgid "Delete analytics measurement"
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:27
-msgid "Delete recording?"
+msgid "Delete analytics measurement?"
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_delete_confirm.tpl:1
-msgid "Delete this recording?"
+msgid "Delete this analytics measurement?"
+msgstr ""
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
+msgid "Describe the activity this analytics measurement tracks"
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:55
@@ -7125,8 +7142,8 @@ msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:14
 msgid ""
-"Drag recordings to set their order on the dashboard. Changes are saved "
-"immediately."
+"Drag analytics measurements to set their order on the dashboard. Changes are "
+"saved immediately."
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:21
@@ -7149,7 +7166,7 @@ msgstr ""
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:52
 msgid ""
 "Each stored time interval holds the counts for all groups in one analytics "
-"recording. Storage slots for older intervals are reused, so history stays "
+"measurement. Storage slots for older intervals are reused, so history stays "
 "bounded instead of growing with every visit. Only aggregate counts are "
 "stored, not individual events."
 msgstr ""
@@ -7188,12 +7205,8 @@ msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:23
 msgid ""
-"Events must satisfy both filters to be recorded. New recordings start "
-"without historical data."
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
-msgid "Explain what this recording measures"
+"Events must satisfy both filters to be counted. New analytics measurements "
+"start without historical data."
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:18
@@ -7257,6 +7270,10 @@ msgstr ""
 msgid "Last six hours"
 msgstr ""
 
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:23
+msgid "Maximum number of analytics measurements"
+msgstr ""
+
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
 msgid "Most popular content in this period"
 msgstr ""
@@ -7296,6 +7313,12 @@ msgstr ""
 msgid "Next, choose a breakdown and filters supported by this event type."
 msgstr ""
 
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:22
+msgid ""
+"No analytics measurements to display. Configure or resume an analytics "
+"measurement to get started."
+msgstr ""
+
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:12
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:14
 msgid "No breakdown (total)"
@@ -7313,11 +7336,6 @@ msgstr ""
 msgid "No recorded events yet."
 msgstr ""
 
-#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:22
-msgid ""
-"No recordings to display. Configure or resume a recording to get started."
-msgstr ""
-
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:16
 msgid "None — all matching events"
 msgstr ""
@@ -7328,12 +7346,12 @@ msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:46
 msgid ""
-"One event can update several recordings, so these are not visitor or page-"
-"view totals. Counters reset when analytics restarts."
+"One event can update several analytics measurements, so these are not "
+"visitor or page-view totals. Counters reset when analytics restarts."
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
-msgid "Optional. Shown with the recording on the dashboard."
+msgid "Optional. Shown with the analytics measurement on the dashboard."
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:5
@@ -7376,22 +7394,6 @@ msgstr ""
 msgid ""
 "Ranked by recorded requests in the selected moving period. The window "
 "advances in steps of"
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:8
-msgid "Recording ID"
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:23
-msgid "Recording capacity"
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:23
-msgid "Recording information"
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:12
-msgid "Recordings"
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:11
@@ -7446,7 +7448,7 @@ msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:29
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:25
-msgid "Start recording"
+msgid "Start analytics measurement"
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:15
@@ -7461,7 +7463,7 @@ msgid "State"
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:5
-msgid "Step 1 of 2: Choose what to record"
+msgid "Step 1 of 2: Choose which activity to measure"
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:34
@@ -7479,9 +7481,9 @@ msgstr ""
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:24
 msgid ""
 "Stored data size measures the database space used by the aggregate counts "
-"and recording definition. It excludes row headers, indexes, shared table "
-"space and unsaved events. Reserved capacity is a planning limit, not disk "
-"usage."
+"and analytics measurement definition. It excludes row headers, indexes, "
+"shared table space and unsaved events. Reserved capacity is a planning "
+"limit, not disk usage."
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
@@ -7493,19 +7495,20 @@ msgid "Stored time intervals"
 msgstr ""
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:243
-msgid "The recordings changed. Reloading their current display order."
+msgid ""
+"The analytics measurements changed. Reloading their current display order."
+msgstr ""
+
+#: zotonic_mod_analytics/src/mod_analytics.erl:266
+msgid "This analytics measurement exceeds the storage budget."
+msgstr ""
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:38
+msgid "This analytics measurement is no longer available."
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:11
 msgid "This event schema is unavailable."
-msgstr ""
-
-#: zotonic_mod_analytics/src/mod_analytics.erl:266
-msgid "This recording exceeds the storage budget."
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:38
-msgid "This recording is no longer available."
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:13
@@ -7518,6 +7521,14 @@ msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
 msgid "Your site at a glance."
+msgstr ""
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:44
+msgid "analytics measurement updates since startup"
+msgstr ""
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:24
+msgid "analytics measurements"
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:20
@@ -7539,14 +7550,6 @@ msgstr ""
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:18
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:22
 msgid "group/time slots"
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:44
-msgid "recording updates since startup"
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:24
-msgid "recordings"
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
