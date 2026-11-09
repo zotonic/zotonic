@@ -41,7 +41,7 @@ The selected model result is passed to the template as `analytics`.
 
 Recording mutations are handled by `mod_analytics` events and the `m_analytics` APIs,
 which check permissions separately. This controller only renders the pages.
-">>).
+"/utf8>>).
 
 -export([service_available/1,is_authorized/1,process/4]).
 

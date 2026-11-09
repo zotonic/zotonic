@@ -75,7 +75,7 @@ SMTP observers count sent, retry, failed and bounced notifications independently
 Modules declare namespaced events using the `analytics_events` fold notification and call
 `m_analytics:record_event/3` for background events or `/4` with the current request.
 See `m_analytics` and the application README for calling conventions and schema examples.
-">>).
+"/utf8>>).
 
 -export([
     start_link/1,init/1,manage_schema/2,

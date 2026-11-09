@@ -147,7 +147,7 @@ configuration(Context) ->
             #{recordings=>store_collectors(Context),registry=>[E#{dimension_keys=>lists:sort(maps:keys(maps:get(dimensions,E))),
                 choices=>maps:map(fun(_,V) -> case V of
                     L when is_list(L) -> iolist_to_binary(lists:join(<<", ">>,L));
-                    http_status -> <<"100–599">>;
+                    http_status -> <<"100–599"/utf8>>;
                     _ -> <<>>
                 end end,maps:get(dimensions,E))} || E <- maps:values(Reg)],
               request_types=>z_analytics_request:dispatch_types(Context),
@@ -301,7 +301,7 @@ trend_chart(Rows,Start,End,R,N,Context) ->
 
 time_label(T,R,Context) ->
     Date=z_datetime:timestamp_to_datetime(T),
-    Format=case R of 60 -> <<"H:i">>; 900 -> <<"D H:i">>; 3600 -> <<"M j H:i">>; _ -> <<"Y-m-d">> end,
+    Format=case R of 60 -> "H:i"; 900 -> "D H:i"; 3600 -> "M j H:i"; _ -> "Y-m-d" end,
     z_datetime:format(Date,Format,Context).
 point(A,B,R,Index) ->
     Rows=[maps:get(T,Index,#{counts=>#{},complete=>false})||T<-lists:seq(A,B-1,R)],

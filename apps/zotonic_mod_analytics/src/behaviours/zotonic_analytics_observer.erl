@@ -77,7 +77,7 @@ argument to `record_event/4`. Request exclusions and consent policy then apply;
 request dimensions declared in the schema are derived from the context and cannot
 be overridden. The three-argument API does not implicitly associate a request.
 Events are best-effort aggregate measurements, not durable audit records.
-">>).
+"/utf8>>).
 
 -callback observe_analytics_events(Notification, Acc, Context) -> Result when
     Notification :: #analytics_events{},

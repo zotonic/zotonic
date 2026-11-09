@@ -21,7 +21,7 @@
 -moduledoc(<<"Bounded, mergeable weighted Misra-Gries summaries for popular content. Counters are lower bounds; error is a
 deterministic per-key upper-bound offset. Total counts accepted events, including those no longer represented by a candidate.
 Bucket expiry supplies the moving window; summaries are never subtracted.
-">>).
+"/utf8>>).
 -export([enabled/1, new/0, add/4, merge/3, normalize/1, total/1, size/1, ranked/1, error/1]).
 
 -spec enabled(map()) -> boolean().
