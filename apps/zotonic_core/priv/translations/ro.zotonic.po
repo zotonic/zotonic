@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-09 12:14\n"
+"PO-Revision-Date: 2026-11-09 12:23\n"
 "Last-Translator: \n"
 "Language-Team: Romanian\n"
 "MIME-Version: 1.0\n"
@@ -6653,16 +6653,16 @@ msgid "About 5 years"
 msgstr "Aproximativ 5 ani"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:26
-msgid "Active and paused recordings both count towards this limit. A new recording also needs enough free storage capacity for its group limit."
-msgstr "Atât înregistrările active, cât și cele puse în pauză sunt luate în calcul la această limită. De asemenea, o înregistrare nouă necesită suficient spațiu de stocare liber pentru a respecta limita grupului respectiv."
+msgid "Active and paused analytics measurements both count towards this limit. A new analytics measurement also needs enough free storage capacity for its group limit."
+msgstr "Atât măsurătorile de analiză active, cât și cele suspendate sunt luate în calcul la această limită. De asemenea, o nouă măsurătoare de analiză necesită suficient spațiu de stocare liber pentru limita grupului său."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:48
 msgid "Activity counters are unavailable until analytics resumes."
 msgstr "Contorul de activitate nu este disponibil până la reluarea analizei."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:40
-msgid "Add recording"
-msgstr "Adăugare înregistrare"
+msgid "Add analytics measurement"
+msgstr "Adăugați indicatori de analiză"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:39
 msgid "All breakdown values"
@@ -6681,8 +6681,8 @@ msgid "Allowed values:"
 msgstr "Valori permise:"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:267
-msgid "An equivalent recording already exists."
-msgstr "Există deja o înregistrare echivalentă."
+msgid "An equivalent analytics measurement already exists."
+msgstr "Există deja o măsurătoare analitică echivalentă."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
@@ -6702,6 +6702,18 @@ msgstr "Analiza este în curs de desfășurare"
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:8
 msgid "Analytics is unavailable"
 msgstr "Funcția de analiză nu este disponibilă"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:8
+msgid "Analytics measurement ID"
+msgstr "ID de măsurare analitică"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:23
+msgid "Analytics measurement information"
+msgstr "Informații privind măsurarea analitică"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:12
+msgid "Analytics measurements"
+msgstr "Indicatori de analiză"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:2
 msgid "Analytics status"
@@ -6730,24 +6742,24 @@ msgid "Buffer status is unavailable."
 msgstr "Starea bufferului nu este disponibilă."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:20
-msgid "Capacity is reserved for the full history of every group in a recording. This is a planning limit, not disk usage. Pausing keeps the reservation; deleting a recording releases it."
-msgstr "Se rezervă spațiu pentru istoricul complet al fiecărui grup dintr-o înregistrare. Aceasta este o limită de planificare, nu o limită de utilizare a spațiului pe disc. Punerea în pauză menține rezervarea; ștergerea unei înregistrări eliberează spațiul rezervat."
+msgid "Capacity is reserved for the full history of every group in an analytics measurement. This is a planning limit, not disk usage. Pausing keeps the reservation; deleting an analytics measurement releases it."
+msgstr "Se rezervă spațiu pentru istoricul complet al fiecărui grup dintr-o măsurătoare analitică. Aceasta este o limită de planificare, nu o limită de utilizare a spațiului pe disc. Punerea în pauză menține rezervarea; ștergerea unei măsurători analitice eliberează spațiul rezervat."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
-msgid "Choose what to record and arrange your dashboard."
-msgstr "Alege ce vrei să înregistrezi și organizează-ți tabloul de bord."
+msgid "Choose which activity to measure and arrange your dashboard."
+msgstr "Alegeți ce activitate doriți să monitorizați și configurați-vă tabloul de bord."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:4
 msgid "Classified requests — pages, APIs and other dispatch types"
 msgstr "Solicitări clasificate — pagini, API-uri și alte tipuri de dispecerizare"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:9
-msgid "Configure recordings"
-msgstr "Configurarea înregistrărilor"
+msgid "Configure analytics measurements"
+msgstr "Configurarea măsurătorilor analitice"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:235
-msgid "Could not delete the recording."
-msgstr "Nu s-a putut șterge înregistrarea."
+msgid "Could not delete the analytics measurement."
+msgstr "Nu s-a putut șterge indicatorul de analiză."
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:268
 msgid "Could not save. Check the event, breakdown and filter values."
@@ -6771,20 +6783,24 @@ msgid "Database writes are being retried. Event processing can continue while bu
 msgstr "Se efectuează noi încercări de scriere în baza de date. Procesarea evenimentelor poate continua atâta timp cât există capacitate disponibilă în buffer; defecțiunile prelungite pot duce la pierderea datelor."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:36
-msgid "Dates show the start of each stored time interval, not the first or last event. Different resolutions contain overlapping history. Pausing a recording preserves its stored history and reserved capacity. Figures are a snapshot taken when this dialog opens."
-msgstr "Datele indică începutul fiecărui interval de timp stocat, nu primul sau ultimul eveniment. Rezoluțiile diferite conțin istoricul care se suprapune. Punerea în pauză a unei înregistrări păstrează istoricul stocat și capacitatea rezervată. Cifrele reprezintă o captură de ecran realizată în momentul deschiderii acestei ferestre de dialog."
+msgid "Dates show the start of each stored time interval, not the first or last event. Different resolutions contain overlapping history. Pausing an analytics measurement preserves its stored history and reserved capacity. Figures are a snapshot taken when this dialog opens."
+msgstr "Datele indică momentul de început al fiecărui interval de timp stocat, nu primul sau ultimul eveniment. Rezoluțiile diferite conțin istoricul care se suprapune. Punerea în pauză a unei măsurători analitice păstrează istoricul stocat și capacitatea rezervată. Cifrele reprezintă o imagine de moment capturată la deschiderea acestei ferestre de dialog."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:30
-msgid "Delete recording"
-msgstr "Șterge înregistrarea"
+msgid "Delete analytics measurement"
+msgstr "Ștergeți datele de analiză"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:27
-msgid "Delete recording?"
-msgstr "Să ștergi înregistrarea?"
+msgid "Delete analytics measurement?"
+msgstr "Să șterg datele de analiză?"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_delete_confirm.tpl:1
-msgid "Delete this recording?"
-msgstr "Vrei să ștergi această înregistrare?"
+msgid "Delete this analytics measurement?"
+msgstr "Să ștergi această măsurătoare analitică?"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
+msgid "Describe the activity this analytics measurement tracks"
+msgstr "Descrieți activitatea pe care o monitorizează acest indicator de analiză"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:55
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
@@ -6804,8 +6820,8 @@ msgid "Display order saved."
 msgstr "Ordinea de afișare a fost salvată."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:14
-msgid "Drag recordings to set their order on the dashboard. Changes are saved immediately."
-msgstr "Trageți înregistrările pentru a le ordona pe tabloul de bord. Modificările se salvează imediat."
+msgid "Drag analytics measurements to set their order on the dashboard. Changes are saved immediately."
+msgstr "Trageți indicatorii de analiză pentru a le stabili ordinea pe tabloul de bord. Modificările se salvează imediat."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:21
 msgid "Drag to reorder"
@@ -6820,8 +6836,8 @@ msgid "Each group reserves 3,578 time slots. Page breakdowns use candidates with
 msgstr "Fiecare grup rezervă 3.578 de intervale de timp. Defalcările pe pagini utilizează candidați cu numere aproximative; celelalte defalcări rezervă un grup pentru valorile excedentare."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:52
-msgid "Each stored time interval holds the counts for all groups in one analytics recording. Storage slots for older intervals are reused, so history stays bounded instead of growing with every visit. Only aggregate counts are stored, not individual events."
-msgstr "Fiecare interval de timp stocat conține numărul de evenimente pentru toate grupurile dintr-o singură înregistrare analitică. Spațiile de stocare pentru intervalele mai vechi sunt reutilizate, astfel încât istoricul rămâne limitat, în loc să crească la fiecare vizită. Se stochează doar numărul total de evenimente, nu și evenimentele individuale."
+msgid "Each stored time interval holds the counts for all groups in one analytics measurement. Storage slots for older intervals are reused, so history stays bounded instead of growing with every visit. Only aggregate counts are stored, not individual events."
+msgstr "Fiecare interval de timp stocat conține valorile agregate pentru toate grupurile dintr-o singură măsurătoare analitică. Spațiile de stocare pentru intervalele mai vechi sunt reutilizate, astfel încât istoricul rămâne limitat, în loc să crească la fiecare vizită. Se stochează doar valorile agregate, nu evenimentele individuale."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:9
 msgid "Email outcome — sent, retry, failed or bounced"
@@ -6853,12 +6869,8 @@ msgid "Events are combined into counters in memory before saving, normally every
 msgstr "Evenimentele sunt grupate în contori în memorie înainte de a fi salvate, de obicei la fiecare 10 secunde. O valoare scăzută este normală. Acest tampon este separat de lotul care se salvează în prezent."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:23
-msgid "Events must satisfy both filters to be recorded. New recordings start without historical data."
-msgstr "Pentru a fi înregistrate, evenimentele trebuie să îndeplinească ambele criterii de filtrare. Noile înregistrări încep fără date istorice."
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
-msgid "Explain what this recording measures"
-msgstr "Explicați ce măsoară această înregistrare"
+msgid "Events must satisfy both filters to be counted. New analytics measurements start without historical data."
+msgstr "Pentru a fi luate în calcul, evenimentele trebuie să îndeplinească ambele criterii de filtrare. Noile măsurători analitice încep fără date istorice."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:18
 msgid "Fixed filter"
@@ -6918,6 +6930,10 @@ msgstr "Ultima oră"
 msgid "Last six hours"
 msgstr "Ultimele șase ore"
 
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:23
+msgid "Maximum number of analytics measurements"
+msgstr "Numărul maxim de măsurători analitice"
+
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
 msgid "Most popular content in this period"
 msgstr "Cele mai populare conținuturi din această perioadă"
@@ -6955,6 +6971,10 @@ msgstr "Înainte"
 msgid "Next, choose a breakdown and filters supported by this event type."
 msgstr "Apoi, alegeți o defalcare și filtrele acceptate de acest tip de eveniment."
 
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:22
+msgid "No analytics measurements to display. Configure or resume an analytics measurement to get started."
+msgstr "Nu există măsurători analitice de afișat. Configurați sau reluați o măsurătoare analitică pentru a începe."
+
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:12
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:14
 msgid "No breakdown (total)"
@@ -6972,10 +6992,6 @@ msgstr "Nu s-au identificat articole de referință în această perioadă."
 msgid "No recorded events yet."
 msgstr "Nu există încă evenimente înregistrate."
 
-#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:22
-msgid "No recordings to display. Configure or resume a recording to get started."
-msgstr "Nu există înregistrări de afișat. Configurează sau reia o înregistrare pentru a începe."
-
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:16
 msgid "None — all matching events"
 msgstr "Niciunul — toate evenimentele corespunzătoare"
@@ -6985,12 +7001,12 @@ msgid "Oldest stored interval"
 msgstr "Cel mai vechi interval înregistrat"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:46
-msgid "One event can update several recordings, so these are not visitor or page-view totals. Counters reset when analytics restarts."
-msgstr "Un singur eveniment poate actualiza mai multe înregistrări, așa că aceste cifre nu reprezintă totalul vizitatorilor sau al vizualizărilor de pagină. Contorii se resetează la repornirea serviciului de analiză."
+msgid "One event can update several analytics measurements, so these are not visitor or page-view totals. Counters reset when analytics restarts."
+msgstr "Un singur eveniment poate actualiza mai multe valori de analiză, așa că acestea nu reprezintă totaluri ale vizitatorilor sau ale vizualizărilor de pagină. Contorii se resetează la repornirea sistemului de analiză."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
-msgid "Optional. Shown with the recording on the dashboard."
-msgstr "Opțional. Prezentat cu înregistrarea afișată pe tabloul de bord."
+msgid "Optional. Shown with the analytics measurement on the dashboard."
+msgstr "Opțional. Se afișează împreună cu indicatorii de analiză pe tabloul de bord."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:5
 msgid "Page ID present — true or false"
@@ -7031,22 +7047,6 @@ msgstr "Clasament"
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
 msgid "Ranked by recorded requests in the selected moving period. The window advances in steps of"
 msgstr "Clasificare în funcție de numărul de solicitări înregistrate în perioada selectată. Fereastra avansează în pași de"
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:8
-msgid "Recording ID"
-msgstr "ID-ul înregistrării"
-
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:23
-msgid "Recording capacity"
-msgstr "Capacitate de înregistrare"
-
-#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:23
-msgid "Recording information"
-msgstr "Informații privind înregistrarea"
-
-#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:12
-msgid "Recordings"
-msgstr "Înregistrări"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:11
 msgid "Referrer — referring hostname, internal or direct/unknown"
@@ -7100,8 +7100,8 @@ msgstr "Instantaneu la încărcarea paginii. Actualizează pagina pentru a vedea
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:29
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:25
-msgid "Start recording"
-msgstr "Începe înregistrarea"
+msgid "Start analytics measurement"
+msgstr "Începeți măsurarea indicatorilor de analiză"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:15
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_mailing_runs_panel.tpl:18
@@ -7115,8 +7115,8 @@ msgid "State"
 msgstr "Stat"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:5
-msgid "Step 1 of 2: Choose what to record"
-msgstr "Pasul 1 din 2: Alege ce vrei să înregistrezi"
+msgid "Step 1 of 2: Choose which activity to measure"
+msgstr "Pasul 1 din 2: Alegeți activitatea pe care doriți să o măsurați"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:34
 msgid "Step 2 of 2: Breakdown and filters"
@@ -7131,8 +7131,8 @@ msgid "Stored data size"
 msgstr "Dimensiunea datelor stocate"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:24
-msgid "Stored data size measures the database space used by the aggregate counts and recording definition. It excludes row headers, indexes, shared table space and unsaved events. Reserved capacity is a planning limit, not disk usage."
-msgstr "Dimensiunea datelor stocate măsoară spațiul din baza de date ocupat de numărările agregate și de definiția înregistrărilor. Aceasta nu include anteturile de rânduri, indexurile, spațiul comun al tabelelor și evenimentele nesalvate. Capacitatea rezervată reprezintă o limită de planificare, nu o utilizare efectivă a spațiului pe disc."
+msgid "Stored data size measures the database space used by the aggregate counts and analytics measurement definition. It excludes row headers, indexes, shared table space and unsaved events. Reserved capacity is a planning limit, not disk usage."
+msgstr "Dimensiunea datelor stocate măsoară spațiul din baza de date utilizat de totalurile agregate și de definiția măsurătorilor analitice. Aceasta exclude anteturile de rânduri, indexurile, spațiul comun al tabelelor și evenimentele nesalvate. Capacitatea rezervată reprezintă o limită de planificare, nu o utilizare a spațiului pe disc."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
 msgid "Stored intervals / capacity"
@@ -7143,20 +7143,20 @@ msgid "Stored time intervals"
 msgstr "Intervale de timp stocate"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:243
-msgid "The recordings changed. Reloading their current display order."
-msgstr "Înregistrările s-au modificat. Se reîncarcă ordinea actuală de afișare a acestora."
+msgid "The analytics measurements changed. Reloading their current display order."
+msgstr "Măsurătorile analitice s-au modificat. Se reîncarcă ordinea actuală de afișare."
+
+#: zotonic_mod_analytics/src/mod_analytics.erl:266
+msgid "This analytics measurement exceeds the storage budget."
+msgstr "Această măsurătoare analitică depășește bugetul alocat stocării."
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:38
+msgid "This analytics measurement is no longer available."
+msgstr "Această măsurătoare analitică nu mai este disponibilă."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:11
 msgid "This event schema is unavailable."
 msgstr "Această schemă de eveniment nu este disponibilă."
-
-#: zotonic_mod_analytics/src/mod_analytics.erl:266
-msgid "This recording exceeds the storage budget."
-msgstr "Această înregistrare depășește limita de stocare."
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:38
-msgid "This recording is no longer available."
-msgstr "Această înregistrare nu mai este disponibilă."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:13
 msgid "Traffic — crawler, other or unknown"
@@ -7169,6 +7169,14 @@ msgstr "Vizualizează statisticile"
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
 msgid "Your site at a glance."
 msgstr "Prezentare generală a site-ului dumneavoastră."
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:44
+msgid "analytics measurement updates since startup"
+msgstr "Actualizări privind măsurarea datelor analitice de la înființare"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:24
+msgid "analytics measurements"
+msgstr "măsurători analitice"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:20
 msgid "bytes"
@@ -7190,14 +7198,6 @@ msgstr "evenimente"
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:22
 msgid "group/time slots"
 msgstr "grup/intervale orare"
-
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:44
-msgid "recording updates since startup"
-msgstr "înregistrarea actualizărilor de la pornire"
-
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:24
-msgid "recordings"
-msgstr "înregistrări"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
 msgid "requests."
