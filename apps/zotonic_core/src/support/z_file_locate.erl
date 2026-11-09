@@ -476,6 +476,10 @@ part_file(Filename, Opts) ->
             {error, enoent};
         {error, enoent} ->
             {error, enoent};
+        {error, enametoolong} ->
+            %% A URL-derived legacy preview name can exceed the filesystem
+            %% limit. It cannot exist locally; continue with CAFS generation.
+            {error, enoent};
         {error, _} = Error ->
             Error
     end.
