@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-09 12:14\n"
+"PO-Revision-Date: 2026-11-09 12:23\n"
 "Last-Translator: \n"
 "Language-Team: Czech\n"
 "MIME-Version: 1.0\n"
@@ -6674,16 +6674,16 @@ msgid "About 5 years"
 msgstr "Asi 5 let"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:26
-msgid "Active and paused recordings both count towards this limit. A new recording also needs enough free storage capacity for its group limit."
-msgstr "Do tohoto limitu se započítávají jak aktivní, tak pozastavené nahrávky. Nová nahrávka navíc vyžaduje dostatek volného úložného prostoru v rámci limitu dané skupiny."
+msgid "Active and paused analytics measurements both count towards this limit. A new analytics measurement also needs enough free storage capacity for its group limit."
+msgstr "Do tohoto limitu se započítávají jak aktivní, tak pozastavená analytická měření. Nové analytické měření také vyžaduje dostatek volné úložné kapacity pro limit své skupiny."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:48
 msgid "Activity counters are unavailable until analytics resumes."
 msgstr "Počítadla aktivit nebudou k dispozici, dokud se neobnoví sběr analytických údajů."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:40
-msgid "Add recording"
-msgstr "Přidat nahrávku"
+msgid "Add analytics measurement"
+msgstr "Přidat analytické měření"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:39
 msgid "All breakdown values"
@@ -6702,8 +6702,8 @@ msgid "Allowed values:"
 msgstr "Přípustné hodnoty:"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:267
-msgid "An equivalent recording already exists."
-msgstr "Obdobný záznam již existuje."
+msgid "An equivalent analytics measurement already exists."
+msgstr "Obdobná analytická metrika již existuje."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
@@ -6723,6 +6723,18 @@ msgstr "Analytika je spuštěna"
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:8
 msgid "Analytics is unavailable"
 msgstr "Analytika není k dispozici"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:8
+msgid "Analytics measurement ID"
+msgstr "Identifikátor měření analytiky"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:23
+msgid "Analytics measurement information"
+msgstr "Informace o měření analytických údajů"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:12
+msgid "Analytics measurements"
+msgstr "Analytická měření"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:2
 msgid "Analytics status"
@@ -6751,24 +6763,24 @@ msgid "Buffer status is unavailable."
 msgstr "Stav vyrovnávací paměti není k dispozici."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:20
-msgid "Capacity is reserved for the full history of every group in a recording. This is a planning limit, not disk usage. Pausing keeps the reservation; deleting a recording releases it."
-msgstr "Kapacita je vyhrazena pro kompletní historii každé skupiny v záznamu. Jedná se o plánovací limit, nikoli o využití diskového prostoru. Pozastavení záznamu zachová tuto rezervaci; smazání záznamu ji uvolní."
+msgid "Capacity is reserved for the full history of every group in an analytics measurement. This is a planning limit, not disk usage. Pausing keeps the reservation; deleting an analytics measurement releases it."
+msgstr "Pro celou historii každé skupiny v analytickém měření je vyhrazena kapacita. Jedná se o plánovací limit, nikoli o využití diskového prostoru. Pozastavení zachová tuto rezervaci; smazání analytického měření ji uvolní."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
-msgid "Choose what to record and arrange your dashboard."
-msgstr "Vyberte si, co chcete zaznamenávat, a upravte si svůj ovládací panel."
+msgid "Choose which activity to measure and arrange your dashboard."
+msgstr "Vyberte, kterou aktivitu chcete měřit, a upravte si svůj přehled."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:4
 msgid "Classified requests — pages, APIs and other dispatch types"
 msgstr "Klasifikované požadavky – stránky, API a další typy odeslání"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:9
-msgid "Configure recordings"
-msgstr "Nastavení nahrávání"
+msgid "Configure analytics measurements"
+msgstr "Nastavení analytických měření"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:235
-msgid "Could not delete the recording."
-msgstr "Nahrávku se nepodařilo smazat."
+msgid "Could not delete the analytics measurement."
+msgstr "Měření analytiky se nepodařilo odstranit."
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:268
 msgid "Could not save. Check the event, breakdown and filter values."
@@ -6792,20 +6804,24 @@ msgid "Database writes are being retried. Event processing can continue while bu
 msgstr "Probíhá opakování zápisů do databáze. Zpracování událostí může pokračovat, dokud je k dispozici kapacita vyrovnávací paměti; dlouhodobé výpadky mohou způsobit ztrátu dat."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:36
-msgid "Dates show the start of each stored time interval, not the first or last event. Different resolutions contain overlapping history. Pausing a recording preserves its stored history and reserved capacity. Figures are a snapshot taken when this dialog opens."
-msgstr "Data udávají začátek každého uloženého časového intervalu, nikoli první či poslední událost. Různá rozlišení obsahují překrývající se historii. Pozastavení záznamu zachová jeho uloženou historii i vyhrazenou kapacitu. Údaje představují momentální snímek pořízený v okamžiku otevření tohoto dialogového okna."
+msgid "Dates show the start of each stored time interval, not the first or last event. Different resolutions contain overlapping history. Pausing an analytics measurement preserves its stored history and reserved capacity. Figures are a snapshot taken when this dialog opens."
+msgstr "Data udávají začátek každého uloženého časového intervalu, nikoli první či poslední událost. Různá rozlišení obsahují překrývající se historii. Pozastavení analytického měření zachová jeho uloženou historii i vyhrazenou kapacitu. Údaje představují momentální snímek pořízený v okamžiku otevření tohoto dialogového okna."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:30
-msgid "Delete recording"
-msgstr "Smazat záznam"
+msgid "Delete analytics measurement"
+msgstr "Odstranit analytické měření"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:27
-msgid "Delete recording?"
-msgstr "Smazat záznam?"
+msgid "Delete analytics measurement?"
+msgstr "Smazat analytická měření?"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_delete_confirm.tpl:1
-msgid "Delete this recording?"
-msgstr "Chcete tento záznam smazat?"
+msgid "Delete this analytics measurement?"
+msgstr "Chcete tuto analytickou metriku smazat?"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
+msgid "Describe the activity this analytics measurement tracks"
+msgstr "Popište činnost, kterou tato analytická metrika sleduje"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:55
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
@@ -6825,8 +6841,8 @@ msgid "Display order saved."
 msgstr "Pořadí zobrazení bylo uloženo."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:14
-msgid "Drag recordings to set their order on the dashboard. Changes are saved immediately."
-msgstr "Záznamy přetáhněte myší a určete tak jejich pořadí na ovládacím panelu. Změny se uloží okamžitě."
+msgid "Drag analytics measurements to set their order on the dashboard. Changes are saved immediately."
+msgstr "Přetáhněte analytické ukazatele a nastavte tak jejich pořadí na řídicím panelu. Změny se uloží okamžitě."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:21
 msgid "Drag to reorder"
@@ -6841,8 +6857,8 @@ msgid "Each group reserves 3,578 time slots. Page breakdowns use candidates with
 msgstr "Každá skupina si rezervuje 3 578 časových úseků. V rozčlenění na stránkách jsou uvedeni kandidáti s přibližnými počty; v ostatních rozčleněních je jedna skupina vyhrazena pro nadbytečné hodnoty."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:52
-msgid "Each stored time interval holds the counts for all groups in one analytics recording. Storage slots for older intervals are reused, so history stays bounded instead of growing with every visit. Only aggregate counts are stored, not individual events."
-msgstr "Každý uložený časový interval obsahuje počty pro všechny skupiny v rámci jednoho analytického záznamu. Úložná místa pro starší intervaly se znovu využívají, takže historie zůstává ohraničená a nerostou s každou návštěvou. Ukládají se pouze souhrnné počty, nikoli jednotlivé události."
+msgid "Each stored time interval holds the counts for all groups in one analytics measurement. Storage slots for older intervals are reused, so history stays bounded instead of growing with every visit. Only aggregate counts are stored, not individual events."
+msgstr "Každý uložený časový interval obsahuje počty pro všechny skupiny v rámci jednoho analytického měření. Úložné pozice pro starší intervaly se znovu využívají, takže historická data zůstávají ohraničená a nerostou s každou návštěvou. Ukládají se pouze souhrnné počty, nikoli jednotlivé události."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:9
 msgid "Email outcome — sent, retry, failed or bounced"
@@ -6874,12 +6890,8 @@ msgid "Events are combined into counters in memory before saving, normally every
 msgstr "Události se před uložením sdružují do čítačů v paměti, obvykle každých 10 sekund. Nízká hodnota je normální. Tento vyrovnávací paměťový blok je oddělený od právě ukládané dávky."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:23
-msgid "Events must satisfy both filters to be recorded. New recordings start without historical data."
-msgstr "Aby byly události zaznamenány, musí splňovat oba filtry. Nové záznamy začínají bez historických dat."
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
-msgid "Explain what this recording measures"
-msgstr "Vysvětlete, co tato záznamová jednotka měří"
+msgid "Events must satisfy both filters to be counted. New analytics measurements start without historical data."
+msgstr "Aby byly události započítány, musí splňovat oba filtry. Nová analytická měření začínají bez historických dat."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:18
 msgid "Fixed filter"
@@ -6939,6 +6951,10 @@ msgstr "Poslední hodina"
 msgid "Last six hours"
 msgstr "Posledních šest hodin"
 
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:23
+msgid "Maximum number of analytics measurements"
+msgstr "Maximální počet analytických měření"
+
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
 msgid "Most popular content in this period"
 msgstr "Nejoblíbenější obsah v tomto období"
@@ -6976,6 +6992,10 @@ msgstr "Další"
 msgid "Next, choose a breakdown and filters supported by this event type."
 msgstr "Dále vyberte rozčlenění a filtry, které tento typ události podporuje."
 
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:22
+msgid "No analytics measurements to display. Configure or resume an analytics measurement to get started."
+msgstr "Nejsou k dispozici žádná analytická měření. Chcete-li začít, nakonfigurujte nebo obnovte analytické měření."
+
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:12
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:14
 msgid "No breakdown (total)"
@@ -6993,10 +7013,6 @@ msgstr "V tomto období nebyl zjištěn žádný významný obsah."
 msgid "No recorded events yet."
 msgstr "Zatím nejsou zaznamenány žádné události."
 
-#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:22
-msgid "No recordings to display. Configure or resume a recording to get started."
-msgstr "Nejsou k dispozici žádné nahrávky. Chcete-li začít, nastavte nebo obnovte nahrávání."
-
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:16
 msgid "None — all matching events"
 msgstr "Žádné — všechny odpovídající události"
@@ -7006,12 +7022,12 @@ msgid "Oldest stored interval"
 msgstr "Nejstarší zaznamenaný interval"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:46
-msgid "One event can update several recordings, so these are not visitor or page-view totals. Counters reset when analytics restarts."
-msgstr "Jedna událost může aktualizovat několik záznamů, takže se nejedná o celkové počty návštěvníků ani zobrazení stránek. Počítadla se vynulují při restartu analytického systému."
+msgid "One event can update several analytics measurements, so these are not visitor or page-view totals. Counters reset when analytics restarts."
+msgstr "Jedna událost může aktualizovat několik analytických metrik, takže se nejedná o celkové počty návštěvníků ani zobrazení stránek. Počítadla se vynulují při restartu analytického systému."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
-msgid "Optional. Shown with the recording on the dashboard."
-msgstr "Volitelné. Na obrázku je zobrazeno s nahrávkou na palubní desce."
+msgid "Optional. Shown with the analytics measurement on the dashboard."
+msgstr "Volitelné. Zobrazeno spolu s analytickými údaji na řídicím panelu."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:5
 msgid "Page ID present — true or false"
@@ -7052,22 +7068,6 @@ msgstr "Pořadí"
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
 msgid "Ranked by recorded requests in the selected moving period. The window advances in steps of"
 msgstr "Seřazeno podle zaznamenaných požadavků ve vybraném časovém období. Okno se posouvá v krocích po"
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:8
-msgid "Recording ID"
-msgstr "Identifikační číslo záznamu"
-
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:23
-msgid "Recording capacity"
-msgstr "Kapacita záznamu"
-
-#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:23
-msgid "Recording information"
-msgstr "Informace o nahrávce"
-
-#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:12
-msgid "Recordings"
-msgstr "Nahrávky"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:11
 msgid "Referrer — referring hostname, internal or direct/unknown"
@@ -7121,8 +7121,8 @@ msgstr "Snímek obrazovky při načtení stránky. Pro aktualizaci stránku obno
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:29
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:25
-msgid "Start recording"
-msgstr "Spustit nahrávání"
+msgid "Start analytics measurement"
+msgstr "Spustit měření analytických údajů"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:15
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_mailing_runs_panel.tpl:18
@@ -7136,8 +7136,8 @@ msgid "State"
 msgstr "Stát"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:5
-msgid "Step 1 of 2: Choose what to record"
-msgstr "Krok 1 z 2: Vyberte, co chcete nahrát"
+msgid "Step 1 of 2: Choose which activity to measure"
+msgstr "Krok 1 ze 2: Vyberte aktivitu, kterou chcete měřit"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:34
 msgid "Step 2 of 2: Breakdown and filters"
@@ -7152,8 +7152,8 @@ msgid "Stored data size"
 msgstr "Velikost uložených dat"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:24
-msgid "Stored data size measures the database space used by the aggregate counts and recording definition. It excludes row headers, indexes, shared table space and unsaved events. Reserved capacity is a planning limit, not disk usage."
-msgstr "Velikost uložených dat udává, kolik místa v databázi zabírají souhrnné počty a definice záznamů. Nezahrnuje záhlaví řádků, indexy, sdílený tabulkový prostor ani neuložené události. Rezervovaná kapacita představuje plánovací limit, nikoli skutečné využití diskového prostoru."
+msgid "Stored data size measures the database space used by the aggregate counts and analytics measurement definition. It excludes row headers, indexes, shared table space and unsaved events. Reserved capacity is a planning limit, not disk usage."
+msgstr "Velikost uložených dat udává, kolik místa v databázi zabírají souhrnné počty a definice analytických měření. Nezahrnuje záhlaví řádků, indexy, sdílený tabulkový prostor a neuložené události. Rezervovaná kapacita představuje plánovací limit, nikoli využití diskového prostoru."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
 msgid "Stored intervals / capacity"
@@ -7164,20 +7164,20 @@ msgid "Stored time intervals"
 msgstr "Uložené časové intervaly"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:243
-msgid "The recordings changed. Reloading their current display order."
-msgstr "Záznamy se změnily. Načítá se aktuální pořadí zobrazení."
+msgid "The analytics measurements changed. Reloading their current display order."
+msgstr "Metriky analýzy se změnily. Probíhá obnovení aktuálního pořadí zobrazení."
+
+#: zotonic_mod_analytics/src/mod_analytics.erl:266
+msgid "This analytics measurement exceeds the storage budget."
+msgstr "Toto analytické měření překračuje limit úložného prostoru."
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:38
+msgid "This analytics measurement is no longer available."
+msgstr "Tato analytická metrika již není k dispozici."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:11
 msgid "This event schema is unavailable."
 msgstr "Toto schéma události není k dispozici."
-
-#: zotonic_mod_analytics/src/mod_analytics.erl:266
-msgid "This recording exceeds the storage budget."
-msgstr "Tento záznam překračuje povolenou kapacitu úložiště."
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:38
-msgid "This recording is no longer available."
-msgstr "Tato nahrávka již není k dispozici."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:13
 msgid "Traffic — crawler, other or unknown"
@@ -7190,6 +7190,14 @@ msgstr "Zobrazit analytické údaje"
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
 msgid "Your site at a glance."
 msgstr "Váš web v kostce."
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:44
+msgid "analytics measurement updates since startup"
+msgstr "aktualizace analytických měření od spuštění"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:24
+msgid "analytics measurements"
+msgstr "analytická měření"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:20
 msgid "bytes"
@@ -7211,14 +7219,6 @@ msgstr "události"
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:22
 msgid "group/time slots"
 msgstr "skupiny/časové úseky"
-
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:44
-msgid "recording updates since startup"
-msgstr "zaznamenávání změn od spuštění"
-
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:24
-msgid "recordings"
-msgstr "nahrávky"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
 msgid "requests."
