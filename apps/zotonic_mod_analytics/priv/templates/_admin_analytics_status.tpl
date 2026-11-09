@@ -20,7 +20,7 @@
                 <p>{_ Capacity is reserved for the full history of every group in a recording. This is a planning limit, not disk usage. Pausing keeps the reservation; deleting a recording releases it. _}</p>
             </div>
             <div class="analytics-capacity">
-                <label for="analytics-recording-capacity">{_ Recording slots _}</label>
+                <label for="analytics-recording-capacity">{_ Recording capacity _}</label>
                 <div class="analytics-capacity-value"><strong>{{ a.usage.recordings }}</strong> / 32 {_ recordings _}</div>
                 <meter id="analytics-recording-capacity" min="0" max="32" value="{{ a.usage.recordings }}"></meter>
                 <p>{_ Active and paused recordings both count towards this limit. A new recording also needs enough free storage capacity for its group limit. _}</p>
@@ -48,11 +48,11 @@
                 {% else %}<p class="text-muted">{_ Activity counters are unavailable until analytics resumes. _}</p>{% endif %}
             </div>
             <div><h4>{_ Bounded history _}</h4>
-                <p><strong>{{ a.usage.buckets }}</strong> {_ stored time buckets _}</p>
-                <p class="text-muted">{_ A bucket holds the counts for all groups in one recording and time interval. Older slots are reused, so history stays bounded instead of growing with every visit. Only aggregate counts are stored, not individual events. _}</p>
+                <p><strong>{{ a.usage.buckets }}</strong> {_ stored time intervals _}</p>
+                <p class="text-muted">{_ Each stored time interval holds the counts for all groups in one analytics recording. Storage slots for older intervals are reused, so history stays bounded instead of growing with every visit. Only aggregate counts are stored, not individual events. _}</p>
                 <table class="table table-condensed">
                     <caption class="sr-only">{_ History detail and retention _}</caption>
-                    <thead><tr><th>{_ Detail _}</th><th>{_ Retained for _}</th></tr></thead>
+                    <thead><tr><th>{_ Detail _}</th><th>{_ Retention period _}</th></tr></thead>
                     <tbody>
                         <tr><td>{_ 1 minute _}</td><td>{_ 6 hours _}</td></tr>
                         <tr><td>{_ 15 minutes _}</td><td>{_ 7 days _}</td></tr>

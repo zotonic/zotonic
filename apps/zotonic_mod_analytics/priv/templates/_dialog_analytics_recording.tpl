@@ -6,7 +6,7 @@
     <fieldset data-step="1">
         <div class="form-group"><label for="{{ #name }}">{_ Name _}</label><input id="{{ #name }}" class="form-control" name="name" required maxlength="255" autofocus /></div>
         <div class="form-group"><label for="{{ #description }}">{_ Short description _}</label><textarea id="{{ #description }}" class="form-control" name="description" rows="2" maxlength="250" placeholder="{_ Explain what this recording measures _}"></textarea><p class="help-block">{_ Optional. Shown with the recording on the dashboard. _}</p></div>
-        <div class="form-group"><label for="{{ #event }}">{_ Event type _}</label><select id="{{ #event }}" class="form-control" name="event">{% include "_admin_analytics_event_options.tpl" events=a.registry %}</select></div>
+        <div class="form-group"><label for="{{ #event }}">{_ Analytics event type _}</label><select id="{{ #event }}" class="form-control" name="event">{% include "_admin_analytics_event_options.tpl" events=a.registry %}</select></div>
         <p>{_ Next, choose a breakdown and filters supported by this event type. _}</p>
     </fieldset>
     <fieldset data-step="2" hidden disabled>
@@ -20,7 +20,7 @@
         </div>
         {% endfor %}
         <p data-request-types hidden>{_ Request types found in this site's dispatch rules: _} {% for t in a.request_types %}<code>{{ t|escape }}</code> {% endfor %}</p>
-        <p>{_ Both filters must match. New recordings start without historical data. _}</p>
+        <p>{_ Events must satisfy both filters to be recorded. New recordings start without historical data. _}</p>
     </fieldset>
     <div class="modal-footer">
         {% button text=_"Cancel" class="btn btn-default" action={dialog_close} %}

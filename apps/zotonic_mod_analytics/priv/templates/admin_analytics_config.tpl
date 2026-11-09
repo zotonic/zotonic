@@ -14,7 +14,7 @@
         <p>{_ Drag recordings to set their order on the dashboard. Changes are saved immediately. _}</p>
         {% sorter id="analytics-recordings" tag="recordings" delegate="mod_analytics" handle=".analytics-drag" axis="y" %}
         <table class="table">
-            <thead><tr><th><span class="sr-only">{_ Order _}</span></th><th>{_ Name _}</th><th>{_ Event _}</th><th>{_ Breakdown _}</th><th>{_ Group limit _}</th><th>{_ State _}</th><th></th></tr></thead>
+            <thead><tr><th><span class="sr-only">{_ Display order _}</span></th><th>{_ Name _}</th><th>{_ Event _}</th><th>{_ Breakdown _}</th><th>{_ Group limit _}</th><th>{_ State _}</th><th></th></tr></thead>
             <tbody id="analytics-recordings">{% for c in a.recordings %}
                 {% with c.id as recording_id %}
                 {% sortable id=#recording.recording_id tag=c.id %}

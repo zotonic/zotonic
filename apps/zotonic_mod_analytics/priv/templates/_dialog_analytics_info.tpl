@@ -7,7 +7,7 @@
 <dl class="dl-horizontal">
     <dt>{_ Recording ID _}</dt><dd>{{ c.id }}</dd>
     <dt>{_ State _}</dt><dd>{{ c.state|escape }}</dd>
-    <dt>{_ Event type _}</dt><dd>{{ c.event|escape }}</dd>
+    <dt>{_ Analytics event type _}</dt><dd>{{ c.event|escape }}</dd>
     <dt>{_ Schema version _}</dt><dd>{{ c.schema_version }}</dd>
     <dt>{_ Break down by _}</dt><dd>{{ c.dimension|default:_"No breakdown (total)"|escape }}</dd>
     <dt>{_ Group limit _}</dt><dd>{{ c.groups }}</dd>
@@ -17,14 +17,14 @@
 </dl>
 <h4>{_ Storage usage _}</h4>
 <dl class="dl-horizontal">
-    <dt>{_ Stored payload _}</dt><dd>{{ info.payload_bytes|filesizeformat }} ({{ info.payload_bytes }} {_ bytes _})</dd>
-    <dt>{_ Stored buckets _}</dt><dd>{{ info.buckets }}</dd>
+    <dt>{_ Stored data size _}</dt><dd>{{ info.payload_bytes|filesizeformat }} ({{ info.payload_bytes }} {_ bytes _})</dd>
+    <dt>{_ Stored time intervals _}</dt><dd>{{ info.buckets }}</dd>
     <dt>{_ Reserved capacity _}</dt><dd>{{ info.reserved }} {_ group/time slots _}</dd>
 </dl>
-<p class="help-block">{_ Stored payload is the database size of the aggregate counts and recording definition. It excludes row headers, indexes, shared table space and unsaved events. Reserved capacity is a planning limit, not disk usage. _}</p>
+<p class="help-block">{_ Stored data size measures the database space used by the aggregate counts and recording definition. It excludes row headers, indexes, shared table space and unsaved events. Reserved capacity is a planning limit, not disk usage. _}</p>
 <div class="table-responsive">
 <table class="table table-condensed">
-    <thead><tr><th>{_ Detail _}</th><th>{_ Buckets / slots _}</th><th>{_ Payload _}</th><th>{_ Oldest bucket _}</th><th>{_ Latest bucket _}</th></tr></thead>
+    <thead><tr><th>{_ Detail _}</th><th>{_ Stored intervals / capacity _}</th><th>{_ Data size _}</th><th>{_ Oldest stored interval _}</th><th>{_ Newest stored interval _}</th></tr></thead>
     <tbody>{% for t in info.tiers %}<tr>
         <td>{% if t.resolution == 60 %}{_ 1 minute _}{% elseif t.resolution == 900 %}{_ 15 minutes _}{% elseif t.resolution == 3600 %}{_ 1 hour _}{% else %}{_ 1 day _}{% endif %}</td>
         <td>{{ t.buckets }} / {{ t.slots }}</td><td>{{ t.bytes|filesizeformat }}</td>
@@ -33,7 +33,7 @@
     </tr>{% endfor %}</tbody>
 </table>
 </div>
-<p class="help-block">{_ Dates show the start of each bucket, not the first or last event. Different resolutions contain overlapping history. Pausing preserves stored history and its reservation. Figures are a snapshot when this dialog opens. _}</p>
+<p class="help-block">{_ Dates show the start of each stored time interval, not the first or last event. Different resolutions contain overlapping history. Pausing a recording preserves its stored history and reserved capacity. Figures are a snapshot taken when this dialog opens. _}</p>
 {% endwith %}
 {% else %}<p>{_ This recording is no longer available. _}</p>{% endif %}
 {% endwith %}

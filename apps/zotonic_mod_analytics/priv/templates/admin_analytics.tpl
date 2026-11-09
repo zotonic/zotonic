@@ -10,7 +10,7 @@
 </div>
 <form method="get" action="{% url admin_analytics %}" class="analytics-period">
     <span>{_ Period _}</span>
-    {% for value, label in [["hour", _"Last hour"], ["day", _"Last six hours"], ["24hours", _"Last 24 hours"], ["week", _"Last week"], ["month", _"Last month"], ["year", _"Last year"], ["years", _"Last five years"]] %}
+    {% for value, label in [["hour", _"Last hour"], ["day", _"Last six hours"], ["24hours", _"Last 24 hours"], ["week", _"Past 7 days"], ["month", _"Past 30 days"], ["year", _"Past 365 days"], ["years", _"Last five years"]] %}
         <button name="period" value="{{ value }}" class="btn {% if value == a.period %}btn-primary{% else %}btn-default{% endif %}" {% if value == a.period %}aria-current="true"{% endif %}>{{ label|escape }}</button>
     {% endfor %}
     <span class="text-muted">{{ m.req.timezone|escape }}</span>

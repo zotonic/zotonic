@@ -238,9 +238,9 @@ event(#sort{items=Items,drop=#dragdrop{tag=Tag}},Context)
         when Tag =:= recordings; Tag =:= <<"recordings">> ->
     case m_analytics:reorder([Id || #dragdrop{tag=Id} <- Items],Context) of
         ok ->
-            z_render:growl(?__("Recording order saved.",Context),Context);
+            z_render:growl(?__("Display order saved.",Context),Context);
         _ ->
-            Context1 = z_render:growl_error(?__("The recordings changed. Reloading the current order.",Context), Context),
+            Context1 = z_render:growl_error(?__("The recordings changed. Reloading their current display order.",Context), Context),
             z_render:wire({reload,[]},Context1)
     end;
 event(_,Context) ->
