@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-09 12:23\n"
+"PO-Revision-Date: 2026-11-09 12:31\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "MIME-Version: 1.0\n"
@@ -6886,7 +6886,7 @@ msgstr "지난 6시간"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:23
 msgid "Maximum number of analytics measurements"
-msgstr "분석 측정값의 최대 개수"
+msgstr "분석 측정 항목의 최대 개수"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
 msgid "Most popular content in this period"
@@ -7098,7 +7098,7 @@ msgstr "저장된 시간 구간"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:243
 msgid "The analytics measurements changed. Reloading their current display order."
-msgstr "분석 측정값이 변경되었습니다. 현재 표시 순서를 다시 불러오고 있습니다."
+msgstr "분석 측정 항목이 변경되었습니다. 현재 표시 순서를 다시 불러옵니다."
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:266
 msgid "This analytics measurement exceeds the storage budget."
@@ -7126,7 +7126,7 @@ msgstr "귀하의 사이트를 한눈에 살펴보세요."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:44
 msgid "analytics measurement updates since startup"
-msgstr "창업 이후 분석 지표 업데이트 현황"
+msgstr "분석 모듈 시작 이후 측정 항목 업데이트 수"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:24
 msgid "analytics measurements"
