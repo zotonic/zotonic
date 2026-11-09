@@ -174,8 +174,6 @@ public(_,_) ->
 allowed(Context) ->
     not z_convert:to_bool(z_context:get(analytics_exclude,Context))
         andalso not z_acl:is_allowed(use,mod_admin,Context)
-        andalso cowmachine_req:get_req_header(<<"dnt">>,Context) =/= <<"1">>
-        andalso cowmachine_req:get_req_header(<<"sec-gpc">>,Context) =/= <<"1">>
         andalso (not m_config:get_boolean(mod_analytics,require_consent,Context)
             orelse z_context:get(analytics_consent,Context) =:= true).
 

@@ -21,7 +21,7 @@ immediately. Reordering does not alter recording definitions or history.
 
 The built-in `page_request` event counts successful GET requests for public HTML
 pages served by Zotonic, including template pages without a resource ID. It excludes private pages, admin/editor requests,
-assets, redirects, DNT and GPC opt-outs. It includes automated traffic; the coarse
+assets and redirects. DNT and GPC headers do not exclude requests. It includes automated traffic; the coarse
 `traffic` dimension distinguishes known crawlers, other and unknown traffic. CDN
 hits that never reach Zotonic are not counted. Counts are not unique visitors.
 
@@ -219,8 +219,8 @@ Choose one breakdown: `method`, `status` (1xx–5xx), `language`, `country` or
 down by method. The same bounded storage and fixed filters apply. Create the
 recordings you need; existing installations do not get an extra recording automatically.
 
-The existing request exclusions apply: admin-interface users, `analytics_exclude`,
-DNT/GPC and required consent. API requests do not need to refer to a public page.
+The existing request exclusions apply: admin-interface users, `analytics_exclude`
+and missing consent when `require_consent` is enabled. API requests do not need to refer to a public page.
 No topic/path, query string, body, token or user identifier is retained.
 
 ### Dispatch classification

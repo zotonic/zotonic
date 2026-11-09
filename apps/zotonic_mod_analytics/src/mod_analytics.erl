@@ -43,9 +43,10 @@ The default Languages recording starts paused and can be resumed there.
 
 Reports require `use mod_analytics`. Configuration and recording mutations require
 site administrator access (`use mod_admin_config`); the two permissions are independent.
-Request events exclude users with `use mod_admin`, requests marked `analytics_exclude`,
-and browsers sending DNT or GPC. With `require_consent` enabled, the context must also
-contain `analytics_consent = true`. Ordinary logged-in users are otherwise eligible.
+Request events exclude users with `use mod_admin` and requests marked `analytics_exclude`.
+DNT and GPC headers do not exclude requests from aggregate analytics. With
+`require_consent` enabled, the context must contain `analytics_consent = true`.
+Ordinary logged-in users are otherwise eligible.
 No visitor identifiers, tracking cookies or raw request logs are stored.
 
 ## Recordings and storage
