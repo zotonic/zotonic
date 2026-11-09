@@ -2,10 +2,10 @@
 {% with m.analytics.configuration as a %}
 {% wire id=#create type="submit" postback="create_recording" delegate="mod_analytics" %}
 <form class="analytics-recording-wizard" id="{{ #create }}" method="post" action="postback">
-    <p class="text-muted" data-step-label aria-live="polite">{_ Step 1 of 2: Choose what to record _}</p>
+    <p class="text-muted" data-step-label aria-live="polite">{_ Step 1 of 2: Choose which activity to measure _}</p>
     <fieldset data-step="1">
         <div class="form-group"><label for="{{ #name }}">{_ Name _}</label><input id="{{ #name }}" class="form-control" name="name" required maxlength="255" autofocus /></div>
-        <div class="form-group"><label for="{{ #description }}">{_ Short description _}</label><textarea id="{{ #description }}" class="form-control" name="description" rows="2" maxlength="250" placeholder="{_ Explain what this recording measures _}"></textarea><p class="help-block">{_ Optional. Shown with the recording on the dashboard. _}</p></div>
+        <div class="form-group"><label for="{{ #description }}">{_ Short description _}</label><textarea id="{{ #description }}" class="form-control" name="description" rows="2" maxlength="250" placeholder="{_ Describe the activity this analytics measurement tracks _}"></textarea><p class="help-block">{_ Optional. Shown with the analytics measurement on the dashboard. _}</p></div>
         <div class="form-group"><label for="{{ #event }}">{_ Analytics event type _}</label><select id="{{ #event }}" class="form-control" name="event">{% include "_admin_analytics_event_options.tpl" events=a.registry %}</select></div>
         <p>{_ Next, choose a breakdown and filters supported by this event type. _}</p>
     </fieldset>
@@ -20,13 +20,13 @@
         </div>
         {% endfor %}
         <p data-request-types hidden>{_ Request types found in this site's dispatch rules: _} {% for t in a.request_types %}<code>{{ t|escape }}</code> {% endfor %}</p>
-        <p>{_ Events must satisfy both filters to be recorded. New recordings start without historical data. _}</p>
+        <p>{_ Events must satisfy both filters to be counted. New analytics measurements start without historical data. _}</p>
     </fieldset>
     <div class="modal-footer">
         {% button text=_"Cancel" class="btn btn-default" action={dialog_close} %}
         <button type="button" class="btn btn-default" data-back hidden>{_ Back _}</button>
         <button type="button" class="btn btn-primary" data-next>{_ Next _}</button>
-        <button type="submit" class="btn btn-primary" data-start hidden>{_ Start recording _}</button>
+        <button type="submit" class="btn btn-primary" data-start hidden>{_ Start analytics measurement _}</button>
     </div>
     {% for e in a.registry %}
         <template data-event="{{ e.name|escape }}">{% include "_admin_analytics_dimension_options.tpl" dimensions=e.dimension_keys choices=e.choices %}</template>

@@ -232,7 +232,7 @@ event(#postback{message={delete_recording,Args}},Context) ->
     %% access in the model even if the user's permissions changed meanwhile.
     case m_analytics:purge(proplists:get_value(id,Args),Context) of
         ok -> z_render:wire({reload,[]},Context);
-        _ -> z_render:growl_error(?__("Could not delete the recording.",Context),Context)
+        _ -> z_render:growl_error(?__("Could not delete the analytics measurement.",Context),Context)
     end;
 event(#sort{items=Items,drop=#dragdrop{tag=Tag}},Context)
         when Tag =:= recordings; Tag =:= <<"recordings">> ->
@@ -240,7 +240,7 @@ event(#sort{items=Items,drop=#dragdrop{tag=Tag}},Context)
         ok ->
             z_render:growl(?__("Display order saved.",Context),Context);
         _ ->
-            Context1 = z_render:growl_error(?__("The recordings changed. Reloading their current display order.",Context), Context),
+            Context1 = z_render:growl_error(?__("The analytics measurements changed. Reloading their current display order.",Context), Context),
             z_render:wire({reload,[]},Context1)
     end;
 event(_,Context) ->
@@ -263,6 +263,6 @@ integer(B) -> try z_convert:to_integer(B) catch _:_ -> 0 end.
 
 result(ok,Context) -> z_render:wire({reload,[]},Context);
 result({ok,_},Context) -> z_render:wire({reload,[]},Context);
-result({error,budget_exceeded},Context) -> z_render:growl_error(?__("This recording exceeds the storage budget.",Context),Context);
-result({error,{exists,_}},Context) -> z_render:growl_error(?__("An equivalent recording already exists.",Context),Context);
+result({error,budget_exceeded},Context) -> z_render:growl_error(?__("This analytics measurement exceeds the storage budget.",Context),Context);
+result({error,{exists,_}},Context) -> z_render:growl_error(?__("An equivalent analytics measurement already exists.",Context),Context);
 result(_,Context) -> z_render:growl_error(?__("Could not save. Check the event, breakdown and filter values.",Context),Context).

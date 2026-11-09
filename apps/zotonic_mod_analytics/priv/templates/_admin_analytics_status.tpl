@@ -17,13 +17,13 @@
                 <label for="analytics-storage">{_ Reserved storage capacity _}</label>
                 <div class="analytics-capacity-value"><strong>{{ a.usage.reserved }}</strong> / {{ a.usage.budget }} {_ group/time slots _}</div>
                 <meter id="analytics-storage" min="0" max="{{ a.usage.budget }}" value="{{ a.usage.reserved }}"></meter>
-                <p>{_ Capacity is reserved for the full history of every group in a recording. This is a planning limit, not disk usage. Pausing keeps the reservation; deleting a recording releases it. _}</p>
+                <p>{_ Capacity is reserved for the full history of every group in an analytics measurement. This is a planning limit, not disk usage. Pausing keeps the reservation; deleting an analytics measurement releases it. _}</p>
             </div>
             <div class="analytics-capacity">
-                <label for="analytics-recording-capacity">{_ Recording capacity _}</label>
-                <div class="analytics-capacity-value"><strong>{{ a.usage.recordings }}</strong> / 32 {_ recordings _}</div>
+                <label for="analytics-recording-capacity">{_ Maximum number of analytics measurements _}</label>
+                <div class="analytics-capacity-value"><strong>{{ a.usage.recordings }}</strong> / 32 {_ analytics measurements _}</div>
                 <meter id="analytics-recording-capacity" min="0" max="32" value="{{ a.usage.recordings }}"></meter>
-                <p>{_ Active and paused recordings both count towards this limit. A new recording also needs enough free storage capacity for its group limit. _}</p>
+                <p>{_ Active and paused analytics measurements both count towards this limit. A new analytics measurement also needs enough free storage capacity for its group limit. _}</p>
             </div>
             <div class="analytics-capacity">
                 <label for="analytics-buffer">{_ Event buffer _}</label>
@@ -41,15 +41,15 @@
         <div class="analytics-health-grid">
             <div><h4>{_ Event processing _}</h4>
                 {% if a.status.running %}
-                    <p><strong>{{ a.status.accepted }}</strong> {_ recording updates since startup _}<br>
+                    <p><strong>{{ a.status.accepted }}</strong> {_ analytics measurement updates since startup _}<br>
                     <strong>{{ a.status.dropped }}</strong> {_ dropped updates since startup _}</p>
-                    <p class="text-muted">{_ One event can update several recordings, so these are not visitor or page-view totals. Counters reset when analytics restarts. _}</p>
+                    <p class="text-muted">{_ One event can update several analytics measurements, so these are not visitor or page-view totals. Counters reset when analytics restarts. _}</p>
                     <p class="{% if a.status.dropped %}text-warning{% else %}text-muted{% endif %}">{_ Dropped updates can result from overload, expired events, configuration changes or failed writes. This is a diagnostic count, not an exact count of lost page views. Incomplete periods are marked in reports. _}</p>
                 {% else %}<p class="text-muted">{_ Activity counters are unavailable until analytics resumes. _}</p>{% endif %}
             </div>
             <div><h4>{_ Bounded history _}</h4>
                 <p><strong>{{ a.usage.buckets }}</strong> {_ stored time intervals _}</p>
-                <p class="text-muted">{_ Each stored time interval holds the counts for all groups in one analytics recording. Storage slots for older intervals are reused, so history stays bounded instead of growing with every visit. Only aggregate counts are stored, not individual events. _}</p>
+                <p class="text-muted">{_ Each stored time interval holds the counts for all groups in one analytics measurement. Storage slots for older intervals are reused, so history stays bounded instead of growing with every visit. Only aggregate counts are stored, not individual events. _}</p>
                 <table class="table table-condensed">
                     <caption class="sr-only">{_ History detail and retention _}</caption>
                     <thead><tr><th>{_ Detail _}</th><th>{_ Retention period _}</th></tr></thead>
