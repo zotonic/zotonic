@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-09 12:22\n"
+"PO-Revision-Date: 2026-11-09 12:30\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -6630,7 +6630,7 @@ msgstr "Circa 5 anni"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:26
 msgid "Active and paused analytics measurements both count towards this limit. A new analytics measurement also needs enough free storage capacity for its group limit."
-msgstr ""
+msgstr "Sia le misurazioni analitiche attive che quelle in pausa vengono conteggiate ai fini di questo limite. Inoltre, una nuova misurazione analitica richiede una capacità di archiviazione libera sufficiente per il limite del proprio gruppo."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:48
 msgid "Activity counters are unavailable until analytics resumes."
@@ -6638,7 +6638,7 @@ msgstr "I contatori di attività non saranno disponibili fino alla ripresa dell'
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:40
 msgid "Add analytics measurement"
-msgstr ""
+msgstr "Aggiungi una misurazione analitica"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:39
 msgid "All breakdown values"
@@ -6658,7 +6658,7 @@ msgstr "Valori consentiti:"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:267
 msgid "An equivalent analytics measurement already exists."
-msgstr ""
+msgstr "Esiste già una metrica analitica equivalente."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
@@ -6681,15 +6681,15 @@ msgstr "L'analisi dei dati non è disponibile"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:8
 msgid "Analytics measurement ID"
-msgstr ""
+msgstr "ID di misurazione analitica"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:23
 msgid "Analytics measurement information"
-msgstr ""
+msgstr "Informazioni relative alle misurazioni analitiche"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:12
 msgid "Analytics measurements"
-msgstr ""
+msgstr "Misurazioni analitiche"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:2
 msgid "Analytics status"
@@ -6719,11 +6719,11 @@ msgstr "Lo stato del buffer non è disponibile."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:20
 msgid "Capacity is reserved for the full history of every group in an analytics measurement. This is a planning limit, not disk usage. Pausing keeps the reservation; deleting an analytics measurement releases it."
-msgstr ""
+msgstr "La capacità è riservata all'intero storico di ogni gruppo in una misurazione analitica. Si tratta di un limite di pianificazione, non di spazio su disco. La sospensione mantiene la prenotazione; l'eliminazione di una misurazione analitica la libera."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
 msgid "Choose which activity to measure and arrange your dashboard."
-msgstr ""
+msgstr "Scegli quale attività monitorare e personalizza la tua dashboard."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:4
 msgid "Classified requests — pages, APIs and other dispatch types"
@@ -6731,11 +6731,11 @@ msgstr "Richieste classificate — pagine, API e altri tipi di invio"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:9
 msgid "Configure analytics measurements"
-msgstr ""
+msgstr "Configurare le metriche di analisi"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:235
 msgid "Could not delete the analytics measurement."
-msgstr ""
+msgstr "Impossibile eliminare la metrica di analisi."
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:268
 msgid "Could not save. Check the event, breakdown and filter values."
@@ -6760,23 +6760,23 @@ msgstr "Si sta riprovando a eseguire le operazioni di scrittura sul database. L'
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:36
 msgid "Dates show the start of each stored time interval, not the first or last event. Different resolutions contain overlapping history. Pausing an analytics measurement preserves its stored history and reserved capacity. Figures are a snapshot taken when this dialog opens."
-msgstr ""
+msgstr "Le date indicano l'inizio di ciascun intervallo di tempo memorizzato, non il primo o l'ultimo evento. Risoluzioni diverse contengono cronologie sovrapposte. La messa in pausa di una misurazione analitica ne preserva la cronologia memorizzata e la capacità riservata. I dati riportati rappresentano un'istantanea acquisita al momento dell'apertura di questa finestra di dialogo."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:30
 msgid "Delete analytics measurement"
-msgstr ""
+msgstr "Elimina la misurazione analitica"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:27
 msgid "Delete analytics measurement?"
-msgstr ""
+msgstr "Eliminare la misurazione analitica?"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_delete_confirm.tpl:1
 msgid "Delete this analytics measurement?"
-msgstr ""
+msgstr "Elimina questa metrica di analisi?"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
 msgid "Describe the activity this analytics measurement tracks"
-msgstr ""
+msgstr "Descrivi l'attività monitorata da questa metrica analitica"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:55
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
@@ -6797,7 +6797,7 @@ msgstr "Ordine di visualizzazione salvato."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:14
 msgid "Drag analytics measurements to set their order on the dashboard. Changes are saved immediately."
-msgstr ""
+msgstr "Trascina gli indicatori di analisi per impostarne l'ordine nella dashboard. Le modifiche vengono salvate immediatamente."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:21
 msgid "Drag to reorder"
@@ -6813,7 +6813,7 @@ msgstr "Ciascun gruppo si riserva 3.578 fasce orarie. Le ripartizioni per pagina
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:52
 msgid "Each stored time interval holds the counts for all groups in one analytics measurement. Storage slots for older intervals are reused, so history stays bounded instead of growing with every visit. Only aggregate counts are stored, not individual events."
-msgstr ""
+msgstr "Ogni intervallo di tempo archiviato contiene i conteggi relativi a tutti i gruppi nell'ambito di una singola misurazione analitica. Gli slot di archiviazione relativi agli intervalli più vecchi vengono riutilizzati, in modo che la cronologia rimanga circoscritta anziché crescere ad ogni visita. Vengono archiviati solo i conteggi aggregati, non i singoli eventi."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:9
 msgid "Email outcome — sent, retry, failed or bounced"
@@ -6846,7 +6846,7 @@ msgstr "Gli eventi vengono raggruppati in contatori in memoria prima di essere s
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:23
 msgid "Events must satisfy both filters to be counted. New analytics measurements start without historical data."
-msgstr ""
+msgstr "Per essere conteggiati, gli eventi devono soddisfare entrambi i filtri. Le nuove metriche di analisi partono senza dati storici."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:18
 msgid "Fixed filter"
@@ -6908,7 +6908,7 @@ msgstr "Ultime sei ore"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:23
 msgid "Maximum number of analytics measurements"
-msgstr ""
+msgstr "Numero massimo di misurazioni analitiche"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
 msgid "Most popular content in this period"
@@ -6949,7 +6949,7 @@ msgstr "Successivamente, seleziona una suddivisione e i filtri supportati da que
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:22
 msgid "No analytics measurements to display. Configure or resume an analytics measurement to get started."
-msgstr ""
+msgstr "Non ci sono misurazioni analitiche da visualizzare. Configura o riprendi una misurazione analitica per iniziare."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:12
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:14
@@ -6978,11 +6978,11 @@ msgstr "Intervallo più vecchio memorizzato"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:46
 msgid "One event can update several analytics measurements, so these are not visitor or page-view totals. Counters reset when analytics restarts."
-msgstr ""
+msgstr "Un singolo evento può aggiornare diverse metriche di analisi; pertanto, questi dati non rappresentano i totali relativi ai visitatori o alle visualizzazioni di pagina. I contatori vengono azzerati al riavvio dell'analisi."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
 msgid "Optional. Shown with the analytics measurement on the dashboard."
-msgstr ""
+msgstr "Facoltativo. Visualizzato insieme alla misurazione analitica nella dashboard."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:5
 msgid "Page ID present — true or false"
@@ -7077,7 +7077,7 @@ msgstr "Istantanea al caricamento della pagina. Aggiorna per visualizzare i dati
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:29
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:25
 msgid "Start analytics measurement"
-msgstr ""
+msgstr "Avvia la misurazione analitica"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:15
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_mailing_runs_panel.tpl:18
@@ -7092,7 +7092,7 @@ msgstr "Stato"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:5
 msgid "Step 1 of 2: Choose which activity to measure"
-msgstr ""
+msgstr "Fase 1 di 2: Scegliere quale attività misurare"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:34
 msgid "Step 2 of 2: Breakdown and filters"
@@ -7108,7 +7108,7 @@ msgstr "Dimensione dei dati memorizzati"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:24
 msgid "Stored data size measures the database space used by the aggregate counts and analytics measurement definition. It excludes row headers, indexes, shared table space and unsaved events. Reserved capacity is a planning limit, not disk usage."
-msgstr ""
+msgstr "La dimensione dei dati memorizzati indica lo spazio occupato nel database dai conteggi aggregati e dalle definizioni delle metriche analitiche. Sono esclusi le intestazioni delle righe, gli indici, lo spazio tabella condiviso e gli eventi non salvati. La capacità riservata è un limite di pianificazione, non un utilizzo effettivo del disco."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
 msgid "Stored intervals / capacity"
@@ -7120,15 +7120,15 @@ msgstr "Intervalli di tempo memorizzati"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:243
 msgid "The analytics measurements changed. Reloading their current display order."
-msgstr ""
+msgstr "Le misurazioni analitiche sono cambiate. Ricaricamento del loro ordine di visualizzazione attuale."
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:266
 msgid "This analytics measurement exceeds the storage budget."
-msgstr ""
+msgstr "Questa misurazione analitica supera il budget di archiviazione."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:38
 msgid "This analytics measurement is no longer available."
-msgstr ""
+msgstr "Questa metrica di analisi non è più disponibile."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:11
 msgid "This event schema is unavailable."
@@ -7148,11 +7148,11 @@ msgstr "Il tuo sito in sintesi."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:44
 msgid "analytics measurement updates since startup"
-msgstr ""
+msgstr "Aggiornamenti relativi alle misurazioni analitiche dal momento dell'avvio"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:24
 msgid "analytics measurements"
-msgstr ""
+msgstr "misurazioni analitiche"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:20
 msgid "bytes"
