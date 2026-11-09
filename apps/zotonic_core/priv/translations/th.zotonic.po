@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-09 12:23\n"
+"PO-Revision-Date: 2026-11-09 12:31\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -6608,7 +6608,7 @@ msgstr "ประมาณ 5 ปี"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:26
 msgid "Active and paused analytics measurements both count towards this limit. A new analytics measurement also needs enough free storage capacity for its group limit."
-msgstr ""
+msgstr "การวัดผลวิเคราะห์ทั้งที่กำลังทำงานและที่ถูกหยุดชั่วคราวจะนับรวมเข้าในขีดจำกัดนี้ การวัดผลวิเคราะห์ใหม่ยังต้องมีพื้นที่จัดเก็บข้อมูลว่างเพียงพอสำหรับขีดจำกัดของกลุ่มนั้นด้วย"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:48
 msgid "Activity counters are unavailable until analytics resumes."
@@ -6616,7 +6616,7 @@ msgstr "ตัวนับกิจกรรมจะไม่สามารถ
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:40
 msgid "Add analytics measurement"
-msgstr ""
+msgstr "เพิ่มการวัดผลวิเคราะห์"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:39
 msgid "All breakdown values"
@@ -6636,7 +6636,7 @@ msgstr "ค่าที่อนุญาต:"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:267
 msgid "An equivalent analytics measurement already exists."
-msgstr ""
+msgstr "มีตัวชี้วัดการวิเคราะห์ที่เทียบเท่ากันอยู่แล้ว"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
@@ -6659,15 +6659,15 @@ msgstr "บริการวิเคราะห์ไม่สามารถ
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:8
 msgid "Analytics measurement ID"
-msgstr ""
+msgstr "รหัสการวัดผลวิเคราะห์"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:23
 msgid "Analytics measurement information"
-msgstr ""
+msgstr "ข้อมูลการวัดผลวิเคราะห์"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:12
 msgid "Analytics measurements"
-msgstr ""
+msgstr "การวัดผลวิเคราะห์"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:2
 msgid "Analytics status"
@@ -6697,11 +6697,11 @@ msgstr "สถานะบัฟเฟอร์ไม่สามารถใช
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:20
 msgid "Capacity is reserved for the full history of every group in an analytics measurement. This is a planning limit, not disk usage. Pausing keeps the reservation; deleting an analytics measurement releases it."
-msgstr ""
+msgstr "มีการสำรองพื้นที่สำหรับประวัติทั้งหมดของทุกกลุ่มในตัววัดการวิเคราะห์ นี่เป็นขีดจำกัดในการวางแผน ไม่ใช่การใช้พื้นที่ดิสก์ การหยุดชั่วคราวจะรักษาการสำรองพื้นที่ไว้ ส่วนการลบตัววัดการวิเคราะห์จะปล่อยพื้นที่นั้นให้ว่าง"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
 msgid "Choose which activity to measure and arrange your dashboard."
-msgstr ""
+msgstr "เลือกกิจกรรมที่ต้องการวัดผลและจัดเรียงหน้าแดชบอร์ดของคุณ"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:4
 msgid "Classified requests — pages, APIs and other dispatch types"
@@ -6709,11 +6709,11 @@ msgstr "คำขอที่จัดประเภท — หน้าเว�
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:9
 msgid "Configure analytics measurements"
-msgstr ""
+msgstr "ตั้งค่าการวัดผลวิเคราะห์"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:235
 msgid "Could not delete the analytics measurement."
-msgstr ""
+msgstr "ไม่สามารถลบข้อมูลการวัดผลวิเคราะห์ได้"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:268
 msgid "Could not save. Check the event, breakdown and filter values."
@@ -6738,23 +6738,23 @@ msgstr "ระบบกำลังลองเขียนข้อมูลล
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:36
 msgid "Dates show the start of each stored time interval, not the first or last event. Different resolutions contain overlapping history. Pausing an analytics measurement preserves its stored history and reserved capacity. Figures are a snapshot taken when this dialog opens."
-msgstr ""
+msgstr "วันที่แสดงเวลาเริ่มต้นของแต่ละช่วงเวลาที่จัดเก็บไว้ ไม่ใช่เวลาของเหตุการณ์แรกหรือเหตุการณ์สุดท้าย ข้อมูลประวัติที่มีความละเอียดต่างกันครอบคลุมช่วงเวลาที่ทับซ้อนกัน การหยุดการวัดผลวิเคราะห์ชั่วคราวจะเก็บข้อมูลประวัติและความจุที่สำรองไว้ ตัวเลขแสดงสถานะ ณ เวลาที่เปิดกล่องโต้ตอบนี้"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:30
 msgid "Delete analytics measurement"
-msgstr ""
+msgstr "ลบการวัดผลวิเคราะห์"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:27
 msgid "Delete analytics measurement?"
-msgstr ""
+msgstr "ลบการวัดผลวิเคราะห์หรือไม่?"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_delete_confirm.tpl:1
 msgid "Delete this analytics measurement?"
-msgstr ""
+msgstr "จะลบการวัดผลวิเคราะห์นี้หรือไม่?"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
 msgid "Describe the activity this analytics measurement tracks"
-msgstr ""
+msgstr "อธิบายกิจกรรมที่ตัววัดวิเคราะห์นี้ติดตาม"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:55
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
@@ -6775,7 +6775,7 @@ msgstr "ลำดับการแสดงผลได้บันทึกแ
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:14
 msgid "Drag analytics measurements to set their order on the dashboard. Changes are saved immediately."
-msgstr ""
+msgstr "ลากตัววัดวิเคราะห์เพื่อจัดเรียงลำดับบนแดชบอร์ด การเปลี่ยนแปลงจะถูกบันทึกทันที"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:21
 msgid "Drag to reorder"
@@ -6791,7 +6791,7 @@ msgstr "แต่ละกลุ่มได้จองช่วงเวลา
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:52
 msgid "Each stored time interval holds the counts for all groups in one analytics measurement. Storage slots for older intervals are reused, so history stays bounded instead of growing with every visit. Only aggregate counts are stored, not individual events."
-msgstr ""
+msgstr "แต่ละช่วงเวลาที่เก็บไว้จะเก็บจำนวนเหตุการณ์ของทุกกลุ่มในหนึ่งการวัดวิเคราะห์ ช่องเก็บข้อมูลสำหรับช่วงเวลาที่เก่ากว่าจะถูกนำกลับมาใช้ใหม่ ทำให้ข้อมูลประวัติยังคงอยู่ในขอบเขตที่กำหนด แทนที่จะเพิ่มขึ้นทุกครั้งที่มีการเข้าชม ระบบจะเก็บเฉพาะจำนวนเหตุการณ์รวมเท่านั้น ไม่ใช่เหตุการณ์แต่ละรายการ"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:9
 msgid "Email outcome — sent, retry, failed or bounced"
@@ -6824,7 +6824,7 @@ msgstr "เหตุการณ์ต่างๆ จะถูกรวมเ�
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:23
 msgid "Events must satisfy both filters to be counted. New analytics measurements start without historical data."
-msgstr ""
+msgstr "เหตุการณ์ต้องผ่านทั้งสองตัวกรองจึงจะได้รับการนับรวม การวัดผลวิเคราะห์ใหม่จะเริ่มต้นโดยไม่มีข้อมูลในอดีต"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:18
 msgid "Fixed filter"
@@ -6886,7 +6886,7 @@ msgstr "หกชั่วโมงที่ผ่านมา"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:23
 msgid "Maximum number of analytics measurements"
-msgstr ""
+msgstr "จำนวนการวัดวิเคราะห์สูงสุด"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
 msgid "Most popular content in this period"
@@ -6927,7 +6927,7 @@ msgstr "ต่อไป ให้เลือกการแบ่งข้อ�
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:22
 msgid "No analytics measurements to display. Configure or resume an analytics measurement to get started."
-msgstr ""
+msgstr "ไม่มีการวัดผลวิเคราะห์ที่จะแสดง ตั้งค่าหรือกลับมาดำเนินการวัดผลวิเคราะห์ต่อเพื่อเริ่มต้น"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:12
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:14
@@ -6956,11 +6956,11 @@ msgstr "ช่วงเวลาที่เก่าที่สุดที่
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:46
 msgid "One event can update several analytics measurements, so these are not visitor or page-view totals. Counters reset when analytics restarts."
-msgstr ""
+msgstr "เหตุการณ์หนึ่งสามารถอัปเดตค่าการวัดหลายรายการได้ ดังนั้นตัวเลขเหล่านี้จึงไม่ใช่จำนวนผู้เข้าชมหรือจำนวนการดูหน้าเว็บทั้งหมด ตัวนับจะถูกรีเซ็ตเมื่อระบบวิเคราะห์ข้อมูลเริ่มต้นใหม่"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
 msgid "Optional. Shown with the analytics measurement on the dashboard."
-msgstr ""
+msgstr "เป็นตัวเลือกเสริม แสดงพร้อมข้อมูลวิเคราะห์บนแดชบอร์ด"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:5
 msgid "Page ID present — true or false"
@@ -7055,7 +7055,7 @@ msgstr "ภาพถ่ายหน้าจอเมื่อหน้าเว
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:29
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:25
 msgid "Start analytics measurement"
-msgstr ""
+msgstr "เริ่มการวัดผลวิเคราะห์"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:15
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_mailing_runs_panel.tpl:18
@@ -7070,7 +7070,7 @@ msgstr "รัฐ"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:5
 msgid "Step 1 of 2: Choose which activity to measure"
-msgstr ""
+msgstr "ขั้นตอนที่ 1 จาก 2: เลือกกิจกรรมที่ต้องการวัด"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:34
 msgid "Step 2 of 2: Breakdown and filters"
@@ -7086,7 +7086,7 @@ msgstr "ขนาดข้อมูลที่เก็บไว้"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:24
 msgid "Stored data size measures the database space used by the aggregate counts and analytics measurement definition. It excludes row headers, indexes, shared table space and unsaved events. Reserved capacity is a planning limit, not disk usage."
-msgstr ""
+msgstr "ขนาดข้อมูลที่จัดเก็บไว้คือพื้นที่ในฐานข้อมูลที่ใช้สำหรับจำนวนเหตุการณ์รวมและข้อกำหนดของการวัดผลวิเคราะห์ โดยไม่รวมส่วนหัวของแถว ดัชนี พื้นที่ตารางที่ใช้ร่วมกัน และเหตุการณ์ที่ยังไม่ได้บันทึก ความจุที่สำรองไว้เป็นขีดจำกัดสำหรับการวางแผน ไม่ใช่พื้นที่ดิสก์ที่ใช้จริง"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
 msgid "Stored intervals / capacity"
@@ -7098,15 +7098,15 @@ msgstr "ช่วงเวลาที่จัดเก็บไว้"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:243
 msgid "The analytics measurements changed. Reloading their current display order."
-msgstr ""
+msgstr "ข้อมูลวิเคราะห์ได้เปลี่ยนแปลงแล้ว กำลังโหลดลำดับการแสดงผลปัจจุบันใหม่"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:266
 msgid "This analytics measurement exceeds the storage budget."
-msgstr ""
+msgstr "การวัดผลวิเคราะห์นี้เกินงบประมาณการจัดเก็บข้อมูล"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:38
 msgid "This analytics measurement is no longer available."
-msgstr ""
+msgstr "การวัดผลวิเคราะห์นี้ไม่มีให้บริการอีกต่อไปแล้ว"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:11
 msgid "This event schema is unavailable."
@@ -7126,11 +7126,11 @@ msgstr "ภาพรวมเว็บไซต์ของคุณ"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:44
 msgid "analytics measurement updates since startup"
-msgstr ""
+msgstr "การอัปเดตการวัดผลวิเคราะห์ตั้งแต่เริ่มทำงานของโมดูลวิเคราะห์"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:24
 msgid "analytics measurements"
-msgstr ""
+msgstr "การวัดผลวิเคราะห์"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:20
 msgid "bytes"
