@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-09 11:24\n"
+"PO-Revision-Date: 2026-11-09 12:13\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -6587,216 +6587,225 @@ msgstr "Cette page affiche des statistiques système (en temps réel) telles que
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:60
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:29
 msgid "1 day"
-msgstr ""
+msgstr "1 jour"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:59
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:29
 msgid "1 hour"
-msgstr ""
+msgstr "1 heure"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:57
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:29
 msgid "1 minute"
-msgstr ""
+msgstr "1 minute"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:58
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:29
 msgid "15 minutes"
-msgstr ""
+msgstr "15 minutes"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:59
 msgid "30 days"
-msgstr ""
+msgstr "30 jours"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:57
 msgid "6 hours"
-msgstr ""
+msgstr "6 heures"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:58
 msgid "7 days"
-msgstr ""
+msgstr "7 jours"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:34
 msgid "A batch is waiting to be saved."
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:52
-msgid "A bucket holds the counts for all groups in one recording and time interval. Older slots are reused, so history stays bounded instead of growing with every visit. Only aggregate counts are stored, not individual events."
-msgstr ""
+msgstr "Un lot attend d'être enregistré."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:3
 msgid "API requests — HTTP calls, including errors"
-msgstr ""
+msgstr "Requêtes API — Appels HTTP, y compris les erreurs"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:60
 msgid "About 5 years"
-msgstr ""
+msgstr "Environ 5 ans"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:26
 msgid "Active and paused recordings both count towards this limit. A new recording also needs enough free storage capacity for its group limit."
-msgstr ""
+msgstr "Les enregistrements actifs et ceux en pause sont tous deux pris en compte dans cette limite. Un nouvel enregistrement nécessite également une capacité de stockage libre suffisante pour respecter la limite de son groupe."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:48
 msgid "Activity counters are unavailable until analytics resumes."
-msgstr ""
+msgstr "Les compteurs d'activité ne sont pas disponibles tant que l'analyse n'a pas repris."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:40
 msgid "Add recording"
-msgstr ""
+msgstr "Ajouter un enregistrement"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:39
 msgid "All breakdown values"
-msgstr ""
+msgstr "Toutes les valeurs détaillées"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_delete_confirm.tpl:2
 msgid "All recorded history will be permanently deleted and its storage reservation released. This cannot be undone."
-msgstr ""
+msgstr "Tout l'historique enregistré sera définitivement supprimé et l'espace de stockage qu'il occupait sera libéré. Cette action est irréversible."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:19
 msgid "Allowed values (comma separated)"
-msgstr ""
+msgstr "Valeurs autorisées (séparées par des virgules)"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:35
 msgid "Allowed values:"
-msgstr ""
+msgstr "Valeurs autorisées :"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:267
 msgid "An equivalent recording already exists."
-msgstr ""
+msgstr "Un enregistrement équivalent existe déjà."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
 #: zotonic_mod_analytics/src/mod_analytics.erl:196
 msgid "Analytics configuration"
+msgstr "Configuration de l'analyse"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:10
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:9
+msgid "Analytics event type"
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:6
 msgid "Analytics is running"
-msgstr ""
+msgstr "L'analyse est en cours"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:8
 msgid "Analytics is unavailable"
-msgstr ""
+msgstr "La fonctionnalité d'analyse n'est pas disponible"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:2
 msgid "Analytics status"
-msgstr ""
+msgstr "État de l'analyse"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
 msgid "Bars show the lower bound. Counts are ranges, ordered by their lower bound. Overlapping ranges may change order. Content outside the retained candidates has at most"
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:23
-msgid "Both filters must match. New recordings start without historical data."
-msgstr ""
+msgstr "Les barres indiquent la limite inférieure. Les nombres correspondent à des plages, classées par ordre croissant de leur limite inférieure. Les plages qui se chevauchent peuvent modifier l'ordre. Le contenu ne figurant pas parmi les candidats retenus compte au maximum"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:50
 msgid "Bounded history"
-msgstr ""
+msgstr "Historique limité"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:12
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:14
 msgid "Break down by"
-msgstr ""
+msgstr "Répartition par"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:40
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "Breakdown"
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
-msgid "Buckets / slots"
-msgstr ""
+msgstr "Répartition"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:36
 msgid "Buffer status is unavailable."
-msgstr ""
+msgstr "L'état du tampon n'est pas disponible."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:20
 msgid "Capacity is reserved for the full history of every group in a recording. This is a planning limit, not disk usage. Pausing keeps the reservation; deleting a recording releases it."
-msgstr ""
+msgstr "Une capacité est réservée pour l'historique complet de chaque groupe dans un enregistrement. Il s'agit d'une limite de planification, et non d'une limite d'utilisation du disque. La mise en pause maintient cette réservation ; la suppression d'un enregistrement la libère."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
 msgid "Choose what to record and arrange your dashboard."
-msgstr ""
+msgstr "Choisissez les éléments à enregistrer et organisez votre tableau de bord."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:4
 msgid "Classified requests — pages, APIs and other dispatch types"
-msgstr ""
+msgstr "Demandes classifiées — pages, API et autres types de traitement"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:9
 msgid "Configure recordings"
-msgstr ""
+msgstr "Configurer les enregistrements"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:235
 msgid "Could not delete the recording."
-msgstr ""
+msgstr "Impossible de supprimer l'enregistrement."
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:268
 msgid "Could not save. Check the event, breakdown and filter values."
-msgstr ""
+msgstr "Impossible d'enregistrer. Vérifiez les valeurs de l'événement, de la ventilation et du filtre."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:3
 msgid "Country — two-letter code, e.g. NL"
-msgstr ""
+msgstr "Pays — code à deux lettres, par exemple NL"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:14
 #: zotonic_mod_survey/src/models/m_survey.erl:1498
 msgid "Created"
 msgstr "Créé"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:13
-msgid "Database writes are being retried. Event processing can continue while buffer capacity remains available; prolonged failures can cause data loss."
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
+msgid "Data size"
 msgstr ""
 
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:13
+msgid "Database writes are being retried. Event processing can continue while buffer capacity remains available; prolonged failures can cause data loss."
+msgstr "Les opérations d'écriture dans la base de données font l'objet de nouvelles tentatives. Le traitement des événements peut se poursuivre tant que la capacité de la mémoire tampon est suffisante ; des échecs prolongés peuvent entraîner une perte de données."
+
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:36
-msgid "Dates show the start of each bucket, not the first or last event. Different resolutions contain overlapping history. Pausing preserves stored history and its reservation. Figures are a snapshot when this dialog opens."
+msgid "Dates show the start of each stored time interval, not the first or last event. Different resolutions contain overlapping history. Pausing a recording preserves its stored history and reserved capacity. Figures are a snapshot taken when this dialog opens."
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:30
 msgid "Delete recording"
-msgstr ""
+msgstr "Supprimer l'enregistrement"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:27
 msgid "Delete recording?"
-msgstr ""
+msgstr "Supprimer l'enregistrement ?"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_delete_confirm.tpl:1
 msgid "Delete this recording?"
-msgstr ""
+msgstr "Supprimer cet enregistrement ?"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:55
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
 msgid "Detail"
-msgstr ""
+msgstr "Détails"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:4
 msgid "Device — phone, tablet, desktop or unknown"
+msgstr "Appareil : téléphone, tablette, ordinateur de bureau ou inconnu"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
+msgid "Display order"
+msgstr ""
+
+#: zotonic_mod_analytics/src/mod_analytics.erl:241
+msgid "Display order saved."
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:14
 msgid "Drag recordings to set their order on the dashboard. Changes are saved immediately."
-msgstr ""
+msgstr "Faites glisser les enregistrements pour définir leur ordre d'affichage sur le tableau de bord. Les modifications sont enregistrées immédiatement."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:21
 msgid "Drag to reorder"
-msgstr ""
+msgstr "Faites glisser pour réorganiser"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:47
 msgid "Dropped updates can result from overload, expired events, configuration changes or failed writes. This is a diagnostic count, not an exact count of lost page views. Incomplete periods are marked in reports."
-msgstr ""
+msgstr "Les mises à jour manquantes peuvent être dues à une surcharge, à des événements périmés, à des modifications de configuration ou à des échecs d'écriture. Il s'agit d'un chiffre à caractère diagnostique, et non d'un décompte exact des pages vues perdues. Les périodes incomplètes sont signalées dans les rapports."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:15
 msgid "Each group reserves 3,578 time slots. Page breakdowns use candidates with approximate counts; other breakdowns reserve a group for excess values."
+msgstr "Chaque groupe se voit attribuer 3 578 créneaux horaires. Les ventilations par page utilisent des chiffres approximatifs concernant le nombre de candidats ; les autres ventilations prévoient un groupe pour les valeurs excédentaires."
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:52
+msgid "Each stored time interval holds the counts for all groups in one analytics recording. Storage slots for older intervals are reused, so history stays bounded instead of growing with every visit. Only aggregate counts are stored, not individual events."
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:9
 msgid "Email outcome — sent, retry, failed or bounced"
-msgstr ""
+msgstr "Statut de l'e-mail : envoyé, nouvelle tentative, échec ou rejeté"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:36
 msgid "Enter one or more values, separated by commas."
-msgstr ""
+msgstr "Saisissez une ou plusieurs valeurs, séparées par des virgules."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:19
@@ -6805,106 +6814,89 @@ msgstr "Evènement"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:29
 msgid "Event buffer"
-msgstr ""
+msgstr "Tampon d'événements"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:42
 msgid "Event processing"
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:10
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:9
-msgid "Event type"
-msgstr ""
+msgstr "Traitement des événements"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:40
 msgid "Events"
-msgstr ""
+msgstr "Événements"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:33
 msgid "Events are combined into counters in memory before saving, normally every 10 seconds. A low value is normal. This buffer is separate from a batch currently being saved."
+msgstr "Les événements sont regroupés dans des compteurs en mémoire avant d'être enregistrés, généralement toutes les 10 secondes. Une valeur faible est normale. Ce tampon est distinct du lot en cours d'enregistrement."
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:23
+msgid "Events must satisfy both filters to be recorded. New recordings start without historical data."
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
 msgid "Explain what this recording measures"
-msgstr ""
+msgstr "Expliquez ce que mesure cet enregistrement"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:18
 msgid "Fixed filter"
-msgstr ""
+msgstr "Filtre fixe"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:16
 msgid "Fixed filters"
-msgstr ""
+msgstr "Filtres fixes"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:25
 msgid "Gaps are unrecorded intervals. Partial intervals may undercount activity. Request counts include automation, exclude editor activity and do not measure unique visitors."
-msgstr ""
+msgstr "Les lacunes correspondent à des intervalles non enregistrés. Les intervalles partiels peuvent entraîner une sous-estimation de l'activité. Les chiffres relatifs aux requêtes incluent l'automatisation, excluent l'activité des éditeurs et ne mesurent pas le nombre de visiteurs uniques."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:13
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:15
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "Group limit"
-msgstr ""
+msgstr "Limite par groupe"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:8
 msgid "HTTP method — GET, POST, HEAD and others"
-msgstr ""
+msgstr "Méthodes HTTP — GET, POST, HEAD et autres"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:12
 msgid "HTTP status class — 2xx success, 4xx client errors, 5xx server errors"
-msgstr ""
+msgstr "Classes d'état HTTP — 2xx : succès, 4xx : erreurs client, 5xx : erreurs serveur"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:6
 msgid "HTTP status code — e.g. 200, 404 or 500"
-msgstr ""
+msgstr "Code d'état HTTP — par exemple 200, 404 ou 500"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:54
 msgid "History detail and retention"
-msgstr ""
+msgstr "Détails et conservation de l'historique"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:45
 msgid "Includes incomplete or unrecorded intervals"
-msgstr ""
+msgstr "Comprend les intervalles incomplets ou non enregistrés"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:7
 msgid "Language — language code, e.g. en or nl"
-msgstr ""
+msgstr "Langue — code de langue, par exemple « en » ou « nl »"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
 msgid "Last 24 hours"
-msgstr ""
+msgstr "Au cours des dernières 24 heures"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
 msgid "Last five years"
-msgstr ""
+msgstr "Ces cinq dernières années"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
 msgid "Last hour"
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
-msgid "Last month"
-msgstr ""
+msgstr "Dernière heure"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
 msgid "Last six hours"
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
-msgid "Last week"
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
-msgid "Last year"
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
-msgid "Latest bucket"
-msgstr ""
+msgstr "Au cours des six dernières heures"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
 msgid "Most popular content in this period"
-msgstr ""
+msgstr "Contenus les plus populaires au cours de cette période"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:7
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
@@ -6918,6 +6910,10 @@ msgstr "Nom"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:12
 msgid "New events cannot currently be processed. Previously saved history is still available."
+msgstr "Il n'est actuellement pas possible de traiter de nouveaux événements. L'historique enregistré précédemment reste toutefois accessible."
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
+msgid "Newest stored interval"
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:28
@@ -6933,155 +6929,155 @@ msgstr "Suivant"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:10
 msgid "Next, choose a breakdown and filters supported by this event type."
-msgstr ""
+msgstr "Choisissez ensuite une ventilation et les filtres pris en charge par ce type d'événement."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:12
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:14
 msgid "No breakdown (total)"
-msgstr ""
+msgstr "Pas de ventilation (total)"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:18
 msgid "No filter — include all values"
-msgstr ""
+msgstr "Pas de filtre — inclure toutes les valeurs"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:29
 msgid "No leading content identified in this period."
-msgstr ""
+msgstr "Aucun contenu phare n'a été identifié au cours de cette période."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:36
 msgid "No recorded events yet."
-msgstr ""
+msgstr "Aucun événement n'a encore été enregistré."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:22
 msgid "No recordings to display. Configure or resume a recording to get started."
-msgstr ""
+msgstr "Aucun enregistrement à afficher. Configurez ou reprenez un enregistrement pour commencer."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:16
 msgid "None — all matching events"
-msgstr ""
+msgstr "Aucun — tous les événements correspondants"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
-msgid "Oldest bucket"
+msgid "Oldest stored interval"
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:46
 msgid "One event can update several recordings, so these are not visitor or page-view totals. Counters reset when analytics restarts."
-msgstr ""
+msgstr "Un événement peut mettre à jour plusieurs enregistrements ; il ne s'agit donc pas du nombre total de visiteurs ou de pages vues. Les compteurs sont remis à zéro au redémarrage de l'outil d'analyse."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
 msgid "Optional. Shown with the recording on the dashboard."
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
-msgid "Order"
-msgstr ""
+msgstr "Facultatif. Illustré avec l'enregistrement affiché sur le tableau de bord."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:5
 msgid "Page ID present — true or false"
-msgstr ""
+msgstr "ID de page présent — vrai ou faux"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:2
 msgid "Page requests — successful public HTML pages"
-msgstr ""
+msgstr "Demandes de pages — pages HTML publiques affichées avec succès"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:10
 msgid "Page — public resource ID"
+msgstr "Page — identifiant de la ressource publique"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
+msgid "Past 30 days"
+msgstr ""
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
+msgid "Past 365 days"
+msgstr ""
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
+msgid "Past 7 days"
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:24
 msgid "Pause"
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
-msgid "Payload"
-msgstr ""
+msgstr "Pause"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:12
 msgid "Period"
-msgstr ""
+msgstr "Période"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:26
 msgid "Rank"
-msgstr ""
+msgstr "Classement"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
 msgid "Ranked by recorded requests in the selected moving period. The window advances in steps of"
-msgstr ""
+msgstr "Classement en fonction du nombre de demandes enregistrées au cours de la période choisie. La fenêtre avance par incréments de"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:8
 msgid "Recording ID"
+msgstr "Identifiant de l'enregistrement"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:23
+msgid "Recording capacity"
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:23
 msgid "Recording information"
-msgstr ""
-
-#: zotonic_mod_analytics/src/mod_analytics.erl:241
-msgid "Recording order saved."
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:23
-msgid "Recording slots"
-msgstr ""
+msgstr "Informations relatives à l'enregistrement"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:12
 msgid "Recordings"
-msgstr ""
+msgstr "Enregistrements"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:11
 msgid "Referrer — referring hostname, internal or direct/unknown"
-msgstr ""
+msgstr "Référent — nom d'hôte de référence, interne ou direct/inconnu"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:14
 msgid "Request type — page, api or a custom dispatch type"
-msgstr ""
+msgstr "Type de requête : page, API ou type de traitement personnalisé"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:22
 msgid "Request types found in this site's dispatch rules:"
-msgstr ""
+msgstr "Types de demandes figurant dans les règles de répartition de ce site :"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:26
 msgid "Requests"
-msgstr ""
+msgstr "Demandes"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:22
 msgid "Reserved capacity"
-msgstr ""
+msgstr "Capacité réservée"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:17
 msgid "Reserved storage capacity"
-msgstr ""
+msgstr "Capacité de stockage réservée"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:55
-msgid "Retained for"
+msgid "Retention period"
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:5
 msgid "SMTP (Email) — sent, retries, failures and bounces"
-msgstr ""
+msgstr "SMTP (e-mail) — messages envoyés, tentatives de réenvoi, échecs et messages rejetés"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:11
 msgid "Schema version"
-msgstr ""
+msgstr "Version du schéma"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
 msgid "Short description"
-msgstr ""
+msgstr "Brève description"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
 #: zotonic_mod_analytics/src/mod_analytics.erl:188
 msgid "Site Analytics"
-msgstr ""
+msgstr "Statistiques du site"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:10
 msgid "Snapshot at page load. Refresh to update."
-msgstr ""
+msgstr "Instantané au chargement de la page. Actualisez la page pour mettre à jour les informations."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:29
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:25
 msgid "Start recording"
-msgstr ""
+msgstr "Commencer l'enregistrement"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:15
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_mailing_runs_panel.tpl:18
@@ -7092,99 +7088,103 @@ msgstr "Lancé"
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:9
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "State"
-msgstr ""
+msgstr "Etat"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:5
 msgid "Step 1 of 2: Choose what to record"
-msgstr ""
+msgstr "Étape 1 sur 2 : Choisissez ce que vous souhaitez enregistrer"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:34
 msgid "Step 2 of 2: Breakdown and filters"
-msgstr ""
+msgstr "Étape 2 sur 2 : Ventilation et filtres"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:18
 msgid "Storage usage"
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:21
-msgid "Stored buckets"
-msgstr ""
+msgstr "Utilisation de l'espace de stockage"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:20
-msgid "Stored payload"
+msgid "Stored data size"
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:24
-msgid "Stored payload is the database size of the aggregate counts and recording definition. It excludes row headers, indexes, shared table space and unsaved events. Reserved capacity is a planning limit, not disk usage."
+msgid "Stored data size measures the database space used by the aggregate counts and recording definition. It excludes row headers, indexes, shared table space and unsaved events. Reserved capacity is a planning limit, not disk usage."
+msgstr ""
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
+msgid "Stored intervals / capacity"
+msgstr ""
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:21
+msgid "Stored time intervals"
 msgstr ""
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:243
-msgid "The recordings changed. Reloading the current order."
+msgid "The recordings changed. Reloading their current display order."
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:11
 msgid "This event schema is unavailable."
-msgstr ""
+msgstr "Ce schéma d'événement n'est pas disponible."
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:266
 msgid "This recording exceeds the storage budget."
-msgstr ""
+msgstr "Cet enregistrement dépasse l'espace de stockage alloué."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:38
 msgid "This recording is no longer available."
-msgstr ""
+msgstr "Cet enregistrement n'est plus disponible."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:13
 msgid "Traffic — crawler, other or unknown"
-msgstr ""
+msgstr "Trafic — robot d'indexation, autre ou inconnu"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:8
 msgid "View analytics"
-msgstr ""
+msgstr "Consulter les statistiques"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
 msgid "Your site at a glance."
-msgstr ""
+msgstr "Votre site en un coup d'œil."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:20
 msgid "bytes"
-msgstr ""
+msgstr "octets"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:31
 msgid "counters"
-msgstr ""
+msgstr "compteurs"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:45
 msgid "dropped updates since startup"
-msgstr ""
+msgstr "mises à jour manquées depuis le démarrage"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:8
 msgid "events"
-msgstr ""
+msgstr "événements"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:18
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:22
 msgid "group/time slots"
-msgstr ""
+msgstr "groupes/créneaux horaires"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:44
 msgid "recording updates since startup"
-msgstr ""
+msgstr "enregistrement des mises à jour depuis le démarrage"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:24
 msgid "recordings"
-msgstr ""
+msgstr "enregistrements"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
 msgid "requests."
-msgstr ""
+msgstr "demandes."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
 msgid "seconds."
-msgstr ""
+msgstr "secondes."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:51
-msgid "stored time buckets"
+msgid "stored time intervals"
 msgstr ""
 
 #: zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:13
