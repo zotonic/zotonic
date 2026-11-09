@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-09 11:26\n"
+"PO-Revision-Date: 2026-11-09 12:14\n"
 "Last-Translator: \n"
 "Language-Team: Romanian\n"
 "MIME-Version: 1.0\n"
@@ -6644,10 +6644,6 @@ msgstr "7 zile"
 msgid "A batch is waiting to be saved."
 msgstr "Un lot așteaptă să fie salvat."
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:52
-msgid "A bucket holds the counts for all groups in one recording and time interval. Older slots are reused, so history stays bounded instead of growing with every visit. Only aggregate counts are stored, not individual events."
-msgstr "Un „bucket” stochează valorile numărului de evenimente pentru toate grupurile dintr-o singură înregistrare și dintr-un singur interval de timp. Sloturile mai vechi sunt reutilizate, astfel încât istoricul rămâne limitat, în loc să crească la fiecare vizită. Se stochează doar valorile agregate, nu evenimentele individuale."
-
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:3
 msgid "API requests — HTTP calls, including errors"
 msgstr "Solicitări API — apeluri HTTP, inclusiv erori"
@@ -6694,6 +6690,11 @@ msgstr "Există deja o înregistrare echivalentă."
 msgid "Analytics configuration"
 msgstr "Configurarea funcțiilor de analiză"
 
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:10
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:9
+msgid "Analytics event type"
+msgstr "Tipul evenimentului de analiză"
+
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:6
 msgid "Analytics is running"
 msgstr "Analiza este în curs de desfășurare"
@@ -6710,10 +6711,6 @@ msgstr "Starea analizelor"
 msgid "Bars show the lower bound. Counts are ranges, ordered by their lower bound. Overlapping ranges may change order. Content outside the retained candidates has at most"
 msgstr "Barele indică limita inferioară. Numărările sunt intervale, ordonate după limita lor inferioară. Intervalele care se suprapun pot modifica ordinea. Conținutul din afara candidaților reținuți are cel mult"
 
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:23
-msgid "Both filters must match. New recordings start without historical data."
-msgstr "Ambele filtre trebuie să coincidă. Noile înregistrări încep fără date istorice."
-
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:50
 msgid "Bounded history"
 msgstr "Istoric limitat"
@@ -6727,10 +6724,6 @@ msgstr "Defalcare pe"
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "Breakdown"
 msgstr "Defalcare"
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
-msgid "Buckets / slots"
-msgstr "Găleți / fante"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:36
 msgid "Buffer status is unavailable."
@@ -6769,13 +6762,17 @@ msgstr "Țară — cod din două litere, de exemplu NL"
 msgid "Created"
 msgstr "Creat"
 
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
+msgid "Data size"
+msgstr "Dimensiunea datelor"
+
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:13
 msgid "Database writes are being retried. Event processing can continue while buffer capacity remains available; prolonged failures can cause data loss."
 msgstr "Se efectuează noi încercări de scriere în baza de date. Procesarea evenimentelor poate continua atâta timp cât există capacitate disponibilă în buffer; defecțiunile prelungite pot duce la pierderea datelor."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:36
-msgid "Dates show the start of each bucket, not the first or last event. Different resolutions contain overlapping history. Pausing preserves stored history and its reservation. Figures are a snapshot when this dialog opens."
-msgstr "Datele indică momentul de început al fiecărui interval, nu primul sau ultimul eveniment. Rezoluțiile diferite conțin istoric care se suprapune. Punerea în pauză păstrează istoricul stocat și rezervarea acestuia. Cifrele reprezintă o imagine instantanee la momentul deschiderii acestei ferestre de dialog."
+msgid "Dates show the start of each stored time interval, not the first or last event. Different resolutions contain overlapping history. Pausing a recording preserves its stored history and reserved capacity. Figures are a snapshot taken when this dialog opens."
+msgstr "Datele indică începutul fiecărui interval de timp stocat, nu primul sau ultimul eveniment. Rezoluțiile diferite conțin istoricul care se suprapune. Punerea în pauză a unei înregistrări păstrează istoricul stocat și capacitatea rezervată. Cifrele reprezintă o captură de ecran realizată în momentul deschiderii acestei ferestre de dialog."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:30
 msgid "Delete recording"
@@ -6798,6 +6795,14 @@ msgstr "Detalii"
 msgid "Device — phone, tablet, desktop or unknown"
 msgstr "Dispozitiv — telefon, tabletă, computer de birou sau necunoscut"
 
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
+msgid "Display order"
+msgstr "Ordinea afișării"
+
+#: zotonic_mod_analytics/src/mod_analytics.erl:241
+msgid "Display order saved."
+msgstr "Ordinea de afișare a fost salvată."
+
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:14
 msgid "Drag recordings to set their order on the dashboard. Changes are saved immediately."
 msgstr "Trageți înregistrările pentru a le ordona pe tabloul de bord. Modificările se salvează imediat."
@@ -6813,6 +6818,10 @@ msgstr "Actualizările omise pot fi cauzate de suprasolicitare, evenimente expir
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:15
 msgid "Each group reserves 3,578 time slots. Page breakdowns use candidates with approximate counts; other breakdowns reserve a group for excess values."
 msgstr "Fiecare grup rezervă 3.578 de intervale de timp. Defalcările pe pagini utilizează candidați cu numere aproximative; celelalte defalcări rezervă un grup pentru valorile excedentare."
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:52
+msgid "Each stored time interval holds the counts for all groups in one analytics recording. Storage slots for older intervals are reused, so history stays bounded instead of growing with every visit. Only aggregate counts are stored, not individual events."
+msgstr "Fiecare interval de timp stocat conține numărul de evenimente pentru toate grupurile dintr-o singură înregistrare analitică. Spațiile de stocare pentru intervalele mai vechi sunt reutilizate, astfel încât istoricul rămâne limitat, în loc să crească la fiecare vizită. Se stochează doar numărul total de evenimente, nu și evenimentele individuale."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:9
 msgid "Email outcome — sent, retry, failed or bounced"
@@ -6835,11 +6844,6 @@ msgstr "Buffer de evenimente"
 msgid "Event processing"
 msgstr "Prelucrarea evenimentelor"
 
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:10
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:9
-msgid "Event type"
-msgstr "Tipul evenimentului"
-
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:40
 msgid "Events"
 msgstr "Evenimente"
@@ -6847,6 +6851,10 @@ msgstr "Evenimente"
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:33
 msgid "Events are combined into counters in memory before saving, normally every 10 seconds. A low value is normal. This buffer is separate from a batch currently being saved."
 msgstr "Evenimentele sunt grupate în contori în memorie înainte de a fi salvate, de obicei la fiecare 10 secunde. O valoare scăzută este normală. Acest tampon este separat de lotul care se salvează în prezent."
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:23
+msgid "Events must satisfy both filters to be recorded. New recordings start without historical data."
+msgstr "Pentru a fi înregistrate, evenimentele trebuie să îndeplinească ambele criterii de filtrare. Noile înregistrări încep fără date istorice."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
 msgid "Explain what this recording measures"
@@ -6907,24 +6915,8 @@ msgid "Last hour"
 msgstr "Ultima oră"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
-msgid "Last month"
-msgstr "Luna trecută"
-
-#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
 msgid "Last six hours"
 msgstr "Ultimele șase ore"
-
-#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
-msgid "Last week"
-msgstr "Săptămâna trecută"
-
-#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
-msgid "Last year"
-msgstr "Anul trecut"
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
-msgid "Latest bucket"
-msgstr "Cea mai recentă cupă"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
 msgid "Most popular content in this period"
@@ -6943,6 +6935,10 @@ msgstr "Nume"
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:12
 msgid "New events cannot currently be processed. Previously saved history is still available."
 msgstr "În prezent, nu se pot procesa evenimente noi. Istoricul salvat anterior este în continuare disponibil."
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
+msgid "Newest stored interval"
+msgstr "Cel mai recent interval înregistrat"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:28
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:210
@@ -6985,8 +6981,8 @@ msgid "None — all matching events"
 msgstr "Niciunul — toate evenimentele corespunzătoare"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
-msgid "Oldest bucket"
-msgstr "Cea mai veche găleată"
+msgid "Oldest stored interval"
+msgstr "Cel mai vechi interval înregistrat"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:46
 msgid "One event can update several recordings, so these are not visitor or page-view totals. Counters reset when analytics restarts."
@@ -6995,10 +6991,6 @@ msgstr "Un singur eveniment poate actualiza mai multe înregistrări, așa că a
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
 msgid "Optional. Shown with the recording on the dashboard."
 msgstr "Opțional. Prezentat cu înregistrarea afișată pe tabloul de bord."
-
-#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
-msgid "Order"
-msgstr "Comandă"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:5
 msgid "Page ID present — true or false"
@@ -7012,13 +7004,21 @@ msgstr "Solicitări de pagini — pagini HTML publice încărcate cu succes"
 msgid "Page — public resource ID"
 msgstr "Pagină — ID-ul resursei publice"
 
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
+msgid "Past 30 days"
+msgstr "Ultimele 30 de zile"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
+msgid "Past 365 days"
+msgstr "Ultimele 365 de zile"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
+msgid "Past 7 days"
+msgstr "Ultimele 7 zile"
+
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:24
 msgid "Pause"
 msgstr "Pauză"
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
-msgid "Payload"
-msgstr "Sarcina utilă"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:12
 msgid "Period"
@@ -7036,17 +7036,13 @@ msgstr "Clasificare în funcție de numărul de solicitări înregistrate în pe
 msgid "Recording ID"
 msgstr "ID-ul înregistrării"
 
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:23
+msgid "Recording capacity"
+msgstr "Capacitate de înregistrare"
+
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:23
 msgid "Recording information"
 msgstr "Informații privind înregistrarea"
-
-#: zotonic_mod_analytics/src/mod_analytics.erl:241
-msgid "Recording order saved."
-msgstr "Ordinea de înregistrare a fost salvată."
-
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:23
-msgid "Recording slots"
-msgstr "Intervale de înregistrare"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:12
 msgid "Recordings"
@@ -7077,8 +7073,8 @@ msgid "Reserved storage capacity"
 msgstr "Capacitate de stocare rezervată"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:55
-msgid "Retained for"
-msgstr "Păstrat pentru"
+msgid "Retention period"
+msgstr "Perioada de păstrare"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:5
 msgid "SMTP (Email) — sent, retries, failures and bounces"
@@ -7130,21 +7126,25 @@ msgstr "Pasul 2 din 2: Detaliere și filtre"
 msgid "Storage usage"
 msgstr "Utilizarea spațiului de stocare"
 
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:21
-msgid "Stored buckets"
-msgstr "Containere stocate"
-
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:20
-msgid "Stored payload"
-msgstr "Sarcina utilă stocată"
+msgid "Stored data size"
+msgstr "Dimensiunea datelor stocate"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:24
-msgid "Stored payload is the database size of the aggregate counts and recording definition. It excludes row headers, indexes, shared table space and unsaved events. Reserved capacity is a planning limit, not disk usage."
-msgstr "Sarcina utilă stocată reprezintă dimensiunea bazei de date constituită din numărările agregate și definiția înregistrărilor. Aceasta nu include anteturile rândurilor, indexurile, spațiul comun al tabelelor și evenimentele nesalvate. Capacitatea rezervată este o limită de planificare, nu o utilizare a spațiului pe disc."
+msgid "Stored data size measures the database space used by the aggregate counts and recording definition. It excludes row headers, indexes, shared table space and unsaved events. Reserved capacity is a planning limit, not disk usage."
+msgstr "Dimensiunea datelor stocate măsoară spațiul din baza de date ocupat de numărările agregate și de definiția înregistrărilor. Aceasta nu include anteturile de rânduri, indexurile, spațiul comun al tabelelor și evenimentele nesalvate. Capacitatea rezervată reprezintă o limită de planificare, nu o utilizare efectivă a spațiului pe disc."
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
+msgid "Stored intervals / capacity"
+msgstr "Intervale stocate / capacitate"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:21
+msgid "Stored time intervals"
+msgstr "Intervale de timp stocate"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:243
-msgid "The recordings changed. Reloading the current order."
-msgstr "Înregistrările s-au modificat. Se reîncarcă comanda curentă."
+msgid "The recordings changed. Reloading their current display order."
+msgstr "Înregistrările s-au modificat. Se reîncarcă ordinea actuală de afișare a acestora."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:11
 msgid "This event schema is unavailable."
@@ -7208,7 +7208,7 @@ msgid "seconds."
 msgstr "secunde."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:51
-msgid "stored time buckets"
+msgid "stored time intervals"
 msgstr "intervale de timp stocate"
 
 #: zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:13
