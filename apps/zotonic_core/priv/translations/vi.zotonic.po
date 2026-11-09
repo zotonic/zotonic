@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-09 12:15\n"
+"PO-Revision-Date: 2026-11-09 12:23\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
 "MIME-Version: 1.0\n"
@@ -6605,16 +6605,16 @@ msgid "About 5 years"
 msgstr "Khoảng 5 năm"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:26
-msgid "Active and paused recordings both count towards this limit. A new recording also needs enough free storage capacity for its group limit."
-msgstr "Cả các bản ghi đang hoạt động và đang tạm dừng đều được tính vào giới hạn này. Một bản ghi mới cũng cần có đủ dung lượng lưu trữ trống để đáp ứng giới hạn của nhóm đó."
+msgid "Active and paused analytics measurements both count towards this limit. A new analytics measurement also needs enough free storage capacity for its group limit."
+msgstr "Cả các phép đo phân tích đang hoạt động và đang tạm dừng đều được tính vào giới hạn này. Một phép đo phân tích mới cũng cần có đủ dung lượng lưu trữ trống để đáp ứng giới hạn của nhóm đó."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:48
 msgid "Activity counters are unavailable until analytics resumes."
 msgstr "Các bộ đếm hoạt động sẽ không khả dụng cho đến khi chức năng phân tích được khôi phục."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:40
-msgid "Add recording"
-msgstr "Thêm bản ghi âm"
+msgid "Add analytics measurement"
+msgstr "Thêm chỉ số phân tích"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:39
 msgid "All breakdown values"
@@ -6633,8 +6633,8 @@ msgid "Allowed values:"
 msgstr "Các giá trị được phép:"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:267
-msgid "An equivalent recording already exists."
-msgstr "Đã có một bản ghi tương đương rồi."
+msgid "An equivalent analytics measurement already exists."
+msgstr "Hiện đã có một chỉ số phân tích tương đương."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
@@ -6654,6 +6654,18 @@ msgstr "Phân tích đang được thực hiện"
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:8
 msgid "Analytics is unavailable"
 msgstr "Tính năng phân tích hiện không khả dụng"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:8
+msgid "Analytics measurement ID"
+msgstr "ID đo lường phân tích"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:23
+msgid "Analytics measurement information"
+msgstr "Thông tin đo lường phân tích"
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:12
+msgid "Analytics measurements"
+msgstr "Các chỉ số phân tích"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:2
 msgid "Analytics status"
@@ -6682,24 +6694,24 @@ msgid "Buffer status is unavailable."
 msgstr "Không thể truy cập trạng thái bộ đệm."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:20
-msgid "Capacity is reserved for the full history of every group in a recording. This is a planning limit, not disk usage. Pausing keeps the reservation; deleting a recording releases it."
-msgstr "Dung lượng được dành riêng cho toàn bộ lịch sử của mỗi nhóm trong một bản ghi. Đây là giới hạn về mặt lập kế hoạch, không phải là dung lượng đĩa đã sử dụng. Khi tạm dừng, dung lượng này vẫn được giữ nguyên; khi xóa bản ghi, dung lượng này sẽ được giải phóng."
+msgid "Capacity is reserved for the full history of every group in an analytics measurement. This is a planning limit, not disk usage. Pausing keeps the reservation; deleting an analytics measurement releases it."
+msgstr "Dung lượng được dành riêng cho toàn bộ lịch sử của mỗi nhóm trong một chỉ số phân tích. Đây là giới hạn về mặt lập kế hoạch, không phải dung lượng đĩa đã sử dụng. Việc tạm dừng sẽ giữ nguyên mức dung lượng đã dành riêng; việc xóa một chỉ số phân tích sẽ giải phóng mức dung lượng đó."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
-msgid "Choose what to record and arrange your dashboard."
-msgstr "Chọn nội dung cần ghi lại và sắp xếp bảng điều khiển của bạn."
+msgid "Choose which activity to measure and arrange your dashboard."
+msgstr "Chọn hoạt động cần theo dõi và sắp xếp bảng điều khiển của bạn."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:4
 msgid "Classified requests — pages, APIs and other dispatch types"
 msgstr "Yêu cầu được phân loại — trang, API và các loại yêu cầu khác"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:9
-msgid "Configure recordings"
-msgstr "Cấu hình bản ghi âm"
+msgid "Configure analytics measurements"
+msgstr "Cấu hình các chỉ số phân tích"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:235
-msgid "Could not delete the recording."
-msgstr "Không thể xóa bản ghi âm."
+msgid "Could not delete the analytics measurement."
+msgstr "Không thể xóa chỉ số phân tích."
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:268
 msgid "Could not save. Check the event, breakdown and filter values."
@@ -6723,20 +6735,24 @@ msgid "Database writes are being retried. Event processing can continue while bu
 msgstr "Hệ thống đang thử lại các thao tác ghi vào cơ sở dữ liệu. Quá trình xử lý sự kiện có thể tiếp tục miễn là dung lượng bộ đệm vẫn còn; các lỗi kéo dài có thể dẫn đến mất dữ liệu."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:36
-msgid "Dates show the start of each stored time interval, not the first or last event. Different resolutions contain overlapping history. Pausing a recording preserves its stored history and reserved capacity. Figures are a snapshot taken when this dialog opens."
-msgstr "Các ngày tháng thể hiện thời điểm bắt đầu của từng khoảng thời gian được lưu trữ, chứ không phải sự kiện đầu tiên hay cuối cùng. Các mức độ chi tiết khác nhau có thể chứa lịch sử trùng lặp. Việc tạm dừng ghi sẽ giữ nguyên lịch sử đã lưu trữ và dung lượng đã dành riêng. Các số liệu là ảnh chụp nhanh được thực hiện tại thời điểm hộp thoại này mở ra."
+msgid "Dates show the start of each stored time interval, not the first or last event. Different resolutions contain overlapping history. Pausing an analytics measurement preserves its stored history and reserved capacity. Figures are a snapshot taken when this dialog opens."
+msgstr "Các mốc thời gian thể hiện thời điểm bắt đầu của từng khoảng thời gian được lưu trữ, chứ không phải sự kiện đầu tiên hay cuối cùng. Các mức độ chi tiết khác nhau có thể chứa dữ liệu lịch sử chồng chéo. Việc tạm dừng một phép đo phân tích sẽ giữ nguyên lịch sử đã lưu trữ và dung lượng đã dành riêng cho phép đo đó. Các số liệu là ảnh chụp nhanh được thực hiện tại thời điểm hộp thoại này mở ra."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:30
-msgid "Delete recording"
-msgstr "Xóa bản ghi âm"
+msgid "Delete analytics measurement"
+msgstr "Xóa số liệu phân tích"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:27
-msgid "Delete recording?"
-msgstr "Xóa bản ghi âm?"
+msgid "Delete analytics measurement?"
+msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_delete_confirm.tpl:1
-msgid "Delete this recording?"
-msgstr "Xóa bản ghi âm này?"
+msgid "Delete this analytics measurement?"
+msgstr ""
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
+msgid "Describe the activity this analytics measurement tracks"
+msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:55
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
@@ -6756,8 +6772,8 @@ msgid "Display order saved."
 msgstr "Thứ tự hiển thị đã được lưu."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:14
-msgid "Drag recordings to set their order on the dashboard. Changes are saved immediately."
-msgstr "Kéo các bản ghi vào vị trí mong muốn trên bảng điều khiển để sắp xếp thứ tự. Các thay đổi sẽ được lưu ngay lập tức."
+msgid "Drag analytics measurements to set their order on the dashboard. Changes are saved immediately."
+msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:21
 msgid "Drag to reorder"
@@ -6772,8 +6788,8 @@ msgid "Each group reserves 3,578 time slots. Page breakdowns use candidates with
 msgstr "Mỗi nhóm dành riêng 3.578 khung thời gian. Các bảng phân tích theo trang sử dụng số lượng ứng viên ước tính; các bảng phân tích khác dành riêng một nhóm cho các giá trị vượt quá."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:52
-msgid "Each stored time interval holds the counts for all groups in one analytics recording. Storage slots for older intervals are reused, so history stays bounded instead of growing with every visit. Only aggregate counts are stored, not individual events."
-msgstr "Mỗi khoảng thời gian được lưu trữ chứa số liệu thống kê của tất cả các nhóm trong một bản ghi phân tích. Các vị trí lưu trữ dành cho các khoảng thời gian cũ hơn sẽ được tái sử dụng, do đó dữ liệu lịch sử được giới hạn thay vì tăng lên theo mỗi lần truy cập. Chỉ các số liệu tổng hợp mới được lưu trữ, chứ không phải các sự kiện riêng lẻ."
+msgid "Each stored time interval holds the counts for all groups in one analytics measurement. Storage slots for older intervals are reused, so history stays bounded instead of growing with every visit. Only aggregate counts are stored, not individual events."
+msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:9
 msgid "Email outcome — sent, retry, failed or bounced"
@@ -6805,12 +6821,8 @@ msgid "Events are combined into counters in memory before saving, normally every
 msgstr "Các sự kiện được gộp lại thành các bộ đếm trong bộ nhớ trước khi lưu, thường là cứ sau 10 giây. Giá trị thấp là bình thường. Bộ đệm này tách biệt với lô dữ liệu đang được lưu."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:23
-msgid "Events must satisfy both filters to be recorded. New recordings start without historical data."
-msgstr "Các sự kiện phải đáp ứng cả hai bộ lọc thì mới được ghi lại. Các bản ghi mới sẽ bắt đầu mà không có dữ liệu lịch sử."
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
-msgid "Explain what this recording measures"
-msgstr "Hãy giải thích xem bản ghi này đo lường điều gì"
+msgid "Events must satisfy both filters to be counted. New analytics measurements start without historical data."
+msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:18
 msgid "Fixed filter"
@@ -6870,6 +6882,10 @@ msgstr "Giờ vừa qua"
 msgid "Last six hours"
 msgstr "Sáu giờ qua"
 
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:23
+msgid "Maximum number of analytics measurements"
+msgstr ""
+
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
 msgid "Most popular content in this period"
 msgstr "Nội dung được yêu thích nhất trong giai đoạn này"
@@ -6890,7 +6906,7 @@ msgstr "Hiện tại, hệ thống không thể xử lý các sự kiện mới.
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
 msgid "Newest stored interval"
-msgstr "Khoảng thời gian được lưu gần đây nhất"
+msgstr "Khoảng thời gian mới nhất đã lưu"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:28
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:210
@@ -6906,6 +6922,10 @@ msgstr "Tiếp"
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:10
 msgid "Next, choose a breakdown and filters supported by this event type."
 msgstr "Tiếp theo, hãy chọn một cách phân tích chi tiết và các bộ lọc được hỗ trợ bởi loại sự kiện này."
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:22
+msgid "No analytics measurements to display. Configure or resume an analytics measurement to get started."
+msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:12
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:14
@@ -6924,25 +6944,21 @@ msgstr "Không phát hiện nội dung nổi bật nào trong giai đoạn này.
 msgid "No recorded events yet."
 msgstr "Chưa có sự kiện nào được ghi lại."
 
-#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:22
-msgid "No recordings to display. Configure or resume a recording to get started."
-msgstr "Không có bản ghi nào để hiển thị. Hãy thiết lập hoặc tiếp tục một bản ghi để bắt đầu."
-
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:16
 msgid "None — all matching events"
 msgstr "Không có — tất cả các sự kiện phù hợp"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
 msgid "Oldest stored interval"
-msgstr ""
+msgstr "Khoảng thời gian cũ nhất đã lưu"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:46
-msgid "One event can update several recordings, so these are not visitor or page-view totals. Counters reset when analytics restarts."
-msgstr "Một sự kiện có thể cập nhật nhiều bản ghi, do đó những con số này không phải là tổng số lượt truy cập hay tổng số lượt xem trang. Các bộ đếm sẽ được đặt lại khi hệ thống phân tích được khởi động lại."
+msgid "One event can update several analytics measurements, so these are not visitor or page-view totals. Counters reset when analytics restarts."
+msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
-msgid "Optional. Shown with the recording on the dashboard."
-msgstr "Tùy chọn. Hình ảnh minh họa hiển thị bản ghi trên bảng điều khiển."
+msgid "Optional. Shown with the analytics measurement on the dashboard."
+msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:5
 msgid "Page ID present — true or false"
@@ -6958,15 +6974,15 @@ msgstr "Trang — Mã định danh tài nguyên công khai"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
 msgid "Past 30 days"
-msgstr ""
+msgstr "30 ngày qua"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
 msgid "Past 365 days"
-msgstr ""
+msgstr "365 ngày qua"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
 msgid "Past 7 days"
-msgstr ""
+msgstr "7 ngày qua"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:24
 msgid "Pause"
@@ -6983,22 +6999,6 @@ msgstr "Xếp hạng"
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
 msgid "Ranked by recorded requests in the selected moving period. The window advances in steps of"
 msgstr "Xếp hạng theo số lượng yêu cầu được ghi nhận trong khoảng thời gian di chuyển đã chọn. Khoảng thời gian này được điều chỉnh theo từng bước"
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:8
-msgid "Recording ID"
-msgstr "Mã ghi âm"
-
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:23
-msgid "Recording capacity"
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:23
-msgid "Recording information"
-msgstr "Thông tin ghi âm"
-
-#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:12
-msgid "Recordings"
-msgstr "Các bản ghi âm"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:11
 msgid "Referrer — referring hostname, internal or direct/unknown"
@@ -7026,7 +7026,7 @@ msgstr "Dung lượng lưu trữ đã được dành riêng"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:55
 msgid "Retention period"
-msgstr ""
+msgstr "Thời hạn lưu giữ"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:5
 msgid "SMTP (Email) — sent, retries, failures and bounces"
@@ -7052,8 +7052,8 @@ msgstr "Ảnh chụp nhanh khi tải trang. Nhấn F5 để làm mới."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:29
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:25
-msgid "Start recording"
-msgstr "Bắt đầu ghi âm"
+msgid "Start analytics measurement"
+msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:15
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_mailing_runs_panel.tpl:18
@@ -7067,8 +7067,8 @@ msgid "State"
 msgstr "Tiểu bang"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:5
-msgid "Step 1 of 2: Choose what to record"
-msgstr "Bước 1 trong 2: Chọn nội dung cần ghi lại"
+msgid "Step 1 of 2: Choose which activity to measure"
+msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:34
 msgid "Step 2 of 2: Breakdown and filters"
@@ -7080,35 +7080,35 @@ msgstr "Dung lượng lưu trữ đã sử dụng"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:20
 msgid "Stored data size"
-msgstr ""
+msgstr "Dung lượng dữ liệu được lưu trữ"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:24
-msgid "Stored data size measures the database space used by the aggregate counts and recording definition. It excludes row headers, indexes, shared table space and unsaved events. Reserved capacity is a planning limit, not disk usage."
+msgid "Stored data size measures the database space used by the aggregate counts and analytics measurement definition. It excludes row headers, indexes, shared table space and unsaved events. Reserved capacity is a planning limit, not disk usage."
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
 msgid "Stored intervals / capacity"
-msgstr ""
+msgstr "Khoảng thời gian lưu trữ / dung lượng"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:21
 msgid "Stored time intervals"
-msgstr ""
+msgstr "Các khoảng thời gian đã lưu trữ"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:243
-msgid "The recordings changed. Reloading their current display order."
+msgid "The analytics measurements changed. Reloading their current display order."
+msgstr ""
+
+#: zotonic_mod_analytics/src/mod_analytics.erl:266
+msgid "This analytics measurement exceeds the storage budget."
+msgstr ""
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:38
+msgid "This analytics measurement is no longer available."
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:11
 msgid "This event schema is unavailable."
 msgstr "Sơ đồ sự kiện này hiện không khả dụng."
-
-#: zotonic_mod_analytics/src/mod_analytics.erl:266
-msgid "This recording exceeds the storage budget."
-msgstr "Bản ghi này vượt quá dung lượng lưu trữ cho phép."
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:38
-msgid "This recording is no longer available."
-msgstr "Bản ghi âm này hiện không còn nữa."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:13
 msgid "Traffic — crawler, other or unknown"
@@ -7121,6 +7121,14 @@ msgstr "Xem số liệu phân tích"
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
 msgid "Your site at a glance."
 msgstr "Tổng quan về trang web của bạn."
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:44
+msgid "analytics measurement updates since startup"
+msgstr ""
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:24
+msgid "analytics measurements"
+msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:20
 msgid "bytes"
@@ -7143,14 +7151,6 @@ msgstr "sự kiện"
 msgid "group/time slots"
 msgstr "nhóm/khung giờ"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:44
-msgid "recording updates since startup"
-msgstr "ghi lại các bản cập nhật kể từ khi khởi động"
-
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:24
-msgid "recordings"
-msgstr "bản ghi âm"
-
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
 msgid "requests."
 msgstr "yêu cầu."
@@ -7161,7 +7161,7 @@ msgstr "giây."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:51
 msgid "stored time intervals"
-msgstr ""
+msgstr "các khoảng thời gian đã lưu trữ"
 
 #: zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:13
 #: zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:14
