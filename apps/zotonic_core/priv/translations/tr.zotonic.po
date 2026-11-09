@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-09 12:22\n"
+"PO-Revision-Date: 2026-11-09 12:30\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -6629,7 +6629,7 @@ msgstr "Yaklaşık 5 yıl"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:26
 msgid "Active and paused analytics measurements both count towards this limit. A new analytics measurement also needs enough free storage capacity for its group limit."
-msgstr ""
+msgstr "Hem aktif hem de duraklatılmış analitik ölçümleri bu sınıra dahil edilir. Yeni bir analitik ölçüm için, ilgili grup sınırına uygun yeterli boş depolama kapasitesi de gereklidir."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:48
 msgid "Activity counters are unavailable until analytics resumes."
@@ -6637,7 +6637,7 @@ msgstr "Analitik hizmetleri yeniden başlayana kadar aktivite sayacı kullanıla
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:40
 msgid "Add analytics measurement"
-msgstr ""
+msgstr "Analitik ölçüm ekle"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:39
 msgid "All breakdown values"
@@ -6657,7 +6657,7 @@ msgstr "İzin verilen değerler:"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:267
 msgid "An equivalent analytics measurement already exists."
-msgstr ""
+msgstr "Buna eşdeğer bir analitik ölçüm zaten mevcuttur."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
@@ -6680,15 +6680,15 @@ msgstr "Analitik özelliği kullanılamıyor"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:8
 msgid "Analytics measurement ID"
-msgstr ""
+msgstr "Analitik ölçüm kimliği"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:23
 msgid "Analytics measurement information"
-msgstr ""
+msgstr "Analitik ölçüm bilgileri"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:12
 msgid "Analytics measurements"
-msgstr ""
+msgstr "Analitik ölçümler"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:2
 msgid "Analytics status"
@@ -6718,11 +6718,11 @@ msgstr "Tampon durumu mevcut değil."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:20
 msgid "Capacity is reserved for the full history of every group in an analytics measurement. This is a planning limit, not disk usage. Pausing keeps the reservation; deleting an analytics measurement releases it."
-msgstr ""
+msgstr "Bir analiz ölçümündeki her grubun tüm geçmişi için kapasite ayrılmıştır. Bu, bir planlama sınırıdır; disk kullanımı ile ilgili değildir. Ölçümü duraklatmak bu ayrımı korur; bir analiz ölçümünü silmek ise bu ayrımı serbest bırakır."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
 msgid "Choose which activity to measure and arrange your dashboard."
-msgstr ""
+msgstr "Hangi etkinliği ölçmek istediğinizi seçin ve kontrol panelinizi düzenleyin."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:4
 msgid "Classified requests — pages, APIs and other dispatch types"
@@ -6730,11 +6730,11 @@ msgstr "Sınıflandırılmış istekler — sayfalar, API’ler ve diğer gönde
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:9
 msgid "Configure analytics measurements"
-msgstr ""
+msgstr "Analitik ölçümlerini yapılandırın"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:235
 msgid "Could not delete the analytics measurement."
-msgstr ""
+msgstr "Analitik ölçüm silinemedi."
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:268
 msgid "Could not save. Check the event, breakdown and filter values."
@@ -6759,23 +6759,23 @@ msgstr "Veritabanına yazma işlemleri yeniden deneniyor. Tampon kapasitesi mevc
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:36
 msgid "Dates show the start of each stored time interval, not the first or last event. Different resolutions contain overlapping history. Pausing an analytics measurement preserves its stored history and reserved capacity. Figures are a snapshot taken when this dialog opens."
-msgstr ""
+msgstr "Tarihler, ilk veya son olayı değil, kaydedilmiş her zaman aralığının başlangıcını gösterir. Farklı çözünürlükler, birbiriyle örtüşen geçmiş verileri içerir. Bir analiz ölçümünü duraklatmak, kaydedilmiş geçmişini ve ayrılmış kapasitesini korur. Rakamlar, bu iletişim kutusu açıldığında alınan bir anlık görüntüdür."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:30
 msgid "Delete analytics measurement"
-msgstr ""
+msgstr "Analitik ölçümünü sil"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:27
 msgid "Delete analytics measurement?"
-msgstr ""
+msgstr "Analitik ölçümünü silmek mi?"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_delete_confirm.tpl:1
 msgid "Delete this analytics measurement?"
-msgstr ""
+msgstr "Bu analiz ölçümünü silmek ister misiniz?"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
 msgid "Describe the activity this analytics measurement tracks"
-msgstr ""
+msgstr "Bu analitik ölçümün izlediği etkinliği açıklayın"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:55
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
@@ -6796,7 +6796,7 @@ msgstr "Görüntüleme sırası kaydedildi."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:14
 msgid "Drag analytics measurements to set their order on the dashboard. Changes are saved immediately."
-msgstr ""
+msgstr "Analitik ölçümlerini panoda sıralamalarını belirlemek için sürükleyin. Değişiklikler anında kaydedilir."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:21
 msgid "Drag to reorder"
@@ -6812,7 +6812,7 @@ msgstr "Her grup 3.578 zaman dilimi ayırır. Sayfa bazında dağılımlar, yakl
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:52
 msgid "Each stored time interval holds the counts for all groups in one analytics measurement. Storage slots for older intervals are reused, so history stays bounded instead of growing with every visit. Only aggregate counts are stored, not individual events."
-msgstr ""
+msgstr "Depolanan her zaman aralığı, tek bir analiz ölçümündeki tüm gruplara ait sayıları içerir. Daha eski aralıklar için ayrılan depolama alanları yeniden kullanılır; böylece geçmiş veriler her ziyaretle birlikte büyümeyip sınırlı kalır. Yalnızca toplu sayılar depolanır, tek tek olaylar değil."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:9
 msgid "Email outcome — sent, retry, failed or bounced"
@@ -6845,7 +6845,7 @@ msgstr "Olaylar, kaydedilmeden önce bellekte sayaçlara birleştirilir; bu işl
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:23
 msgid "Events must satisfy both filters to be counted. New analytics measurements start without historical data."
-msgstr ""
+msgstr "Olayların sayılabilmesi için her iki filtreyi de karşılaması gerekir. Yeni analitik ölçümler, geçmiş veriler olmadan başlar."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:18
 msgid "Fixed filter"
@@ -6907,7 +6907,7 @@ msgstr "Son altı saat"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:23
 msgid "Maximum number of analytics measurements"
-msgstr ""
+msgstr "Analitik ölçümlerin maksimum sayısı"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
 msgid "Most popular content in this period"
@@ -6948,7 +6948,7 @@ msgstr "Ardından, bu olay türü tarafından desteklenen bir döküm ve filtrel
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:22
 msgid "No analytics measurements to display. Configure or resume an analytics measurement to get started."
-msgstr ""
+msgstr "Görüntülenecek herhangi bir analiz ölçümü bulunmuyor. Başlamak için bir analiz ölçümünü yapılandırın veya devam ettirin."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:12
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:14
@@ -6977,11 +6977,11 @@ msgstr "Kaydedilmiş en eski aralık"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:46
 msgid "One event can update several analytics measurements, so these are not visitor or page-view totals. Counters reset when analytics restarts."
-msgstr ""
+msgstr "Tek bir olay, birkaç analiz ölçümünü güncelleyebilir; dolayısıyla bu rakamlar ziyaretçi veya sayfa görüntüleme toplamları değildir. Analiz yeniden başlatıldığında sayaçlar sıfırlanır."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
 msgid "Optional. Shown with the analytics measurement on the dashboard."
-msgstr ""
+msgstr "İsteğe bağlı. Kontrol panelinde analitik ölçümleriyle birlikte gösterilir."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:5
 msgid "Page ID present — true or false"
@@ -7076,7 +7076,7 @@ msgstr "Sayfa yüklendiğinde alınan anlık görüntü. Güncellemek için sayf
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:29
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:25
 msgid "Start analytics measurement"
-msgstr ""
+msgstr "Analitik ölçümünü başlat"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:15
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_mailing_runs_panel.tpl:18
@@ -7091,7 +7091,7 @@ msgstr "Eyalet"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:5
 msgid "Step 1 of 2: Choose which activity to measure"
-msgstr ""
+msgstr "1/2. Adım: Ölçülecek etkinliği seçin"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:34
 msgid "Step 2 of 2: Breakdown and filters"
@@ -7107,7 +7107,7 @@ msgstr "Depolanan veri boyutu"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:24
 msgid "Stored data size measures the database space used by the aggregate counts and analytics measurement definition. It excludes row headers, indexes, shared table space and unsaved events. Reserved capacity is a planning limit, not disk usage."
-msgstr ""
+msgstr "Depolanan veri boyutu, toplama sayıları ve analitik ölçüm tanımının kullandığı veritabanı alanını ölçer. Satır başlıkları, dizinler, paylaşılan tablo alanı ve kaydedilmemiş olaylar bu hesaplamaya dahil edilmez. Ayrılmış kapasite, bir planlama sınırıdır; disk kullanımı değildir."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
 msgid "Stored intervals / capacity"
@@ -7119,15 +7119,15 @@ msgstr "Kaydedilmiş zaman aralıkları"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:243
 msgid "The analytics measurements changed. Reloading their current display order."
-msgstr ""
+msgstr "Analitik ölçümleri değişti. Mevcut görüntüleme sırası yeniden yükleniyor."
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:266
 msgid "This analytics measurement exceeds the storage budget."
-msgstr ""
+msgstr "Bu analiz ölçümü, depolama bütçesini aşıyor."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:38
 msgid "This analytics measurement is no longer available."
-msgstr ""
+msgstr "Bu analiz ölçümü artık kullanılamamaktadır."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:11
 msgid "This event schema is unavailable."
@@ -7147,11 +7147,11 @@ msgstr "Sitenize genel bakış."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:44
 msgid "analytics measurement updates since startup"
-msgstr ""
+msgstr "analiz modülünün başlatılmasından bu yana yapılan ölçüm güncellemeleri"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:24
 msgid "analytics measurements"
-msgstr ""
+msgstr "analitik ölçümler"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:20
 msgid "bytes"
