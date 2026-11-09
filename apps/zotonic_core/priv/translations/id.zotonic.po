@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-09 12:14\n"
+"PO-Revision-Date: 2026-11-09 12:22\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -6607,16 +6607,16 @@ msgid "About 5 years"
 msgstr "Sekitar 5 tahun"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:26
-msgid "Active and paused recordings both count towards this limit. A new recording also needs enough free storage capacity for its group limit."
-msgstr "Baik rekaman yang aktif maupun yang dijeda sama-sama dihitung dalam batas ini. Rekaman baru juga memerlukan kapasitas penyimpanan kosong yang cukup sesuai dengan batas grupnya."
+msgid "Active and paused analytics measurements both count towards this limit. A new analytics measurement also needs enough free storage capacity for its group limit."
+msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:48
 msgid "Activity counters are unavailable until analytics resumes."
 msgstr "Penghitung aktivitas tidak tersedia sampai analisis kembali berjalan."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:40
-msgid "Add recording"
-msgstr "Tambahkan rekaman"
+msgid "Add analytics measurement"
+msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:39
 msgid "All breakdown values"
@@ -6635,8 +6635,8 @@ msgid "Allowed values:"
 msgstr "Nilai yang diperbolehkan:"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:267
-msgid "An equivalent recording already exists."
-msgstr "Rekaman yang serupa sudah ada."
+msgid "An equivalent analytics measurement already exists."
+msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
@@ -6656,6 +6656,18 @@ msgstr "Analisis sedang berjalan"
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:8
 msgid "Analytics is unavailable"
 msgstr "Fitur Analitik tidak tersedia"
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:8
+msgid "Analytics measurement ID"
+msgstr ""
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:23
+msgid "Analytics measurement information"
+msgstr ""
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:12
+msgid "Analytics measurements"
+msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:2
 msgid "Analytics status"
@@ -6684,24 +6696,24 @@ msgid "Buffer status is unavailable."
 msgstr "Status buffer tidak tersedia."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:20
-msgid "Capacity is reserved for the full history of every group in a recording. This is a planning limit, not disk usage. Pausing keeps the reservation; deleting a recording releases it."
-msgstr "Kapasitas disediakan untuk riwayat lengkap setiap grup dalam sebuah rekaman. Ini merupakan batasan perencanaan, bukan penggunaan ruang disk. Menjeda rekaman akan mempertahankan alokasi kapasitas tersebut; menghapus rekaman akan membebaskannya."
+msgid "Capacity is reserved for the full history of every group in an analytics measurement. This is a planning limit, not disk usage. Pausing keeps the reservation; deleting an analytics measurement releases it."
+msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
-msgid "Choose what to record and arrange your dashboard."
-msgstr "Pilih apa yang ingin Anda rekam dan atur tampilan dasbor Anda."
+msgid "Choose which activity to measure and arrange your dashboard."
+msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:4
 msgid "Classified requests — pages, APIs and other dispatch types"
 msgstr "Permintaan terklasifikasi — halaman, API, dan jenis pengiriman lainnya"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:9
-msgid "Configure recordings"
-msgstr "Mengonfigurasi perekaman"
+msgid "Configure analytics measurements"
+msgstr ""
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:235
-msgid "Could not delete the recording."
-msgstr "Tidak dapat menghapus rekaman tersebut."
+msgid "Could not delete the analytics measurement."
+msgstr ""
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:268
 msgid "Could not save. Check the event, breakdown and filter values."
@@ -6718,27 +6730,31 @@ msgstr "Dibuat"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
 msgid "Data size"
-msgstr ""
+msgstr "Ukuran data"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:13
 msgid "Database writes are being retried. Event processing can continue while buffer capacity remains available; prolonged failures can cause data loss."
 msgstr "Proses penulisan ke basis data sedang dicoba ulang. Pemrosesan peristiwa dapat dilanjutkan selama kapasitas buffer masih tersedia; kegagalan yang berkepanjangan dapat menyebabkan hilangnya data."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:36
-msgid "Dates show the start of each stored time interval, not the first or last event. Different resolutions contain overlapping history. Pausing a recording preserves its stored history and reserved capacity. Figures are a snapshot taken when this dialog opens."
+msgid "Dates show the start of each stored time interval, not the first or last event. Different resolutions contain overlapping history. Pausing an analytics measurement preserves its stored history and reserved capacity. Figures are a snapshot taken when this dialog opens."
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:30
-msgid "Delete recording"
-msgstr "Hapus rekaman"
+msgid "Delete analytics measurement"
+msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:27
-msgid "Delete recording?"
-msgstr "Hapus rekaman?"
+msgid "Delete analytics measurement?"
+msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_delete_confirm.tpl:1
-msgid "Delete this recording?"
-msgstr "Hapus rekaman ini?"
+msgid "Delete this analytics measurement?"
+msgstr ""
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
+msgid "Describe the activity this analytics measurement tracks"
+msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:55
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
@@ -6751,15 +6767,15 @@ msgstr "Perangkat — ponsel, tablet, komputer desktop, atau tidak diketahui"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "Display order"
-msgstr ""
+msgstr "Urutan tampilan"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:241
 msgid "Display order saved."
-msgstr ""
+msgstr "Urutan tampilan telah disimpan."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:14
-msgid "Drag recordings to set their order on the dashboard. Changes are saved immediately."
-msgstr "Seret rekaman untuk mengatur urutannya di dasbor. Perubahan akan langsung tersimpan."
+msgid "Drag analytics measurements to set their order on the dashboard. Changes are saved immediately."
+msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:21
 msgid "Drag to reorder"
@@ -6774,7 +6790,7 @@ msgid "Each group reserves 3,578 time slots. Page breakdowns use candidates with
 msgstr "Setiap kelompok mengalokasikan 3.578 slot waktu. Rincian per halaman menggunakan jumlah kandidat yang diperkirakan; rincian lainnya mengalokasikan satu kelompok untuk nilai-nilai yang melebihi batas."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:52
-msgid "Each stored time interval holds the counts for all groups in one analytics recording. Storage slots for older intervals are reused, so history stays bounded instead of growing with every visit. Only aggregate counts are stored, not individual events."
+msgid "Each stored time interval holds the counts for all groups in one analytics measurement. Storage slots for older intervals are reused, so history stays bounded instead of growing with every visit. Only aggregate counts are stored, not individual events."
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:9
@@ -6807,12 +6823,8 @@ msgid "Events are combined into counters in memory before saving, normally every
 msgstr "Peristiwa-peristiwa digabungkan menjadi penghitung di memori sebelum disimpan, biasanya setiap 10 detik. Nilai yang rendah adalah hal yang wajar. Buffer ini terpisah dari batch yang sedang disimpan saat ini."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:23
-msgid "Events must satisfy both filters to be recorded. New recordings start without historical data."
+msgid "Events must satisfy both filters to be counted. New analytics measurements start without historical data."
 msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
-msgid "Explain what this recording measures"
-msgstr "Jelaskan apa yang diukur oleh rekaman ini"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:18
 msgid "Fixed filter"
@@ -6872,6 +6884,10 @@ msgstr "Satu jam terakhir"
 msgid "Last six hours"
 msgstr "Enam jam terakhir"
 
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:23
+msgid "Maximum number of analytics measurements"
+msgstr ""
+
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
 msgid "Most popular content in this period"
 msgstr "Konten terpopuler pada periode ini"
@@ -6892,7 +6908,7 @@ msgstr "Saat ini, acara baru belum dapat diproses. Riwayat yang telah disimpan s
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
 msgid "Newest stored interval"
-msgstr ""
+msgstr "Interval tersimpan terbaru"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:28
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:210
@@ -6908,6 +6924,10 @@ msgstr "Selanjutnya"
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:10
 msgid "Next, choose a breakdown and filters supported by this event type."
 msgstr "Selanjutnya, pilih rincian dan filter yang didukung oleh jenis acara ini."
+
+#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:22
+msgid "No analytics measurements to display. Configure or resume an analytics measurement to get started."
+msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:12
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:14
@@ -6926,25 +6946,21 @@ msgstr "Tidak ditemukan konten unggulan pada periode ini."
 msgid "No recorded events yet."
 msgstr "Belum ada peristiwa yang tercatat."
 
-#: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:22
-msgid "No recordings to display. Configure or resume a recording to get started."
-msgstr "Tidak ada rekaman yang ditampilkan. Atur atau lanjutkan rekaman untuk memulai."
-
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:16
 msgid "None — all matching events"
 msgstr "Tidak ada — semua acara yang sesuai"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
 msgid "Oldest stored interval"
-msgstr ""
+msgstr "Interval tertua yang tersimpan"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:46
-msgid "One event can update several recordings, so these are not visitor or page-view totals. Counters reset when analytics restarts."
-msgstr "Satu peristiwa dapat memperbarui beberapa catatan, sehingga angka-angka ini bukanlah jumlah pengunjung atau jumlah tampilan halaman. Penghitung akan disetel ulang saat layanan analitik dimulai kembali."
+msgid "One event can update several analytics measurements, so these are not visitor or page-view totals. Counters reset when analytics restarts."
+msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:8
-msgid "Optional. Shown with the recording on the dashboard."
-msgstr "Opsional. Ditampilkan bersama rekaman di dasbor."
+msgid "Optional. Shown with the analytics measurement on the dashboard."
+msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:5
 msgid "Page ID present — true or false"
@@ -6960,15 +6976,15 @@ msgstr "Halaman — ID sumber daya publik"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
 msgid "Past 30 days"
-msgstr ""
+msgstr "30 hari terakhir"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
 msgid "Past 365 days"
-msgstr ""
+msgstr "365 hari terakhir"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
 msgid "Past 7 days"
-msgstr ""
+msgstr "7 hari terakhir"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:24
 msgid "Pause"
@@ -6985,22 +7001,6 @@ msgstr "Peringkat"
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
 msgid "Ranked by recorded requests in the selected moving period. The window advances in steps of"
 msgstr "Diurutkan berdasarkan jumlah permintaan yang tercatat dalam periode pergerakan yang dipilih. Jendela ini bergerak maju dengan selisih"
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:8
-msgid "Recording ID"
-msgstr "ID Rekaman"
-
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:23
-msgid "Recording capacity"
-msgstr ""
-
-#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:23
-msgid "Recording information"
-msgstr "Informasi rekaman"
-
-#: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:12
-msgid "Recordings"
-msgstr "Rekaman"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:11
 msgid "Referrer — referring hostname, internal or direct/unknown"
@@ -7028,7 +7028,7 @@ msgstr "Kapasitas penyimpanan yang telah dialokasikan"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:55
 msgid "Retention period"
-msgstr ""
+msgstr "Jangka waktu penyimpanan"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_event_options.tpl:5
 msgid "SMTP (Email) — sent, retries, failures and bounces"
@@ -7054,8 +7054,8 @@ msgstr "Tangkapan layar saat halaman dimuat. Segarkan halaman untuk memperbarui.
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:29
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:25
-msgid "Start recording"
-msgstr "Mulai merekam"
+msgid "Start analytics measurement"
+msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:15
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_mailing_runs_panel.tpl:18
@@ -7069,8 +7069,8 @@ msgid "State"
 msgstr "Negara"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:5
-msgid "Step 1 of 2: Choose what to record"
-msgstr "Langkah 1 dari 2: Pilih apa yang akan direkam"
+msgid "Step 1 of 2: Choose which activity to measure"
+msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:34
 msgid "Step 2 of 2: Breakdown and filters"
@@ -7082,35 +7082,35 @@ msgstr "Penggunaan ruang penyimpanan"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:20
 msgid "Stored data size"
-msgstr ""
+msgstr "Ukuran data yang disimpan"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:24
-msgid "Stored data size measures the database space used by the aggregate counts and recording definition. It excludes row headers, indexes, shared table space and unsaved events. Reserved capacity is a planning limit, not disk usage."
+msgid "Stored data size measures the database space used by the aggregate counts and analytics measurement definition. It excludes row headers, indexes, shared table space and unsaved events. Reserved capacity is a planning limit, not disk usage."
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:27
 msgid "Stored intervals / capacity"
-msgstr ""
+msgstr "Interval penyimpanan / kapasitas"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:21
 msgid "Stored time intervals"
-msgstr ""
+msgstr "Interval waktu yang tersimpan"
 
 #: zotonic_mod_analytics/src/mod_analytics.erl:243
-msgid "The recordings changed. Reloading their current display order."
+msgid "The analytics measurements changed. Reloading their current display order."
+msgstr ""
+
+#: zotonic_mod_analytics/src/mod_analytics.erl:266
+msgid "This analytics measurement exceeds the storage budget."
+msgstr ""
+
+#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:38
+msgid "This analytics measurement is no longer available."
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:11
 msgid "This event schema is unavailable."
 msgstr "Skema peristiwa ini tidak tersedia."
-
-#: zotonic_mod_analytics/src/mod_analytics.erl:266
-msgid "This recording exceeds the storage budget."
-msgstr "Rekaman ini melebihi kuota penyimpanan."
-
-#: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:38
-msgid "This recording is no longer available."
-msgstr "Rekaman ini tidak lagi tersedia."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:13
 msgid "Traffic — crawler, other or unknown"
@@ -7123,6 +7123,14 @@ msgstr "Lihat analisis"
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
 msgid "Your site at a glance."
 msgstr "Gambaran singkat situs Anda."
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:44
+msgid "analytics measurement updates since startup"
+msgstr ""
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:24
+msgid "analytics measurements"
+msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:20
 msgid "bytes"
@@ -7145,14 +7153,6 @@ msgstr "peristiwa"
 msgid "group/time slots"
 msgstr "kelompok/slot waktu"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:44
-msgid "recording updates since startup"
-msgstr "mencatat pembaruan sejak sistem dijalankan"
-
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:24
-msgid "recordings"
-msgstr "rekaman"
-
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
 msgid "requests."
 msgstr "permintaan."
@@ -7163,7 +7163,7 @@ msgstr "detik."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:51
 msgid "stored time intervals"
-msgstr ""
+msgstr "interval waktu yang tersimpan"
 
 #: zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:13
 #: zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:14
