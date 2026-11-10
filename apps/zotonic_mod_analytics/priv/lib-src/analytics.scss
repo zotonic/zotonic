@@ -1,0 +1,265 @@
+$analytics-border-color: #dce1e5;
+$analytics-panel-radius: 8px;
+$analytics-primary: var(--bs-primary, #337ab7);
+$analytics-background: var(--bs-body-bg, #fff);
+
+/* Dashboard layout, shared by consumption and configuration pages. */
+.analytics-heading {
+    &::before, &::after {
+        display: none;
+    }
+}
+
+.analytics-heading, .analytics-panel-heading {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 1.5rem;
+
+}
+.analytics-period {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin: 1.5rem 0;
+}
+
+.analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.analytics-panel {
+    min-width: 0;
+    padding: 24px;
+    border: 1px solid $analytics-border-color;
+    border-radius: $analytics-panel-radius;
+    background: $analytics-background;
+}
+
+.analytics-panel-lead {
+    grid-column: 1 / -1;
+}
+
+.analytics-panel-heading {
+    h3 {
+        margin: 0;
+        font-size: 18px;
+    }
+}
+
+.analytics-total {
+    display: flex;
+    align-items: baseline;
+    gap: .6rem;
+    white-space: nowrap;
+
+    strong {
+        font-size: 32px;
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+        font-weight: 500;
+    }
+    span {
+        opacity: .65;
+        font-size: 12px;
+    }
+}
+
+.analytics-trend {
+    margin: 22px 0 8px;
+
+    .z-chart {
+        margin: 0;
+        max-width: none;
+        width: 100%;
+    }
+    .z-chart-svg {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+    circle {
+        r: 1.5px;
+    }
+    .z-chart-grid-line-vertical {
+        stroke-opacity: .16;
+    }
+}
+
+.analytics-breakdown {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #e7eaed;
+
+    div {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        min-width: 0;
+    }
+    span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        opacity: .7;
+    }
+    strong {
+        font-size: 18px;
+        font-variant-numeric: tabular-nums;
+    }
+}
+
+.analytics-details {
+    margin-top: 14px;
+    font-size: 12px;
+
+    summary {
+        cursor: pointer;
+    }
+}
+
+.analytics-coverage {
+    margin: 12px 0 0;
+    font-size: 11px;
+}
+
+.analytics-note {
+    margin-top: 20px;
+    font-size: 12px;
+}
+
+.analytics-drag {
+    cursor: grab;
+    width: 40px;
+    text-align: center;
+    font-size: 22px;
+
+    &:active {
+        cursor: grabbing;
+    }
+}
+
+#analytics-recordings .ui-sortable-helper {
+
+    background: $analytics-background;
+
+}
+@media (max-width: 767px) {
+    .analytics-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .analytics-panel {
+        padding: 16px;
+    }
+    .analytics-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+    .analytics-panel-heading h3 {
+        font-size: 16px;
+    }
+    .analytics-total strong {
+        font-size: 26px;
+    }
+}
+
+/* Capacity meters show bounded resources; activity counts are not percentages. */
+.analytics-status-heading {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.analytics-status-label {
+    color: var(--bs-success-text-emphasis, #287443);
+}
+
+.analytics-capacity-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+}
+
+.analytics-capacity {
+    min-width: 0;
+    padding: 20px;
+    border: 1px solid var(--bs-border-color, $analytics-border-color);
+    border-radius: $analytics-panel-radius;
+
+    label {
+        display: block;
+        font-weight: 600;
+    }
+
+    &-value {
+        margin: 12px 0;
+        font-variant-numeric: tabular-nums;
+        strong {
+            font-size: 24px;
+            font-weight: 500;
+        }
+    }
+
+    meter {
+        display: block;
+        width: 100%;
+        height: 20px;
+        margin-bottom: 14px;
+        accent-color: $analytics-primary;
+    }
+    meter::-webkit-meter-bar {
+        background: var(--bs-tertiary-bg, #edf0f3);
+        border: 0;
+        border-radius: 5px;
+    }
+    meter::-webkit-meter-optimum-value {
+        background: $analytics-primary;
+        border-radius: 5px;
+    }
+    meter::-moz-meter-bar {
+        background: $analytics-primary;
+        border-radius: 5px;
+    }
+    p {
+        margin-bottom: 0;
+    }
+}
+
+.analytics-health-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px;
+    margin-top: 24px;
+
+    h4 {
+        margin-top: 0;
+    }
+}
+
+@media (max-width: 991px) {
+    .analytics-capacity-grid, .analytics-health-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* Bootstrap button display rules must not reveal inactive wizard controls. */
+.analytics-recording-wizard {
+    [hidden] {
+        display: none !important;
+    }
+}
+
+.analytics-recording-actions {
+    padding: 12px 8px 24px;
+}
