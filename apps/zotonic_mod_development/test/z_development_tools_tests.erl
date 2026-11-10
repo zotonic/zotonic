@@ -40,13 +40,13 @@ setup() ->
     meck:new([z_context, z_sites_manager], [passthrough, no_link]),
     meck:expect(z_context, new, fun(prod_tools_test) -> ctx(production) end),
     meck:expect(z_sites_manager, get_sites, fun() -> #{prod_tools_test => running} end),
-    meck:expect(z_acl, sudo, fun(C) -> C#{admin => true} end),
-    meck:expect(z_acl, is_admin, fun(C) -> maps:get(admin, C, false) end),
-    meck:expect(z_acl, is_allowed, fun(use, mod_development, C) -> maps:get(developer, C, true) end),
-    meck:expect(m_site, environment, fun(C) -> maps:get(environment, C, production) end),
+    meck:expect(z_acl, sudo, fun(C) -> C#context{props = (C#context.props)#{admin => true}} end),
+    meck:expect(z_acl, is_admin, fun(C) -> maps:get(admin, C#context.props, false) end),
+    meck:expect(z_acl, is_allowed, fun(use, mod_development, C) -> maps:get(developer, C#context.props, true) end),
+    meck:expect(m_site, environment, fun(C) -> maps:get(environment, C#context.props, production) end),
     meck:expect(z, dispatch_list, fun(_) -> {ok, #{dispatch_list => [#{path => [{id, "[0-9]+"}],
         controller_options => [{template, <<"page.tpl">>}]}]}} end),
-    meck:expect(z, dispatch_path, fun(Path, C) -> {ok, #{path => Path, site => maps:get(site, C)}} end),
+    meck:expect(z, dispatch_path, fun(Path, C) -> {ok, #{path => Path, site => C#context.site}} end),
     meck:expect(z_module_manager, prio, fun(site) -> 1; (mod_base) -> 500 end),
     meck:expect(z_module_indexer, all, fun(template, _) -> [idx(<<"page.tpl">>, site), idx(<<"page.tpl">>, mod_base), idx(<<"base.tpl">>, mod_base)] end),
     meck:expect(z_module_indexer, find, fun(template, <<"page.tpl">>, _) -> {ok, idx(<<"page.tpl">>, site)};
@@ -60,7 +60,8 @@ setup() ->
             {ok, #template_file{template = <<"page.tpl">>, filename = <<"/site/page.tpl">>}}
     end).
 
-ctx(Env) -> #{site => test_site, admin => true, environment => Env}.
+-spec ctx(atom()) -> z:context().
+ctx(Env) -> #context{site = test_site, props = #{admin => true, environment => Env}}.
 get(Path, P, C) -> m_development_tools:m_get(Path, #{payload => P}, C).
 idx(Name, Mod) -> #module_index{key = #module_index_key{name = Name}, module = Mod, filepath = <<"/template.tpl">>}.
 
@@ -84,8 +85,8 @@ permissions() ->
         C = ctx(Env),
         ?assert(m_development_tools:allowed(C)),
         ?assert(m_development_capture:console_allowed(C)),
-        ?assertNot(m_development_tools:allowed(C#{admin => false})),
-        ?assertNot(m_development_tools:allowed(C#{developer => false}))
+        ?assertNot(m_development_tools:allowed(C#context{props = (C#context.props)#{admin => false}})),
+        ?assertNot(m_development_tools:allowed(C#context{props = (C#context.props)#{developer => false}}))
     end, [development, test, acceptance]).
 
 dispatch() ->

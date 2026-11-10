@@ -62,24 +62,24 @@ access_test_() ->
     z_test_support:isolated({setup,
         fun() ->
             meck:new([z_acl, m_site], [no_link]),
-            meck:expect(z_acl, is_admin, fun(C) -> maps:get(admin, C, false) end),
+            meck:expect(z_acl, is_admin, fun(C) -> maps:get(admin, C#context.props, false) end),
             meck:expect(z_acl, is_allowed, fun(use, mod_development, _) -> true end),
-            meck:expect(m_site, environment, fun(C) -> maps:get(environment, C, production) end)
+            meck:expect(m_site, environment, fun(C) -> maps:get(environment, C#context.props, production) end)
         end,
         fun(_) -> meck:unload([z_acl, m_site]) end,
         fun(_) -> [?_test(begin
             lists:foreach(fun(Env) ->
-                ?assert(m_development_capture:console_allowed(#{admin => true, environment => Env})),
-                ?assertNot(m_development_capture:console_allowed(#{environment => Env}))
+                ?assert(m_development_capture:console_allowed(context(#{admin => true, environment => Env}))),
+                ?assertNot(m_development_capture:console_allowed(context(#{environment => Env})))
             end, [development, test, acceptance]),
-            ?assertNot(m_development_capture:console_allowed(#{admin => true, environment => production})),
-            ?assertEqual({error, eacces}, m_development_capture:m_get([<<"trace">>, <<"id">>], #{}, #{})),
-            ?assertEqual({error, eacces}, m_development_capture:m_post([<<"start">>, <<"id">>], #{}, #{})),
-            ?assertEqual({error, eacces}, m_development_capture:m_get([<<"console">>, <<"id">>], #{}, #{admin => true})),
+            ?assertNot(m_development_capture:console_allowed(context(#{admin => true, environment => production}))),
+            ?assertEqual({error, eacces}, m_development_capture:m_get([<<"trace">>, <<"id">>], #{}, context(#{}))),
+            ?assertEqual({error, eacces}, m_development_capture:m_post([<<"start">>, <<"id">>], #{}, context(#{}))),
+            ?assertEqual({error, eacces}, m_development_capture:m_get([<<"console">>, <<"id">>], #{}, context(#{admin => true}))),
             ?assertEqual({error, eacces}, m_development_capture:m_post([<<"poll">>, <<"id">>],
-                #{payload => #{<<"entries">> => [<<"private">>]}}, #{admin => false})),
+                #{payload => #{<<"entries">> => [<<"private">>]}}, context(#{admin => false}))),
             ?assertEqual({error, eacces}, m_development_capture:m_post([<<"poll">>, <<"id">>],
-                #{payload => #{<<"entries">> => [<<"private">>]}}, #{admin => true, environment => production}))
+                #{payload => #{<<"entries">> => [<<"private">>]}}, context(#{admin => true, environment => production})))
         end)] end}).
 
 trace_integration_test() ->
@@ -101,3 +101,8 @@ template_syntax_test() ->
     {ok, Source} = file:read_file("apps/zotonic_mod_development/priv/templates/_html_head_development.tpl"),
     {ok, Tokens} = template_compiler_scanner:scan(<<"capture-template">>, Source),
     ?assertMatch({ok, _}, template_compiler_parser:parse(Tokens)).
+
+%% Keep mock flags inside a real context so model contracts are checked too.
+-spec context(map()) -> z:context().
+context(Props) ->
+    #context{site = capture_test, props = Props}.
