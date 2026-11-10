@@ -316,6 +316,9 @@ rebar_executable() ->
     meck:new(exec, [no_link]),
     meck:expect(exec, run, fun
         ("git " ++ _, _) -> {ok, []};
+        % PATH contains only the compiler fixture. Cotonic is covered separately
+        % by deployment_cotonic/0 and must not invoke bash or the network here.
+        ("bash ./cotonic-update.sh", _) -> {ok, []};
         (Cmd, _) -> rebar_fixture_command(Cmd)
     end),
     meck:new(zotonic_filehandler, [no_link]),
