@@ -1,17 +1,80 @@
 # Public information discovery and access for agents
 
-**Status: implementation in progress; discovery module started.** Reviewed 10 November 2026
+**Status: phase 3 implemented; phase 4 recency repeat passed for the HTTP-capable agent.** Reviewed 10 November 2026
 against repository revision `e7c53472b`.
 
 ### Implementation progress
 
 The first implementation of `mod_agent_discovery` now provides discovery routes,
 shared descriptions of existing search/export reads, HTML and HTTP links, and a
-visible API-help fragment. See the [setup guide](../guides/agent-discovery.md).
-It does not yet implement the concise read facade or new content representations.
-Discovery documents use no-store responses pending the cache work below.
-Live pilot fixtures and agent trials are still required; local contract tests
-do not establish deployed-site behavior or independent agent discovery.
+dedicated API-help page. Discovery is kept out of human-facing page bodies and footers. See the [setup guide](../guides/agent-discovery.md).
+The next implementation adds anonymous bounded search, resource projections,
+one-hop incoming/outgoing relationships, category/predicate listings and explicit
+Markdown representations, including negotiation through `/id/:id`. Language
+defaults to the configured site language; fallback is reported. Discovery now
+advertises these reads alongside the existing compatibility APIs.
+
+The facade caps pages at 100 candidates (20 by default), query text at 512 bytes,
+and execution at five seconds. Relationship SQL fetches at most one page plus
+one lookahead row. No totals are returned. Filtered candidate pages can be sparse;
+`next_url` preserves the query, and a 10,000-candidate exploration limit is explicit.
+Errors are uncached. Successful content responses require cache revalidation and
+compute ETags after fresh anonymous checks, including publication dates.
+Discovery documents continue using no-store responses.
+
+Markdown skips all `survey_...` blocks before template selection. Editorial HTML
+is composed through `_agent_content.tpl` and `_agent_block_<type>.tpl`, with site
+and category overrides. Built-in renderers cover text, headings and one level of
+page references; nested content is marked incomplete instead of recursing.
+Citation, language, license and attribution accompany content. JSON also links
+to the resource's downloadable medium and the full export, and Markdown links
+to media and relationship reads.
+
+Phase 3 now includes inclusive UTC publication date filters, deterministic
+id/newest/oldest/modified sorting, optional relationship predicate filtering,
+modification timestamps, visible category parents, and bounded public predicate
+category constraints. OpenAPI describes these implemented capabilities. Custom
+site fields belong in the documented composition templates, not a database dump.
+
+Local verification on `zotonicwww2` covered discovery documents, search and
+continuation URLs, category/predicate listings, both relationship directions,
+Markdown negotiation, HEAD and conditional GET (304), and malformed requests.
+A temporary resource verified language fallback, survey-block omission, ETag
+changes after content updates, and 404 responses after unpublishing, future/expired
+publication dates and deletion. The temporary resource was removed.
+The tests also caught and fixed Unicode site-title encoding and plain-text
+language fallback. The unit suite covers anonymous contexts even for signed-in
+callers, hidden endpoints, request bounds and termination of over-budget workers.
+The remaining local acceptance checks passed with a temporary published resource
+moved from a public group into a private collaboration group. Both anonymous and
+signed-in administrator HTTP requests returned 404 despite the old ETag, including
+`If-None-Match: *`, with no-store headers. The same administrator could read it
+through the ordinary model API, proving the agent endpoint used anonymous
+permissions. Public responses were byte-identical with and without that session.
+Temporary resources and the group were deleted and the test session invalidated.
+No ACL rules or existing resources were changed.
+
+A temporary category override verified category selection. Rendered fixture
+content preserved headings, code, tables, inline image alt text and page-reference
+content while excluding survey blocks. The first 1,000 public pilot resources
+contained text/page blocks plus surveys, all covered by these renderer choices.
+The temporary override was removed after verification.
+
+Query-plan samples on the local pilot (not production capacity estimates):
+
+| Query, 20 candidates plus lookahead | Execution time | Plan |
+| --- | --- | --- |
+| Articles, newest first | 0.454 ms | Category bitmap index, sort, limit 21 |
+| Full-text `template`, ID order | 17.220 ms | Sequential scan, sort, limit 21 |
+| Outgoing edges of resource 330 | 0.021 ms | Subject index, sort, limit 21 |
+
+The full-text plan scanned the pilot table; production-sized datasets still need
+workload-specific profiling. Query/result bounds and the five-second worker budget
+remain in force. Phase 4 independently measures agent adoption and task accuracy.
+
+Additional JSON-LD and Turtle remain deferred until the SPARQL merge.
+Broader pilot fixtures and independent agent trials are still required; local
+HTTP and contract tests do not establish independent agent discovery.
 
 ## Purpose
 
@@ -43,7 +106,7 @@ to this audience. Keep MCP as a later adapter over shared operations.
 
 | Proposal | Assessment and decision |
 | --- | --- |
-| HTML links and HTTP `Link` headers | First priority. Include ordinary visible links because extracted-text browsing tools may discard headers and HTML head metadata. |
+| HTML links and HTTP `Link` headers | First priority. Use HTTP headers and HTML head links only; accept reduced discoverability in body-text-only clients. |
 | OpenAPI for search and retrieval | Adopt a small, tested public contract. Model callback documentation alone does not describe HTTP serialization, errors, or site-specific capabilities. |
 | `llms.txt` | Cheap complementary guidance. Generate it from the same capabilities as the API documentation; do not depend on clients looking for it. |
 | `/.well-known/api-catalog` | Adopt the defined Linkset format, including endpoint links. An arbitrary JSON capability map or OpenAPI document at that URL is insufficient. |
@@ -130,7 +193,12 @@ Keep responsibilities small:
 - Support modules: OpenAPI/Linkset serialization and resource-to-Markdown
   composition. Controllers handle HTTP representations and conditional requests.
 - Templates: `_html_head.tpl` contribution, an API help page, and a reusable
-  visible link fragment for site footers or resource pages.
+  representation templates. No discovery navigation is added to resource bodies or footers.
+
+Discovery policy: HTTP headers, HTML head links, `llms.txt`, the API catalog and
+dedicated documentation/representation URLs are allowed. Do not inject visible
+API-help or Markdown links into human-facing pages, and do not replace them with
+hidden body links. The former optional visible fragment has been removed.
 
 Maintain one explicit capability definition used by documentation, OpenAPI,
 catalog and `llms.txt`. Include only implemented operations available on the
@@ -146,7 +214,7 @@ URLs with dispatch rules; preserve host, language and site overrides.
 | `/openapi.json` | Selected GET operations, parameters, response envelopes, language behavior, paging and errors. |
 | `/api-help` | Server-rendered explanation with clickable examples and ordinary links to representations and search. The path is provisional and dispatch-generated. |
 | Resource HTML head and headers | Catalog, API documentation and supported resource alternates; `describedby` for `llms.txt`. |
-| Resource body/footer | A visible “Data and API” link, plus a readable-version link where appropriate. Supply a fragment and document its integration in custom site templates. |
+| Resource body/footer | No discovery links, visible or hidden. Preserve the human-facing page design. |
 
 Only advertise representations that exist and are public. A page without a
 resource ID can still advertise site-level search and documentation. Use one
@@ -256,7 +324,7 @@ private fixtures are distinguished, and baseline tasks are reproducible.
 ### 2. Ship discovery and documented existing reads
 
 Build the module, API help, OpenAPI, Linkset catalog, `llms.txt`, HTML links and
-header observer. Integrate the visible fragment on the pilot site. Describe
+header observer. Keep discovery out of human-facing page bodies and footers. Describe
 existing search/export faithfully, including their indexing headers and limits;
 do not claim the later facade already exists.
 
@@ -282,6 +350,15 @@ Verify that signed-in visits cannot populate a public cache with private data.
 
 ### 4. Measure independent discovery and refine
 
+**Trial results:** [first pass](agent-discovery-phase4-first-pass.md) and
+[recency repeat after the sorting fix](agent-discovery-phase4-recency-repeat.md).
+The HTTP-capable agent independently discovered the APIs in both passes. After
+explicit ordering was moved ahead of full-text relevance, it answered correctly
+with one search request and checked the ordinary source pages. The extracted-text
+agent still could not verify recency. Discovery remains out of human-facing page
+bodies and footers; visible-fragment recommendations are withdrawn. Metadata-only
+discovery limitations are accepted, not worked around with hidden body links.
+
 Run repeated trials with the same questions, data and client versions:
 
 | Variant | Available discovery |
@@ -290,7 +367,7 @@ Run repeated trials with the same questions, data and client versions:
 | B | `llms.txt` only |
 | C | HTML head and HTTP links |
 | D | Combined discovery with OpenAPI |
-| E | Combined discovery plus visible API-help/Markdown links |
+
 
 For each, distinguish agents given only a starting article URL from agents given
 the API documentation. Test both extracted-text browsers and HTTP-capable agents.
@@ -303,7 +380,8 @@ Use tasks such as finding three related recent articles, listing upcoming events
 following a collection object's creator, and reading a page in another language.
 Keep expected answers and trial traces. Ship broader defaults only after a pilot
 shows useful exploration and no permission regressions. If discovery fails,
-improve visible links and readable content before adding more protocols.
+improve metadata and dedicated discovery documents within the no-body-links
+constraint before adding more protocols.
 
 ### 5. Add semantic representations after the SPARQL merge
 

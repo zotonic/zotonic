@@ -1,0 +1,230 @@
+{
+  "date": "2026-11-10",
+  "starting_url": "https://zotonicwww2.test:8443/en/docs/13301/catinclude",
+  "task": "Starting at the supplied URL, find the THREE most recently modified public pages on this site matching a search for 'template'. Give each title, exact last modification timestamp, and ordinary human page URL, newest first. If you cannot verify the ordering or timestamps, say so rather than guessing.",
+  "budget": 8,
+  "changes": [
+    "Agent search maps explicit ordering, including ID tie-breaker, to asort ahead of full-text relevance.",
+    "Optional visible discovery fragment removed; no visible or hidden page-body links added."
+  ],
+  "runs": {
+    "http_repeat": {
+      "mode": "http",
+      "api_used": true,
+      "completed": true,
+      "requests": [
+        {
+          "n": 1,
+          "url": "https://zotonicwww2.test:8443/en/docs/13301/catinclude",
+          "final_url": "https://zotonicwww2.test:8443/en/docs/13301/catinclude",
+          "status": 200,
+          "bytes": 43783,
+          "seconds": 0.059,
+          "content_type": "text/html;charset=utf-8"
+        },
+        {
+          "n": 2,
+          "url": "https://zotonicwww2.test:8443/llms.txt",
+          "final_url": "https://zotonicwww2.test:8443/llms.txt",
+          "status": 200,
+          "bytes": 2662,
+          "seconds": 0.0192,
+          "content_type": "text/plain;charset=utf-8"
+        },
+        {
+          "n": 3,
+          "url": "https://zotonicwww2.test:8443/openapi.json",
+          "final_url": "https://zotonicwww2.test:8443/openapi.json",
+          "status": 200,
+          "bytes": 22521,
+          "seconds": 0.0183,
+          "content_type": "application/json;charset=utf-8"
+        },
+        {
+          "n": 4,
+          "url": "https://zotonicwww2.test:8443/api/agent/search?text=template&sort=modified&language=en&page=1&pagelen=3",
+          "final_url": "https://zotonicwww2.test:8443/api/agent/search?text=template&sort=modified&language=en&page=1&pagelen=3",
+          "status": 200,
+          "bytes": 2368,
+          "seconds": 0.0229,
+          "content_type": "application/json;charset=utf-8"
+        },
+        {
+          "n": 5,
+          "url": "https://zotonicwww2.test:8443/en/docs/12900/mod_development",
+          "final_url": "https://zotonicwww2.test:8443/en/docs/12900/mod_development",
+          "status": 200,
+          "bytes": 72649,
+          "seconds": 0.2559,
+          "content_type": "text/html;charset=utf-8"
+        },
+        {
+          "n": 6,
+          "url": "https://zotonicwww2.test:8443/en/docs/13595/set-up-a-local-development-environment",
+          "final_url": "https://zotonicwww2.test:8443/en/docs/13595/set-up-a-local-development-environment",
+          "status": 200,
+          "bytes": 46312,
+          "seconds": 0.0949,
+          "content_type": "text/html;charset=utf-8"
+        },
+        {
+          "n": 7,
+          "url": "https://zotonicwww2.test:8443/en/docs/14809/choose-a-development-tool",
+          "final_url": "https://zotonicwww2.test:8443/en/docs/14809/choose-a-development-tool",
+          "status": 200,
+          "bytes": 37945,
+          "seconds": 0.0426,
+          "content_type": "text/html;charset=utf-8"
+        }
+      ],
+      "payload_bytes": 228240,
+      "fetch_seconds": 0.5128,
+      "response_sha256": [
+        "f24dadb4ed1eb8f5e51a52587d7a0c6e0008939f68f08ffe808c8b9062445e6b",
+        "10e89afec6721077b0f95f836ee49aee5e66840fa369235915b61e0749c96e99",
+        "69f54a086cfcfb836a8c2a89424e6a895cffa4a79d17a2ff8fc3770af15f8368",
+        "1f26778919f0c6160673c4b3e72722eaf1b5d12582bc99b1ec2652652089138b",
+        "99250c6d4e3ab34c3a1e99aeac2f0609e4a4beea87b4dc5008ca9786ca8433fd",
+        "709a2559fe6431eb1074d53841b5b086fc7b3ece241ede548be707cb310e1997",
+        "47d9fddd1839d3c5395500278efee5b6f48cb4110e754d12569e759ef6150b08"
+      ],
+      "answer": [
+        {
+          "id": 12900,
+          "title": "mod_development",
+          "modified": "2026-10-20T21:29:36+00:00",
+          "page_url": "https://zotonicwww2.test:8443/en/docs/12900/mod_development"
+        },
+        {
+          "id": 13595,
+          "title": "Set up a local development environment",
+          "modified": "2026-10-07T10:45:10+00:00",
+          "page_url": "https://zotonicwww2.test:8443/en/docs/13595/set-up-a-local-development-environment"
+        },
+        {
+          "id": 14809,
+          "title": "Choose a development tool",
+          "modified": "2026-10-07T10:36:56+00:00",
+          "page_url": "https://zotonicwww2.test:8443/en/docs/14809/choose-a-development-tool"
+        }
+      ],
+      "strategy": "Followed page discovery links to llms.txt and OpenAPI, used one sorted search, then checked all three ordinary pages including existing modification metadata."
+    },
+    "text_repeat": {
+      "mode": "extracted_text",
+      "api_used": false,
+      "completed": false,
+      "requests": [
+        {
+          "n": 1,
+          "url": "https://zotonicwww2.test:8443/en/docs/13301/catinclude",
+          "final_url": "https://zotonicwww2.test:8443/en/docs/13301/catinclude",
+          "status": 200,
+          "bytes": 43783,
+          "seconds": 0.0362,
+          "content_type": "text/html;charset=utf-8"
+        },
+        {
+          "n": 2,
+          "url": "https://zotonicwww2.test:8443/en/search?text=template",
+          "final_url": "https://zotonicwww2.test:8443/en/search?text=template",
+          "status": 200,
+          "bytes": 23476,
+          "seconds": 0.0219,
+          "content_type": "text/html;charset=utf-8"
+        },
+        {
+          "n": 3,
+          "url": "https://zotonicwww2.test:8443/en/search?q=template&sort=-modified",
+          "final_url": "https://zotonicwww2.test:8443/en/search?q=template&sort=-modified",
+          "status": 200,
+          "bytes": 23548,
+          "seconds": 0.0193,
+          "content_type": "text/html;charset=utf-8"
+        },
+        {
+          "n": 4,
+          "url": "https://zotonicwww2.test:8443/en/page/14339/template",
+          "final_url": "https://zotonicwww2.test:8443/en/page/14339/template",
+          "status": 200,
+          "bytes": 45054,
+          "seconds": 0.0851,
+          "content_type": "text/html;charset=utf-8"
+        },
+        {
+          "n": 5,
+          "url": "https://zotonicwww2.test:8443/en/search?qs=template&sort=-modified",
+          "final_url": "https://zotonicwww2.test:8443/en/search?qs=template&sort=-modified",
+          "status": 200,
+          "bytes": 55172,
+          "seconds": 0.331,
+          "content_type": "text/html;charset=utf-8"
+        },
+        {
+          "n": 6,
+          "url": "https://zotonicwww2.test:8443/en/search?qs=template",
+          "final_url": "https://zotonicwww2.test:8443/en/search?qs=template",
+          "status": 200,
+          "bytes": 55082,
+          "seconds": 0.2363,
+          "content_type": "text/html;charset=utf-8"
+        },
+        {
+          "n": 7,
+          "url": "https://zotonicwww2.test:8443/en/docs/13137/template",
+          "final_url": "https://zotonicwww2.test:8443/en/docs/13137/template",
+          "status": 200,
+          "bytes": 35197,
+          "seconds": 0.0401,
+          "content_type": "text/html;charset=utf-8"
+        }
+      ],
+      "payload_bytes": 281312,
+      "fetch_seconds": 0.7699,
+      "response_sha256": [
+        "313b17713e0367d009cf45942c1135625337342d1007268d1ed5e091ad6e34ef",
+        "3f1dca70246d34ddec7518e467cf999cdc70b6eaab28889fda4cd8020faf97e0",
+        "e79b6755c54b6cf4f5df734bd8dd2540438506770cc615c4e7f2a717e3ada5c0",
+        "52e48b4280de944c7490add548966eb624d266883ce75f9ab46f43fc8ac1f5e8",
+        "f3135a783a7991ea255a1a8a9d100716923b55192b72bedb5dade4e93fc93431",
+        "1b65a8edf4b1217311a37dfd7466ab0235de9ae66334abd5df9286a4442bd272",
+        "6fab9e83c62ed11610f47edda6a20cb421996d8261f006dcc8056d4beb14673e"
+      ],
+      "strategy": "Tried HTML search arguments, found qs=template, visited Template topic and a resource page; could not verify timestamps/order and explicitly declined to guess."
+    }
+  },
+  "validation": {
+    "unit_tests": "13 content tests passed, including real SQL-term combination with relevance preceding explicit sort input.",
+    "live_ordering": [
+      {
+        "sort": "id",
+        "checked": 100,
+        "ordering": "pass",
+        "pagination": "page 1 + page 2 at size 3 equals page 1 at size 6",
+        "repeated_sort_keys": 0
+      },
+      {
+        "sort": "newest",
+        "checked": 100,
+        "ordering": "pass",
+        "pagination": "page 1 + page 2 at size 3 equals page 1 at size 6",
+        "repeated_sort_keys": 80
+      },
+      {
+        "sort": "oldest",
+        "checked": 100,
+        "ordering": "pass",
+        "pagination": "page 1 + page 2 at size 3 equals page 1 at size 6",
+        "repeated_sort_keys": 42
+      },
+      {
+        "sort": "modified",
+        "checked": 100,
+        "ordering": "pass",
+        "pagination": "page 1 + page 2 at size 3 equals page 1 at size 6",
+        "repeated_sort_keys": 0
+      }
+    ],
+    "modified_precision": "Database timestamps include microseconds; API timestamps currently expose seconds. Full database precision was used for the independent comparison."
+  }
+}

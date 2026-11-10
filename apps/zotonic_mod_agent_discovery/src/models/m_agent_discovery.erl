@@ -33,8 +33,8 @@ info(Context0) ->
     Search = url(api, [{star, <<"model/search/get/paged">>}], Context),
     Export = url(api_rsc_export, [{id, <<"AGENT_RESOURCE_ID">>}], Context),
     #{
-        title => z_convert:to_binary(m_site:get(title, Context)),
-        description => z_convert:to_binary(m_config:get_value(mod_agent_discovery, description, <<>>, Context)),
+        title => public_text(m_site:get(title, Context)),
+        description => public_text(m_config:get_value(mod_agent_discovery, description, <<>>, Context)),
         home => z_context:abs_url(<<"/">>, Context),
         llms => url(agent_llms, [], Context),
         catalog => url(agent_api_catalog, [], Context),
@@ -44,7 +44,8 @@ info(Context0) ->
             true -> url(sitemap_xml, [], Context);
             false -> undefined
         end,
-        operations => agent_discovery_document:operations(Search, Export)
+        operations => agent_discovery_document:content_operations(Context)
+            ++ agent_discovery_document:operations(Search, Export)
     }.
 
 -spec links(Id, Context) -> Links when
@@ -61,7 +62,8 @@ links(Id, Context0) ->
     case public_resource(Id, Context) of
         undefined -> SiteLinks;
         RscId -> SiteLinks ++ [link(url(api_rsc_export, [{id, RscId}], Context),
-            <<"alternate">>, <<"application/json">>)]
+            <<"alternate">>, <<"application/json">>),
+            link(url(agent_markdown, [{id, RscId}], Context), <<"alternate">>, <<"text/markdown">>)]
     end.
 
 public_resource(Id, Context) when is_integer(Id); is_binary(Id); is_atom(Id), Id =/= undefined ->
@@ -84,6 +86,10 @@ public_context(Context) ->
     z_context:set_language('x-default', z_acl:anondo(Context)).
 
 url(Dispatch, Args, Context) ->
-    z_context:abs_url(z_dispatcher:url_for(Dispatch, Args, Context), Context).
+    z_context:abs_url(z_dispatcher:url_for(Dispatch, Args, none, Context), Context).
 
 link(Href, Rel, Type) -> #{href => Href, rel => Rel, type => Type}.
+
+%% Site configuration strings can be Unicode charlists, not UTF-8 iodata.
+public_text(Text) when is_list(Text) -> unicode:characters_to_binary(Text);
+public_text(Text) -> z_convert:to_binary(Text).

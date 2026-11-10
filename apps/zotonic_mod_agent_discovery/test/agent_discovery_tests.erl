@@ -15,6 +15,7 @@ discovery_test_() ->
         fun private_and_noindex/0,
         fun header_coexistence/0,
         fun document_contract/0,
+        fun unicode_metadata/0,
         fun controller_contract/0,
         fun anonymous_responses/0,
         fun model_paths/0
@@ -23,7 +24,7 @@ discovery_test_() ->
 setup() ->
     Modules = [z_dispatcher, z_context, m_site, m_config, m_rsc, z_acl, z_module_manager],
     lists:foreach(fun(M) -> meck:new(M, [passthrough, no_link]) end, Modules),
-    meck:expect(z_dispatcher, url_for, fun(Dispatch, Args, C) ->
+    meck:expect(z_dispatcher, url_for, fun(Dispatch, Args, none, C) ->
         anonymous(C),
         ?assertEqual('x-default', z_context:language(C)),
         dispatch(Dispatch, Args)
@@ -53,6 +54,11 @@ anonymous(_) -> error(non_anonymous_context).
 
 context() -> #context{user_id = 1, acl = admin, language = [nl, en]}.
 
+dispatch(agent_search, []) -> <<"/api/agent/search">>;
+dispatch(agent_schema, []) -> <<"/api/agent/schema">>;
+dispatch(agent_resource, [{id, Id}]) -> <<"/api/agent/resource/", (z_convert:to_binary(Id))/binary>>;
+dispatch(agent_related, [{id, Id}]) -> <<"/api/agent/related/", (z_convert:to_binary(Id))/binary>>;
+dispatch(agent_markdown, [{id, Id}]) -> <<"/agent/resource/", (z_convert:to_binary(Id))/binary, "/markdown">>;
 dispatch(agent_llms, []) -> <<"/llms.txt">>;
 dispatch(agent_api_catalog, []) -> <<"/.well-known/api-catalog">>;
 dispatch(agent_openapi, []) -> <<"/openapi.json">>;
@@ -65,9 +71,10 @@ dispatch(api_rsc_export, [{id, Id}]) ->
 
 anonymous_links() ->
     Links = m_agent_discovery:links(1, context()),
-    ?assertEqual(5, length(Links)),
+    ?assertEqual(6, length(Links)),
     ?assertEqual([#{href => <<"https://example.test/public-resource/1">>,
-        rel => <<"alternate">>, type => <<"application/json">>}], alternates(Links)),
+        rel => <<"alternate">>, type => <<"application/json">>},
+        #{href => <<"https://example.test/agent/resource/1/markdown">>, rel => <<"alternate">>, type => <<"text/markdown">>}], alternates(Links)),
     ?assertEqual(4, length(m_agent_discovery:links(undefined, context()))).
 
 private_and_noindex() ->
@@ -105,14 +112,14 @@ document_contract() ->
     Spec = agent_discovery_document:openapi(Info),
     ?assertEqual(<<"3.1.0">>, maps:get(openapi, Spec)),
     Paths = maps:get(paths, Spec),
-    ?assertEqual([<<"/custom-api/model/search/get/paged">>, <<"/public-resource/{id}">>], lists:sort(maps:keys(Paths))),
+    ?assertEqual([<<"/api/agent/related/{id}">>, <<"/api/agent/resource/{id}">>, <<"/api/agent/schema">>, <<"/api/agent/search">>, <<"/custom-api/model/search/get/paged">>, <<"/public-resource/{id}">>], lists:sort(maps:keys(Paths))),
     lists:foreach(fun(Item) -> ?assertEqual([get], maps:keys(Item)) end, maps:values(Paths)),
     #{get := #{parameters := [#{required := true, in := <<"path">>}]}} = maps:get(<<"/public-resource/{id}">>, Paths),
     %% Exercise real JSON serialization, including binary path keys.
     #{<<"paths">> := JsonPaths} = z_json:decode(z_json:encode(Spec)),
     ?assertEqual(maps:keys(Paths), maps:keys(JsonPaths)),
     #{linkset := [#{item := [#{href := Endpoint}]}, #{anchor := Endpoint}]} = agent_discovery_document:catalog(Info),
-    ?assertEqual(<<"https://example.test/custom-api/model/search/get/paged">>, Endpoint),
+    ?assertEqual(<<"https://example.test/api/agent/search">>, Endpoint),
     Text = agent_discovery_document:llms(Info),
     ?assertNotEqual(nomatch, binary:match(Text, Endpoint)),
     ?assertEqual(nomatch, binary:match(Text, <<"/mcp">>)),
@@ -130,7 +137,7 @@ controller_contract() ->
           {openapi, <<"application/json">>}, {help, <<"text/html">>}]).
 
 model_paths() ->
-    ?assertMatch({ok, {#{operations := [_, _]}, []}}, m_agent_discovery:m_get([<<"info">>], undefined, context())),
+    ?assertMatch({ok, {#{operations := [_, _, _, _, _, _]}, []}}, m_agent_discovery:m_get([<<"info">>], undefined, context())),
     ?assertMatch({error, unknown_path}, m_agent_discovery:m_get([<<"unknown">>], undefined, context())).
 
 anonymous_responses() ->
@@ -163,3 +170,9 @@ anonymous_responses() ->
     ?assertEqual(<<"noindex,nofollow">>, maps:get(<<"x-robots-tag">>, maps:get(resp_headers, NoIndex#context.cowreq))).
 
 alternates(Links) -> [L || #{rel := <<"alternate">>} = L <- Links].
+
+unicode_metadata() ->
+    meck:expect(m_site, get, fun(title, _) -> "Zøtoñic" end),
+    #{<<"info">> := #{<<"title">> := Title}} = z_json:decode(z_json:encode(
+        agent_discovery_document:openapi(m_agent_discovery:info(context())))),
+    ?assertEqual(<<"Zøtoñic public information API"/utf8>>, Title).
