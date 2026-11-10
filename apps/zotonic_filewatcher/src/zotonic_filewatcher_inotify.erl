@@ -187,10 +187,14 @@ start_inotify(#state{executable = Executable, port = undefined} = State) ->
     Args = [
             Executable,
             "-q", "-e", "modify,create,delete,moved_to,moved_from", "-m", "-r",
-            "--exclude", zotonic_filewatcher_handler:re_exclude()
-        ]
-        ++ zotonic_filewatcher_sup:watch_dirs_expanded(),
-    {ok, Pid, Port} = exec:run_link(Args, [stdout, monitor]),
+            "--exclude", zotonic_filewatcher_handler:re_exclude(),
+            "--fromfile", "-"
+        ],
+    Files = zotonic_filewatcher_sup:inotify_watch_files(
+        zotonic_filewatcher_sup:watch_dirs_expanded()),
+    {ok, Pid, Port} = exec:run_link(Args, [stdin, stdout, monitor]),
+    ok = exec:send(Pid, Files),
+    ok = exec:send(Pid, eof),
     State#state{
         port = Port,
         pid = Pid

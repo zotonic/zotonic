@@ -24,7 +24,7 @@
 -include_lib("kernel/include/logger.hrl").
 -include_lib("zotonic_notifier/include/zotonic_notifier.hrl").
 
--export([start_link/0, run/1, build/1, deploy/1, schema/1, try_idle/1, is_pending/0, status/0, publish_status/0]).
+-export([start_link/0, run/1, build/1, deploy/1, inspect/1, schema/1, try_idle/1, is_pending/0, status/0, publish_status/0]).
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2]).
 
 -record(state, {
@@ -85,6 +85,19 @@ flush_deployment_changes() ->
         {Pid, _} when Pid =:= self() -> ok;
         {_, #{deployment := true}} -> zotonic_filewatcher_handler:flush();
         _ -> ok
+    end.
+
+%% @doc Inspect a checkout even after a failed deployment, without releasing the
+%% failure barrier. Refuse active updates instead of leaving an admin dialog waiting.
+-spec inspect(Fun) -> Result | {error, update_in_progress} when
+    Fun :: fun(() -> Result), Result :: term().
+inspect(Fun) ->
+    case gen_server:call(?MODULE, inspect) of
+        {ok, Ref} ->
+            try Fun()
+            after gen_server:call(?MODULE, {release, Ref})
+            end;
+        {error, _} = Error -> Error
     end.
 
 %% @doc Hold a read lease for the entire migration, including version recording.
@@ -171,6 +184,11 @@ handle_call({begin_update, Kind}, From, #state{owner = undefined, readers = Read
         _ -> {noreply, State1}
     end;
 handle_call({begin_update, _Kind}, _From, State) ->
+    {reply, {error, update_in_progress}, State};
+handle_call(inspect, {Pid, _}, #state{owner = undefined, readers = Readers} = State) ->
+    Ref = monitor(process, Pid),
+    {reply, {ok, Ref}, State#state{readers = Readers#{Ref => Pid}}};
+handle_call(inspect, _From, State) ->
     {reply, {error, update_in_progress}, State};
 handle_call(try_idle, _From, #state{owner = Owner, failure = Failure} = State)
     when Owner =/= undefined; Failure =/= undefined ->

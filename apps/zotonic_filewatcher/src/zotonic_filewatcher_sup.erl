@@ -30,7 +30,8 @@
     is_watcher_running/0,
 
     watch_dirs/0,
-    watch_dirs_expanded/0
+    watch_dirs_expanded/0,
+    inotify_watch_files/1
     ]).
 
 -include_lib("kernel/include/file.hrl").
@@ -166,12 +167,7 @@ watch_dirs() ->
 %% @doc We expand all watch dirs, so that symbolic links to src, include, and priv are followed
 -spec watch_dirs_expanded() -> list( file:filename_all() ).
 watch_dirs_expanded() ->
-    lists:foldl(
-        fun(Dir, Acc) ->
-            symlinks(Dir) ++ [ Dir | Acc ]
-        end,
-        [],
-        watch_dirs()).
+    lists:usort(lists:flatmap(fun(Dir) -> [Dir | symlinks(Dir)] end, watch_dirs())).
 
 symlinks(Dir) ->
     All =  filelib:wildcard(filename:join([ Dir, "*" ]))
@@ -189,6 +185,41 @@ symlinks(Dir) ->
             end
         end,
         All).
+
+%% @doc Input for inotifywait --fromfile. Explicit @ paths prevent recursive
+%% watches on ignored trees; --exclude only filters events on older Ubuntu tools.
+%% Do not follow symlinks here: their watch roots are already expanded separately.
+-spec inotify_watch_files(Dirs) -> binary() when Dirs :: [file:filename_all()].
+inotify_watch_files(Dirs) ->
+    Roots = lists:usort([ unicode:characters_to_list(filename:absname(D)) || D <- Dirs ]),
+    Excluded = lists:usort(lists:flatmap(fun excluded_dirs/1, Roots)),
+    %% Reject invalid Unicode instead of passing a conversion error to exec:send/2.
+    <<_/binary>> = unicode:characters_to_binary([
+        [ watch_line(D) || D <- Roots ],
+        [ [$@, watch_line(D)] || D <- Excluded ]
+    ]).
+
+watch_line(Path) ->
+    %% The fromfile protocol has no escaping for embedded newlines.
+    nomatch = string:find(Path, "\n"),
+    [Path, $\n].
+
+excluded_dirs(Dir) ->
+    case file:list_dir(Dir) of
+        {ok, Names} ->
+            lists:flatmap(fun(Name) ->
+                Path = filename:join(Dir, Name),
+                case file:read_link_info(Path) of
+                    {ok, #file_info{type = directory}} ->
+                        case zotonic_filewatcher_handler:is_file_blocked(Path ++ "/") of
+                            true -> [Path];
+                            false -> excluded_dirs(Path)
+                        end;
+                    _ -> []
+                end
+            end, Names);
+        {error, _} -> []
+    end.
 
 %% @doc Return the _build/default/lib directory
 -spec build_lib_dir() -> file:filename_all().

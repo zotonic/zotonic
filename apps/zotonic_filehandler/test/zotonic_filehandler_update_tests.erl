@@ -29,6 +29,7 @@ isolated_tests() ->
         fun public_status/0,
         fun status_notifications/0,
         fun failed_build/0,
+        fun recovery/0,
         fun automatic_failures/0,
         fun missing_compile_options/0,
         fun recompile_paths/0,
@@ -106,12 +107,41 @@ failed_build() ->
     ?assert(zotonic_filehandler_update:is_pending()),
     ?assertMatch({error, {code_update_failed, compile_failed}},
         zotonic_filehandler_update:schema(fun() -> error(must_not_run) end)),
+    ?assertEqual(inspected, zotonic_filehandler_update:inspect(fun() -> inspected end)),
+    ?assert(zotonic_filehandler_update:is_pending()),
     ?assertMatch({error, _}, zotonic_filehandler_update:run(fun() -> error(must_not_run) end)),
     ?assertEqual({error, retry_failed},
         zotonic_filehandler_update:build(fun() -> {error, retry_failed} end)),
     ?assert(zotonic_filehandler_update:is_pending()),
     ?assertEqual(ok, zotonic_filehandler_update:build(fun() -> ok end)),
     ?assertEqual(migrated, zotonic_filehandler_update:schema(fun() -> migrated end)).
+
+%% Reset does not release the barrier until compilation and activation succeed.
+recovery() ->
+    Modules = [exec, zotonic_filehandler, zotonic_filehandler_reload],
+    lists:foreach(fun(M) -> meck:new(M, [no_link]) end, Modules),
+    meck:expect(zotonic_filehandler, terminal_notifier, fun(_) -> ok end),
+    meck:expect(zotonic_filehandler_reload, all, fun() -> {ok, []} end),
+    try
+        ?assertEqual({error, dirty}, zotonic_filehandler_update:deploy(fun() -> {error, dirty} end)),
+        ?assertEqual({error, reset_failed}, zotonic_filehandler_compile:recover(fun() -> {error, reset_failed} end)),
+        ?assert(zotonic_filehandler_update:is_pending()),
+        meck:expect(exec, run, fun(_, _) -> {error, [{exit_status, 1}]} end),
+        ?assertMatch({error, _}, zotonic_filehandler_compile:recover(fun() -> ok end)),
+        ?assert(zotonic_filehandler_update:is_pending()),
+        ?assertNot(meck:called(zotonic_filehandler_reload, all, [])),
+        meck:expect(exec, run, fun(_, _) -> {ok, []} end),
+        Reset = fun() ->
+            ?assertEqual({error, update_in_progress},
+                zotonic_filehandler_update:inspect(fun() -> must_not_run end)),
+            ok
+        end,
+        ?assertEqual(ok, zotonic_filehandler_compile:recover(Reset)),
+        ?assert(meck:called(zotonic_filehandler_reload, all, [])),
+        ?assertNot(zotonic_filehandler_update:is_pending())
+    after
+        lists:foreach(fun meck:unload/1, Modules)
+    end.
 
 %% Neither single-file updates nor ordinary full builds latch a deployment failure.
 automatic_failures() ->

@@ -5,5 +5,7 @@
         delegate=`mod_site_update`
         postback={vcs_up site=name}
     %}
+    {% button text=_"Reset" class="btn btn-default btn-xs"
+        postback={vcs_reset site=name} delegate=`mod_site_update` %}
     {% include "_site_deploy_status.tpl" %}
 {% endif %}

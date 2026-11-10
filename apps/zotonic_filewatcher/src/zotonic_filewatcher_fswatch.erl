@@ -106,7 +106,7 @@ handle_call(Message, _From, State) ->
 handle_cast(restart, #state{ pid = undefined } = State) ->
     {noreply, State};
 handle_cast(restart, #state{ pid = Pid } = State) when is_pid(Pid) ->
-    ?LOG_INFO("[inotify] Stopping fswatch file monitor."),
+    ?LOG_INFO("[fswatch] Stopping fswatch file monitor."),
     try exec:stop(Pid) catch _:_ -> ok end,
     {noreply, start_fswatch(State#state{ port = undefined, tries = 0 })};
 
@@ -174,14 +174,10 @@ backoff(N) -> max(900_000, N * 5000).
 
 start_fswatch(State=#state{executable = Executable, port = undefined}) ->
     ?LOG_INFO("[fswatch] Starting fswatch file monitor."),
-    REs = lists:foldl(
-        fun(RE, Acc) ->
-            [ "-e", RE | Acc ]
-        end,
-        [],
-        string:tokens(zotonic_filewatcher_handler:re_exclude(), "|")),
-    Args = [ Executable, "-0", "-x", "-Lr" ]
-        ++ REs
+    %% Extended regex syntax supports the shared alternation in one argument.
+    %% Keep explicit symlink roots: link traversal depends on the fswatch backend.
+    Args = [ Executable, "-0", "-x", "-Lr", "-E",
+             "-e", zotonic_filewatcher_handler:re_exclude() ]
         ++ zotonic_filewatcher_sup:watch_dirs_expanded(),
     {ok, Pid, Port} = exec:run_link(Args, [stdout, monitor]),
     State#state{
