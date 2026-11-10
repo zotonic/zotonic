@@ -74,6 +74,23 @@ Wait for the **container shell prompt**. The checkout is now available at
 continue with Step 4. Its window stays open after exit or failure so you can
 read the output.
 
+If the launcher reports that the Linux engine check failed, Zotonic has not
+started. Open Docker Desktop from the Windows Start menu, resolve any startup
+error it displays, and wait until its engine is running. Then close the launcher
+and double-click `start-docker.cmd` again. Pressing a key on the launcher's error
+screen only closes it; it does not retry or start Docker Desktop.
+
+To diagnose this from **PowerShell**, run:
+
+```powershell
+docker info
+docker info --format '{{.OSType}}'
+```
+
+The second command should print `linux`. A connection error means Docker's
+engine is unavailable; `windows` means it is running Windows containers and
+must be switched to Linux containers.
+
 If host port `5432` is occupied, launch from **PowerShell** with:
 
 ```powershell

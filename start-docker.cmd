@@ -19,7 +19,15 @@ if errorlevel 1 (
 rem Zotonic needs the Linux container engine, not Windows containers.
 docker info --format "{{.OSType}}" | findstr /x "linux" >nul
 if errorlevel 1 (
-    echo Start Docker Desktop and wait for its Linux container engine to be ready.
+    echo.
+    echo Zotonic has not started: Docker's Linux engine check failed.
+    echo Docker diagnostic information follows:
+    docker info
+    echo.
+    echo Open Docker Desktop from the Windows Start menu.
+    echo Resolve any startup error shown there and wait until the engine is running.
+    echo Then close this window and double-click start-docker.cmd again.
+    echo This launcher does not wait for Docker or retry automatically.
     goto failed
 )
 
@@ -42,7 +50,8 @@ set "ZOTONIC_EXIT_CODE=1"
 :finished
 popd
 echo.
-pause
+echo Press any key to close this launcher.
+pause >nul
 exit /b %ZOTONIC_EXIT_CODE%
 
 :directory_error
