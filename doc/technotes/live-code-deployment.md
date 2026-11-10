@@ -15,7 +15,21 @@ changes, including dependencies added by compiling `apps_user` applications.
 Other local changes and untracked lock files are preserved. A restore failure
 aborts deployment; a failed pull does not undo the lock-file reset.
 
-The command then runs `git pull --ff-only`, compiles the umbrella, captures the BEAM
+The command then runs `git pull --ff-only`. When deploying the Zotonic umbrella
+itself, it refreshes Cotonic with `apps/zotonic_mod_base/cotonic-update.sh` before
+compilation. Site/module repository deployments do not refresh the shared
+Cotonic runtime. A failed Cotonic download fails the deployment without replacing
+the installed Cotonic files.
+
+Deployments use the committed `priv/lib` assets. Build and commit those assets
+during development; do not run their Makefiles or Taskfiles during deployment.
+Buffered deployment watcher events still refresh file indexes and caches, but
+do not rebuild library assets (including Sass, Less and CoffeeScript). This also
+applies when a full build recovers a failed deployment. Ordinary development
+watcher events continue to build assets. Erlang compilation and native runtime
+build hooks, such as the sandbox launcher, still run.
+
+The command compiles the umbrella, captures the BEAM
 binaries and activates changed code atomically. The site-update UI and webhook
 use the same barrier (including the existing Mercurial update path). Install this
 feature with a full build and node restart first, so the new supervised
@@ -54,13 +68,15 @@ stop the node, pull and build completely, then start it.
 1. Acquire the node-wide update barrier, waiting for active schema migrations.
 2. Drain executing file-handler actions. Buffer subsequent watcher events,
    including templates, translations, dispatch files and application files.
-3. Restore the tracked Git lock file, pull and compile. A failure does not activate code.
+3. Restore the tracked Git lock file, pull, refresh Cotonic for an umbrella
+   deployment, and compile. A failure does not activate code.
 4. Discover new applications; capture changed loaded modules and unloaded project
    modules from the active code paths. Compare BEAM MD5 hashes, not timestamps.
 5. Prepare the binaries with `code:prepare_loading/1`, safely purge unused old
    code, and activate the entire batch with `code:finish_loading/1`.
 6. Notify site managers only after activation.
-7. Release the barrier, replay buffered events, and perform any deferred periodic
+7. Flush queued watcher events into the barrier, then release it, replay buffered
+   events without rebuilding committed library assets, and perform any deferred periodic
    mtime cache clearing. Flush caches and reindex files under a read lease, which
    prevents a subsequent deployment from overlapping that refresh.
    Migrations acquire read leases

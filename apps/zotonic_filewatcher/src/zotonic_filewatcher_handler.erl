@@ -24,6 +24,7 @@
 
 -export([
     file_changed/2,
+    flush/0,
     re_exclude/0,
     is_file_blocked/1,
     is_file_blocked/2
@@ -104,6 +105,14 @@ file_changed(Verb, F) when is_binary(F) ->
             gen_server:cast(?MODULE, {file_changed, Verb, F})
     end.
 
+%% @doc Deliver queued events before a deployment releases its update barrier.
+-spec flush() -> ok.
+flush() ->
+    case whereis(?MODULE) of
+        undefined -> ok;
+        _ -> gen_server:call(?MODULE, flush, infinity)
+    end.
+
 -spec re_exclude() -> string().
 re_exclude() ->
     ?FILENAME_BLOCKLIST_RE.
@@ -159,6 +168,11 @@ init(_) ->
         is_changed = false
     }}.
 
+handle_call(flush, _From, #state{is_changed = false} = State) ->
+    {reply, ok, State};
+handle_call(flush, _From, State) ->
+    send_changes(State#state.events),
+    {reply, ok, State#state{events = #{}, is_changed = false}};
 handle_call(Msg, _From, State) ->
     {stop, {unknown_msg, Msg}, State}.
 

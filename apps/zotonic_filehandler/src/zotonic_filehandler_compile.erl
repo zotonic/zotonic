@@ -113,7 +113,7 @@ deploy(Vcs, Path) ->
     Result = zotonic_filehandler_update:deploy(fun() ->
         case pull(Vcs, Path) of
             {ok, Output} ->
-                case compile_build() of
+                case deploy_build(Path) of
                     ok -> {ok, proplists:get_value(stdout, Output, [])};
                     {error, _} = Error -> Error
                 end;
@@ -121,6 +121,24 @@ deploy(Vcs, Path) ->
         end
     end),
     finish_build(Result).
+
+%% Only an update of the umbrella itself refreshes the shared Cotonic runtime.
+%% Site/module deployments still compile the umbrella, without updating Cotonic.
+deploy_build(Path) ->
+    Root = case os:getenv("ZOTONIC") of
+        false -> {ok, Cwd} = file:get_cwd(), Cwd;
+        Dir -> Dir
+    end,
+    %% Compare directory identity so symlinked checkouts work too.
+    case {file:read_file_info(Path), file:read_file_info(Root)} of
+        {{ok, Info}, {ok, Info}} ->
+            Base = filename:join([Root, "apps", "zotonic_mod_base"]),
+            case run_cmd_task("bash ./cotonic-update.sh", [{cd, Base}], []) of
+                ok -> compile_build();
+                {error, _} = Error -> Error
+            end;
+        _ -> compile_build()
+    end.
 
 %% Compilation can rewrite the tracked lock file with apps_user dependencies.
 %% Restore only that file, inside the barrier and before Git updates the tree.
