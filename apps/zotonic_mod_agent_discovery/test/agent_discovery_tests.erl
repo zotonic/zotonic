@@ -146,7 +146,24 @@ anonymous_responses() ->
         z_context:set_resp_headers(mod_agent_discovery:observe_resource_headers(
             #resource_headers{}, [], C), C)
     end),
-    SignedIn = (context())#context{cowreq = #{}},
+    SignedIn = (context())#context{cowreq = #{
+        method => <<"GET">>,
+        version => 'HTTP/1.1',
+        scheme => <<"https">>,
+        host => <<"example.test">>,
+        port => 443,
+        path => <<"/llms.txt">>,
+        qs => <<>>,
+        headers => #{},
+        peer => {{127, 0, 0, 1}, 12345},
+        sock => {{127, 0, 0, 1}, 443},
+        cert => undefined,
+        ref => agent_discovery_tests,
+        pid => self(),
+        streamid => 1,
+        has_body => false,
+        body_length => 0
+    }},
     {true, Public} = controller_agent_discovery:service_available(SignedIn),
     anonymous(Public),
     ?assertNotEqual(nomatch, binary:match(
