@@ -14,8 +14,11 @@ msgctxt_test_() ->
 
 setup() ->
     {ok, _} = application:ensure_all_started(template_compiler),
-    ok = meck:new(z_notifier, [no_link]),
-    ok = meck:expect(z_notifier, notify, fun(_, _) -> ok end),
+    ok = meck:new(z_notifier, [passthrough, no_link]),
+    ok = meck:expect(z_notifier, notify, fun
+        (_, #context{site=msgctxt_tests}) -> ok;
+        (Event, Ctx) -> meck:passthrough([Event, Ctx])
+    end),
     Table = ets:new(msgctxt_test, [set, public]),
     Rule = template_compiler_plural:english(),
     Three = {3, {conditional, {'==', n, 1}, 0,
@@ -90,12 +93,22 @@ module_default(C) ->
     File = "/tmp/msgctxt_owner/priv/templates/default.tpl",
     Other = "/tmp/msgctxt_override/priv/templates/default.tpl",
     Key = #module_index_key{site=msgctxt_tests, type=template, name= <<"default.tpl">>},
-    ok = meck:new(z_module_indexer, [no_link]),
-    ok = meck:expect(z_module_indexer, find_all, fun(template, <<"default.tpl">>, _) ->
+    ok = meck:new(z_module_indexer, [passthrough, no_link]),
+    ok = meck:expect(z_module_indexer, find_all, fun(template, <<"default.tpl">>, #context{site=msgctxt_tests}) ->
         [#module_index{key=Key, filepath=Other, module=z_trans},
-         #module_index{key=Key, filepath=File, module=?MODULE}]
+         #module_index{key=Key, filepath=File, module=?MODULE}];
+        (Type, Name, Ctx) -> meck:passthrough([Type, Name, Ctx])
     end),
     try
+        % A live site's indexer must still receive calls during this mock.
+        Indexer = spawn(fun() ->
+            receive
+                {'$gen_call', From, {find_all, template, <<"default.tpl">>}} ->
+                    gen_server:reply(From, [live_site_template])
+            end
+        end),
+        ?assertEqual([live_site_template], z_module_indexer:find_all(
+            template, <<"default.tpl">>, #context{site=live_site, module_indexer=Indexer})),
         ?assertEqual(undefined, z_template_compiler_runtime:get_template_msgctxt(Other, C)),
         ?assertEqual(<<"action">>, z_template_compiler_runtime:get_template_msgctxt(File, C)),
         lists:foreach(fun({Source, Expected}) ->
