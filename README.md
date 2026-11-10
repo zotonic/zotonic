@@ -24,6 +24,13 @@ Installation
 * Read the [**Installation chapter**](https://zotonic.com/docs/1526/getting-started#installation)
   in the documentation.
 
+On Windows, start Docker Desktop and double-click `start-docker.cmd` in a local
+Windows checkout, or run `.\start-docker.cmd` from PowerShell. It builds the
+development container and opens its shell; run `bin/zotonic start` there.
+The launcher defaults the container UID and GID to `1000`, preserves explicit
+environment overrides, and keeps the window open so errors can be read.
+See the [Windows development guide](doc/guides/docker-windows.md) for setup.
+
 The development launchers `./start-docker.sh` and `./start-podman.sh` use your local
 UID and GID for the container's Zotonic user. Start them as your normal user.
 Override either ID when necessary, for example:

@@ -1,0 +1,7 @@
+# Scripts executed by Linux development containers must retain LF on Windows.
+*.sh text eol=lf
+*.escript text eol=lf
+bin/zotonic text eol=lf
+
+# Native Windows launcher.
+*.cmd text eol=crlf
