@@ -100,18 +100,35 @@ plural_catalog_render_test() ->
         "\nmsgctxt \"future\"\nmsgid \"hour\"\nmsgid_plural \"hours\"\n"
         "msgstr[0] \"hodinu\"\nmsgstr[1] \"hodiny\"\nmsgstr[2] \"hodin\"\n">>,
     ok = file:write_file(File, Catalog),
-    ok = meck:new(z_module_indexer, [no_link]),
-    ok = meck:new(z_notifier, [no_link]),
-    ok = meck:new(z_template, [no_link]),
-    ok = meck:expect(z_module_indexer, translations, fun(_) -> [{test_module, [{cs, File}]}] end),
-    ok = meck:expect(z_notifier, observe, fun(_, _, _) -> ok end),
-    ok = meck:expect(z_notifier, detach, fun(_, _) -> ok end),
-    ok = meck:expect(z_notifier, notify, fun(_, _) -> ok end),
-    ok = meck:expect(z_template, reset, fun(_) -> ok end),
+    % Site processes keep using these modules while the fixture is running.
+    ok = meck:new(z_module_indexer, [passthrough, no_link]),
+    ok = meck:new(z_notifier, [passthrough, no_link]),
+    ok = meck:new(z_template, [passthrough, no_link]),
+    ok = meck:expect(z_module_indexer, translations, fun
+        (#context{site=plural_catalog_test}) -> [{test_module, [{cs, File}]}];
+        (Ctx) -> meck:passthrough([Ctx])
+    end),
+    ok = meck:expect(z_notifier, observe, fun
+        (_, _, plural_catalog_test) -> ok;
+        (Event, Observer, Site) -> meck:passthrough([Event, Observer, Site])
+    end),
+    ok = meck:expect(z_notifier, detach, fun
+        (_, plural_catalog_test) -> ok;
+        (Event, Site) -> meck:passthrough([Event, Site])
+    end),
+    ok = meck:expect(z_notifier, notify, fun
+        (_, #context{site=plural_catalog_test}) -> ok;
+        (Event, Ctx) -> meck:passthrough([Event, Ctx])
+    end),
+    ok = meck:expect(z_template, reset, fun
+        (plural_catalog_test) -> ok;
+        (Site) -> meck:passthrough([Site])
+    end),
     {ok, Server} = z_trans_server:start_link(plural_catalog_test),
     Context = #context{site=plural_catalog_test, language=[cs, en],
         translation_table=z_trans_server:table(plural_catalog_test)},
     try
+        ?assert(erlang:function_exported(z_module_indexer, find_all, 3)),
         ok = z_trans_server:load_translations(Context),
         _ = sys:get_state(Server),
         ?assertEqual(<<"hodinami">>, z_trans:trans_plural("hour", "hours", 3, "past", Context)),

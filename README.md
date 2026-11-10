@@ -24,19 +24,20 @@ Installation
 * Read the [**Installation chapter**](https://zotonic.com/docs/1526/getting-started#installation)
   in the documentation.
 
-On Windows, start Docker Desktop and double-click `start-docker.cmd` in a local
-Windows checkout, or run `.\start-docker.cmd` from PowerShell. It builds the
-development container and opens its shell; run `bin/zotonic start` there.
-The launcher defaults the container UID and GID to `1000`, preserves explicit
-environment overrides, and keeps the window open so errors can be read.
-See the [Windows development guide](doc/guides/docker-windows.md) for setup.
+On Windows, install Ubuntu WSL 2 and enable its Docker Desktop WSL integration,
+then double-click `setup-wsl.cmd`. Setup clones Zotonic into Ubuntu's Linux
+filesystem and creates a desktop folder shortcut with **Start Zotonic**,
+**Stop Zotonic**, **Open Zotonic Folder**, **Edit Zotonic**, **Shell Zotonic**,
+and **Logs Zotonic** launchers. Start builds and starts the server automatically
+and opens the browser when it is ready. VS Code uses its WSL extension.
+See the [Windows development guide](doc/guides/docker-windows.md) for setup and
+migration from an existing Windows checkout.
 
-To stop this checkout's containers, double-click `stop-docker.cmd` on Windows
-or run `./stop-docker.sh` on macOS/Linux/WSL from another terminal. These remove
-the project's containers and network, including one-off development shells,
-while keeping the PostgreSQL volume and checkout files. Docker Desktop stays
-running. For an orderly application shutdown, run `bin/zotonic stop` in the
-container shell first.
+`start-docker.cmd` and `stop-docker.cmd` now control that saved WSL setup; they
+do not mount the Windows checkout. Stop keeps the database and files and leaves
+Docker Desktop running. The managed WSL setup uses its own Compose project.
+For containers started manually with `./start-docker.sh` on macOS/Linux/WSL,
+use `./stop-docker.sh` from another terminal in the same checkout.
 
 The development launchers `./start-docker.sh` and `./start-podman.sh` use your local
 UID and GID for the container's Zotonic user. Start them as your normal user.

@@ -60,8 +60,10 @@ run_update(Fun, Kind) ->
     case gen_server:call(?MODULE, {begin_update, Kind}, infinity) of
         ok ->
             try
-                ok = zotonic_filehandler_handler:update_barrier(),
-                Fun()
+                ok = zotonic_filehandler_handler:update_barrier(Kind),
+                FunResult = Fun(),
+                flush_deployment_changes(),
+                FunResult
             of
                 {error, _} = Error ->
                     ok = gen_server:call(?MODULE, {finish, Error}),
@@ -74,6 +76,15 @@ run_update(Fun, Kind) ->
                 erlang:raise(Class, Reason, Stack)
             end;
         {error, _} = Error -> Error
+    end.
+
+%% The watcher debounces notifications. Deliver its queued events while the
+%% deployment barrier still marks them as asset changes that must not rebuild.
+flush_deployment_changes() ->
+    case {whereis(zotonic_filehandler_handler), status()} of
+        {Pid, _} when Pid =:= self() -> ok;
+        {_, #{deployment := true}} -> zotonic_filewatcher_handler:flush();
+        _ -> ok
     end.
 
 %% @doc Hold a read lease for the entire migration, including version recording.

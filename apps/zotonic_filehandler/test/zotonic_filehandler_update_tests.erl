@@ -40,6 +40,8 @@ isolated_tests() ->
         fun atomic_failure/0,
         fun old_code_in_use/0,
         fun watcher_replay/0,
+        fun deployment_assets/0,
+        fun deployment_cotonic/0,
         fun periodic_mtime_flush/0,
         fun scanner_mtime_flush/0
     ]}.
@@ -314,6 +316,9 @@ rebar_executable() ->
     meck:new(exec, [no_link]),
     meck:expect(exec, run, fun
         ("git " ++ _, _) -> {ok, []};
+        % PATH contains only the compiler fixture. Cotonic is covered separately
+        % by deployment_cotonic/0 and must not invoke bash or the network here.
+        ("bash ./cotonic-update.sh", _) -> {ok, []};
         (Cmd, _) -> rebar_fixture_command(Cmd)
     end),
     meck:new(zotonic_filehandler, [no_link]),
@@ -406,6 +411,88 @@ watcher_replay() ->
         gen_server:stop(Handler),
         meck:unload(zotonic_filehandler_mapper),
         meck:unload(zotonic_notifier)
+    end.
+
+deployment_assets() ->
+    meck:new(zotonic_notifier, [no_link]),
+    meck:new(zotonic_filehandler_mapper, [no_link]),
+    meck:new(zotonic_filehandler_mappers, [no_link]),
+    meck:expect(zotonic_notifier, observe, fun(_, _, _, _, _) -> ok end),
+    meck:expect(zotonic_notifier, map, fun(_, _, _, _) -> [] end),
+    meck:expect(zotonic_filehandler_mappers, run_build, fun(_, _) -> ok end),
+    meck:expect(zotonic_filehandler_mapper, map_change, fun(_, _) ->
+        {ok, [{zotonic_filehandler_mappers, run_build, [fixture, {make, <<"Makefile">>}]}]}
+    end),
+    {ok, Handler} = zotonic_filehandler_handler:start_link(),
+    meck:expect(zotonic_notifier, first, fun(_, filewatcher_changes, Msg, _) ->
+        zotonic_filehandler_handler:filewatcher_changes_observer(Msg, undefined)
+    end),
+    {ok, Watcher} = zotonic_filewatcher_handler:start_link(),
+    Changes = #{<<"/fixture/priv/lib-src/site.scss">> => modify},
+    try
+        ?assertEqual({error, failed}, zotonic_filehandler_update:deploy(fun() ->
+            ok = zotonic_filehandler_handler:handle_changes(Changes),
+            {error, failed}
+        end)),
+        %% Recovery must not turn the buffered source change into an asset build.
+        ok = zotonic_filehandler_update:build(fun() -> ok end),
+        _ = sys:get_state(Handler),
+        ?assertNot(meck:called(zotonic_filehandler_mappers, run_build, '_')),
+        ?assert(meck:called(zotonic_notifier, map, '_')),
+        meck:reset(zotonic_notifier),
+        %% A short deployment can finish before the watcher debounce expires.
+        ok = zotonic_filehandler_update:deploy(fun() ->
+            zotonic_filewatcher_handler:file_changed(modify, <<"/fixture/priv/lib-src/site.scss">>)
+        end),
+        _ = sys:get_state(Handler),
+        ?assertNot(meck:called(zotonic_filehandler_mappers, run_build, '_')),
+        ?assert(meck:called(zotonic_notifier, map, '_')),
+        %% A later local edit still uses the normal development build.
+        _ = zotonic_filehandler_handler:handle_changes(Changes),
+        ?assert(meck:called(zotonic_filehandler_mappers, run_build, '_'))
+    after
+        gen_server:stop(Watcher),
+        gen_server:stop(Handler),
+        meck:unload(zotonic_filehandler_mappers),
+        meck:unload(zotonic_filehandler_mapper),
+        meck:unload(zotonic_notifier)
+    end.
+
+deployment_cotonic() ->
+    Root = filename:join(os:getenv("TMPDIR", "/tmp"),
+        "zotonic-cotonic-test-" ++ integer_to_list(erlang:unique_integer([positive]))),
+    Site = filename:join(Root, "site"),
+    ok = filelib:ensure_dir(filename:join(Site, "placeholder")),
+    Previous = os:getenv("ZOTONIC"),
+    true = os:putenv("ZOTONIC", Root),
+    meck:new(exec, [no_link]),
+    meck:new(zotonic_filehandler, [no_link]),
+    meck:new(zotonic_filehandler_reload, [no_link]),
+    meck:expect(zotonic_filehandler, terminal_notifier, fun(_) -> ok end),
+    meck:expect(zotonic_filehandler_reload, all, fun() -> {ok, []} end),
+    meck:expect(exec, run, fun(_, _) -> {ok, []} end),
+    try
+        ?assertMatch({ok, _}, zotonic_filehandler_compile:deploy(git, Site)),
+        ?assertNot(meck:called(exec, run, ["bash ./cotonic-update.sh", '_'])),
+        meck:reset(exec),
+        ?assertMatch({ok, _}, zotonic_filehandler_compile:deploy(git, Root)),
+        ?assert(meck:called(exec, run, ["bash ./cotonic-update.sh", '_'])),
+        Commands = [Cmd || {_, {exec, run, [Cmd, _]}, _} <- meck:history(exec)],
+        ?assertMatch([_, "git pull --ff-only", "bash ./cotonic-update.sh", _], Commands),
+        meck:expect(exec, run, fun
+            ("bash ./cotonic-update.sh", _) -> {error, [{exit_status, 22}]};
+            (_, _) -> {ok, []}
+        end),
+        meck:reset(zotonic_filehandler_reload),
+        ?assertMatch({error, _}, zotonic_filehandler_compile:deploy(git, Root)),
+        ?assertNot(meck:called(zotonic_filehandler_reload, all, [])),
+        ?assert(zotonic_filehandler_update:is_pending())
+    after
+        case Previous of false -> os:unsetenv("ZOTONIC"); _ -> os:putenv("ZOTONIC", Previous) end,
+        meck:unload(zotonic_filehandler_reload),
+        meck:unload(zotonic_filehandler),
+        meck:unload(exec),
+        file:del_dir_r(Root)
     end.
 
 periodic_mtime_flush() ->

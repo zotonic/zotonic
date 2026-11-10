@@ -1,20 +1,7 @@
 @echo off
 setlocal
-rem Stop this checkout's project, preserving database volumes and source files.
-pushd "%~dp0"
-if errorlevel 1 goto directory_error
-
-echo Stopping Zotonic containers. Database data will be kept.
-docker compose -f docker-compose.yml down --remove-orphans --timeout 30
+rem Windows development runs in the Ubuntu checkout configured by setup-wsl.cmd.
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0docker\windows\launcher.ps1" -Action stop
 set "ZOTONIC_EXIT_CODE=%ERRORLEVEL%"
-if not "%ZOTONIC_EXIT_CODE%"=="0" echo Docker stop failed with code %ZOTONIC_EXIT_CODE%.
-popd
-echo.
-echo Press any key to close this launcher.
-pause >nul
+if not "%ZOTONIC_EXIT_CODE%"=="0" pause
 exit /b %ZOTONIC_EXIT_CODE%
-
-:directory_error
-echo Could not open the Zotonic checkout directory.
-pause
-exit /b 1

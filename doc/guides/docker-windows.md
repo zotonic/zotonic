@@ -8,405 +8,232 @@ keywords:
 
 # Local development with Docker on Windows
 
-Use Docker Desktop and double-click `start-docker.cmd` in a Windows checkout.
-Erlang, PostgreSQL and the other Zotonic dependencies run in Linux containers.
-You do not need to open Ubuntu for this workflow, though Docker Desktop can use
-WSL 2 internally as its Linux container backend.
+Keep Zotonic in Ubuntu's Linux filesystem and use Windows launchers for everyday
+work. This avoids the slow Windows bind mounts and missed file-change events
+that can affect a checkout under `C:\projects`. Erlang, PostgreSQL and the media
+tools run in Linux containers; your editor connects to Ubuntu through WSL.
 
-Commands below are labelled **PowerShell** or **container shell**. The alternative
-Ubuntu WSL workflow is at the end of this guide.
+## 1. Prepare Ubuntu and Docker Desktop
 
-## 1. Install and start Docker Desktop
+Install [Docker Desktop for Windows](https://docs.docker.com/desktop/setup/install/windows-install/).
+Use its **WSL 2 backend** for this workflow. Docker VMM and Windows containers do
+not provide the Ubuntu filesystem integration this setup needs.
 
-Install [Docker Desktop for Windows](https://docs.docker.com/desktop/setup/install/windows-install/)
-and Git for Windows. Complete Docker Desktop's backend setup and start it.
-Wait for the Linux container engine to be ready.
-
-If Docker Desktop shows **Use WSL 2 based engine** under **Settings → General**,
-you can enable it. The **Switch to Linux containers** menu item only appears
-when applicable; it is not a setting every installation shows. Ubuntu WSL
-integration is only needed for the alternative Ubuntu workflow below.
-
-Open a normal **PowerShell** window and check:
-
-```powershell
-docker version
-docker compose version
-```
-
-Expect both client and server information from `docker version`. If Docker is
-not found, reopen PowerShell after installation. If the server is unavailable,
-check that Docker Desktop has finished starting.
-
-## 2. Create a Windows checkout
-
-In **PowerShell**, run:
-
-```powershell
-New-Item -ItemType Directory -Force C:\projects
-Set-Location C:\projects
-git -c core.autocrlf=false clone https://github.com/zotonic/zotonic.git
-Set-Location zotonic
-git config core.autocrlf false
-```
-
-The repository's Git attributes preserve LF endings for Linux scripts in new
-checkouts. They do not automatically repair CRLF scripts already present in an
-older checkout. When moving from WSL, use a fresh clone and preserve existing
-site files and database backups separately.
-
-## 3. Double-click the launcher
-
-In Windows Explorer, open `C:\projects\zotonic` and double-click
-**start-docker.cmd**. Alternatively, run this from the checkout in **PowerShell**:
-
-```powershell
-.\start-docker.cmd
-```
-
-No administrator shell is needed. The launcher checks Docker, defaults the
-container user and group IDs to `1000` unless explicitly overridden, starts
-PostgreSQL, builds the image, and opens a shell inside the Zotonic container.
-Downloads and the first compilation can take several minutes.
-
-Wait for the **container shell prompt**. The checkout is now available at
-`/opt/zotonic`. The launcher does not start the Zotonic server automatically;
-continue with Step 4. Its window stays open after exit or failure so you can
-read the output.
-
-If the launcher reports that the Linux engine check failed, Zotonic has not
-started. Open Docker Desktop from the Windows Start menu, resolve any startup
-error it displays, and wait until its engine is running. Then close the launcher
-and double-click `start-docker.cmd` again. Pressing a key on the launcher's error
-screen only closes it; it does not retry or start Docker Desktop.
-
-To diagnose this from **PowerShell**, run:
-
-```powershell
-docker info
-docker info --format '{{.OSType}}'
-```
-
-The second command should print `linux`. A connection error means Docker's
-engine is unavailable; `windows` means it is running Windows containers and
-must be switched to Linux containers.
-
-If host port `5432` is occupied, launch from **PowerShell** with:
-
-```powershell
-$env:DB_FORWARD_PORT = "5433"
-.\start-docker.cmd
-```
-
-Use the same override on subsequent starts. Zotonic still connects to
-`postgres:5432` inside the container network. Ports `8000` and `8443` must also
-be available.
-
-## 4. Start Zotonic inside the container
-
-At the **container shell prompt**, run:
-
-```bash
-bin/zotonic start
-bin/zotonic status
-```
-
-Keep this terminal open. In your Windows browser, open
-[the local status site](http://localhost:8000/). If redirected to HTTPS, the
-local development certificate is self-signed.
-
-The container supplies the database settings automatically. The database host is
-`postgres`; do not change it to `localhost` or run the native PostgreSQL setup.
-
-## 5. Create your development site
-
-In the same **container shell**, run:
-
-```bash
-bin/zotonic addsite -s blog -H mysite.test mysite
-```
-
-This creates `apps_user/mysite`, initializes its database schema and starts the
-site. Save the admin password printed by the command.
-
-On **Windows**, open Notepad as Administrator and edit:
-
-```text
-C:\Windows\System32\drivers\etc\hosts
-```
-
-Select **All files** in Notepad's file picker to see the extensionless `hosts`
-file. Add this line and save the existing file:
-
-```text
-127.0.0.1 mysite.test
-```
-
-Open [your site](http://mysite.test:8000/) or
-[its admin interface](http://mysite.test:8000/admin). Log in as `admin` with the
-generated password. These credentials belong to your new site; the Zotonic
-status site has a separate password.
-
-## 6. Edit your site
-
-Open `C:\projects\zotonic` in your Windows editor, such as VS Code. Your site
-lives under `apps_user/mysite`; templates are in `priv/templates`. The checkout
-is mounted into the container, so edits are available there immediately.
-
-To explicitly rebuild, run in the **container shell**:
-
-```bash
-make
-```
-
-The Windows checkout workflow has not yet been verified on a Windows machine.
-For more reliable Linux file-change notifications and better bind-mount
-performance, use the Ubuntu WSL alternative below.
-
-## 7. Stop and return later
-
-To stop from Windows Explorer, double-click **stop-docker.cmd** in the same
-checkout you used to start Zotonic. It stops the project's containers, including
-the development shell and PostgreSQL, and removes their containers and network.
-Your database volume and checkout files remain saved.
-
-For an orderly application shutdown before stopping the containers, first run
-in the **container shell**:
-
-```bash
-bin/zotonic stop
-exit
-```
-
-The start launcher pauses before closing its window. Then double-click
-**stop-docker.cmd**, or run it in **PowerShell**:
-
-```powershell
-Set-Location C:\projects\zotonic
-.\stop-docker.cmd
-```
-
-You can also double-click `stop-docker.cmd` while the development container is
-running; it stops the project's containers with a 30-second shutdown timeout.
-For an orderly application shutdown, use `bin/zotonic stop` first as shown above.
-The stop launcher keeps database volumes and checkout files, and leaves Docker
-Desktop running. Its pause only keeps the result visible; pressing a key closes
-that window.
-
-Next time, start Docker Desktop and double-click `start-docker.cmd` again. At
-the **container prompt**, run:
-
-```bash
-bin/zotonic start
-```
-
-Source files remain in the checkout, runtime files under `docker-data`, and
-PostgreSQL data in the Docker `pgdata` volume. Avoid `docker compose down -v`
-unless you intend to delete the development database.
-
-## Troubleshooting: `env: 'bash\r': No such file or directory`
-
-This means a Linux script has Windows CRLF line endings: the carriage return
-becomes part of the interpreter name. Installing Bash does not fix it. Git
-attributes protect fresh checkouts, but do not rewrite existing working files.
-
-Close the failed launcher. In **PowerShell**, from the checkout, convert the
-tracked shell scripts to LF without discarding their contents:
-
-```powershell
-Set-Location C:\projects\zotonic
-git config core.autocrlf false
-$utf8 = New-Object System.Text.UTF8Encoding($false)
-git ls-files -- '*.sh' 'bin/zotonic' 'bin/mergepot' 'bin/zotonic-lsp' | ForEach-Object {
-    $path = Join-Path (Get-Location).Path $_
-    $text = [System.IO.File]::ReadAllText($path)
-    [System.IO.File]::WriteAllText($path, $text.Replace("`r`n", "`n"), $utf8)
-}
-```
-
-Double-click `start-docker.cmd` again. Its build step rebuilds the Docker image
-with the corrected entrypoint, and the other corrected scripts are available
-through the mounted checkout. Do not delete the database volume or reset the
-checkout to fix line endings. If the error remains, inspect the failing hook's
-file path; scripts in dependencies or user sites may need the same correction.
-
-## Alternative: develop from Ubuntu WSL
-
-Use this workflow instead of Steps 1–3 when you want the checkout on Ubuntu's
-Linux filesystem. After opening the container shell, follow Steps 4–5 above to
-start Zotonic and create your site.
-
-### Install WSL 2 and Ubuntu
-
-Open **PowerShell as Administrator** and run:
+If Ubuntu is not installed, open **PowerShell as Administrator**:
 
 ```powershell
 wsl --install -d Ubuntu
 ```
 
-Restart Windows if requested. Open the **Windows Start menu**, search for
-**Ubuntu**, and launch it. On the first launch, create your Linux username and
-password.
+Restart Windows if requested. Open **Ubuntu from the Windows Start menu** and
+create a normal Linux username and password. Do not use root for development.
+In that **Ubuntu shell**, install Git:
 
-In PowerShell, update WSL and check the distribution version:
+```bash
+sudo apt update
+sudo apt install -y git
+```
+
+In **PowerShell**, check:
 
 ```powershell
 wsl --update
 wsl --list --verbose
 ```
 
-Ubuntu should show version `2`. If necessary, convert it:
+Ubuntu must show version `2`. If necessary, use `wsl --set-version Ubuntu 2`,
+substituting the exact distribution name shown in the list.
 
-```powershell
-wsl --set-version Ubuntu 2
-```
+Start Docker Desktop. Under **Settings → Resources → WSL Integration**, enable
+that Ubuntu distribution and apply the settings. Enable **Use WSL 2 based
+engine** under General if shown. **Switch to Linux containers** is a conditional
+menu item, not an option every installation shows.
 
-See [Microsoft's WSL installation instructions](https://learn.microsoft.com/en-us/windows/wsl/install).
+See [Microsoft's WSL instructions](https://learn.microsoft.com/en-us/windows/wsl/install)
+and [Docker's WSL setup](https://docs.docker.com/desktop/features/wsl/).
 
-### Configure Docker Desktop for Ubuntu
+## 2. Run the Windows setup once
 
-Install [Docker Desktop for Windows](https://docs.docker.com/desktop/setup/install/windows-install/)
-and start it.
+Obtain a current Zotonic checkout or extract the repository archive on Windows.
+This Windows copy is only used to run setup; it is not mounted into the container.
+Windows Git is not required when using an extracted archive.
 
-In Docker Desktop settings:
+In Explorer, double-click **setup-wsl.cmd**. No administrator shell is needed.
+It asks for:
 
-- Enable **Use WSL 2 based engine** under **General**, if shown.
-- Enable **Ubuntu** under **Resources → WSL Integration** and click **Apply**.
-- If WSL Integration is missing, check the Docker taskbar menu for **Switch to
-  Linux containers**. This is a conditional menu item, not a setting that every
-  installation shows.
+- The Ubuntu distribution name, such as `Ubuntu` or `Ubuntu-24.04`.
+- Your Linux username. Setup rejects root.
+- The Linux checkout path, defaulting to `/home/YOUR_USERNAME/projects/zotonic`.
+  Keep it inside your Linux home directory, without spaces or special characters.
 
-### Open the Ubuntu WSL shell from Windows
+Setup clones Zotonic with Linux Git if that directory does not exist. It can
+reuse an existing Zotonic Git checkout without pulling, resetting, or replacing
+its files. It rejects Windows-mounted paths, even if reached through a symlink.
+The initial clone uses the Zotonic repository's default branch.
 
-Keep Docker Desktop running. Open your Ubuntu shell from **Windows**, separately
-from the Docker Desktop app. Docker Desktop runs the container engine; its
-container terminal is not the Ubuntu shell used for the next steps.
+Setup checks Docker's Ubuntu integration, starts Docker Desktop if it can find
+it, and offers **Enter to retry** or **Q to quit** if Docker is unavailable.
+It installs a launcher folder under `%LOCALAPPDATA%\Zotonic\WSL` and creates a
+**Zotonic** shortcut to that folder on your Windows desktop.
 
-Choose either of these ways to open Ubuntu:
+The folder remembers the distribution, Linux user and checkout path. Rerun
+**Setup Zotonic** there to change them. This setup manages one selected checkout
+at a time. Running setup again does not stop a previously selected project;
+stop it before switching profiles. To install newer launcher code, rerun
+`setup-wsl.cmd` from an updated repository copy.
 
-- Open the **Windows Start menu**, search for **Ubuntu**, and launch it.
-- Open **PowerShell** (a normal, non-administrator window is sufficient) and run:
+## 3. Start Zotonic
 
-  ```powershell
-  wsl -d Ubuntu
-  ```
+Open the desktop **Zotonic** folder and double-click **Start Zotonic**.
 
-If your distribution has a different name, such as `Ubuntu-24.04`, use the exact
-name shown by `wsl --list --verbose` in PowerShell. Open your Ubuntu distribution,
-not Docker's internal `docker-desktop` distribution or Git Bash.
+The launcher starts Docker Desktop when needed, builds the development image,
+starts PostgreSQL, and starts Zotonic automatically. Compilation on the first
+run can take several minutes. The sources and `_build` remain inside Ubuntu.
 
-You are now at an **Ubuntu shell prompt**. Run the following commands there:
+The launcher checks the HTTP endpoint inside the Zotonic container. When it is
+ready, it opens [the local status site](http://localhost:8000/) in your Windows
+browser. No `bin/zotonic start` command is needed. The server continues running
+in its container after the launcher window closes.
 
-```bash
-docker version
-docker compose version
-```
+Use **Logs Zotonic** to see compilation and server output. Closing the log
+window does not stop Zotonic. Startup errors stay visible. If readiness times
+out, the containers are left available for inspection; use Logs or Stop.
 
-`docker version` should show both client and server information. If it cannot
-connect to the server, check that Docker Desktop is running and Ubuntu
-integration is enabled.
+Ports `8000`, `8443`, and the database forwarding port `5432` must be available.
+If `5432` is occupied, add `DB_FORWARD_PORT=5433` to the Linux checkout's `.env`
+file, preserving any existing settings. Zotonic still connects to `postgres:5432`
+inside Docker. Do not change its database host to `localhost`.
 
-If Ubuntu reports `docker: command not found`, check that WSL Integration is
-enabled for the same Ubuntu distribution you opened, apply the settings, and
-reopen Ubuntu. Docker Desktop supplies the Docker commands through this
-integration; do not install a separate Docker Engine with `apt` for this setup.
+If the browser redirects to HTTPS, the development certificate is self-signed.
 
-See [Docker's WSL setup](https://docs.docker.com/desktop/features/wsl/).
+## 4. Create your development site
 
-### Clone Zotonic inside Ubuntu
-
-Run in the **Ubuntu terminal**:
-
-```bash
-sudo apt update
-sudo apt install -y git
-
-mkdir -p ~/projects
-cd ~/projects
-git clone https://github.com/zotonic/zotonic.git
-cd zotonic
-```
-
-Keep the checkout under `~/projects`, rather than `/mnt/c`. Linux filesystem
-storage improves bind-mount performance and lets file-change notifications reach
-the container reliably. See [Docker's WSL best practices](https://docs.docker.com/desktop/features/wsl/best-practices/).
-
-### Build and enter the development container
-
-From the Zotonic checkout in **Ubuntu**, run:
+Double-click **Shell Zotonic**. This opens a shell **inside the running Zotonic
+container**, as the Zotonic user, with the correct configuration paths.
+Run:
 
 ```bash
-./start-docker.sh
+bin/zotonic addsite -s blog -H mysite.test mysite
 ```
 
-This starts PostgreSQL, builds the development image and compiles Zotonic on the
-first run. Downloads and compilation can take several minutes. Wait until the
-**container's shell prompt** appears. The same terminal now runs a shell inside
-the Zotonic container, with the checkout available at `/opt/zotonic`. Run the
-commands from **Step 4: Start Zotonic inside the container** there.
+The command creates `apps_user/mysite`, initializes its database schema and
+starts the site. Save the generated admin password printed in the terminal.
 
-If port `5432` is already occupied, use:
+On Windows, open Notepad as Administrator and edit:
 
-```bash
-DB_FORWARD_PORT=5433 ./start-docker.sh
+```text
+C:\Windows\System32\drivers\etc\hosts
 ```
 
-Use the same port override on subsequent starts. Zotonic still connects to
-`postgres:5432` inside the container network. Ports `8000` and `8443` must also
-be available on your computer.
+Select **All files** in the file picker to see `hosts`. Add:
 
-See [Zotonic's Docker guide](https://zotonic.com/docs/1411/install-with-docker-or-podman).
+```text
+127.0.0.1 mysite.test
+```
 
-### Check the Ubuntu user
+Open [your site](http://mysite.test:8000/) or
+[its admin](http://mysite.test:8000/admin). Log in as `admin` with the generated
+password. The status site has separate credentials.
 
-Run `whoami` and `id` in Ubuntu before launching `./start-docker.sh`. Use the
-normal Linux user created during Ubuntu installation, and run the launcher
-without `sudo`. User or group ID `0` is rejected.
+Type `exit` to close the container shell. This leaves the server running.
 
-If Ubuntu opened as root, open **PowerShell** and select your normal Linux user:
+## 5. Edit files
+
+Install VS Code for Windows with its **WSL extension** and the `code` command
+on your Windows PATH. Double-click **Edit Zotonic** to open the Linux checkout
+through VS Code's WSL connection.
+
+Double-click **Open Zotonic Folder** to browse the checkout in Explorer. Its
+address looks like:
+
+```text
+\\wsl.localhost\Ubuntu\home\YOUR_USERNAME\projects\zotonic
+```
+
+Keep the working files there rather than copying them back to a Windows drive.
+Site templates are under `apps_user/mysite/priv/templates`. Zotonic receives
+Linux file-change notifications for the checkout. To explicitly rebuild, open
+**Shell Zotonic** and run `make`.
+
+## 6. Stop and return later
+
+Double-click **Stop Zotonic**. It stops and removes the managed project's
+containers and network, allowing up to 60 seconds for shutdown. The PostgreSQL
+volume, source files, uploaded files and configuration remain saved. Docker
+Desktop stays running; it can be quit separately from its system-tray menu.
+
+Next time, double-click **Start Zotonic**. Your site and database remain.
+
+The repository's Windows `start-docker.cmd` and `stop-docker.cmd` also use this
+saved WSL setup. They no longer mount the Windows checkout. The standalone
+`./start-docker.sh` and `./stop-docker.sh` are for the separate manual container
+workflow; use the Windows launchers together for this managed setup.
+
+Avoid `docker compose down -v`: `-v` removes database volumes.
+
+## Moving from the old Windows checkout
+
+First stop the old containers. If using the previous interactive setup, run
+`bin/zotonic stop` and `exit` in its container, then run `docker compose down`
+from PowerShell in the old Windows checkout. Do not add `-v`.
+
+Keep the old checkout and database volume until migration is complete. Setup
+creates a separate Compose project whose name starts with `zotonic-wsl-` and is
+based on the distribution and Linux checkout path. Existing Windows project
+databases are **not automatically migrated**. Copy your site source files and
+transfer the database with PostgreSQL backup/restore; preserve uploaded files
+and any needed configuration under `docker-data` as well. Do not copy `_build`
+from the old checkout.
+
+Setup does not reset local edits or delete the old project. Moving or renaming
+the Linux checkout changes its managed Compose project identity, so keep its
+path stable once it contains data.
+
+## Troubleshooting
+
+### Docker is unavailable
+
+The retry prompt waits for you to resolve Docker Desktop startup or integration
+errors. Press Enter to check again, or Q to leave. In PowerShell, open the exact
+Ubuntu distribution and user selected during setup:
 
 ```powershell
 wsl -d Ubuntu -u YOUR_USERNAME
 ```
 
-If `id` already shows non-zero IDs but the launcher reports ID `0`, clear explicit
-overrides in **Ubuntu** and retry:
+Then, in Ubuntu:
 
 ```bash
-unset ZOTONIC_UID ZOTONIC_GID
-./start-docker.sh
+docker version
+docker compose version
+docker info --format '{{.OSType}}'
 ```
 
-### Edit and return to a WSL checkout
+The engine type must be `linux`. A missing `docker` command usually means Ubuntu
+WSL integration is disabled. Do not install a second Docker Engine with `apt`.
 
-For VS Code, install the WSL extension on Windows. In a second Ubuntu shell:
+### User or group ID is zero
 
-```bash
-cd ~/projects/zotonic
-code .
-```
+Rerun setup and choose the normal Linux user created during Ubuntu installation.
+The managed launchers use that user's IDs and ignore stale UID/GID overrides.
 
-To open that directory in Windows Explorer, run `explorer.exe .` from the same
-Ubuntu shell.
+### The credential helper fails
 
-Stop Zotonic with `bin/zotonic stop` and `exit` inside the container. Back in
-Ubuntu, run `./stop-docker.sh` from the checkout. You can also run this stop
-script from a second Ubuntu terminal while the development container is running:
+For `docker-credential-desktop.exe: Invalid argument`, save your WSL work, quit
+Docker Desktop, and run `wsl --shutdown` in PowerShell. This stops all WSL
+distributions. Start Docker Desktop and retry Start Zotonic. If it still fails,
+check `cmd.exe /c ver` and `command -v docker-credential-desktop.exe` in Ubuntu;
+keep the diagnostic output rather than deleting Docker credential settings.
 
-```bash
-cd ~/projects/zotonic
-./stop-docker.sh
-```
+### A script reports `bash\r` or `sh\r`
 
-Run this on the Ubuntu host, not inside the Zotonic container. It removes the
-project's containers and network, preserves the database volume and checkout
-files, and leaves Docker Desktop running.
+A script has Windows CRLF endings. Fresh clones made by setup use Linux Git
+with `core.autocrlf=false`. If you copied scripts from the old Windows checkout,
+change their line endings to LF in VS Code and retry. Git attributes do not
+rewrite existing files automatically.
 
-Next time, start Docker Desktop, open Ubuntu from Windows, and run:
+### Validation status
 
-```bash
-cd ~/projects/zotonic
-./start-docker.sh
-```
-
-At the container prompt, run `bin/zotonic start`.
+The launcher shell logic and Compose configuration can be tested without
+Windows. Full Windows Desktop/WSL integration still needs verification on a
+Windows machine.
