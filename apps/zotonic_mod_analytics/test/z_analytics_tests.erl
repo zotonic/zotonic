@@ -129,3 +129,18 @@ description_and_event_dimensions_test() ->
     ?assertEqual({error,invalid_definition},z_analytics:definition(D#{<<"dimension">>=><<"page">>},R)),
     ?assertEqual({error,invalid_definition},z_analytics:definition(D#{<<"filters">>=>#{<<"language">>=>[<<"en">>]}},R)),
     ?assertEqual({error,invalid_definition},z_analytics:definition(D#{<<"filters">>=>#{<<"outcome">>=>[<<"bogus">>]}},R)).
+
+
+crawler_measurement_policy_test() ->
+    Bot=#{<<"traffic">>=><<"crawler">>},
+    Human=#{<<"traffic">>=><<"other">>},
+    lists:foreach(fun(Dimension) ->
+        Col=#{event=><<"page_request">>,dimension=>Dimension,filters=>#{}},
+        ?assertNot(z_analytics:matches(Col,Bot)),
+        ?assert(z_analytics:matches(Col,Human)),
+        ?assert(z_analytics:matches(Col,#{<<"traffic">>=><<"unknown">>}))
+    end,[<<>>,<<"device">>,<<"page">>]),
+    ?assert(z_analytics:matches(#{event=><<"page_request">>,dimension=><<"traffic">>,filters=>#{}},Bot)),
+    ?assert(z_analytics:matches(#{event=><<"request">>,dimension=><<"traffic">>,filters=>#{}},Bot)),
+    ?assert(z_analytics:matches(#{event=><<"api_request">>,dimension=><<>>,filters=>#{}},Bot)),
+    ?assertNot(z_analytics:matches(#{event=><<"api_request">>,dimension=><<>>,filters=>#{<<"traffic">>=>[<<"other">>]}},Bot)).

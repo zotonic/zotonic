@@ -21,8 +21,12 @@ immediately. Reordering does not alter recording definitions or history.
 
 The built-in `page_request` event counts successful GET requests for public HTML
 pages served by Zotonic, including template pages without a resource ID. It excludes private pages, admin/editor requests,
-assets and redirects. DNT and GPC headers do not exclude requests. It includes automated traffic; the coarse
-`traffic` dimension distinguishes known crawlers, other and unknown traffic. CDN
+assets and redirects. DNT and GPC headers do not exclude requests. Page-request totals, device breakdowns and popular content exclude detected crawlers.
+Traffic classification and API measurements include crawlers unless their configured
+filters exclude them. The coarse `traffic` dimension distinguishes known crawlers,
+other and unknown traffic. Crawler detection is cached as `is_crawler` in the request
+context at the well-formed middleware stage. These rules apply to new events; stored
+history is unchanged. CDN
 hits that never reach Zotonic are not counted. Counts are not unique visitors.
 
 Initial recordings cover total requests, language, public content, device and

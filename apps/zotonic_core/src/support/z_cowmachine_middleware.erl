@@ -60,8 +60,10 @@ execute(Req, #{ cowmachine_controller := Controller, cowmachine_controller_optio
                 undefined -> Ctx1;
                 HttpAccept -> set_accept_context(HttpAccept, Ctx1)
             end,
-            z_memo:enable(Ctx2),
-            z_notifier:foldl(#middleware{ on = welformed }, Ctx2, Ctx2)
+            Ctx3 = z_context:set(is_crawler,
+                z_user_agent:is_crawler(cowmachine_req:get_req_header(<<"user-agent">>, Ctx2)), Ctx2),
+            z_memo:enable(Ctx3),
+            z_notifier:foldl(#middleware{ on = welformed }, Ctx3, Ctx3)
         end,
         on_handled => fun(Ctx) ->
             z_context:set_req_metrics(#{

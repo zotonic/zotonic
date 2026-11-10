@@ -22,7 +22,7 @@
         <p>{_ No analytics measurements to display. Configure or resume an analytics measurement to get started. _}</p>
     {% endfor %}
 </div>
-<p class="text-muted analytics-note">{_ Gaps are unrecorded intervals. Partial intervals may undercount activity. Request counts include automation, exclude editor activity and do not measure unique visitors. _}</p>
+<p class="text-muted analytics-note">{_ Gaps are unrecorded intervals. Partial intervals may undercount activity. Page-request totals, device breakdowns and popular content exclude detected crawlers. API and traffic-classification measurements include crawlers unless filtered out. Counts exclude editor activity and do not measure unique visitors. _}</p>
 {% endwith %}
 {% endif %}
 {% endblock %}

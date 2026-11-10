@@ -180,13 +180,10 @@ allowed(Context) ->
 -spec dimensions(Context) -> map() when Context :: z:context().
 dimensions(Context) ->
     UA = case m_req:get(user_agent,Context) of B when is_binary(B), byte_size(B)=<2048 -> string:lowercase(B); _ -> <<>> end,
-    Traffic = case UA of
-        <<>> -> <<"unknown">>;
-        _ ->
-            case z_user_agent:is_crawler(UA) of
-                true -> <<"crawler">>;
-                false -> <<"other">>
-            end
+    Traffic = case {z_user_agent:is_crawler(Context), UA} of
+        {true, _} -> <<"crawler">>;
+        {false, <<>>} -> <<"unknown">>;
+        {false, _} -> <<"other">>
     end,
     #{
         <<"language">>=>z_convert:to_binary(z_context:language(Context)),
