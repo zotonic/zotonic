@@ -101,13 +101,18 @@ module_default(C) ->
     end),
     try
         % A live site's indexer must still receive calls during this mock.
+        LiveTemplate = #module_index{
+            key=Key#module_index_key{site=live_site},
+            filepath="/tmp/live_site/priv/templates/default.tpl",
+            module=live_site
+        },
         Indexer = spawn(fun() ->
             receive
                 {'$gen_call', From, {find_all, template, <<"default.tpl">>}} ->
-                    gen_server:reply(From, [live_site_template])
+                    gen_server:reply(From, [LiveTemplate])
             end
         end),
-        ?assertEqual([live_site_template], z_module_indexer:find_all(
+        ?assertEqual([LiveTemplate], z_module_indexer:find_all(
             template, <<"default.tpl">>, #context{site=live_site, module_indexer=Indexer})),
         ?assertEqual(undefined, z_template_compiler_runtime:get_template_msgctxt(Other, C)),
         ?assertEqual(<<"action">>, z_template_compiler_runtime:get_template_msgctxt(File, C)),
