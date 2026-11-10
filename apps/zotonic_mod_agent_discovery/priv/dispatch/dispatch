@@ -1,0 +1,6 @@
+[
+    {agent_llms, ["llms.txt"], controller_agent_discovery, [{document, llms}]},
+    {agent_api_catalog, [".well-known", "api-catalog"], controller_agent_discovery, [{document, catalog}]},
+    {agent_openapi, ["openapi.json"], controller_agent_discovery, [{document, openapi}]},
+    {agent_api_help, ["api-help"], controller_agent_discovery, [{document, help}]}
+].
