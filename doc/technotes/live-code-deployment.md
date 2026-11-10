@@ -21,6 +21,12 @@ use the same barrier (including the existing Mercurial update path). Install thi
 feature with a full build and node restart first, so the new supervised
 coordinator and migration guards are present before the first live deployment.
 
+Deploy and update compile with `rebar3` from the running node's `PATH`, falling
+back to `./rebar3` in the Zotonic checkout when no installed executable is found.
+Ensure the service's environment includes the installed Rebar3 location; an
+interactive shell can have a different `PATH`. A compiler failure still aborts
+activation and keeps a failed deployment blocked until a successful rebuild.
+
 The admin/status **Deploy latest** buttons first open a preview dialog showing the
 current commit and a scrollable remote change log. Opening the dialog fetches
 remote metadata without modifying the checkout or its lock file. **Cancel**

@@ -211,9 +211,16 @@ do_all_task(OptPid) ->
     Result.
 
 compile_build() ->
+    %% The checkout may omit rebar3 when it is installed on the node's PATH.
+    %% Resolve before changing directory, and quote paths containing spaces.
+    Rebar = case os:find_executable("rebar3") of
+        false -> "./rebar3";
+        Executable -> z_filelib:os_filename(filename:absname(Executable))
+    end,
+    CompileCmd = Rebar ++ " compile",
     Cmd = case os:getenv("ZOTONIC") of
-        false -> "./rebar3 compile";
-        ZotonicDir -> "cd " ++ z_filelib:os_filename(ZotonicDir) ++ " && ./rebar3 compile"
+        false -> CompileCmd;
+        ZotonicDir -> "cd " ++ z_filelib:os_filename(ZotonicDir) ++ " && " ++ CompileCmd
     end,
     zotonic_filehandler:terminal_notifier("Compile all: start"),
     case cleanup_stdout(run_cmd_task(Cmd, [], [])) of
@@ -361,7 +368,7 @@ maybe_ignore_dir(#{ ignore_dir := Dir }, true) ->
 maybe_ignore_dir(_, _) ->
     ok.
 
-%% When "./rebar3 compile" runs, then all .../test/*.erl file are touched.
+%% When "rebar3 compile" runs, then all .../test/*.erl file are touched.
 %% This forces a recompile of all these files. We might not want to
 %% automatically recompile these files during a rebar3 run.
 -spec recompile(file:filename_all()) -> ok.

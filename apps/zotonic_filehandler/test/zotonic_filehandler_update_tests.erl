@@ -33,6 +33,7 @@ isolated_tests() ->
         fun missing_compile_options/0,
         fun recompile_paths/0,
         fun new_application_build/0,
+        fun rebar_executable/0,
         fun interrupted_build/0,
         fun interrupted_automatic_update/0,
         fun active_migrations/0,
@@ -293,6 +294,89 @@ new_application_build() ->
         meck:unload(buffalo),
         meck:unload(jobs),
         file:del_dir_r(Root)
+    end.
+
+%% Both deploy and update must work without a checkout-local rebar3. Execute
+%% tiny shell fixtures to check selection, quoting, cwd, and failure handling.
+rebar_executable() ->
+    Root = filename:join(os:getenv("TMPDIR", "/tmp"),
+        "zotonic rebar test " ++ integer_to_list(erlang:unique_integer([positive]))),
+    InstalledDir = filename:join(Root, "installed bin"),
+    Checkout = filename:join(Root, "checkout"),
+    Installed = filename:join(InstalledDir, "rebar3"),
+    Local = filename:join(Checkout, "rebar3"),
+    Marker = filename:join(Checkout, "selected"),
+    ok = filelib:ensure_dir(Installed),
+    ok = filelib:ensure_dir(Local),
+    Previous = [{Name, os:getenv(Name)} || Name <- ["PATH", "ZOTONIC"]],
+    meck:new(jobs, [no_link]),
+    meck:expect(jobs, run, fun(zotonic_filehandler_single_job, Fun) -> Fun() end),
+    meck:new(exec, [no_link]),
+    meck:expect(exec, run, fun
+        ("git " ++ _, _) -> {ok, []};
+        (Cmd, _) -> rebar_fixture_command(Cmd)
+    end),
+    meck:new(zotonic_filehandler, [no_link]),
+    meck:expect(zotonic_filehandler, terminal_notifier, fun(_) -> ok end),
+    meck:new(zotonic_filehandler_reload, [no_link]),
+    meck:expect(zotonic_filehandler_reload, all, fun() -> {ok, []} end),
+    try
+        true = os:putenv("PATH", InstalledDir),
+        true = os:putenv("ZOTONIC", Checkout),
+        rebar_fixture(Installed, "installed"),
+        lists:foreach(fun(Selection) ->
+            case Selection of
+                installed_only -> ok;
+                both -> rebar_fixture(Local, "local");
+                local_only -> ok = file:delete(Installed)
+            end,
+            Expected = case Selection of local_only -> <<"local:compile">>; _ -> <<"installed:compile">> end,
+            ?assertEqual(ok, zotonic_filehandler_compile:all_sync()),
+            ?assertEqual({ok, Expected}, file:read_file(Marker)),
+            ok = file:delete(Marker),
+            ?assertMatch({ok, _}, zotonic_filehandler_compile:deploy(git, Checkout)),
+            ?assertEqual({ok, Expected}, file:read_file(Marker)),
+            ok = file:delete(Marker)
+        end, [installed_only, both, local_only]),
+        ok = file:delete(Local),
+        meck:reset(zotonic_filehandler_reload),
+        ?assertMatch({error, _}, zotonic_filehandler_compile:deploy(git, Checkout)),
+        ?assertNot(meck:called(zotonic_filehandler_reload, all, [])),
+        ?assert(zotonic_filehandler_update:is_pending()),
+        rebar_fixture(Installed, "installed"),
+        ?assertEqual(ok, zotonic_filehandler_compile:all_sync()),
+        ?assertNot(zotonic_filehandler_update:is_pending()),
+        ?assertEqual({ok, <<"installed:compile">>}, file:read_file(Marker))
+    after
+        lists:foreach(fun
+            ({Name, false}) -> os:unsetenv(Name);
+            ({Name, Value}) -> os:putenv(Name, Value)
+        end, Previous),
+        meck:unload(zotonic_filehandler_reload),
+        meck:unload(zotonic_filehandler),
+        meck:unload(exec),
+        meck:unload(jobs),
+        file:del_dir_r(Root)
+    end.
+
+rebar_fixture(File, Name) ->
+    ok = file:write_file(File, ["#!/bin/sh\nprintf '", Name, ":%s' \"$1\" > selected\n"]),
+    ok = file:change_mode(File, 8#755).
+
+rebar_fixture_command(Cmd) ->
+    Port = open_port({spawn_executable, "/bin/sh"},
+        [binary, exit_status, stderr_to_stdout, {args, ["-c", Cmd]}]),
+    rebar_fixture_result(Port, []).
+
+rebar_fixture_result(Port, Output) ->
+    receive
+        {Port, {data, Data}} -> rebar_fixture_result(Port, [Data | Output]);
+        {Port, {exit_status, 0}} -> {ok, [{stdout, lists:reverse(Output)}]};
+        {Port, {exit_status, Status}} ->
+            {error, [{exit_status, Status}, {stderr, lists:reverse(Output)}]}
+    after 5000 ->
+        port_close(Port),
+        error(rebar_fixture_timeout)
     end.
 
 watcher_replay() ->
