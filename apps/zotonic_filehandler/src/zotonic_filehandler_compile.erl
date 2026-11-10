@@ -38,6 +38,7 @@
     ld/1,
     ld_batch/1,
     deploy/2,
+    recover/1,
     code_path_check/1
 ]).
 
@@ -117,6 +118,18 @@ deploy(Vcs, Path) ->
                     ok -> {ok, proplists:get_value(stdout, Output, [])};
                     {error, _} = Error -> Error
                 end;
+            {error, _} = Error -> Error
+        end
+    end),
+    finish_build(Result).
+
+%% @doc Repair a checkout exclusively, then rebuild and activate before releasing
+%% a failed deployment barrier. The callback must return ok or an error.
+-spec recover(Fun) -> ok | {error, term()} when Fun :: fun(() -> ok | {error, term()}).
+recover(Fun) ->
+    Result = zotonic_filehandler_update:deploy(fun() ->
+        case Fun() of
+            ok -> compile_build();
             {error, _} = Error -> Error
         end
     end),

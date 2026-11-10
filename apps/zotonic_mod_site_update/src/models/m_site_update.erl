@@ -69,6 +69,8 @@ Available Model API Paths
     vcs_module/1,
 
     preview_vcs/1,
+    local_changes/1,
+    reset_vcs/1,
     update_vcs/2
 ]).
 
@@ -156,7 +158,19 @@ vcs_module(Module) ->
 preview_vcs(false) ->
     {error, no_vcs};
 preview_vcs(VCS) ->
-    zotonic_filehandler_update:schema(fun() -> z_site_update_preview:preview(VCS) end).
+    zotonic_filehandler_update:inspect(fun() -> z_site_update_preview:preview(VCS) end).
+
+%% @doc List local changes, including after a failed deploy. Call after ACL checks.
+-spec local_changes(vcs() | false) -> {ok, binary()} | {error, term()}.
+local_changes(false) -> {error, no_vcs};
+local_changes(VCS) ->
+    zotonic_filehandler_update:inspect(fun() -> z_site_update_reset:changes(VCS) end).
+
+%% @doc Discard local changes and rebuild. Call only after confirmation and ACL checks.
+-spec reset_vcs(vcs() | false) -> ok | {error, term()}.
+reset_vcs(false) -> {error, no_vcs};
+reset_vcs(VCS) ->
+    zotonic_filehandler_compile:recover(fun() -> z_site_update_reset:reset(VCS) end).
 
 %% @doc Deploy a directory through the same barrier as the CLI, for admin/status and webhooks.
 update_vcs(false, _Context) ->

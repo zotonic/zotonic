@@ -43,6 +43,12 @@ the coordinator directly, so it does not depend on an unexpired snapshot. Subscr
 administrator or `use mod_site_update` permission; no repository paths or failure
 terms are published.
 
+**Reset** lists the site's uncommitted changes before offering **Undo all local changes**.
+This restores tracked files and removes non-ignored untracked files throughout the repository.
+Local commits and nested repositories are preserved. Reset rebuilds and activates the code
+before releasing a failed deployment barrier; a failed rebuild keeps the barrier closed.
+Deployment previews remain available after failures so deployment can also be retried directly.
+
 The update uses the same deployment barrier as `bin/zotonic deploy`: restore the tracked Git lock file,
 pull code, compile and activate the updated modules before allowing schema upgrades. File changes are
 buffered until activation completes, then caches and template indexes are refreshed.
@@ -97,7 +103,7 @@ preview and deployment still resolve the repository and check permissions again.
 
 Delegate callbacks:
 
-- `event/2` with `postback` messages: `make`, `module_deployment_buttons`, `vcs_up` (open dialog), `vcs_preview` (fetch preview), `vcs_deploy` (confirmation).
+- `event/2` with `postback` messages: `make`, `module_deployment_buttons`, `vcs_up` (open dialog), `vcs_preview` (fetch preview), `vcs_deploy` (confirmation), `vcs_reset` (list local changes), `vcs_reset_confirm` (discard and rebuild).
 
 ").
 -author("Marc Worrell <marc@worrell.nl>").
@@ -165,6 +171,11 @@ event(#postback{message = {vcs_preview, Args}}, Context) ->
     fetch_preview(proplists:get_value(target, Args), proplists:get_value(element_id, Args), Context);
 event(#postback{message = {vcs_deploy, Args}}, Context) ->
     deploy(proplists:get_value(target, Args), Context);
+event(#postback{message = {vcs_reset, Args}}, Context) ->
+    Target = proplists:get_value(target, Args, {site, proplists:get_value(site, Args)}),
+    reset_preview(Target, Context);
+event(#postback{message = {vcs_reset_confirm, Args}}, Context) ->
+    reset(proplists:get_value(target, Args), Context);
 event(#postback{ message = make }, Context) ->
     case z_context:site(Context) of
         zotonic_site_status ->
@@ -264,6 +275,39 @@ deploy(Target, Context) ->
             ]}, Context),
             Result = m_site_update:update_vcs(VCS, Context),
             deployment_notice(Name, Result, Context);
+        {error, eacces} ->
+            z_render:growl_error(?__("You are not allowed to deploy this code.", Context), Context)
+    end.
+
+reset_preview(Target, Context) ->
+    case resolve_target(Target, Context) of
+        {ok, Name, VCS} ->
+            Info = case m_site_update:local_changes(VCS) of
+                {ok, Changes} -> #{changes => Changes};
+                {error, Reason} -> #{error => Reason}
+            end,
+            z_render:dialog(?__("Reset local changes", Context), "_dialog_site_reset.tpl",
+                [{target, Target}, {name, Name}, {preview, Info}], Context);
+        {error, eacces} ->
+            z_render:growl_error(?__("You are not allowed to deploy this code.", Context), Context)
+    end.
+
+reset(Target, Context) ->
+    case resolve_target(Target, Context) of
+        {ok, _Name, VCS} ->
+            z_notifier:notify(#page_actions{actions = [
+                {dialog_close, []},
+                {growl, [{text, ?__("Resetting local changes and rebuilding...", Context)}]}
+            ]}, Context),
+            case m_site_update:reset_vcs(VCS) of
+                ok -> z_render:growl(?__("Local changes reset. You can deploy again.", Context), Context);
+                {error, update_in_progress} ->
+                    deployment_notice(undefined, {error, update_in_progress}, Context);
+                {error, Reason} ->
+                    ?LOG_ERROR(#{text => <<"Deployment reset failed">>, in => mod_site_update,
+                        result => error, reason => Reason}),
+                    z_render:growl_error(?__("Reset or rebuild failed. Check the server log before retrying.", Context), Context)
+            end;
         {error, eacces} ->
             z_render:growl_error(?__("You are not allowed to deploy this code.", Context), Context)
     end.

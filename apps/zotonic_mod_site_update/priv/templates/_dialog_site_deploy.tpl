@@ -56,6 +56,7 @@
 </div>
 <div class="modal-footer">
     {% include "_site_deploy_status.tpl" %}
+    {% button class="btn btn-default" text=_"Reset" postback={vcs_reset target=target} delegate=`mod_site_update` %}
     {% button class="btn btn-default" text=_"Cancel" action={dialog_close} %}
     {% if preview.can_deploy %}
         {% button class="btn btn-primary" text=_"Deploy" postback={vcs_deploy target=target} delegate=`mod_site_update` %}

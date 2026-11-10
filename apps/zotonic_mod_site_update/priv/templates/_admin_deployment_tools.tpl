@@ -2,6 +2,7 @@
     <div class="form-group">
         {% if m.site_update.is_vcs_site %}
             {% button class="btn btn-default" text=_"Deploy latest" postback=`vcs_up` delegate=`mod_site_update` %}
+            {% button class="btn btn-default" text=_"Reset" postback={vcs_reset target=`current`} delegate=`mod_site_update` %}
             {% include "_site_deploy_status.tpl" %}
             <span class="help-block">{_ Review incoming changes before deploying the latest version. _}</span>
         {% else %}
