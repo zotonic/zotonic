@@ -1,0 +1,4 @@
+interface:
+  display_name: "Zotonic Development Tools"
+  short_description: "Inspect Zotonic pages locally and over SSH."
+  default_prompt: "Use $zotonic-development-tools to inspect the templates and dispatch behind this page and validate its behavior."
