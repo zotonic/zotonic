@@ -148,9 +148,7 @@ render_single(Params, Context) when is_list(Params) ->
             {ok, iolist_to_binary(Figure)};
         error ->
             {error, badarg}
-    end;
-render_single(_Params, _Context) ->
-    {error, badarg}.
+    end.
 
 -spec normalize_type(term()) -> {ok, chart_type()} | error.
 normalize_type(pie) -> {ok, pie};

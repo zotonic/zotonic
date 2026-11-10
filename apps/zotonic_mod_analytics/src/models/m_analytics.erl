@@ -20,9 +20,6 @@
 -module(m_analytics).
 -behaviour(zotonic_model).
 
--ifdef(TEST).
--export([trend_chart/8]).
--endif.
 -moduledoc(#{
     zotonic_keywords => ["reference", "model", "backend_developer", "logging_and_monitoring", "authorization_and_access_control", "privacy_and_consent"]
 }).
@@ -290,54 +287,12 @@ report(Col,Period,Context) ->
     %% expansion, graph aggregation and timestamp formatting for this report.
     Chart=case Popular of
         true -> [#{label=>maps:get(label,G),value=>maps:get(count,G)} || G <- Groups];
-        false -> trend_chart(Rows,Start,End,R,N,Groups,Col,Context)
+        false -> z_analytics_chart:series(Rows,Start,End,R,N,Groups,Col,Context)
     end,
     #{chart=>Chart,groups=>lists:sublist(Groups,100),popular=>Popular,error=>Error,
       total=>Total,resolution=>R,from=>Start,until=>Now,
       incomplete=>length(Rows)<N orelse lists:any(fun(X)->not maps:get(complete,X) end,Rows)}.
 
-trend_chart(Rows,Start,End,R,N,Groups,Col,Context) ->
-    Index=maps:from_list([{maps:get(start,X),X}||X<-Rows]),
-    Step=max(1,(N+239) div 240),
-    Points=[point(T,min(End,T+R*Step),R,Index)||T<-lists:seq(Start,End-1,R*Step)],
-    Labels=[time_label(maps:get(start,P),R,Context) || P <- Points],
-    Total=#{label=>?__("Total",Context),color=><<"#00a6e8">>,width=>3,
-        data=>series_points(Points,Labels,fun(P)->maps:get(total,P) end)},
-    Keys=maps:from_keys([maps:get(key,G) || G <- Groups, maps:get(key,G) =/= <<"$other">>],true),
-    Breakdown=case maps:get(dimension,Col,undefined) of
-        undefined -> [];
-        <<>> -> [];
-        _ -> [#{label=>maps:get(label,G),width=>1,
-            data=>series_points(Points,Labels,fun(P) ->
-                Counts=maps:get(counts,P),
-                case maps:get(key,G) of
-                    <<"$other">> -> maps:fold(fun(K,V,A) ->
-                        case maps:is_key(K,Keys) of true -> A; false -> A+V end
-                    end,0,Counts);
-                    Key -> maps:get(Key,Counts,0)
-                end
-            end)} || G <- Groups]
-    end,
-    [Total | Breakdown].
-
-series_points(Points,Labels,Value) ->
-    [begin
-        V=Value(P),
-        #{label=>L,value=>case maps:get(complete,P) orelse V>0 of
-            true -> V; false -> null
-        end}
-    end || {P,L} <- lists:zip(Points,Labels)].
-
-
-time_label(T,R,Context) ->
-    Date=z_datetime:timestamp_to_datetime(T),
-    Format=case R of 60 -> "H:i"; 900 -> "D H:i"; 3600 -> "M j H:i"; _ -> "Y-m-d" end,
-    z_datetime:format(Date,Format,Context).
-point(A,B,R,Index) ->
-    Rows=[maps:get(T,Index,#{counts=>#{},complete=>false})||T<-lists:seq(A,B-1,R)],
-    Counts=lists:foldl(fun(X,Acc)->z_analytics:merge(Acc,maps:get(counts,X)) end,#{},Rows),
-    #{start=>A,counts=>Counts,total=>z_analytics_frequency:total(Counts),
-      complete=>lists:all(fun(X)->maps:get(complete,X) end,Rows)}.
 label(<<"$total">>,_,_) -> <<"Total">>;
 label(<<"$other">>,_,_) -> <<"Other (overflow)">>;
 label(<<"v:",Id/binary>>,#{dimension:= <<"page">>},Context) ->
