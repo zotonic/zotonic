@@ -534,3 +534,30 @@ line_gap_boundaries_test() ->
     ?assertEqual(nomatch,binary:match(Solid,<<"z-chart-line-gap">>)),
     {ok,Single}=render([{type,line},{data,[[<<"A">>,null],[<<"B">>,2],[<<"C">>,null]]}]),
     ?assertEqual(nomatch,binary:match(Single,<<"z-chart-line-gap">>)).
+
+
+line_series_test() ->
+    Total = #{label => <<"Total">>, color => <<"#00a6e8">>, width => 3,
+        data => [[<<"A">>,10],[<<"B">>,null],[<<"C">>,10]]},
+    Group = #{label => <<"<Group>">>, color => <<"#ee6677">>, width => 1,
+        data => [[<<"A">>,5],[<<"B">>,null],[<<"C">>,5]]},
+    {ok,Html} = render([{type,line},{series,[Total,Group]},{hide_table,true}]),
+    ?assertEqual(2,length(binary:matches(Html,<<"class='z-chart-line-series'">>))),
+    ?assertEqual(2,length(binary:matches(Html,<<"class='z-chart-line-gap'">>))),
+    ?assertMatch({_,_},binary:match(Html,<<"stroke-width='3'">>)),
+    ?assertMatch({_,_},binary:match(Html,<<"stroke-width='1'">>)),
+    ?assertMatch({_,_},binary:match(Html,<<"&lt;Group&gt;">>)),
+    ?assertMatch({_,_},binary:match(Html,<<"z-chart-legend">>)),
+    assert_in_order(Html,[<<"stroke='#ee6677'">>,<<"stroke='#00a6e8'">>]),
+    %% Shared scale: half the total is halfway up the same plot area.
+    ?assertMatch({_,_},binary:match(Html,<<"44.0,111.0">>)),
+    ?assertMatch({_,_},binary:match(Html,<<"44.0,10.0">>)).
+
+line_series_bounds_test() ->
+    S = #{<<"label">> => <<"test">>, <<"width">> => 100,
+        <<"color">> => <<"red;evil">>, <<"data">> => [[<<"A">>,1]]},
+    {ok,Html} = render([{type,line},{series,lists:duplicate(110,S)},{hide_table,true}]),
+    ?assertEqual(101,length(binary:matches(Html,<<"class='z-chart-line-series'">>))),
+    ?assertEqual(nomatch,binary:match(Html,<<"red;evil">>)),
+    ?assertEqual(nomatch,binary:match(Html,<<"stroke-width='100'">>)),
+    ?assertMatch({ok,_},render([{type,line},{series,[#{data=>[]}]}])).

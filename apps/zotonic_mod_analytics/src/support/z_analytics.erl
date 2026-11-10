@@ -179,6 +179,12 @@ value_type(V, text) -> valid_value(V);
 value_type(V, Values) when is_list(Values) -> lists:member(V,Values).
 
 -spec matches(Collector, Properties) -> boolean() when Collector :: map(), Properties :: map().
+%% Keep crawler events available to traffic classification and API measurements.
+%% Apply this at ingestion so existing page/device/content measurements follow
+%% the same policy as newly created ones, without rewriting their history.
+matches(#{event := <<"page_request">>, dimension := Dimension}, #{<<"traffic">> := <<"crawler">>})
+        when Dimension =:= <<>>; Dimension =:= <<"device">>; Dimension =:= <<"page">> ->
+    false;
 matches(#{filters := Filters}, Properties) ->
     maps:fold(
         fun(K,Vs,Match) -> Match andalso lists:member(maps:get(K,Properties,<<"unknown">>),Vs) end,

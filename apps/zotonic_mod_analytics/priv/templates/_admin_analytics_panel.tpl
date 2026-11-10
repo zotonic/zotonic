@@ -14,13 +14,14 @@
         {% if panel.report.popular %}
             {% chart type="horizontal_bar" title=c.name data=panel.report.chart width=680 height=190 hide_table %}
         {% elseif lead %}
-            {% chart type="line" title=c.name data=panel.report.chart width=1400 height=190 hide_table %}
+            {% chart type="line" title=c.name series=panel.report.chart width=1400 height=190 hide_table %}
         {% else %}
-            {% chart type="line" title=c.name data=panel.report.chart width=680 height=190 hide_table %}
+            {% chart type="line" title=c.name series=panel.report.chart width=680 height=190 hide_table %}
         {% endif %}
     </div>
     {% if panel.report.popular %}
-        <h4>{_ Most popular content in this period _}</h4>
+        <details class="analytics-details">
+        <summary>{_ Most popular content in this period _}</summary>
         <p class="text-muted">{_ Ranked by recorded requests in the selected moving period. The window advances in steps of _} {{ panel.report.resolution }} {_ seconds. _}</p>
         <table class="table table-condensed">
             <thead><tr><th>{_ Rank _}</th><th>{_ Content _}</th><th>{_ Requests _}</th></tr></thead>
@@ -29,6 +30,7 @@
             {% empty %}<tr><td colspan="3">{_ No leading content identified in this period. _}</td></tr>{% endfor %}</tbody>
         </table>
         {% if panel.report.error %}<p class="text-muted">{_ Bars show the lower bound. Counts are ranges, ordered by their lower bound. Overlapping ranges may change order. Content outside the retained candidates has at most _} {{ panel.report.error }} {_ requests. _}</p>{% endif %}
+        </details>
     {% elseif c.dimension %}
         <div class="analytics-breakdown">
             {% for g in panel.report.groups|slice:[1,5] %}

@@ -19,6 +19,7 @@
 
 -module(m_analytics).
 -behaviour(zotonic_model).
+
 -moduledoc(#{
     zotonic_keywords => ["reference", "model", "backend_developer", "logging_and_monitoring", "authorization_and_access_control", "privacy_and_consent"]
 }).
@@ -53,7 +54,9 @@ and the configuration page's confirmation flow, not a public model POST path.
 returns one selected report with the recording list. Both enforce `use mod_analytics`.
 Period keys are `hour`, `day` (six hours), `24hours`, `week`, `month`, `year` and `years`.
 Unknown periods use six hours. Reports contain aggregate counts; popular-content counts
-are lower bounds with approximation metadata. `configuration/1` enforces administrator access.
+are lower bounds with approximation metadata. Ordinary reports return `chart` as line-series
+maps with `label`, `data`, `color` (optional) and `width`: the total first, then breakdowns.
+Popular-content reports keep their label/value ranking data. `configuration/1` enforces administrator access.
 
 `create(Definition, State, Context)` accepts binary keys `name`, optional `description`,
 `event`, `dimension`, `groups` and `filters`. Filters map dimension names to lists of
@@ -277,36 +280,19 @@ report(Col,Period,Context) ->
         false ->
             Counts=z_analytics:reduce(Counts0,maps:get(groups,Col)),
             Sorted=lists:sort(fun(A,B)->maps:get(count,A)>maps:get(count,B) end,
-                [#{label=>label(K,Col,Context),count=>V}||{K,V}<-maps:to_list(Counts)]),
+                [#{key=>K,label=>label(K,Col,Context),count=>V}||{K,V}<-maps:to_list(Counts)]),
             {Sorted,z_analytics_frequency:total(Counts),0}
     end,
     %% Popular content needs only ranked counts. Skip the time index, gap
     %% expansion, graph aggregation and timestamp formatting for this report.
     Chart=case Popular of
         true -> [#{label=>maps:get(label,G),value=>maps:get(count,G)} || G <- Groups];
-        false -> trend_chart(Rows,Start,End,R,N,Context)
+        false -> z_analytics_chart:series(Rows,Start,End,R,N,Groups,Col,Context)
     end,
     #{chart=>Chart,groups=>lists:sublist(Groups,100),popular=>Popular,error=>Error,
       total=>Total,resolution=>R,from=>Start,until=>Now,
       incomplete=>length(Rows)<N orelse lists:any(fun(X)->not maps:get(complete,X) end,Rows)}.
 
-trend_chart(Rows,Start,End,R,N,Context) ->
-    Index=maps:from_list([{maps:get(start,X),X}||X<-Rows]),
-    Step=max(1,(N+239) div 240),
-    Points=[point(T,min(End,T+R*Step),R,Index)||T<-lists:seq(Start,End-1,R*Step)],
-    [#{label=>time_label(maps:get(start,P),R,Context),
-        value=>case maps:get(complete,P) orelse maps:get(total,P)>0 of
-            true -> maps:get(total,P); false -> null end}||P<-Points].
-
-
-time_label(T,R,Context) ->
-    Date=z_datetime:timestamp_to_datetime(T),
-    Format=case R of 60 -> "H:i"; 900 -> "D H:i"; 3600 -> "M j H:i"; _ -> "Y-m-d" end,
-    z_datetime:format(Date,Format,Context).
-point(A,B,R,Index) ->
-    Rows=[maps:get(T,Index,#{counts=>#{},complete=>false})||T<-lists:seq(A,B-1,R)],
-    #{start=>A,total=>lists:sum([z_analytics_frequency:total(maps:get(counts,X))||X<-Rows]),
-      complete=>lists:all(fun(X)->maps:get(complete,X) end,Rows)}.
 label(<<"$total">>,_,_) -> <<"Total">>;
 label(<<"$other">>,_,_) -> <<"Other (overflow)">>;
 label(<<"v:",Id/binary>>,#{dimension:= <<"page">>},Context) ->
