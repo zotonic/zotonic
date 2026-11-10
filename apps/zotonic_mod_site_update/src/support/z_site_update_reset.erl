@@ -8,30 +8,39 @@ be resolved by the caller, after checking deployment permissions.").
 
 -spec changes(VCS) -> {ok, binary()} | {error, term()} when VCS :: m_site_update:vcs().
 changes(VCS) ->
-    with_root(VCS, fun changes_root/1).
+    case repository_root(VCS) of
+        {ok, VCSRoot} -> changes_root(VCSRoot);
+        {error, _} = Error -> Error
+    end.
 
 -spec reset(VCS) -> ok | {error, term()} when VCS :: m_site_update:vcs().
 reset(VCS) ->
-    with_root(VCS, fun(VCSRoot) ->
-        case reset_root(VCSRoot) of
-            {ok, _} ->
-                case changes_root(VCSRoot) of
-                    {ok, <<>>} -> ok;
-                    {ok, _} -> {error, local_changes_remaining};
-                    {error, _} = Error -> Error
-                end;
-            {error, _} = Error -> Error
-        end
-    end).
+    case repository_root(VCS) of
+        {ok, VCSRoot} -> reset_checkout(VCSRoot);
+        {error, _} = Error -> Error
+    end.
+
+reset_checkout(VCSRoot) ->
+    case reset_root(VCSRoot) of
+        {ok, _} ->
+            case changes_root(VCSRoot) of
+                {ok, <<>>} -> ok;
+                {ok, _} -> {error, local_changes_remaining};
+                {error, _} = Error -> Error
+            end;
+        {error, _} = Error -> Error
+    end.
 
 %% Resolve the root for symlinked sites and sites nested in a shared checkout.
-with_root({Vcs, Path}, Fun) ->
+-spec repository_root(VCS) -> {ok, m_site_update:vcs()} | {error, term()}
+    when VCS :: m_site_update:vcs().
+repository_root({Vcs, Path}) ->
     Command = case Vcs of
         git -> "git rev-parse --show-toplevel";
         hg -> "hg root"
     end,
     case run(Command, Path) of
-        {ok, Root} -> Fun({Vcs, unicode:characters_to_list(z_string:trim(Root))});
+        {ok, Root} -> {ok, {Vcs, unicode:characters_to_list(z_string:trim(Root))}};
         {error, _} = Error -> Error
     end.
 
