@@ -193,7 +193,8 @@ symlinks(Dir) ->
 inotify_watch_files(Dirs) ->
     Roots = lists:usort([ unicode:characters_to_list(filename:absname(D)) || D <- Dirs ]),
     Excluded = lists:usort(lists:flatmap(fun excluded_dirs/1, Roots)),
-    unicode:characters_to_binary([
+    %% Reject invalid Unicode instead of passing a conversion error to exec:send/2.
+    <<_/binary>> = unicode:characters_to_binary([
         [ watch_line(D) || D <- Roots ],
         [ [$@, watch_line(D)] || D <- Excluded ]
     ]).
