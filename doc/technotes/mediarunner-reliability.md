@@ -5,6 +5,12 @@ Investigation and implementation: 2026-11-04. The R1–R4 fixes below are implem
 in the Zotonic checkout and the separate `apps_user/mediarunner` checkout. The
 original findings and design follow the implementation notes for context.
 
+Update from the 2026-11-10 [CAFS audit revisit](cafs-audit.md): the client now
+waits up to **60 seconds** for HTTP file lookup, following `7440a0d32`. This gives
+cold image downloads/conversions time to finish because browsers do not themselves
+retry failed image requests. The original five-second choice below is historical;
+bounded waiting, shared generation and retryable error responses remain in place.
+
 Implemented behavior
 --------------------
 
@@ -17,7 +23,7 @@ Implemented behavior
 - Only validated terminal conversion failures may commit a broken medium. Unknown
   failures retain input. Task rescheduling replaces the pivot row before starting
   a worker, preventing the scheduler from overwriting the worker's retry decision.
-- HTTP file lookups wait at most five seconds; pending or failed generation returns
+- HTTP file lookups now wait at most 60 seconds (originally five seconds); pending or failed generation returns
   503 with `Retry-After: 2` and `Cache-Control: no-store`. Background lookups default
   to 60 seconds and can use `z_file_request:lookup_file/5` to choose another finite
   wait. A timeout does not cancel shared work. Entries bound waiting calls to 128.
