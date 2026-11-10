@@ -1621,7 +1621,7 @@ Return:
     zotonic_keywords => ["reference", "backend_developer", "notification", "email_delivery", "monitor"]
 }).
 -doc("
-Notify that we could NOT send an e-mail (there might be a bounce later...) The Context is the depickled z_email:send/2 context.
+Notify that we sent an e-mail (there might be a bounce later...) The Context is the depickled z_email:send/2 context.
 
 Type:
 
