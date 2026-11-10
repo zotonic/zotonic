@@ -204,6 +204,32 @@ Source files remain in the checkout, runtime files under `docker-data`, and
 PostgreSQL data in the Docker `pgdata` volume. Avoid `docker compose down -v`
 unless you intend to delete the development database.
 
+## Troubleshooting: `env: 'bash\r': No such file or directory`
+
+This means a Linux script has Windows CRLF line endings: the carriage return
+becomes part of the interpreter name. Installing Bash does not fix it. Git
+attributes protect fresh checkouts, but do not rewrite existing working files.
+
+Close the failed launcher. In **PowerShell**, from the checkout, convert the
+tracked shell scripts to LF without discarding their contents:
+
+```powershell
+Set-Location C:\projects\zotonic
+git config core.autocrlf false
+$utf8 = New-Object System.Text.UTF8Encoding($false)
+git ls-files -- '*.sh' 'bin/zotonic' 'bin/mergepot' 'bin/zotonic-lsp' | ForEach-Object {
+    $path = Join-Path (Get-Location).Path $_
+    $text = [System.IO.File]::ReadAllText($path)
+    [System.IO.File]::WriteAllText($path, $text.Replace("`r`n", "`n"), $utf8)
+}
+```
+
+Double-click `start-docker.cmd` again. Its build step rebuilds the Docker image
+with the corrected entrypoint, and the other corrected scripts are available
+through the mounted checkout. Do not delete the database volume or reset the
+checkout to fix line endings. If the error remains, inspect the failing hook's
+file path; scripts in dependencies or user sites may need the same correction.
+
 ## Alternative: develop from Ubuntu WSL
 
 Use this workflow instead of Steps 1–3 when you want the checkout on Ubuntu's

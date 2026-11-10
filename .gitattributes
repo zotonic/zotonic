@@ -2,6 +2,10 @@
 *.sh text eol=lf
 *.escript text eol=lf
 bin/zotonic text eol=lf
+bin/mergepot text eol=lf
+bin/zotonic-lsp text eol=lf
+docker/s6-service/**/run text eol=lf
+docker/s6-service/**/finish text eol=lf
 
 # Native Windows launcher.
 *.cmd text eol=crlf
