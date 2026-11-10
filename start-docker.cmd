@@ -17,8 +17,11 @@ if errorlevel 1 (
 )
 
 rem Zotonic needs the Linux container engine, not Windows containers.
-docker info --format "{{.OSType}}" | findstr /x "linux" >nul
-if errorlevel 1 (
+set "ZOTONIC_LINUX_ENGINE="
+for /f "tokens=1" %%T in ('docker info --format "{{.OSType}}"') do (
+    if /i "%%T"=="linux" set "ZOTONIC_LINUX_ENGINE=1"
+)
+if not defined ZOTONIC_LINUX_ENGINE (
     echo.
     echo Zotonic has not started: Docker's Linux engine check failed.
     echo Docker diagnostic information follows:
