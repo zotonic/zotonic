@@ -165,20 +165,33 @@ performance, use the Ubuntu WSL alternative below.
 
 ## 7. Stop and return later
 
-In the **container shell**, run:
+To stop from Windows Explorer, double-click **stop-docker.cmd** in the same
+checkout you used to start Zotonic. It stops the project's containers, including
+the development shell and PostgreSQL, and removes their containers and network.
+Your database volume and checkout files remain saved.
+
+For an orderly application shutdown before stopping the containers, first run
+in the **container shell**:
 
 ```bash
 bin/zotonic stop
 exit
 ```
 
-The launcher pauses before closing its window. To stop PostgreSQL too, open
-**PowerShell** and run:
+The start launcher pauses before closing its window. Then double-click
+**stop-docker.cmd**, or run it in **PowerShell**:
 
 ```powershell
 Set-Location C:\projects\zotonic
-docker compose stop postgres
+.\stop-docker.cmd
 ```
+
+You can also double-click `stop-docker.cmd` while the development container is
+running; it stops the project's containers with a 30-second shutdown timeout.
+For an orderly application shutdown, use `bin/zotonic stop` first as shown above.
+The stop launcher keeps database volumes and checkout files, and leaves Docker
+Desktop running. Its pause only keeps the result visible; pressing a key closes
+that window.
 
 Next time, start Docker Desktop and double-click `start-docker.cmd` again. At
 the **container prompt**, run:
@@ -351,8 +364,19 @@ To open that directory in Windows Explorer, run `explorer.exe .` from the same
 Ubuntu shell.
 
 Stop Zotonic with `bin/zotonic stop` and `exit` inside the container. Back in
-Ubuntu, run `docker compose stop postgres`. Next time, start Docker Desktop,
-open Ubuntu from Windows, and run:
+Ubuntu, run `./stop-docker.sh` from the checkout. You can also run this stop
+script from a second Ubuntu terminal while the development container is running:
+
+```bash
+cd ~/projects/zotonic
+./stop-docker.sh
+```
+
+Run this on the Ubuntu host, not inside the Zotonic container. It removes the
+project's containers and network, preserves the database volume and checkout
+files, and leaves Docker Desktop running.
+
+Next time, start Docker Desktop, open Ubuntu from Windows, and run:
 
 ```bash
 cd ~/projects/zotonic

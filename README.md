@@ -31,6 +31,13 @@ The launcher defaults the container UID and GID to `1000`, preserves explicit
 environment overrides, and keeps the window open so errors can be read.
 See the [Windows development guide](doc/guides/docker-windows.md) for setup.
 
+To stop this checkout's containers, double-click `stop-docker.cmd` on Windows
+or run `./stop-docker.sh` on macOS/Linux/WSL from another terminal. These remove
+the project's containers and network, including one-off development shells,
+while keeping the PostgreSQL volume and checkout files. Docker Desktop stays
+running. For an orderly application shutdown, run `bin/zotonic stop` in the
+container shell first.
+
 The development launchers `./start-docker.sh` and `./start-podman.sh` use your local
 UID and GID for the container's Zotonic user. Start them as your normal user.
 Override either ID when necessary, for example:
