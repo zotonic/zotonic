@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-11 10:49\n"
+"PO-Revision-Date: 2026-11-11 11:44\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "MIME-Version: 1.0\n"
@@ -6585,7 +6585,7 @@ msgstr "通常のリンクやHTTP GETリクエストを使用して、このサ�
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:29
 msgid "JSON responses contain status and result fields. Concise reads return localized text and report language fallback. Follow next_url until next is false; filtered pages can be empty. Resource exports provide page URLs by language, including x-default. Cite the human page URL in the appropriate language."
-msgstr "JSONレスポンスには、ステータスおよび結果フィールドが含まれます。concise読み取りでは、ローカライズされたテキストが返され、言語のフォールバックが報告されます。nextがfalseになるまでnext_urlをたどってください。フィルタリングされたページは空の場合があります。リソースのエクスポートでは、x-defaultを含め、言語ごとのページURLが提供されます。適切な言語の「human」ページURLを引用してください。"
+msgstr "JSONレスポンスには status フィールドと result フィールドが含まれます。簡潔な読み取りでは、ローカライズされたテキストが返され、言語のフォールバックが報告されます。nextがfalseになるまでnext_urlをたどってください。フィルタリングされたページは空の場合があります。リソースのエクスポートでは、x-defaultを含め、言語ごとのページURLが提供されます。適切な言語のユーザー向けページのURLを引用してください。"
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:11
 msgid "OpenAPI description"
