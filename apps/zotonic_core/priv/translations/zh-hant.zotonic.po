@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-11 10:48\n"
+"PO-Revision-Date: 2026-11-11 11:43\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -6568,32 +6568,32 @@ msgstr "此頁面顯示即時系統統計資訊，例如記憶體用量與請求
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:12
 msgid "API catalog"
-msgstr ""
+msgstr "API 目錄"
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:24
 msgid "Browse public resources"
-msgstr ""
+msgstr "瀏覽公開資源"
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:3
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:7
 msgid "Data and API"
-msgstr ""
+msgstr "資料與 API"
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:8
 msgid "Explore this site's public information using ordinary links and HTTP GET requests. Public content does not require an account or API key."
-msgstr ""
+msgstr "請透過一般連結和 HTTP GET 請求瀏覽本網站的公開資訊。公開內容無需帳戶或 API 金鑰即可存取。"
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:29
 msgid "JSON responses contain status and result fields. Concise reads return localized text and report language fallback. Follow next_url until next is false; filtered pages can be empty. Resource exports provide page URLs by language, including x-default. Cite the human page URL in the appropriate language."
-msgstr ""
+msgstr "JSON 回應包含 status 和 result 欄位。精簡讀取會傳回在地化文字，並報告語言備用方案。請沿著 next_url 繼續瀏覽，直到 next 為 false 為止；經過篩選的頁面可能為空。資源匯出會提供各語言的頁面網址，包括 x-default。請引用相應語言的使用者頁面的網址。"
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:11
 msgid "OpenAPI description"
-msgstr ""
+msgstr "OpenAPI 描述"
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:28
 msgid "Replace {id} with an ID or unique name obtained from search results or a page's alternate link. Use small pages and follow pagination to explore further."
-msgstr ""
+msgstr "請將 {id} 替換為從搜尋結果或頁面的替代連結中取得的 ID 或唯一名稱。請使用小型頁面並依照分頁指引進行進一步探索。"
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:15
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:2
@@ -6602,7 +6602,7 @@ msgstr "網站地圖"
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:30
 msgid "The agent endpoints always use anonymous permissions. Existing compatibility APIs apply the caller's permissions. They return only accessible information and keep their existing indexing headers. Content and media may have their own licenses; preserve attribution and follow the stated terms."
-msgstr ""
+msgstr "代理端點始終採用匿名權限。現有的相容性 API 會套用呼叫者的權限。它們僅返回可存取的資訊，並保留其現有的索引標頭。內容與媒體可能有其自身的授權條款；請保留來源標示並遵守所述條款。"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:60
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:29
@@ -6878,7 +6878,7 @@ msgstr "固定式濾網"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:25
 msgid "Gaps are unrecorded intervals. Partial intervals may undercount activity. Page-request totals, device breakdowns and popular content exclude detected crawlers. API and traffic-classification measurements include crawlers unless filtered out. Counts exclude editor activity and do not measure unique visitors."
-msgstr ""
+msgstr "「缺口」是指未被記錄的區間。部分區間可能導致活動量被低估。頁面請求總數、裝置分類及熱門內容的統計數據均不包含已偵測到的爬蟲程式。API 及流量分類的測量數據則包含爬蟲程式，除非已將其過濾掉。統計數據不包含編輯者的活動，且不計入獨特訪客數。"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:13
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:15
@@ -9709,7 +9709,7 @@ msgstr "永遠隱藏浮動的範本追蹤按鈕。"
 
 #: zotonic_mod_development/priv/templates/_html_head_development.tpl:50
 msgid "Attach capture"
-msgstr ""
+msgstr "連結診斷記錄"
 
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:18
 msgid "Automatic detection on the Zotonic machine"
@@ -10407,7 +10407,7 @@ msgstr "中止"
 
 #: zotonic_mod_development/priv/templates/_html_head_development.tpl:51
 msgid "Stop capture"
-msgstr ""
+msgstr "停止擷取"
 
 #: zotonic_mod_development/src/mod_development.erl:669
 msgid "Stopped logging to the console of all browser tabs."
@@ -16439,7 +16439,7 @@ msgstr "你的註冊驗證碼"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:6
 msgid "A deployment is running. Try again when it finishes."
-msgstr ""
+msgstr "目前正在執行部署。請待部署完成後再試一次。"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:320
 msgid "Another deployment is in progress. Please try again when it finishes."
@@ -16455,7 +16455,7 @@ msgstr "無法取得遠端變更日誌。請檢查遠端連線，然後重試。
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:8
 msgid "Could not list local changes. Check the repository and server log."
-msgstr ""
+msgstr "無法列出本地的變更。請檢查儲存庫和伺服器日誌。"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:9
 msgid "Current commit"
@@ -16521,11 +16521,11 @@ msgstr "傳入的變更"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:2
 msgid "Local changes for {name}."
-msgstr ""
+msgstr "{name} 的本地變更。"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:303
 msgid "Local changes reset. You can deploy again."
-msgstr ""
+msgstr "本地變更已重置。你可以再次進行部署。"
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:14
 msgid "Modules list"
@@ -16545,15 +16545,15 @@ msgstr "在背景重新編譯已變更的 Erlang 檔案"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:289
 msgid "Reset local changes"
-msgstr ""
+msgstr "重置本機變更"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:309
 msgid "Reset or rebuild failed. Check the server log before retrying."
-msgstr ""
+msgstr "重設或重建失敗。請在重新嘗試前檢查伺服器日誌。"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:300
 msgid "Resetting local changes and rebuilding..."
-msgstr ""
+msgstr "重置本機變更並重新建置中..."
 
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
 msgid "Review and deploy the latest version of this site."
@@ -16602,7 +16602,7 @@ msgstr "抱歉，這只能從 Zotonic 狀態網站執行"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:20
 msgid "The code is then rebuilt before deployment is enabled again. If this repository contains other sites or modules, their local changes are also discarded."
-msgstr ""
+msgstr "隨後會重新編譯程式碼，然後才再次啟用部署功能。若此儲存庫中包含其他網站或模組，其本機變更也會一併被捨棄。"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:28
 msgid "The deployment preview is unavailable. Check the repository and server log, then try again."
@@ -16622,7 +16622,7 @@ msgstr "沒有傳入的變更。"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:15
 msgid "There are no local changes. You can still rebuild to recover from a failed deployment."
-msgstr ""
+msgstr "沒有任何本機變更。你仍可重新建置以從部署失敗的情況中恢復。"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:22
 msgid "This branch has no upstream configured. Configure its remote tracking branch before deploying."
@@ -16630,7 +16630,7 @@ msgstr "此分支未設定上游。部署前請先設定其遠端追蹤分支。
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:18
 msgid "This permanently discards all uncommitted changes in the entire repository, including staged changes, and deletes untracked files and directories. Ignored files, local commits and nested repositories are preserved."
-msgstr ""
+msgstr "此操作會永久捨棄整個儲存庫中所有未提交的變更（包括已標記為待提交的變更），並刪除未被追蹤的檔案和目錄。被忽略的檔案、本機提交以及嵌套儲存庫將予以保留。"
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
 msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
@@ -16646,7 +16646,7 @@ msgstr "若要透過 webhook 更新，請將服務設為向下列 URL 傳送 POS
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:26
 msgid "Undo all local changes and rebuild"
-msgstr ""
+msgstr "撤銷所有本機變更並重新建置"
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:16
 msgid "View system status"
