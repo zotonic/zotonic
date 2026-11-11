@@ -90,8 +90,10 @@ then the resource's first language. The human `page_url` is the citation URL;
 `uri` is the entity identifier.
 
 Search accepts `text` (up to 512 bytes) and `cat` (category name or ID).
-`sort` accepts `id` (default), `newest`, `oldest` or `modified`; all orders use
-resource ID as a stable tie-breaker. `publication_after` and `publication_before`
+`sort` accepts `id` (resource ID ascending, the default), `newest` (publication
+start descending), `oldest` (publication start ascending) or `modified`
+(modification time descending). All orders use resource ID ascending as a stable
+tie-breaker. `publication_after` and `publication_before`
 accept valid `YYYY-MM-DD` dates and filter publication start inclusively in UTC.
 The before date includes the whole day. Reversed ranges are rejected.
 Summaries include the resource's UTC `modified` timestamp.
@@ -115,6 +117,23 @@ is true if exploration stops at the 10,000-candidate limit; refine the search.
 Direct reads allow public noindex content. Missing, private and unpublished
 resources all return 404. The facade never returns arbitrary resource properties.
 
+Relationship pages fetch only `pagelen + 1` candidate edges from PostgreSQL,
+through `m_edge:get_page/6`, before visibility/noindex filtering. An optional
+predicate is applied in SQL. Ordering is by predicate ID and endpoint resource ID,
+not editorial edge sequence. This matches the existing outgoing/incoming unique
+edge indexes and avoids sorting all incoming edges of a popular keyword.
+Offsets still cost work proportional to the skipped candidates; the existing
+10,000-candidate traversal limit remains. Concurrent edge edits can shift pages.
+
+Other callers can use `/api/model/edge/get/o_page/{id}/{predicate}` or
+`/api/model/edge/get/s_page/{id}/{predicate}`, omitting the predicate segment to
+include all predicates. These accept `offset` (default 0) and `limit` (default 20,
+maximum 100). Results contain `items` with `endpoint_id`/`predicate_id` and
+`has_more`. Advance offset by the requested limit even after an empty filtered
+page; stop at the 10,000-candidate bound. These core paths use the caller's ACL,
+whereas the agent facade additionally enforces anonymous publication/noindex
+rules. Existing full-list `m_edge` accessors retain their behavior.
+
 Markdown includes body HTML, text and header blocks, and one level of page-reference content. All `survey_...` blocks are intentionally skipped without marking the content
 incomplete. Unsupported blocks and oversized
 content are explicitly marked; check `content_complete` and follow the source
@@ -124,6 +143,10 @@ help, the OpenAPI specification and this resource's JSON endpoint in the content
 actual language. These links are not added to human-facing HTML or to the JSON
 resource's editorial `markdown` field. They assist clients that already fetch
 the Markdown representation; header/head discovery remains unchanged.
+If an editorial template cannot render, the representation returns HTTP 503 with
+`Cache-Control: no-store`, rather than successful empty content. This can occur
+while the site's templates are becoming available after startup; retry later.
+Legitimate empty content still renders successfully.
 JSON includes a resource's own downloadable medium when available, exposing only
 MIME type, dimensions, size and download URL. Preserve supplied licensing and
 attribution. Page references include a source link, language and supplied licensing/attribution;
@@ -138,8 +161,9 @@ Errors use no-store: 400 for invalid requests, 404 for unavailable resources,
 413 for responses over 1 MiB, 503 for backend failures and 504 for timeouts.
 Both GET and HEAD are supported; no credentialed CORS policy is added.
 
-Broader ACL/session fixtures, custom block coverage and agent trials remain in the
-[implementation plan](../technotes/agent-discovery-and-access.md).
+The initial pilot is complete. Implementation decisions, pilot findings and
+future work are recorded in the
+[design notes](../technotes/agent-discovery/agent-discovery-and-access.md).
 Additional JSON-LD and Turtle work waits for the SPARQL merge. No MCP endpoint is
 advertised.
 

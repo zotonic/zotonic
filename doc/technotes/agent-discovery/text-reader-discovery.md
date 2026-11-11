@@ -1,7 +1,7 @@
-# Phase 4: hidden discovery links in actual text readers
+# Discovery links in text readers
 
 Date: 11 November 2026. Repository revision: `d09962f64`.
-Continues the [agent discovery plan](agent-discovery-and-access.md).
+Supports the [current discovery design](agent-discovery-and-access.md).
 
 ## Decision
 
@@ -135,9 +135,8 @@ not provide a general exemption for bot-only API links.
 
 There is no demonstrated approach here that simultaneously guarantees retention,
 zero visible footprint and search-engine acceptance. Keep header/head discovery
-and dedicated documents. Links in Zotonic's own Markdown response remain an
-option for clients that already request it; that alone would not solve initial
-discovery from ordinary HTML.
+and dedicated documents. Zotonic now includes API access links in its Markdown response for clients that
+already request it. This does not solve initial discovery from ordinary HTML.
 
 The useful next experiment, if pursued, is the same controlled matrix through
 remote-URL extraction on a separately hosted disposable fixture, with explicit
@@ -148,7 +147,7 @@ agent adoption trial was run: retaining a URL does not prove an agent will use i
 
 ## Evidence and reproduction
 
-[Machine-readable results](agent-discovery-phase4-text-readers.json) contain
+[Machine-readable results](text-reader-results.json) contain
 per-case URL/label retention, hosted status and elapsed time, version metadata,
 fixture hashes, browser diagnostics, and exact extracted outputs deduplicated by
 SHA-256. The synthetic HTML is reproducible with
@@ -162,11 +161,11 @@ environment and npm prefix, plus `playwright-core` for the browser diagnostic;
 the complete observed dependency versions are in the JSON. Then run:
 
 ```sh
-python3 doc/technotes/agent-discovery-reader-trial/fixtures.py /tmp/zotonic-reader-trial/fixtures.json
-NODE_PATH=/tmp/zotonic-reader-trial/node_modules node doc/technotes/agent-discovery-reader-trial/readers.cjs /tmp/zotonic-reader-trial/fixtures.json /tmp/zotonic-reader-trial/js-results.json
-/tmp/zotonic-reader-trial/venv/bin/python doc/technotes/agent-discovery-reader-trial/readers.py /tmp/zotonic-reader-trial/fixtures.json /tmp/zotonic-reader-trial/py-results.json
-python3 doc/technotes/agent-discovery-reader-trial/hosted.py /tmp/zotonic-reader-trial/fixtures.json /tmp/zotonic-reader-trial/jina-results.json
-NODE_PATH=/tmp/zotonic-reader-trial/node_modules node doc/technotes/agent-discovery-reader-trial/browser.cjs /tmp/zotonic-reader-trial/fixtures.json /tmp/zotonic-reader-trial/browser-results.json
+python3 doc/technotes/agent-discovery/agent-discovery-reader-trial/fixtures.py /tmp/zotonic-reader-trial/fixtures.json
+NODE_PATH=/tmp/zotonic-reader-trial/node_modules node doc/technotes/agent-discovery/agent-discovery-reader-trial/readers.cjs /tmp/zotonic-reader-trial/fixtures.json /tmp/zotonic-reader-trial/js-results.json
+/tmp/zotonic-reader-trial/venv/bin/python doc/technotes/agent-discovery/agent-discovery-reader-trial/readers.py /tmp/zotonic-reader-trial/fixtures.json /tmp/zotonic-reader-trial/py-results.json
+python3 doc/technotes/agent-discovery/agent-discovery-reader-trial/hosted.py /tmp/zotonic-reader-trial/fixtures.json /tmp/zotonic-reader-trial/jina-results.json
+NODE_PATH=/tmp/zotonic-reader-trial/node_modules node doc/technotes/agent-discovery/agent-discovery-reader-trial/browser.cjs /tmp/zotonic-reader-trial/fixtures.json /tmp/zotonic-reader-trial/browser-results.json
 ```
 
 The hosted step sends synthetic data to Jina and can encounter service/rate-limit

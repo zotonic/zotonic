@@ -41,7 +41,10 @@ read(Op, Id, Args, Context) ->
         {ok, Request} ->
             {Pid, Ref} = spawn_monitor(fun() ->
                 Result = try execute(Op, Id, Request, z_context:set_language(maps:get(language, Request), C))
-                    catch throw:too_large -> {error, too_large} end,
+                    catch
+                        throw:too_large -> {error, too_large};
+                        throw:unavailable -> {error, unavailable}
+                    end,
                 exit({agent_result, Result})
             end),
             receive
@@ -219,24 +222,18 @@ translated(Value, _Lang, _C) when is_list(Value) -> unicode:characters_to_binary
 translated(Value, Lang, C) -> z_convert:to_binary(z_trans:lookup(Value, Lang, C)).
 
 related(Id, Predicate, R, C) ->
-    {Where, Endpoint} = case maps:get(direction, R) of
-        <<"out">> -> {"subject_id", "object_id"};
-        <<"in">> -> {"object_id", "subject_id"}
+    Direction = case maps:get(direction, R) of
+        <<"out">> -> out;
+        <<"in">> -> in
     end,
     Size = maps:get(pagelen, R),
     Page = maps:get(page, R),
-    {Filter, Params} = case Predicate of
-        undefined -> {[], [Id, Size + 1, (Page - 1) * Size]};
-        P -> {" and predicate_id = $4", [Id, Size + 1, (Page - 1) * Size, P]}
-    end,
-    Sql = ["select ", Endpoint, " as endpoint_id, predicate_id from edge where ", Where,
-        " = $1", Filter, " order by predicate_id, seq, id limit $2 offset $3"],
-    case z_db:qmap(Sql, Params, [{keys, atom}, {timeout, 3000}], C) of
-        {ok, Rows} ->
+    case m_edge:get_page(Direction, Id, Predicate, (Page - 1) * Size, Size, C) of
+        {ok, #{items := Rows, has_more := HasMore}} ->
             Items = [#{predicate => summary(P, R, C), resource => summary(E, R, C)}
-                || #{endpoint_id := E, predicate_id := P} <- lists:sublist(Rows, Size),
+                || #{endpoint_id := E, predicate_id := P} <- Rows,
                     listed(P, C), listed(E, C)],
-            Next = case length(Rows) > Size of true -> Page + 1; false -> false end,
+            Next = case HasMore of true -> Page + 1; false -> false end,
             {ok, continuation(related, Id, R,
                 (page(Items, Next, R))#{id => Id, direction => maps:get(direction, R)}, C)};
         {error, _} -> {error, unavailable}

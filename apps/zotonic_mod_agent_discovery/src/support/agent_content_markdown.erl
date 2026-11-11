@@ -2,6 +2,7 @@
 %% SPDX-License-Identifier: Apache-2.0
 -module(agent_content_markdown).
 -export([compose/4]).
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 %% Render editorial HTML through category-aware templates, then use the existing
 %% faithful converter. All calls run inside the model's bounded anonymous worker.
@@ -17,7 +18,7 @@ compose(Id, Props, Language, Context) ->
         true ->
             Parts = [block(Id, B, Language, C) || B <- lists:sublist(Blocks, 100)],
             Complete = length(Blocks) =< 100 andalso lists:all(fun({Ok, _}) -> Ok end, Parts),
-            {Html, _} = z_template:render_to_iolist({cat, "_agent_content.tpl"},
+            {Html, _} = render({cat, "_agent_content.tpl"},
                 [{id, Id}, {body_html, Body}, {blocks_html, [H || {_, H} <- Parts]}], C),
             case iolist_size(Html) =< 1048576 of
                 true -> #{markdown => z_markdown:to_markdown(iolist_to_binary(Html), faithful), content_complete => Complete};
@@ -45,7 +46,7 @@ block(Id, #{<<"type">> := Type} = Block, Language, C) when is_binary(Type), byte
                         false -> omitted();
                         true ->
                             {Complete, Reference} = reference(Type, B, Language, C),
-                            {Html, _} = z_template:render_to_iolist(File, [{id, Id}, {blk, B}, {reference, Reference}], C),
+                            {Html, _} = render(File, [{id, Id}, {blk, B}, {reference, Reference}], C),
                             {Complete, Html}
                     end
             end
@@ -90,3 +91,15 @@ text(Value, _, _) when is_list(Value) -> unicode:characters_to_binary(Value);
 text(Value, Language, C) -> z_convert:to_binary(z_trans:lookup(Value, Language, C)).
 
 plain(Value, Language, C) -> z_html:unescape(z_html:strip(text(Value, Language, C))).
+
+%% Normal HTML rendering tolerates errors as empty output. A machine-readable
+%% representation must instead fail, so callers cannot cache incomplete success.
+render(Template, Vars, Context) ->
+    case z_template:render_to_iolist_result(Template, Vars, Context) of
+        {ok, Html, RenderContext} -> {Html, RenderContext};
+        {error, Reason} ->
+            ?LOG_ERROR(#{in => zotonic_mod_agent_discovery,
+                text => <<"Cannot render agent content">>, template => Template,
+                result => error, reason => Reason}),
+            throw(unavailable)
+    end.

@@ -6,6 +6,7 @@ content_test_() ->
     {foreach, fun setup/0, fun cleanup/1, [
         fun limits/0, fun localized_content/0, fun markdown_api_access/0, fun survey_blocks/0, fun private_content/0,
         fun bounded_search/0, fun bounded_edges/0, fun conditional_content/0,
+        fun rendering_failure/0, fun relationship_boundaries/0,
         fun explicit_sort_precedes_relevance/0, fun search_filters/0, fun schema_constraints/0, fun private_page_block/0, fun page_block_dependencies/0,
         {timeout, 8, fun execution_budget/0}
     ]}.
@@ -39,13 +40,13 @@ setup() ->
         anonymous(C),
         case Name of <<"_agent_block_unknown.tpl">> -> {error, enoent}; _ -> {ok, Name} end
     end),
-    meck:expect(z_template, render_to_iolist, fun
+    meck:expect(z_template, render_to_iolist_result, fun
         ({cat, "_agent_content.tpl"}, Vars, C) ->
-            anonymous(C), {[proplists:get_value(body_html, Vars), proplists:get_value(blocks_html, Vars)], C};
-        (<<"_agent_block_text.tpl">>, Vars, C) -> {maps:get(<<"body">>, proplists:get_value(blk, Vars)), C};
-        (<<"_agent_block_header.tpl">>, Vars, C) -> {["<h2>", maps:get(<<"header">>, proplists:get_value(blk, Vars)), "</h2>"], C};
+            anonymous(C), {ok, [proplists:get_value(body_html, Vars), proplists:get_value(blocks_html, Vars)], C};
+        (<<"_agent_block_text.tpl">>, Vars, C) -> {ok, maps:get(<<"body">>, proplists:get_value(blk, Vars)), C};
+        (<<"_agent_block_header.tpl">>, Vars, C) -> {ok, ["<h2>", maps:get(<<"header">>, proplists:get_value(blk, Vars)), "</h2>"], C};
         (<<"_agent_block_page.tpl">>, Vars, C) ->
-            {case proplists:get_value(reference, Vars) of undefined -> []; Ref -> maps:get(body, Ref) end, C}
+            {ok, case proplists:get_value(reference, Vars) of undefined -> []; Ref -> maps:get(body, Ref) end, C}
     end),
     meck:expect(m_media, get, fun(_, _) -> undefined end),
     meck:expect(m_rsc, uri, fun(_, C) -> anonymous(C), <<"https://example.test/id/1">> end),
@@ -121,6 +122,43 @@ private_content() ->
         ?assertEqual({error, not_found}, m_agent_content:read(related, Id, #{}, context()))
     end, [2, 3, 5, 6, undefined]),
     ?assertMatch({ok, _}, m_agent_content:read(resource, 4, #{}, context())).
+
+rendering_failure() ->
+    meck:expect(z_template, render_to_iolist_result, fun(_, _, _) -> {error, enoent} end),
+    ?assertEqual({error, unavailable}, m_agent_content:read(resource, 1, #{}, context())),
+    meck:expect(z_context, ensure_qs, fun(C) -> C end),
+    meck:expect(z_context, get_q, fun(<<"id">>, _) -> 1 end),
+    C = z_context:set(agent_operation, markdown, (context())#context{cowreq = #{qs => <<>>}}),
+    {{halt, 503}, Failed} = controller_agent_content:resource_exists(C),
+    Headers = maps:get(resp_headers, Failed#context.cowreq),
+    ?assertNotEqual(nomatch, binary:match(maps:get(<<"cache-control">>, Headers), <<"no-store">>)),
+    ?assertEqual(undefined, z_context:get(agent_body, Failed)).
+
+relationship_boundaries() ->
+    %% Two fully filtered windows, then one public row, then an empty last page.
+    meck:expect(z_db, qmap, fun(_, [1, 3, Offset], _, _) ->
+        {ok, case Offset of
+            0 -> [#{endpoint_id => 2, predicate_id => 1} || _ <- lists:seq(1,3)];
+            2 -> [#{endpoint_id => 2, predicate_id => 1} || _ <- lists:seq(1,3)];
+            4 -> [#{endpoint_id => 1, predicate_id => 1}, #{endpoint_id => 2, predicate_id => 1}, #{endpoint_id => 2, predicate_id => 1}];
+            6 -> [#{endpoint_id => 2, predicate_id => 1}]
+        end}
+    end),
+    lists:foreach(fun(Page) ->
+        ?assertMatch({ok, #{items := [], next := N}} when N =:= Page + 1,
+            m_agent_content:read(related, 1, #{<<"page">> => Page, <<"pagelen">> => 2}, context()))
+    end, [1,2]),
+    ?assertMatch({ok, #{items := [_], next := 4}},
+        m_agent_content:read(related, 1, #{<<"page">> => 3, <<"pagelen">> => 2}, context())),
+    ?assertMatch({ok, #{items := [], next := false, next_url := undefined}},
+        m_agent_content:read(related, 1, #{<<"page">> => 4, <<"pagelen">> => 2}, context())),
+    meck:expect(z_db, qmap, fun(_, [1, 101, 9900], _, _) ->
+        {ok, [#{endpoint_id => 2, predicate_id => 1} || _ <- lists:seq(1,101)]}
+    end),
+    ?assertMatch({ok, #{items := [], next := false, next_url := undefined, limit_reached := true}},
+        m_agent_content:read(related, 1, #{<<"page">> => 100, <<"pagelen">> => 100}, context())),
+    ?assertEqual({error, bad_request},
+        m_agent_content:read(related, 1, #{<<"page">> => 101, <<"pagelen">> => 100}, context())).
 
 bounded_search() ->
     meck:expect(m_search, search, fun(<<"query">>, Args, C) ->
