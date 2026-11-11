@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-11 10:49\n"
+"PO-Revision-Date: 2026-11-11 11:44\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "MIME-Version: 1.0\n"
@@ -6585,7 +6585,7 @@ msgstr "일반 링크와 HTTP GET 요청을 사용하여 이 사이트의 공개
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:29
 msgid "JSON responses contain status and result fields. Concise reads return localized text and report language fallback. Follow next_url until next is false; filtered pages can be empty. Resource exports provide page URLs by language, including x-default. Cite the human page URL in the appropriate language."
-msgstr "JSON 응답에는 상태 및 결과 필드가 포함됩니다. 간결한 읽기 작업은 현지화된 텍스트를 반환하고 언어 대체 정보를 보고합니다. next가 false가 될 때까지 next_url을 따라가십시오. 필터링된 페이지는 비어 있을 수 있습니다. 리소스 내보내기 기능은 x-default를 포함하여 언어별 페이지 URL을 제공합니다. 해당 언어의 일반 사용자용 페이지 URL을 인용하십시오."
+msgstr "JSON 응답에는 status 및 result 필드가 포함됩니다. 간결한 읽기 작업은 현지화된 텍스트를 반환하고 언어 대체 정보를 보고합니다. next가 false가 될 때까지 next_url을 따라가십시오. 필터링된 페이지는 비어 있을 수 있습니다. 리소스 내보내기 기능은 x-default를 포함하여 언어별 페이지 URL을 제공합니다. 해당 언어의 일반 사용자용 페이지 URL을 인용하십시오."
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:11
 msgid "OpenAPI description"
@@ -9708,7 +9708,7 @@ msgstr "플로팅 템플릿 추적 버튼 항상 숨기기"
 
 #: zotonic_mod_development/priv/templates/_html_head_development.tpl:50
 msgid "Attach capture"
-msgstr "캡처 이미지 첨부"
+msgstr "진단 기록 연결"
 
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:18
 msgid "Automatic detection on the Zotonic machine"
