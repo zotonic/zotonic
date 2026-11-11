@@ -114,6 +114,23 @@
         return show(await call("post", `stop/${id}`));
     });
 
+    // Validate ownership through poll before fetching evidence for the current page.
+    const evidence = (kind, flush) => run(async () => {
+        if (!await pollCurrent(flush ? entries.splice(0) : [])) return null;
+        try {
+            return await call("get", `${kind}/${id}`);
+        } catch (error) {
+            if (missing(error)) return forget();
+            throw error;
+        }
+    });
+
+    /** Return {capture, nodes, edges}, or null when unattached/expired. */
+    const trace = () => evidence("trace", false);
+
+    /** Flush pending logs, then return {entries, truncated}; does not clear stored logs. */
+    const logs = () => evidence("console", true);
+
     function install(button, labels) {
         if (installed) return;
         installed = true;
@@ -151,6 +168,6 @@
         }
         setTimeout(poll, 1000);
     };
-    window.z_development_capture = {install, attach, status, stop};
+    window.z_development_capture = {install, attach, status, stop, trace, console: logs};
     poll();
 })();

@@ -36,18 +36,58 @@ GET paths (payload is supplied as query arguments over HTTP):
 * template/lookup: {name: page.tpl, id: optional resource id/name}; resolves the
   winning template and all candidates for its resolved name, in priority order.
   With id, uses the actual catinclude resolution rules. Does not render.
+* template/source: same name and optional id as template/lookup, plus optional
+  candidate (zero-based index in the resolved candidates list). Omitting candidate
+  reads the winner. Returns lookup metadata plus source (UTF-8 text), candidate,
+  module, priority and winner_filepath; filepath identifies the selected file.
+  Follow overrules using the next candidate in the list. Each request resolves
+  the list afresh; an absent candidate returns enoent, invalid selectors badarg.
+  Reads only a candidate for that resolved name on this site, never a supplied path. Files larger than 1 MiB return too_large;
+  invalid UTF-8 returns invalid_utf8. No rendering or compilation is performed.
+* template/composition: same name/id/candidate selection as template/source.
+  Returns selected metadata, inheritance (type none/extends/overrules, with a
+  resolved target or error), local block names, and literal include metadata
+  (template, line, column, method, is_catinclude). analysis is static;
+  blocks_scope is local, includes_scope is literal_references. Compiles the
+  selected indexed file if needed, without rendering or evaluating inheritance
+  arguments. Does not recursively expand parents or resolve dynamic includes,
+  include conditions, or category selections at include call sites. Missing
+  parents appear as inheritance.error; compilation errors fail the request.
 * templates: {prefix: optional, offset: 0, limit: 50}; indexed template names
   and winning source locations; limit is capped at 200.
 * modules: active modules and their priorities.
+* models: {prefix: optional, offset: 0, limit: 50}; paginated core and active-site
+  models, effective Erlang module, source location and exported get/post/delete
+  methods. Limit 1-200. Methods indicate callbacks, not permission to call them.
+* model/documentation: {name: model name without m_}; returns Markdown module/API
+  documentation, availability, methods, HTTP/MQTT topic patterns and static GET
+  path hints. Documentation comes from BEAM docs with the existing source fallback.
+  Missing documentation is explicitly reported; hints are incomplete (especially
+  delegated/dynamic paths and POST/DELETE). A path segment any is a placeholder.
+  No model callbacks are executed to discover data or schemas. Unknown/inactive
+  models return enoent; arbitrary Erlang module names and paths are not accepted.
 
 Use /api/model/development_tools/get/<path> or
 bridge/origin/model/development_tools/get/<path>. Results contain only JSON
 values; Erlang tuples in dispatch metadata are represented as arrays.
 Template names must be relative indexed names, not filesystem paths.
 
+Authorized non-production pages expose window.z_development_tools:
+`await z_development_tools.dispatch()` lists rules;
+`dispatchTrace(path)` traces a local path, defaulting to location.pathname;
+`template(name, id)` resolves a template with optional resource category selection;
+`templateSource(name, id, {candidate})` reads its source using the same resolution;
+omit candidate for the winner, or select a zero-based override candidate;
+`templateComposition(name, id, {candidate})` inspects static composition;
+`templates({prefix, offset, limit})` lists templates; `modules()` lists modules;
+`models({prefix, offset, limit})` discovers models; `modelDocumentation(name)`
+reads their public API documentation and static path hints.
+All return promises with the model result, rejecting errors with an error.code.
+Inspection needs neither a capture attachment nor a visible debug button.
+
 The CLI equivalent is bin/zotonic inspect SITE OPERATION [ARGUMENTS].
 Supported operations: dispatch, dispatch-trace PATH, template NAME [RESOURCE],
-templates [PREFIX], modules. No operation compiles, renders or deploys code.
+templates [PREFIX], modules. These CLI operations do not compile, render or deploy code.
 ").
 -behaviour(zotonic_model).
 -export([m_get/3, allowed/1, cli/2]).
@@ -79,6 +119,20 @@ get([<<"dispatch">>, <<"trace">>], #{<<"path">> := <<"/", _/binary>> = Path}, Co
         <<"//", _/binary>> -> {error, badarg};
         _ -> z:dispatch_path(Path, Context)
     end;
+get([<<"template">>, Operation], #{<<"name">> := Name} = P, Context)
+    when Operation =:= <<"source">>; Operation =:= <<"composition">> ->
+    case valid_name(Name) of
+        true ->
+            case lookup(Name, maps:get(<<"id">>, P, undefined), Context) of
+                {ok, Resolved} ->
+                    case select_candidate(maps:get(<<"candidate">>, P, undefined), Resolved) of
+                        {ok, Selected} -> inspect_template(Operation, Selected, Context);
+                        {error, _} = Error -> Error
+                    end;
+                {error, _} = Error -> Error
+            end;
+        false -> {error, badarg}
+    end;
 get([<<"template">>, <<"lookup">>], #{<<"name">> := Name} = P, Context) ->
     case valid_name(Name) of
         true -> lookup(Name, maps:get(<<"id">>, P, undefined), Context);
@@ -101,10 +155,73 @@ get([<<"templates">>], P, Context) ->
             {ok, #{items => Page, total => length(Items), offset => Offset, limit => Limit}};
         false -> {error, badarg}
     end;
+get([<<"models">>], P, Context) ->
+    Prefix = maps:get(<<"prefix">>, P, <<>>),
+    Offset = number(maps:get(<<"offset">>, P, 0)),
+    Limit = number(maps:get(<<"limit">>, P, 50)),
+    case is_binary(Prefix) andalso byte_size(Prefix) =< 128
+        andalso is_integer(Offset) andalso Offset >= 0
+        andalso is_integer(Limit) andalso Limit > 0 andalso Limit =< 200 of
+        true ->
+            Models = [M || #{name := Name} = M <- site_models(Context),
+                Prefix =:= <<>> orelse binary:match(Name, Prefix) =:= {0, byte_size(Prefix)}],
+            Page = lists:sublist(lists:nthtail(min(Offset, length(Models)), Models), Limit),
+            {ok, #{items => [model_methods(M) || M <- Page],
+                total => length(Models), offset => Offset, limit => Limit}};
+        false -> {error, badarg}
+    end;
+get([<<"model">>, <<"documentation">>], #{<<"name">> := Name}, Context)
+    when is_binary(Name), byte_size(Name) > 0, byte_size(Name) =< 128 ->
+    case [M || #{name := N} = M <- site_models(Context), N =:= Name] of
+        [#{erlang_module := Module} = Model] ->
+            case code:ensure_loaded(Module) of
+                {module, Module} ->
+                    Doc = z_development_lsp_docs:module(Module),
+                    Hints = [H#{method => get} || H <- z_development_lsp_model:paths(Module)],
+                    {ok, (model_methods(Model))#{
+                        documentation => Doc,
+                        documentation_format => <<"text/markdown">>,
+                        documentation_available => Doc =/= <<>>,
+                        path_hints => Hints,
+                        path_hints_complete => false,
+                        mqtt_topic => <<"bridge/origin/model/", Name/binary, "/{method}/{path}">>,
+                        http_url => <<"/api/model/", Name/binary, "/{method}/{path}">>
+                    }};
+                {error, _} -> {error, unavailable}
+            end;
+        [] -> {error, enoent}
+    end;
 get([<<"modules">>], _, Context) ->
     {ok, [#{module => M, priority => z_module_manager:prio(M)}
         || M <- z_module_manager:prio_sort(z_module_manager:active(Context))]};
 get(_, _, _) -> {error, badarg}.
+
+%% Include core models and active apps, but honor z_model's effective resolution
+%% (including its core-model precedence). Never turn client names into atoms.
+site_models(Context) ->
+    Indexed = z_module_indexer:all_files(model, zotonic_core)
+        ++ z_module_indexer:all(model, Context),
+    Names = lists:usort([z_convert:to_binary(N)
+        || #module_index{key = #module_index_key{name = N}} <- Indexed]),
+    [model_location(Name, Module, Indexed)
+        || Name <- Names, {ok, Module} <- [z_model:get_module(Name, Context)]].
+
+model_location(Name, Module, Indexed) ->
+    Base = #{name => Name, erlang_module => Module},
+    case [I || #module_index{erlang_module = M} = I <- Indexed, M =:= Module] of
+        [#module_index{module = App, filepath = File} | _] ->
+            Base#{module => App, filepath => File};
+        [] -> Base
+    end.
+
+model_methods(#{erlang_module := Module} = Model) ->
+    case code:ensure_loaded(Module) of
+        {module, Module} ->
+            Methods = [Verb || {Verb, Callback} <- [{get, m_get}, {post, m_post}, {delete, m_delete}],
+                erlang:function_exported(Module, Callback, 3)],
+            Model#{available => true, methods => Methods};
+        {error, _} -> Model#{available => false, methods => []}
+    end.
 
 lookup(Name, undefined, Context) -> resolve(Name, Name, Context);
 lookup(Name, Resource, Context) when is_binary(Resource); is_integer(Resource) ->
@@ -117,8 +234,91 @@ lookup(_, _, _) -> {error, badarg}.
 resolve(Requested, Template, Context) ->
     case z_template_compiler_runtime:map_template(Template, #{}, Context) of
         {ok, #template_file{filename = File, template = Name}} ->
+            Matches = z_module_indexer:find_all(template, Name, Context),
+            Candidates = [(index(I))#{candidate => N}
+                || {N, I} <- lists:zip(lists:seq(0, length(Matches) - 1), Matches)],
             {ok, #{requested => Requested, name => Name, filepath => File,
-                candidates => [index(I) || I <- z_module_indexer:find_all(template, Name, Context)]}};
+                candidates => Candidates}};
+        {error, _} = Error -> Error
+    end.
+
+%% Candidate selectors are positions in the freshly resolved site's index, never paths.
+select_candidate(undefined, #{filepath := Winner, candidates := Candidates} = Resolved) ->
+    case [C || #{filepath := File} = C <- Candidates, File =:= Winner] of
+        [Selected | _] -> selected_candidate(Selected, Resolved);
+        [] -> {error, enoent}
+    end;
+select_candidate(Value, #{candidates := Candidates} = Resolved) ->
+    case number(Value) of
+        N when is_integer(N), N >= 0 ->
+            case [C || #{candidate := Position} = C <- Candidates, Position =:= N] of
+                [Selected] -> selected_candidate(Selected, Resolved);
+                [] -> {error, enoent}
+            end;
+        _ -> {error, badarg}
+    end.
+
+selected_candidate(Selected, #{filepath := Winner} = Resolved) ->
+    {ok, (maps:merge(Resolved, Selected))#{winner_filepath => maps:get(winner_filepath, Resolved, Winner)}}.
+
+inspect_template(<<"source">>, #{filepath := File} = Selected, _Context) ->
+    case template_source(File) of
+        {ok, Source} -> {ok, Selected#{source => Source}};
+        {error, _} = Error -> Error
+    end;
+inspect_template(<<"composition">>, #{filepath := File, name := Name} = Selected, Context) ->
+    %% Compile only the selected indexed file; never execute render or extends_runtime.
+    Template = #template_file{filename = File, template = Name},
+    case z_template:template_module(Template, #{}, Context) of
+        {ok, Module} ->
+            Includes = lists:sort(fun(A, B) ->
+                {maps:get(line, A), maps:get(column, A)} =<
+                    {maps:get(line, B), maps:get(column, B)}
+            end, Module:includes()),
+            {ok, Selected#{
+                analysis => static,
+                inheritance => inheritance(Module:extends(), Selected, Context),
+                blocks => lists:sort(Module:blocks()),
+                blocks_scope => local,
+                includes => Includes,
+                includes_scope => literal_references
+            }};
+        {error, _} = Error -> Error
+    end.
+
+inheritance(undefined, _Selected, _Context) -> #{type => none};
+inheritance(overrules, #{candidate := N, name := Name} = Selected, _Context) ->
+    inheritance_target(#{type => overrules, template => Name}, select_candidate(N + 1, Selected));
+inheritance(Name, _Selected, Context) when is_binary(Name) ->
+    Result = case valid_name(Name) of
+        true -> lookup(Name, undefined, Context);
+        false -> {error, badarg}
+    end,
+    inheritance_target(#{type => extends, template => Name}, Result).
+
+inheritance_target(Relation, {ok, Target}) -> Relation#{target => Target};
+inheritance_target(Relation, {error, Reason}) -> Relation#{error => Reason}.
+
+%% Read only the server-resolved index path, with a bounded UTF-8 response.
+-spec template_source(File) -> {ok, binary()} | {error, term()}
+    when File :: file:filename_all().
+template_source(File) ->
+    case file:open(File, [read, binary, raw]) of
+        {ok, Io} ->
+            try
+                case file:read(Io, 1048577) of
+                    {ok, Data} when byte_size(Data) > 1048576 -> {error, too_large};
+                    {ok, Data} ->
+                        case unicode:characters_to_binary(Data, utf8, utf8) of
+                            Source when is_binary(Source) -> {ok, Source};
+                            _ -> {error, invalid_utf8}
+                        end;
+                    eof -> {ok, <<>>};
+                    {error, _} = Error -> Error
+                end
+            after
+                file:close(Io)
+            end;
         {error, _} = Error -> Error
     end.
 

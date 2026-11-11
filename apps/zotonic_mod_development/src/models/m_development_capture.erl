@@ -35,7 +35,10 @@ In an authorized page's browser console, call
 `await window.z_development_capture.attach()` to start or reuse a capture and
 obtain its id. `status()` returns current server state or null when unattached
 or expired; `stop()` flushes buffered console entries and stops the capture.
-These methods return promises and reject on permission or transport errors.
+`trace()` returns {capture, nodes, edges}; `console()` flushes pending browser
+logs and returns {entries, truncated} without clearing stored entries. Both
+return null when unattached or expired and remain usable after stopping until
+expiry. These methods return promises and reject on permission or transport errors.
 The floating debug button uses the same functions. From the server checkout run:
 
 ```sh
