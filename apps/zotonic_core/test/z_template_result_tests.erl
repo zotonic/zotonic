@@ -3,8 +3,9 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 render_result_test_() ->
-    {foreach, fun setup/0, fun cleanup/1,
-        [fun failed_render/0, fun empty_render/0, fun successful_render/0]}.
+    %% Core mocks must not affect background testsandbox workers.
+    z_test_support:isolated({foreach, fun setup/0, fun cleanup/1,
+        [fun failed_render/0, fun empty_render/0, fun successful_render/0]}).
 
 setup() ->
     Modules = [template_compiler, z_notifier, m_config],

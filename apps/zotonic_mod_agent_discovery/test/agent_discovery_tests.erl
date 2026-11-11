@@ -10,7 +10,8 @@ module_dependencies_test() ->
     ?assertEqual([], Depends -- Provided).
 
 discovery_test_() ->
-    {foreach, fun setup/0, fun cleanup/1, [
+    %% Core mocks must not affect background testsandbox workers.
+    z_test_support:isolated({foreach, fun setup/0, fun cleanup/1, [
         fun anonymous_links/0,
         fun private_and_noindex/0,
         fun header_coexistence/0,
@@ -19,7 +20,7 @@ discovery_test_() ->
         fun controller_contract/0,
         fun anonymous_responses/0,
         fun model_paths/0
-    ]}.
+    ]}).
 
 setup() ->
     Modules = [z_dispatcher, z_context, m_site, m_config, m_rsc, z_acl, z_module_manager],

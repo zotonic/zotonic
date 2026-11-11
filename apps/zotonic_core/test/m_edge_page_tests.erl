@@ -3,9 +3,10 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 page_test_() ->
-    {foreach, fun setup/0, fun cleanup/1,
+    %% Core mocks must not affect background testsandbox workers.
+    z_test_support:isolated({foreach, fun setup/0, fun cleanup/1,
         [fun bounded_query/0, fun filtered_candidates/0, fun validation/0,
-         fun private_root/0, fun model_path/0]}.
+         fun private_root/0, fun model_path/0]}).
 
 setup() ->
     Modules = [m_rsc, z_acl, z_db],

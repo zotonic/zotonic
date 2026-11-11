@@ -3,13 +3,14 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 content_test_() ->
-    {foreach, fun setup/0, fun cleanup/1, [
+    %% Core mocks must not affect background testsandbox workers.
+    z_test_support:isolated({foreach, fun setup/0, fun cleanup/1, [
         fun limits/0, fun localized_content/0, fun markdown_api_access/0, fun survey_blocks/0, fun private_content/0,
         fun bounded_search/0, fun bounded_edges/0, fun conditional_content/0,
         fun rendering_failure/0, fun relationship_boundaries/0,
         fun explicit_sort_precedes_relevance/0, fun search_filters/0, fun schema_constraints/0, fun private_page_block/0, fun page_block_dependencies/0,
         {timeout, 8, fun execution_budget/0}
-    ]}.
+    ]}).
 
 setup() ->
     Modules = [z_language, z_context, z_acl, m_rsc, m_media, m_category, z_template, z_template_compiler_runtime, m_search, m_config, z_dispatcher, z_db],
