@@ -103,7 +103,8 @@ value or a bare `?response_topic`. This ensures that HEAD waits for the model's 
 
 -spec service_available( z:context() ) -> {boolean(), z:context()}.
 service_available(Context) ->
-    Context1 = set_cors_header(Context),
+    %% Model results can contain authenticated data; also protect error responses.
+    Context1 = set_cors_header(z_context:set_nocache_headers(Context)),
     Context2 = z_context:set_noindex_header(true, Context1),
     {true, Context2}.
 

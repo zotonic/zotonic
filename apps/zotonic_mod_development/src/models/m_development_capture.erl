@@ -28,6 +28,7 @@
 Admin-only capture API. GET list, status/:id, trace/:id, console/:id;
 POST attach {path}, start/:id, stop/:id, poll/:id {entries: [text]}.
 All operations require development, test or acceptance environment.
+POST operations also require write access; read-only administrators can fetch captures.
 Poll is bound to the attaching browser session. All results expire after ten minutes.
 SSH uses cli/3 over the trusted Erlang distribution connection.
 
@@ -100,7 +101,7 @@ get([<<"console">>, Id | Rest], Context) ->
 get(_, _) -> {error, unknown_path}.
 
 m_post(Path, Msg, Context) ->
-    case authorized(Context) of
+    case authorized(Context) andalso not z_acl:is_read_only(Context) of
         true -> post(Path, Msg, Context);
         false -> {error, eacces}
     end.

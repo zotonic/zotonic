@@ -82,6 +82,46 @@ access_test_() ->
                 #{payload => #{<<"entries">> => [<<"private">>]}}, context(#{admin => true, environment => production})))
         end)] end}).
 
+read_only_admin_test_() ->
+    z_test_support:isolated({setup,
+        fun() ->
+            %% Keep the real ACL functions, including the trusted sudo exception.
+            meck:new([m_site, mod_development], [no_link]),
+            meck:expect(m_site, environment, fun(C) -> maps:get(environment, C#context.props) end),
+            meck:expect(mod_development, capture, fun(_, _, _) -> {ok, #{}} end)
+        end,
+        fun(_) -> meck:unload([m_site, mod_development]) end,
+        fun(_) -> [?_test(read_only_admin(Env)) || Env <- [development, test, acceptance]] end}).
+
+read_only_admin(Env) ->
+    C = #context{site = capture_test, user_id = 1, acl_is_read_only = true,
+        props = #{environment => Env, session_id => <<"capture-session">>}},
+    Posts = [
+        {[<<"attach">>], #{payload => #{<<"path">> => <<"/">>}}},
+        {[<<"start">>, <<"id">>], #{}},
+        {[<<"stop">>, <<"id">>], #{}},
+        {[<<"poll">>, <<"id">>], #{payload => #{<<"entries">> => [<<"console log">>]}}},
+        {[<<"poll">>, <<"id">>], #{payload => #{<<"entries">> => []}}}
+    ],
+    ?assert(z_acl:is_read_only(C)),
+    ?assert(m_development_tools:allowed(C)),
+    meck:reset(mod_development),
+    lists:foreach(fun({Path, Msg}) ->
+        ?assertEqual({error, eacces}, m_development_capture:m_post(Path, Msg, C))
+    end, Posts),
+    ?assertEqual(0, meck:num_calls(mod_development, capture, '_')),
+    %% Diagnostics remain readable with a read-only admin token.
+    lists:foreach(fun(Path) ->
+        ?assertEqual({ok, {#{}, []}}, m_development_capture:m_get(Path, #{}, C))
+    end, [[<<"list">>], [<<"status">>, <<"id">>],
+        [<<"trace">>, <<"id">>], [<<"console">>, <<"id">>]]),
+    %% Ordinary writable admins and the trusted CLI's sudo context still work.
+    lists:foreach(fun(Writable) ->
+        lists:foreach(fun({Path, Msg}) ->
+            ?assertEqual({ok, #{}}, m_development_capture:m_post(Path, Msg, Writable))
+        end, Posts)
+    end, [z_acl:set_read_only(false, C), z_acl:sudo(C)]).
+
 trace_integration_test() ->
     %% Exercise the actual module callbacks without touching a running site's debugger.
     {ok, S0} = mod_development:init([{context, #context{site = capture_test}}]),

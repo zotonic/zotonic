@@ -120,6 +120,66 @@ concurrent_derivative() ->
         cleanup(Hash,C), cleanup(OutHash,C)
     after file:delete(File),file:delete(Output) end.
 
+completed_derivative_claim_test_() -> {timeout, 60, fun completed_derivative_claim/0}.
+completed_derivative_claim() ->
+    C = context(), File = tempfile(), Output = tempfile(),
+    try
+        {ok, #{hash := Hash} = Stage} = m_cafs:stage_file(File, C),
+        ok = m_cafs:attach(name(), Stage, C),
+        {ok, #{hash := OutHash}} = m_cafs:stage_file(Output, C),
+        Ops = term_to_binary([{width, 100}]),
+        Version = term_to_binary(1),
+        1 = z_db:q("insert into cafs_derivative (source_hash, operations, renderer_version)
+            values ($1, $2, $3)", [Hash, Ops, Version], C),
+        Parent = self(), Ref = make_ref(),
+        {Worker, Monitor} = spawn_monitor(fun() ->
+            receive {run, Ref} -> ok end,
+            Generate = fun() -> error(completed_derivative_regenerated) end,
+            Parent ! {Ref, m_cafs:derivative(Hash, [{width, 100}], 1, Generate, C)}
+        end),
+        try
+            ?assertEqual(ok, z_db:transaction(fun(Ctx) ->
+                %% Hold only the derivative row: the waiter must get past its
+                %% source lock and output SELECT, then block on the claim UPDATE.
+                Hash = z_db:q1("select source_hash from cafs_derivative
+                    where source_hash=$1 for update", [Hash], Ctx),
+                Backend = z_db:q1("select pg_backend_pid()", Ctx),
+                Worker ! {run, Ref},
+                wait_for_derivative_claim(Backend, Ctx, 500),
+                %% Simulate the generator publishing between the waiter's read
+                %% and claim. PostgreSQL must recheck output_hash after unlocking.
+                1 = z_db:q("update cafs_derivative set output_hash=$2,
+                    claim_token=null, claim_until=null where source_hash=$1",
+                    [Hash, OutHash], Ctx),
+                ok
+            end, C)),
+            receive
+                {Ref, Result} -> ?assertEqual({ok, OutHash}, Result);
+                {'DOWN', Monitor, process, Worker, Reason} -> error({worker_failed, Reason})
+            after 10000 -> error(worker_timeout)
+            end
+        after
+            exit(Worker, kill),
+            erlang:demonitor(Monitor, [flush]),
+            cleanup(Hash, C), cleanup(OutHash, C)
+        end
+    after file:delete(File), file:delete(Output) end.
+
+wait_for_derivative_claim(_Backend, _Context, 0) ->
+    error(derivative_claim_not_blocked);
+wait_for_derivative_claim(Backend, Context, Attempts) ->
+    %% Refresh activity information while holding the publisher transaction open.
+    z_db:q1("select pg_stat_clear_snapshot()", Context),
+    case z_db:q1("select exists(select 1 from pg_stat_activity
+        where $1 = any(pg_blocking_pids(pid)) and query like '%update cafs_derivative%')",
+        [Backend], Context)
+    of
+        true -> ok;
+        false ->
+            timer:sleep(10),
+            wait_for_derivative_claim(Backend, Context, Attempts - 1)
+    end.
+
 retention_test_() -> {timeout, 60, fun retention/0}.
 retention() ->
     C=context(), File=tempfile(), Name=name(), Copy=name(),
