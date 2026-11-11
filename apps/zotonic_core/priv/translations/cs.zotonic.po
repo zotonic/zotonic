@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-11 10:49\n"
+"PO-Revision-Date: 2026-11-11 11:44\n"
 "Last-Translator: \n"
 "Language-Team: Czech\n"
 "MIME-Version: 1.0\n"
@@ -9776,7 +9776,7 @@ msgstr "Vždy skrýt plovoucí tlačítko pro sledování šablon."
 
 #: zotonic_mod_development/priv/templates/_html_head_development.tpl:50
 msgid "Attach capture"
-msgstr "Přiložit snímek"
+msgstr "Připojit záznam"
 
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:18
 msgid "Automatic detection on the Zotonic machine"
@@ -16698,7 +16698,7 @@ msgstr "U této větve není nakonfigurován žádný upstream. Před nasazením
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:18
 msgid "This permanently discards all uncommitted changes in the entire repository, including staged changes, and deletes untracked files and directories. Ignored files, local commits and nested repositories are preserved."
-msgstr "Tímto se trvale odstraní všechny neuložené změny v celém repozitáři, včetně změn připravených k uložení, a vymažou se nesledované soubory a adresáře. Ignorované soubory, lokální commity a vnořené repozitáře zůstanou zachovány."
+msgstr "Tímto se trvale odstraní všechny necommitnuté změny v celém repozitáři, včetně změn připravených ke commitu, a vymažou se nesledované soubory a adresáře. Ignorované soubory, lokální commity a vnořené repozitáře zůstanou zachovány."
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
 msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
