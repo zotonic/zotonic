@@ -412,8 +412,9 @@ msgstr ""
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:26
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:85
 #: zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:59
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:60
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:11
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:24
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:229
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:237
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70
@@ -544,7 +545,7 @@ msgstr ""
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4
 #: zotonic_mod_admin/src/mod_admin.erl:516
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:70
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:26
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 msgid "Content"
 msgstr ""
@@ -5375,7 +5376,7 @@ msgstr ""
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:20
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:21
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:37
-#: zotonic_mod_base/src/support/z_chart_svg.erl:1390
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1457
 #: zotonic_mod_development/priv/templates/_development_dispatch_options.tpl:2
 msgid "Value"
 msgstr ""
@@ -6162,6 +6163,9 @@ msgstr ""
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:104
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:135
+#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:5
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:59
+#: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:8
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:61
 msgid "Reset"
 msgstr ""
@@ -6912,6 +6916,58 @@ msgid ""
 "This page shows (real-time) system statistics like memory use and requests."
 msgstr ""
 
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:12
+msgid "API catalog"
+msgstr ""
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:24
+msgid "Browse public resources"
+msgstr ""
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:3
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:7
+msgid "Data and API"
+msgstr ""
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:8
+msgid ""
+"Explore this site's public information using ordinary links and HTTP GET "
+"requests. Public content does not require an account or API key."
+msgstr ""
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:29
+msgid ""
+"JSON responses contain status and result fields. Concise reads return "
+"localized text and report language fallback. Follow next_url until next is "
+"false; filtered pages can be empty. Resource exports provide page URLs by "
+"language, including x-default. Cite the human page URL in the appropriate "
+"language."
+msgstr ""
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:11
+msgid "OpenAPI description"
+msgstr ""
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:28
+msgid ""
+"Replace {id} with an ID or unique name obtained from search results or a "
+"page's alternate link. Use small pages and follow pagination to explore "
+"further."
+msgstr ""
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:15
+#: zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:2
+msgid "Sitemap"
+msgstr ""
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:30
+msgid ""
+"The agent endpoints always use anonymous permissions. Existing compatibility "
+"APIs apply the caller's permissions. They return only accessible information "
+"and keep their existing indexing headers. Content and media may have their "
+"own licenses; preserve attribution and follow the stated terms."
+msgstr ""
+
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:60
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:29
 msgid "1 day"
@@ -6971,7 +7027,7 @@ msgstr ""
 msgid "Add analytics measurement"
 msgstr ""
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:39
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:41
 msgid "All breakdown values"
 msgstr ""
 
@@ -6989,13 +7045,13 @@ msgstr ""
 msgid "Allowed values:"
 msgstr ""
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:267
+#: zotonic_mod_analytics/src/mod_analytics.erl:268
 msgid "An equivalent analytics measurement already exists."
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
-#: zotonic_mod_analytics/src/mod_analytics.erl:196
+#: zotonic_mod_analytics/src/mod_analytics.erl:197
 msgid "Analytics configuration"
 msgstr ""
 
@@ -7028,7 +7084,7 @@ msgstr ""
 msgid "Analytics status"
 msgstr ""
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:32
 msgid ""
 "Bars show the lower bound. Counts are ranges, ordered by their lower bound. "
 "Overlapping ranges may change order. Content outside the retained candidates "
@@ -7044,7 +7100,7 @@ msgstr ""
 msgid "Break down by"
 msgstr ""
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:40
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:42
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "Breakdown"
 msgstr ""
@@ -7072,11 +7128,11 @@ msgstr ""
 msgid "Configure analytics measurements"
 msgstr ""
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:235
+#: zotonic_mod_analytics/src/mod_analytics.erl:236
 msgid "Could not delete the analytics measurement."
 msgstr ""
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:268
+#: zotonic_mod_analytics/src/mod_analytics.erl:269
 msgid "Could not save. Check the event, breakdown and filter values."
 msgstr ""
 
@@ -7136,7 +7192,7 @@ msgstr ""
 msgid "Display order"
 msgstr ""
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:241
+#: zotonic_mod_analytics/src/mod_analytics.erl:242
 msgid "Display order saved."
 msgstr ""
 
@@ -7192,7 +7248,7 @@ msgstr ""
 msgid "Event processing"
 msgstr ""
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:40
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:42
 msgid "Events"
 msgstr ""
 
@@ -7220,8 +7276,10 @@ msgstr ""
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:25
 msgid ""
 "Gaps are unrecorded intervals. Partial intervals may undercount activity. "
-"Request counts include automation, exclude editor activity and do not "
-"measure unique visitors."
+"Page-request totals, device breakdowns and popular content exclude detected "
+"crawlers. API and traffic-classification measurements include crawlers "
+"unless filtered out. Counts exclude editor activity and do not measure "
+"unique visitors."
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:13
@@ -7246,7 +7304,7 @@ msgstr ""
 msgid "History detail and retention"
 msgstr ""
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:45
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:47
 msgid "Includes incomplete or unrecorded intervals"
 msgstr ""
 
@@ -7274,7 +7332,7 @@ msgstr ""
 msgid "Maximum number of analytics measurements"
 msgstr ""
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
 msgid "Most popular content in this period"
 msgstr ""
 
@@ -7328,11 +7386,11 @@ msgstr ""
 msgid "No filter — include all values"
 msgstr ""
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:29
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
 msgid "No leading content identified in this period."
 msgstr ""
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:36
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:38
 msgid "No recorded events yet."
 msgstr ""
 
@@ -7386,11 +7444,11 @@ msgstr ""
 msgid "Period"
 msgstr ""
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:26
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
 msgid "Rank"
 msgstr ""
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:25
 msgid ""
 "Ranked by recorded requests in the selected moving period. The window "
 "advances in steps of"
@@ -7408,7 +7466,7 @@ msgstr ""
 msgid "Request types found in this site's dispatch rules:"
 msgstr ""
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:26
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
 msgid "Requests"
 msgstr ""
 
@@ -7438,7 +7496,7 @@ msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
-#: zotonic_mod_analytics/src/mod_analytics.erl:188
+#: zotonic_mod_analytics/src/mod_analytics.erl:189
 msgid "Site Analytics"
 msgstr ""
 
@@ -7494,12 +7552,12 @@ msgstr ""
 msgid "Stored time intervals"
 msgstr ""
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:243
+#: zotonic_mod_analytics/src/mod_analytics.erl:244
 msgid ""
 "The analytics measurements changed. Reloading their current display order."
 msgstr ""
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:266
+#: zotonic_mod_analytics/src/mod_analytics.erl:267
 msgid "This analytics measurement exceeds the storage budget."
 msgstr ""
 
@@ -7552,11 +7610,11 @@ msgstr ""
 msgid "group/time slots"
 msgstr ""
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:32
 msgid "requests."
 msgstr ""
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:25
 msgid "seconds."
 msgstr ""
 
@@ -9295,12 +9353,12 @@ msgstr ""
 msgid "CSV"
 msgstr ""
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:446
-#: zotonic_mod_base/src/support/z_chart_svg.erl:448
+#: zotonic_mod_base/src/support/z_chart_svg.erl:451
+#: zotonic_mod_base/src/support/z_chart_svg.erl:453
 msgid "Chart"
 msgstr ""
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:1380
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1447
 msgid "Chart legend"
 msgstr ""
 
@@ -9334,7 +9392,7 @@ msgstr ""
 msgid "Connection Test"
 msgstr ""
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:590
+#: zotonic_mod_base/src/support/z_chart_svg.erl:599
 msgid "Data points"
 msgstr ""
 
@@ -9450,7 +9508,7 @@ msgstr ""
 msgid "June"
 msgstr ""
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:1386
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1453
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:41
 msgid "Label"
 msgstr ""
@@ -9517,7 +9575,7 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:1330
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1397
 msgid "No data"
 msgstr ""
 
@@ -9558,7 +9616,7 @@ msgid ""
 "to the internet in general."
 msgstr ""
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:353
+#: zotonic_mod_base/src/support/z_chart_svg.erl:358
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:134
 msgid "Other"
 msgstr ""
@@ -10215,11 +10273,11 @@ msgstr ""
 msgid "You are not allowed to change this."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:699
+#: zotonic_mod_development/src/mod_development.erl:701
 msgid "<i>Function name does not exist.</i>"
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:702
+#: zotonic_mod_development/src/mod_development.erl:704
 msgid "<i>Module not found.</i>"
 msgstr ""
 
@@ -10269,6 +10327,10 @@ msgstr ""
 msgid "Always hide the floating template trace button."
 msgstr ""
 
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:50
+msgid "Attach capture"
+msgstr ""
+
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:18
 msgid "Automatic detection on the Zotonic machine"
 msgstr ""
@@ -10294,8 +10356,8 @@ msgstr ""
 msgid "Check debug points in the template source to see debug data here."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:507
-#: zotonic_mod_development/src/mod_development.erl:522
+#: zotonic_mod_development/src/mod_development.erl:509
+#: zotonic_mod_development/src/mod_development.erl:524
 msgid "Checking all templates..."
 msgstr ""
 
@@ -10367,7 +10429,7 @@ msgstr ""
 msgid "Could not load templates"
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:498
+#: zotonic_mod_development/src/mod_development.erl:500
 msgid "Could not open the directory on this computer."
 msgstr ""
 
@@ -10434,7 +10496,7 @@ msgid "Detecting editors…"
 msgstr ""
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:7
-#: zotonic_mod_development/src/mod_development.erl:1368
+#: zotonic_mod_development/src/mod_development.erl:1386
 msgid "Development"
 msgstr ""
 
@@ -10559,11 +10621,11 @@ msgid ""
 "before stopping."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:671
+#: zotonic_mod_development/src/mod_development.erl:673
 msgid "Error changing the console logs."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:765
+#: zotonic_mod_development/src/mod_development.erl:767
 msgid "Error parsing template."
 msgstr ""
 
@@ -10627,7 +10689,7 @@ msgid ""
 "function call tracing:"
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:705
+#: zotonic_mod_development/src/mod_development.erl:707
 msgid "Function tracing has been disabled in the Zotonic config."
 msgstr ""
 
@@ -10780,18 +10842,18 @@ msgstr ""
 msgid "No matching templates found."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:669
+#: zotonic_mod_development/src/mod_development.erl:671
 msgid "No permission to access the console logs."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:512
-#: zotonic_mod_development/src/mod_development.erl:527
-#: zotonic_mod_development/src/mod_development.erl:542
-#: zotonic_mod_development/src/mod_development.erl:550
-#: zotonic_mod_development/src/mod_development.erl:577
-#: zotonic_mod_development/src/mod_development.erl:619
-#: zotonic_mod_development/src/mod_development.erl:636
-#: zotonic_mod_development/src/mod_development.erl:653
+#: zotonic_mod_development/src/mod_development.erl:514
+#: zotonic_mod_development/src/mod_development.erl:529
+#: zotonic_mod_development/src/mod_development.erl:544
+#: zotonic_mod_development/src/mod_development.erl:552
+#: zotonic_mod_development/src/mod_development.erl:579
+#: zotonic_mod_development/src/mod_development.erl:621
+#: zotonic_mod_development/src/mod_development.erl:638
+#: zotonic_mod_development/src/mod_development.erl:655
 msgid "No permission to use mod_development."
 msgstr ""
 
@@ -10800,7 +10862,7 @@ msgstr ""
 msgid "No references found."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:631
+#: zotonic_mod_development/src/mod_development.erl:633
 msgid "No template found in the context."
 msgstr ""
 
@@ -10825,7 +10887,7 @@ msgstr ""
 msgid "Observers"
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:708
+#: zotonic_mod_development/src/mod_development.erl:710
 msgid "Only the admin user can set traces."
 msgstr ""
 
@@ -10970,19 +11032,19 @@ msgstr ""
 msgid "Start matching dispatch rules"
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:665
+#: zotonic_mod_development/src/mod_development.erl:667
 msgid "Started logging to the console of your browser tab."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:539
+#: zotonic_mod_development/src/mod_development.erl:541
 msgid "Started tracing all template inclusions."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:614
+#: zotonic_mod_development/src/mod_development.erl:616
 msgid "Started tracing template inclusions by rendering the page."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:536
+#: zotonic_mod_development/src/mod_development.erl:538
 msgid "Started tracing template inclusions for your session."
 msgstr ""
 
@@ -10992,11 +11054,15 @@ msgstr ""
 msgid "Stop"
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:667
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:51
+msgid "Stop capture"
+msgstr ""
+
+#: zotonic_mod_development/src/mod_development.erl:669
 msgid "Stopped logging to the console of all browser tabs."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:548
+#: zotonic_mod_development/src/mod_development.erl:550
 msgid "Stopped tracing template inclusions for all sessions."
 msgstr ""
 
@@ -11035,7 +11101,7 @@ msgstr ""
 msgid "Template debugging"
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:768
+#: zotonic_mod_development/src/mod_development.erl:770
 msgid "Template file not found."
 msgstr ""
 
@@ -11057,7 +11123,7 @@ msgstr ""
 msgid "Test with this template"
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:616
+#: zotonic_mod_development/src/mod_development.erl:618
 msgid "The path must be a local URL."
 msgstr ""
 
@@ -11125,8 +11191,9 @@ msgstr ""
 msgid "Trace function calls"
 msgstr ""
 
-#: zotonic_mod_development/priv/templates/_html_head_development.tpl:38
-#: zotonic_mod_development/priv/templates/_html_head_development.tpl:39
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:44
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:45
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:49
 msgid "Trace templates"
 msgstr ""
 
@@ -11166,7 +11233,7 @@ msgstr ""
 msgid "Uncheck to debug only your current session."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:650
+#: zotonic_mod_development/src/mod_development.erl:652
 msgid "Updated template debug points."
 msgstr ""
 
@@ -17178,10 +17245,6 @@ msgstr ""
 msgid "Rebuilding the sitemap in the background."
 msgstr ""
 
-#: zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:2
-msgid "Sitemap"
-msgstr ""
-
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:7
 msgid "Sitemap settings"
 msgstr ""
@@ -17492,11 +17555,15 @@ msgstr ""
 msgid "Your signup code"
 msgstr ""
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:276
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:6
+msgid "A deployment is running. Try again when it finishes."
+msgstr ""
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:320
 msgid "Another deployment is in progress. Please try again when it finishes."
 msgstr ""
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:176
+#: zotonic_mod_site_update/src/mod_site_update.erl:187
 msgid "Building Zotonic in the background..."
 msgstr ""
 
@@ -17506,12 +17573,16 @@ msgid ""
 "again."
 msgstr ""
 
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:8
+msgid "Could not list local changes. Check the repository and server log."
+msgstr ""
+
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:9
 msgid "Current commit"
 msgstr ""
 
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:61
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:63
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:62
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:64
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:12
 msgid "Deploy"
 msgstr ""
@@ -17526,25 +17597,25 @@ msgstr ""
 msgid "Deploy latest Zotonic"
 msgstr ""
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:229
+#: zotonic_mod_site_update/src/mod_site_update.erl:240
 msgid "Deploy latest version"
 msgstr ""
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:263
+#: zotonic_mod_site_update/src/mod_site_update.erl:274
 msgid "Deploying the latest version..."
 msgstr ""
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:2
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:5
-#: zotonic_mod_site_update/src/mod_site_update.erl:140
+#: zotonic_mod_site_update/src/mod_site_update.erl:146
 msgid "Deployment"
 msgstr ""
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:274
+#: zotonic_mod_site_update/src/mod_site_update.erl:318
 msgid "Deployment completed."
 msgstr ""
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:278
+#: zotonic_mod_site_update/src/mod_site_update.erl:322
 msgid "Deployment failed. Check the server log for details."
 msgstr ""
 
@@ -17562,12 +17633,20 @@ msgstr ""
 msgid "Fetching remote changes…"
 msgstr ""
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:174
+#: zotonic_mod_site_update/src/mod_site_update.erl:185
 msgid "Finished rebuilding Zotonic."
 msgstr ""
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:32
 msgid "Incoming changes"
+msgstr ""
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:2
+msgid "Local changes for {name}."
+msgstr ""
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:303
+msgid "Local changes reset. You can deploy again."
 msgstr ""
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:14
@@ -17584,6 +17663,18 @@ msgstr ""
 
 #: zotonic_mod_site_update/priv/templates/_z_system_button.tpl:15
 msgid "Recompile changed Erlang files in the background"
+msgstr ""
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:289
+msgid "Reset local changes"
+msgstr ""
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:309
+msgid "Reset or rebuild failed. Check the server log before retrying."
+msgstr ""
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:300
+msgid "Resetting local changes and rebuilding..."
 msgstr ""
 
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
@@ -17604,7 +17695,7 @@ msgid ""
 "activation are coordinated across all sites on this node."
 msgstr ""
 
-#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:6
+#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:7
 msgid "Review incoming changes before deploying the latest version."
 msgstr ""
 
@@ -17625,14 +17716,21 @@ msgstr ""
 msgid "Site update API token"
 msgstr ""
 
-#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:10
+#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:11
 msgid ""
 "Site update is not available as the site does not use a known version "
 "control system, like git."
 msgstr ""
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:178
+#: zotonic_mod_site_update/src/mod_site_update.erl:189
 msgid "Sorry this can only be run from the Zotonic status site"
+msgstr ""
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:20
+msgid ""
+"The code is then rebuilt before deployment is enabled again. If this "
+"repository contains other sites or modules, their local changes are also "
+"discarded."
 msgstr ""
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:28
@@ -17657,10 +17755,23 @@ msgstr ""
 msgid "There are no incoming changes."
 msgstr ""
 
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:15
+msgid ""
+"There are no local changes. You can still rebuild to recover from a failed "
+"deployment."
+msgstr ""
+
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:22
 msgid ""
 "This branch has no upstream configured. Configure its remote tracking branch "
 "before deploying."
+msgstr ""
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:18
+msgid ""
+"This permanently discards all uncommitted changes in the entire repository, "
+"including staged changes, and deletes untracked files and directories. "
+"Ignored files, local commits and nested repositories are preserved."
 msgstr ""
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
@@ -17679,13 +17790,19 @@ msgid ""
 "URL:"
 msgstr ""
 
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:26
+msgid "Undo all local changes and rebuild"
+msgstr ""
+
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:16
 msgid "View system status"
 msgstr ""
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:20
-#: zotonic_mod_site_update/src/mod_site_update.erl:233
-#: zotonic_mod_site_update/src/mod_site_update.erl:268
+#: zotonic_mod_site_update/src/mod_site_update.erl:244
+#: zotonic_mod_site_update/src/mod_site_update.erl:279
+#: zotonic_mod_site_update/src/mod_site_update.erl:292
+#: zotonic_mod_site_update/src/mod_site_update.erl:312
 msgid "You are not allowed to deploy this code."
 msgstr ""
 
