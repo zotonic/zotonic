@@ -93,7 +93,7 @@ a custom controller's page; normal public-page eligibility checks still apply.
 -export([m_get/3,m_post/3,record_event/3,record_event/4,mark_page/2,
     create/3,set_state/3,purge/2,reorder/2,overview/2,configuration/1,dashboard/3,registry/1]).
 %% Trusted internal persistence API. Public model paths use the ACL-checked APIs above.
--export([store_install/1,store_collectors/1,store_create/3,store_state/3,
+-export([store_upgrade_traffic_groups/1,store_install/1,store_collectors/1,store_create/3,store_state/3,
     store_purge/2,store_reorder/2,store_flush/5,store_rows/5,store_usage/1,store_info/2]).
 -include_lib("zotonic_core/include/zotonic.hrl").
 
@@ -401,6 +401,38 @@ store_create(D, State, Context) when State =:= <<"draft">>; State =:= <<"active"
     end,Context);
 store_create(_,_,_) -> {error, invalid_state}.
 
+%% Expand existing built-in traffic recordings without rewriting their buckets.
+%% Serialize budget reservations with creation, deletion and batch persistence.
+-spec store_upgrade_traffic_groups(Context) -> ok | {rollback, term()}
+    when Context :: z:context().
+store_upgrade_traffic_groups(Context) ->
+    z_db:transaction(fun(Tx) ->
+        lock(Tx),
+        Cs = store_collectors(Tx),
+        Budget = config(row_budget, 1000000, Tx),
+        Reserved = lists:sum([3578 * maps:get(groups, C) || C <- Cs]),
+        lists:foldl(fun
+            (#{id := Id, event := Event, dimension := <<"traffic">>, groups := G} = C, Used)
+                    when G < 5,
+                         (Event =:= <<"page_request">> orelse Event =:= <<"api_request">>
+                          orelse Event =:= <<"request">>) ->
+                Extra = 3578 * (5 - G),
+                case Used + Extra =< Budget of
+                    true ->
+                        D = maps:without([id, state, started], C#{groups => 5}),
+                        1 = z_db:q("update analytics_collector set definition=$2 where id=$1",
+                            [Id, z_analytics:encode(D)], Tx),
+                        Used + Extra;
+                    false ->
+                        ?LOG_WARNING(#{text => <<"Traffic recording upgrade skipped: analytics row budget exhausted">>,
+                            in => mod_analytics, collector_id => Id, extra_rows => Extra}),
+                        Used
+                end;
+            (_, Used) -> Used
+        end, Reserved, Cs),
+        ok
+    end, Context).
+
 %% Validate a complete permutation under the same lock used for create/purge.
 %% Stale pages must not silently lose a newly created recording from the order.
 -spec store_reorder(Ids, Context) -> ok | {error, term()} | {rollback, term()}
@@ -459,12 +491,14 @@ store_flush(Epoch, Seq, Batch, Cs, Context) ->
                 ByCollector = maps:fold(fun({Id,T},Counts,A) ->
                     maps:update_with(Id,fun(D)->D#{T=>Counts} end,#{T=>Counts},A)
                 end,#{},maps:get(deltas,Batch)),
-                Existing = maps:from_list([{Id,true} || {Id} <-
-                    flush_q("select id from analytics_collector",Tx)]),
+                %% A queued batch can predate a group-limit upgrade. Use the current
+                %% limit so its rollups cannot fold newly admitted groups into overflow.
+                Existing = maps:from_list([{Id,maps:get(groups,z_analytics:decode(Definition))}
+                    || {Id,Definition} <- flush_q("select id,definition from analytics_collector",Tx)]),
                 lists:foreach(fun(#{id:=Id}=Col) ->
-                    case maps:is_key(Id,Existing) of
-                        true -> flush_collector(Col,Batch#{deltas=>maps:get(Id,ByCollector,#{})},Now,Tx);
-                        false -> ok
+                    case maps:find(Id,Existing) of
+                        {ok,G} -> flush_collector(Col#{groups=>G},Batch#{deltas=>maps:get(Id,ByCollector,#{})},Now,Tx);
+                        error -> ok
                     end
                 end,Cs),
                 ok

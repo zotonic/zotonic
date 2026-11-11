@@ -22,7 +22,7 @@
 -mod_title("Site Analytics").
 -mod_description("Lightweight analytics for site traffic, content, email, and custom events.").
 -mod_depends([admin]).
--mod_schema(3).
+-mod_schema(4).
 -mod_prio(500).
 -mod_config([
     #{key=>row_budget,type=>integer,default=>1000000,
@@ -110,6 +110,10 @@ init(Args) ->
     ],
     {ok,{#{strategy=>one_for_all,intensity=>3,period=>60},Children}}.
 
+manage_schema({upgrade,4},Context) ->
+    ok = m_analytics:store_install(Context),
+    ok = m_analytics:store_upgrade_traffic_groups(Context),
+    z_analytics_worker:reload(Context);
 manage_schema({upgrade,3},Context) ->
     ok = m_analytics:store_install(Context),
     add_smtp_recording(Context);
@@ -135,7 +139,7 @@ manage_schema(_,Context) ->
                     {<<"Languages">>,<<"language">>,16,<<"paused">>},
                     {<<"Popular content">>,<<"page">>,100,<<"active">>},
                     {<<"Devices">>,<<"device">>,5,<<"active">>},
-                    {<<"Traffic classification">>,<<"traffic">>,4,<<"active">>}
+                    {<<"Traffic classification">>,<<"traffic">>,5,<<"active">>}
                 ]),
             add_smtp_recording(Context);
         _ ->

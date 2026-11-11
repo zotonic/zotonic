@@ -21,13 +21,31 @@ immediately. Reordering does not alter recording definitions or history.
 
 The built-in `page_request` event counts successful GET requests for public HTML
 pages served by Zotonic, including template pages without a resource ID. It excludes private pages, admin/editor requests,
-assets and redirects. DNT and GPC headers do not exclude requests. Page-request totals, device breakdowns and popular content exclude detected crawlers.
-Traffic classification and API measurements include crawlers unless their configured
-filters exclude them. The coarse `traffic` dimension distinguishes known crawlers,
-other and unknown traffic. Crawler detection is cached as `is_crawler` in the request
-context at the well-formed middleware stage. These rules apply to new events; stored
-history is unchanged. CDN
-hits that never reach Zotonic are not counted. Counts are not unique visitors.
+assets and redirects. DNT and GPC headers do not exclude requests. Page-request
+totals, device breakdowns and popular content exclude detected crawlers and agents
+unless the recording explicitly selects them with a `traffic` filter.
+Traffic classification and API measurements include both unless their filters exclude them.
+The coarse `traffic` dimension distinguishes:
+
+- `agent`: declared user-triggered assistants (`ChatGPT-User` and `Claude-User`).
+- `crawler`: detected crawlers, including GPTBot, OAI-SearchBot, ClaudeBot and Claude-SearchBot.
+- `other`: a user agent is present but no crawler or assistant is recognized.
+- `unknown`: no usable user agent is available.
+
+Assistant tokens are checked before the cached generic `is_crawler` classification.
+These are declared identities, not verified providers. Ordinary browser automation
+can appear as `other`; this category does not mean human. No network verification
+or fingerprinting is performed. These rules apply to new events; stored history is
+unchanged. CDN hits that never reach Zotonic are not counted. Counts are not unique visitors.
+The default traffic recording reserves five groups (four categories plus overflow).
+Schema upgrade 4 expands existing built-in traffic recordings with fewer than five
+groups to five, including paused and draft recordings. It preserves their IDs,
+settings, order and historical buckets. Each extra group reserves 3,578 rows.
+Recordings are considered in display order under the shared budget lock; those
+that cannot fit remain unchanged and produce a warning. Increasing the budget
+allows an administrator to retry `m_analytics:store_upgrade_traffic_groups/1`, then
+reload the analytics worker. Repeating the upgrade is safe. Previously aggregated
+overflow cannot be split back into its original categories.
 
 Initial recordings cover total requests, language, public content, device and
 traffic classification. Optional dimensions are country (from an already enabled
@@ -381,3 +399,33 @@ unsaved in-memory events. Reserved group/time slots are shown separately as the
 budget commitment, not physical disk usage. Statistics are queried only when the
 dialog opens, for that recording, with no aggregate payload decoding or scans of
 other recordings. Missing/deleted recordings show an unavailable message.
+
+## Agent interface analytics
+
+With `mod_agent_discovery` and `mod_analytics` enabled, create a **Requests by
+dispatch type** (`request`) recording with dimension `type`. The agent interfaces
+use these types:
+
+| Type | Interface |
+| --- | --- |
+| `agent_search` | Agent search |
+| `agent_resource` | Resource data |
+| `agent_related` | Related resources |
+| `agent_schema` | Content schema |
+| `agent_markdown` | Markdown resource representation |
+| `agent_llms` | llms.txt |
+| `agent_api_catalog` | API catalog |
+| `agent_openapi` | OpenAPI document |
+| `agent_api_help` | API help page |
+
+Filter by these types to measure interface usage, or also by `traffic = agent` to
+measure recognized assistants using them. Interface usage alone does not identify
+an agent. To inspect errors, filter by type and break down by `http_status` or
+`status`. Allow ten groups for all nine types plus overflow.
+
+Recording is opt-in through the usual analytics configuration and row budget.
+Admin exclusions and consent settings still apply. Completed responses, including
+errors, are counted when they reach the handled controller middleware. Paths,
+resource IDs, search terms and request bodies are not stored for these interfaces.
+MQTT model calls are not counted. Requests made through the generic model HTTP API
+retain the `api` type; these types apply to the dedicated agent dispatch routes.
