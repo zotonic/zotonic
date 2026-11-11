@@ -437,6 +437,7 @@ Delegate callbacks:
     task_graph/2,
     reload/1,
     make/1,
+    capture/3,
     template_trace_start/1,
     template_trace_start/2,
     template_trace_stop/1,
@@ -466,6 +467,7 @@ Delegate callbacks:
 
 -record(state, {
         site :: atom(),
+        captures = #{} :: map(),
         template_trace_sid = undefined :: undefined | binary() | all,
         template_trace = #{} :: map(),
         template_trace_timer = undefined :: undefined | timer:tref(),
@@ -903,6 +905,12 @@ reload(Context) ->
 make(Context) ->
     z_notifier:notify(development_make, Context).
 
+%% Capture operations are authorized by m_development_capture before reaching here.
+-spec capture(Operation, Payload, Context) -> {ok, term()} | {error, term()}
+    when Operation :: atom(), Payload :: map(), Context :: z:context().
+capture(Operation, Payload, Context) ->
+    gen_server:call(name(Context), {capture, Operation, Payload}).
+
 template_trace_start(Context) ->
     gen_server:cast(name(Context), {template_trace_start, session_id(Context)}).
 
@@ -1026,6 +1034,7 @@ init(Args) ->
         site => Site,
         module => ?MODULE
     }),
+    erlang:send_after(60000, self(), capture_expire),
     {ok, #state{
         site = Site,
         template_trace_sid = undefined,
@@ -1036,6 +1045,9 @@ init(Args) ->
     }}.
 
 
+handle_call({capture, Operation, Payload}, _From, #state{captures = Captures} = State) ->
+    {Result, Captures1} = z_development_capture:command(Operation, Payload, Captures),
+    {reply, Result, State#state{captures = Captures1}};
 handle_call(template_trace_fetch, _From, #state{
         template_trace = Trace,
         template_trace_sid = Sid,
@@ -1106,12 +1118,14 @@ handle_cast({template_trace_start, Sid}, #state{ template_trace_timer = PrevTime
         template_trace_timer = Timer
     }};
 handle_cast({template_render, {render, Template, SrcPos}, Sid},
-           #state{ template_trace_sid = TraceSid, template_trace = Trace } = State)
-    when is_binary(Sid) andalso Sid =:= TraceSid; TraceSid =:= all ->
-    Trace1 = do_template_trace(Template, SrcPos, Trace),
-    {noreply, State#state{ template_trace = Trace1 }};
-handle_cast({template_render, _Src, _Sid}, #state{} = State) ->
-    {noreply, State};
+           #state{ template_trace_sid = TraceSid, template_trace = Trace, captures = Captures } = State) ->
+    Trace1 = case (is_binary(Sid) andalso Sid =:= TraceSid) orelse TraceSid =:= all of
+        true -> do_template_trace(Template, SrcPos, Trace);
+        false -> Trace
+    end,
+    Captures1 = z_development_capture:render(Sid,
+        fun(G) -> do_template_trace(Template, SrcPos, G) end, Captures),
+    {noreply, State#state{template_trace = Trace1, captures = Captures1}};
 handle_cast({template_debug_start, undefined}, State) ->
     {noreply, do_template_debug_stop(State)};
 handle_cast({template_debug_start, Sid}, #state{ site = Site, template_debug_timer = PrevTimer } = State) ->
@@ -1167,6 +1181,10 @@ handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
 
 
+handle_info(capture_expire, #state{captures = Captures} = State) ->
+    {_, Captures1} = z_development_capture:command(list, #{}, Captures),
+    erlang:send_after(60000, self(), capture_expire),
+    {noreply, State#state{captures = Captures1}};
 handle_info(template_trace_stop, #state{ site = Site } = State) ->
     z_mqtt:publish(
         [ <<"model">>, <<"development">>, <<"event">>, <<"template">>, <<"trace">> ],

@@ -158,6 +158,25 @@ event(#postback{message = refresh, target = TargetId}, Context) ->
 - Server models are reachable through topics such as `bridge/origin/model/<model>/get/...`, `bridge/origin/model/<model>/post/...`, and `bridge/origin/model/<model>/delete/...`; server-side `mod_mqtt` dispatches them through `z_model:callback/5`.
 - Client-routing topics on the server are the `bridge/...` topics; use them for page-specific browser communication, not for durable global state.
 
+## Calling Models over MQTT
+
+Use `bridge/origin/model/<model>/<get|post|delete>/<path...>` for server models;
+omit the Erlang `m_` prefix. `model/...` without the bridge prefix addresses the
+browser's local broker/model namespace. Supply model arguments as the payload
+object, not as an HTTP-style query string in the topic.
+
+Use `await cotonic.ready` before `cotonic.broker.call(topic, payload,
+{timeout: 15000})`. Check `response.payload.status === "ok"` before consuming
+`response.payload.result`; model errors resolve with an error envelope, whereas
+transport/timeouts can reject the promise. `call()` arranges a response topic;
+`publish()` alone does not report model success. Do not automatically replay
+mutations after timeouts, since they may already have executed.
+
+Read [the MQTT model-call guide](../zotonic-coding/references/site-data-and-apis.md#call-models-over-mqtt-from-the-browser)
+for a reusable helper, resource/search examples, authorization, and mutation
+handling. The browser bridge uses its authenticated session; model callbacks
+must still enforce their ACLs.
+
 ## Client Publish Subscribe
 
 - Wait for `cotonic.ready` before browser code depends on Cotonic startup.

@@ -917,6 +917,9 @@ derivative_wait(Hash, Ops, Version, Usage, Generate, Deadline, Context) ->
                   and renderer_version = $3",
                   [Hash, Ops, Version], Ctx) of
             undefined ->
+                %% Generation can publish after the SELECT above. Recheck the
+                %% output in the claim UPDATE so a completed derivative cannot
+                %% be claimed again when its generator clears the lease.
                 case z_db:q1("
                     update cafs_derivative
                     set claim_token = $4,
@@ -924,6 +927,7 @@ derivative_wait(Hash, Ops, Version, Usage, Generate, Deadline, Context) ->
                     where source_hash = $1
                       and operations = $2
                       and renderer_version = $3
+                      and output_hash is null
                       and (claim_until is null or claim_until<now())
                     returning claim_token",
                     [Hash, Ops, Version, Token], Ctx)
