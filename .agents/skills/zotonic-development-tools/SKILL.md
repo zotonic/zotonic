@@ -1,6 +1,6 @@
 ---
 name: zotonic-development-tools
-description: Inspect and validate running Zotonic sites using dispatch and template inspection APIs, browser capture sessions, and local or SSH CLI commands. Use when diagnosing which templates build a page, tracing lazy rendering, reading captured console logs, or checking site changes.
+description: Inspect and validate running Zotonic sites via CLI, HTTP, and MQTT, including remote sites accessed through an authorized browser session or OAuth2 administrator token. Use for dispatch and template inspection, lazy-render tracing, console capture, and checking site changes. SSH runs the CLI remotely.
 ---
 
 # Zotonic Development Tools
@@ -9,6 +9,19 @@ Use the running site's indexes and traces to identify the code actually used by
 that site. Source filenames alone do not establish which module override wins.
 
 ## Access and environment
+
+Choose the interface available for the site:
+
+- **CLI:** run commands locally on the server, or use SSH to run that same CLI
+  remotely. SSH is a transport for CLI access, not a separate development API.
+- **HTTP:** use the site's model endpoints with an authorized browser session
+  or an OAuth2 bearer token belonging to an administrator with the required access.
+- **MQTT:** use the authenticated browser's Cotonic bridge to call the model
+  topics shown below.
+
+Remote inspection does not require SSH or a local checkout when an authorized
+browser session or OAuth2 administrator token is available. Use the site's
+origin for HTTP calls and its authenticated browser tab for Cotonic calls.
 
 The `inspect` and `capture` commands require a running Zotonic node and the
 updated `mod_development` implementation. Their model APIs require administrator
@@ -58,13 +71,37 @@ bin/zotonic inspect mysite modules
 
 ## Attach to an open page and capture lazy rendering
 
-1. On the intended page, open the floating debug button and choose **Attach
-   capture**. This preserves the current page state and starts a capture. The
-   panel shows its ID; `bin/zotonic capture mysite list` also lists attachments.
-2. Use browser tools or normal interaction to scroll, open tabs, and trigger the
-   component under investigation. Reload only when the initial render needs to
-   be traced; renders before attachment cannot be reconstructed.
-3. Fetch the trace and console evidence, then stop the capture when finished.
+Prefer JavaScript in the intended page's browser console or browser execution
+tool to attach and obtain the ID. There is no need to locate or click the button:
+
+```javascript
+const capture = await window.z_development_capture.attach();
+capture.id; // Use this ID with CLI, HTTP, or MQTT capture commands.
+
+await window.z_development_capture.status();
+// Current capture state, or null if no attachment exists or it expired.
+
+// After interacting with the page and fetching the evidence:
+await window.z_development_capture.stop();
+```
+
+`attach()` preserves page state, reuses a valid attachment, restarts it if stopped,
+and creates a replacement if it expired. Concurrent calls share one attachment.
+All three functions return promises; permission and transport failures reject.
+`status()` checks the server rather than trusting a possibly expired ID in
+sessionStorage. `stop()` flushes the browser's buffered logs before stopping.
+
+Use browser tools or normal interaction to scroll, open tabs, and trigger the
+component under investigation. Fetch the trace and console evidence using the
+returned ID, then stop the capture. Reload only when the initial render needs
+to be traced; renders before attachment cannot be reconstructed.
+
+The floating debug button's **Attach capture** and **Stop capture** controls use
+the same functions and remain a human-friendly alternative; its panel shows the
+ID. `bin/zotonic capture mysite list` also lists attachments. If the JavaScript
+object is absent, check that the page has loaded the development tools, that the
+trace button is enabled for the site, and that the browser has the required
+administrator access on a supported non-production environment.
 
 ```sh
 bin/zotonic capture mysite list
@@ -75,9 +112,10 @@ bin/zotonic capture mysite console CAPTURE_ID
 bin/zotonic capture mysite stop CAPTURE_ID
 ```
 
-The same commands work within the quoted SSH command above. SSH controls the
-server capture; it cannot open a browser, click elements, or take screenshots.
-Use available browser tools for those tasks. If no page is attached, arrange an
+Run these CLI commands locally or remotely through SSH, or use the HTTP/MQTT
+equivalents below to control capture and fetch evidence. Capture control does
+not execute browser interactions or take screenshots; use browser tools for
+those tasks. If no page is attached, arrange an
 attachment instead of treating an empty trace as evidence that no template ran.
 
 Capture facts that affect interpretation:
@@ -92,14 +130,18 @@ Capture facts that affect interpretation:
 - Captures expire ten minutes after attachment. Logs and graphs are bounded;
   inspect `truncated`. Browser log delivery is best effort, approximately once
   a second; disconnects, reloads and buffer overflow can lose entries.
-- Stopping from the page flushes its current console batch. Stopping over SSH
+- Stopping from the page flushes its current console batch. Stopping through the CLI or API
   freezes ingestion immediately and can lose the remaining browser buffer.
 - Attachment survives reload through sessionStorage. It uses the logged-in
   browser identity; an admin rendering does not validate anonymous access.
 
 ## HTTP and MQTT equivalents
 
-Use an existing authorized session or appropriately scoped administrator token.
+Use an existing authorized browser session or an OAuth2 administrator token
+with the required permissions. For token-authenticated HTTP requests, send
+`Authorization: Bearer <token>` over HTTPS. Keep credentials out of logs, source
+files, and captured console output. A token can inspect the site and control/read
+an existing capture; capturing browser logs still requires an attached page.
 Do not enable the older unauthenticated recompile API to gain inspection access.
 
 ```text
@@ -134,7 +176,7 @@ const result = response.payload.result;
 For bridge implementation details, the capture model additionally offers
 `POST attach {path}` (creates a stopped capture) and `POST poll/ID {entries: []}`.
 Poll binds to the attaching browser session; an unrelated API token cannot
-impersonate that session. The floating debug button handles this handshake.
+impersonate that session. The browser `attach()` function and floating debug button handle this handshake.
 
 ## Validate changes
 

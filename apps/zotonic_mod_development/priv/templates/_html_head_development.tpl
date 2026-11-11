@@ -46,7 +46,7 @@
                                 trace: "{_ Trace templates _}",
                                 attach: "{_ Attach capture _}",
                                 stop: "{_ Stop capture _}"
-                            }, {% if m.development_capture.console_allowed %}true{% else %}false{% endif %});
+                            });
                         {% endif %}
                     }, 100);
             }

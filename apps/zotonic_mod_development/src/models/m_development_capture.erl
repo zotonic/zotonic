@@ -31,8 +31,12 @@ All operations require development, test or acceptance environment.
 Poll is bound to the attaching browser session. All results expire after ten minutes.
 SSH uses cli/3 over the trusted Erlang distribution connection.
 
-Click the floating debug button and choose Attach capture. The panel displays
-an id. From the server checkout run:
+In an authorized page's browser console, call
+`await window.z_development_capture.attach()` to start or reuse a capture and
+obtain its id. `status()` returns current server state or null when unattached
+or expired; `stop()` flushes buffered console entries and stops the capture.
+These methods return promises and reject on permission or transport errors.
+The floating debug button uses the same functions. From the server checkout run:
 
 ```sh
 bin/zotonic capture mysite list

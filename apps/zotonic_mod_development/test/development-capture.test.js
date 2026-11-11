@@ -4,12 +4,13 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const source = fs.readFileSync(require.resolve('../priv/lib/js/development-capture.js'), 'utf8');
 
-function harness(allowed) {
+function harness(allowed, {install = true, storedId} = {}) {
     const elements = [];
     const calls = [];
     const timers = [];
     const printed = [];
-    const storage = new Map();
+    const storage = new Map(storedId ? [["zotonic.development.capture", storedId]] : []);
+    let failure;
     let state = 'stopped';
     const element = () => {
         const e = {listeners: {}, children: [], addEventListener(k, f) {this.listeners[k] = f;},
@@ -25,6 +26,9 @@ function harness(allowed) {
         setTimeout: fn => timers.push(fn),
         cotonic: {ready: Promise.resolve(), broker: {call: async (topic, payload) => {
             calls.push({topic, payload});
+            if (failure || topic.endsWith('/expired')) {
+                return {payload: {status: 'error', error: failure || 'enoent'}};
+            }
             if (topic.endsWith('/start/cap')) state = 'active';
             if (topic.endsWith('/stop/cap')) state = 'stopped';
             return {payload: {status: 'ok', result: {id: 'cap', state, console_allowed: allowed}}};
@@ -32,8 +36,8 @@ function harness(allowed) {
     };
     vm.runInNewContext(source, ctx);
     const button = element();
-    ctx.window.z_development_capture.install(button, {trace: 'Trace', attach: 'Attach', stop: 'Stop'}, allowed);
-    return {ctx, elements, calls, timers, original, printed};
+    if (install) ctx.window.z_development_capture.install(button, {trace: 'Trace', attach: 'Attach', stop: 'Stop'}, allowed);
+    return {ctx, elements, calls, timers, original, printed, storage, failWith: value => { failure = value; }};
 }
 
 test('attach, capture console without swallowing output, flush and restore on stop', async () => {
@@ -57,4 +61,56 @@ test('production attachment never wraps console.log', async () => {
     assert.equal(h.ctx.console.log, h.original);
     await h.timers.shift()();
     assert.equal(h.calls.at(-1).payload.entries.length, 0);
+});
+
+
+test('public API works before button installation and serializes concurrent attachments', async () => {
+    const h = harness(true, {install: false});
+    const api = h.ctx.window.z_development_capture;
+    assert.equal(await api.status(), null);
+    assert.equal(await api.stop(), null);
+    const results = await Promise.all([api.attach(), api.attach()]);
+    assert.equal(results[0].id, 'cap');
+    assert.equal(results[1].id, 'cap');
+    assert.equal(h.calls.filter(c => c.topic.endsWith('/attach')).length, 1);
+    assert.equal(h.calls.filter(c => c.topic.endsWith('/start/cap')).length, 1);
+    assert.equal((await api.status()).state, 'active');
+    h.ctx.console.log('final message');
+    assert.equal((await api.stop()).state, 'stopped');
+    assert.equal(h.calls.at(-2).payload.entries[0], 'final message');
+    assert.equal(h.ctx.console.log, h.original);
+    assert.equal((await api.attach()).id, 'cap');
+    assert.equal(h.calls.filter(c => c.topic.endsWith('/attach')).length, 1);
+});
+
+test('expired stored attachment is replaced automatically', async () => {
+    const h = harness(true, {install: false, storedId: 'expired'});
+    assert.equal((await h.ctx.window.z_development_capture.attach()).id, 'cap');
+    assert.equal(h.storage.get('zotonic.development.capture'), 'cap');
+    assert.equal(h.calls.filter(c => c.topic.endsWith('/attach')).length, 1);
+});
+
+test('permission errors reject without creating another attachment and allow recovery', async () => {
+    const h = harness(true, {install: false});
+    const api = h.ctx.window.z_development_capture;
+    await api.attach();
+    h.failWith('eacces');
+    await assert.rejects(api.attach(), {message: 'eacces'});
+    assert.equal(h.ctx.console.log, h.original);
+    assert.equal(h.storage.get('zotonic.development.capture'), 'cap');
+    assert.equal(h.calls.filter(c => c.topic.endsWith('/attach')).length, 1);
+    h.failWith(undefined);
+    assert.equal((await api.status()).state, 'active');
+});
+
+test('debug buttons call the public API methods', async () => {
+    const h = harness(true);
+    const api = h.ctx.window.z_development_capture;
+    let attaches = 0, stops = 0;
+    api.attach = async () => { attaches++; };
+    api.stop = async () => { stops++; };
+    await h.elements[1].children[1].listeners.click();
+    await h.elements[1].children[2].listeners.click();
+    assert.equal(attaches, 1);
+    assert.equal(stops, 1);
 });
