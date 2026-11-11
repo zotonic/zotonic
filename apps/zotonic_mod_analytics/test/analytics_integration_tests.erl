@@ -1,7 +1,7 @@
 %% Run explicitly against a development site: analytics_integration_tests:run(C).
 %% Own collectors/receipts are removed; existing site analytics are untouched.
 -module(analytics_integration_tests).
--export([run/1,popular_content/1,events/3,ordering/1,access_control/1,test_acl/2,lock_contention/1]).
+-export([traffic_upgrade/1,run/1,popular_content/1,events/3,ordering/1,access_control/1,test_acl/2,lock_contention/1]).
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("eunit/include/eunit.hrl").
 
@@ -245,4 +245,44 @@ popular_content(C) ->
     after
         m_analytics:store_purge(Id,C),
         z_db:q("delete from analytics_batch where epoch=$1",[Epoch],C)
+    end.
+
+%% Run on a development site when upgrading analytics. Existing traffic recordings
+%% are upgraded too; only this test's temporary recording and receipt are removed.
+traffic_upgrade(C) ->
+    development = m_site:environment(C),
+    Epoch = crypto:strong_rand_bytes(16),
+    {ok,D} = z_analytics:definition(#{<<"name">> => <<"Traffic upgrade test">>,
+        <<"event">> => <<"page_request">>, <<"dimension">> => <<"traffic">>, <<"groups">> => 4,
+        <<"filters">> => #{<<"page">> => [base64:encode(Epoch)]}}, z_analytics:registry(C)),
+    {ok,Id} = m_analytics:store_create(D, <<"paused">>, C),
+    T = z_analytics:bucket(erlang:system_time(second),60)-60,
+    OldCol = D#{id=>Id,state=><<"paused">>,started=>T},
+    Counts = #{<<"v:crawler">>=>2,<<"v:other">>=>3,<<"v:unknown">>=>4,<<"$other">>=>5},
+    Batch = #{from=>T,until=>T+60,lost=>false,deltas=>#{{Id,T}=>Counts}},
+    try
+        ok = m_analytics:store_flush(Epoch,1,Batch,[OldCol],C),
+        %% The lock prevents background writes from invalidating the comparison.
+        ok = z_db:transaction(fun(Tx) ->
+            z_db:q("select id from analytics_budget where id=1 for update",Tx),
+            Before = z_db:q("select * from analytics_bucket order by collector_id,resolution,slot",Tx),
+            Collectors = z_db:q("select id,name,state,started,sort_order,created from analytics_collector order by id",Tx),
+            ok = m_analytics:store_upgrade_traffic_groups(Tx),
+            ?assertEqual(Before,z_db:q("select * from analytics_bucket order by collector_id,resolution,slot",Tx)),
+            ?assertEqual(Collectors,z_db:q("select id,name,state,started,sort_order,created from analytics_collector order by id",Tx)),
+            ok
+        end,C),
+        [Upgraded] = [X || #{id:=I}=X <- m_analytics:store_collectors(C), I=:=Id],
+        ?assertEqual(5,maps:get(groups,Upgraded)),
+        %% Simulate a batch queued before migration, still carrying groups=4.
+        ok = m_analytics:store_flush(Epoch,2,Batch#{deltas=>#{{Id,T}=>#{<<"v:agent">>=>1}}},[OldCol],C),
+        lists:foreach(fun({Resolution,_}) ->
+            [Row] = m_analytics:store_rows(Id,Resolution,0,T+86400,C),
+            ?assertEqual(Counts#{<<"v:agent">>=>1},maps:get(counts,Row))
+        end,z_analytics:tiers()),
+        ok
+    after
+        m_analytics:store_purge(Id,C),
+        z_db:q("delete from analytics_batch where epoch=$1",[Epoch],C),
+        z_analytics_worker:reload(C)
     end.

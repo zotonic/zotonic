@@ -43,7 +43,7 @@ registry(Context) ->
             <<"has_page_id">> => [<<"true">>,<<"false">>],
             <<"country">> => text,
             <<"device">> => [<<"phone">>, <<"tablet">>, <<"desktop">>, <<"unknown">>],
-            <<"traffic">> => [<<"crawler">>, <<"other">>, <<"unknown">>]}},
+            <<"traffic">> => [<<"crawler">>, <<"agent">>, <<"other">>, <<"unknown">>]}},
     Api = #{
         name => <<"api_request">>,
         version => 1,
@@ -57,7 +57,7 @@ registry(Context) ->
             <<"http_status">> => http_status,
             <<"status">> => [<<"1xx">>,<<"2xx">>,<<"3xx">>,<<"4xx">>,<<"5xx">>],
             <<"language">> => text, <<"country">> => text,
-            <<"traffic">> => [<<"crawler">>,<<"other">>,<<"unknown">>]
+            <<"traffic">> => [<<"crawler">>,<<"agent">>,<<"other">>,<<"unknown">>]
         }
     },
     Request = Api#{
@@ -179,12 +179,15 @@ value_type(V, text) -> valid_value(V);
 value_type(V, Values) when is_list(Values) -> lists:member(V,Values).
 
 -spec matches(Collector, Properties) -> boolean() when Collector :: map(), Properties :: map().
-%% Keep crawler events available to traffic classification and API measurements.
+%% Keep automated traffic available to classification and API measurements.
 %% Apply this at ingestion so existing page/device/content measurements follow
 %% the same policy as newly created ones, without rewriting their history.
-matches(#{event := <<"page_request">>, dimension := Dimension}, #{<<"traffic">> := <<"crawler">>})
-        when Dimension =:= <<>>; Dimension =:= <<"device">>; Dimension =:= <<"page">> ->
-    false;
+matches(#{event := <<"page_request">>, dimension := Dimension, filters := Filters},
+        #{<<"traffic">> := Traffic} = Properties)
+        when (Traffic =:= <<"crawler">> orelse Traffic =:= <<"agent">>),
+             (Dimension =:= <<>> orelse Dimension =:= <<"device">> orelse Dimension =:= <<"page">>) ->
+    %% An explicit traffic filter opts in to automated page/content measurements.
+    maps:is_key(<<"traffic">>, Filters) andalso matches(#{filters => Filters}, Properties);
 matches(#{filters := Filters}, Properties) ->
     maps:fold(
         fun(K,Vs,Match) -> Match andalso lists:member(maps:get(K,Properties,<<"unknown">>),Vs) end,

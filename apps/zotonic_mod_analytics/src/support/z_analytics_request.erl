@@ -19,7 +19,7 @@
 
 -module(z_analytics_request).
 -moduledoc("Request policy and privacy boundary. Only coarse approved dimensions leave this module.").
--export([mark/1, allowed/1, dimensions/1, request_event/1, typed_event/1, dispatch_types/1, dispatch_type/2]).
+-export([mark/1, allowed/1, dimensions/1, request_event/1, typed_event/1, dispatch_types/1, dispatch_type/2, traffic/2]).
 
 -spec mark(Context) -> z:context() when Context :: z:context().
 mark(Context) ->
@@ -180,11 +180,7 @@ allowed(Context) ->
 -spec dimensions(Context) -> map() when Context :: z:context().
 dimensions(Context) ->
     UA = case m_req:get(user_agent,Context) of B when is_binary(B), byte_size(B)=<2048 -> string:lowercase(B); _ -> <<>> end,
-    Traffic = case {z_user_agent:is_crawler(Context), UA} of
-        {true, _} -> <<"crawler">>;
-        {false, <<>>} -> <<"unknown">>;
-        {false, _} -> <<"other">>
-    end,
+    Traffic = traffic(UA, z_user_agent:is_crawler(Context)),
     #{
         <<"language">>=>z_convert:to_binary(z_context:language(Context)),
         <<"device">>=>device(UA),
@@ -192,6 +188,29 @@ dimensions(Context) ->
         <<"country">>=>country(Context),
         <<"referrer">>=>referrer(cowmachine_req:get_req_header(<<"referer">>,Context),m_req:get(host,Context))
     }.
+
+%% Declared product tokens are not verified identities. Match token boundaries,
+%% not arbitrary substrings; normal browser automation remains unrecognized.
+-spec traffic(UserAgent, IsCrawler) -> binary() when
+    UserAgent :: term(),
+    IsCrawler :: boolean().
+traffic(UA, IsCrawler) when is_binary(UA), byte_size(UA) > 0, byte_size(UA) =< 2048 ->
+    Tokens = string:lowercase(UA),
+    case product_token(Tokens, <<"chatgpt-user|claude-user">>) of
+        true -> <<"agent">>;
+        false ->
+            case IsCrawler orelse product_token(Tokens,
+                    <<"gptbot|oai-searchbot|claudebot|claude-searchbot">>) of
+                true -> <<"crawler">>;
+                false -> <<"other">>
+            end
+    end;
+traffic(_, true) -> <<"crawler">>;
+traffic(_, false) -> <<"unknown">>.
+
+product_token(UA, Products) ->
+    re:run(UA, <<"(?:^|[\\s;(])(?:", Products/binary, ")(?:/|[\\s;)]|$)">>,
+        [{capture, none}]) =:= match.
 
 device(<<>>) ->
     <<"unknown">>;
