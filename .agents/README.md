@@ -14,6 +14,12 @@ Read a skill's description to decide when to use it, then load its `SKILL.md`
 and any references needed for the task. `agents/openai.yaml`, where present,
 provides Codex metadata; shared instructions belong in `SKILL.md`.
 
+For site inspection and validation, start with the
+[LLM site development guide](../doc/guides/llm-site-development.md). It covers
+local and remote setups using SSH, HTTP, MQTT, and browser tools. Use the
+[development tools skill](skills/zotonic-development-tools/SKILL.md) for the
+detailed agent workflow.
+
 ## Adding or renaming a skill
 
 1. Create `skills/<name>/SKILL.md` with YAML `name` and `description` fields.
