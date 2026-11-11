@@ -33,16 +33,16 @@ command(Op, Payload, Captures0) ->
     Captures = prune(Captures0),
     command_1(Op, Payload, Captures).
 
-command_1(attach, #{sid := Sid, path := Path}, Captures)
+command_1(attach, #{sid := Sid, path := Path} = Payload, Captures)
     when is_binary(Sid), is_binary(Path), byte_size(Path) =< 2048, map_size(Captures) < 16 ->
     Id = z_ids:id(24),
     Capture = #{id => Id, sid => Sid, path => Path, state => stopped,
         expires => erlang:system_time(second) + ?TTL,
         graph => #{nodes => #{}, edges => #{}}, logs => [], sequence => 0,
         truncated => false},
-    {{ok, public(Capture)}, Captures#{Id => Capture}};
-command_1(list, _, Captures) ->
-    {{ok, [public(C) || C <- maps:values(Captures)]}, Captures};
+    {{ok, public(Capture, Payload)}, Captures#{Id => Capture}};
+command_1(list, Payload, Captures) ->
+    {{ok, [public(C, Payload) || C <- maps:values(Captures)]}, Captures};
 command_1(Op, #{id := Id} = Payload, Captures) ->
     case maps:find(Id, Captures) of
         {ok, C} ->
@@ -53,24 +53,24 @@ command_1(Op, #{id := Id} = Payload, Captures) ->
 command_1(_, _, Captures) ->
     {{error, badarg}, Captures}.
 
-operation(start, _, C) ->
+operation(start, Payload, C) ->
     %% Start is idempotent and retains evidence. Attach again for a fresh capture.
     C1 = C#{state => active},
-    {{ok, public(C1)}, C1};
-operation(stop, _, C) ->
+    {{ok, public(C1, Payload)}, C1};
+operation(stop, Payload, C) ->
     C1 = C#{state => stopped},
-    {{ok, public(C1)}, C1};
-operation(status, _, C) -> {{ok, public(C)}, C};
-operation(trace, _, #{graph := #{nodes := Ns, edges := Es}} = C) ->
-    {{ok, #{capture => public(C), nodes => maps:values(Ns), edges => maps:values(Es)}}, C};
+    {{ok, public(C1, Payload)}, C1};
+operation(status, Payload, C) -> {{ok, public(C, Payload)}, C};
+operation(trace, Payload, #{graph := #{nodes := Ns, edges := Es}} = C) ->
+    {{ok, #{capture => public(C, Payload), nodes => maps:values(Ns), edges => maps:values(Es)}}, C};
 operation(console, _, C) ->
     {{ok, #{entries => lists:reverse(maps:get(logs, C)), truncated => maps:get(truncated, C)}}, C};
-operation(poll, #{sid := Sid, entries := Entries}, #{sid := Sid} = C) ->
+operation(poll, #{sid := Sid, entries := Entries} = Payload, #{sid := Sid} = C) ->
     C1 = case maps:get(state, C) of
         active -> lists:foldl(fun add_log/2, C, Entries);
         stopped -> C
     end,
-    {{ok, public(C1)}, C1};
+    {{ok, public(C1, Payload)}, C1};
 operation(_, _, C) -> {{error, badarg}, C}.
 
 add_log(Text, #{logs := Logs, sequence := Seq} = C) ->
@@ -89,8 +89,12 @@ render(Sid, Render, Captures) ->
         (_, C) -> C
     end, prune(Captures)).
 
-public(C) ->
-    (maps:with([id, path, state, expires, truncated], C))#{trace_scope => session}.
+public(#{sid := Sid} = C, Payload) ->
+    RequestSid = maps:get(request_sid, Payload, undefined),
+    (maps:with([id, path, state, expires, truncated], C))#{
+        trace_scope => session,
+        is_owner => is_binary(RequestSid) andalso RequestSid =/= <<>> andalso RequestSid =:= Sid
+    }.
 
 prune(Captures) ->
     Now = erlang:system_time(second),

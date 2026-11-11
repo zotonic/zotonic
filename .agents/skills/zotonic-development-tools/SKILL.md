@@ -242,6 +242,7 @@ await window.z_development_capture.status();
 // Current capture state, or null if no attachment exists or it expired.
 
 // Interact with the page to trigger lazy components, then fetch evidence:
+await window.z_development_capture.flush(); // Submit this page's pending console logs.
 const trace = await window.z_development_capture.trace();
 // {capture, nodes, edges}
 const logs = await window.z_development_capture.console();
@@ -253,11 +254,94 @@ await window.z_development_capture.stop();
 
 `attach()` preserves page state, reuses a valid attachment, restarts it if stopped,
 and creates a replacement if it expired. Concurrent calls share one attachment.
-All five functions return promises; permission and transport failures reject.
+Use `await window.z_development_capture.attach(captureId)` to reconnect this page
+to an existing capture owned by the same browser session. It requires writable
+admin access and validates ownership through an empty poll POST before saving
+the ID in sessionStorage. An active capture is reused; a stopped one is started.
+An invalid, expired, foreign-session, or forbidden ID rejects without replacing
+the current attachment or creating a new capture. Start/transport failures also
+preserve local state; a timed-out server operation may nevertheless have succeeded.
+Switching IDs discards the old page buffer without submitting it to the new capture;
+call `flush()` first if those logs must be retained. Reconnecting the same ID keeps
+its buffer. Read-only admins should use explicit-ID reads instead of attaching.
+All capture functions return promises; permission and transport failures reject.
 `status()` checks the server rather than trusting a possibly expired ID in
 sessionStorage. `stop()` flushes the browser's buffered logs before stopping.
-`trace()` returns the accumulated template graph; `console()` flushes pending
-browser logs before fetching stored entries without clearing them. Both return
+`status()`, `trace()`, and `console()` use GET only and work for read-only admins.
+Use `list()` to discover available captures on the site, then pass an ID to
+inspect one without attaching first. This also works with read-only admin access:
+
+```javascript
+const captures = await window.z_development_capture.list();
+// Summaries include id, path, state, expires, truncated, trace_scope,
+// is_owner, write_allowed, and console_allowed. No session IDs are exposed.
+// Choose a capture by its path/state; an empty array means none are available.
+const captureId = captures.find(capture => capture.path === "/example")?.id;
+if (captureId) {
+    await window.z_development_capture.status(captureId);
+    await window.z_development_capture.trace(captureId);
+    await window.z_development_capture.console(captureId);
+}
+```
+
+`list()` uses GET only, returns `[]` when no captures exist, and requires no attachment.
+Each list summary and `status(captureId)` result has `is_owner`: true only when
+the capture belongs to the request's current browser session. Without a browser
+session (for example ordinary CLI or bearer-token requests), it is false.
+Ownership is independent of write access: a read-only owner still cannot attach.
+To find reconnectable captures, filter by both flags:
+
+```javascript
+const reconnectable = (await window.z_development_capture.list())
+    .filter(capture => capture.is_owner && capture.write_allowed);
+```
+
+These flags are hints, not authorization; `attach(captureId)` still validates
+ownership and write access on the server. Non-owners can use explicit-ID reads
+and, with write access, start/stop; they cannot attach or submit browser logs.
+Listing and explicit-ID reads do not change sessionStorage, the page's current attachment,
+or console collection, even when reading the current ID. Missing or expired IDs
+return `null`; permission and transport failures reject without changing local
+capture state. Omit the argument to inspect the current page attachment.
+
+Writable admins can also control a discovered capture without adopting it as
+the page's attachment:
+
+```javascript
+if (captureId) {
+    await window.z_development_capture.start(captureId);
+    // Interact with the attached page to collect evidence.
+    await window.z_development_capture.stop(captureId);
+}
+```
+
+`start(captureId)` requires an ID. Explicit-ID start/stop use POST and return
+the capture status, or `null` if it has expired or is missing. The server rejects
+read-only admins with `eacces`. These commands do not change sessionStorage,
+switch the local attachment, or flush buffered logs; errors preserve local state.
+When targeting this page's capture, normal background polling observes its new state.
+Use `stop()` without an ID on the attached page to flush its pending logs first.
+Do not automatically retry mutations after a transport failure: they may have succeeded.
+
+`trace()` returns the accumulated template graph; `console()` fetches stored
+entries without submitting pending browser logs or clearing stored entries.
+Use `await window.z_development_capture.flush()` before fetching up-to-date logs
+from the attached page. It takes no capture ID, submits only this page's pending
+console batch, and returns the capture status without stopping or restarting it.
+It returns `null` when unattached or expired, and returns a stopped capture's status
+without submitting logs. It checks write access first: read-only admins receive
+`eacces` without a poll POST. The server also checks write access and session ownership.
+Permission and transport failures reject; do not automatically retry failed submissions.
+Use `await window.z_development_capture.detach()` to leave the page's attachment
+without stopping the server capture. It is local-only and works for read-only
+admins or offline: it clears the stored capture ID and pending logs, removes
+its console.log wrapper, clears the debug panel's status, and returns `null`.
+It does not flush logs. Call `flush()` first if you have write access and want
+to retain them. Detached pages stop polling; inspect the still-running capture
+with `list()` and explicit-ID reads. Already-sent requests cannot be undone,
+but their replies cannot reattach the page; queued local commands are cancelled.
+Writable background polling also submits pending logs; `stop()` flushes them before stopping.
+Read-only clients do not collect or submit logs. Both evidence methods return
 `null` when unattached or expired, and neither creates or restarts a capture.
 Check `trace.capture.truncated` and `logs.truncated` for server limits. Fetching
 these results does not itself print them with `console.log`, avoiding feedback

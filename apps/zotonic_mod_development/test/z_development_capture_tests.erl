@@ -88,7 +88,7 @@ read_only_admin_test_() ->
             %% Keep the real ACL functions, including the trusted sudo exception.
             meck:new([m_site, mod_development], [no_link]),
             meck:expect(m_site, environment, fun(C) -> maps:get(environment, C#context.props) end),
-            meck:expect(mod_development, capture, fun(_, _, _) -> {ok, #{}} end)
+            meck:expect(mod_development, capture, fun(_, _, _) -> {ok, #{id => <<"id">>}} end)
         end,
         fun(_) -> meck:unload([m_site, mod_development]) end,
         fun(_) -> [?_test(read_only_admin(Env)) || Env <- [development, test, acceptance]] end}).
@@ -112,15 +112,63 @@ read_only_admin(Env) ->
     ?assertEqual(0, meck:num_calls(mod_development, capture, '_')),
     %% Diagnostics remain readable with a read-only admin token.
     lists:foreach(fun(Path) ->
-        ?assertEqual({ok, {#{}, []}}, m_development_capture:m_get(Path, #{}, C))
+        ?assertMatch({ok, {#{write_allowed := false, console_allowed := true}, []}},
+            m_development_capture:m_get(Path, #{}, C))
     end, [[<<"list">>], [<<"status">>, <<"id">>],
         [<<"trace">>, <<"id">>], [<<"console">>, <<"id">>]]),
     %% Ordinary writable admins and the trusted CLI's sudo context still work.
     lists:foreach(fun(Writable) ->
         lists:foreach(fun({Path, Msg}) ->
-            ?assertEqual({ok, #{}}, m_development_capture:m_post(Path, Msg, Writable))
+            ?assertMatch({ok, #{write_allowed := true}},
+                m_development_capture:m_post(Path, Msg, Writable))
         end, Posts)
     end, [z_acl:set_read_only(false, C), z_acl:sudo(C)]).
+
+ownership_test_() ->
+    z_test_support:isolated({setup,
+        fun() ->
+            {{ok, #{id := Own}}, S1} = z_development_capture:command(attach,
+                #{sid => <<"private-owner-session">>, path => <<"/own">>}, #{}),
+            {{ok, #{id := Other}}, S2} = z_development_capture:command(attach,
+                #{sid => <<"private-other-session">>, path => <<"/other">>}, S1),
+            meck:new([m_site, mod_development], [no_link]),
+            meck:expect(m_site, environment, fun(_) -> development end),
+            meck:expect(mod_development, capture, fun(Op, Payload, _) ->
+                {Result, _} = z_development_capture:command(Op, Payload, S2),
+                Result
+            end),
+            {Own, Other}
+        end,
+        fun(_) -> meck:unload([m_site, mod_development]) end,
+        fun({Own, Other}) -> ?_test(begin
+            Base = #context{site = capture_test, user_id = 1},
+            lists:foreach(fun({Sid, IsReadOnly, Expected}) ->
+                C = Base#context{acl_is_read_only = IsReadOnly, props = #{session_id => Sid}},
+                %% The client cannot supply another session or an ownership flag.
+                Msg = #{payload => #{<<"request_sid">> => <<"private-owner-session">>,
+                    <<"sid">> => <<"private-owner-session">>, <<"is_owner">> => true}},
+                {ok, {Listed, []}} = m_development_capture:m_get([<<"list">>], Msg, C),
+                ?assertEqual(2, length(Listed)),
+                lists:foreach(fun(#{id := Id} = Summary) ->
+                    {ok, {Status, []}} = m_development_capture:m_get([<<"status">>, Id], Msg, C),
+                    ?assertEqual(Summary, Status),
+                    ?assertEqual(Id =:= Expected, maps:get(is_owner, Status)),
+                    ?assertEqual(not IsReadOnly, maps:get(write_allowed, Status)),
+                    ?assertNot(maps:is_key(sid, Status)),
+                    ?assertNot(maps:is_key(request_sid, Status))
+                end, Listed),
+                Json = z_json:encode(Listed),
+                ?assertEqual(nomatch, binary:match(Json, <<"private-owner-session">>)),
+                ?assertEqual(nomatch, binary:match(Json, <<"private-other-session">>))
+            end, [
+                {<<"private-owner-session">>, false, Own},
+                {<<"private-owner-session">>, true, Own},
+                {<<"private-other-session">>, false, Other},
+                {<<"unrelated-session">>, false, undefined},
+                {undefined, false, undefined},
+                {<<>>, true, undefined}
+            ])
+        end) end}).
 
 trace_integration_test() ->
     %% Exercise the actual module callbacks without touching a running site's debugger.

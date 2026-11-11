@@ -33,13 +33,37 @@ Poll is bound to the attaching browser session. All results expire after ten min
 SSH uses cli/3 over the trusted Erlang distribution connection.
 
 In an authorized page's browser console, call
+`await window.z_development_capture.list()` to discover available site captures
+without attaching or changing local state, including with read-only admin access.
+It returns an array of capture summaries, or an empty array when none exist. Call
 `await window.z_development_capture.attach()` to start or reuse a capture and
-obtain its id. `status()` returns current server state or null when unattached
+obtain its id. `attach(captureId)` reconnects an existing capture after a session-bound
+empty poll validates write access and ownership. Stopped captures are started before
+saving the ID. Failures preserve the current attachment; no replacement is created.
+Switching IDs discards pending local logs; flush first to retain them. Reconnecting
+the same ID preserves its buffer. `status()` returns current server state or null when unattached
 or expired; `stop()` flushes buffered console entries and stops the capture.
-`trace()` returns {capture, nodes, edges}; `console()` flushes pending browser
+`trace()` returns {capture, nodes, edges}; `console()` reads captured browser
 logs and returns {entries, truncated} without clearing stored entries. Both
 return null when unattached or expired and remain usable after stopping until
 expiry. These methods return promises and reject on permission or transport errors.
+`status()`, `trace()` and `console()` use GET only, including for read-only admins.
+Each accepts an optional capture ID to inspect an existing capture without attaching
+or changing sessionStorage or local capture state. Explicit missing IDs return null.
+`start(captureId)` and `stop(captureId)` control existing captures using POST and
+require writable admin access. They return status or null for missing captures,
+without changing sessionStorage or flushing browser logs. Use `stop()` without
+an ID to flush this page's buffer first. `start` always requires an ID.
+`flush()` submits this page's pending console logs without stopping its capture.
+It checks write access before posting, returns status (or null when unattached or
+expired), and does not submit to stopped captures. Read-only admins receive eacces.
+Use `await flush()` before `console()` to read up-to-date logs from this page.
+`detach()` clears this page's attachment, stored ID and pending logs and restores
+console.log without stopping the server capture. It returns null and makes no
+server request, so it works offline and for read-only admins. Late replies and
+queued local commands cannot reattach the page. Already-sent requests may complete.
+Pending browser logs are submitted by writable polling, `flush()` or `stop()`, not by reads.
+Capture status includes `write_allowed`; read-only clients do not collect or submit logs.
 The floating debug button uses the same functions. From the server checkout run:
 
 ```sh
@@ -59,8 +83,12 @@ An attachment starts stopped; the debug button attaches and then starts it.
 The browser polls every second; console collection starts when it observes active
 state and only covers subsequent console.log calls. Logs are best effort, text
 snapshots, capped at 500 entries and 4096 bytes per entry (50 per upload).
-No cookies or browser session ids are returned. The HTTP API requires normal
-administrator authentication; the SSH command uses trusted node RPC authority.
+No cookies or browser session ids are returned.
+List and status summaries include `is_owner`, comparing the capture's session
+with the current request's browser session without exposing either session ID.
+It is false when the request has no session. `write_allowed` is independent:
+read-only owners cannot attach or submit logs. Attach still validates ownership.
+The HTTP API requires normal administrator authentication; the SSH command uses trusted node RPC authority.
 All capture access is denied in production, including over SSH.
 
 Captures survive page reload via sessionStorage. The initial page render is
@@ -135,10 +163,22 @@ authorized(Context) ->
     m_development_tools:allowed(Context).
 
 call(Op, Payload, Context) ->
-    case mod_development:capture(Op, Payload, Context) of
-        {ok, #{id := _} = Value} -> {ok, Value#{console_allowed => console_allowed(Context)}};
+    %% Ownership is relative to the authenticated request, never a client payload.
+    Sid = case z_context:session_id(Context) of
+        {ok, SessionId} -> SessionId;
+        _ -> undefined
+    end,
+    case mod_development:capture(Op, Payload#{request_sid => Sid}, Context) of
+        {ok, #{id := _} = Value} ->
+            {ok, capabilities(Value, Context)};
+        {ok, Values} when is_list(Values) ->
+            {ok, [capabilities(Value, Context) || Value <- Values]};
         Result -> Result
     end.
+
+capabilities(Value, Context) ->
+    Value#{console_allowed => console_allowed(Context),
+        write_allowed => authorized(Context) andalso not z_acl:is_read_only(Context)}.
 result({ok, Value}, Rest) -> {ok, {Value, Rest}};
 result({error, _} = Error, _) -> Error.
 
