@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-11 10:49\n"
+"PO-Revision-Date: 2026-11-11 11:43\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -6585,15 +6585,15 @@ msgstr "สำรวจข้อมูลสาธารณะของเว็
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:29
 msgid "JSON responses contain status and result fields. Concise reads return localized text and report language fallback. Follow next_url until next is false; filtered pages can be empty. Resource exports provide page URLs by language, including x-default. Cite the human page URL in the appropriate language."
-msgstr "คำตอบ JSON มีสนามสถานะและผลลัพธ์ การอ่านแบบสั้นๆ จะคืนข้อความที่แปลเป็นภาษาท้องถิ่นและรายงานภาษาที่ใช้แทน หาก next_url ถูกติดตามจนกว่า next จะกลายเป็น false; หน้าที่มีตัวกรองอาจว่างเปล่า การส่งออกทรัพยากรจะให้ URL ของหน้าตามภาษา รวมถึง x-default ให้อ้างอิง URL ของหน้าสำหรับผู้ใช้ในภาษาที่เหมาะสม"
+msgstr "การตอบกลับ JSON มีฟิลด์ status และ result การอ่านแบบสั้นๆ จะคืนข้อความที่แปลเป็นภาษาท้องถิ่นและรายงานภาษาที่ใช้แทน ให้ติดตาม next_url จนกว่า next จะมีค่าเป็น false; หน้าที่มีตัวกรองอาจว่างเปล่า การส่งออกทรัพยากรจะให้ URL ของหน้าตามภาษา รวมถึง x-default ให้อ้างอิง URL ของหน้าสำหรับผู้ใช้ในภาษาที่เหมาะสม"
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:11
 msgid "OpenAPI description"
-msgstr ""
+msgstr "คำอธิบาย OpenAPI"
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:28
 msgid "Replace {id} with an ID or unique name obtained from search results or a page's alternate link. Use small pages and follow pagination to explore further."
-msgstr ""
+msgstr "แทนที่ {id} ด้วย ID หรือชื่อที่ไม่ซ้ำกัน ซึ่งได้มาจากผลการค้นหาหรือลิงก์ทางเลือกของหน้า ใช้หน้าที่มีผลลัพธ์จำนวนน้อย และทำตามระบบการแบ่งหน้าเพื่อสำรวจเพิ่มเติม"
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:15
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:2
@@ -6602,7 +6602,7 @@ msgstr "แผนผังเว็บไซต์"
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:30
 msgid "The agent endpoints always use anonymous permissions. Existing compatibility APIs apply the caller's permissions. They return only accessible information and keep their existing indexing headers. Content and media may have their own licenses; preserve attribution and follow the stated terms."
-msgstr ""
+msgstr "จุดปลายทางของเอเจนต์จะใช้สิทธิ์การเข้าถึงแบบไม่ระบุตัวตนเสมอ API ความเข้ากันได้ที่มีอยู่จะใช้สิทธิ์การเข้าถึงของผู้เรียก API เหล่านี้จะส่งคืนเฉพาะข้อมูลที่สามารถเข้าถึงได้ และรักษาส่วนหัวการจัดทำดัชนีที่มีอยู่ไว้ เนื้อหาและสื่ออาจมีใบอนุญาตของตนเอง; ให้รักษาข้อมูลการระบุแหล่งที่มาและปฏิบัติตามเงื่อนไขที่ระบุไว้"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:60
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:29
@@ -6878,7 +6878,7 @@ msgstr "ตัวกรองแบบคงที่"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:25
 msgid "Gaps are unrecorded intervals. Partial intervals may undercount activity. Page-request totals, device breakdowns and popular content exclude detected crawlers. API and traffic-classification measurements include crawlers unless filtered out. Counts exclude editor activity and do not measure unique visitors."
-msgstr ""
+msgstr "ช่องว่างคือช่วงเวลาที่ไม่ได้บันทึกไว้ ช่วงเวลารวมบางส่วนอาจทำให้การนับกิจกรรมไม่ครบถ้วน จำนวนคำขอหน้าเว็บ การแบ่งประเภทตามอุปกรณ์ และเนื้อหาที่ได้รับความนิยม ไม่รวมโปรแกรมรวบรวมข้อมูล (crawlers) ที่ถูกตรวจพบ การวัดผล API และการจัดประเภทการจราจรทางอินเทอร์เน็ต รวมถึงโปรแกรมรวบรวมข้อมูล (crawlers) เว้นแต่จะถูกกรองออก การนับไม่รวมกิจกรรมของผู้บรรณาธิการ และไม่วัดจำนวนผู้เยี่ยมชมที่ไม่ซ้ำกัน"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:13
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:15
@@ -9709,7 +9709,7 @@ msgstr "ซ่อนปุ่มแสดงร่องรอยเทมเพ
 
 #: zotonic_mod_development/priv/templates/_html_head_development.tpl:50
 msgid "Attach capture"
-msgstr ""
+msgstr "เชื่อมต่อการบันทึกข้อมูลวินิจฉัย"
 
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:18
 msgid "Automatic detection on the Zotonic machine"
@@ -10407,7 +10407,7 @@ msgstr "เลิก"
 
 #: zotonic_mod_development/priv/templates/_html_head_development.tpl:51
 msgid "Stop capture"
-msgstr ""
+msgstr "หยุดการบันทึกข้อมูล"
 
 #: zotonic_mod_development/src/mod_development.erl:669
 msgid "Stopped logging to the console of all browser tabs."
@@ -16439,7 +16439,7 @@ msgstr "รหัสสมัครของคุณ"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:6
 msgid "A deployment is running. Try again when it finishes."
-msgstr ""
+msgstr "การปรับใช้กำลังดำเนินการอยู่ โปรดลองอีกครั้งเมื่อเสร็จสิ้น"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:320
 msgid "Another deployment is in progress. Please try again when it finishes."
@@ -16455,7 +16455,7 @@ msgstr "ไม่สามารถดึงบันทึกการเปล
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:8
 msgid "Could not list local changes. Check the repository and server log."
-msgstr ""
+msgstr "ไม่สามารถแสดงรายการการเปลี่ยนแปลงในเครื่องได้ โปรดตรวจสอบรีโพสิตอรีและบันทึกของเซิร์ฟเวอร์"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:9
 msgid "Current commit"
@@ -16521,11 +16521,11 @@ msgstr "การเปลี่ยนแปลงที่จะนำเข้
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:2
 msgid "Local changes for {name}."
-msgstr ""
+msgstr "การเปลี่ยนแปลงในไฟล์ท้องถิ่นสำหรับ {name}"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:303
 msgid "Local changes reset. You can deploy again."
-msgstr ""
+msgstr "การเปลี่ยนแปลงในเครื่องท้องถิ่นได้ถูกตั้งกลับเป็นค่าเริ่มต้นแล้ว คุณสามารถดำเนินการปรับใช้ใหม่ได้"
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:14
 msgid "Modules list"
@@ -16545,15 +16545,15 @@ msgstr "คอมไพล์ไฟล์ Erlang ที่เปลี่ยน�
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:289
 msgid "Reset local changes"
-msgstr ""
+msgstr "รีเซ็ตการเปลี่ยนแปลงในเครื่อง"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:309
 msgid "Reset or rebuild failed. Check the server log before retrying."
-msgstr ""
+msgstr "การรีเซ็ตหรือสร้างใหม่ไม่สำเร็จ โปรดตรวจสอบบันทึกของเซิร์ฟเวอร์ก่อนที่จะลองอีกครั้ง"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:300
 msgid "Resetting local changes and rebuilding..."
-msgstr ""
+msgstr "กำลังรีเซ็ตการเปลี่ยนแปลงในเครื่องและสร้างใหม่..."
 
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
 msgid "Review and deploy the latest version of this site."
@@ -16602,7 +16602,7 @@ msgstr "ขออภัยสิ่งนี้สามารถเรียก
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:20
 msgid "The code is then rebuilt before deployment is enabled again. If this repository contains other sites or modules, their local changes are also discarded."
-msgstr ""
+msgstr "หลังจากนั้น ระบบจะสร้างโค้ดใหม่ก่อนที่จะเปิดใช้งานการปรับใช้อีกครั้ง หากรีโพสิตอรีนี้ยังมีเว็บไซต์หรือโมดูลอื่น ๆ อยู่ การเปลี่ยนแปลงในเครื่องของพวกนั้นก็จะถูกลบออกด้วย"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:28
 msgid "The deployment preview is unavailable. Check the repository and server log, then try again."
@@ -16622,7 +16622,7 @@ msgstr "ไม่มีการเปลี่ยนแปลงที่จะ
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:15
 msgid "There are no local changes. You can still rebuild to recover from a failed deployment."
-msgstr ""
+msgstr "ไม่มีการเปลี่ยนแปลงในระบบท้องถิ่น คุณสามารถสร้างใหม่ได้เพื่อกู้คืนจากกระบวนการปรับใช้ที่ล้มเหลว"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:22
 msgid "This branch has no upstream configured. Configure its remote tracking branch before deploying."
@@ -16630,7 +16630,7 @@ msgstr "สาขาดังกล่าวไม่มีการกำหน
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:18
 msgid "This permanently discards all uncommitted changes in the entire repository, including staged changes, and deletes untracked files and directories. Ignored files, local commits and nested repositories are preserved."
-msgstr ""
+msgstr "คำสั่งนี้จะลบการเปลี่ยนแปลงทั้งหมดที่ยังไม่ถูกส่งในรีโพสิตอรีทั้งหมดอย่างถาวร รวมถึงการเปลี่ยนแปลงที่อยู่ในขั้นตอนการเตรียมส่ง (staged changes) และลบไฟล์และไดเรกทอรีที่ไม่ได้ถูกติดตามไว้ ไฟล์ที่ถูกเพิกเฉย การส่งแบบท้องถิ่น (local commits) และรีโพสิตอรีที่ซ้อนกันจะยังคงอยู่"
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
 msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
@@ -16646,7 +16646,7 @@ msgstr "ในการรันการอัปเดต webhook ให้ก
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:26
 msgid "Undo all local changes and rebuild"
-msgstr ""
+msgstr "ยกเลิกการเปลี่ยนแปลงทั้งหมดในเครื่องและสร้างใหม่"
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:16
 msgid "View system status"
