@@ -18,14 +18,14 @@ cleanup(Modules) -> lists:foreach(fun meck:unload/1, Modules).
 
 failed_render() ->
     meck:expect(template_compiler, render, fun(_, _, _, _) -> {error, enoent} end),
-    ?assertEqual({error, enoent}, z_template:render_to_iolist_result(<<"missing.tpl">>, [], #context{})),
+    ?assertEqual({error, enoent}, z_template:render_to_iolist_context(<<"missing.tpl">>, [], #context{})),
     %% Existing human-facing rendering retains its tolerant behavior.
     {Html, _} = z_template:render_to_iolist(<<"missing.tpl">>, [], #context{}),
     ?assertEqual(<<>>, iolist_to_binary(Html)).
 
 empty_render() ->
     meck:expect(template_compiler, render, fun(_, _, _, _) -> {ok, <<>>} end),
-    {ok, Html, _} = z_template:render_to_iolist_result(<<"empty.tpl">>, [], #context{}),
+    {ok, Html, _} = z_template:render_to_iolist_context(<<"empty.tpl">>, [], #context{}),
     ?assertEqual(<<>>, iolist_to_binary(Html)).
 
 successful_render() ->
@@ -33,5 +33,5 @@ successful_render() ->
         ?assertEqual(#{body => <<"content">>}, Vars),
         {ok, [<<"<p>">>, maps:get(body, Vars), <<"</p>">>]}
     end),
-    {ok, Html, _} = z_template:render_to_iolist_result(<<"ok.tpl">>, [{body, <<"content">>}], #context{}),
+    {ok, Html, _} = z_template:render_to_iolist_context(<<"ok.tpl">>, [{body, <<"content">>}], #context{}),
     ?assertEqual(<<"<p>content</p>">>, iolist_to_binary(Html)).

@@ -34,7 +34,7 @@
     render/2,
     render/3,
     render_to_iolist/3,
-    render_to_iolist_result/3,
+    render_to_iolist_context/3,
 
     render_block/3,
     render_block/4,
@@ -233,11 +233,11 @@ render_to_iolist(File, Vars, Context) ->
 
 %% @doc Render without converting template errors into successful empty output.
 %% Use for representations that must distinguish unavailable content from empty content.
--spec render_to_iolist_result(Template, Vars, Context) -> Result when
+-spec render_to_iolist_context(Template, Vars, Context) -> Result when
     Template :: template_compiler:template() | #module_index{},
     Vars :: list() | map(), Context :: z:context(),
     Result :: {ok, iolist(), z:context()} | {error, term()}.
-render_to_iolist_result(Template, Vars, Context) ->
+render_to_iolist_context(Template, Vars, Context) ->
     case render_result(undefined, Template, Vars, Context) of
         {ok, Output} ->
             {Html, RenderContext} = z_render:render_to_iolist(Output, Context),

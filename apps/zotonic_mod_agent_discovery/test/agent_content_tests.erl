@@ -41,7 +41,7 @@ setup() ->
         anonymous(C),
         case Name of <<"_agent_block_unknown.tpl">> -> {error, enoent}; _ -> {ok, Name} end
     end),
-    meck:expect(z_template, render_to_iolist_result, fun
+    meck:expect(z_template, render_to_iolist_context, fun
         ({cat, "_agent_content.tpl"}, Vars, C) ->
             anonymous(C), {ok, [proplists:get_value(body_html, Vars), proplists:get_value(blocks_html, Vars)], C};
         (<<"_agent_block_text.tpl">>, Vars, C) -> {ok, maps:get(<<"body">>, proplists:get_value(blk, Vars)), C};
@@ -136,7 +136,7 @@ private_content() ->
     ?assertMatch({ok, _}, m_agent_content:read(resource, 4, #{}, context())).
 
 rendering_failure() ->
-    meck:expect(z_template, render_to_iolist_result, fun(_, _, _) -> {error, enoent} end),
+    meck:expect(z_template, render_to_iolist_context, fun(_, _, _) -> {error, enoent} end),
     ?assertEqual({error, unavailable}, m_agent_content:read(resource, 1, #{}, context())),
     meck:expect(z_context, ensure_qs, fun(C) -> C end),
     meck:expect(z_context, get_q, fun(<<"id">>, _) -> 1 end),

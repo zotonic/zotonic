@@ -95,7 +95,7 @@ plain(Value, Language, C) -> z_html:unescape(z_html:strip(text(Value, Language, 
 %% Normal HTML rendering tolerates errors as empty output. A machine-readable
 %% representation must instead fail, so callers cannot cache incomplete success.
 render(Template, Vars, Context) ->
-    case z_template:render_to_iolist_result(Template, Vars, Context) of
+    case z_template:render_to_iolist_context(Template, Vars, Context) of
         {ok, Html, RenderContext} -> {Html, RenderContext};
         {error, Reason} ->
             ?LOG_ERROR(#{in => zotonic_mod_agent_discovery,

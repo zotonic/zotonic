@@ -95,7 +95,7 @@ selection. Unsupported or nested content is explicitly marked incomplete;
 custom fields belong in composition templates, not an unrestricted export.
 
 A rendering error must not become successful empty content.
-`z_template:render_to_iolist_result/3` preserves template errors for the agent
+`z_template:render_to_iolist_context/3` preserves template errors for the agent
 composer, which returns an uncached 503. The existing tolerant renderer retains
 its behavior for ordinary HTML. Legitimately empty rendered content is valid.
 
