@@ -61,7 +61,18 @@ setup() ->
     Modules.
 
 cleanup(Modules) -> lists:foreach(fun meck:unload/1, Modules).
-context() -> #context{user_id = 1, acl = admin, language = [en], cowreq = #{}, cowenv = #{}}.
+context() ->
+    #context{user_id = 1, acl = admin, language = [en], cowreq = request(), cowenv = #{}}.
+
+%% Keep controller fixtures valid Cowboy requests, including required fields.
+request() ->
+    #{method => <<"GET">>, version => 'HTTP/1.1', scheme => <<"https">>,
+      host => <<"example.test">>, port => 443, path => <<"/api/agent/resource/1">>,
+      qs => <<>>, headers => #{}, peer => {{127, 0, 0, 1}, 12345},
+      sock => {{127, 0, 0, 1}, 443}, cert => undefined,
+      ref => agent_content_tests, pid => self(), streamid => 1,
+      has_body => false, body_length => 0}.
+
 anonymous(#context{user_id = undefined, acl = undefined}) -> ok;
 anonymous(_) -> error(non_anonymous).
 
@@ -128,7 +139,7 @@ rendering_failure() ->
     ?assertEqual({error, unavailable}, m_agent_content:read(resource, 1, #{}, context())),
     meck:expect(z_context, ensure_qs, fun(C) -> C end),
     meck:expect(z_context, get_q, fun(<<"id">>, _) -> 1 end),
-    C = z_context:set(agent_operation, markdown, (context())#context{cowreq = #{qs => <<>>}}),
+    C = z_context:set(agent_operation, markdown, context()),
     {{halt, 503}, Failed} = controller_agent_content:resource_exists(C),
     Headers = maps:get(resp_headers, Failed#context.cowreq),
     ?assertNotEqual(nomatch, binary:match(maps:get(<<"cache-control">>, Headers), <<"no-store">>)),
@@ -184,7 +195,7 @@ bounded_edges() ->
 conditional_content() ->
     meck:expect(z_context, ensure_qs, fun(C) -> C end),
     meck:expect(z_context, get_q, fun(<<"id">>, _) -> 1 end),
-    C0 = (context())#context{cowreq = #{qs => <<>>}},
+    C0 = context(),
     {true, Public} = controller_agent_content:service_available(C0),
     anonymous(Public),
     ?assertEqual(<<"public, max-age=0, must-revalidate">>,
