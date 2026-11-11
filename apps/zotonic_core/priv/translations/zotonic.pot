@@ -7045,13 +7045,13 @@ msgstr ""
 msgid "Allowed values:"
 msgstr ""
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:268
+#: zotonic_mod_analytics/src/mod_analytics.erl:272
 msgid "An equivalent analytics measurement already exists."
 msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
-#: zotonic_mod_analytics/src/mod_analytics.erl:197
+#: zotonic_mod_analytics/src/mod_analytics.erl:201
 msgid "Analytics configuration"
 msgstr ""
 
@@ -7128,11 +7128,11 @@ msgstr ""
 msgid "Configure analytics measurements"
 msgstr ""
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:236
+#: zotonic_mod_analytics/src/mod_analytics.erl:240
 msgid "Could not delete the analytics measurement."
 msgstr ""
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:269
+#: zotonic_mod_analytics/src/mod_analytics.erl:273
 msgid "Could not save. Check the event, breakdown and filter values."
 msgstr ""
 
@@ -7192,7 +7192,7 @@ msgstr ""
 msgid "Display order"
 msgstr ""
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:242
+#: zotonic_mod_analytics/src/mod_analytics.erl:246
 msgid "Display order saved."
 msgstr ""
 
@@ -7496,7 +7496,7 @@ msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
-#: zotonic_mod_analytics/src/mod_analytics.erl:189
+#: zotonic_mod_analytics/src/mod_analytics.erl:193
 msgid "Site Analytics"
 msgstr ""
 
@@ -7552,12 +7552,12 @@ msgstr ""
 msgid "Stored time intervals"
 msgstr ""
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:244
+#: zotonic_mod_analytics/src/mod_analytics.erl:248
 msgid ""
 "The analytics measurements changed. Reloading their current display order."
 msgstr ""
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:267
+#: zotonic_mod_analytics/src/mod_analytics.erl:271
 msgid "This analytics measurement exceeds the storage budget."
 msgstr ""
 
@@ -10273,11 +10273,11 @@ msgstr ""
 msgid "You are not allowed to change this."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:701
+#: zotonic_mod_development/src/mod_development.erl:718
 msgid "<i>Function name does not exist.</i>"
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:704
+#: zotonic_mod_development/src/mod_development.erl:721
 msgid "<i>Module not found.</i>"
 msgstr ""
 
@@ -10356,8 +10356,8 @@ msgstr ""
 msgid "Check debug points in the template source to see debug data here."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:509
-#: zotonic_mod_development/src/mod_development.erl:524
+#: zotonic_mod_development/src/mod_development.erl:526
+#: zotonic_mod_development/src/mod_development.erl:541
 msgid "Checking all templates..."
 msgstr ""
 
@@ -10429,7 +10429,7 @@ msgstr ""
 msgid "Could not load templates"
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:500
+#: zotonic_mod_development/src/mod_development.erl:517
 msgid "Could not open the directory on this computer."
 msgstr ""
 
@@ -10496,7 +10496,7 @@ msgid "Detecting editors…"
 msgstr ""
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:7
-#: zotonic_mod_development/src/mod_development.erl:1386
+#: zotonic_mod_development/src/mod_development.erl:1403
 msgid "Development"
 msgstr ""
 
@@ -10621,11 +10621,11 @@ msgid ""
 "before stopping."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:673
+#: zotonic_mod_development/src/mod_development.erl:690
 msgid "Error changing the console logs."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:767
+#: zotonic_mod_development/src/mod_development.erl:784
 msgid "Error parsing template."
 msgstr ""
 
@@ -10689,7 +10689,7 @@ msgid ""
 "function call tracing:"
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:707
+#: zotonic_mod_development/src/mod_development.erl:724
 msgid "Function tracing has been disabled in the Zotonic config."
 msgstr ""
 
@@ -10842,18 +10842,18 @@ msgstr ""
 msgid "No matching templates found."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:671
+#: zotonic_mod_development/src/mod_development.erl:688
 msgid "No permission to access the console logs."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:514
-#: zotonic_mod_development/src/mod_development.erl:529
-#: zotonic_mod_development/src/mod_development.erl:544
-#: zotonic_mod_development/src/mod_development.erl:552
-#: zotonic_mod_development/src/mod_development.erl:579
-#: zotonic_mod_development/src/mod_development.erl:621
+#: zotonic_mod_development/src/mod_development.erl:531
+#: zotonic_mod_development/src/mod_development.erl:546
+#: zotonic_mod_development/src/mod_development.erl:561
+#: zotonic_mod_development/src/mod_development.erl:569
+#: zotonic_mod_development/src/mod_development.erl:596
 #: zotonic_mod_development/src/mod_development.erl:638
 #: zotonic_mod_development/src/mod_development.erl:655
+#: zotonic_mod_development/src/mod_development.erl:672
 msgid "No permission to use mod_development."
 msgstr ""
 
@@ -10862,7 +10862,7 @@ msgstr ""
 msgid "No references found."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:633
+#: zotonic_mod_development/src/mod_development.erl:650
 msgid "No template found in the context."
 msgstr ""
 
@@ -10887,7 +10887,7 @@ msgstr ""
 msgid "Observers"
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:710
+#: zotonic_mod_development/src/mod_development.erl:727
 msgid "Only the admin user can set traces."
 msgstr ""
 
@@ -11032,19 +11032,19 @@ msgstr ""
 msgid "Start matching dispatch rules"
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:667
+#: zotonic_mod_development/src/mod_development.erl:684
 msgid "Started logging to the console of your browser tab."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:541
+#: zotonic_mod_development/src/mod_development.erl:558
 msgid "Started tracing all template inclusions."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:616
+#: zotonic_mod_development/src/mod_development.erl:633
 msgid "Started tracing template inclusions by rendering the page."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:538
+#: zotonic_mod_development/src/mod_development.erl:555
 msgid "Started tracing template inclusions for your session."
 msgstr ""
 
@@ -11058,11 +11058,11 @@ msgstr ""
 msgid "Stop capture"
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:669
+#: zotonic_mod_development/src/mod_development.erl:686
 msgid "Stopped logging to the console of all browser tabs."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:550
+#: zotonic_mod_development/src/mod_development.erl:567
 msgid "Stopped tracing template inclusions for all sessions."
 msgstr ""
 
@@ -11101,7 +11101,7 @@ msgstr ""
 msgid "Template debugging"
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:770
+#: zotonic_mod_development/src/mod_development.erl:787
 msgid "Template file not found."
 msgstr ""
 
@@ -11123,7 +11123,7 @@ msgstr ""
 msgid "Test with this template"
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:618
+#: zotonic_mod_development/src/mod_development.erl:635
 msgid "The path must be a local URL."
 msgstr ""
 
@@ -11233,7 +11233,7 @@ msgstr ""
 msgid "Uncheck to debug only your current session."
 msgstr ""
 
-#: zotonic_mod_development/src/mod_development.erl:652
+#: zotonic_mod_development/src/mod_development.erl:669
 msgid "Updated template debug points."
 msgstr ""
 
