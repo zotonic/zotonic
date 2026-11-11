@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-09 12:31\n"
+"PO-Revision-Date: 2026-11-11 10:49\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "MIME-Version: 1.0\n"
@@ -387,8 +387,9 @@ msgstr "모든 ACL 규칙을 현재 게시된 버전으로 복원하시겠습니
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:26
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:85
 #: zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:59
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:60
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:11
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:24
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:229
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:237
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70
@@ -516,7 +517,7 @@ msgstr "자료 작성자를 소유자로 간주하십시오."
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4
 #: zotonic_mod_admin/src/mod_admin.erl:516
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:70
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:26
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 msgid "Content"
 msgstr "콘텐츠"
@@ -5123,7 +5124,7 @@ msgstr "유효기간"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:20
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:21
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:37
-#: zotonic_mod_base/src/support/z_chart_svg.erl:1390
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1457
 #: zotonic_mod_development/priv/templates/_development_dispatch_options.tpl:2
 msgid "Value"
 msgstr "값"
@@ -5864,6 +5865,9 @@ msgstr "순위가 매겨진 쌍"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:104
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:135
+#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:5
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:59
+#: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:8
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:61
 msgid "Reset"
 msgstr "재설정"
@@ -6562,6 +6566,44 @@ msgstr "시스템 사용량"
 msgid "This page shows (real-time) system statistics like memory use and requests."
 msgstr "이 페이지는 메모리 사용량 및 요청 수와 같은 (실시간) 시스템 통계를 보여줍니다."
 
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:12
+msgid "API catalog"
+msgstr "API 카탈로그"
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:24
+msgid "Browse public resources"
+msgstr "공개 자료 찾아보기"
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:3
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:7
+msgid "Data and API"
+msgstr "데이터 및 API"
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:8
+msgid "Explore this site's public information using ordinary links and HTTP GET requests. Public content does not require an account or API key."
+msgstr "일반 링크와 HTTP GET 요청을 사용하여 이 사이트의 공개 정보를 살펴보세요. 공개 콘텐츠는 계정이나 API 키가 필요하지 않습니다."
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:29
+msgid "JSON responses contain status and result fields. Concise reads return localized text and report language fallback. Follow next_url until next is false; filtered pages can be empty. Resource exports provide page URLs by language, including x-default. Cite the human page URL in the appropriate language."
+msgstr "JSON 응답에는 상태 및 결과 필드가 포함됩니다. 간결한 읽기 작업은 현지화된 텍스트를 반환하고 언어 대체 정보를 보고합니다. next가 false가 될 때까지 next_url을 따라가십시오. 필터링된 페이지는 비어 있을 수 있습니다. 리소스 내보내기 기능은 x-default를 포함하여 언어별 페이지 URL을 제공합니다. 해당 언어의 일반 사용자용 페이지 URL을 인용하십시오."
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:11
+msgid "OpenAPI description"
+msgstr "OpenAPI 설명"
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:28
+msgid "Replace {id} with an ID or unique name obtained from search results or a page's alternate link. Use small pages and follow pagination to explore further."
+msgstr "{id} 을 검색 결과나 페이지의 대체 링크에서 얻은 ID나 고유 이름으로 대체하세요. 작은 페이지를 활용하고 페이지 매김을 따라 더 자세히 살펴보세요."
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:15
+#: zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:2
+msgid "Sitemap"
+msgstr "사이트맵"
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:30
+msgid "The agent endpoints always use anonymous permissions. Existing compatibility APIs apply the caller's permissions. They return only accessible information and keep their existing indexing headers. Content and media may have their own licenses; preserve attribution and follow the stated terms."
+msgstr "에이전트 엔드포인트는 항상 익명 권한을 사용합니다. 기존 호환성 API는 호출자의 권한을 적용합니다. 이러한 API는 접근 가능한 정보만 반환하며, 기존의 인덱싱 헤더를 유지합니다. 콘텐츠와 미디어에는 별도의 라이선스가 적용될 수 있으므로, 출처를 명시하고 명시된 이용 약관을 준수해야 합니다."
+
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:60
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:29
 msgid "1 day"
@@ -6618,7 +6660,7 @@ msgstr "분석 기능이 재개될 때까지 활동 카운터는 사용할 수 �
 msgid "Add analytics measurement"
 msgstr "분석 측정 항목 추가"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:39
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:41
 msgid "All breakdown values"
 msgstr "모든 세부 항목 값"
 
@@ -6634,13 +6676,13 @@ msgstr "허용되는 값 (쉼표로 구분)"
 msgid "Allowed values:"
 msgstr "허용되는 값:"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:267
+#: zotonic_mod_analytics/src/mod_analytics.erl:268
 msgid "An equivalent analytics measurement already exists."
 msgstr "이에 상응하는 분석 지표는 이미 존재합니다."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
-#: zotonic_mod_analytics/src/mod_analytics.erl:196
+#: zotonic_mod_analytics/src/mod_analytics.erl:197
 msgid "Analytics configuration"
 msgstr "분석 설정"
 
@@ -6673,7 +6715,7 @@ msgstr "분석 지표"
 msgid "Analytics status"
 msgstr "분석 현황"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:32
 msgid "Bars show the lower bound. Counts are ranges, ordered by their lower bound. Overlapping ranges may change order. Content outside the retained candidates has at most"
 msgstr "막대는 하한을 나타냅니다. 개수는 범위이며, 하한 순으로 정렬되어 있습니다. 범위가 겹치는 경우 순서가 바뀔 수 있습니다. 유지된 후보 집합 외부의 내용은 최대"
 
@@ -6686,7 +6728,7 @@ msgstr "제한된 역사"
 msgid "Break down by"
 msgstr "분류 기준:"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:40
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:42
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "Breakdown"
 msgstr "내역"
@@ -6711,11 +6753,11 @@ msgstr "비공개 요청 — 페이지, API 및 기타 디스패치 유형"
 msgid "Configure analytics measurements"
 msgstr "분석 측정 항목 구성"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:235
+#: zotonic_mod_analytics/src/mod_analytics.erl:236
 msgid "Could not delete the analytics measurement."
 msgstr "분석 측정 항목을 삭제할 수 없습니다."
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:268
+#: zotonic_mod_analytics/src/mod_analytics.erl:269
 msgid "Could not save. Check the event, breakdown and filter values."
 msgstr "저장할 수 없습니다. 이벤트, 세부 내역 및 필터 값을 확인해 주세요."
 
@@ -6769,7 +6811,7 @@ msgstr "기기 — 휴대폰, 태블릿, 데스크톱 또는 알 수 없음"
 msgid "Display order"
 msgstr "표시 순서"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:241
+#: zotonic_mod_analytics/src/mod_analytics.erl:242
 msgid "Display order saved."
 msgstr "정렬 순서가 저장되었습니다."
 
@@ -6814,7 +6856,7 @@ msgstr "이벤트 버퍼"
 msgid "Event processing"
 msgstr "이벤트 처리"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:40
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:42
 msgid "Events"
 msgstr "이벤트"
 
@@ -6835,8 +6877,8 @@ msgid "Fixed filters"
 msgstr "고정형 필터"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:25
-msgid "Gaps are unrecorded intervals. Partial intervals may undercount activity. Request counts include automation, exclude editor activity and do not measure unique visitors."
-msgstr "‘공백’은 기록되지 않은 구간을 의미합니다. 부분 구간은 활동량을 과소 집계할 수 있습니다. 요청 횟수에는 자동화 작업이 포함되며, 편집자 활동은 제외되고, 고유 방문자 수는 측정되지 않습니다."
+msgid "Gaps are unrecorded intervals. Partial intervals may undercount activity. Page-request totals, device breakdowns and popular content exclude detected crawlers. API and traffic-classification measurements include crawlers unless filtered out. Counts exclude editor activity and do not measure unique visitors."
+msgstr "‘공백’은 기록되지 않은 구간을 의미합니다. 부분 구간은 활동량을 과소 산정할 수 있습니다. 페이지 요청 총계, 기기별 분석 및 인기 콘텐츠 통계에서는 탐지된 크롤러가 제외됩니다. API 및 트래픽 분류 측정값에는 필터링되지 않은 한 크롤러가 포함됩니다. 집계 수치에는 편집자 활동이 제외되며, 순 방문자 수는 측정되지 않습니다."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:13
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:15
@@ -6860,7 +6902,7 @@ msgstr "HTTP 상태 코드 — 예: 200, 404 또는 500"
 msgid "History detail and retention"
 msgstr "이력 상세 정보 및 보존"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:45
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:47
 msgid "Includes incomplete or unrecorded intervals"
 msgstr "불완전하거나 기록되지 않은 간격이 포함됩니다"
 
@@ -6888,7 +6930,7 @@ msgstr "지난 6시간"
 msgid "Maximum number of analytics measurements"
 msgstr "분석 측정 항목의 최대 개수"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
 msgid "Most popular content in this period"
 msgstr "이 기간 동안 가장 인기 있는 콘텐츠"
 
@@ -6938,11 +6980,11 @@ msgstr "분류 없음 (합계)"
 msgid "No filter — include all values"
 msgstr "필터 적용하지 않음 — 모든 값 포함"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:29
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
 msgid "No leading content identified in this period."
 msgstr "이 기간 동안 주요 콘텐츠가 확인되지 않았습니다."
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:36
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:38
 msgid "No recorded events yet."
 msgstr "아직 기록된 이벤트가 없습니다."
 
@@ -6994,11 +7036,11 @@ msgstr "일시 정지"
 msgid "Period"
 msgstr "기간"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:26
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
 msgid "Rank"
 msgstr "순위"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:25
 msgid "Ranked by recorded requests in the selected moving period. The window advances in steps of"
 msgstr "선택한 이동 기간 동안 기록된 요청 수를 기준으로 순위를 매깁니다. 이 기간은 다음 단계별로 진행됩니다."
 
@@ -7014,7 +7056,7 @@ msgstr "요청 유형 — 페이지, API 또는 사용자 정의 디스패치 �
 msgid "Request types found in this site's dispatch rules:"
 msgstr "이 사이트의 디스패치 규칙에서 발견되는 요청 유형:"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:26
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
 msgid "Requests"
 msgstr "요청 사항"
 
@@ -7044,7 +7086,7 @@ msgstr "간략한 설명"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
-#: zotonic_mod_analytics/src/mod_analytics.erl:188
+#: zotonic_mod_analytics/src/mod_analytics.erl:189
 msgid "Site Analytics"
 msgstr "사이트 분석"
 
@@ -7096,11 +7138,11 @@ msgstr "저장된 시간 구간 / 용량"
 msgid "Stored time intervals"
 msgstr "저장된 시간 구간"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:243
+#: zotonic_mod_analytics/src/mod_analytics.erl:244
 msgid "The analytics measurements changed. Reloading their current display order."
 msgstr "분석 측정 항목이 변경되었습니다. 현재 표시 순서를 다시 불러옵니다."
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:266
+#: zotonic_mod_analytics/src/mod_analytics.erl:267
 msgid "This analytics measurement exceeds the storage budget."
 msgstr "이 분석 측정값이 스토리지 예산을 초과합니다."
 
@@ -7153,11 +7195,11 @@ msgstr "이벤트"
 msgid "group/time slots"
 msgstr "그룹/시간대"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:32
 msgid "requests."
 msgstr "요청."
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:25
 msgid "seconds."
 msgstr "초."
 
@@ -8731,12 +8773,12 @@ msgstr "브라우저 점유율 데이터"
 msgid "CSV"
 msgstr "CSV"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:446
-#: zotonic_mod_base/src/support/z_chart_svg.erl:448
+#: zotonic_mod_base/src/support/z_chart_svg.erl:451
+#: zotonic_mod_base/src/support/z_chart_svg.erl:453
 msgid "Chart"
 msgstr "차트"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:1380
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1447
 msgid "Chart legend"
 msgstr "차트 범례"
 
@@ -8770,7 +8812,7 @@ msgstr "연결 중..."
 msgid "Connection Test"
 msgstr "연결 테스트"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:590
+#: zotonic_mod_base/src/support/z_chart_svg.erl:599
 msgid "Data points"
 msgstr "데이터 포인트"
 
@@ -8884,7 +8926,7 @@ msgstr "7월"
 msgid "June"
 msgstr "6월"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:1386
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1453
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:41
 msgid "Label"
 msgstr "라벨"
@@ -8951,7 +8993,7 @@ msgstr "순변동"
 msgid "No"
 msgstr "아니요"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:1330
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1397
 msgid "No data"
 msgstr "데이터 없음"
 
@@ -8990,7 +9032,7 @@ msgstr "10월"
 msgid "On this page you can test the connection of your browser to our server and to the internet in general."
 msgstr "이 페이지에서 브라우저와 당사 서버 및 인터넷 간의 연결 상태를 테스트할 수 있습니다."
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:353
+#: zotonic_mod_base/src/support/z_chart_svg.erl:358
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:134
 msgid "Other"
 msgstr "기타"
@@ -9618,11 +9660,11 @@ msgstr "새 위치는 로컬 경로 또는 전체 URL일 수 있습니다. 이 �
 msgid "You are not allowed to change this."
 msgstr "이것은 변경할 수 없습니다."
 
-#: zotonic_mod_development/src/mod_development.erl:699
+#: zotonic_mod_development/src/mod_development.erl:701
 msgid "<i>Function name does not exist.</i>"
 msgstr "<i>함수 이름이 존재하지 않습니다.</i>"
 
-#: zotonic_mod_development/src/mod_development.erl:702
+#: zotonic_mod_development/src/mod_development.erl:704
 msgid "<i>Module not found.</i>"
 msgstr "<i>모듈을 찾을 수 없습니다.</i>"
 
@@ -9664,6 +9706,10 @@ msgstr "운영 및 승인 사이트에 플로팅 템플릿 추적 버튼을 표�
 msgid "Always hide the floating template trace button."
 msgstr "플로팅 템플릿 추적 버튼 항상 숨기기"
 
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:50
+msgid "Attach capture"
+msgstr "캡처 이미지 첨부"
+
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:18
 msgid "Automatic detection on the Zotonic machine"
 msgstr "Zotonic 기기의 자동 감지 기능"
@@ -9689,8 +9735,8 @@ msgstr "모든 템플릿의 종속성 그래프를 계산하고 시각화합니�
 msgid "Check debug points in the template source to see debug data here."
 msgstr "여기에서 디버그 데이터를 보려면 템플릿 소스의 디버그 지점을 선택하십시오."
 
-#: zotonic_mod_development/src/mod_development.erl:507
-#: zotonic_mod_development/src/mod_development.erl:522
+#: zotonic_mod_development/src/mod_development.erl:509
+#: zotonic_mod_development/src/mod_development.erl:524
 msgid "Checking all templates..."
 msgstr "모든 템플릿을 확인하는 중..."
 
@@ -9762,7 +9808,7 @@ msgstr "편집기 설정을 불러오거나 저장할 수 없습니다."
 msgid "Could not load templates"
 msgstr "템플릿을 불러올 수 없습니다."
 
-#: zotonic_mod_development/src/mod_development.erl:498
+#: zotonic_mod_development/src/mod_development.erl:500
 msgid "Could not open the directory on this computer."
 msgstr "이 컴퓨터에서 해당 디렉터리를 열 수 없습니다."
 
@@ -9826,7 +9872,7 @@ msgid "Detecting editors…"
 msgstr "편집기 감지…"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:7
-#: zotonic_mod_development/src/mod_development.erl:1368
+#: zotonic_mod_development/src/mod_development.erl:1386
 msgid "Development"
 msgstr "개발"
 
@@ -9946,11 +9992,11 @@ msgstr "데이터베이스 쿼리 추적을 활성화했습니다."
 msgid "Enter the module and function you want to trace. If no function is given, all functions in the module will be traced. Enter how many calls to trace before stopping."
 msgstr "추적할 모듈과 함수를 입력하십시오. 함수를 지정하지 않으면 모듈의 모든 함수를 추적합니다. 중지하기 전에 추적할 호출 횟수를 입력하십시오."
 
-#: zotonic_mod_development/src/mod_development.erl:671
+#: zotonic_mod_development/src/mod_development.erl:673
 msgid "Error changing the console logs."
 msgstr "콘솔 로그를 변경하는 중 오류가 발생했습니다."
 
-#: zotonic_mod_development/src/mod_development.erl:765
+#: zotonic_mod_development/src/mod_development.erl:767
 msgid "Error parsing template."
 msgstr "템플릿 구문 분석 오류입니다."
 
@@ -10008,7 +10054,7 @@ msgstr "함수 호출 추적"
 msgid "Function call tracing has been disabled. Use the following to enable function call tracing:"
 msgstr "함수 호출 추적 기능이 비활성화되었습니다. 함수 호출 추적을 활성화하려면 다음을 사용하십시오."
 
-#: zotonic_mod_development/src/mod_development.erl:705
+#: zotonic_mod_development/src/mod_development.erl:707
 msgid "Function tracing has been disabled in the Zotonic config."
 msgstr "Zotonic 설정에서 함수 추적 기능이 비활성화되었습니다."
 
@@ -10153,18 +10199,18 @@ msgstr "일치하는 디스패치 규칙을 찾을 수 없습니다."
 msgid "No matching templates found."
 msgstr "일치하는 템플릿을 찾을 수 없습니다."
 
-#: zotonic_mod_development/src/mod_development.erl:669
+#: zotonic_mod_development/src/mod_development.erl:671
 msgid "No permission to access the console logs."
 msgstr "콘솔 로그에 접근할 권한이 없습니다."
 
-#: zotonic_mod_development/src/mod_development.erl:512
-#: zotonic_mod_development/src/mod_development.erl:527
-#: zotonic_mod_development/src/mod_development.erl:542
-#: zotonic_mod_development/src/mod_development.erl:550
-#: zotonic_mod_development/src/mod_development.erl:577
-#: zotonic_mod_development/src/mod_development.erl:619
-#: zotonic_mod_development/src/mod_development.erl:636
-#: zotonic_mod_development/src/mod_development.erl:653
+#: zotonic_mod_development/src/mod_development.erl:514
+#: zotonic_mod_development/src/mod_development.erl:529
+#: zotonic_mod_development/src/mod_development.erl:544
+#: zotonic_mod_development/src/mod_development.erl:552
+#: zotonic_mod_development/src/mod_development.erl:579
+#: zotonic_mod_development/src/mod_development.erl:621
+#: zotonic_mod_development/src/mod_development.erl:638
+#: zotonic_mod_development/src/mod_development.erl:655
 msgid "No permission to use mod_development."
 msgstr "mod_development를 사용할 권한이 없습니다."
 
@@ -10173,7 +10219,7 @@ msgstr "mod_development를 사용할 권한이 없습니다."
 msgid "No references found."
 msgstr "참고 자료를 찾을 수 없습니다."
 
-#: zotonic_mod_development/src/mod_development.erl:631
+#: zotonic_mod_development/src/mod_development.erl:633
 msgid "No template found in the context."
 msgstr "해당 문맥에서 템플릿을 찾을 수 없습니다."
 
@@ -10198,7 +10244,7 @@ msgstr "찾을 수 없음"
 msgid "Observers"
 msgstr "옵저버"
 
-#: zotonic_mod_development/src/mod_development.erl:708
+#: zotonic_mod_development/src/mod_development.erl:710
 msgid "Only the admin user can set traces."
 msgstr "관리자 사용자만 추적을 설정할 수 있습니다."
 
@@ -10336,19 +10382,19 @@ msgstr "추적 시작"
 msgid "Start matching dispatch rules"
 msgstr "디스패치 규칙 매칭 시작"
 
-#: zotonic_mod_development/src/mod_development.erl:665
+#: zotonic_mod_development/src/mod_development.erl:667
 msgid "Started logging to the console of your browser tab."
 msgstr "브라우저 탭의 콘솔에 로그를 기록하기 시작했습니다."
 
-#: zotonic_mod_development/src/mod_development.erl:539
+#: zotonic_mod_development/src/mod_development.erl:541
 msgid "Started tracing all template inclusions."
 msgstr "템플릿에 포함된 모든 항목을 추적하기 시작했습니다."
 
-#: zotonic_mod_development/src/mod_development.erl:614
+#: zotonic_mod_development/src/mod_development.erl:616
 msgid "Started tracing template inclusions by rendering the page."
 msgstr "페이지를 렌더링하여 템플릿 포함 여부 추적을 시작했습니다."
 
-#: zotonic_mod_development/src/mod_development.erl:536
+#: zotonic_mod_development/src/mod_development.erl:538
 msgid "Started tracing template inclusions for your session."
 msgstr "세션에 포함될 템플릿 항목을 추적하기 시작했습니다."
 
@@ -10358,11 +10404,15 @@ msgstr "세션에 포함될 템플릿 항목을 추적하기 시작했습니다.
 msgid "Stop"
 msgstr "중지"
 
-#: zotonic_mod_development/src/mod_development.erl:667
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:51
+msgid "Stop capture"
+msgstr "캡처 중지"
+
+#: zotonic_mod_development/src/mod_development.erl:669
 msgid "Stopped logging to the console of all browser tabs."
 msgstr "모든 브라우저 탭의 콘솔 로그 기록을 중지했습니다."
 
-#: zotonic_mod_development/src/mod_development.erl:548
+#: zotonic_mod_development/src/mod_development.erl:550
 msgid "Stopped tracing template inclusions for all sessions."
 msgstr "모든 세션에 대한 템플릿 포함 추적을 중지했습니다."
 
@@ -10401,7 +10451,7 @@ msgstr "템플릿"
 msgid "Template debugging"
 msgstr "템플릿 디버깅"
 
-#: zotonic_mod_development/src/mod_development.erl:768
+#: zotonic_mod_development/src/mod_development.erl:770
 msgid "Template file not found."
 msgstr "템플릿 파일을 찾을 수 없습니다."
 
@@ -10421,7 +10471,7 @@ msgstr "템플릿 경로"
 msgid "Test with this template"
 msgstr "이 템플릿으로 테스트"
 
-#: zotonic_mod_development/src/mod_development.erl:616
+#: zotonic_mod_development/src/mod_development.erl:618
 msgid "The path must be a local URL."
 msgstr "경로는 로컬 URL이어야 합니다."
 
@@ -10477,8 +10527,9 @@ msgstr "현재 세션의 모든 데이터베이스 쿼리를 추적합니다."
 msgid "Trace function calls"
 msgstr "함수 호출 추적"
 
-#: zotonic_mod_development/priv/templates/_html_head_development.tpl:38
-#: zotonic_mod_development/priv/templates/_html_head_development.tpl:39
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:44
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:45
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:49
 msgid "Trace templates"
 msgstr "템플릿 추적"
 
@@ -10514,7 +10565,7 @@ msgstr "URI 패턴"
 msgid "Uncheck to debug only your current session."
 msgstr "현재 세션만 디버깅하려면 선택을 해제하십시오."
 
-#: zotonic_mod_development/src/mod_development.erl:650
+#: zotonic_mod_development/src/mod_development.erl:652
 msgid "Updated template debug points."
 msgstr "템플릿 디버그 포인트가 업데이트되었습니다."
 
@@ -16096,10 +16147,6 @@ msgstr "사이트맵 재구축"
 msgid "Rebuilding the sitemap in the background."
 msgstr "백그라운드에서 사이트맵을 다시 구축하는 중입니다."
 
-#: zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:2
-msgid "Sitemap"
-msgstr "사이트맵"
-
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:7
 msgid "Sitemap settings"
 msgstr "사이트맵 설정"
@@ -16381,11 +16428,15 @@ msgstr "가입하려면 이용 약관에 동의해야 합니다."
 msgid "Your signup code"
 msgstr "회원가입 코드"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:276
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:6
+msgid "A deployment is running. Try again when it finishes."
+msgstr "현재 배포가 진행 중입니다. 완료되면 다시 시도해 주세요."
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:320
 msgid "Another deployment is in progress. Please try again when it finishes."
 msgstr "현재 또 다른 배포가 진행 중입니다. 배포가 완료되면 다시 시도해 주세요."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:176
+#: zotonic_mod_site_update/src/mod_site_update.erl:187
 msgid "Building Zotonic in the background..."
 msgstr "백그라운드에서 Zotonic을 빌드하는 중..."
 
@@ -16393,12 +16444,16 @@ msgstr "백그라운드에서 Zotonic을 빌드하는 중..."
 msgid "Could not fetch the remote change log. Check the remote connection and try again."
 msgstr "원격 변경 로그를 가져올 수 없습니다. 원격 연결 상태를 확인한 후 다시 시도하십시오."
 
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:8
+msgid "Could not list local changes. Check the repository and server log."
+msgstr "로컬 변경 사항을 나열할 수 없습니다. 저장소와 서버 로그를 확인해 주세요."
+
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:9
 msgid "Current commit"
 msgstr "현재 커밋"
 
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:61
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:63
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:62
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:64
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:12
 msgid "Deploy"
 msgstr "배포"
@@ -16413,25 +16468,25 @@ msgstr "최신 버전 배포"
 msgid "Deploy latest Zotonic"
 msgstr "Zotonic 최신 버전 배포"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:229
+#: zotonic_mod_site_update/src/mod_site_update.erl:240
 msgid "Deploy latest version"
 msgstr "최신 버전 배포"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:263
+#: zotonic_mod_site_update/src/mod_site_update.erl:274
 msgid "Deploying the latest version..."
 msgstr "최신 버전을 배포 중입니다..."
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:2
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:5
-#: zotonic_mod_site_update/src/mod_site_update.erl:140
+#: zotonic_mod_site_update/src/mod_site_update.erl:146
 msgid "Deployment"
 msgstr "배포"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:274
+#: zotonic_mod_site_update/src/mod_site_update.erl:318
 msgid "Deployment completed."
 msgstr "배포가 완료되었습니다."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:278
+#: zotonic_mod_site_update/src/mod_site_update.erl:322
 msgid "Deployment failed. Check the server log for details."
 msgstr "배포에 실패했습니다. 자세한 내용은 서버 로그를 확인하십시오."
 
@@ -16447,13 +16502,21 @@ msgstr "배포 시에는 해당 Git 저장소에 포함된 다른 모듈을 포�
 msgid "Fetching remote changes…"
 msgstr "원격 변경 사항을 가져오는 중…"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:174
+#: zotonic_mod_site_update/src/mod_site_update.erl:185
 msgid "Finished rebuilding Zotonic."
 msgstr "Zotonic 다시 빌드가 완료되었습니다."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:32
 msgid "Incoming changes"
 msgstr "가져올 변경 사항"
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:2
+msgid "Local changes for {name}."
+msgstr "{name} 에 대한 로컬 변경 사항."
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:303
+msgid "Local changes reset. You can deploy again."
+msgstr "로컬 변경 사항이 초기화되었습니다. 다시 배포할 수 있습니다."
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:14
 msgid "Modules list"
@@ -16471,6 +16534,18 @@ msgstr "Zotonic 다시 빌드"
 msgid "Recompile changed Erlang files in the background"
 msgstr "변경된 Erlang 파일을 백그라운드에서 다시 컴파일합니다."
 
+#: zotonic_mod_site_update/src/mod_site_update.erl:289
+msgid "Reset local changes"
+msgstr "로컬 변경 내용 초기화"
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:309
+msgid "Reset or rebuild failed. Check the server log before retrying."
+msgstr "재설정 또는 재구축에 실패했습니다. 다시 시도하기 전에 서버 로그를 확인하십시오."
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:300
+msgid "Resetting local changes and rebuilding..."
+msgstr "로컬 변경 사항을 초기화하고 다시 빌드 중..."
+
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
 msgid "Review and deploy the latest version of this site."
 msgstr "이 사이트의 최신 버전을 검토하고 배포하십시오."
@@ -16487,7 +16562,7 @@ msgstr "가져올 변경 사항을 검토하고 이 모듈의 Git 저장소를 �
 msgid "Review incoming changes and deploy this site's code. Compilation and activation are coordinated across all sites on this node."
 msgstr "가져올 변경 사항을 검토하고 이 사이트의 코드를 배포하십시오. 컴파일과 활성화는 이 노드의 모든 사이트 간에 조정됩니다."
 
-#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:6
+#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:7
 msgid "Review incoming changes before deploying the latest version."
 msgstr "최신 버전을 배포하기 전에 가져올 변경 사항을 검토하십시오."
 
@@ -16508,13 +16583,17 @@ msgstr "사이트 배포"
 msgid "Site update API token"
 msgstr "사이트 업데이트 API 토큰"
 
-#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:10
+#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:11
 msgid "Site update is not available as the site does not use a known version control system, like git."
 msgstr "해당 사이트는 Git과 같은 알려진 버전 관리 시스템을 사용하지 않으므로 사이트 업데이트가 불가능합니다."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:178
+#: zotonic_mod_site_update/src/mod_site_update.erl:189
 msgid "Sorry this can only be run from the Zotonic status site"
 msgstr "죄송하지만 이 기능은 Zotonic 상태 사이트에서만 실행할 수 있습니다."
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:20
+msgid "The code is then rebuilt before deployment is enabled again. If this repository contains other sites or modules, their local changes are also discarded."
+msgstr "그런 다음 배포가 다시 활성화되기 전에 코드가 재빌드됩니다. 이 저장소에 다른 사이트나 모듈이 포함되어 있는 경우, 해당 사이트나 모듈의 로컬 변경 사항도 모두 취소됩니다."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:28
 msgid "The deployment preview is unavailable. Check the repository and server log, then try again."
@@ -16532,9 +16611,17 @@ msgstr "로컬 브랜치를 원격 버전으로 fast-forward할 수 없습니다
 msgid "There are no incoming changes."
 msgstr "가져올 변경 사항이 없습니다."
 
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:15
+msgid "There are no local changes. You can still rebuild to recover from a failed deployment."
+msgstr "로컬 변경 사항은 없습니다. 배포에 실패한 경우 재구축을 통해 복구할 수 있습니다."
+
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:22
 msgid "This branch has no upstream configured. Configure its remote tracking branch before deploying."
 msgstr "이 브랜치에는 업스트림이 설정되어 있지 않습니다. 배포하기 전에 원격 추적 브랜치를 설정하십시오."
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:18
+msgid "This permanently discards all uncommitted changes in the entire repository, including staged changes, and deletes untracked files and directories. Ignored files, local commits and nested repositories are preserved."
+msgstr "이 작업은 스테이징된 변경 사항을 포함하여 리포지토리 전체의 커밋되지 않은 모든 변경 사항을 영구적으로 폐기하고, 추적되지 않는 파일과 디렉터리를 삭제합니다. 무시된 파일, 로컬 커밋 및 중첩된 리포지토리는 그대로 유지됩니다."
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
 msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
@@ -16548,13 +16635,19 @@ msgstr "개별 모듈에 대한 업데이트를 배포하려면 다음을 엽니
 msgid "To run the webhook update, configure your service to POST to the following URL:"
 msgstr "웹훅 업데이트를 실행하려면 서비스가 다음 URL로 POST 요청을 보내도록 구성하십시오."
 
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:26
+msgid "Undo all local changes and rebuild"
+msgstr "모든 로컬 변경 사항을 취소하고 다시 빌드하기"
+
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:16
 msgid "View system status"
 msgstr "시스템 상태 보기"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:20
-#: zotonic_mod_site_update/src/mod_site_update.erl:233
-#: zotonic_mod_site_update/src/mod_site_update.erl:268
+#: zotonic_mod_site_update/src/mod_site_update.erl:244
+#: zotonic_mod_site_update/src/mod_site_update.erl:279
+#: zotonic_mod_site_update/src/mod_site_update.erl:292
+#: zotonic_mod_site_update/src/mod_site_update.erl:312
 msgid "You are not allowed to deploy this code."
 msgstr "이 코드를 배포할 권한이 없습니다."
 
