@@ -19,20 +19,29 @@ The extra row determines `has_more`; it is not returned. No count is performed.
 The agent facade calls this function and retains its additional anonymous,
 publication and noindex rules and existing continuation fields.
 
-New model access points are:
+## Model API pagination
+
+The existing model paths accept optional offset and limit:
 
 ```text
-/api/model/edge/get/o_page/{id}/{predicate}?offset=0&limit=20
-/api/model/edge/get/s_page/{id}/{predicate}?offset=0&limit=20
+/api/model/edge/get/o/{id}/{predicate}?offset=0&limit=20
+/api/model/edge/get/s/{id}/{predicate}?offset=0&limit=20
+/api/model/edge/get/o_props/{id}/{predicate}?offset=0&limit=20
+/api/model/edge/get/s_props/{id}/{predicate}?offset=0&limit=20
 ```
 
-The predicate segment is optional. Unknown payload keys, malformed numbers,
-negative offsets, limits outside 1–100, and offset plus limit above 10000 are
-rejected. These are candidate pages: ACL filtering can leave an empty result
-while `has_more` is true. Offset advances by the requested limit, not the number
-of returned items. The core paths use caller ACLs, not the facade's anonymous-only
-policy; no private row identifiers are returned. Candidate continuation does not
-provide a visible-resource total and can reflect filtered candidates.
+With neither parameter, the original full-list behavior is retained. With either,
+offset defaults to 0 and limit to 20. Negative offsets, limits outside 1–100,
+malformed pagination values and offset plus limit above 10000 are rejected.
+These methods retain their tuple/property-list shapes, required predicate,
+editorial `seq, id` order and caller ACL semantics. They apply LIMIT/OFFSET in SQL
+without loading the full cached list. They do not expose `has_more` or totals.
+Sequence ordering can still require sorting many edges.
+
+The agent facade calls `get_page/6` directly, which returns filtered candidate
+rows and `has_more` using indexed endpoint ordering. An empty candidate page can
+have more results: offset advances by the requested limit. Candidate continuation
+does not provide a visible-resource total and can reflect filtered candidates.
 
 ## Ordering and bounds
 
@@ -60,10 +69,11 @@ that bound is a separate future extension, not implied by this implementation.
   candidate pages and model-path decoding. Agent tests exercise the real edge
   function and add anonymous publication/noindex checks. See the consolidated
   [pilot findings](pilot-findings.md) for acceptance coverage.
-- Live generic `s_page` reads at limit 3 traversed all fifteen `refers` sources of
-  `catinclude`; `o_page` returned both targets. Concatenated IDs were sorted,
-  unique and equal to the existing full-list edge accessors. Following the agent
-  facade's `next_url` returned exactly the same IDs in both directions.
+- The initial pilot checked indexed candidate reads at limit 3 against all fifteen
+  incoming `refers` sources of `catinclude` and both outgoing targets. Concatenated
+  IDs matched the full-list accessors. Agent `next_url` traversal returned the same
+  IDs in both directions. Subsequent model-path regression tests verify all four
+  optional-pagination methods, list shapes, SQL bounds and unchanged unpaged reads.
 
 An isolated temporary table contained 100,000 incoming edges for one object and
 predicate, with both equivalent unique indexes and fresh statistics. It existed

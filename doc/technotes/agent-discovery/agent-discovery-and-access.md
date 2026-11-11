@@ -110,7 +110,8 @@ The main implementation boundaries are:
 - [Markdown composer](../../../apps/zotonic_mod_agent_discovery/src/support/agent_content_markdown.erl):
   localized editorial composition and omission reporting.
 - [Core edge model](../../../apps/zotonic_core/src/models/m_edge.erl):
-  bounded `get_page/6`, `o_page` and `s_page` reads. These generic entry points use
+  indexed candidate selection through `get_page/6`, plus optional SQL offset/limit
+  on the existing `o`, `s`, `o_props` and `s_props` model paths. Generic reads use
   caller ACLs; the facade adds its anonymous publication/noindex policy.
 
 ## Future work

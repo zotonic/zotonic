@@ -125,14 +125,15 @@ edge indexes and avoids sorting all incoming edges of a popular keyword.
 Offsets still cost work proportional to the skipped candidates; the existing
 10,000-candidate traversal limit remains. Concurrent edge edits can shift pages.
 
-Other callers can use `/api/model/edge/get/o_page/{id}/{predicate}` or
-`/api/model/edge/get/s_page/{id}/{predicate}`, omitting the predicate segment to
-include all predicates. These accept `offset` (default 0) and `limit` (default 20,
-maximum 100). Results contain `items` with `endpoint_id`/`predicate_id` and
-`has_more`. Advance offset by the requested limit even after an empty filtered
-page; stop at the 10,000-candidate bound. These core paths use the caller's ACL,
-whereas the agent facade additionally enforces anonymous publication/noindex
-rules. Existing full-list `m_edge` accessors retain their behavior.
+Other callers can use `/api/model/edge/get/o/{id}/{predicate}`, `s`, `o_props`
+or `s_props` with optional `offset` and `limit` query parameters. Without either,
+these methods retain their full-list behavior. With either, offset defaults to
+0 and limit to 20 (maximum 100, offset plus limit at most 10,000). They return the
+existing edge tuples or property lists, in editorial `seq, id` order, with the
+same caller ACL semantics and no continuation metadata. The predicate is required.
+SQL selects the requested subset, but sequence ordering may require a sort.
+The agent facade uses the separate Erlang `get_page/6` helper for indexed
+endpoint ordering, filtered candidate pages and continuation metadata.
 
 Markdown includes body HTML, text and header blocks, and one level of page-reference content. All `survey_...` blocks are intentionally skipped without marking the content
 incomplete. Unsupported blocks and oversized
