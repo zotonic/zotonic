@@ -5413,7 +5413,14 @@ updated `z:context()`
 
 `#middleware{}` properties:
 
-*   on: `request|welformed|handled`
+*   on: `guard|request|welformed|handled`
+
+The `guard` phase runs before controller callbacks, with proxy and cookie metadata
+initialized. It can return a context with `request_guard_response = {Status, Body}`
+(an HTTP 400..599 status and binary body). Response headers set on that context are
+preserved. This sends an early response without the other middleware phases or
+controller rendering. Observers must initialize authentication explicitly if needed
+and emit any telemetry for early responses themselves.
 ").
 -callback observe_middleware(#middleware{}, Acc, z:context()) -> Result when
     Acc :: z:context(),

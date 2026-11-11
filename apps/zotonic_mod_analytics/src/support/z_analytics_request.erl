@@ -77,7 +77,7 @@ dispatch_types(Context) ->
 mark_request(Type,Context) ->
     case allowed(Context) of
         true ->
-            D = (maps:with([<<"language">>, <<"country">>, <<"traffic">>], dimensions(Context)))#{
+            D = (maps:with([<<"language">>, <<"country">>, <<"traffic">>, <<"crawl_behavior">>, <<"guard_action">>, <<"guard_reason">>], dimensions(Context)))#{
                 <<"has_page_id">>=>has_page_id(page_id(Context))},
             Metrics = #{analytics_request=>D#{<<"type">>=>Type}},
             case Type of
@@ -99,7 +99,7 @@ mark_page(Context) ->
                     _ -> D0#{<<"page">>=>z_convert:to_binary(Key)}
                 end,
                 z_context:set_req_metrics(#{analytics=>D,
-                    analytics_request=>(maps:with([<<"language">>,<<"country">>,<<"traffic">>,<<"has_page_id">>],D))#{<<"type">>=><<"page">>}},Context);
+                    analytics_request=>(maps:with([<<"language">>,<<"country">>,<<"traffic">>,<<"has_page_id">>,<<"crawl_behavior">>,<<"guard_action">>,<<"guard_reason">>],D))#{<<"type">>=><<"page">>}},Context);
             false -> ok
         end.
 
@@ -181,13 +181,21 @@ allowed(Context) ->
 dimensions(Context) ->
     UA = case m_req:get(user_agent,Context) of B when is_binary(B), byte_size(B)=<2048 -> string:lowercase(B); _ -> <<>> end,
     Traffic = traffic(UA, z_user_agent:is_crawler(Context)),
-    #{
+    (guard_signals(Context))#{
         <<"language">>=>z_convert:to_binary(z_context:language(Context)),
         <<"device">>=>device(UA),
         <<"traffic">>=>Traffic,
         <<"country">>=>country(Context),
         <<"referrer">>=>referrer(cowmachine_req:get_req_header(<<"referer">>,Context),m_req:get(host,Context))
     }.
+
+%% Guard context is server-owned; never copy client/session identifiers.
+guard_signals(Context) ->
+    case z_context:get(crawl_guard_result, Context) of
+        #{crawl_behavior := B, guard_action := A, guard_reason := R} ->
+            #{<<"crawl_behavior">> => B, <<"guard_action">> => A, <<"guard_reason">> => R};
+        _ -> #{}
+    end.
 
 %% Declared product tokens are not verified identities. Match token boundaries,
 %% not arbitrary substrings; normal browser automation remains unrecognized.

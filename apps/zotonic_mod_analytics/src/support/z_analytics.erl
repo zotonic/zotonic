@@ -36,9 +36,15 @@ decode(B) when is_binary(B) -> binary_to_term(B, [safe]).
 
 -spec registry(Context) -> map() when Context :: z:context().
 registry(Context) ->
+    Guard = #{
+        <<"crawl_behavior">> => [<<"normal">>, <<"excessive">>, <<"unknown">>],
+        <<"guard_action">> => [<<"allow">>, <<"would_throttle">>, <<"throttle">>],
+        <<"guard_reason">> => [<<"none">>, <<"request_rate">>, <<"distinct_targets">>,
+            <<"state_capacity">>, <<"unavailable">>]
+    },
     Builtin = #{name => <<"page_request">>, version => 1,
         title => <<"Public page requests">>,
-        dimensions => #{
+        dimensions => Guard#{
             <<"page">> => text, <<"language">> => text, <<"referrer">> => text,
             <<"has_page_id">> => [<<"true">>,<<"false">>],
             <<"country">> => text,
@@ -48,7 +54,7 @@ registry(Context) ->
         name => <<"api_request">>,
         version => 1,
         title => <<"HTTP API requests">>,
-        dimensions => #{
+        dimensions => Guard#{
             <<"method">> => [
                 <<"GET">>,<<"HEAD">>,<<"POST">>,<<"PUT">>,<<"PATCH">>,
                 <<"DELETE">>,<<"OPTIONS">>,<<"OTHER">>
@@ -161,7 +167,9 @@ definition(_, _) ->
 
 -spec properties(Properties, Schema) -> {ok, map()} | {error, invalid_properties}
     when Properties :: term(), Schema :: map().
-properties(P, #{dimensions := Ds}) when is_map(P), map_size(P) =< 8 ->
+%% Built-in HTTP events have up to eleven fields with crawl-guard signals.
+%% Keep a fixed ceiling as well as validating every field against its schema.
+properties(P, #{dimensions := Ds}) when is_map(P), map_size(P) =< 16 ->
     case lists:all(
             fun({K,V}) -> maps:is_key(K,Ds) andalso value_type(V,maps:get(K,Ds)) end,
             maps:to_list(P))

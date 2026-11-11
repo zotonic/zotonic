@@ -122,7 +122,7 @@ observe_analytics_events(#analytics_events{}, Events, _Context) ->
 ```
 
 Names must be namespaced. Dimensions accept enums or UTF-8 text up to 255 bytes.
-Each event has at most eight declared dimensions; undeclared properties are
+Each custom event has at most eight declared dimensions; undeclared properties are
 rejected. Use coarse categories, never personal data, free-form user input,
 addresses or identifiers. A few sensitive field names are rejected, but that is
 not a substitute for reviewing a module's schema. Increment `version` when the
@@ -429,3 +429,33 @@ errors, are counted when they reach the handled controller middleware. Paths,
 resource IDs, search terms and request bodies are not stored for these interfaces.
 MQTT model calls are not counted. Requests made through the generic model HTTP API
 retain the `api` type; these types apply to the dedicated agent dispatch routes.
+
+## Crawl guard signals
+
+When `mod_crawl_guard` is enabled, assessed requests carry `crawl_behavior`,
+`guard_action` and `guard_reason` on the built-in page, API and dispatch-type
+request events. For example, filter `guard_action = would_throttle` in observe
+mode to inspect content that would be limited. These signals describe behavior,
+independently of the declared `traffic` classification.
+
+The optional `mod_crawl_guard:request` event also counts early 429 decisions that
+never reach normal request analytics. It overlaps with ordinary request events;
+do not sum their totals. Existing analytics consent, admin and exclusion policies
+apply. See [Crawl guard](../zotonic_mod_crawl_guard/README.md) for configuration,
+values, coverage and operational limitations.
+
+
+Schema upgrade 5 and module activation add a **Page requests: crawl guard**
+companion when a default normal-traffic Page requests recording and
+`mod_crawl_guard` are available. The default chart displays **Would throttle** and
+**Throttled** alongside page views. These lines count page attempts of `other` and
+`unknown` traffic, including early rejections; they must not be added to page views.
+The companion remains configurable but is not shown as a separate dashboard panel
+while an unpaused default Page requests panel is present.
+
+The companion reserves three groups (10,734 rows), respecting the shared row budget
+and 32-recording limit. Existing recordings and their history are unchanged. Guard
+history starts on creation, with gaps before that time. If capacity is exhausted,
+free capacity and retry `m_analytics:store_ensure_page_guard(Context)`, followed by
+an analytics worker reload. Once initialized, deleting the companion is respected;
+module restarts do not recreate it.

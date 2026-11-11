@@ -1445,7 +1445,7 @@
 %% Type: foldl
 %% Return: updated ``z:context()``
 -record(middleware, {
-    on :: request | welformed | handled
+    on :: guard | request | welformed | handled
 }).
 
 

@@ -22,7 +22,7 @@
 -mod_title("Site Analytics").
 -mod_description("Lightweight analytics for site traffic, content, email, and custom events.").
 -mod_depends([admin]).
--mod_schema(4).
+-mod_schema(5).
 -mod_prio(500).
 -mod_config([
     #{key=>row_budget,type=>integer,default=>1000000,
@@ -110,6 +110,10 @@ init(Args) ->
     ],
     {ok,{#{strategy=>one_for_all,intensity=>3,period=>60},Children}}.
 
+manage_schema({upgrade,5},Context) ->
+    ok = m_analytics:store_install(Context),
+    ensure_page_guard(Context),
+    z_analytics_worker:reload(Context);
 manage_schema({upgrade,4},Context) ->
     ok = m_analytics:store_install(Context),
     ok = m_analytics:store_upgrade_traffic_groups(Context),
@@ -145,7 +149,7 @@ manage_schema(_,Context) ->
         _ ->
             ok
     end,
-    ok.
+    ensure_page_guard(Context).
 
 %% Upgrade once, append after existing recordings, and respect the site budget.
 %% Later installs/restarts must not recreate a recording the administrator deleted.
@@ -180,7 +184,20 @@ smtp_event(Outcome,Context) ->
 observe_middleware(#middleware{on=handled},Context,_Context) -> z_analytics_request:mark(Context);
 observe_middleware(_,Context,_) -> Context.
 
+observe_module_activate(#module_activate{module = M},Context)
+        when M =:= mod_crawl_guard; M =:= mod_analytics ->
+    ensure_page_guard(Context),
+    z_analytics_worker:reload(Context);
 observe_module_activate(_,Context) -> z_analytics_worker:reload(Context).
+
+ensure_page_guard(Context) ->
+    case m_analytics:store_ensure_page_guard(Context) of
+        ok -> ok;
+        Error ->
+            ?LOG_WARNING(#{in => mod_analytics, text => <<"Could not add default crawl guard graphs">>,
+                result => error, reason => Error}),
+            ok
+    end.
 
 observe_module_deactivate(_,Context) -> z_analytics_worker:reload(Context).
 
