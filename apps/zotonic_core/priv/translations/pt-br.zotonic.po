@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-11 10:49\n"
+"PO-Revision-Date: 2026-11-11 11:43\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "MIME-Version: 1.0\n"
@@ -6590,32 +6590,32 @@ msgstr "Esta página mostra estatísticas do sistema (em tempo real), como uso d
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:12
 msgid "API catalog"
-msgstr ""
+msgstr "Catálogo de APIs"
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:24
 msgid "Browse public resources"
-msgstr ""
+msgstr "Navegar pelos recursos públicos"
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:3
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:7
 msgid "Data and API"
-msgstr ""
+msgstr "Dados e API"
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:8
 msgid "Explore this site's public information using ordinary links and HTTP GET requests. Public content does not require an account or API key."
-msgstr ""
+msgstr "Explore as informações públicas deste site usando links comuns e solicitações HTTP GET. O conteúdo público não exige uma conta nem uma chave de API."
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:29
 msgid "JSON responses contain status and result fields. Concise reads return localized text and report language fallback. Follow next_url until next is false; filtered pages can be empty. Resource exports provide page URLs by language, including x-default. Cite the human page URL in the appropriate language."
-msgstr ""
+msgstr "As respostas JSON contêm os campos status e result. As leituras concisas retornam texto localizado e informam o idioma de fallback. Siga o next_url até que next seja false; as páginas filtradas podem estar vazias. As exportações de recursos fornecem URLs de páginas por idioma, incluindo x-default. Cite a URL da página para humanos no idioma apropriado."
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:11
 msgid "OpenAPI description"
-msgstr ""
+msgstr "Descrição da OpenAPI"
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:28
 msgid "Replace {id} with an ID or unique name obtained from search results or a page's alternate link. Use small pages and follow pagination to explore further."
-msgstr ""
+msgstr "Substitua {id} por um ID ou nome exclusivo obtido a partir dos resultados da pesquisa ou de um link alternativo da página. Use páginas menores e siga a paginação para explorar mais a fundo."
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:15
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:2
@@ -6624,7 +6624,7 @@ msgstr "Mapa do site"
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:30
 msgid "The agent endpoints always use anonymous permissions. Existing compatibility APIs apply the caller's permissions. They return only accessible information and keep their existing indexing headers. Content and media may have their own licenses; preserve attribution and follow the stated terms."
-msgstr ""
+msgstr "Os endpoints do agente sempre utilizam permissões anônimas. As APIs de compatibilidade existentes aplicam as permissões do chamador. Elas retornam apenas informações acessíveis e mantêm seus cabeçalhos de indexação existentes. O conteúdo e a mídia podem ter suas próprias licenças; preserve a atribuição e siga os termos estabelecidos."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:60
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:29
@@ -6900,7 +6900,7 @@ msgstr "Filtros fixos"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:25
 msgid "Gaps are unrecorded intervals. Partial intervals may undercount activity. Page-request totals, device breakdowns and popular content exclude detected crawlers. API and traffic-classification measurements include crawlers unless filtered out. Counts exclude editor activity and do not measure unique visitors."
-msgstr ""
+msgstr "Lacunas são intervalos não registrados. Intervalos parciais podem subestimar a atividade. Os totais de solicitações de página, a distribuição por dispositivo e o conteúdo popular excluem os rastreadores detectados. As medições de API e de classificação de tráfego incluem rastreadores, a menos que sejam filtrados. As contagens excluem a atividade dos editores e não medem visitantes únicos."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:13
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:15
@@ -9731,7 +9731,7 @@ msgstr "Sempre oculte o botão flutuante de rastreamento do modelo."
 
 #: zotonic_mod_development/priv/templates/_html_head_development.tpl:50
 msgid "Attach capture"
-msgstr ""
+msgstr "Anexar captura"
 
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:18
 msgid "Automatic detection on the Zotonic machine"
@@ -10429,7 +10429,7 @@ msgstr "Pare"
 
 #: zotonic_mod_development/priv/templates/_html_head_development.tpl:51
 msgid "Stop capture"
-msgstr ""
+msgstr "Interromper a captura"
 
 #: zotonic_mod_development/src/mod_development.erl:669
 msgid "Stopped logging to the console of all browser tabs."
@@ -16461,7 +16461,7 @@ msgstr "Seu código de cadastro"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:6
 msgid "A deployment is running. Try again when it finishes."
-msgstr ""
+msgstr "Uma implantação está em andamento. Tente novamente quando ela terminar."
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:320
 msgid "Another deployment is in progress. Please try again when it finishes."
@@ -16477,7 +16477,7 @@ msgstr "Não foi possível obter o registro de alterações remoto. Verifique a 
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:8
 msgid "Could not list local changes. Check the repository and server log."
-msgstr ""
+msgstr "Não foi possível listar as alterações locais. Verifique o repositório e o log do servidor."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:9
 msgid "Current commit"
@@ -16543,11 +16543,11 @@ msgstr "Alterações recebidas"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:2
 msgid "Local changes for {name}."
-msgstr ""
+msgstr "Alterações locais para {name}."
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:303
 msgid "Local changes reset. You can deploy again."
-msgstr ""
+msgstr "As alterações locais foram redefinidas. Você pode fazer a implantação novamente."
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:14
 msgid "Modules list"
@@ -16567,15 +16567,15 @@ msgstr "Recompilar arquivos Erlang alterados em segundo plano"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:289
 msgid "Reset local changes"
-msgstr ""
+msgstr "Redefinir alterações locais"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:309
 msgid "Reset or rebuild failed. Check the server log before retrying."
-msgstr ""
+msgstr "A redefinição ou a reconstrução falhou. Verifique o log do servidor antes de tentar novamente."
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:300
 msgid "Resetting local changes and rebuilding..."
-msgstr ""
+msgstr "Redefinindo as alterações locais e recompilando..."
 
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
 msgid "Review and deploy the latest version of this site."
@@ -16624,7 +16624,7 @@ msgstr "Desculpe, isso só pode ser executado no site de status Zotonic"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:20
 msgid "The code is then rebuilt before deployment is enabled again. If this repository contains other sites or modules, their local changes are also discarded."
-msgstr ""
+msgstr "O código é então recompilado antes que a implantação seja reativada. Se esse repositório contiver outros sites ou módulos, as alterações locais neles feitas também serão descartadas."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:28
 msgid "The deployment preview is unavailable. Check the repository and server log, then try again."
@@ -16644,7 +16644,7 @@ msgstr "Não há alterações recebidas."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:15
 msgid "There are no local changes. You can still rebuild to recover from a failed deployment."
-msgstr ""
+msgstr "Não há alterações locais. Você ainda pode recompilar para recuperar uma implantação que falhou."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:22
 msgid "This branch has no upstream configured. Configure its remote tracking branch before deploying."
@@ -16652,7 +16652,7 @@ msgstr "Este branch não tem nenhum upstream configurado. Configure o branch rem
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:18
 msgid "This permanently discards all uncommitted changes in the entire repository, including staged changes, and deletes untracked files and directories. Ignored files, local commits and nested repositories are preserved."
-msgstr ""
+msgstr "Isso descarta permanentemente todas as alterações não confirmadas em todo o repositório, incluindo as alterações preparadas para confirmação, e exclui arquivos e diretórios não rastreados. Arquivos ignorados, confirmações locais e repositórios aninhados são preservados."
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
 msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
@@ -16668,7 +16668,7 @@ msgstr "Para executar a atualização do webhook, configure seu serviço para PO
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:26
 msgid "Undo all local changes and rebuild"
-msgstr ""
+msgstr "Desfazer todas as alterações locais e recompilar"
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:16
 msgid "View system status"
