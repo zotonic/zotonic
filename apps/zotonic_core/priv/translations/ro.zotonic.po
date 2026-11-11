@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-11 10:49\n"
+"PO-Revision-Date: 2026-11-11 11:44\n"
 "Last-Translator: \n"
 "Language-Team: Romanian\n"
 "MIME-Version: 1.0\n"
@@ -6631,7 +6631,7 @@ msgstr "Explorați informațiile publice ale acestui site folosind linkuri obiș
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:29
 msgid "JSON responses contain status and result fields. Concise reads return localized text and report language fallback. Follow next_url until next is false; filtered pages can be empty. Resource exports provide page URLs by language, including x-default. Cite the human page URL in the appropriate language."
-msgstr "Răspunsurile JSON conțin câmpuri de stare și de rezultat. Citirile concise returnează text localizat și indică limba de rezervă. Urmați next_url până când next devine fals; paginile filtrate pot fi goale. Exporturile de resurse furnizează adresele URL ale paginilor pe limbi, inclusiv x-default. Menționați adresa URL a paginii destinate utilizatorilor în limba corespunzătoare."
+msgstr "Răspunsurile JSON conțin câmpurile status și result. Citirile concise returnează text localizat și indică limba de rezervă. Urmați next_url până când next devine false; paginile filtrate pot fi goale. Exporturile de resurse furnizează adresele URL ale paginilor pe limbi, inclusiv x-default. Menționați adresa URL a paginii destinate utilizatorilor în limba corespunzătoare."
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:11
 msgid "OpenAPI description"
