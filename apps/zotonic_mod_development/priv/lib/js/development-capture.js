@@ -7,6 +7,7 @@
     let installed = false;
     let allowConsole = false;
     let allowWrite = false;
+    let isOwner = false;
     let id;
     try { id = sessionStorage.getItem(storageKey); } catch (_) { /* Storage may be disabled. */ }
     let active = false;
@@ -53,7 +54,7 @@
             original = console.log;
             wrapper = function(...args) {
                 original.apply(console, args);
-                if (active && entries.length < 50) {
+                if (active && allowConsole && entries.length < 50) {
                     entries.push(Array.from(args.map(text).join(" ")).slice(0, 900).join(""));
                 }
             };
@@ -66,7 +67,9 @@
     };
     const show = capture => {
         allowWrite = capture.write_allowed === true;
-        allowConsole = allowWrite && capture.console_allowed === true;
+        isOwner = capture.is_owner === true;
+        allowConsole = isOwner && allowWrite && capture.console_allowed === true;
+        if (!isOwner) entries = [];
         setActive(capture.state === "active");
         if (statusOutput) statusOutput.textContent = `${capture.id} — ${capture.state}`;
         return capture;
@@ -98,6 +101,7 @@
         entries = [];
         allowConsole = false;
         allowWrite = false;
+        isOwner = false;
         if (statusOutput) statusOutput.textContent = "";
         return null;
     };
@@ -108,10 +112,16 @@
         pending = 0;
         return forget();
     };
-    const pollCurrent = async (entries, request) => {
-        if (!id) return null;
+    const pollCurrent = async (request, current) => {
+        current = current === undefined ? await readStatus(request) : current;
+        if (!current) return null;
+        if (!isOwner || !allowWrite) {
+            const error = new Error("eacces");
+            error.code = "eacces";
+            throw error;
+        }
         try {
-            return show(await request("post", `poll/${id}`, {entries}));
+            return show(await request("post", `poll/${id}`, {entries: entries.splice(0)}));
         } catch (error) {
             if (missing(error)) return forget();
             throw error;
@@ -141,7 +151,7 @@
             save(captureId);
             return show(capture);
         }
-        const current = await pollCurrent(entries.splice(0), request);
+        const current = await pollCurrent(request);
         if (current?.state === "active") return current;
         if (!current) {
             const capture = await request("post", "attach", {path: location.pathname});
@@ -185,20 +195,20 @@
     const flush = () => run(async request => {
         const current = await readStatus(request);
         if (!current) return null;
-        if (!allowWrite) {
+        if (!isOwner || !allowWrite) {
             const error = new Error("eacces");
             error.code = "eacces";
             throw error;
         }
         if (current.state !== "active") return current;
-        return pollCurrent(entries.splice(0), request);
+        return pollCurrent(request, current);
     });
 
     /** Explicit IDs stop without flushing; omit the ID to flush this page first. */
     const stop = captureId => captureId !== undefined
         ? captureCall("post", "stop", captureId)
         : run(async request => {
-        if (!await pollCurrent(entries.splice(0), request)) return null;
+        if (!await pollCurrent(request)) return null;
         return show(await request("post", `stop/${id}`));
     });
 
@@ -258,8 +268,9 @@
         if (id && pending === 0) {
             await run(async request => {
                 // Refresh permissions before collecting or submitting browser logs.
-                if (await readStatus(request) && allowWrite) {
-                    await pollCurrent(entries.splice(0), request);
+                const current = await readStatus(request);
+                if (current && isOwner && allowWrite) {
+                    await pollCurrent(request, current);
                 }
             }).catch(() => {});
         }

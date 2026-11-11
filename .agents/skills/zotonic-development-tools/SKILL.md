@@ -299,6 +299,15 @@ const reconnectable = (await window.z_development_capture.list())
 These flags are hints, not authorization; `attach(captureId)` still validates
 ownership and write access on the server. Non-owners can use explicit-ID reads
 and, with write access, start/stop; they cannot attach or submit browser logs.
+The page API requires `is_owner === true` before wrapping `console.log` or
+submitting its buffer. Background polling and local `attach()`, `flush()`, and
+`stop()` refresh status before any log submission. A false or missing ownership
+flag restores normal console output and discards pending logs. Background polling
+then uses GET only; local attach/flush/stop reject with `eacces` without a poll POST.
+The stored ID remains available for inspection; use `detach()` to clear it, then
+`attach()` to create a capture for the current session. Explicit-ID reads and
+admin start/stop commands remain available. Server-side ownership checks remain
+authoritative if authentication changes between the status check and submission.
 Listing and explicit-ID reads do not change sessionStorage, the page's current attachment,
 or console collection, even when reading the current ID. Missing or expired IDs
 return `null`; permission and transport failures reject without changing local

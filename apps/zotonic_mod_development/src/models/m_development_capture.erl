@@ -88,6 +88,11 @@ List and status summaries include `is_owner`, comparing the capture's session
 with the current request's browser session without exposing either session ID.
 It is false when the request has no session. `write_allowed` is independent:
 read-only owners cannot attach or submit logs. Attach still validates ownership.
+The JavaScript API requires is_owner=true to wrap console.log or submit logs.
+Local attach/flush/stop and background polling refresh status before submitting;
+lost or missing ownership discards buffered logs and disables console collection.
+Local mutations then reject with eacces; explicit-ID reads and admin start/stop
+remain available. Use detach() to clear the stale local attachment.
 The HTTP API requires normal administrator authentication; the SSH command uses trusted node RPC authority.
 All capture access is denied in production, including over SSH.
 

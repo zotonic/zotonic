@@ -12,6 +12,7 @@ function harness(allowed, {install = true, storedId, readOnly = false, initialSt
     const storage = new Map(storedId ? [["zotonic.development.capture", storedId]] : []);
     let failure;
     let failurePath;
+    let ownership = true;
     const logs = [];
     let state = initialState;
     const element = () => {
@@ -54,7 +55,7 @@ function harness(allowed, {install = true, storedId, readOnly = false, initialSt
             if (topic.endsWith('/stop/cap')) state = 'stopped';
             const resultId = topic.endsWith('/attach') ? 'cap' : topic.split('/').at(-1);
             return {payload: {status: 'ok', result: {id: resultId, state, console_allowed: allowed,
-                write_allowed: allowed && !readOnly, is_owner: resultId === 'cap'}}};
+                write_allowed: allowed && !readOnly, is_owner: resultId === 'foreign' ? false : ownership}}};
         }}}
     };
     vm.runInNewContext(source, ctx);
@@ -62,6 +63,7 @@ function harness(allowed, {install = true, storedId, readOnly = false, initialSt
     if (install) ctx.window.z_development_capture.install(button, {trace: 'Trace', attach: 'Attach', stop: 'Stop'}, allowed);
     return {ctx, elements, calls, timers, original, printed, storage,
         setReadOnly: value => { readOnly = value; },
+        setOwnership: value => { ownership = value; },
         failWith: (value, path) => { failure = value; failurePath = path; }};
 }
 
@@ -638,6 +640,52 @@ test('attach by ID rejects malformed IDs without network requests', async () => 
     }
     assert.equal(h.calls.length, 0);
     assert.equal(h.storage.size, 0);
+});
+
+test('a foreign stored attachment never wraps console.log or submits logs', async () => {
+    for (const install of [true, false]) {
+        const h = harness(true, {install, storedId: 'foreign', initialState: 'active'});
+        const api = h.ctx.window.z_development_capture;
+        assert.equal((await api.status()).is_owner, false);
+        assert.equal(h.ctx.console.log, h.original);
+        h.ctx.console.log('not for the foreign capture');
+        await h.timers.shift()();
+        for (const method of ['flush', 'stop', 'attach']) {
+            await assert.rejects(api[method](), {code: 'eacces'});
+        }
+        assert.equal(h.calls.every(c => c.topic.includes('/get/')), true);
+        assert.equal(h.ctx.console.log, h.original);
+        assert.equal(h.storage.get('zotonic.development.capture'), 'foreign');
+        // Explicit control by a writable admin remains available without log submission.
+        await api.stop('foreign');
+        assert.equal(h.calls.at(-1).topic.endsWith('/post/stop/foreign'), true);
+        await api.detach();
+        assert.equal(h.storage.size, 0);
+    }
+});
+
+test('lost or missing ownership drops buffered logs before every local submission path', async () => {
+    for (const owner of [false, undefined, 'true']) {
+        for (const method of ['status', 'flush', 'stop', 'attach', 'background']) {
+            const h = harness(true, {install: false});
+            const api = h.ctx.window.z_development_capture;
+            await api.attach();
+            const oldWrapper = h.ctx.console.log;
+            h.ctx.console.log('discard after session change');
+            h.setOwnership(owner);
+            const before = h.calls.length;
+            if (method === 'background') await h.timers.shift()();
+            else if (method === 'status') await api.status();
+            else await assert.rejects(api[method](), {code: 'eacces'});
+            assert.equal(h.calls.slice(before).every(c => c.topic.includes('/get/')), true);
+            assert.equal(h.ctx.console.log, h.original);
+            assert.equal(h.storage.get('zotonic.development.capture'), 'cap');
+            oldWrapper('a retained wrapper must not collect either');
+            h.setOwnership(true);
+            await api.flush();
+            assert.equal((await api.console()).entries.length, 0);
+        }
+    }
 });
 
 test('explicit IDs support unattached readers without changing storage or collecting logs', async () => {
