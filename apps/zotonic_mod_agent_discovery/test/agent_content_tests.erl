@@ -4,7 +4,7 @@
 
 content_test_() ->
     {foreach, fun setup/0, fun cleanup/1, [
-        fun limits/0, fun localized_content/0, fun survey_blocks/0, fun private_content/0,
+        fun limits/0, fun localized_content/0, fun markdown_api_access/0, fun survey_blocks/0, fun private_content/0,
         fun bounded_search/0, fun bounded_edges/0, fun conditional_content/0,
         fun explicit_sort_precedes_relevance/0, fun search_filters/0, fun schema_constraints/0, fun private_page_block/0, fun page_block_dependencies/0,
         {timeout, 8, fun execution_budget/0}
@@ -81,11 +81,39 @@ localized_content() ->
     ?assertMatch(#{title := <<"Titel">>, language := nl, requested_language := de,
         is_fallback := true, content_complete := false}, R),
     ?assertEqual(false, maps:is_key(<<"private_secret">>, R)),
-    Markdown = controller_agent_content:markdown(R),
+    Markdown = controller_agent_content:markdown(R, context()),
     ?assertNotEqual(nomatch, binary:match(Markdown, <<"Public body">>)),
     ?assertNotEqual(nomatch, binary:match(Markdown, <<"Unsupported block">>)),
     {ok, English} = m_agent_content:read(resource, 1, #{<<"language">> => <<"en">>}, context()),
     ?assertMatch(#{title := <<"Title">>, is_fallback := false}, English).
+
+markdown_api_access() ->
+    meck:expect(z_dispatcher, url_for, fun(Dispatch, Args, none, C) ->
+        anonymous(C),
+        case Dispatch of
+            agent_api_help ->
+                ?assertEqual([], Args),
+                ?assertEqual('x-default', z_context:language(C)),
+                <<"/api-help">>;
+            agent_openapi ->
+                ?assertEqual([], Args),
+                ?assertEqual('x-default', z_context:language(C)),
+                <<"/openapi.json">>;
+            agent_resource ->
+                ?assertEqual(1, proplists:get_value(id, Args)),
+                ?assertEqual(nl, proplists:get_value(language, Args)),
+                <<"/api/agent/resource/1?language=nl">>;
+            _ -> <<"/other">>
+        end
+    end),
+    %% A German request falls back to Dutch; the JSON link follows actual content.
+    {ok, R} = m_agent_content:read(resource, 1, #{<<"language">> => <<"de">>}, context()),
+    Text = controller_agent_content:markdown(R, context()),
+    ?assertNotEqual(nomatch, binary:match(Text, <<"\n## API access\n\n",
+        "- [API help](<https://example.test/api-help>)\n",
+        "- [OpenAPI specification](<https://example.test/openapi.json>)\n",
+        "- [This resource as JSON](<https://example.test/api/agent/resource/1?language=nl>)\n">>)),
+    ?assertEqual(nomatch, binary:match(maps:get(markdown, R), <<"## API access">>)).
 
 private_content() ->
     lists:foreach(fun(Id) ->
@@ -153,7 +181,7 @@ survey_blocks() ->
     } end),
     {ok, R} = m_agent_content:read(resource, 1, #{}, context()),
     ?assertEqual(true, maps:get(content_complete, R)),
-    Text = controller_agent_content:markdown(R),
+    Text = controller_agent_content:markdown(R, context()),
     ?assertEqual(nomatch, binary:match(Text, <<"Hidden">>)),
     ?assertEqual(nomatch, binary:match(Text, <<"Unsupported">>)),
     ?assertNotEqual(nomatch, binary:match(Text, <<"Editorial text">>)).

@@ -1,6 +1,6 @@
 # Public information discovery and access for agents
 
-**Status: phase 3 implemented; phase 4 recency repeat passed for the HTTP-capable agent.** Reviewed 10 November 2026
+**Status: phase 3 implemented; phase 4 recency, relationship, multilingual and text-reader pilot results recorded.** Reviewed 11 November 2026
 against repository revision `e7c53472b`.
 
 ### Implementation progress
@@ -350,14 +350,57 @@ Verify that signed-in visits cannot populate a public cache with private data.
 
 ### 4. Measure independent discovery and refine
 
-**Trial results:** [first pass](agent-discovery-phase4-first-pass.md) and
-[recency repeat after the sorting fix](agent-discovery-phase4-recency-repeat.md).
+**Trial results:** [first pass](agent-discovery-phase4-first-pass.md),
+[recency repeat after the sorting fix](agent-discovery-phase4-recency-repeat.md),
+[relationship/multilingual trials](agent-discovery-phase4-navigation-language.md),
+[actual text-reader retention tests](agent-discovery-phase4-text-readers.md),
+and [Markdown API discovery trials, 11 November 2026](agent-discovery-phase4-markdown-access.md).
 The HTTP-capable agent independently discovered the APIs in both passes. After
 explicit ordering was moved ahead of full-text relevance, it answered correctly
 with one search request and checked the ordinary source pages. The extracted-text
 agent still could not verify recency. Discovery remains out of human-facing page
 bodies and footers; visible-fragment recommendations are withdrawn. Metadata-only
 discovery limitations are accepted, not worked around with hidden body links.
+
+The relationship trials verified outgoing/incoming references through ordinary
+article links in both access modes, without API use. Both multilingual trials
+retrieved the Dutch page and recognized English fallback at the German URL; the
+HTTP participant additionally discovered the existing JSON export to verify the
+published language set. These runs do not yet establish unaided use of the new
+relationship or language facade. One helper response-file collision was fixed
+and the affected relationship run repeated with a fresh agent; see the trace.
+
+The isolated text-reader experiment tested 29 synthetic HTML cases through seven
+configurations, including Jina's hosted raw-HTML Reader and Mozilla Readability.
+Both discarded end-of-body/footer discovery links even when visible. CSS-hidden
+links sometimes survived inside article content, while simpler whole-body
+converters retained more hidden markup. This does not establish portable
+discovery or SEO acceptance. Live pages remain unchanged; no hidden body-link
+implementation is planned from these results. Remote-URL rendered-reader and
+chat-product behavior remain unmeasured.
+
+**Markdown discovery follow-up implemented:** the `text/markdown` representation
+now ends with a concise “API access” section linking to API help, OpenAPI and the
+resource's JSON endpoint. The resource link preserves the actual content language,
+including fallback. This is representation navigation, not editorial content, so
+it is not injected into the JSON resource's `markdown` field or category content
+templates. Header/head discovery and human-facing HTML remain unchanged. The
+section helps clients that already fetch Markdown; it does not resolve discovery
+for readers that only extract ordinary HTML. All `survey_...` blocks remain
+excluded; additional JSON-LD and Turtle support remains deferred until the SPARQL
+merge.
+
+**Markdown trial results:** two fresh recency participants followed the section's
+API-help/OpenAPI links and used one search call each to return the independently
+verified top three. A third participant followed the resource JSON link and used
+the concise resource facade to verify Dutch content and English fallback for a
+German request. All succeeded within eight fetches (13 total across three runs).
+This establishes useful navigation after Markdown is supplied, not discovery of
+Markdown from ordinary HTML. There was no no-section control, and the reporting
+prompt mentioned structured interfaces; see the report for limitations. Keep the
+section, retain the no-HTML-body-links policy, and clarify sort-direction wording
+in a subsequent API-documentation pass. Relationship-facade adoption and broader
+client/language trials remain open.
 
 Run repeated trials with the same questions, data and client versions:
 

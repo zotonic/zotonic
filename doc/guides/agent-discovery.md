@@ -119,6 +119,11 @@ Markdown includes body HTML, text and header blocks, and one level of page-refer
 incomplete. Unsupported blocks and oversized
 content are explicitly marked; check `content_complete` and follow the source
 page for omitted material. Inline images use the existing Markdown conversion.
+The Markdown response ends with a concise “API access” section linking to API
+help, the OpenAPI specification and this resource's JSON endpoint in the content's
+actual language. These links are not added to human-facing HTML or to the JSON
+resource's editorial `markdown` field. They assist clients that already fetch
+the Markdown representation; header/head discovery remains unchanged.
 JSON includes a resource's own downloadable medium when available, exposing only
 MIME type, dimensions, size and download URL. Preserve supplied licensing and
 attribution. Page references include a source link, language and supplied licensing/attribution;

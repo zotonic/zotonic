@@ -5,7 +5,7 @@
 -moduledoc("Anonymous GET/HEAD projections. Recompute authorization and content before
 conditional requests; caches must revalidate every use. Errors are never cached.").
 -export([service_available/1, allowed_methods/1, content_types_provided/1,
-    resource_exists/1, generate_etag/1, process/4, markdown/1]).
+    resource_exists/1, generate_etag/1, process/4, markdown/2]).
 
 -spec service_available(z:context()) -> {boolean(), z:context()}.
 service_available(C) ->
@@ -37,7 +37,7 @@ resource_exists(C0) ->
     case Result of
         {ok, Value} ->
             Body = case Operation of
-                markdown -> markdown(Value);
+                markdown -> markdown(Value, C);
                 _ -> z_json:encode(#{status => ok, result => Value})
             end,
             case byte_size(Body) =< 1048576 of
@@ -54,8 +54,9 @@ generate_etag(C) ->
 -spec process(binary(), term(), term(), z:context()) -> {binary(), z:context()}.
 process(_, _, _, C) -> {z_context:get(agent_body, C), C}.
 
--spec markdown(map()) -> binary().
-markdown(#{title := Title, page_url := Page, uri := Uri, markdown := Text} = R) ->
+-spec markdown(Resource, Context) -> binary() when
+    Resource :: map(), Context :: z:context().
+markdown(#{title := Title, page_url := Page, uri := Uri, markdown := Text} = R, Context) ->
     iolist_to_binary([
         "# ", z_markdown:to_markdown(z_html:escape(Title), faithful), "\n\n",
         "Source: ", Page, "\n\nURI: ", Uri, "\n\n",
@@ -68,8 +69,21 @@ markdown(#{title := Title, page_url := Page, uri := Uri, markdown := Text} = R) 
         case maps:get(media, R, undefined) of
             #{download_url := Download} -> ["Media download: ", Download, "\n"];
             _ -> []
-        end
+        end,
+        api_access(R, Context)
     ]).
+
+%% Representation navigation belongs here, outside editorial content templates.
+-spec api_access(Resource, Context) -> iolist() when
+    Resource :: map(), Context :: z:context().
+api_access(#{resource_url := ResourceUrl}, Context) ->
+    C = z_context:set_language('x-default', z_acl:anondo(Context)),
+    Help = z_context:abs_url(z_dispatcher:url_for(agent_api_help, [], none, C), C),
+    OpenAPI = z_context:abs_url(z_dispatcher:url_for(agent_openapi, [], none, C), C),
+    ["\n## API access\n\n",
+     "- [API help](<", Help, ">)\n",
+     "- [OpenAPI specification](<", OpenAPI, ">)\n",
+     "- [This resource as JSON](<", ResourceUrl, ">)\n"].
 
 failure(Reason, C) ->
     Status = case Reason of
