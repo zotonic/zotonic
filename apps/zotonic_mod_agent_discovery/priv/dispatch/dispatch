@@ -1,0 +1,11 @@
+[
+    {agent_search, ["api", "agent", "search"], controller_agent_content, [{agent_operation, search}]},
+    {agent_resource, ["api", "agent", "resource", id], controller_agent_content, [{agent_operation, resource}]},
+    {agent_related, ["api", "agent", "related", id], controller_agent_content, [{agent_operation, related}]},
+    {agent_schema, ["api", "agent", "schema"], controller_agent_content, [{agent_operation, schema}]},
+    {agent_markdown, ["agent", "resource", id, "markdown"], controller_agent_content, [{agent_operation, markdown}]},
+    {agent_llms, ["llms.txt"], controller_agent_discovery, [{document, llms}]},
+    {agent_api_catalog, [".well-known", "api-catalog"], controller_agent_discovery, [{document, catalog}]},
+    {agent_openapi, ["openapi.json"], controller_agent_discovery, [{document, openapi}]},
+    {agent_api_help, ["api-help"], controller_agent_discovery, [{document, help}]}
+].

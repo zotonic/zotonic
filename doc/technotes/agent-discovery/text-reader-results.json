@@ -1,0 +1,2286 @@
+{
+  "date": "2026-11-11",
+  "revision": "d09962f64",
+  "target": "https://example.com/reader-trial/api-help",
+  "label": "Machine-readable API documentation",
+  "versions": {
+    "@mozilla/readability": "0.6.0",
+    "jsdom": "31.0.0",
+    "turndown": "7.2.5",
+    "trafilatura": "2.3.1",
+    "html2text": "2025.4.15",
+    "markdownify": "1.2.3",
+    "beautifulsoup4": "4.15.0"
+  },
+  "fixtures": [
+    {
+      "id": "article/visible",
+      "placement": "article",
+      "variant": "visible",
+      "sha256": "32d3307a925c24e67ef84fdd89f504f64d8d2b4ffd2b2f022b0f2921bccc3646"
+    },
+    {
+      "id": "article/hidden",
+      "placement": "article",
+      "variant": "hidden",
+      "sha256": "f653689c4b123b98c9db2708b859cb054ed3a8f697d555bb9c5cc1bd22ef9e34"
+    },
+    {
+      "id": "article/display-none-inline",
+      "placement": "article",
+      "variant": "display-none-inline",
+      "sha256": "ed32b0ba734c2ff1cd445a557353c9ba7ef6d680cead5ced8a47af869bc72236"
+    },
+    {
+      "id": "article/display-none-class",
+      "placement": "article",
+      "variant": "display-none-class",
+      "sha256": "93795488cb4b646a52a7dcdc3cde8a28cd50572f070cafacdde6bd377b23ba54"
+    },
+    {
+      "id": "article/visually-hidden",
+      "placement": "article",
+      "variant": "visually-hidden",
+      "sha256": "f9bf039b7315403a9ef5bb7dbbe31a4f1503c70eadc5ddbbe27b1d711018d4aa"
+    },
+    {
+      "id": "article/visually-hidden-aria",
+      "placement": "article",
+      "variant": "visually-hidden-aria",
+      "sha256": "2ef88822b766c9c7a78e5fbdef4aae9b6664260404b3fd8412303acd5664e734"
+    },
+    {
+      "id": "article/comment",
+      "placement": "article",
+      "variant": "comment",
+      "sha256": "d2cf1f14857011920994a6a914e8c5f82a3e75ef2eceeae80dab4807ad1d730f"
+    },
+    {
+      "id": "article/template",
+      "placement": "article",
+      "variant": "template",
+      "sha256": "70888b6577cd436bfb25a3ab0f510a053d5daa7b7b38afcbff21e4a91f228592"
+    },
+    {
+      "id": "article/details",
+      "placement": "article",
+      "variant": "details",
+      "sha256": "429b7b4962f6d5592ce8071a299c9bffae4c62e3b1cb28212fb617d2de060faa"
+    },
+    {
+      "id": "body-end/visible",
+      "placement": "body-end",
+      "variant": "visible",
+      "sha256": "f700b6bd49c53c5dc73960a5c83f35d212548789a09b53c19ea9f47a0e4e9c14"
+    },
+    {
+      "id": "body-end/hidden",
+      "placement": "body-end",
+      "variant": "hidden",
+      "sha256": "4e632799155186aa164eb921796e00837960afe0c0966cfa83623b8a1d93512d"
+    },
+    {
+      "id": "body-end/display-none-inline",
+      "placement": "body-end",
+      "variant": "display-none-inline",
+      "sha256": "fb8d308b8c8c7cb9d11e0255ab03f96b874bda3a0eab0a41db0b8d3a1e8c988c"
+    },
+    {
+      "id": "body-end/display-none-class",
+      "placement": "body-end",
+      "variant": "display-none-class",
+      "sha256": "92698ccf417119d46769d16911e2e3a004103e07621e540bdbce425418acd538"
+    },
+    {
+      "id": "body-end/visually-hidden",
+      "placement": "body-end",
+      "variant": "visually-hidden",
+      "sha256": "fde705f681277753e19d34e5c50a837b2024e507488777f3bf1f2dd209978e7d"
+    },
+    {
+      "id": "body-end/visually-hidden-aria",
+      "placement": "body-end",
+      "variant": "visually-hidden-aria",
+      "sha256": "07cb18049805984311d6a9bd28174448edb092d96e84e5077d6a59ae92d16abe"
+    },
+    {
+      "id": "body-end/comment",
+      "placement": "body-end",
+      "variant": "comment",
+      "sha256": "16da21d13950b21d2136b5808f810d4d8e817b431df2389371558207bdf522c1"
+    },
+    {
+      "id": "body-end/template",
+      "placement": "body-end",
+      "variant": "template",
+      "sha256": "f258f83cded2053fbcdd519dc501f0610032308547c3cf58e89daaf2ab78f077"
+    },
+    {
+      "id": "body-end/details",
+      "placement": "body-end",
+      "variant": "details",
+      "sha256": "7c5c4839e438076e51417738ef5738294c95b65995f7b55118d221c5cd6509e0"
+    },
+    {
+      "id": "footer/visible",
+      "placement": "footer",
+      "variant": "visible",
+      "sha256": "d1dab888c82b7d203f99a7166f2f4d42c978de74847cfd6e68cfd0f642534f22"
+    },
+    {
+      "id": "footer/hidden",
+      "placement": "footer",
+      "variant": "hidden",
+      "sha256": "4921a8c4ef71497f17916519e88f5eda887d8f237e3af2028eae6f449475e602"
+    },
+    {
+      "id": "footer/display-none-inline",
+      "placement": "footer",
+      "variant": "display-none-inline",
+      "sha256": "b0572f44b77793a75ecc6bb337685090d715078b6733115b6c5f935dfa69181e"
+    },
+    {
+      "id": "footer/display-none-class",
+      "placement": "footer",
+      "variant": "display-none-class",
+      "sha256": "2c873514ee57671d016215bc7b4ef6a1d0a79fd2007fe1905cb2a8b8197518c1"
+    },
+    {
+      "id": "footer/visually-hidden",
+      "placement": "footer",
+      "variant": "visually-hidden",
+      "sha256": "b572f80ccb6de59511e4a21e09da8faf7931aed934bad35fecc3dc3345b22dd7"
+    },
+    {
+      "id": "footer/visually-hidden-aria",
+      "placement": "footer",
+      "variant": "visually-hidden-aria",
+      "sha256": "795e438eddc6d9b81997fd12fb5bc96315973b77f026bc21be807454be678d98"
+    },
+    {
+      "id": "footer/comment",
+      "placement": "footer",
+      "variant": "comment",
+      "sha256": "3fa9cf305b180c550bcaac339018885c4f06807693979c0494348c26a5f73910"
+    },
+    {
+      "id": "footer/template",
+      "placement": "footer",
+      "variant": "template",
+      "sha256": "74f4f504b6b96f8daf5867a68b79c35a8d7742fb5ab66035ea22e3b589992854"
+    },
+    {
+      "id": "footer/details",
+      "placement": "footer",
+      "variant": "details",
+      "sha256": "b466b40630b0f64b1d38694e1d4d01a6993faf498e268a0879340bea2467b858"
+    },
+    {
+      "id": "head/link",
+      "placement": "head",
+      "variant": "link",
+      "sha256": "d214b3250943a7e059d403aca400f9dd182c19651d189c25c8ee9141bce1293b"
+    },
+    {
+      "id": "control/absent",
+      "placement": "none",
+      "variant": "absent",
+      "sha256": "c528dbcc9e56fc8443c8cc0f36cf91a249e53fecf6acf3248462e1d67c019137"
+    }
+  ],
+  "rows": [
+    {
+      "id": "article/visible",
+      "reader": "turndown-body",
+      "output_sha256": "84cd3e0f4491395bb247b1b62ce7afb4adc149706668e14034fdd2723d15d263",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "article/visible",
+      "reader": "readability-turndown",
+      "parsed": true,
+      "output_sha256": "fd50863fd2b431bd2e28e97b6636851313eef42ffc328045c6a8fed83436468d",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "article/hidden",
+      "reader": "turndown-body",
+      "output_sha256": "84cd3e0f4491395bb247b1b62ce7afb4adc149706668e14034fdd2723d15d263",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "article/hidden",
+      "reader": "readability-turndown",
+      "parsed": true,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "article/display-none-inline",
+      "reader": "turndown-body",
+      "output_sha256": "84cd3e0f4491395bb247b1b62ce7afb4adc149706668e14034fdd2723d15d263",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "article/display-none-inline",
+      "reader": "readability-turndown",
+      "parsed": true,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "article/display-none-class",
+      "reader": "turndown-body",
+      "output_sha256": "84cd3e0f4491395bb247b1b62ce7afb4adc149706668e14034fdd2723d15d263",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "article/display-none-class",
+      "reader": "readability-turndown",
+      "parsed": true,
+      "output_sha256": "fd50863fd2b431bd2e28e97b6636851313eef42ffc328045c6a8fed83436468d",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "article/visually-hidden",
+      "reader": "turndown-body",
+      "output_sha256": "84cd3e0f4491395bb247b1b62ce7afb4adc149706668e14034fdd2723d15d263",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "article/visually-hidden",
+      "reader": "readability-turndown",
+      "parsed": true,
+      "output_sha256": "fd50863fd2b431bd2e28e97b6636851313eef42ffc328045c6a8fed83436468d",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "article/visually-hidden-aria",
+      "reader": "turndown-body",
+      "output_sha256": "84cd3e0f4491395bb247b1b62ce7afb4adc149706668e14034fdd2723d15d263",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "article/visually-hidden-aria",
+      "reader": "readability-turndown",
+      "parsed": true,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "article/comment",
+      "reader": "turndown-body",
+      "output_sha256": "7fb6db39de11ebd69d6e766a64cd3d8f2d8766ca82663d5dc8f6bf845662e766",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "article/comment",
+      "reader": "readability-turndown",
+      "parsed": true,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "article/template",
+      "reader": "turndown-body",
+      "output_sha256": "7fb6db39de11ebd69d6e766a64cd3d8f2d8766ca82663d5dc8f6bf845662e766",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "article/template",
+      "reader": "readability-turndown",
+      "parsed": true,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "article/details",
+      "reader": "turndown-body",
+      "output_sha256": "178cb6deb02c9c2104383d08979b3500802b39d3eb47635923632bfce0e13bcd",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "article/details",
+      "reader": "readability-turndown",
+      "parsed": true,
+      "output_sha256": "a04a28c5bd5360694f142b0548f2b2087ea0645ad71c482d92668ff7d22bd33b",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "body-end/visible",
+      "reader": "turndown-body",
+      "output_sha256": "ca27b61a11f060e2ab8a0b598af94ea93bbbf531f68e63b3d1900c73ce05effa",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "body-end/visible",
+      "reader": "readability-turndown",
+      "parsed": true,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/hidden",
+      "reader": "turndown-body",
+      "output_sha256": "ca27b61a11f060e2ab8a0b598af94ea93bbbf531f68e63b3d1900c73ce05effa",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "body-end/hidden",
+      "reader": "readability-turndown",
+      "parsed": true,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/display-none-inline",
+      "reader": "turndown-body",
+      "output_sha256": "ca27b61a11f060e2ab8a0b598af94ea93bbbf531f68e63b3d1900c73ce05effa",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "body-end/display-none-inline",
+      "reader": "readability-turndown",
+      "parsed": true,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/display-none-class",
+      "reader": "turndown-body",
+      "output_sha256": "ca27b61a11f060e2ab8a0b598af94ea93bbbf531f68e63b3d1900c73ce05effa",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "body-end/display-none-class",
+      "reader": "readability-turndown",
+      "parsed": true,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/visually-hidden",
+      "reader": "turndown-body",
+      "output_sha256": "ca27b61a11f060e2ab8a0b598af94ea93bbbf531f68e63b3d1900c73ce05effa",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "body-end/visually-hidden",
+      "reader": "readability-turndown",
+      "parsed": true,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/visually-hidden-aria",
+      "reader": "turndown-body",
+      "output_sha256": "ca27b61a11f060e2ab8a0b598af94ea93bbbf531f68e63b3d1900c73ce05effa",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "body-end/visually-hidden-aria",
+      "reader": "readability-turndown",
+      "parsed": true,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/comment",
+      "reader": "turndown-body",
+      "output_sha256": "7fb6db39de11ebd69d6e766a64cd3d8f2d8766ca82663d5dc8f6bf845662e766",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/comment",
+      "reader": "readability-turndown",
+      "parsed": true,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/template",
+      "reader": "turndown-body",
+      "output_sha256": "7fb6db39de11ebd69d6e766a64cd3d8f2d8766ca82663d5dc8f6bf845662e766",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/template",
+      "reader": "readability-turndown",
+      "parsed": true,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/details",
+      "reader": "turndown-body",
+      "output_sha256": "921ed5c5968906cc0b983eafe06860903ad3e23bd609f7c4fb12e26595c8d738",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "body-end/details",
+      "reader": "readability-turndown",
+      "parsed": true,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/visible",
+      "reader": "turndown-body",
+      "output_sha256": "ca27b61a11f060e2ab8a0b598af94ea93bbbf531f68e63b3d1900c73ce05effa",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "footer/visible",
+      "reader": "readability-turndown",
+      "parsed": true,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/hidden",
+      "reader": "turndown-body",
+      "output_sha256": "ca27b61a11f060e2ab8a0b598af94ea93bbbf531f68e63b3d1900c73ce05effa",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "footer/hidden",
+      "reader": "readability-turndown",
+      "parsed": true,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/display-none-inline",
+      "reader": "turndown-body",
+      "output_sha256": "ca27b61a11f060e2ab8a0b598af94ea93bbbf531f68e63b3d1900c73ce05effa",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "footer/display-none-inline",
+      "reader": "readability-turndown",
+      "parsed": true,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/display-none-class",
+      "reader": "turndown-body",
+      "output_sha256": "ca27b61a11f060e2ab8a0b598af94ea93bbbf531f68e63b3d1900c73ce05effa",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "footer/display-none-class",
+      "reader": "readability-turndown",
+      "parsed": true,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/visually-hidden",
+      "reader": "turndown-body",
+      "output_sha256": "ca27b61a11f060e2ab8a0b598af94ea93bbbf531f68e63b3d1900c73ce05effa",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "footer/visually-hidden",
+      "reader": "readability-turndown",
+      "parsed": true,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/visually-hidden-aria",
+      "reader": "turndown-body",
+      "output_sha256": "ca27b61a11f060e2ab8a0b598af94ea93bbbf531f68e63b3d1900c73ce05effa",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "footer/visually-hidden-aria",
+      "reader": "readability-turndown",
+      "parsed": true,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/comment",
+      "reader": "turndown-body",
+      "output_sha256": "7fb6db39de11ebd69d6e766a64cd3d8f2d8766ca82663d5dc8f6bf845662e766",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/comment",
+      "reader": "readability-turndown",
+      "parsed": true,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/template",
+      "reader": "turndown-body",
+      "output_sha256": "7fb6db39de11ebd69d6e766a64cd3d8f2d8766ca82663d5dc8f6bf845662e766",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/template",
+      "reader": "readability-turndown",
+      "parsed": true,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/details",
+      "reader": "turndown-body",
+      "output_sha256": "869c32d1d63f95516fcc10d1d452a5f2e45930491d91a0d7d791f795553943bb",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "footer/details",
+      "reader": "readability-turndown",
+      "parsed": true,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "head/link",
+      "reader": "turndown-body",
+      "output_sha256": "dbd9d4c361d218b7f48d28da76a045a91a65887f15f5003255facd352418bf91",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "head/link",
+      "reader": "readability-turndown",
+      "parsed": true,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "control/absent",
+      "reader": "turndown-body",
+      "output_sha256": "dbd9d4c361d218b7f48d28da76a045a91a65887f15f5003255facd352418bf91",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "control/absent",
+      "reader": "readability-turndown",
+      "parsed": true,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "article/visible",
+      "reader": "trafilatura",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "article/visible",
+      "reader": "trafilatura-recall",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "article/visible",
+      "reader": "html2text-body",
+      "output_sha256": "5705a69ce1eab6f6ec967914b92387794bca48d2c198a505fb065d83d2bf33d3",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "article/visible",
+      "reader": "markdownify-body",
+      "output_sha256": "84cd3e0f4491395bb247b1b62ce7afb4adc149706668e14034fdd2723d15d263",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "article/hidden",
+      "reader": "trafilatura",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "article/hidden",
+      "reader": "trafilatura-recall",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "article/hidden",
+      "reader": "html2text-body",
+      "output_sha256": "5705a69ce1eab6f6ec967914b92387794bca48d2c198a505fb065d83d2bf33d3",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "article/hidden",
+      "reader": "markdownify-body",
+      "output_sha256": "84cd3e0f4491395bb247b1b62ce7afb4adc149706668e14034fdd2723d15d263",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "article/display-none-inline",
+      "reader": "trafilatura",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "article/display-none-inline",
+      "reader": "trafilatura-recall",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "article/display-none-inline",
+      "reader": "html2text-body",
+      "output_sha256": "5705a69ce1eab6f6ec967914b92387794bca48d2c198a505fb065d83d2bf33d3",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "article/display-none-inline",
+      "reader": "markdownify-body",
+      "output_sha256": "84cd3e0f4491395bb247b1b62ce7afb4adc149706668e14034fdd2723d15d263",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "article/display-none-class",
+      "reader": "trafilatura",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "article/display-none-class",
+      "reader": "trafilatura-recall",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "article/display-none-class",
+      "reader": "html2text-body",
+      "output_sha256": "5705a69ce1eab6f6ec967914b92387794bca48d2c198a505fb065d83d2bf33d3",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "article/display-none-class",
+      "reader": "markdownify-body",
+      "output_sha256": "84cd3e0f4491395bb247b1b62ce7afb4adc149706668e14034fdd2723d15d263",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "article/visually-hidden",
+      "reader": "trafilatura",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "article/visually-hidden",
+      "reader": "trafilatura-recall",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "article/visually-hidden",
+      "reader": "html2text-body",
+      "output_sha256": "5705a69ce1eab6f6ec967914b92387794bca48d2c198a505fb065d83d2bf33d3",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "article/visually-hidden",
+      "reader": "markdownify-body",
+      "output_sha256": "84cd3e0f4491395bb247b1b62ce7afb4adc149706668e14034fdd2723d15d263",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "article/visually-hidden-aria",
+      "reader": "trafilatura",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "article/visually-hidden-aria",
+      "reader": "trafilatura-recall",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "article/visually-hidden-aria",
+      "reader": "html2text-body",
+      "output_sha256": "5705a69ce1eab6f6ec967914b92387794bca48d2c198a505fb065d83d2bf33d3",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "article/visually-hidden-aria",
+      "reader": "markdownify-body",
+      "output_sha256": "84cd3e0f4491395bb247b1b62ce7afb4adc149706668e14034fdd2723d15d263",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "article/comment",
+      "reader": "trafilatura",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "article/comment",
+      "reader": "trafilatura-recall",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "article/comment",
+      "reader": "html2text-body",
+      "output_sha256": "f906075cc10a154cfdc0707c5e8fa499e7f122af0afc36818aa41198155dd1b7",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "article/comment",
+      "reader": "markdownify-body",
+      "output_sha256": "7fb6db39de11ebd69d6e766a64cd3d8f2d8766ca82663d5dc8f6bf845662e766",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "article/template",
+      "reader": "trafilatura",
+      "output_sha256": "599c35a89baca4a366fbfad979cc16a907d1bc1a031f46082aed9158e348dd39",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "article/template",
+      "reader": "trafilatura-recall",
+      "output_sha256": "599c35a89baca4a366fbfad979cc16a907d1bc1a031f46082aed9158e348dd39",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "article/template",
+      "reader": "html2text-body",
+      "output_sha256": "b16d79092c89bad62deea2a118df8f307986fb0fa893c40a9eabdddb36183c10",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "article/template",
+      "reader": "markdownify-body",
+      "output_sha256": "84cd3e0f4491395bb247b1b62ce7afb4adc149706668e14034fdd2723d15d263",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "article/details",
+      "reader": "trafilatura",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "article/details",
+      "reader": "trafilatura-recall",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "article/details",
+      "reader": "html2text-body",
+      "output_sha256": "a5085034e9d8715717d4fb35fda42ed6d549938f5082671e2b54d0c99088d11c",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "article/details",
+      "reader": "markdownify-body",
+      "output_sha256": "178cb6deb02c9c2104383d08979b3500802b39d3eb47635923632bfce0e13bcd",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "body-end/visible",
+      "reader": "trafilatura",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/visible",
+      "reader": "trafilatura-recall",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/visible",
+      "reader": "html2text-body",
+      "output_sha256": "62310c73259065cc599f9a2796a39948a0e5c2dae08f4f96453091cc62a247c0",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "body-end/visible",
+      "reader": "markdownify-body",
+      "output_sha256": "ca27b61a11f060e2ab8a0b598af94ea93bbbf531f68e63b3d1900c73ce05effa",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "body-end/hidden",
+      "reader": "trafilatura",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/hidden",
+      "reader": "trafilatura-recall",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/hidden",
+      "reader": "html2text-body",
+      "output_sha256": "62310c73259065cc599f9a2796a39948a0e5c2dae08f4f96453091cc62a247c0",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "body-end/hidden",
+      "reader": "markdownify-body",
+      "output_sha256": "ca27b61a11f060e2ab8a0b598af94ea93bbbf531f68e63b3d1900c73ce05effa",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "body-end/display-none-inline",
+      "reader": "trafilatura",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/display-none-inline",
+      "reader": "trafilatura-recall",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/display-none-inline",
+      "reader": "html2text-body",
+      "output_sha256": "62310c73259065cc599f9a2796a39948a0e5c2dae08f4f96453091cc62a247c0",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "body-end/display-none-inline",
+      "reader": "markdownify-body",
+      "output_sha256": "ca27b61a11f060e2ab8a0b598af94ea93bbbf531f68e63b3d1900c73ce05effa",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "body-end/display-none-class",
+      "reader": "trafilatura",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/display-none-class",
+      "reader": "trafilatura-recall",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/display-none-class",
+      "reader": "html2text-body",
+      "output_sha256": "62310c73259065cc599f9a2796a39948a0e5c2dae08f4f96453091cc62a247c0",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "body-end/display-none-class",
+      "reader": "markdownify-body",
+      "output_sha256": "ca27b61a11f060e2ab8a0b598af94ea93bbbf531f68e63b3d1900c73ce05effa",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "body-end/visually-hidden",
+      "reader": "trafilatura",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/visually-hidden",
+      "reader": "trafilatura-recall",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/visually-hidden",
+      "reader": "html2text-body",
+      "output_sha256": "62310c73259065cc599f9a2796a39948a0e5c2dae08f4f96453091cc62a247c0",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "body-end/visually-hidden",
+      "reader": "markdownify-body",
+      "output_sha256": "ca27b61a11f060e2ab8a0b598af94ea93bbbf531f68e63b3d1900c73ce05effa",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "body-end/visually-hidden-aria",
+      "reader": "trafilatura",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/visually-hidden-aria",
+      "reader": "trafilatura-recall",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/visually-hidden-aria",
+      "reader": "html2text-body",
+      "output_sha256": "62310c73259065cc599f9a2796a39948a0e5c2dae08f4f96453091cc62a247c0",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "body-end/visually-hidden-aria",
+      "reader": "markdownify-body",
+      "output_sha256": "ca27b61a11f060e2ab8a0b598af94ea93bbbf531f68e63b3d1900c73ce05effa",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "body-end/comment",
+      "reader": "trafilatura",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/comment",
+      "reader": "trafilatura-recall",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/comment",
+      "reader": "html2text-body",
+      "output_sha256": "f906075cc10a154cfdc0707c5e8fa499e7f122af0afc36818aa41198155dd1b7",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/comment",
+      "reader": "markdownify-body",
+      "output_sha256": "7fb6db39de11ebd69d6e766a64cd3d8f2d8766ca82663d5dc8f6bf845662e766",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/template",
+      "reader": "trafilatura",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/template",
+      "reader": "trafilatura-recall",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/template",
+      "reader": "html2text-body",
+      "output_sha256": "166b59f96952ab230b7b22e2a65c6cb320993efbe5401a6997d1aec3a3826c6d",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "body-end/template",
+      "reader": "markdownify-body",
+      "output_sha256": "286ffdbe25e5fedfa46df509c36e13485d569f85fc72ed66d94f5d534a8b0a48",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "body-end/details",
+      "reader": "trafilatura",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/details",
+      "reader": "trafilatura-recall",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/details",
+      "reader": "html2text-body",
+      "output_sha256": "8d5e683237bdfa598fe376b9556ed4b5786fdcffcd224f0297951a2acf5eb7a7",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "body-end/details",
+      "reader": "markdownify-body",
+      "output_sha256": "869c32d1d63f95516fcc10d1d452a5f2e45930491d91a0d7d791f795553943bb",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "footer/visible",
+      "reader": "trafilatura",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/visible",
+      "reader": "trafilatura-recall",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/visible",
+      "reader": "html2text-body",
+      "output_sha256": "62310c73259065cc599f9a2796a39948a0e5c2dae08f4f96453091cc62a247c0",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "footer/visible",
+      "reader": "markdownify-body",
+      "output_sha256": "ca27b61a11f060e2ab8a0b598af94ea93bbbf531f68e63b3d1900c73ce05effa",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "footer/hidden",
+      "reader": "trafilatura",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/hidden",
+      "reader": "trafilatura-recall",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/hidden",
+      "reader": "html2text-body",
+      "output_sha256": "62310c73259065cc599f9a2796a39948a0e5c2dae08f4f96453091cc62a247c0",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "footer/hidden",
+      "reader": "markdownify-body",
+      "output_sha256": "ca27b61a11f060e2ab8a0b598af94ea93bbbf531f68e63b3d1900c73ce05effa",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "footer/display-none-inline",
+      "reader": "trafilatura",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/display-none-inline",
+      "reader": "trafilatura-recall",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/display-none-inline",
+      "reader": "html2text-body",
+      "output_sha256": "62310c73259065cc599f9a2796a39948a0e5c2dae08f4f96453091cc62a247c0",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "footer/display-none-inline",
+      "reader": "markdownify-body",
+      "output_sha256": "ca27b61a11f060e2ab8a0b598af94ea93bbbf531f68e63b3d1900c73ce05effa",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "footer/display-none-class",
+      "reader": "trafilatura",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/display-none-class",
+      "reader": "trafilatura-recall",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/display-none-class",
+      "reader": "html2text-body",
+      "output_sha256": "62310c73259065cc599f9a2796a39948a0e5c2dae08f4f96453091cc62a247c0",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "footer/display-none-class",
+      "reader": "markdownify-body",
+      "output_sha256": "ca27b61a11f060e2ab8a0b598af94ea93bbbf531f68e63b3d1900c73ce05effa",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "footer/visually-hidden",
+      "reader": "trafilatura",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/visually-hidden",
+      "reader": "trafilatura-recall",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/visually-hidden",
+      "reader": "html2text-body",
+      "output_sha256": "62310c73259065cc599f9a2796a39948a0e5c2dae08f4f96453091cc62a247c0",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "footer/visually-hidden",
+      "reader": "markdownify-body",
+      "output_sha256": "ca27b61a11f060e2ab8a0b598af94ea93bbbf531f68e63b3d1900c73ce05effa",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "footer/visually-hidden-aria",
+      "reader": "trafilatura",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/visually-hidden-aria",
+      "reader": "trafilatura-recall",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/visually-hidden-aria",
+      "reader": "html2text-body",
+      "output_sha256": "62310c73259065cc599f9a2796a39948a0e5c2dae08f4f96453091cc62a247c0",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "footer/visually-hidden-aria",
+      "reader": "markdownify-body",
+      "output_sha256": "ca27b61a11f060e2ab8a0b598af94ea93bbbf531f68e63b3d1900c73ce05effa",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "footer/comment",
+      "reader": "trafilatura",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/comment",
+      "reader": "trafilatura-recall",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/comment",
+      "reader": "html2text-body",
+      "output_sha256": "f906075cc10a154cfdc0707c5e8fa499e7f122af0afc36818aa41198155dd1b7",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/comment",
+      "reader": "markdownify-body",
+      "output_sha256": "7fb6db39de11ebd69d6e766a64cd3d8f2d8766ca82663d5dc8f6bf845662e766",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/template",
+      "reader": "trafilatura",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/template",
+      "reader": "trafilatura-recall",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/template",
+      "reader": "html2text-body",
+      "output_sha256": "166b59f96952ab230b7b22e2a65c6cb320993efbe5401a6997d1aec3a3826c6d",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "footer/template",
+      "reader": "markdownify-body",
+      "output_sha256": "286ffdbe25e5fedfa46df509c36e13485d569f85fc72ed66d94f5d534a8b0a48",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "footer/details",
+      "reader": "trafilatura",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/details",
+      "reader": "trafilatura-recall",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/details",
+      "reader": "html2text-body",
+      "output_sha256": "8d5e683237bdfa598fe376b9556ed4b5786fdcffcd224f0297951a2acf5eb7a7",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "footer/details",
+      "reader": "markdownify-body",
+      "output_sha256": "869c32d1d63f95516fcc10d1d452a5f2e45930491d91a0d7d791f795553943bb",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "head/link",
+      "reader": "trafilatura",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "head/link",
+      "reader": "trafilatura-recall",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "head/link",
+      "reader": "html2text-body",
+      "output_sha256": "436fb2c20ee61d510fb9eb1faa98dc26119cf0e4c455617e3b711ae5358c0e12",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "head/link",
+      "reader": "markdownify-body",
+      "output_sha256": "dbd9d4c361d218b7f48d28da76a045a91a65887f15f5003255facd352418bf91",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "control/absent",
+      "reader": "trafilatura",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "control/absent",
+      "reader": "trafilatura-recall",
+      "output_sha256": "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "control/absent",
+      "reader": "html2text-body",
+      "output_sha256": "436fb2c20ee61d510fb9eb1faa98dc26119cf0e4c455617e3b711ae5358c0e12",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "control/absent",
+      "reader": "markdownify-body",
+      "output_sha256": "dbd9d4c361d218b7f48d28da76a045a91a65887f15f5003255facd352418bf91",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "article/visible",
+      "reader": "jina-hosted-raw-html",
+      "status": 200,
+      "seconds": 0.8052,
+      "output_sha256": "fd50863fd2b431bd2e28e97b6636851313eef42ffc328045c6a8fed83436468d",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "article/hidden",
+      "reader": "jina-hosted-raw-html",
+      "status": 200,
+      "seconds": 0.9604,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "article/display-none-inline",
+      "reader": "jina-hosted-raw-html",
+      "status": 200,
+      "seconds": 0.8016,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "article/display-none-class",
+      "reader": "jina-hosted-raw-html",
+      "status": 200,
+      "seconds": 0.8108,
+      "output_sha256": "fd50863fd2b431bd2e28e97b6636851313eef42ffc328045c6a8fed83436468d",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "article/visually-hidden",
+      "reader": "jina-hosted-raw-html",
+      "status": 200,
+      "seconds": 0.8376,
+      "output_sha256": "fd50863fd2b431bd2e28e97b6636851313eef42ffc328045c6a8fed83436468d",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "article/visually-hidden-aria",
+      "reader": "jina-hosted-raw-html",
+      "status": 200,
+      "seconds": 0.8297,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "article/comment",
+      "reader": "jina-hosted-raw-html",
+      "status": 200,
+      "seconds": 1.1943,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "article/template",
+      "reader": "jina-hosted-raw-html",
+      "status": 200,
+      "seconds": 0.8252,
+      "output_sha256": "fd50863fd2b431bd2e28e97b6636851313eef42ffc328045c6a8fed83436468d",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "article/details",
+      "reader": "jina-hosted-raw-html",
+      "status": 200,
+      "seconds": 0.8261,
+      "output_sha256": "c549b691b90fbbfc9d90c568cfd9fc5c9362ecbc805576595fc5c209c85d96da",
+      "retains_url": true,
+      "retains_label": true
+    },
+    {
+      "id": "body-end/visible",
+      "reader": "jina-hosted-raw-html",
+      "status": 200,
+      "seconds": 0.7937,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/hidden",
+      "reader": "jina-hosted-raw-html",
+      "status": 200,
+      "seconds": 0.8124,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/display-none-inline",
+      "reader": "jina-hosted-raw-html",
+      "status": 200,
+      "seconds": 0.799,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/display-none-class",
+      "reader": "jina-hosted-raw-html",
+      "status": 200,
+      "seconds": 0.9966,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/visually-hidden",
+      "reader": "jina-hosted-raw-html",
+      "status": 200,
+      "seconds": 0.8365,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/visually-hidden-aria",
+      "reader": "jina-hosted-raw-html",
+      "status": 200,
+      "seconds": 0.8352,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/comment",
+      "reader": "jina-hosted-raw-html",
+      "status": 200,
+      "seconds": 1.3222,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/template",
+      "reader": "jina-hosted-raw-html",
+      "status": 200,
+      "seconds": 0.8818,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "body-end/details",
+      "reader": "jina-hosted-raw-html",
+      "status": 200,
+      "seconds": 0.8068,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/visible",
+      "reader": "jina-hosted-raw-html",
+      "status": 200,
+      "seconds": 0.8325,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/hidden",
+      "reader": "jina-hosted-raw-html",
+      "status": 200,
+      "seconds": 1.1326,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/display-none-inline",
+      "reader": "jina-hosted-raw-html",
+      "status": 200,
+      "seconds": 0.8471,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/display-none-class",
+      "reader": "jina-hosted-raw-html",
+      "status": 200,
+      "seconds": 2.4566,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/visually-hidden",
+      "reader": "jina-hosted-raw-html",
+      "status": 200,
+      "seconds": 1.0677,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/visually-hidden-aria",
+      "reader": "jina-hosted-raw-html",
+      "status": 200,
+      "seconds": 0.8807,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/comment",
+      "reader": "jina-hosted-raw-html",
+      "status": 200,
+      "seconds": 0.8602,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/template",
+      "reader": "jina-hosted-raw-html",
+      "status": 200,
+      "seconds": 0.8684,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "footer/details",
+      "reader": "jina-hosted-raw-html",
+      "status": 200,
+      "seconds": 0.8273,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "head/link",
+      "reader": "jina-hosted-raw-html",
+      "status": 200,
+      "seconds": 0.8507,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    },
+    {
+      "id": "control/absent",
+      "reader": "jina-hosted-raw-html",
+      "status": 200,
+      "seconds": 0.8024,
+      "output_sha256": "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6",
+      "retains_url": false,
+      "retains_label": false
+    }
+  ],
+  "outputs": {
+    "84cd3e0f4491395bb247b1b62ce7afb4adc149706668e14034fdd2723d15d263": "Exploring a community archive\n=============================\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\n[Machine-readable API documentation](https://example.com/reader-trial/api-help)\n\nCommunity archive",
+    "fd50863fd2b431bd2e28e97b6636851313eef42ffc328045c6a8fed83436468d": "A community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\n[Machine-readable API documentation](https://example.com/reader-trial/api-help)",
+    "375a3256e14d8bc6d74d433eec30d4fd0b3db85ee32bccc0c3e3d910c7aeaba6": "A community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.",
+    "7fb6db39de11ebd69d6e766a64cd3d8f2d8766ca82663d5dc8f6bf845662e766": "Exploring a community archive\n=============================\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nCommunity archive",
+    "178cb6deb02c9c2104383d08979b3500802b39d3eb47635923632bfce0e13bcd": "Exploring a community archive\n=============================\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nAlternative formats\n\n[Machine-readable API documentation](https://example.com/reader-trial/api-help)\n\nCommunity archive",
+    "a04a28c5bd5360694f142b0548f2b2087ea0645ad71c482d92668ff7d22bd33b": "A community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nAlternative formats\n\n[Machine-readable API documentation](https://example.com/reader-trial/api-help)",
+    "ca27b61a11f060e2ab8a0b598af94ea93bbbf531f68e63b3d1900c73ce05effa": "Exploring a community archive\n=============================\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nCommunity archive\n\n[Machine-readable API documentation](https://example.com/reader-trial/api-help)",
+    "921ed5c5968906cc0b983eafe06860903ad3e23bd609f7c4fb12e26595c8d738": "Exploring a community archive\n=============================\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nCommunity archive\n\nAlternative formats\n\n[Machine-readable API documentation](https://example.com/reader-trial/api-help)",
+    "869c32d1d63f95516fcc10d1d452a5f2e45930491d91a0d7d791f795553943bb": "Exploring a community archive\n=============================\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nCommunity archiveAlternative formats\n\n[Machine-readable API documentation](https://example.com/reader-trial/api-help)",
+    "dbd9d4c361d218b7f48d28da76a045a91a65887f15f5003255facd352418bf91": "Exploring a community archive\n=============================\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.",
+    "0d128531c080d69b7997de8d88c7b4153d7c7565c75ea57f173ff53269e27777": "# Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.",
+    "5705a69ce1eab6f6ec967914b92387794bca48d2c198a505fb065d83d2bf33d3": "# Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\n[Machine-readable API documentation](https://example.com/reader-trial/api-help)\n\nCommunity archive\n",
+    "f906075cc10a154cfdc0707c5e8fa499e7f122af0afc36818aa41198155dd1b7": "# Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nCommunity archive\n",
+    "599c35a89baca4a366fbfad979cc16a907d1bc1a031f46082aed9158e348dd39": "# Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\n[Machine-readable API documentation](https://example.com/reader-trial/api-help)",
+    "b16d79092c89bad62deea2a118df8f307986fb0fa893c40a9eabdddb36183c10": "# Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\n[Machine-readable API documentation](https://example.com/reader-trial/api-help)Community archive\n",
+    "a5085034e9d8715717d4fb35fda42ed6d549938f5082671e2b54d0c99088d11c": "# Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nAlternative formats\n\n[Machine-readable API documentation](https://example.com/reader-trial/api-help)\n\nCommunity archive\n",
+    "62310c73259065cc599f9a2796a39948a0e5c2dae08f4f96453091cc62a247c0": "# Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nCommunity archive\n\n[Machine-readable API documentation](https://example.com/reader-trial/api-help)\n",
+    "166b59f96952ab230b7b22e2a65c6cb320993efbe5401a6997d1aec3a3826c6d": "# Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nCommunity archive[Machine-readable API documentation](https://example.com/reader-trial/api-help)\n",
+    "286ffdbe25e5fedfa46df509c36e13485d569f85fc72ed66d94f5d534a8b0a48": "Exploring a community archive\n=============================\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nCommunity archive[Machine-readable API documentation](https://example.com/reader-trial/api-help)",
+    "8d5e683237bdfa598fe376b9556ed4b5786fdcffcd224f0297951a2acf5eb7a7": "# Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nCommunity archiveAlternative formats\n\n[Machine-readable API documentation](https://example.com/reader-trial/api-help)\n",
+    "436fb2c20ee61d510fb9eb1faa98dc26119cf0e4c455617e3b711ae5358c0e12": "# Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n",
+    "c549b691b90fbbfc9d90c568cfd9fc5c9362ecbc805576595fc5c209c85d96da": "A community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nAlternative formats\n[Machine-readable API documentation](https://example.com/reader-trial/api-help)"
+  },
+  "browser": {
+    "version": "157.0.8103.39",
+    "rows": [
+      {
+        "id": "article/visible",
+        "output": "Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nMachine-readable API documentation\n\nCommunity archive",
+        "computed": {
+          "display": "block",
+          "position": "static",
+          "clip": "auto",
+          "rects": 1
+        },
+        "bodyHeightBefore": 318.4375,
+        "bodyHeightAfter": 284.4375,
+        "bodyHeightDelta": 34
+      },
+      {
+        "id": "article/hidden",
+        "output": "Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nCommunity archive",
+        "computed": {
+          "display": "none",
+          "position": "static",
+          "clip": "auto",
+          "rects": 0
+        },
+        "bodyHeightBefore": 284.4375,
+        "bodyHeightAfter": 284.4375,
+        "bodyHeightDelta": 0
+      },
+      {
+        "id": "article/display-none-inline",
+        "output": "Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nCommunity archive",
+        "computed": {
+          "display": "none",
+          "position": "static",
+          "clip": "auto",
+          "rects": 0
+        },
+        "bodyHeightBefore": 284.4375,
+        "bodyHeightAfter": 284.4375,
+        "bodyHeightDelta": 0
+      },
+      {
+        "id": "article/display-none-class",
+        "output": "Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nCommunity archive",
+        "computed": {
+          "display": "none",
+          "position": "static",
+          "clip": "auto",
+          "rects": 0
+        },
+        "bodyHeightBefore": 284.4375,
+        "bodyHeightAfter": 284.4375,
+        "bodyHeightDelta": 0
+      },
+      {
+        "id": "article/visually-hidden",
+        "output": "Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nMachine-readable API documentation\n\nCommunity archive",
+        "computed": {
+          "display": "block",
+          "position": "absolute",
+          "clip": "rect(0px, 0px, 0px, 0px)",
+          "rects": 1
+        },
+        "bodyHeightBefore": 284.4375,
+        "bodyHeightAfter": 284.4375,
+        "bodyHeightDelta": 0
+      },
+      {
+        "id": "article/visually-hidden-aria",
+        "output": "Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nMachine-readable API documentation\n\nCommunity archive",
+        "computed": {
+          "display": "block",
+          "position": "absolute",
+          "clip": "rect(0px, 0px, 0px, 0px)",
+          "rects": 1
+        },
+        "bodyHeightBefore": 284.4375,
+        "bodyHeightAfter": 284.4375,
+        "bodyHeightDelta": 0
+      },
+      {
+        "id": "article/comment",
+        "output": "Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nCommunity archive",
+        "computed": null,
+        "bodyHeightBefore": 284.4375,
+        "bodyHeightAfter": 284.4375,
+        "bodyHeightDelta": 0
+      },
+      {
+        "id": "article/template",
+        "output": "Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nCommunity archive",
+        "computed": null,
+        "bodyHeightBefore": 284.4375,
+        "bodyHeightAfter": 284.4375,
+        "bodyHeightDelta": 0
+      },
+      {
+        "id": "article/details",
+        "output": "Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nAlternative formats\nCommunity archive",
+        "computed": {
+          "display": "block",
+          "position": "static",
+          "clip": "auto",
+          "rects": 1
+        },
+        "bodyHeightBefore": 302.4375,
+        "bodyHeightAfter": 284.4375,
+        "bodyHeightDelta": 18
+      },
+      {
+        "id": "body-end/visible",
+        "output": "Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nCommunity archive\n\nMachine-readable API documentation",
+        "computed": {
+          "display": "block",
+          "position": "static",
+          "clip": "auto",
+          "rects": 1
+        },
+        "bodyHeightBefore": 318.4375,
+        "bodyHeightAfter": 284.4375,
+        "bodyHeightDelta": 34
+      },
+      {
+        "id": "body-end/hidden",
+        "output": "Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nCommunity archive",
+        "computed": {
+          "display": "none",
+          "position": "static",
+          "clip": "auto",
+          "rects": 0
+        },
+        "bodyHeightBefore": 284.4375,
+        "bodyHeightAfter": 284.4375,
+        "bodyHeightDelta": 0
+      },
+      {
+        "id": "body-end/display-none-inline",
+        "output": "Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nCommunity archive",
+        "computed": {
+          "display": "none",
+          "position": "static",
+          "clip": "auto",
+          "rects": 0
+        },
+        "bodyHeightBefore": 284.4375,
+        "bodyHeightAfter": 284.4375,
+        "bodyHeightDelta": 0
+      },
+      {
+        "id": "body-end/display-none-class",
+        "output": "Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nCommunity archive",
+        "computed": {
+          "display": "none",
+          "position": "static",
+          "clip": "auto",
+          "rects": 0
+        },
+        "bodyHeightBefore": 284.4375,
+        "bodyHeightAfter": 284.4375,
+        "bodyHeightDelta": 0
+      },
+      {
+        "id": "body-end/visually-hidden",
+        "output": "Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nCommunity archive\n\nMachine-readable API documentation",
+        "computed": {
+          "display": "block",
+          "position": "absolute",
+          "clip": "rect(0px, 0px, 0px, 0px)",
+          "rects": 1
+        },
+        "bodyHeightBefore": 284.4375,
+        "bodyHeightAfter": 284.4375,
+        "bodyHeightDelta": 0
+      },
+      {
+        "id": "body-end/visually-hidden-aria",
+        "output": "Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nCommunity archive\n\nMachine-readable API documentation",
+        "computed": {
+          "display": "block",
+          "position": "absolute",
+          "clip": "rect(0px, 0px, 0px, 0px)",
+          "rects": 1
+        },
+        "bodyHeightBefore": 284.4375,
+        "bodyHeightAfter": 284.4375,
+        "bodyHeightDelta": 0
+      },
+      {
+        "id": "body-end/comment",
+        "output": "Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nCommunity archive",
+        "computed": null,
+        "bodyHeightBefore": 284.4375,
+        "bodyHeightAfter": 284.4375,
+        "bodyHeightDelta": 0
+      },
+      {
+        "id": "body-end/template",
+        "output": "Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nCommunity archive",
+        "computed": null,
+        "bodyHeightBefore": 284.4375,
+        "bodyHeightAfter": 284.4375,
+        "bodyHeightDelta": 0
+      },
+      {
+        "id": "body-end/details",
+        "output": "Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nCommunity archive\nAlternative formats",
+        "computed": {
+          "display": "block",
+          "position": "static",
+          "clip": "auto",
+          "rects": 1
+        },
+        "bodyHeightBefore": 302.4375,
+        "bodyHeightAfter": 284.4375,
+        "bodyHeightDelta": 18
+      },
+      {
+        "id": "footer/visible",
+        "output": "Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nCommunity archive\n\nMachine-readable API documentation",
+        "computed": {
+          "display": "block",
+          "position": "static",
+          "clip": "auto",
+          "rects": 1
+        },
+        "bodyHeightBefore": 318.4375,
+        "bodyHeightAfter": 284.4375,
+        "bodyHeightDelta": 34
+      },
+      {
+        "id": "footer/hidden",
+        "output": "Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nCommunity archive",
+        "computed": {
+          "display": "none",
+          "position": "static",
+          "clip": "auto",
+          "rects": 0
+        },
+        "bodyHeightBefore": 284.4375,
+        "bodyHeightAfter": 284.4375,
+        "bodyHeightDelta": 0
+      },
+      {
+        "id": "footer/display-none-inline",
+        "output": "Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nCommunity archive",
+        "computed": {
+          "display": "none",
+          "position": "static",
+          "clip": "auto",
+          "rects": 0
+        },
+        "bodyHeightBefore": 284.4375,
+        "bodyHeightAfter": 284.4375,
+        "bodyHeightDelta": 0
+      },
+      {
+        "id": "footer/display-none-class",
+        "output": "Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nCommunity archive",
+        "computed": {
+          "display": "none",
+          "position": "static",
+          "clip": "auto",
+          "rects": 0
+        },
+        "bodyHeightBefore": 284.4375,
+        "bodyHeightAfter": 284.4375,
+        "bodyHeightDelta": 0
+      },
+      {
+        "id": "footer/visually-hidden",
+        "output": "Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nCommunity archive\n\nMachine-readable API documentation",
+        "computed": {
+          "display": "block",
+          "position": "absolute",
+          "clip": "rect(0px, 0px, 0px, 0px)",
+          "rects": 1
+        },
+        "bodyHeightBefore": 284.4375,
+        "bodyHeightAfter": 284.4375,
+        "bodyHeightDelta": 0
+      },
+      {
+        "id": "footer/visually-hidden-aria",
+        "output": "Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nCommunity archive\n\nMachine-readable API documentation",
+        "computed": {
+          "display": "block",
+          "position": "absolute",
+          "clip": "rect(0px, 0px, 0px, 0px)",
+          "rects": 1
+        },
+        "bodyHeightBefore": 284.4375,
+        "bodyHeightAfter": 284.4375,
+        "bodyHeightDelta": 0
+      },
+      {
+        "id": "footer/comment",
+        "output": "Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nCommunity archive",
+        "computed": null,
+        "bodyHeightBefore": 284.4375,
+        "bodyHeightAfter": 284.4375,
+        "bodyHeightDelta": 0
+      },
+      {
+        "id": "footer/template",
+        "output": "Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nCommunity archive",
+        "computed": null,
+        "bodyHeightBefore": 284.4375,
+        "bodyHeightAfter": 284.4375,
+        "bodyHeightDelta": 0
+      },
+      {
+        "id": "footer/details",
+        "output": "Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.\n\nCommunity archive\nAlternative formats",
+        "computed": {
+          "display": "block",
+          "position": "static",
+          "clip": "auto",
+          "rects": 1
+        },
+        "bodyHeightBefore": 302.4375,
+        "bodyHeightAfter": 284.4375,
+        "bodyHeightDelta": 18
+      },
+      {
+        "id": "head/link",
+        "output": "Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.",
+        "computed": null,
+        "bodyHeightBefore": 250.4375,
+        "bodyHeightAfter": 250.4375,
+        "bodyHeightDelta": 0
+      },
+      {
+        "id": "control/absent",
+        "output": "Exploring a community archive\n\nA community archive describes buildings, photographs, and the people who contributed them. Each record has a stable address and a short description. Visitors can follow references between records to understand how the collection developed over time.\n\nThe catalogue separates publication dates from later corrections. An editor can update a description when new evidence arrives, while retaining the original publication date. This distinction helps readers compare accounts without confusing an editorial correction with a newly published item.\n\nTranslations belong to individual records. A visitor may request a language that is not available for a particular document. The archive then displays the original text and identifies its language, rather than pretending that the fallback is a translation.\n\nReferences have a direction. A photograph can refer to the building it depicts, and the building page can list the photographs that refer back to it. These relationships provide a useful route through a collection even when the records use different terminology.",
+        "computed": null,
+        "bodyHeightBefore": 250.4375,
+        "bodyHeightAfter": 250.4375,
+        "bodyHeightDelta": 0
+      }
+    ]
+  },
+  "python_packages": [
+    "babel==2.18.0",
+    "beautifulsoup4==4.15.0",
+    "certifi==2026.10.23",
+    "charset-normalizer==3.5.2",
+    "courlan==1.4.0",
+    "dateparser==1.5.0",
+    "html2text==2025.4.15",
+    "htmldate==1.11.0",
+    "jusText==3.0.2",
+    "lxml==6.1.3",
+    "lxml_html_clean==0.4.6",
+    "markdownify==1.2.3",
+    "python-dateutil==4.0.0",
+    "pytz==2026.6",
+    "regex==2026.11.9",
+    "six==1.17.0",
+    "soupsieve==4.1",
+    "tld==0.13.2",
+    "trafilatura==2.3.1",
+    "typing_extensions==4.16.0",
+    "tzdata==2026.6",
+    "tzlocal==5.4.5",
+    "urllib3==2.8.0"
+  ],
+  "npm_packages": {
+    "resolved": "file:../private/tmp/zotonic-reader-trial",
+    "name": "zotonic-reader-trial",
+    "dependencies": {
+      "@mozilla/readability": {
+        "version": "0.6.0",
+        "overridden": false
+      },
+      "jsdom": {
+        "version": "31.0.0",
+        "overridden": false,
+        "dependencies": {
+          "@exodus/bytes": {
+            "version": "1.16.0",
+            "overridden": false,
+            "dependencies": {
+              "@noble/hashes": {}
+            }
+          },
+          "@napi-rs/canvas": {},
+          "bcp-47-match": {
+            "version": "2.0.3",
+            "overridden": false
+          },
+          "bcp-47": {
+            "version": "2.1.2",
+            "overridden": false,
+            "dependencies": {
+              "is-alphabetical": {
+                "version": "2.0.1",
+                "overridden": false
+              },
+              "is-alphanumerical": {
+                "version": "2.0.1",
+                "overridden": false,
+                "dependencies": {
+                  "is-alphabetical": {
+                    "version": "2.0.1"
+                  },
+                  "is-decimal": {
+                    "version": "2.0.1"
+                  }
+                }
+              },
+              "is-decimal": {
+                "version": "2.0.1",
+                "overridden": false
+              }
+            }
+          },
+          "data-urls": {
+            "version": "8.0.0",
+            "overridden": false,
+            "dependencies": {
+              "whatwg-mimetype": {
+                "version": "5.0.0"
+              },
+              "whatwg-url": {
+                "version": "17.3.0"
+              }
+            }
+          },
+          "decimal.js": {
+            "version": "10.6.0",
+            "overridden": false
+          },
+          "html-encoding-sniffer": {
+            "version": "7.0.0",
+            "overridden": false,
+            "dependencies": {
+              "@exodus/bytes": {
+                "version": "1.16.0"
+              }
+            }
+          },
+          "is-potential-custom-element-name": {
+            "version": "1.0.1",
+            "overridden": false
+          },
+          "lru-cache": {
+            "version": "11.5.3",
+            "overridden": false
+          },
+          "parse5-parser-stream": {
+            "version": "8.1.1",
+            "overridden": false,
+            "dependencies": {
+              "parse5": {
+                "version": "8.1.1"
+              }
+            }
+          },
+          "parse5": {
+            "version": "8.1.1",
+            "overridden": false,
+            "dependencies": {
+              "entities": {
+                "version": "9.0.0",
+                "overridden": false
+              }
+            }
+          },
+          "saxes": {
+            "version": "6.0.0",
+            "overridden": false,
+            "dependencies": {
+              "xmlchars": {
+                "version": "2.2.0",
+                "overridden": false
+              }
+            }
+          },
+          "tough-cookie": {
+            "version": "6.1.0",
+            "overridden": false,
+            "dependencies": {
+              "tldts": {
+                "version": "7.4.21",
+                "overridden": false,
+                "dependencies": {
+                  "tldts-core": {
+                    "version": "7.4.21",
+                    "overridden": false
+                  }
+                }
+              }
+            }
+          },
+          "undici": {
+            "version": "8.12.4",
+            "overridden": false
+          },
+          "w3c-xmlserializer": {
+            "version": "6.0.0",
+            "overridden": false,
+            "dependencies": {
+              "xml-name-validator": {
+                "version": "5.0.0"
+              }
+            }
+          },
+          "webidl-conversions": {
+            "version": "8.0.1",
+            "overridden": false
+          },
+          "whatwg-mimetype": {
+            "version": "5.0.0",
+            "overridden": false
+          },
+          "whatwg-url": {
+            "version": "17.3.0",
+            "overridden": false,
+            "dependencies": {
+              "@exodus/bytes": {
+                "version": "1.16.0"
+              },
+              "tr46": {
+                "version": "7.0.0",
+                "overridden": false,
+                "dependencies": {
+                  "punycode": {
+                    "version": "2.3.1",
+                    "overridden": false
+                  }
+                }
+              },
+              "webidl-conversions": {
+                "version": "8.0.1"
+              }
+            }
+          },
+          "xml-name-validator": {
+            "version": "5.0.0",
+            "overridden": false
+          }
+        }
+      },
+      "playwright-core": {
+        "version": "1.65.0",
+        "overridden": false
+      },
+      "turndown": {
+        "version": "7.2.5",
+        "overridden": false,
+        "dependencies": {
+          "@mixmark-io/domino": {
+            "version": "2.2.0",
+            "overridden": false
+          }
+        }
+      }
+    }
+  },
+  "hosted_mode": "Jina Reader POST raw HTML, Accept application/json; no preset or key; service build not reported"
+}

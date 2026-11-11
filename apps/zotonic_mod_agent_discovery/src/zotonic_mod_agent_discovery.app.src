@@ -1,0 +1,9 @@
+{application, zotonic_mod_agent_discovery, [
+    {description, "Discovery of public information for agents and HTTP clients"},
+    {vsn, {file, "../../VERSION"}},
+    {registered, []},
+    {applications, [kernel, stdlib, zotonic_core]},
+    {env, []},
+    {modules, []},
+    {licenses, ["Apache-2.0"]}
+]}.
