@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-11 10:48\n"
+"PO-Revision-Date: 2026-11-11 11:43\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -6612,32 +6612,32 @@ msgstr "דף זה מציג סטטיסטיקות מערכת (בזמן אמת) כ�
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:12
 msgid "API catalog"
-msgstr ""
+msgstr "קטלוג ה-API"
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:24
 msgid "Browse public resources"
-msgstr ""
+msgstr "עיון במשאבים ציבוריים"
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:3
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:7
 msgid "Data and API"
-msgstr ""
+msgstr "נתונים וממשק API"
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:8
 msgid "Explore this site's public information using ordinary links and HTTP GET requests. Public content does not require an account or API key."
-msgstr ""
+msgstr "חקור את המידע הציבורי באתר זה באמצעות קישורים רגילים ובקשות HTTP GET. הגישה לתוכן הציבורי אינה מצריכה חשבון או מפתח API."
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:29
 msgid "JSON responses contain status and result fields. Concise reads return localized text and report language fallback. Follow next_url until next is false; filtered pages can be empty. Resource exports provide page URLs by language, including x-default. Cite the human page URL in the appropriate language."
-msgstr ""
+msgstr "תגובות JSON מכילות את השדות status ו-result. קריאות תמציתיות מחזירות טקסט מתורגם ומדווחות על שפת הגיבוי. יש לעקוב אחר next_url עד ש-next יהיה false; דפים מסוננים עשויים להיות ריקים. ייצוא משאבים מספק כתובות URL של דפים לפי שפה, כולל x-default. יש לצטט את כתובת ה-URL של הדף המיועד לבני אדם בשפה המתאימה."
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:11
 msgid "OpenAPI description"
-msgstr ""
+msgstr "תיאור OpenAPI"
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:28
 msgid "Replace {id} with an ID or unique name obtained from search results or a page's alternate link. Use small pages and follow pagination to explore further."
-msgstr ""
+msgstr "החלף את {id} ב-ID או בשם ייחודי שהושג מתוצאות החיפוש או מקישור חלופי של הדף. השתמש בדפים קטנים ועקוב אחר חלוקת העמודים כדי להמשיך לחקור."
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:15
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:2
@@ -6646,7 +6646,7 @@ msgstr "מפת אתר"
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:30
 msgid "The agent endpoints always use anonymous permissions. Existing compatibility APIs apply the caller's permissions. They return only accessible information and keep their existing indexing headers. Content and media may have their own licenses; preserve attribution and follow the stated terms."
-msgstr ""
+msgstr "נקודות הקצה של הסוכן משתמשות תמיד בהרשאות אנונימיות. ממשקי ה-API הקיימים לתאימות מיישמים את ההרשאות של המתקשר. הם מחזירים רק מידע נגיש ושומרים על כותרות האינדקס הקיימות שלהם. לתוכן ולמדיה עשויות להיות רישיונות משלהן; יש לשמור על ציון המקור ולפעול בהתאם לתנאים המפורטים."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:60
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:29
@@ -6922,7 +6922,7 @@ msgstr "מסננים קבועים"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:25
 msgid "Gaps are unrecorded intervals. Partial intervals may undercount activity. Page-request totals, device breakdowns and popular content exclude detected crawlers. API and traffic-classification measurements include crawlers unless filtered out. Counts exclude editor activity and do not measure unique visitors."
-msgstr ""
+msgstr "\"פערים\" הם מרווחי זמן שלא תועדו. מרווחי זמן חלקיים עלולים להוביל לספירה חסרה של הפעילות. בסכומים הכוללים של בקשות לדפים, בפירוט לפי מכשירים ובתכנים הפופולריים לא נכללים זחלים שזוהו. מדידות ה-API וסיווג התעבורה כוללות זחלים, אלא אם כן הם מסוננים החוצה. הספירות אינן כוללות פעילות של עורכים ואינן מודדות מבקרים ייחודיים."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:13
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:15
@@ -9753,7 +9753,7 @@ msgstr "הסתר תמיד את כפתור מעקב התבניות הצף."
 
 #: zotonic_mod_development/priv/templates/_html_head_development.tpl:50
 msgid "Attach capture"
-msgstr ""
+msgstr "חיבור הקלטת אבחון"
 
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:18
 msgid "Automatic detection on the Zotonic machine"
@@ -10451,7 +10451,7 @@ msgstr "תפסיק"
 
 #: zotonic_mod_development/priv/templates/_html_head_development.tpl:51
 msgid "Stop capture"
-msgstr ""
+msgstr "הפסק את הלכידה"
 
 #: zotonic_mod_development/src/mod_development.erl:669
 msgid "Stopped logging to the console of all browser tabs."
@@ -16483,7 +16483,7 @@ msgstr "קוד ההרשמה שלך"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:6
 msgid "A deployment is running. Try again when it finishes."
-msgstr ""
+msgstr "תהליך פריסה נמצא כעת בפעולה. נסה שוב לאחר סיום התהליך."
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:320
 msgid "Another deployment is in progress. Please try again when it finishes."
@@ -16499,7 +16499,7 @@ msgstr "לא ניתן היה לאחזר את יומן השינויים המרו�
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:8
 msgid "Could not list local changes. Check the repository and server log."
-msgstr ""
+msgstr "לא ניתן היה לרשום את השינויים המקומיים. בדוק את המאגר ואת יומן השרת."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:9
 msgid "Current commit"
@@ -16565,11 +16565,11 @@ msgstr "שינויים נכנסים"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:2
 msgid "Local changes for {name}."
-msgstr ""
+msgstr "שינויים מקומיים ב- {name}."
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:303
 msgid "Local changes reset. You can deploy again."
-msgstr ""
+msgstr "השינויים המקומיים נמחקו. ניתן לבצע פריסה מחדש."
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:14
 msgid "Modules list"
@@ -16589,15 +16589,15 @@ msgstr "הידור מחדש קבצי Erlang ששונו ברקע"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:289
 msgid "Reset local changes"
-msgstr ""
+msgstr "איפוס שינויים מקומיים"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:309
 msgid "Reset or rebuild failed. Check the server log before retrying."
-msgstr ""
+msgstr "האיפוס או הבנייה מחדש נכשלו. בדוק את יומן השרת לפני שתנסה שוב."
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:300
 msgid "Resetting local changes and rebuilding..."
-msgstr ""
+msgstr "איפוס השינויים המקומיים ובנייה מחדש..."
 
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
 msgid "Review and deploy the latest version of this site."
@@ -16646,7 +16646,7 @@ msgstr "מצטער, ניתן להריץ זאת רק מאתר הסטטוס של �
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:20
 msgid "The code is then rebuilt before deployment is enabled again. If this repository contains other sites or modules, their local changes are also discarded."
-msgstr ""
+msgstr "לאחר מכן, הקוד נבנה מחדש לפני שהפריסה מופעלת שוב. אם מאגר זה מכיל אתרים או מודולים אחרים, השינויים המקומיים בהם נמחקים גם הם."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:28
 msgid "The deployment preview is unavailable. Check the repository and server log, then try again."
@@ -16666,7 +16666,7 @@ msgstr "אין שינויים נכנסים."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:15
 msgid "There are no local changes. You can still rebuild to recover from a failed deployment."
-msgstr ""
+msgstr "אין שינויים מקומיים. עדיין ניתן לבצע בנייה מחדש כדי לשחזר את המערכת לאחר פריסה שנכשלה."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:22
 msgid "This branch has no upstream configured. Configure its remote tracking branch before deploying."
@@ -16674,7 +16674,7 @@ msgstr "לענף זה לא הוגדר upstream. יש להגדיר את ענף ה
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:18
 msgid "This permanently discards all uncommitted changes in the entire repository, including staged changes, and deletes untracked files and directories. Ignored files, local commits and nested repositories are preserved."
-msgstr ""
+msgstr "פעולה זו מבטלת לצמיתות את כל השינויים שלא בוצע עבורם commit במאגר כולו, כולל שינויים שהוכנו ל-commit, ומוחקת קבצים ותיקיות שאינם במעקב. קבצים שמתעלמים מהם, commits מקומיים ומאגרים מקוננים נשמרים."
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
 msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
@@ -16690,7 +16690,7 @@ msgstr "כדי להריץ את עדכון ה- webhook, הגדר את השירו�
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:26
 msgid "Undo all local changes and rebuild"
-msgstr ""
+msgstr "בטל את כל השינויים המקומיים ובנה מחדש"
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:16
 msgid "View system status"
