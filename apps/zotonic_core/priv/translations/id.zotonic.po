@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-11 10:49\n"
+"PO-Revision-Date: 2026-11-11 11:43\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -6572,28 +6572,28 @@ msgstr "Katalog API"
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:24
 msgid "Browse public resources"
-msgstr ""
+msgstr "Telusuri sumber daya publik"
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:3
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:7
 msgid "Data and API"
-msgstr ""
+msgstr "Data dan API"
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:8
 msgid "Explore this site's public information using ordinary links and HTTP GET requests. Public content does not require an account or API key."
-msgstr ""
+msgstr "Jelajahi informasi publik di situs ini menggunakan tautan biasa dan permintaan HTTP GET. Konten publik tidak memerlukan akun atau kunci API."
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:29
 msgid "JSON responses contain status and result fields. Concise reads return localized text and report language fallback. Follow next_url until next is false; filtered pages can be empty. Resource exports provide page URLs by language, including x-default. Cite the human page URL in the appropriate language."
-msgstr ""
+msgstr "Respons JSON berisi bidang status dan result. Pembacaan ringkas mengembalikan teks yang telah dilokalkan dan melaporkan bahasa cadangan. Ikuti next_url hingga next bernilai false; halaman yang telah difilter mungkin kosong. Ekspor sumber daya menyediakan URL halaman berdasarkan bahasa, termasuk x-default. Cantumkan URL halaman untuk pengguna dalam bahasa yang sesuai."
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:11
 msgid "OpenAPI description"
-msgstr ""
+msgstr "Deskripsi OpenAPI"
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:28
 msgid "Replace {id} with an ID or unique name obtained from search results or a page's alternate link. Use small pages and follow pagination to explore further."
-msgstr ""
+msgstr "Ganti {id} dengan ID atau nama unik yang diperoleh dari hasil pencarian atau tautan alternatif suatu halaman. Gunakan halaman-halaman kecil dan ikuti paginasi untuk menjelajah lebih lanjut."
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:15
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:2
@@ -6602,7 +6602,7 @@ msgstr "Peta Situs"
 
 #: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:30
 msgid "The agent endpoints always use anonymous permissions. Existing compatibility APIs apply the caller's permissions. They return only accessible information and keep their existing indexing headers. Content and media may have their own licenses; preserve attribution and follow the stated terms."
-msgstr ""
+msgstr "Titik akhir agen selalu menggunakan izin anonim. API kompatibilitas yang ada menerapkan izin dari pihak yang memanggil. API tersebut hanya mengembalikan informasi yang dapat diakses dan mempertahankan header pengindeksan yang sudah ada. Konten dan media mungkin memiliki lisensi masing-masing; pertahankan atribusi dan patuhi ketentuan yang disebutkan."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:60
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:29
@@ -6878,7 +6878,7 @@ msgstr "Filter tetap"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:25
 msgid "Gaps are unrecorded intervals. Partial intervals may undercount activity. Page-request totals, device breakdowns and popular content exclude detected crawlers. API and traffic-classification measurements include crawlers unless filtered out. Counts exclude editor activity and do not measure unique visitors."
-msgstr ""
+msgstr "Kesenjangan adalah interval yang tidak tercatat. Interval parsial mungkin mengakibatkan penghitungan aktivitas yang kurang akurat. Jumlah permintaan halaman, rincian perangkat, dan konten populer tidak mencakup crawler yang terdeteksi. Pengukuran API dan klasifikasi lalu lintas mencakup crawler kecuali jika disaring. Jumlah tersebut tidak mencakup aktivitas editor dan tidak mengukur pengunjung unik."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:13
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:15
@@ -9707,7 +9707,7 @@ msgstr "Selalu sembunyikan tombol penelusuran templat mengambang."
 
 #: zotonic_mod_development/priv/templates/_html_head_development.tpl:50
 msgid "Attach capture"
-msgstr ""
+msgstr "Hubungkan rekaman diagnostik"
 
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:18
 msgid "Automatic detection on the Zotonic machine"
@@ -10405,7 +10405,7 @@ msgstr "Berhenti"
 
 #: zotonic_mod_development/priv/templates/_html_head_development.tpl:51
 msgid "Stop capture"
-msgstr ""
+msgstr "Hentikan penangkapan"
 
 #: zotonic_mod_development/src/mod_development.erl:669
 msgid "Stopped logging to the console of all browser tabs."
@@ -16437,7 +16437,7 @@ msgstr "Kode pendaftaran Anda"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:6
 msgid "A deployment is running. Try again when it finishes."
-msgstr ""
+msgstr "Proses penyebaran sedang berjalan. Silakan coba lagi setelah proses tersebut selesai."
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:320
 msgid "Another deployment is in progress. Please try again when it finishes."
@@ -16453,7 +16453,7 @@ msgstr "Tidak dapat mengambil log perubahan dari server jarak jauh. Periksa kone
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:8
 msgid "Could not list local changes. Check the repository and server log."
-msgstr ""
+msgstr "Tidak dapat menampilkan daftar perubahan lokal. Periksa repositori dan log server."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:9
 msgid "Current commit"
@@ -16519,11 +16519,11 @@ msgstr "Perubahan yang masuk"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:2
 msgid "Local changes for {name}."
-msgstr ""
+msgstr "Perubahan lokal untuk {name}."
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:303
 msgid "Local changes reset. You can deploy again."
-msgstr ""
+msgstr "Perubahan lokal telah diatur ulang. Anda dapat melakukan deployment kembali."
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:14
 msgid "Modules list"
@@ -16543,15 +16543,15 @@ msgstr "Kompilasi ulang berkas Erlang yang berubah di latar belakang"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:289
 msgid "Reset local changes"
-msgstr ""
+msgstr "Atur ulang perubahan lokal"
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:309
 msgid "Reset or rebuild failed. Check the server log before retrying."
-msgstr ""
+msgstr "Proses reset atau rebuild gagal. Periksa log server sebelum mencoba lagi."
 
 #: zotonic_mod_site_update/src/mod_site_update.erl:300
 msgid "Resetting local changes and rebuilding..."
-msgstr ""
+msgstr "Mengembalikan perubahan lokal ke pengaturan awal dan membangun ulang..."
 
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
 msgid "Review and deploy the latest version of this site."
@@ -16600,7 +16600,7 @@ msgstr "Maaf ini hanya dapat dijalankan dari situs status Zotonic"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:20
 msgid "The code is then rebuilt before deployment is enabled again. If this repository contains other sites or modules, their local changes are also discarded."
-msgstr ""
+msgstr "Kode tersebut kemudian dibangun ulang sebelum penerapan diaktifkan kembali. Jika repositori ini berisi situs atau modul lain, perubahan lokal pada situs atau modul tersebut juga akan dibuang."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:28
 msgid "The deployment preview is unavailable. Check the repository and server log, then try again."
@@ -16620,7 +16620,7 @@ msgstr "Tidak ada perubahan yang masuk."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:15
 msgid "There are no local changes. You can still rebuild to recover from a failed deployment."
-msgstr ""
+msgstr "Tidak ada perubahan lokal. Anda masih bisa melakukan rebuild untuk memulihkan sistem dari kegagalan deployment."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:22
 msgid "This branch has no upstream configured. Configure its remote tracking branch before deploying."
@@ -16628,7 +16628,7 @@ msgstr "Cabang ini belum dikonfigurasi dengan upstream. Konfigurasikan cabang pe
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:18
 msgid "This permanently discards all uncommitted changes in the entire repository, including staged changes, and deletes untracked files and directories. Ignored files, local commits and nested repositories are preserved."
-msgstr ""
+msgstr "Perintah ini akan membuang secara permanen semua perubahan yang belum dikomit di seluruh repositori, termasuk perubahan yang telah dimasukkan ke dalam staging area, serta menghapus berkas dan direktori yang tidak dilacak. Berkas yang diabaikan, commit lokal, dan repositori bersarang akan tetap dipertahankan."
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
 msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
@@ -16644,7 +16644,7 @@ msgstr "Untuk menjalankan pembaruan webhook, konfigurasikan layanan Anda ke POST
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:26
 msgid "Undo all local changes and rebuild"
-msgstr ""
+msgstr "Batalkan semua perubahan lokal dan bangun ulang"
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:16
 msgid "View system status"
