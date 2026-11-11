@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-09 12:31\n"
+"PO-Revision-Date: 2026-11-11 11:44\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "MIME-Version: 1.0\n"
@@ -387,8 +387,9 @@ msgstr "すべてのACLルールを現在公開されているバージョンに
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:26
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:85
 #: zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:59
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:60
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:11
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:24
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:229
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:237
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70
@@ -516,7 +517,7 @@ msgstr "リソースの作成者を所有者とみなしてください。"
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4
 #: zotonic_mod_admin/src/mod_admin.erl:516
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:70
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:26
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 msgid "Content"
 msgstr "コンテンツ"
@@ -5123,7 +5124,7 @@ msgstr "有効期限"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:20
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:21
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:37
-#: zotonic_mod_base/src/support/z_chart_svg.erl:1390
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1457
 #: zotonic_mod_development/priv/templates/_development_dispatch_options.tpl:2
 msgid "Value"
 msgstr "値"
@@ -5864,6 +5865,9 @@ msgstr "ランキングペア"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:104
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:135
+#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:5
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:59
+#: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:8
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:61
 msgid "Reset"
 msgstr "リセット"
@@ -6562,6 +6566,44 @@ msgstr "システム使用状況"
 msgid "This page shows (real-time) system statistics like memory use and requests."
 msgstr "このページには、メモリ使用量やリクエスト数などの（リアルタイムの）システム統計情報が表示されます。"
 
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:12
+msgid "API catalog"
+msgstr "APIカタログ"
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:24
+msgid "Browse public resources"
+msgstr "公開リソースを閲覧する"
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:3
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:7
+msgid "Data and API"
+msgstr "データとAPI"
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:8
+msgid "Explore this site's public information using ordinary links and HTTP GET requests. Public content does not require an account or API key."
+msgstr "通常のリンクやHTTP GETリクエストを使用して、このサイトの公開情報を閲覧してください。公開コンテンツを利用するには、アカウントやAPIキーは必要ありません。"
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:29
+msgid "JSON responses contain status and result fields. Concise reads return localized text and report language fallback. Follow next_url until next is false; filtered pages can be empty. Resource exports provide page URLs by language, including x-default. Cite the human page URL in the appropriate language."
+msgstr "JSONレスポンスには status フィールドと result フィールドが含まれます。簡潔な読み取りでは、ローカライズされたテキストが返され、言語のフォールバックが報告されます。nextがfalseになるまでnext_urlをたどってください。フィルタリングされたページは空の場合があります。リソースのエクスポートでは、x-defaultを含め、言語ごとのページURLが提供されます。適切な言語のユーザー向けページのURLを引用してください。"
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:11
+msgid "OpenAPI description"
+msgstr "OpenAPIの記述"
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:28
+msgid "Replace {id} with an ID or unique name obtained from search results or a page's alternate link. Use small pages and follow pagination to explore further."
+msgstr "「 {id} 」を、検索結果やページの代替リンクから取得したIDまたは一意の名前で置き換えてください。小規模なページを利用し、ページネーションに従ってさらに詳しく調べてみてください。"
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:15
+#: zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:2
+msgid "Sitemap"
+msgstr "サイトマップ"
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:30
+msgid "The agent endpoints always use anonymous permissions. Existing compatibility APIs apply the caller's permissions. They return only accessible information and keep their existing indexing headers. Content and media may have their own licenses; preserve attribution and follow the stated terms."
+msgstr "エージェントのエンドポイントは常に匿名権限を使用します。既存の互換性APIは、呼び出し元の権限を適用します。これらのAPIは、アクセス可能な情報のみを返し、既存のインデックスヘッダーを維持します。コンテンツやメディアには独自のライセンスが適用されている場合があります。その場合は、帰属表示を維持し、記載された利用規約に従ってください。"
+
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:60
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:29
 msgid "1 day"
@@ -6618,7 +6660,7 @@ msgstr "分析機能が再開されるまで、アクティビティカウンタ
 msgid "Add analytics measurement"
 msgstr "分析指標を追加する"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:39
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:41
 msgid "All breakdown values"
 msgstr "すべての内訳値"
 
@@ -6634,13 +6676,13 @@ msgstr "許容値（カンマ区切り）"
 msgid "Allowed values:"
 msgstr "許容値："
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:267
+#: zotonic_mod_analytics/src/mod_analytics.erl:268
 msgid "An equivalent analytics measurement already exists."
 msgstr "これと同等の分析指標はすでに存在しています。"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
-#: zotonic_mod_analytics/src/mod_analytics.erl:196
+#: zotonic_mod_analytics/src/mod_analytics.erl:197
 msgid "Analytics configuration"
 msgstr "分析の設定"
 
@@ -6673,7 +6715,7 @@ msgstr "分析指標"
 msgid "Analytics status"
 msgstr "分析状況"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:32
 msgid "Bars show the lower bound. Counts are ranges, ordered by their lower bound. Overlapping ranges may change order. Content outside the retained candidates has at most"
 msgstr "棒グラフは下限値を示しています。カウント値は範囲であり、下限値の昇順に並べられています。範囲が重なっている場合、順序が変わる可能性があります。保持された候補の範囲外にあるコンテンツは、最大で"
 
@@ -6686,7 +6728,7 @@ msgstr "範囲指定された履歴"
 msgid "Break down by"
 msgstr "内訳（分類別）"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:40
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:42
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "Breakdown"
 msgstr "内訳"
@@ -6711,11 +6753,11 @@ msgstr "機密扱いのリクエスト — ページ、API、およびその他�
 msgid "Configure analytics measurements"
 msgstr "分析測定の設定"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:235
+#: zotonic_mod_analytics/src/mod_analytics.erl:236
 msgid "Could not delete the analytics measurement."
 msgstr "アナリティクスの測定項目を削除できませんでした。"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:268
+#: zotonic_mod_analytics/src/mod_analytics.erl:269
 msgid "Could not save. Check the event, breakdown and filter values."
 msgstr "保存できませんでした。イベント、内訳、およびフィルタの値を確認してください。"
 
@@ -6769,7 +6811,7 @@ msgstr "デバイス — スマートフォン、タブレット、デスクト�
 msgid "Display order"
 msgstr "表示順序"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:241
+#: zotonic_mod_analytics/src/mod_analytics.erl:242
 msgid "Display order saved."
 msgstr "表示順序が保存されました。"
 
@@ -6814,7 +6856,7 @@ msgstr "イベントバッファ"
 msgid "Event processing"
 msgstr "イベント処理"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:40
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:42
 msgid "Events"
 msgstr "イベント"
 
@@ -6835,8 +6877,8 @@ msgid "Fixed filters"
 msgstr "固定フィルター"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:25
-msgid "Gaps are unrecorded intervals. Partial intervals may undercount activity. Request counts include automation, exclude editor activity and do not measure unique visitors."
-msgstr "ギャップとは、記録されていない期間のことです。部分的な期間では、アクティビティ数が過小評価される可能性があります。リクエスト数には自動化が含まれ、編集者のアクティビティは除外されており、ユニーク訪問者数は計測されていません。"
+msgid "Gaps are unrecorded intervals. Partial intervals may undercount activity. Page-request totals, device breakdowns and popular content exclude detected crawlers. API and traffic-classification measurements include crawlers unless filtered out. Counts exclude editor activity and do not measure unique visitors."
+msgstr "「ギャップ」とは、記録されていない期間を指します。部分的な期間では、アクティビティが過小評価される可能性があります。ページリクエストの合計数、デバイス別内訳、人気コンテンツの集計には、検出されたクローラーは含まれません。APIおよびトラフィック分類の測定値には、フィルタリングされていない限り、クローラーが含まれます。集計値には編集者のアクティビティは含まれず、ユニークビジター数は測定されません。"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:13
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:15
@@ -6860,7 +6902,7 @@ msgstr "HTTPステータスコード — 例：200、404、500など"
 msgid "History detail and retention"
 msgstr "履歴の詳細と保存期間"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:45
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:47
 msgid "Includes incomplete or unrecorded intervals"
 msgstr "不完全な間隔や記録されていない間隔が含まれます"
 
@@ -6888,7 +6930,7 @@ msgstr "過去6時間"
 msgid "Maximum number of analytics measurements"
 msgstr "分析測定の最大数"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
 msgid "Most popular content in this period"
 msgstr "この期間で最も人気があったコンテンツ"
 
@@ -6938,11 +6980,11 @@ msgstr "内訳なし（合計）"
 msgid "No filter — include all values"
 msgstr "フィルタなし — すべての値を含める"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:29
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
 msgid "No leading content identified in this period."
 msgstr "この期間に主要なコンテンツは確認されませんでした。"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:36
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:38
 msgid "No recorded events yet."
 msgstr "まだ記録されたイベントはありません。"
 
@@ -6994,11 +7036,11 @@ msgstr "一時停止"
 msgid "Period"
 msgstr "期間"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:26
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
 msgid "Rank"
 msgstr "ランク"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:25
 msgid "Ranked by recorded requests in the selected moving period. The window advances in steps of"
 msgstr "選択した移動期間内に記録されたリクエスト数に基づいてランク付けされます。この期間の範囲は、"
 
@@ -7014,7 +7056,7 @@ msgstr "リクエストの種類 — ページ、API、またはカスタムデ�
 msgid "Request types found in this site's dispatch rules:"
 msgstr "このサイトのディスパッチルールに見られるリクエストの種類："
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:26
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
 msgid "Requests"
 msgstr "リクエスト"
 
@@ -7044,7 +7086,7 @@ msgstr "概要"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
-#: zotonic_mod_analytics/src/mod_analytics.erl:188
+#: zotonic_mod_analytics/src/mod_analytics.erl:189
 msgid "Site Analytics"
 msgstr "サイト分析"
 
@@ -7096,11 +7138,11 @@ msgstr "保存済み時間区間／容量"
 msgid "Stored time intervals"
 msgstr "保存済み時間区間"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:243
+#: zotonic_mod_analytics/src/mod_analytics.erl:244
 msgid "The analytics measurements changed. Reloading their current display order."
 msgstr "分析の測定値が変更されました。現在の表示順序を再読み込みしています。"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:266
+#: zotonic_mod_analytics/src/mod_analytics.erl:267
 msgid "This analytics measurement exceeds the storage budget."
 msgstr "この分析測定値は、ストレージ予算を超えています。"
 
@@ -7153,11 +7195,11 @@ msgstr "イベント"
 msgid "group/time slots"
 msgstr "グループ／時間帯"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:32
 msgid "requests."
 msgstr "リクエスト。"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:25
 msgid "seconds."
 msgstr "秒。"
 
@@ -8728,12 +8770,12 @@ msgstr "ブラウザのシェアのデータ"
 msgid "CSV"
 msgstr "CSV"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:446
-#: zotonic_mod_base/src/support/z_chart_svg.erl:448
+#: zotonic_mod_base/src/support/z_chart_svg.erl:451
+#: zotonic_mod_base/src/support/z_chart_svg.erl:453
 msgid "Chart"
 msgstr "チャート"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:1380
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1447
 msgid "Chart legend"
 msgstr "チャート凡例"
 
@@ -8767,7 +8809,7 @@ msgstr "接続中..."
 msgid "Connection Test"
 msgstr "接続テスト"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:590
+#: zotonic_mod_base/src/support/z_chart_svg.erl:599
 msgid "Data points"
 msgstr "データポイント"
 
@@ -8881,7 +8923,7 @@ msgstr "7月"
 msgid "June"
 msgstr "6月"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:1386
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1453
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:41
 msgid "Label"
 msgstr "ラベル"
@@ -8948,7 +8990,7 @@ msgstr "純変化"
 msgid "No"
 msgstr "いいえ"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:1330
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1397
 msgid "No data"
 msgstr "データなし"
 
@@ -8987,7 +9029,7 @@ msgstr "10月"
 msgid "On this page you can test the connection of your browser to our server and to the internet in general."
 msgstr "このページでは、お使いのブラウザと当社のサーバー、そしてインターネット全般との接続状況をテストできます。"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:353
+#: zotonic_mod_base/src/support/z_chart_svg.erl:358
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:134
 msgid "Other"
 msgstr "その他"
@@ -9615,11 +9657,11 @@ msgstr "新しい場所は、ローカルパスでも完全なURLでも構いま
 msgid "You are not allowed to change this."
 msgstr "あなたはこれを変更することはできません。"
 
-#: zotonic_mod_development/src/mod_development.erl:699
+#: zotonic_mod_development/src/mod_development.erl:701
 msgid "<i>Function name does not exist.</i>"
 msgstr "<i>関数名が存在しません。</i>"
 
-#: zotonic_mod_development/src/mod_development.erl:702
+#: zotonic_mod_development/src/mod_development.erl:704
 msgid "<i>Module not found.</i>"
 msgstr "<i>モジュールが見つかりません。</i>"
 
@@ -9661,6 +9703,10 @@ msgstr "本番環境および受入環境で、フローティングテンプレ
 msgid "Always hide the floating template trace button."
 msgstr "フローティングテンプレートのトレースボタンは常に非表示にしてください。"
 
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:50
+msgid "Attach capture"
+msgstr "キャプチャを添付"
+
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:18
 msgid "Automatic detection on the Zotonic machine"
 msgstr "Zotonicマシンでの自動検出"
@@ -9686,8 +9732,8 @@ msgstr "すべてのテンプレートの依存関係グラフを計算し、視
 msgid "Check debug points in the template source to see debug data here."
 msgstr "ここにデバッグデータを表示するには、テンプレートソースのデバッグポイントにチェックを入れてください。"
 
-#: zotonic_mod_development/src/mod_development.erl:507
-#: zotonic_mod_development/src/mod_development.erl:522
+#: zotonic_mod_development/src/mod_development.erl:509
+#: zotonic_mod_development/src/mod_development.erl:524
 msgid "Checking all templates..."
 msgstr "すべてのテンプレートを確認しています..."
 
@@ -9759,7 +9805,7 @@ msgstr "エディター設定の読み込みまたは保存ができませんで
 msgid "Could not load templates"
 msgstr "テンプレートを読み込めませんでした"
 
-#: zotonic_mod_development/src/mod_development.erl:498
+#: zotonic_mod_development/src/mod_development.erl:500
 msgid "Could not open the directory on this computer."
 msgstr "このコンピューター上のディレクトリを開くことができませんでした。"
 
@@ -9823,7 +9869,7 @@ msgid "Detecting editors…"
 msgstr "エディターを検出中…"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:7
-#: zotonic_mod_development/src/mod_development.erl:1368
+#: zotonic_mod_development/src/mod_development.erl:1386
 msgid "Development"
 msgstr "開発"
 
@@ -9943,11 +9989,11 @@ msgstr "データベースクエリのトレースを有効にしました"
 msgid "Enter the module and function you want to trace. If no function is given, all functions in the module will be traced. Enter how many calls to trace before stopping."
 msgstr "トレースしたいモジュールと関数を入力してください。関数が指定されていない場合は、モジュール内のすべての関数がトレースされます。停止するまでにトレースする呼び出し回数を入力してください。"
 
-#: zotonic_mod_development/src/mod_development.erl:671
+#: zotonic_mod_development/src/mod_development.erl:673
 msgid "Error changing the console logs."
 msgstr "コンソールログの変更中にエラーが発生しました。"
 
-#: zotonic_mod_development/src/mod_development.erl:765
+#: zotonic_mod_development/src/mod_development.erl:767
 msgid "Error parsing template."
 msgstr "テンプレートの解析中にエラーが発生しました。"
 
@@ -10005,7 +10051,7 @@ msgstr "関数呼び出しトレース"
 msgid "Function call tracing has been disabled. Use the following to enable function call tracing:"
 msgstr "関数呼び出しトレースは無効になっています。関数呼び出しトレースを有効にするには、以下を使用してください。"
 
-#: zotonic_mod_development/src/mod_development.erl:705
+#: zotonic_mod_development/src/mod_development.erl:707
 msgid "Function tracing has been disabled in the Zotonic config."
 msgstr "Zotonicの設定で関数トレースが無効になっています。"
 
@@ -10150,18 +10196,18 @@ msgstr "一致するディスパッチルールが見つかりませんでした
 msgid "No matching templates found."
 msgstr "一致するテンプレートが見つかりませんでした。"
 
-#: zotonic_mod_development/src/mod_development.erl:669
+#: zotonic_mod_development/src/mod_development.erl:671
 msgid "No permission to access the console logs."
 msgstr "コンソールログへのアクセス権限がありません。"
 
-#: zotonic_mod_development/src/mod_development.erl:512
-#: zotonic_mod_development/src/mod_development.erl:527
-#: zotonic_mod_development/src/mod_development.erl:542
-#: zotonic_mod_development/src/mod_development.erl:550
-#: zotonic_mod_development/src/mod_development.erl:577
-#: zotonic_mod_development/src/mod_development.erl:619
-#: zotonic_mod_development/src/mod_development.erl:636
-#: zotonic_mod_development/src/mod_development.erl:653
+#: zotonic_mod_development/src/mod_development.erl:514
+#: zotonic_mod_development/src/mod_development.erl:529
+#: zotonic_mod_development/src/mod_development.erl:544
+#: zotonic_mod_development/src/mod_development.erl:552
+#: zotonic_mod_development/src/mod_development.erl:579
+#: zotonic_mod_development/src/mod_development.erl:621
+#: zotonic_mod_development/src/mod_development.erl:638
+#: zotonic_mod_development/src/mod_development.erl:655
 msgid "No permission to use mod_development."
 msgstr "mod_developmentを使用する権限がありません。"
 
@@ -10170,7 +10216,7 @@ msgstr "mod_developmentを使用する権限がありません。"
 msgid "No references found."
 msgstr "参照は見つかりませんでした。"
 
-#: zotonic_mod_development/src/mod_development.erl:631
+#: zotonic_mod_development/src/mod_development.erl:633
 msgid "No template found in the context."
 msgstr "コンテキスト内にテンプレートが見つかりませんでした。"
 
@@ -10195,7 +10241,7 @@ msgstr "見つかりません"
 msgid "Observers"
 msgstr "オブザーバー"
 
-#: zotonic_mod_development/src/mod_development.erl:708
+#: zotonic_mod_development/src/mod_development.erl:710
 msgid "Only the admin user can set traces."
 msgstr "トレースを設定できるのは管理者ユーザーのみです。"
 
@@ -10333,19 +10379,19 @@ msgstr "トレースを開始する"
 msgid "Start matching dispatch rules"
 msgstr "ディスパッチルールのマッチングを開始します"
 
-#: zotonic_mod_development/src/mod_development.erl:665
+#: zotonic_mod_development/src/mod_development.erl:667
 msgid "Started logging to the console of your browser tab."
 msgstr "ブラウザのタブのコンソールへのログ出力を開始しました。"
 
-#: zotonic_mod_development/src/mod_development.erl:539
+#: zotonic_mod_development/src/mod_development.erl:541
 msgid "Started tracing all template inclusions."
 msgstr "テンプレートのインクルード箇所をすべて追跡し始めました。"
 
-#: zotonic_mod_development/src/mod_development.erl:614
+#: zotonic_mod_development/src/mod_development.erl:616
 msgid "Started tracing template inclusions by rendering the page."
 msgstr "ページをレンダリングすることで、テンプレートのインクルード箇所の追跡を開始しました。"
 
-#: zotonic_mod_development/src/mod_development.erl:536
+#: zotonic_mod_development/src/mod_development.erl:538
 msgid "Started tracing template inclusions for your session."
 msgstr "このセッションでのテンプレートのインクルードのトレースを開始しました。"
 
@@ -10355,11 +10401,15 @@ msgstr "このセッションでのテンプレートのインクルードのト
 msgid "Stop"
 msgstr "停止"
 
-#: zotonic_mod_development/src/mod_development.erl:667
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:51
+msgid "Stop capture"
+msgstr "キャプチャを停止"
+
+#: zotonic_mod_development/src/mod_development.erl:669
 msgid "Stopped logging to the console of all browser tabs."
 msgstr "すべてのブラウザタブのコンソールへのログ出力を停止しました。"
 
-#: zotonic_mod_development/src/mod_development.erl:548
+#: zotonic_mod_development/src/mod_development.erl:550
 msgid "Stopped tracing template inclusions for all sessions."
 msgstr "すべてのセッションにおけるテンプレートのインクルージョンの追跡を停止しました。"
 
@@ -10398,7 +10448,7 @@ msgstr "テンプレート"
 msgid "Template debugging"
 msgstr "テンプレートのデバッグ"
 
-#: zotonic_mod_development/src/mod_development.erl:768
+#: zotonic_mod_development/src/mod_development.erl:770
 msgid "Template file not found."
 msgstr "テンプレートファイルが見つかりません。"
 
@@ -10418,7 +10468,7 @@ msgstr "テンプレートパス"
 msgid "Test with this template"
 msgstr "このテンプレートでテストする"
 
-#: zotonic_mod_development/src/mod_development.erl:616
+#: zotonic_mod_development/src/mod_development.erl:618
 msgid "The path must be a local URL."
 msgstr "パスはローカルURLである必要があります。"
 
@@ -10474,8 +10524,9 @@ msgstr "現在のセッションにおけるすべてのデータベースクエ
 msgid "Trace function calls"
 msgstr "関数呼び出しをトレース"
 
-#: zotonic_mod_development/priv/templates/_html_head_development.tpl:38
-#: zotonic_mod_development/priv/templates/_html_head_development.tpl:39
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:44
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:45
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:49
 msgid "Trace templates"
 msgstr "テンプレートをトレース"
 
@@ -10511,7 +10562,7 @@ msgstr "URIパターン"
 msgid "Uncheck to debug only your current session."
 msgstr "現在のセッションのみをデバッグするには、このチェックを外してください。"
 
-#: zotonic_mod_development/src/mod_development.erl:650
+#: zotonic_mod_development/src/mod_development.erl:652
 msgid "Updated template debug points."
 msgstr "テンプレートのデバッグポイントを更新しました。"
 
@@ -16102,10 +16153,6 @@ msgstr "サイトマップを再構築する"
 msgid "Rebuilding the sitemap in the background."
 msgstr "サイトマップをバックグラウンドで再構築しています。"
 
-#: zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:2
-msgid "Sitemap"
-msgstr "サイトマップ"
-
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:7
 msgid "Sitemap settings"
 msgstr "サイトマップ設定"
@@ -16387,11 +16434,15 @@ msgstr "登録するには、利用規約に同意する必要があります。
 msgid "Your signup code"
 msgstr "サインアップコード"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:276
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:6
+msgid "A deployment is running. Try again when it finishes."
+msgstr "現在、デプロイが実行中です。完了したら、もう一度お試しください。"
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:320
 msgid "Another deployment is in progress. Please try again when it finishes."
 msgstr "現在、別のデプロイが実行中です。完了したら、もう一度お試しください。"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:176
+#: zotonic_mod_site_update/src/mod_site_update.erl:187
 msgid "Building Zotonic in the background..."
 msgstr "Zotonicをバックグラウンドで構築中..."
 
@@ -16399,12 +16450,16 @@ msgstr "Zotonicをバックグラウンドで構築中..."
 msgid "Could not fetch the remote change log. Check the remote connection and try again."
 msgstr "リモートの変更ログを取得できませんでした。リモート接続を確認してから、もう一度試してください。"
 
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:8
+msgid "Could not list local changes. Check the repository and server log."
+msgstr "ローカルの変更を一覧表示できませんでした。リポジトリとサーバーのログを確認してください。"
+
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:9
 msgid "Current commit"
 msgstr "現在のコミット"
 
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:61
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:63
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:62
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:64
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:12
 msgid "Deploy"
 msgstr "デプロイ"
@@ -16419,25 +16474,25 @@ msgstr "最新バージョンをデプロイする"
 msgid "Deploy latest Zotonic"
 msgstr "Zotonicの最新バージョンをデプロイする"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:229
+#: zotonic_mod_site_update/src/mod_site_update.erl:240
 msgid "Deploy latest version"
 msgstr "最新バージョンをデプロイする"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:263
+#: zotonic_mod_site_update/src/mod_site_update.erl:274
 msgid "Deploying the latest version..."
 msgstr "最新バージョンをデプロイ中..."
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:2
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:5
-#: zotonic_mod_site_update/src/mod_site_update.erl:140
+#: zotonic_mod_site_update/src/mod_site_update.erl:146
 msgid "Deployment"
 msgstr "デプロイ"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:274
+#: zotonic_mod_site_update/src/mod_site_update.erl:318
 msgid "Deployment completed."
 msgstr "デプロイが完了しました。"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:278
+#: zotonic_mod_site_update/src/mod_site_update.erl:322
 msgid "Deployment failed. Check the server log for details."
 msgstr "デプロイに失敗しました。詳細については、サーバーのログを確認してください。"
 
@@ -16453,13 +16508,21 @@ msgstr "デプロイを行うと、Gitリポジトリ全体（そこに含まれ
 msgid "Fetching remote changes…"
 msgstr "リモートの変更を取得中…"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:174
+#: zotonic_mod_site_update/src/mod_site_update.erl:185
 msgid "Finished rebuilding Zotonic."
 msgstr "Zotonicの再構築が完了しました。"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:32
 msgid "Incoming changes"
 msgstr "取り込まれる変更"
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:2
+msgid "Local changes for {name}."
+msgstr "{name} に対するローカルな変更。"
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:303
+msgid "Local changes reset. You can deploy again."
+msgstr "ローカルでの変更がリセットされました。再度デプロイできます。"
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:14
 msgid "Modules list"
@@ -16477,6 +16540,18 @@ msgstr "Zotonicを再ビルド"
 msgid "Recompile changed Erlang files in the background"
 msgstr "変更されたErlangファイルをバックグラウンドで再コンパイルする"
 
+#: zotonic_mod_site_update/src/mod_site_update.erl:289
+msgid "Reset local changes"
+msgstr "ローカルの変更をリセットする"
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:309
+msgid "Reset or rebuild failed. Check the server log before retrying."
+msgstr "リセットまたは再構築に失敗しました。再試行する前に、サーバーのログを確認してください。"
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:300
+msgid "Resetting local changes and rebuilding..."
+msgstr "ローカルの変更をリセットして再構築中..."
+
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
 msgid "Review and deploy the latest version of this site."
 msgstr "このサイトの最新バージョンを確認し、デプロイしてください。"
@@ -16493,7 +16568,7 @@ msgstr "取り込まれる変更を確認し、このモジュールのGitリポ
 msgid "Review incoming changes and deploy this site's code. Compilation and activation are coordinated across all sites on this node."
 msgstr "取り込まれる変更を確認し、このサイトのコードをデプロイします。コンパイルと有効化は、このノード上のすべてのサイト間で調整されます。"
 
-#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:6
+#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:7
 msgid "Review incoming changes before deploying the latest version."
 msgstr "最新バージョンをデプロイする前に、適用される変更内容を確認してください。"
 
@@ -16514,13 +16589,17 @@ msgstr "サイトのデプロイ"
 msgid "Site update API token"
 msgstr "サイト更新APIトークン"
 
-#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:10
+#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:11
 msgid "Site update is not available as the site does not use a known version control system, like git."
 msgstr "このサイトはGitのような既知のバージョン管理システムを使用していないため、サイトの更新はできません。"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:178
+#: zotonic_mod_site_update/src/mod_site_update.erl:189
 msgid "Sorry this can only be run from the Zotonic status site"
 msgstr "申し訳ありませんが、これはZotonicステータスサイトからのみ実行できます。"
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:20
+msgid "The code is then rebuilt before deployment is enabled again. If this repository contains other sites or modules, their local changes are also discarded."
+msgstr "その後、コードが再ビルドされ、デプロイが再び有効になります。このリポジトリに他のサイトやモジュールが含まれている場合、それらのローカルでの変更も破棄されます。"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:28
 msgid "The deployment preview is unavailable. Check the repository and server log, then try again."
@@ -16538,9 +16617,17 @@ msgstr "ローカルブランチをリモートブランチのバージョンま
 msgid "There are no incoming changes."
 msgstr "取り込まれる変更はありません。"
 
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:15
+msgid "There are no local changes. You can still rebuild to recover from a failed deployment."
+msgstr "ローカルでの変更はありません。デプロイに失敗した場合でも、再ビルドを行うことで復旧できます。"
+
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:22
 msgid "This branch has no upstream configured. Configure its remote tracking branch before deploying."
 msgstr "このブランチにはアップストリームが設定されていません。デプロイする前に、リモート追跡ブランチを設定してください。"
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:18
+msgid "This permanently discards all uncommitted changes in the entire repository, including staged changes, and deletes untracked files and directories. Ignored files, local commits and nested repositories are preserved."
+msgstr "これにより、ステージング済みの変更を含め、リポジトリ全体のコミットされていない変更がすべて永久に破棄され、追跡されていないファイルやディレクトリが削除されます。無視設定されたファイル、ローカルコミット、およびネストされたリポジトリは保持されます。"
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
 msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
@@ -16554,13 +16641,19 @@ msgstr "個々のモジュールの更新をデプロイするには、次の一
 msgid "To run the webhook update, configure your service to POST to the following URL:"
 msgstr "ウェブフックの更新を実行するには、サービスが次のURLにPOSTするように設定してください。"
 
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:26
+msgid "Undo all local changes and rebuild"
+msgstr "ローカルでの変更をすべて元に戻し、再構築する"
+
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:16
 msgid "View system status"
 msgstr "システムのステータスを確認する"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:20
-#: zotonic_mod_site_update/src/mod_site_update.erl:233
-#: zotonic_mod_site_update/src/mod_site_update.erl:268
+#: zotonic_mod_site_update/src/mod_site_update.erl:244
+#: zotonic_mod_site_update/src/mod_site_update.erl:279
+#: zotonic_mod_site_update/src/mod_site_update.erl:292
+#: zotonic_mod_site_update/src/mod_site_update.erl:312
 msgid "You are not allowed to deploy this code."
 msgstr "このコードをデプロイすることは許可されていません。"
 

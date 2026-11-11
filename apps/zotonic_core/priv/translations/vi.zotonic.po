@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-09 12:31\n"
+"PO-Revision-Date: 2026-11-11 11:44\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
 "MIME-Version: 1.0\n"
@@ -387,8 +387,9 @@ msgstr "Bạn có chắc muốn khôi phục tất cả quy tắc ACL về phiê
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:26
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:85
 #: zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:59
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:60
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:11
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:24
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:229
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:237
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70
@@ -516,7 +517,7 @@ msgstr "Coi tác giả tài nguyên là chủ sở hữu."
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4
 #: zotonic_mod_admin/src/mod_admin.erl:516
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:70
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:26
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 msgid "Content"
 msgstr "Nội dung"
@@ -5123,7 +5124,7 @@ msgstr "Có hiệu lực đến"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:20
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:21
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:37
-#: zotonic_mod_base/src/support/z_chart_svg.erl:1390
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1457
 #: zotonic_mod_development/priv/templates/_development_dispatch_options.tpl:2
 msgid "Value"
 msgstr "Giá trị"
@@ -5864,6 +5865,9 @@ msgstr "Cặp được xếp hạng"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:104
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:135
+#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:5
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:59
+#: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:8
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:61
 msgid "Reset"
 msgstr "Đặt lại"
@@ -6560,6 +6564,44 @@ msgstr "Mức sử dụng hệ thống"
 msgid "This page shows (real-time) system statistics like memory use and requests."
 msgstr "Trang này hiển thị thống kê hệ thống theo thời gian thực như mức sử dụng bộ nhớ và yêu cầu."
 
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:12
+msgid "API catalog"
+msgstr "Danh mục API"
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:24
+msgid "Browse public resources"
+msgstr "Duyệt qua các tài nguyên công khai"
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:3
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:7
+msgid "Data and API"
+msgstr "Dữ liệu và API"
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:8
+msgid "Explore this site's public information using ordinary links and HTTP GET requests. Public content does not require an account or API key."
+msgstr "Khám phá thông tin công khai trên trang web này bằng cách sử dụng các liên kết thông thường và các yêu cầu HTTP GET. Nội dung công khai không yêu cầu tài khoản hay khóa API."
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:29
+msgid "JSON responses contain status and result fields. Concise reads return localized text and report language fallback. Follow next_url until next is false; filtered pages can be empty. Resource exports provide page URLs by language, including x-default. Cite the human page URL in the appropriate language."
+msgstr "Các phản hồi JSON chứa các trường status và result. Các lệnh đọc ngắn gọn trả về văn bản đã được bản địa hóa và báo cáo ngôn ngữ dự phòng. Tiếp tục theo dõi next_url cho đến khi next có giá trị false; các trang đã được lọc có thể trống. Các tệp xuất tài nguyên cung cấp các URL trang theo ngôn ngữ, bao gồm cả x-default. Trích dẫn URL trang dành cho người dùng bằng ngôn ngữ phù hợp."
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:11
+msgid "OpenAPI description"
+msgstr "Mô tả OpenAPI"
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:28
+msgid "Replace {id} with an ID or unique name obtained from search results or a page's alternate link. Use small pages and follow pagination to explore further."
+msgstr "Hãy thay thế {id} bằng một ID hoặc tên duy nhất lấy từ kết quả tìm kiếm hoặc liên kết thay thế của trang. Sử dụng các trang có ít kết quả và tiếp tục theo cơ chế phân trang để khám phá thêm."
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:15
+#: zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:2
+msgid "Sitemap"
+msgstr "Sơ đồ website"
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:30
+msgid "The agent endpoints always use anonymous permissions. Existing compatibility APIs apply the caller's permissions. They return only accessible information and keep their existing indexing headers. Content and media may have their own licenses; preserve attribution and follow the stated terms."
+msgstr "Các điểm cuối của tác nhân luôn sử dụng quyền truy cập ẩn danh. Các API tương thích hiện có sẽ áp dụng quyền truy cập của người gọi. Chúng chỉ trả về thông tin có thể truy cập được và giữ nguyên các tiêu đề lập chỉ mục hiện có. Nội dung và phương tiện truyền thông có thể có giấy phép riêng; hãy giữ nguyên thông tin ghi nguồn và tuân thủ các điều khoản đã nêu."
+
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:60
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:29
 msgid "1 day"
@@ -6616,7 +6658,7 @@ msgstr "Các bộ đếm hoạt động sẽ không khả dụng cho đến khi 
 msgid "Add analytics measurement"
 msgstr "Thêm chỉ số phân tích"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:39
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:41
 msgid "All breakdown values"
 msgstr "Tất cả các giá trị phân tích"
 
@@ -6632,13 +6674,13 @@ msgstr "Các giá trị được phép (ngăn cách bằng dấu phẩy)"
 msgid "Allowed values:"
 msgstr "Các giá trị được phép:"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:267
+#: zotonic_mod_analytics/src/mod_analytics.erl:268
 msgid "An equivalent analytics measurement already exists."
 msgstr "Hiện đã có một chỉ số phân tích tương đương."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
-#: zotonic_mod_analytics/src/mod_analytics.erl:196
+#: zotonic_mod_analytics/src/mod_analytics.erl:197
 msgid "Analytics configuration"
 msgstr "Cấu hình phân tích"
 
@@ -6671,7 +6713,7 @@ msgstr "Các chỉ số phân tích"
 msgid "Analytics status"
 msgstr "Tình trạng phân tích"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:32
 msgid "Bars show the lower bound. Counts are ranges, ordered by their lower bound. Overlapping ranges may change order. Content outside the retained candidates has at most"
 msgstr "Các thanh biểu diễn giới hạn dưới. Số lượng là các khoảng, được sắp xếp theo giới hạn dưới của chúng. Các khoảng chồng chéo có thể làm thay đổi thứ tự. Nội dung nằm ngoài các ứng viên được giữ lại có tối đa"
 
@@ -6684,7 +6726,7 @@ msgstr "Lịch sử có giới hạn"
 msgid "Break down by"
 msgstr "Phân tích theo"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:40
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:42
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "Breakdown"
 msgstr "Phân tích chi tiết"
@@ -6709,11 +6751,11 @@ msgstr "Yêu cầu được phân loại — trang, API và các loại yêu c�
 msgid "Configure analytics measurements"
 msgstr "Cấu hình các chỉ số phân tích"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:235
+#: zotonic_mod_analytics/src/mod_analytics.erl:236
 msgid "Could not delete the analytics measurement."
 msgstr "Không thể xóa chỉ số phân tích."
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:268
+#: zotonic_mod_analytics/src/mod_analytics.erl:269
 msgid "Could not save. Check the event, breakdown and filter values."
 msgstr "Không thể lưu. Vui lòng kiểm tra các giá trị của sự kiện, phân tích chi tiết và bộ lọc."
 
@@ -6767,7 +6809,7 @@ msgstr "Thiết bị — điện thoại, máy tính bảng, máy tính để b�
 msgid "Display order"
 msgstr "Thứ tự hiển thị"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:241
+#: zotonic_mod_analytics/src/mod_analytics.erl:242
 msgid "Display order saved."
 msgstr "Thứ tự hiển thị đã được lưu."
 
@@ -6812,7 +6854,7 @@ msgstr "Bộ đệm sự kiện"
 msgid "Event processing"
 msgstr "Xử lý sự kiện"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:40
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:42
 msgid "Events"
 msgstr "Sự kiện"
 
@@ -6833,8 +6875,8 @@ msgid "Fixed filters"
 msgstr "Bộ lọc cố định"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:25
-msgid "Gaps are unrecorded intervals. Partial intervals may undercount activity. Request counts include automation, exclude editor activity and do not measure unique visitors."
-msgstr "Khoảng trống là những khoảng thời gian chưa được ghi nhận. Các khoảng thời gian không đầy đủ có thể dẫn đến việc thống kê hoạt động không đầy đủ. Số liệu thống kê yêu cầu bao gồm các hoạt động tự động, không bao gồm hoạt động của người biên tập và không đo lường số lượng khách truy cập duy nhất."
+msgid "Gaps are unrecorded intervals. Partial intervals may undercount activity. Page-request totals, device breakdowns and popular content exclude detected crawlers. API and traffic-classification measurements include crawlers unless filtered out. Counts exclude editor activity and do not measure unique visitors."
+msgstr "Khoảng trống là những khoảng thời gian chưa được ghi nhận. Các khoảng thời gian không đầy đủ có thể dẫn đến việc thống kê hoạt động không đầy đủ. Tổng số yêu cầu trang, phân tích theo thiết bị và nội dung phổ biến không bao gồm các trình thu thập dữ liệu được phát hiện. Các số liệu từ API và phân loại lưu lượng truy cập bao gồm các trình thu thập dữ liệu trừ khi chúng được lọc ra. Số liệu thống kê không bao gồm hoạt động của biên tập viên và không đo lường số lượng khách truy cập duy nhất."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:13
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:15
@@ -6858,7 +6900,7 @@ msgstr "Mã trạng thái HTTP — ví dụ: 200, 404 hoặc 500"
 msgid "History detail and retention"
 msgstr "Chi tiết và thời gian lưu trữ lịch sử"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:45
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:47
 msgid "Includes incomplete or unrecorded intervals"
 msgstr "Bao gồm các quãng chưa hoàn chỉnh hoặc chưa được ghi lại"
 
@@ -6886,7 +6928,7 @@ msgstr "Sáu giờ qua"
 msgid "Maximum number of analytics measurements"
 msgstr "Số lượng phép đo phân tích tối đa"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
 msgid "Most popular content in this period"
 msgstr "Nội dung được yêu thích nhất trong giai đoạn này"
 
@@ -6936,11 +6978,11 @@ msgstr "Không có sự cố (tổng cộng)"
 msgid "No filter — include all values"
 msgstr "Không lọc — bao gồm tất cả các giá trị"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:29
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
 msgid "No leading content identified in this period."
 msgstr "Không phát hiện nội dung nổi bật nào trong giai đoạn này."
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:36
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:38
 msgid "No recorded events yet."
 msgstr "Chưa có sự kiện nào được ghi lại."
 
@@ -6992,11 +7034,11 @@ msgstr "Tạm dừng"
 msgid "Period"
 msgstr "Kỳ"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:26
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
 msgid "Rank"
 msgstr "Xếp hạng"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:25
 msgid "Ranked by recorded requests in the selected moving period. The window advances in steps of"
 msgstr "Xếp hạng theo số lượng yêu cầu được ghi nhận trong khoảng thời gian di chuyển đã chọn. Khoảng thời gian này được điều chỉnh theo từng bước"
 
@@ -7012,7 +7054,7 @@ msgstr "Loại yêu cầu — trang, API hoặc loại xử lý tùy chỉnh"
 msgid "Request types found in this site's dispatch rules:"
 msgstr "Các loại yêu cầu có trong quy tắc phân phối của trang web này:"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:26
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
 msgid "Requests"
 msgstr "Yêu cầu"
 
@@ -7042,7 +7084,7 @@ msgstr "Mô tả ngắn gọn"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
-#: zotonic_mod_analytics/src/mod_analytics.erl:188
+#: zotonic_mod_analytics/src/mod_analytics.erl:189
 msgid "Site Analytics"
 msgstr "Phân tích trang web"
 
@@ -7094,11 +7136,11 @@ msgstr "Khoảng thời gian lưu trữ / dung lượng"
 msgid "Stored time intervals"
 msgstr "Các khoảng thời gian đã lưu trữ"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:243
+#: zotonic_mod_analytics/src/mod_analytics.erl:244
 msgid "The analytics measurements changed. Reloading their current display order."
 msgstr "Các chỉ số phân tích đã thay đổi. Đang tải lại thứ tự hiển thị hiện tại."
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:266
+#: zotonic_mod_analytics/src/mod_analytics.erl:267
 msgid "This analytics measurement exceeds the storage budget."
 msgstr "Chỉ số phân tích này đã vượt quá ngân sách lưu trữ."
 
@@ -7151,11 +7193,11 @@ msgstr "sự kiện"
 msgid "group/time slots"
 msgstr "nhóm/khung giờ"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:32
 msgid "requests."
 msgstr "yêu cầu."
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:25
 msgid "seconds."
 msgstr "giây."
 
@@ -8726,12 +8768,12 @@ msgstr "Dữ liệu thị phần trình duyệt"
 msgid "CSV"
 msgstr "CSV"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:446
-#: zotonic_mod_base/src/support/z_chart_svg.erl:448
+#: zotonic_mod_base/src/support/z_chart_svg.erl:451
+#: zotonic_mod_base/src/support/z_chart_svg.erl:453
 msgid "Chart"
 msgstr "Biểu đồ"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:1380
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1447
 msgid "Chart legend"
 msgstr "Chú giải biểu đồ"
 
@@ -8765,7 +8807,7 @@ msgstr "Đang kết nối..."
 msgid "Connection Test"
 msgstr "Kiểm tra kết nối"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:590
+#: zotonic_mod_base/src/support/z_chart_svg.erl:599
 msgid "Data points"
 msgstr "Điểm dữ liệu"
 
@@ -8879,7 +8921,7 @@ msgstr "Tháng 7"
 msgid "June"
 msgstr "Tháng 6"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:1386
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1453
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:41
 msgid "Label"
 msgstr "Nhãn"
@@ -8946,7 +8988,7 @@ msgstr "Thay đổi ròng"
 msgid "No"
 msgstr "Không"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:1330
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1397
 msgid "No data"
 msgstr "Không có dữ liệu"
 
@@ -8985,7 +9027,7 @@ msgstr "Tháng 10"
 msgid "On this page you can test the connection of your browser to our server and to the internet in general."
 msgstr "Tại đây, bạn có thể kiểm tra kết nối của trình duyệt đến máy chủ của chúng tôi và Internet nói chung."
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:353
+#: zotonic_mod_base/src/support/z_chart_svg.erl:358
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:134
 msgid "Other"
 msgstr "Khác"
@@ -9613,11 +9655,11 @@ msgstr "Vị trí mới có thể là đường dẫn cục bộ hoặc URL đ�
 msgid "You are not allowed to change this."
 msgstr "Bạn không được phép thay đổi mục này."
 
-#: zotonic_mod_development/src/mod_development.erl:699
+#: zotonic_mod_development/src/mod_development.erl:701
 msgid "<i>Function name does not exist.</i>"
 msgstr "<i>Tên hàm không tồn tại.</i>"
 
-#: zotonic_mod_development/src/mod_development.erl:702
+#: zotonic_mod_development/src/mod_development.erl:704
 msgid "<i>Module not found.</i>"
 msgstr "<i>Không tìm thấy mô-đun.</i>"
 
@@ -9659,6 +9701,10 @@ msgstr "Cho phép hiển thị nút theo dõi mẫu nổi trên website vận h�
 msgid "Always hide the floating template trace button."
 msgstr "Luôn ẩn nút theo dõi mẫu nổi."
 
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:50
+msgid "Attach capture"
+msgstr "Kết nối bản ghi chẩn đoán"
+
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:18
 msgid "Automatic detection on the Zotonic machine"
 msgstr "Tự động phát hiện trên máy chạy Zotonic"
@@ -9684,8 +9730,8 @@ msgstr "Tính toán và hiển thị đồ thị phụ thuộc của tất cả 
 msgid "Check debug points in the template source to see debug data here."
 msgstr "Đánh dấu các điểm gỡ lỗi trong mã nguồn mẫu để xem dữ liệu gỡ lỗi tại đây."
 
-#: zotonic_mod_development/src/mod_development.erl:507
-#: zotonic_mod_development/src/mod_development.erl:522
+#: zotonic_mod_development/src/mod_development.erl:509
+#: zotonic_mod_development/src/mod_development.erl:524
 msgid "Checking all templates..."
 msgstr "Đang kiểm tra tất cả mẫu..."
 
@@ -9757,7 +9803,7 @@ msgstr "Không thể tải hoặc lưu cài đặt trình soạn thảo."
 msgid "Could not load templates"
 msgstr "Không thể tải mẫu"
 
-#: zotonic_mod_development/src/mod_development.erl:498
+#: zotonic_mod_development/src/mod_development.erl:500
 msgid "Could not open the directory on this computer."
 msgstr "Không thể mở thư mục trên máy tính này."
 
@@ -9821,7 +9867,7 @@ msgid "Detecting editors…"
 msgstr "Đang phát hiện trình soạn thảo…"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:7
-#: zotonic_mod_development/src/mod_development.erl:1368
+#: zotonic_mod_development/src/mod_development.erl:1386
 msgid "Development"
 msgstr "Phát triển"
 
@@ -9941,11 +9987,11 @@ msgstr "Đã bật theo dõi truy vấn cơ sở dữ liệu"
 msgid "Enter the module and function you want to trace. If no function is given, all functions in the module will be traced. Enter how many calls to trace before stopping."
 msgstr "Nhập mô-đun và hàm muốn theo dõi. Nếu không nhập hàm, tất cả hàm trong mô-đun sẽ được theo dõi. Nhập số lời gọi cần theo dõi trước khi dừng."
 
-#: zotonic_mod_development/src/mod_development.erl:671
+#: zotonic_mod_development/src/mod_development.erl:673
 msgid "Error changing the console logs."
 msgstr "Lỗi khi thay đổi nhật ký bảng điều khiển."
 
-#: zotonic_mod_development/src/mod_development.erl:765
+#: zotonic_mod_development/src/mod_development.erl:767
 msgid "Error parsing template."
 msgstr "Lỗi phân tích mẫu."
 
@@ -10003,7 +10049,7 @@ msgstr "Theo dõi lời gọi hàm"
 msgid "Function call tracing has been disabled. Use the following to enable function call tracing:"
 msgstr "Theo dõi lời gọi hàm đã bị vô hiệu hóa. Dùng cấu hình sau để bật:"
 
-#: zotonic_mod_development/src/mod_development.erl:705
+#: zotonic_mod_development/src/mod_development.erl:707
 msgid "Function tracing has been disabled in the Zotonic config."
 msgstr "Theo dõi hàm đã bị vô hiệu hóa trong cấu hình Zotonic."
 
@@ -10148,18 +10194,18 @@ msgstr "Không tìm thấy quy tắc định tuyến phù hợp"
 msgid "No matching templates found."
 msgstr "Không tìm thấy mẫu phù hợp."
 
-#: zotonic_mod_development/src/mod_development.erl:669
+#: zotonic_mod_development/src/mod_development.erl:671
 msgid "No permission to access the console logs."
 msgstr "Không có quyền truy cập nhật ký bảng điều khiển."
 
-#: zotonic_mod_development/src/mod_development.erl:512
-#: zotonic_mod_development/src/mod_development.erl:527
-#: zotonic_mod_development/src/mod_development.erl:542
-#: zotonic_mod_development/src/mod_development.erl:550
-#: zotonic_mod_development/src/mod_development.erl:577
-#: zotonic_mod_development/src/mod_development.erl:619
-#: zotonic_mod_development/src/mod_development.erl:636
-#: zotonic_mod_development/src/mod_development.erl:653
+#: zotonic_mod_development/src/mod_development.erl:514
+#: zotonic_mod_development/src/mod_development.erl:529
+#: zotonic_mod_development/src/mod_development.erl:544
+#: zotonic_mod_development/src/mod_development.erl:552
+#: zotonic_mod_development/src/mod_development.erl:579
+#: zotonic_mod_development/src/mod_development.erl:621
+#: zotonic_mod_development/src/mod_development.erl:638
+#: zotonic_mod_development/src/mod_development.erl:655
 msgid "No permission to use mod_development."
 msgstr "Không có quyền dùng mod_development."
 
@@ -10168,7 +10214,7 @@ msgstr "Không có quyền dùng mod_development."
 msgid "No references found."
 msgstr "Không tìm thấy tham chiếu."
 
-#: zotonic_mod_development/src/mod_development.erl:631
+#: zotonic_mod_development/src/mod_development.erl:633
 msgid "No template found in the context."
 msgstr "Không tìm thấy mẫu trong ngữ cảnh."
 
@@ -10193,7 +10239,7 @@ msgstr "Không tìm thấy"
 msgid "Observers"
 msgstr "Bộ quan sát"
 
-#: zotonic_mod_development/src/mod_development.erl:708
+#: zotonic_mod_development/src/mod_development.erl:710
 msgid "Only the admin user can set traces."
 msgstr "Chỉ người dùng quản trị mới có thể thiết lập theo dõi."
 
@@ -10331,19 +10377,19 @@ msgstr "Bắt đầu theo dõi"
 msgid "Start matching dispatch rules"
 msgstr "Bắt đầu đối chiếu quy tắc định tuyến"
 
-#: zotonic_mod_development/src/mod_development.erl:665
+#: zotonic_mod_development/src/mod_development.erl:667
 msgid "Started logging to the console of your browser tab."
 msgstr "Đã bắt đầu ghi nhật ký vào bảng điều khiển của tab trình duyệt."
 
-#: zotonic_mod_development/src/mod_development.erl:539
+#: zotonic_mod_development/src/mod_development.erl:541
 msgid "Started tracing all template inclusions."
 msgstr "Đã bắt đầu theo dõi tất cả thao tác nhúng mẫu."
 
-#: zotonic_mod_development/src/mod_development.erl:614
+#: zotonic_mod_development/src/mod_development.erl:616
 msgid "Started tracing template inclusions by rendering the page."
 msgstr "Đã bắt đầu theo dõi thao tác nhúng mẫu bằng cách kết xuất trang."
 
-#: zotonic_mod_development/src/mod_development.erl:536
+#: zotonic_mod_development/src/mod_development.erl:538
 msgid "Started tracing template inclusions for your session."
 msgstr "Đã bắt đầu theo dõi thao tác nhúng mẫu trong phiên của bạn."
 
@@ -10353,11 +10399,15 @@ msgstr "Đã bắt đầu theo dõi thao tác nhúng mẫu trong phiên của b�
 msgid "Stop"
 msgstr "Dừng"
 
-#: zotonic_mod_development/src/mod_development.erl:667
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:51
+msgid "Stop capture"
+msgstr "Dừng ghi dữ liệu"
+
+#: zotonic_mod_development/src/mod_development.erl:669
 msgid "Stopped logging to the console of all browser tabs."
 msgstr "Đã dừng ghi nhật ký vào bảng điều khiển của tất cả tab trình duyệt."
 
-#: zotonic_mod_development/src/mod_development.erl:548
+#: zotonic_mod_development/src/mod_development.erl:550
 msgid "Stopped tracing template inclusions for all sessions."
 msgstr "Đã dừng theo dõi thao tác nhúng mẫu trong tất cả phiên."
 
@@ -10396,7 +10446,7 @@ msgstr "Mẫu"
 msgid "Template debugging"
 msgstr "Gỡ lỗi mẫu"
 
-#: zotonic_mod_development/src/mod_development.erl:768
+#: zotonic_mod_development/src/mod_development.erl:770
 msgid "Template file not found."
 msgstr "Không tìm thấy tệp mẫu."
 
@@ -10416,7 +10466,7 @@ msgstr "Đường dẫn mẫu"
 msgid "Test with this template"
 msgstr "Thử với mẫu này"
 
-#: zotonic_mod_development/src/mod_development.erl:616
+#: zotonic_mod_development/src/mod_development.erl:618
 msgid "The path must be a local URL."
 msgstr "Đường dẫn phải là URL cục bộ."
 
@@ -10472,8 +10522,9 @@ msgstr "Theo dõi tất cả truy vấn cơ sở dữ liệu trong phiên hiện
 msgid "Trace function calls"
 msgstr "Theo dõi lời gọi hàm"
 
-#: zotonic_mod_development/priv/templates/_html_head_development.tpl:38
-#: zotonic_mod_development/priv/templates/_html_head_development.tpl:39
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:44
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:45
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:49
 msgid "Trace templates"
 msgstr "Theo dõi mẫu"
 
@@ -10509,7 +10560,7 @@ msgstr "Mẫu URI"
 msgid "Uncheck to debug only your current session."
 msgstr "Bỏ đánh dấu để chỉ gỡ lỗi phiên hiện tại."
 
-#: zotonic_mod_development/src/mod_development.erl:650
+#: zotonic_mod_development/src/mod_development.erl:652
 msgid "Updated template debug points."
 msgstr "Đã cập nhật các điểm gỡ lỗi mẫu."
 
@@ -16090,10 +16141,6 @@ msgstr "Tạo lại sơ đồ website"
 msgid "Rebuilding the sitemap in the background."
 msgstr "Đang tạo lại sơ đồ website trong nền."
 
-#: zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:2
-msgid "Sitemap"
-msgstr "Sơ đồ website"
-
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:7
 msgid "Sitemap settings"
 msgstr "Cài đặt sơ đồ website"
@@ -16375,11 +16422,15 @@ msgstr "Bạn phải đồng ý với Điều khoản để đăng ký."
 msgid "Your signup code"
 msgstr "Mã đăng ký của bạn"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:276
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:6
+msgid "A deployment is running. Try again when it finishes."
+msgstr "Quá trình triển khai đang diễn ra. Vui lòng thử lại sau khi quá trình này hoàn tất."
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:320
 msgid "Another deployment is in progress. Please try again when it finishes."
 msgstr "Một đợt triển khai khác đang được tiến hành. Vui lòng thử lại sau khi quá trình này hoàn tất."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:176
+#: zotonic_mod_site_update/src/mod_site_update.erl:187
 msgid "Building Zotonic in the background..."
 msgstr "Đang xây dựng Zotonic trong nền..."
 
@@ -16387,12 +16438,16 @@ msgstr "Đang xây dựng Zotonic trong nền..."
 msgid "Could not fetch the remote change log. Check the remote connection and try again."
 msgstr "Không thể lấy được nhật ký thay đổi từ máy chủ từ xa. Vui lòng kiểm tra kết nối với máy chủ từ xa và thử lại."
 
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:8
+msgid "Could not list local changes. Check the repository and server log."
+msgstr "Không thể liệt kê các thay đổi cục bộ. Vui lòng kiểm tra kho lưu trữ và nhật ký máy chủ."
+
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:9
 msgid "Current commit"
 msgstr "Commit hiện tại"
 
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:61
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:63
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:62
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:64
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:12
 msgid "Deploy"
 msgstr "Triển khai"
@@ -16407,25 +16462,25 @@ msgstr "Triển khai phiên bản mới nhất"
 msgid "Deploy latest Zotonic"
 msgstr "Triển khai phiên bản mới nhất của Zotonic"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:229
+#: zotonic_mod_site_update/src/mod_site_update.erl:240
 msgid "Deploy latest version"
 msgstr "Triển khai phiên bản mới nhất"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:263
+#: zotonic_mod_site_update/src/mod_site_update.erl:274
 msgid "Deploying the latest version..."
 msgstr "Đang triển khai phiên bản mới nhất..."
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:2
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:5
-#: zotonic_mod_site_update/src/mod_site_update.erl:140
+#: zotonic_mod_site_update/src/mod_site_update.erl:146
 msgid "Deployment"
 msgstr "Triển khai"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:274
+#: zotonic_mod_site_update/src/mod_site_update.erl:318
 msgid "Deployment completed."
 msgstr "Việc triển khai đã hoàn tất."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:278
+#: zotonic_mod_site_update/src/mod_site_update.erl:322
 msgid "Deployment failed. Check the server log for details."
 msgstr "Quá trình triển khai đã thất bại. Vui lòng kiểm tra nhật ký máy chủ để biết thêm chi tiết."
 
@@ -16441,13 +16496,21 @@ msgstr "Quá trình triển khai sẽ cập nhật toàn bộ kho lưu trữ Git
 msgid "Fetching remote changes…"
 msgstr "Đang lấy các thay đổi từ kho lưu trữ từ xa…"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:174
+#: zotonic_mod_site_update/src/mod_site_update.erl:185
 msgid "Finished rebuilding Zotonic."
 msgstr "Đã xây dựng lại Zotonic."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:32
 msgid "Incoming changes"
 msgstr "Các thay đổi sắp được tích hợp"
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:2
+msgid "Local changes for {name}."
+msgstr "Các thay đổi cục bộ cho {name}."
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:303
+msgid "Local changes reset. You can deploy again."
+msgstr "Các thay đổi cục bộ đã được khôi phục về trạng thái ban đầu. Bạn có thể triển khai lại."
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:14
 msgid "Modules list"
@@ -16465,6 +16528,18 @@ msgstr "Xây dựng lại Zotonic"
 msgid "Recompile changed Erlang files in the background"
 msgstr "Biên dịch lại các tệp Erlang đã thay đổi trong nền"
 
+#: zotonic_mod_site_update/src/mod_site_update.erl:289
+msgid "Reset local changes"
+msgstr "Đặt lại các thay đổi cục bộ"
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:309
+msgid "Reset or rebuild failed. Check the server log before retrying."
+msgstr "Quá trình đặt lại hoặc xây dựng lại đã thất bại. Vui lòng kiểm tra nhật ký máy chủ trước khi thử lại."
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:300
+msgid "Resetting local changes and rebuilding..."
+msgstr "Đang khôi phục các thay đổi cục bộ và xây dựng lại..."
+
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
 msgid "Review and deploy the latest version of this site."
 msgstr "Kiểm tra và triển khai phiên bản mới nhất của trang web này."
@@ -16481,7 +16556,7 @@ msgstr "Xem xét các thay đổi sắp được tích hợp và triển khai kh
 msgid "Review incoming changes and deploy this site's code. Compilation and activation are coordinated across all sites on this node."
 msgstr "Xem xét các thay đổi nhận về và triển khai mã nguồn của trang web này. Việc biên dịch và kích hoạt được phối hợp trên tất cả các trang web thuộc nút này."
 
-#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:6
+#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:7
 msgid "Review incoming changes before deploying the latest version."
 msgstr "Xem xét các thay đổi sắp được tích hợp trước khi triển khai phiên bản mới nhất."
 
@@ -16502,13 +16577,17 @@ msgstr "Triển khai trang web"
 msgid "Site update API token"
 msgstr "Mã thông báo API cập nhật website"
 
-#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:10
+#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:11
 msgid "Site update is not available as the site does not use a known version control system, like git."
 msgstr "Không thể cập nhật website vì website không dùng hệ thống quản lý phiên bản được nhận diện, chẳng hạn git."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:178
+#: zotonic_mod_site_update/src/mod_site_update.erl:189
 msgid "Sorry this can only be run from the Zotonic status site"
 msgstr "Rất tiếc, chỉ có thể chạy chức năng này từ website trạng thái Zotonic"
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:20
+msgid "The code is then rebuilt before deployment is enabled again. If this repository contains other sites or modules, their local changes are also discarded."
+msgstr "Sau đó, mã nguồn sẽ được biên dịch lại trước khi tính năng triển khai được kích hoạt trở lại. Nếu kho lưu trữ này chứa các trang web hoặc mô-đun khác, các thay đổi cục bộ của chúng cũng sẽ bị hủy bỏ."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:28
 msgid "The deployment preview is unavailable. Check the repository and server log, then try again."
@@ -16526,9 +16605,17 @@ msgstr "Không thể cập nhật nhánh cục bộ lên phiên bản từ xa b�
 msgid "There are no incoming changes."
 msgstr "Không có thay đổi nào cần tích hợp."
 
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:15
+msgid "There are no local changes. You can still rebuild to recover from a failed deployment."
+msgstr "Không có thay đổi nào ở cấp độ cục bộ. Bạn vẫn có thể tiến hành xây dựng lại để khắc phục sự cố triển khai không thành công."
+
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:22
 msgid "This branch has no upstream configured. Configure its remote tracking branch before deploying."
 msgstr "Nhánh này chưa được cấu hình upstream. Hãy cấu hình nhánh theo dõi từ xa trước khi triển khai."
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:18
+msgid "This permanently discards all uncommitted changes in the entire repository, including staged changes, and deletes untracked files and directories. Ignored files, local commits and nested repositories are preserved."
+msgstr "Thao tác này sẽ vĩnh viễn loại bỏ tất cả các thay đổi chưa được cam kết trong toàn bộ kho lưu trữ, bao gồm cả các thay đổi đã được đưa vào danh sách chuẩn bị, đồng thời xóa các tệp và thư mục chưa được theo dõi. Các tệp bị bỏ qua, các cam kết cục bộ và các kho lưu trữ lồng nhau sẽ được giữ nguyên."
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
 msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
@@ -16542,13 +16629,19 @@ msgstr "Để triển khai các bản cập nhật cho từng mô-đun, hãy m�
 msgid "To run the webhook update, configure your service to POST to the following URL:"
 msgstr "Để chạy cập nhật qua webhook, hãy cấu hình dịch vụ gửi yêu cầu POST đến URL sau:"
 
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:26
+msgid "Undo all local changes and rebuild"
+msgstr "Hoàn tác tất cả các thay đổi cục bộ và xây dựng lại"
+
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:16
 msgid "View system status"
 msgstr "Xem trạng thái hệ thống"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:20
-#: zotonic_mod_site_update/src/mod_site_update.erl:233
-#: zotonic_mod_site_update/src/mod_site_update.erl:268
+#: zotonic_mod_site_update/src/mod_site_update.erl:244
+#: zotonic_mod_site_update/src/mod_site_update.erl:279
+#: zotonic_mod_site_update/src/mod_site_update.erl:292
+#: zotonic_mod_site_update/src/mod_site_update.erl:312
 msgid "You are not allowed to deploy this code."
 msgstr "Bạn không được phép triển khai đoạn mã này."
 
