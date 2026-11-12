@@ -2,7 +2,8 @@
 
 `mod_traffic_guard` detects sustained content fetching independently of the User-Agent.
 It is optional and defaults to **observe** when enabled. It needs no analytics module,
-JavaScript, new cookies, external verification service or database tables.
+JavaScript, new cookies or external verification service. Request-rate state is
+in memory; configured IP exceptions are stored in the database.
 
 ## Enable and configure
 
@@ -25,15 +26,13 @@ before setting `mode` to `enforce`.
 | `period` | `60` | 1–3600 seconds |
 | `request_limit` | `120` | 1–100000 requests replenished per period |
 | `request_burst` | `30` | 1–1000 immediately available request credits |
-| `distinct_limit` | `60` | 1–100000 distinct-path credits replenished per period |
-| `distinct_burst` | `20` | 1–64 immediately available distinct-path credits |
 | `max_clients` | `5000` | 1–50000 retained client budgets per site/node |
 
 Invalid settings use their defaults. Changes reset transient budgets. With the
 default settings, a new client can request 30 times immediately, with two request
-credits replenishing per second. It can fetch 20 distinct paths immediately, with
-one distinct credit replenishing per second. Both budgets must permit a request.
-Repeated visits to a remembered path consume only the request budget.
+credits replenishing per second. Every covered request consumes one credit,
+including repeated reloads of the same page. Paths and query variations do not
+change how requests are counted.
 
 - **off:** bypass detection and emit no guard decisions.
 - **observe:** allow requests, reporting `would_throttle` when the shadow budget
@@ -48,7 +47,9 @@ Clients recover automatically. Nothing is queued intentionally to delay a client
 
 GET/HEAD requests to `controller_page`, `controller_template`, `controller_api`,
 `controller_agent_content` and `controller_agent_discovery` are covered. Other
-controllers require `{traffic_guard, true}` in their dispatch options. Use
+controllers are also covered when analytics classifies their dispatch as a page
+(`{analytics, page}`), or when `{traffic_guard, true}` is set. This does not require
+analytics to be enabled or a visitor to consent to analytics. Use
 `{traffic_guard, false}` to exempt an individual route:
 
 ```erlang
@@ -66,12 +67,6 @@ no automatic administrator or self-declared crawler exemptions. Shared offices,
 carrier NAT and proxies share allowances: do not deploy strict IP limits without
 observing legitimate traffic. Client IP comes from Cowmachine's trusted-proxy
 processing; never use arbitrary forwarded headers to identify clients.
-
-Distinct targets are SHA-256 hashes of request paths, excluding query strings.
-This is deliberately conservative about query variations: all variants consume
-request credits, but do not each count as another distinct path. Up to 64 hashes
-are retained per client for `period` seconds. If that set is full, unremembered
-paths consume distinct credits on each attempt until there is room.
 
 ## Analytics
 
@@ -93,7 +88,7 @@ overflow). In observe mode, filter `guard_action = would_throttle` and group by
 | --- | --- |
 | `crawl_behavior` | `normal`, `excessive`, `unknown` |
 | `guard_action` | `allow`, `would_throttle`, `throttle` |
-| `guard_reason` | `none`, `request_rate`, `distinct_targets`, `state_capacity`, `unavailable` |
+| `guard_reason` | `none`, `request_rate`, `state_capacity`, `unavailable` |
 | `traffic` | `crawler`, `agent`, `other`, `unknown` |
 | `type` | `page`, `api`, `other` |
 
@@ -110,7 +105,7 @@ policies. Rejected requests initialize authentication only when a guard recordin
 is interested, without reading the request body. Allowed requests retain normal
 controller authentication. Enforcement is
 independent of those policies, analytics availability and configured recordings.
-Analytics events contain no client IPs, cookies, tokens, path hashes, query strings
+Analytics events contain no client IPs, cookies, tokens, paths, query strings
 or visited-URL lists. The administrator-only current-throttling view exposes IPs
 for operational decisions.
 
@@ -118,8 +113,8 @@ for operational decisions.
 
 One worker per site serializes admission so concurrent requests share a budget.
 Its client map is capped; idle entries are swept every 30 seconds after budgets
-could fully recover. IP addresses and hashes exist only in transient memory.
-Restarting the worker clears them. Only administrators can inspect the bounded current-throttling snapshot.
+could fully recover. Client rate-limit state exists only in transient memory.
+Restarting the worker clears it; configured IP rules remain stored. Only administrators can inspect the bounded current-throttling snapshot.
 
 At client capacity, a new client is allowed with `state_capacity`; existing clients
 remain checked. If the worker is absent, has a queue of at least 100 messages when
@@ -157,6 +152,21 @@ match IPv4 entries. Networks, ranges, hostnames and zone identifiers are rejecte
 
 Choose hour, day, week, month (30 days), forever, or an explicit UTC date/time.
 Expired entries stop matching on the next request, including when rules are cached.
+Requests check normalized addresses directly in a named ETS table, isolated per
+site, with allow taking precedence. Rule hits bypass the rate-limit worker.
+A separate supervised process owns the table and removes expired entries every
+second. Lookups also check deadlines, so cleanup timing never extends validity.
+The admission worker retains indexed rules as a fallback while the table loads. Duplicate site/global entries retain the latest expiry; a permanent
+entry takes precedence over expiring entries. Request processes normally receive
+only lightweight settings, so the rule maps are not copied on every request.
+Rule reloads preserve other clients' rate-limit budgets and throttling evidence.
+
+For an isolated IP-rule benchmark, compile `test/traffic_guard_bench.erl` and run
+`traffic_guard_bench:ip_rules/0`. It measures cached settings plus admission for
+0, 10, 256 and 1024 entries per list without accessing a site or database.
+`ip_rules/1` accepts a baseline worker module compiled under a separate name for
+an equivalent before/after comparison. These microbenchmarks exclude HTTP work.
+
 Hourly maintenance deletes expired database rows. Empty expiry means forever.
 **Add IP entries** and each row's **Edit** button open dialogs for notes and expiry.
 The merged site/global list shows allow entries first with a green left bar, then

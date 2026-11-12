@@ -39,7 +39,7 @@ registry(Context) ->
     Guard = #{
         <<"crawl_behavior">> => [<<"normal">>, <<"excessive">>, <<"unknown">>],
         <<"guard_action">> => [<<"allow">>, <<"would_throttle">>, <<"throttle">>],
-        <<"guard_reason">> => [<<"none">>, <<"request_rate">>, <<"distinct_targets">>,
+        <<"guard_reason">> => [<<"none">>, <<"request_rate">>,
             <<"state_capacity">>, <<"unavailable">>, <<"ip_allow">>, <<"ip_block">>]
     },
     Builtin = #{name => <<"page_request">>, version => 1,

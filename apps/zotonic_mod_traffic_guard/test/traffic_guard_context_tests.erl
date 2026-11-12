@@ -68,25 +68,34 @@ config_cleanup(_) -> meck:unload(m_traffic_guard),meck:unload(m_config),ets:dele
 config_value(K,D) -> case ets:lookup(guard_config_test,K) of [{_,V}]->V; []->D end.
 config_cache() ->
     C = #context{site=traffic_guard_cache_test},
+    {ok,RulesPid} = z_traffic_guard_rules:start_link([{context,C}]),
     {ok,P} = z_traffic_guard:start_link([{context,C}]),
     try
         Old = z_traffic_guard:settings(C),
+        ?assertNot(maps:is_key(ip_lists,Old)),
+        ?assert(is_map(maps:get(settings,sys:get_state(P)))),
         [Old=z_traffic_guard:settings(C)||_<-lists:seq(1,100)],
-        ?assertEqual(7,meck:num_calls(m_config,get_value,'_')),
+        ?assertEqual(5,meck:num_calls(m_config,get_value,'_')),
         ets:insert(guard_config_test,{mode,<<"enforce">>}),
         z_traffic_guard:reset(C),
         %% A call serializes after reset even if no fresh HTTP settings lookup ran.
-        ?assertEqual(<<"allow">>,maps:get(guard_action,z_traffic_guard:check(client,<<"x">>,Old,C))),
-        ?assertEqual(<<"throttle">>,maps:get(guard_action,z_traffic_guard:check(client,<<"x">>,Old,C))),
+        ?assertEqual(<<"allow">>,maps:get(guard_action,z_traffic_guard:check(client,Old,C))),
+        ?assertEqual(<<"throttle">>,maps:get(guard_action,z_traffic_guard:check(client,Old,C))),
         ?assertEqual(enforce,maps:get(mode,z_traffic_guard:settings(C))),
-        ?assertEqual(14,meck:num_calls(m_config,get_value,'_')),
+        ?assertEqual(10,meck:num_calls(m_config,get_value,'_')),
         ets:insert(guard_config_test,{ip_lists,#{allow=>[],block=>[{{192,0,2,1},0}]}}),
         ok=z_traffic_guard:reset(C),
-        ?assertEqual(<<"ip_block">>,maps:get(guard_reason,z_traffic_guard:check({192,0,2,1},<<"x">>,Old,C))),
+        ?assertEqual(<<"ip_block">>,maps:get(guard_reason,z_traffic_guard:check({192,0,2,1},Old,C))),
+        z_traffic_guard:check({192,0,2,2},Old,C),
+        Clients=maps:get(clients,sys:get_state(P)),
         ets:insert(guard_config_test,{ip_lists,#{allow=>[{{192,0,2,1},0}],block=>[{{192,0,2,1},0}]}}),
-        ok=z_traffic_guard:reset(C),
-        ?assertEqual(<<"ip_allow">>,maps:get(guard_reason,z_traffic_guard:check({192,0,2,1},<<"x">>,Old,C)))
-    after gen_server:stop(P) end.
+        ok=z_traffic_guard:reload_rules(C),
+        ?assertEqual(Clients,maps:get(clients,sys:get_state(P))),
+        ?assertNot(maps:is_key(ip_lists,z_traffic_guard:settings(C))),
+        ?assertEqual(#{allow=>#{{192,0,2,1}=>0},block=>#{{192,0,2,1}=>0}},
+            maps:get(ip_lists,maps:get(settings,sys:get_state(P)))),
+        ?assertEqual(<<"ip_allow">>,maps:get(guard_reason,z_traffic_guard:check({192,0,2,1},Old,C)))
+    after gen_server:stop(P),gen_server:stop(RulesPid) end.
 
 
 global_config_test_() ->

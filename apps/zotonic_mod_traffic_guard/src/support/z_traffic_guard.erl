@@ -19,7 +19,7 @@
 
 -module(z_traffic_guard).
 -behaviour(gen_server).
--export([start_link/1, check/4, settings/1, mode/1, reset/1, step/4, decision/3,throttled/1,matches/3,reload_rules/1]).
+-export([start_link/1, check/3, settings/1, mode/1, reset/1, step/3, decision/3,throttled/1,matches/3,index/1,reload_rules/1]).
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2]).
 -include_lib("zotonic_core/include/zotonic.hrl").
 
@@ -56,13 +56,11 @@ settings(Context) ->
     end.
 
 read_settings(Context) ->
-    #{ip_lists => m_traffic_guard:stored(Context),
+    #{ip_lists => maps:map(fun(_, Entries) -> index(Entries) end, m_traffic_guard:stored(Context)),
       mode => mode(m_config:get_value(mod_traffic_guard, mode, Context)),
       period => integer_config(period, 60, 1, 3600, Context) * 1000,
       request_limit => integer_config(request_limit, 120, 1, 100000, Context),
       request_burst => integer_config(request_burst, 30, 1, 1000, Context),
-      distinct_limit => integer_config(distinct_limit, 60, 1, 100000, Context),
-      distinct_burst => integer_config(distinct_burst, 20, 1, 64, Context),
       max_clients => integer_config(max_clients, 5000, 1, 50000, Context)}.
 
 integer_config(Key, Default, Min, Max, Context) ->
@@ -73,15 +71,23 @@ integer_config(Key, Default, Min, Max, Context) ->
 
 %% No cookie or user-agent component: rotating them must not reset a budget.
 %% The mailbox check sheds work before the limiter becomes a bottleneck.
--spec check(Client, Target, Settings, Context) -> map() when
-    Client :: term(), Target :: binary(), Settings :: map(), Context :: z:context().
-check(_, _, #{mode := off}, _) -> decision(off, none, 0);
-check(Client, Target, Settings, Context) ->
+-spec check(Client, Settings, Context) -> map() when
+    Client :: term(), Settings :: map(), Context :: z:context().
+check(_, #{mode := off}, _) -> decision(off, none, 0);
+check(Client, Settings, Context) ->
+    IP=m_traffic_guard:normalize(Client),
+    case z_traffic_guard_rules:lookup(IP,Context) of
+        ip_allow -> decision(maps:get(mode,Settings),ip_allow,0);
+        ip_block -> decision(maps:get(mode,Settings),ip_block,60);
+        _ -> check_budget(IP,Settings,Context)
+    end.
+
+check_budget(Client, Settings, Context) ->
     try
         Pid = whereis(name(Context)),
         {message_queue_len, N} = process_info(Pid, message_queue_len),
         true = N < 100,
-        gen_server:call(Pid, {check, Client, Target, Settings,
+        gen_server:call(Pid, {check, Client, Settings,
             erlang:monotonic_time(millisecond) + 1000}, 1000)
     catch _:_ -> decision(maps:get(mode, Settings), unavailable, 0) end.
 
@@ -93,14 +99,15 @@ init([Context]) ->
 handle_call(reload_rules, _, State) ->
     C=maps:get(context,State),
     Settings=read_settings(C),
-    ets:insert(name(C),{config,Settings}),
+    ok=z_traffic_guard_rules:replace(maps:get(ip_lists,Settings),C),
+    ets:insert(name(C),{config,maps:remove(ip_lists,Settings)}),
     %% A rule edit must not forgive other clients' debt or erase their evidence.
     {reply,ok,State#{settings=>Settings,managed=>true}};
 handle_call(throttled, _, State) ->
     Now=erlang:monotonic_time(millisecond),
     Wall=erlang:system_time(second),
     S=current_settings(maps:get(settings,State),State),
-    Lists=case S of #{ip_lists:=L}->L; _->#{allow=>[],block=>[]} end,
+    Lists=case S of #{ip_lists:=L}->L; _->#{allow=>#{},block=>#{}} end,
     Rows=[#{ip=>list_to_binary(inet:ntoa(IP)),reason=>maps:get(reason,E),
         count=>maps:get(rejections,E),retry_after=>(Until-Now+999) div 1000,
         action=>maps:get(action,E)} || {IP,#{throttled_until:=Until}=E} <- maps:to_list(maps:get(clients,State)),
@@ -109,15 +116,22 @@ handle_call(throttled, _, State) ->
         not matches(IP,maps:get(block,Lists),Wall)],
     {reply,{ok,lists:sublist(lists:sort(fun(A,B)->maps:get(count,A)>maps:get(count,B) end,Rows),200)},State};
 handle_call(reset, _, State) ->
+    ok=z_traffic_guard_rules:invalidate(maps:get(context,State)),
     ets:delete(name(maps:get(context,State)), config),
     {reply, ok, State#{clients => #{}, settings => undefined}};
 handle_call(settings, _, State) ->
     Settings = current_settings(undefined, State#{managed => true}),
-    {reply, Settings, State#{managed => true}};
-handle_call({check, Client, Target, Settings, Deadline}, _, State) ->
+    {reply, maps:remove(ip_lists,Settings), State#{managed => true, settings => Settings}};
+handle_call({check, Client, Settings, Deadline}, _, State) ->
     case erlang:monotonic_time(millisecond) >= Deadline of
         true -> {reply, decision(maps:get(mode, Settings), unavailable, 0), State};
-        false -> admit(Client, Target, current_settings(Settings,State), State)
+        false ->
+            Current = current_settings(Settings,State),
+            CachedState = case maps:get(managed,State,false) of
+                true -> State#{settings => Current};
+                false -> State
+            end,
+            admit(Client, Current, CachedState)
     end;
 handle_call(_, _, State) -> {reply, {error, badarg}, State}.
 
@@ -126,30 +140,35 @@ handle_call(_, _, State) -> {reply, {error, badarg}, State}.
 current_settings(_, #{managed := true, settings := Cached}) when is_map(Cached) -> Cached;
 current_settings(Provided, State) ->
     case maps:get(managed,State,false) of
-        false -> Provided;
+        false ->
+            %% Trusted direct callers can supply rules without site configuration.
+            case Provided of
+                #{ip_lists := Lists} -> Provided#{ip_lists => maps:map(fun(_, E) -> index(E) end, Lists)};
+                _ -> Provided
+            end;
         true ->
-            Context = maps:get(context,State), Table = name(Context),
-            case ets:lookup(Table,config) of
-                [{config,Settings}] -> Settings;
-                [] ->
-                    Settings = read_settings(Context),
-                    ets:insert(Table,{config,Settings}),
-                    Settings
+            Context = maps:get(context,State),
+            Settings = read_settings(Context),
+            ok=z_traffic_guard_rules:replace(maps:get(ip_lists,Settings),Context),
+            ets:insert(name(Context),{config,maps:remove(ip_lists,Settings)}),
+            Settings
+    end.
+
+admit(_, #{mode := off}, State) -> {reply, decision(off,none,0), State};
+admit(Client, Settings, State) ->
+    Lists = maps:get(ip_lists,Settings,#{allow => #{}, block => #{}}),
+    IP = m_traffic_guard:normalize(Client),
+    Now = erlang:system_time(second),
+    case matches(IP,maps:get(allow,Lists),Now) of
+        true -> {reply,decision(maps:get(mode,Settings),ip_allow,0),State};
+        false ->
+            case matches(IP,maps:get(block,Lists),Now) of
+                true -> {reply,decision(maps:get(mode,Settings),ip_block,60),State};
+                false -> admit_budget(IP,Settings,State)
             end
     end.
 
-admit(_, _, #{mode := off}, State) -> {reply, decision(off,none,0), State};
-admit(Client, Target, Settings, State) ->
-    Lists = maps:get(ip_lists,Settings,#{allow => [], block => []}),
-    IP = m_traffic_guard:normalize(Client),
-    case {matches(IP,maps:get(allow,Lists),erlang:system_time(second)),
-          matches(IP,maps:get(block,Lists),erlang:system_time(second))} of
-        {true,_} -> {reply,decision(maps:get(mode,Settings),ip_allow,0),State};
-        {_,true} -> {reply,decision(maps:get(mode,Settings),ip_block,60),State};
-        _ -> admit_budget(IP,Target,Settings,State)
-    end.
-
-admit_budget(Client, Target, Settings, State) ->
+admit_budget(Client, Settings, State) ->
     %% Changing settings resets transient budgets, including mode transitions.
     Clients = case maps:get(settings, State) =:= Settings of
         true -> maps:get(clients, State);
@@ -160,17 +179,38 @@ admit_budget(Client, Target, Settings, State) ->
         true -> {reply, decision(maps:get(mode, Settings), state_capacity, 0), State};
         false ->
             Now=erlang:monotonic_time(millisecond),
-            {Result, Entry} = step(Target, Now, Settings, Existing),
+            {Result, Entry} = step(Now, Settings, Existing),
             Tracked=track(Result,Entry,Existing,Now),
             {reply, Result, State#{clients => Clients#{Client => Tracked}, settings => Settings}}
     end.
 
 %% Match deadlines on every request, even while the table copy is cached.
 matches(IP,Entries,Now) ->
-    lists:any(fun
-        ({Address,Until}) -> Address=:=IP andalso (Until=:=0 orelse Until>Now);
-        (Address) -> Address=:=IP
-    end,Entries).
+    case maps:find(IP,Entries) of
+        {ok,0} -> true;
+        {ok,Until} -> Until > Now;
+        error -> false
+    end.
+
+%% Duplicate site/global rules match while any entry remains valid. A permanent
+%% entry wins; otherwise retain the latest expiry, independent of input order.
+-spec index(Entries) -> map() when Entries :: list() | map().
+index(Entries) when is_map(Entries) -> Entries;
+index(Entries) ->
+    lists:foldl(fun
+        ({IP,Until},Acc) -> index_entry(IP,Until,Acc);
+        (IP,Acc) -> index_entry(IP,0,Acc)
+    end,#{},Entries).
+
+index_entry(IP,Until,Acc) ->
+    Address = m_traffic_guard:normalize(IP),
+    Expiry = case maps:find(Address,Acc) of
+        {ok,0} -> 0;
+        _ when Until =:= 0 -> 0;
+        {ok,Previous} -> max(Previous,Until);
+        error -> Until
+    end,
+    Acc#{Address => Expiry}.
 
 track(#{guard_action:=<<"allow">>},Entry,_,_) -> Entry;
 track(Result,Entry,Previous,Now) ->
@@ -180,6 +220,7 @@ track(Result,Entry,Previous,Now) ->
         rejections=>Count+1}.
 
 handle_cast(reset, State) ->
+    ok=z_traffic_guard_rules:invalidate(maps:get(context,State)),
     ets:delete(name(maps:get(context,State)), config),
     {noreply, State#{clients => #{}, settings => undefined}};
 handle_cast(_, State) -> {noreply, State}.
@@ -190,56 +231,28 @@ handle_info(prune, #{clients := Clients} = State) ->
     {noreply, State#{clients => Kept}};
 handle_info(_, State) -> {noreply, State}.
 
-%% Pure token-bucket admission. Observe uses the same shadow admission state as
-%% enforce; rejected requests do not prolong depletion. Targets are short hashes.
--spec step(Target, Now, Settings, Previous) -> {map(), map()} when
-    Target :: binary(), Now :: integer(), Settings :: map(),
-    Previous :: undefined | map().
-step(Target, Now, Settings, undefined) ->
-    step(Target, Now, Settings, #{time => Now, targets => #{},
-        requests => maps:get(request_burst, Settings) * maps:get(period, Settings),
-        distinct => maps:get(distinct_burst, Settings) * maps:get(period, Settings)});
-step(Target, Now, S, Previous) ->
+%% Pure request-rate admission. Observe uses the same shadow state as enforce;
+%% rejected requests do not consume credits or prolong depletion.
+-spec step(Now, Settings, Previous) -> {map(), map()} when
+    Now :: integer(), Settings :: map(), Previous :: undefined | map().
+step(Now, Settings, undefined) ->
+    step(Now, Settings, #{time => Now,
+        requests => maps:get(request_burst, Settings) * maps:get(period, Settings)});
+step(Now, S, Previous) ->
     Period = maps:get(period, S),
+    Rate = maps:get(request_limit, S),
+    Capacity = maps:get(request_burst, S) * Period,
     Elapsed = max(0, Now - maps:get(time, Previous)),
-    R = min(maps:get(request_burst,S)*Period,
-        maps:get(requests,Previous) + Elapsed*maps:get(request_limit,S)),
-    D = min(maps:get(distinct_burst,S)*Period,
-        maps:get(distinct,Previous) + Elapsed*maps:get(distinct_limit,S)),
-    {Targets, NextExpiry} = live_targets(Previous, Now),
-    New = not maps:is_key(Target, Targets),
-    RWait = wait_time(R, Period, maps:get(request_limit,S)),
-    DWait = case New of true -> wait_time(D,Period,maps:get(distinct_limit,S)); false -> 0 end,
-    {Reason, Wait} = case {RWait,DWait} of
-        {0,0} -> {none,0};
-        {RW,DW} when RW >= DW -> {request_rate,RW};
-        {_,DW} -> {distinct_targets,DW}
+    Credits = min(Capacity, maps:get(requests, Previous) + Elapsed * Rate),
+    Wait = wait_time(Credits, Period, Rate),
+    {Reason, Remaining} = case Wait of
+        0 -> {none, Credits - Period};
+        _ -> {request_rate, Credits}
     end,
-    Accepted = Wait =:= 0,
-    {Targets1, NextExpiry1} = case Accepted andalso New andalso map_size(Targets) < 64 of
-        true -> {Targets#{Target => Now + Period}, min_expiry(NextExpiry, Now + Period)};
-        false -> {Targets, NextExpiry}
-    end,
-    %% Never expire debt before it would have recovered naturally.
-    TTL = max(Period, max(
-        (maps:get(request_burst,S)*Period + maps:get(request_limit,S)-1) div maps:get(request_limit,S),
-        (maps:get(distinct_burst,S)*Period + maps:get(distinct_limit,S)-1) div maps:get(distinct_limit,S))),
-    {decision(maps:get(mode,S), Reason, (Wait+999) div 1000),
-     #{time => Now, expires => Now + TTL, targets => Targets1, target_expiry => NextExpiry1,
-       requests => R - case Accepted of true -> Period; false -> 0 end,
-       distinct => D - case Accepted andalso New of true -> Period; false -> 0 end}}.
-
-%% Repeated visits do not need to scan/copy all 64 remembered targets.
-%% Only prune when the earliest expiration has actually arrived.
-live_targets(#{targets := Targets, target_expiry := Expiry}, Now)
-        when is_integer(Expiry), Expiry > Now -> {Targets, Expiry};
-live_targets(#{targets := Targets}, Now) ->
-    Kept = maps:filter(fun(_, T) -> T > Now end, Targets),
-    Expiry = maps:fold(fun(_, T, E) -> min_expiry(E,T) end, undefined, Kept),
-    {Kept, Expiry}.
-
-min_expiry(undefined, T) -> T;
-min_expiry(E, T) -> min(E,T).
+    %% Never expire debt before the bucket could fully recover.
+    TTL = max(Period, (Capacity + Rate - 1) div Rate),
+    {decision(maps:get(mode, S), Reason, (Wait + 999) div 1000),
+     #{time => Now, expires => Now + TTL, requests => Remaining}}.
 
 wait_time(Tokens, Cost, _) when Tokens >= Cost -> 0;
 wait_time(Tokens, Cost, Rate) -> (Cost - Tokens + Rate - 1) div Rate.

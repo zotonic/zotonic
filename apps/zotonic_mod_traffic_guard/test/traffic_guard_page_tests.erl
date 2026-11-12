@@ -86,13 +86,13 @@ fill_budget(N,C) ->
     end.
 
 page_requests(Guard,C) ->
-    Keys=[mode,period,request_limit,request_burst,distinct_burst],
+    Keys=[mode,period,request_limit,request_burst],
     Old=[{K,m_config:get_value(mod_traffic_guard,K,C)}||K<-Keys],
     Id=maps:get(id,Guard), Before=counts(Id,C),
     URL=z_convert:to_list(z_context:abs_url(z_dispatcher:url_for(home,C),C)),
     try
         set([{period,<<"60">>},{request_limit,<<"1">>},{request_burst,<<"1">>},
-            {distinct_burst,<<"64">>},{mode,<<"observe">>}],C),
+            {mode,<<"observe">>}],C),
         z_analytics_worker:reload(C), z_analytics_worker:status(C),
         ?assertEqual([200,200,200],[status(URL)||_<-lists:seq(1,3)]),
         set([{mode,<<"enforce">>}],C),

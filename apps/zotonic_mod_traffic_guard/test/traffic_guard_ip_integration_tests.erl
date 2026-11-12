@@ -79,8 +79,8 @@ run(C) ->
         ?assertEqual(0,z_db:q1("select count(*) from traffic_guard_ip where host(ip)=any($1::text[])",[IPs],C)),
         %% Promote current rate-limit evidence to a documented, timed block.
         configure([{request_burst,<<"1">>},{request_limit,<<"1">>}],C),
-        [z_traffic_guard:check({198,51,100,98},<<"test">>,z_traffic_guard:settings(C),C) || _<-lists:seq(1,3)],
-        [z_traffic_guard:check({198,51,100,97},<<"test">>,z_traffic_guard:settings(C),C) || _<-lists:seq(1,2)],
+        [z_traffic_guard:check({198,51,100,98},z_traffic_guard:settings(C),C) || _<-lists:seq(1,3)],
+        [z_traffic_guard:check({198,51,100,97},z_traffic_guard:settings(C),C) || _<-lists:seq(1,2)],
         {ok,T}=m_traffic_guard:throttled(A), ?assert(lists:any(fun(R)->maps:get(ip,R)=:=<<"198.51.100.98">> end,T)),
         ok=m_traffic_guard:block(<<"198.51.100.98">>,<<"week">>,A),
         {ok,Remaining}=m_traffic_guard:throttled(A),

@@ -28,15 +28,11 @@
     #{key => mode, type => string, default => <<"observe">>,
       description => "off, observe or enforce. Observe reports excess without blocking."},
     #{key => period, type => integer, default => 60,
-      description => "Rate period and distinct-path retention in seconds (1..3600)."},
+      description => "Rate period in seconds (1..3600)."},
     #{key => request_limit, type => integer, default => 120,
       description => "Sustained requests per period (1..100000)."},
     #{key => request_burst, type => integer, default => 30,
       description => "Immediate request allowance (1..1000)."},
-    #{key => distinct_limit, type => integer, default => 60,
-      description => "Sustained distinct paths per period (1..100000)."},
-    #{key => distinct_burst, type => integer, default => 20,
-      description => "Immediate distinct-path allowance (1..64)."},
     #{key => max_clients, type => integer, default => 5000,
       description => "Maximum retained client budgets per site and node (1..50000)."}
 ]).
@@ -51,17 +47,17 @@ returns HTTP 429 with Retry-After and no-cache headers. **off** bypasses checks.
 
 The guard covers GET/HEAD requests to page, template, HTTP model API and agent
 interface controllers. Static assets, POST requests and MQTT messages are excluded.
-Dispatch option `{traffic_guard, true}` opts another controller in; `false` opts a
+Custom controllers classified as pages by analytics (`{analytics, page}`) are also
+covered, even without analytics enabled. Dispatch option `{traffic_guard, true}`
+opts another controller in; `false` opts a
 route out. Configuration is under `mod_traffic_guard` in System Configuration.
 
 | Key | Default | Meaning |
 | --- | --- | --- |
 | mode | observe | off, observe, enforce |
-| period | 60 | Rate period and path retention, in seconds |
+| period | 60 | Rate period, in seconds |
 | request_limit | 120 | Requests replenished per period |
 | request_burst | 30 | Maximum request credits |
-| distinct_limit | 60 | Distinct-path credits replenished per period |
-| distinct_burst | 20 | Maximum distinct-path credits |
 | max_clients | 5000 | Retained client budgets per site/node |
 
 Budgets are shared by all covered routes for a client IP. Cookies and user agents
@@ -93,7 +89,7 @@ companion recording reserves 10,734 rows within the site budget, preserving the
 existing page-view history. Additional breakdowns can use `mod_traffic_guard:request`.
 Each checked request emits one decision, including early rejections. Dimensions
 are `crawl_behavior` (normal, excessive, unknown), `guard_action` (allow,
-would_throttle, throttle), `guard_reason` (none, request_rate, distinct_targets,
+would_throttle, throttle), `guard_reason` (none, request_rate,
 state_capacity, unavailable, ip_allow, ip_block), `traffic`, and `type` (page, api, other).
 Existing request events also receive the three guard dimensions. Unknown means
 no reliable guard assessment was available, not a suspected crawler.
@@ -103,11 +99,10 @@ request events overlap and should not be added together as a request total.
 
 ## Limits and privacy
 
-State is transient and bounded: client IPs and up to 64 SHA-256 path hashes per
-client, with no query strings or cookies. Query variations share a distinct target
-but always consume the total-request budget. At the target cap, unremembered paths
-consume distinct credits conservatively. Idle clients expire and a restart resets
-all budgets. Limits are node-local, not shared across a cluster.
+State is transient and bounded: only client IPs and request-rate budgets are
+tracked, with no paths, query strings or cookies. Every covered request consumes
+the same budget, including repeated reloads of one page. Idle clients expire and
+a restart resets all budgets. Limits are node-local, not shared across a cluster.
 
 Unavailable or busy workers and exhausted client capacity fail open with an
 unknown assessment. This is origin protection, not a DDoS firewall. Use trusted
@@ -117,7 +112,7 @@ budgets, concurrency limits, or bot verification. See the module README for setu
 and validation examples.
 ").
 -export([start_link/1, init/1, observe_middleware/3, observe_analytics_events/3, observe_m_config_update/2,
-    eligible/3, signals/1, response/2, observe_admin_menu/3, manage_schema/2, observe_tick_1h/2]).
+    eligible/3, eligible/4, signals/1, response/2, observe_admin_menu/3, manage_schema/2, observe_tick_1h/2]).
 -include_lib("zotonic_core/include/zotonic.hrl").
 %% The analytics declaration is optional; no runtime dependency on mod_analytics.
 -include_lib("zotonic_mod_analytics/include/analytics.hrl").
@@ -135,7 +130,9 @@ observe_tick_1h(tick_1h,C) -> m_traffic_guard:cleanup(C).
 start_link(Args) -> supervisor:start_link(?MODULE, Args).
 
 init(Args) ->
-    {ok, {#{strategy => one_for_one, intensity => 3, period => 60}, [
+    {ok, {#{strategy => rest_for_one, intensity => 3, period => 60}, [
+        #{id => z_traffic_guard_rules, start => {z_traffic_guard_rules, start_link, [Args]},
+          restart => permanent, shutdown => 5000, type => worker, modules => [z_traffic_guard_rules]},
         #{id => z_traffic_guard, start => {z_traffic_guard, start_link, [Args]},
           restart => permanent, shutdown => 5000, type => worker, modules => [z_traffic_guard]}
     ]}}.
@@ -146,7 +143,7 @@ observe_m_config_update(_, _) -> ok.
 
 observe_middleware(#middleware{on = guard}, Context, _) ->
     case eligible(cowmachine_req:method(Context), z_context:get_controller_module(Context),
-            z_context:get(traffic_guard, Context)) of
+            z_context:get(traffic_guard, Context), z_context:get(analytics, Context)) of
         false -> Context;
         true ->
             Settings = z_traffic_guard:settings(Context),
@@ -162,19 +159,25 @@ observe_middleware(_, Context, _) -> Context.
 
 -spec eligible(Method, Controller, Option) -> boolean() when
     Method :: binary(), Controller :: atom(), Option :: term().
-eligible(Method, _, _) when Method =/= <<"GET">>, Method =/= <<"HEAD">> -> false;
-eligible(_, _, false) -> false;
-eligible(_, _, true) -> true;
-eligible(_, Controller, _) ->
+eligible(Method,Controller,Option) -> eligible(Method,Controller,Option,undefined).
+
+%% Use the same dispatch classification as analytics, without requiring a
+%% recording or consent: eligibility is decided before the response is rendered.
+-spec eligible(Method, Controller, Option, Analytics) -> boolean() when
+    Method :: binary(), Controller :: atom(), Option :: term(), Analytics :: term().
+eligible(Method, _, _, _) when Method =/= <<"GET">>, Method =/= <<"HEAD">> -> false;
+eligible(_, _, false, _) -> false;
+eligible(_, _, true, _) -> true;
+eligible(_, Controller, _, Analytics) ->
     lists:member(Controller, [controller_page, controller_template, controller_api,
-        controller_agent_content, controller_agent_discovery]).
+        controller_agent_content, controller_agent_discovery]) orelse
+        z_analytics_request:dispatch_type(Analytics,Controller) =:= <<"page">>.
 
 guard(Settings, Context) ->
     Client = m_req:get(peer_ip, Context),
-    Target = crypto:hash(sha256, cowmachine_req:path(Context)),
     Result = case Client of
         undefined -> z_traffic_guard:decision(maps:get(mode, Settings), unavailable, 0);
-        _ -> z_traffic_guard:check(Client, Target, Settings, Context)
+        _ -> z_traffic_guard:check(Client, Settings, Context)
     end,
     Ctx1 = z_context:set(traffic_guard_result, Result, Context),
     case maps:get(guard_action, Result) of
@@ -239,7 +242,11 @@ emit(Context) ->
                     controller_api -> <<"api">>;
                     controller_agent_content -> <<"api">>;
                     controller_agent_discovery -> <<"api">>;
-                    _ -> <<"other">>
+                    Controller ->
+                        case z_analytics_request:dispatch_type(z_context:get(analytics,Context),Controller) of
+                            <<"page">> -> <<"page">>;
+                            _ -> <<"other">>
+                        end
                 end,
                 m_analytics:record_event(<<"mod_traffic_guard:request">>, #{<<"type">> => Type},
                     z_context:get_reqdata(Context), Context)
@@ -252,7 +259,7 @@ observe_analytics_events(#analytics_events{}, Acc, _) ->
        dimensions => #{
            <<"crawl_behavior">> => [<<"normal">>, <<"excessive">>, <<"unknown">>],
            <<"guard_action">> => [<<"allow">>, <<"would_throttle">>, <<"throttle">>],
-           <<"guard_reason">> => [<<"none">>, <<"request_rate">>, <<"distinct_targets">>,
+           <<"guard_reason">> => [<<"none">>, <<"request_rate">>,
                <<"state_capacity">>, <<"unavailable">>, <<"ip_allow">>, <<"ip_block">>],
            <<"traffic">> => [<<"crawler">>, <<"agent">>, <<"other">>, <<"unknown">>],
            <<"type">> => [<<"page">>, <<"api">>, <<"other">>]
