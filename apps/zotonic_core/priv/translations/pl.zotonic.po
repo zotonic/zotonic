@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-12 13:50\n"
+"PO-Revision-Date: 2026-11-12 14:01\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -6951,7 +6951,7 @@ msgstr "Filtry stałe"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:25
 msgid "Gaps are unrecorded intervals. Partial intervals may undercount activity. Page-request totals, device breakdowns and popular content exclude detected crawlers and agents unless explicitly selected. API and traffic-classification measurements include them unless filtered out. Counts exclude editor activity and do not measure unique visitors."
-msgstr ""
+msgstr "Luki to nie zarejestrowane przedziały czasowe. Niepełne przedziały mogą powodować zaniżenie danych dotyczących aktywności. Łączne liczby żądań stron, zestawienia według urządzeń oraz popularne treści nie uwzględniają wykrytych robotów indeksujących i agentów, chyba że zostaną one wyraźnie wybrane. Pomiary dotyczące API i klasyfikacji ruchu uwzględniają je, o ile nie zostaną odfiltrowane. Liczby nie uwzględniają aktywności redaktorów i nie mierzą liczby unikalnych użytkowników."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:13
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:15
@@ -6961,7 +6961,7 @@ msgstr "Limit grupowy"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
 msgid "Guard lines count page attempts from other and unknown traffic. Throttled requests are not page views; do not add these lines to the total."
-msgstr ""
+msgstr "Linie ochronne zliczają próby wywołania strony pochodzące z innego lub nieznanego ruchu. Ograniczone żądania nie są wyświetleniami stron; nie należy dodawać tych linii do sumy."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:8
 msgid "HTTP method — GET, POST, HEAD and others"
@@ -18363,11 +18363,11 @@ msgstr "{points} z {max} punktów"
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:23
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:53
 msgid "Add IP entries"
-msgstr ""
+msgstr "Dodaj wpisy adresów IP"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:18
 msgid "Add to allow list"
-msgstr ""
+msgstr "Dodaj do listy dozwolonych"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:13
@@ -18377,153 +18377,153 @@ msgstr "Zezwól"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:12
 msgid "Allow entries take precedence. Blocks follow observe/enforce/off mode and only affect guarded routes."
-msgstr ""
+msgstr "Wpisy na liście dozwolonych adresów mają pierwszeństwo. Blokady działają zgodnie z trybem observe/enforce/off i dotyczą tylko chronionych tras."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:90
 msgid "Block IP"
-msgstr ""
+msgstr "Zablokuj adres IP"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:87
 msgid "Block duration"
-msgstr ""
+msgstr "Czas blokady"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:70
 msgid "Block for"
-msgstr ""
+msgstr "Zablokuj na"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:13
 msgid "Current mode:"
-msgstr ""
+msgstr "Aktualny tryb:"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:54
 msgid "Current node only, including would-throttle decisions in observe mode. Up to 200 entries. Blocking generates a note from the displayed reason and rejection count."
-msgstr ""
+msgstr "Tylko bieżący węzeł, w tym żądania, które zostałyby ograniczone w trybie observe. Maksymalnie 200 wpisów. Zablokowanie tworzy notatkę na podstawie wyświetlonego powodu i liczby odrzuconych żądań."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:53
 msgid "Currently throttled IP addresses"
-msgstr ""
+msgstr "Adresy IP z aktualnym ograniczeniem liczby żądań"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:40
 msgid "Delete IP entry"
-msgstr ""
+msgstr "Usuń wpis adresu IP"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:37
 msgid "Delete IP entry?"
-msgstr ""
+msgstr "Usunąć wpis adresu IP?"
 
 #: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_delete_confirm.tpl:1
 msgid "Delete this IP entry?"
-msgstr ""
+msgstr "Czy chcesz usunąć ten wpis adresu IP?"
 
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:71
 msgid "Each list can contain at most 256 entries."
-msgstr ""
+msgstr "Każda lista może zawierać maksymalnie 256 pozycji."
 
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:57
 msgid "Edit IP entry"
-msgstr ""
+msgstr "Edytuj wpis IP"
 
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:72
 msgid "Enter valid IP addresses, a note and a future expiry date or duration. No changes were saved."
-msgstr ""
+msgstr "Wprowadź prawidłowe adresy IP, notatkę oraz przyszłą datę wygaśnięcia lub okres ważności. Żadne zmiany nie zostały zapisane."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:27
 msgid "Expiry dates are UTC. Expired entries stop applying immediately and are removed automatically. Global entries are managed in zotonic.config."
-msgstr ""
+msgstr "Daty wygaśnięcia podane są w czasie UTC. Wpisy, których termin wygaśnięcia upłynął, przestają obowiązywać natychmiast i są automatycznie usuwane. Wpisami globalnymi zarządza się w pliku zotonic.config."
 
 #: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:1
 msgid "Hour"
-msgstr ""
+msgstr "Godzina"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:65
 msgid "IP address"
-msgstr ""
+msgstr "Adres IP"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:18
 msgid "IP addresses"
-msgstr ""
+msgstr "Adresy IP"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:26
 msgid "IP entries"
-msgstr ""
+msgstr "Wpisy IP"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:11
 msgid "List"
-msgstr ""
+msgstr "Lista"
 
 #: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:4
 msgid "Month (30 days)"
-msgstr ""
+msgstr "Miesiąc (30 dni)"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:50
 msgid "No IP entries."
-msgstr ""
+msgstr "Brak wpisów dotyczących adresów IP."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:98
 msgid "No currently throttled IP addresses."
-msgstr ""
+msgstr "Obecnie żaden adres IP nie ma ograniczonej liczby żądań."
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:40
 msgid "Or until (UTC)"
-msgstr ""
+msgstr "Lub do (UTC)"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:66
 msgid "Reason"
-msgstr ""
+msgstr "Powód"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:68
 msgid "Rejections"
-msgstr ""
+msgstr "Odrzucenia"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:69
 msgid "Retry in seconds"
-msgstr ""
+msgstr "Ponowna próba za (sekundy)"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:46
 msgid "Save IP entries"
-msgstr ""
+msgstr "Zapisz wpisy adresów IP"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:9
 msgid "Separate IPv4 or IPv6 addresses with spaces, commas or newlines. Re-adding an address to the same list updates its note and expiry."
-msgstr ""
+msgstr "Adresy IPv4 lub IPv6 należy oddzielać spacjami, przecinkami lub znakami nowej linii. Ponowne dodanie adresu do tej samej listy powoduje aktualizację jego opisu i daty wygaśnięcia."
 
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:70
 msgid "This IP is no longer throttled. Refresh the page."
-msgstr ""
+msgstr "Ten adres IP nie jest już ograniczany. Odśwież stronę."
 
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:58
 msgid "This entry is no longer available. Refresh the page."
-msgstr ""
+msgstr "Ten wpis nie jest już dostępny. Odśwież stronę."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:3
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:10
 #: zotonic_mod_traffic_guard/src/mod_traffic_guard.erl:124
 msgid "Traffic guard"
-msgstr ""
+msgstr "Ochrona ruchu sieciowego"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:59
 msgid "Traffic guard is temporarily unavailable."
-msgstr ""
+msgstr "Ochrona ruchu sieciowego jest chwilowo niedostępna."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
 msgid "Until (UTC):"
-msgstr ""
+msgstr "Do (UTC):"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:29
 msgid "Until (UTC; empty means forever)"
-msgstr ""
+msgstr "Do (UTC; brak wartości oznacza „na zawsze”)"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:34
 msgid "Valid for"
-msgstr ""
+msgstr "Ważne przez"
 
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:69
 msgid "You are not allowed to change these entries."
-msgstr ""
+msgstr "Nie wolno zmieniać tych wpisów."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:16
 msgid "Your current IP address:"
-msgstr ""
+msgstr "Twój aktualny adres IP:"
 
 #: zotonic_mod_translation/priv/templates/_translation_edit_text.tpl:9
 msgid "(empty)"
