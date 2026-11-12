@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-12 13:51\n"
+"PO-Revision-Date: 2026-11-12 14:03\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "MIME-Version: 1.0\n"
@@ -18304,7 +18304,7 @@ msgstr "허용"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:12
 msgid "Allow entries take precedence. Blocks follow observe/enforce/off mode and only affect guarded routes."
-msgstr "입력 항목이 우선 적용됩니다. 블록은 ‘관찰/강제/비활성화’ 모드를 따르며, 보호된 경로에만 영향을 미칩니다."
+msgstr "허용 목록의 항목이 우선 적용됩니다. 차단은 observe/enforce/off 모드를 따르며 보호 대상 경로에만 적용됩니다."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:90
 msgid "Block IP"
@@ -18312,11 +18312,11 @@ msgstr "IP 차단"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:87
 msgid "Block duration"
-msgstr "블록 지속 시간"
+msgstr "차단 기간"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:70
 msgid "Block for"
-msgstr "~용 블록"
+msgstr "차단 기간"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:13
 msgid "Current mode:"
@@ -18324,11 +18324,11 @@ msgstr "현재 모드:"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:54
 msgid "Current node only, including would-throttle decisions in observe mode. Up to 200 entries. Blocking generates a note from the displayed reason and rejection count."
-msgstr "현재 노드에만 해당되며, 관찰 모드에서 스로틀링이 적용될 수 있는 결정도 포함됩니다. 최대 200개 항목까지 저장할 수 있습니다. 차단 시 표시된 사유와 거부 횟수를 바탕으로 알림이 생성됩니다."
+msgstr "현재 노드만 표시하며 observe 모드에서 제한 대상이 되는 요청도 포함합니다. 최대 200개 항목을 표시합니다. 차단 시 표시된 사유와 거부된 요청 수를 바탕으로 메모가 생성됩니다."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:53
 msgid "Currently throttled IP addresses"
-msgstr "현재 속도 제한이 적용된 IP 주소"
+msgstr "현재 요청 수 제한이 적용된 IP 주소"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:40
 msgid "Delete IP entry"
@@ -18400,11 +18400,11 @@ msgstr "이유"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:68
 msgid "Rejections"
-msgstr "거절"
+msgstr "거부 횟수"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:69
 msgid "Retry in seconds"
-msgstr "몇 초 후에 다시 시도하세요"
+msgstr "재시도까지 남은 시간(초)"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:46
 msgid "Save IP entries"
@@ -18416,7 +18416,7 @@ msgstr "IPv4 또는 IPv6 주소는 공백, 쉼표 또는 줄바꿈으로 구분�
 
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:70
 msgid "This IP is no longer throttled. Refresh the page."
-msgstr "이 IP에 대한 속도 제한이 해제되었습니다. 페이지를 새로 고침하세요."
+msgstr "이 IP 주소에 대한 요청 수 제한이 해제되었습니다. 페이지를 새로 고침하세요."
 
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:58
 msgid "This entry is no longer available. Refresh the page."
@@ -18426,19 +18426,19 @@ msgstr "이 항목은 더 이상 사용할 수 없습니다. 페이지를 새로
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:10
 #: zotonic_mod_traffic_guard/src/mod_traffic_guard.erl:124
 msgid "Traffic guard"
-msgstr "교통 안내원"
+msgstr "트래픽 보호"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:59
 msgid "Traffic guard is temporarily unavailable."
-msgstr "교통 안내원이 일시적으로 부재중입니다."
+msgstr "트래픽 보호를 일시적으로 사용할 수 없습니다."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
 msgid "Until (UTC):"
-msgstr "(UTC 기준) ~:"
+msgstr "만료 시각(UTC):"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:29
 msgid "Until (UTC; empty means forever)"
-msgstr "~ (UTC; 비어 있으면 영구적으로)"
+msgstr "만료 시각(UTC, 비워 두면 무기한)"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:34
 msgid "Valid for"
