@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-12 13:51\n"
+"PO-Revision-Date: 2026-11-12 14:03\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "MIME-Version: 1.0\n"
@@ -18310,7 +18310,7 @@ msgstr "許可する"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:12
 msgid "Allow entries take precedence. Blocks follow observe/enforce/off mode and only affect guarded routes."
-msgstr "エントリを優先させます。ブロックは「observe/enforce/off」モードに従い、ガードされたルートにのみ影響します。"
+msgstr "許可リストのエントリが優先されます。ブロックは observe/enforce/off モードに従い、保護対象のルートにのみ適用されます。"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:90
 msgid "Block IP"
@@ -18318,11 +18318,11 @@ msgstr "IPアドレスをブロックする"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:87
 msgid "Block duration"
-msgstr "ブロックの持続時間"
+msgstr "ブロック期間"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:70
 msgid "Block for"
-msgstr "～用のブロック"
+msgstr "ブロック期間"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:13
 msgid "Current mode:"
@@ -18330,11 +18330,11 @@ msgstr "現在のモード："
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:54
 msgid "Current node only, including would-throttle decisions in observe mode. Up to 200 entries. Blocking generates a note from the displayed reason and rejection count."
-msgstr "現在のノードのみ。オブザーブモードでのスロットリング対象となる決定も含む。最大200件まで。ブロックが発生すると、表示されている理由と拒否回数に基づいて通知が生成される。"
+msgstr "現在のノードのみを対象とし、observe モードで制限対象と判定されたリクエストも含みます。最大200件まで表示します。ブロック時には、表示された理由と拒否されたリクエスト数からメモが作成されます。"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:53
 msgid "Currently throttled IP addresses"
-msgstr "現在、通信制限がかけられているIPアドレス"
+msgstr "現在リクエスト数が制限されているIPアドレス"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:40
 msgid "Delete IP entry"
@@ -18394,7 +18394,7 @@ msgstr "IPエントリはありません。"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:98
 msgid "No currently throttled IP addresses."
-msgstr "現在、帯域制限がかけられているIPアドレスはありません。"
+msgstr "現在リクエスト数が制限されているIPアドレスはありません。"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:40
 msgid "Or until (UTC)"
@@ -18406,11 +18406,11 @@ msgstr "理由"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:68
 msgid "Rejections"
-msgstr "不採用"
+msgstr "拒否回数"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:69
 msgid "Retry in seconds"
-msgstr "数秒後に再試行してください"
+msgstr "再試行までの秒数"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:46
 msgid "Save IP entries"
@@ -18422,7 +18422,7 @@ msgstr "IPv4 または IPv6 アドレスは、スペース、コンマ、また�
 
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:70
 msgid "This IP is no longer throttled. Refresh the page."
-msgstr "このIPアドレスに対する通信制限は解除されました。ページを更新してください。"
+msgstr "このIPアドレスに対するリクエスト数の制限は解除されました。ページを更新してください。"
 
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:58
 msgid "This entry is no longer available. Refresh the page."
@@ -18432,11 +18432,11 @@ msgstr "このエントリは現在利用できません。ページを更新し
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:10
 #: zotonic_mod_traffic_guard/src/mod_traffic_guard.erl:124
 msgid "Traffic guard"
-msgstr "交通誘導員"
+msgstr "トラフィック保護"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:59
 msgid "Traffic guard is temporarily unavailable."
-msgstr "交通誘導員は現在、一時的に不在です。"
+msgstr "トラフィック保護は一時的に利用できません。"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
 msgid "Until (UTC):"
@@ -18448,7 +18448,7 @@ msgstr "～まで（UTC；空欄の場合は無期限）"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:34
 msgid "Valid for"
-msgstr "有効期限："
+msgstr "有効期間"
 
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:69
 msgid "You are not allowed to change these entries."
