@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-12 13:51\n"
+"PO-Revision-Date: 2026-11-12 14:02\n"
 "Last-Translator: \n"
 "Language-Team: Czech\n"
 "MIME-Version: 1.0\n"
@@ -18381,7 +18381,7 @@ msgstr "Povolit"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:12
 msgid "Allow entries take precedence. Blocks follow observe/enforce/off mode and only affect guarded routes."
-msgstr "Záznamy mají přednost. Bloky se řídí režimem „observe/enforce/off“ a mají vliv pouze na chráněné trasy."
+msgstr "Záznamy v seznamu povolených adres mají přednost. Blokování se řídí režimem observe/enforce/off a ovlivňuje pouze chráněné trasy."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:90
 msgid "Block IP"
@@ -18389,11 +18389,11 @@ msgstr "Blokovat IP adresu"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:87
 msgid "Block duration"
-msgstr "Doba trvání bloku"
+msgstr "Doba blokování"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:70
 msgid "Block for"
-msgstr "Blok pro"
+msgstr "Blokovat na"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:13
 msgid "Current mode:"
@@ -18401,11 +18401,11 @@ msgstr "Aktuální režim:"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:54
 msgid "Current node only, including would-throttle decisions in observe mode. Up to 200 entries. Blocking generates a note from the displayed reason and rejection count."
-msgstr "Pouze aktuální uzel, včetně rozhodnutí o omezení výkonu v režimu sledování. Až 200 záznamů. Blokování vygeneruje poznámku na základě zobrazeného důvodu a počtu zamítnutí."
+msgstr "Pouze aktuální uzel, včetně požadavků, které by byly omezeny v režimu observe. Až 200 záznamů. Blokování vytvoří poznámku ze zobrazeného důvodu a počtu odmítnutých požadavků."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:53
 msgid "Currently throttled IP addresses"
-msgstr "IP adresy, u nichž je v současné době omezen přenos dat"
+msgstr "IP adresy s aktuálně omezeným počtem požadavků"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:40
 msgid "Delete IP entry"
@@ -18433,7 +18433,7 @@ msgstr "Zadejte platné IP adresy, poznámku a budoucí datum vypršení platnos
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:27
 msgid "Expiry dates are UTC. Expired entries stop applying immediately and are removed automatically. Global entries are managed in zotonic.config."
-msgstr "Datumy platnosti jsou uvedeny v časovém formátu UTC. Záznamy, jejichž platnost vypršela, přestávají platit okamžitě a jsou automaticky odstraněny. Globální záznamy se spravují v souboru zotonic.config."
+msgstr "Data vypršení platnosti jsou uvedena v UTC. Záznamy po vypršení platnosti okamžitě přestávají platit a jsou automaticky odstraněny. Globální záznamy se spravují v souboru zotonic.config."
 
 #: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:1
 msgid "Hour"
@@ -18481,7 +18481,7 @@ msgstr "Odmítnutí"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:69
 msgid "Retry in seconds"
-msgstr "Zkuste to znovu za pár sekund"
+msgstr "Další pokus za (sekundy)"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:46
 msgid "Save IP entries"
@@ -18503,11 +18503,11 @@ msgstr "Tento záznam již není k dispozici. Obnovte stránku."
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:10
 #: zotonic_mod_traffic_guard/src/mod_traffic_guard.erl:124
 msgid "Traffic guard"
-msgstr "Dopravní strážník"
+msgstr "Ochrana provozu"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:59
 msgid "Traffic guard is temporarily unavailable."
-msgstr "Služba Traffic Guard je dočasně nedostupná."
+msgstr "Ochrana provozu je dočasně nedostupná."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
 msgid "Until (UTC):"
@@ -18519,7 +18519,7 @@ msgstr "Do (UTC; prázdné pole znamená navždy)"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:34
 msgid "Valid for"
-msgstr "Platí pro"
+msgstr "Platnost po dobu"
 
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:69
 msgid "You are not allowed to change these entries."
