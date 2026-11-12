@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-12 13:49\n"
+"PO-Revision-Date: 2026-11-12 14:01\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -6930,7 +6930,7 @@ msgstr "מסננים קבועים"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:25
 msgid "Gaps are unrecorded intervals. Partial intervals may undercount activity. Page-request totals, device breakdowns and popular content exclude detected crawlers and agents unless explicitly selected. API and traffic-classification measurements include them unless filtered out. Counts exclude editor activity and do not measure unique visitors."
-msgstr ""
+msgstr "פערים הם מרווחי זמן שלא תועדו. מרווחי זמן חלקיים עלולים להוביל לספירה חסרה של הפעילות. בסכומים הכוללים של בקשות לדפים, בפירוט לפי מכשירים ובתכנים הפופולריים לא נכללים סורקים וסוכנים שזוהו, אלא אם נבחרו במפורש. מדידות ה-API וסיווג התעבורה כוללות אותם, אלא אם סוננו החוצה. הספירות אינן כוללות פעילות עורכים ואינן מודדות מבקרים ייחודיים."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:13
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:15
@@ -6940,7 +6940,7 @@ msgstr "מגבלת קבוצה"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
 msgid "Guard lines count page attempts from other and unknown traffic. Throttled requests are not page views; do not add these lines to the total."
-msgstr ""
+msgstr "שורות ה-Guard סופרות ניסיונות גישה לדף שמקורן בתעבורה אחרת או בלתי ידועה. בקשות שעברו הגבלת קצב אינן נחשבות לצפיות בדף; אין להוסיף שורות אלה לסך הכל."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:8
 msgid "HTTP method — GET, POST, HEAD and others"
@@ -18343,167 +18343,167 @@ msgstr "{points} מ- {max} נקודות"
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:23
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:53
 msgid "Add IP entries"
-msgstr ""
+msgstr "הוספת רשומות IP"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:18
 msgid "Add to allow list"
-msgstr ""
+msgstr "הוסף לרשימת המורשים"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:13
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:31
 msgid "Allow"
-msgstr ""
+msgstr "לאפשר"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:12
 msgid "Allow entries take precedence. Blocks follow observe/enforce/off mode and only affect guarded routes."
-msgstr ""
+msgstr "לרשומות ברשימת ההרשאה יש קדימות. החסימות פועלות לפי המצב observe/enforce/off ומשפיעות רק על נתיבים מוגנים."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:90
 msgid "Block IP"
-msgstr ""
+msgstr "חסימת כתובת IP"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:87
 msgid "Block duration"
-msgstr ""
+msgstr "משך החסימה"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:70
 msgid "Block for"
-msgstr ""
+msgstr "חסימה למשך"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:13
 msgid "Current mode:"
-msgstr ""
+msgstr "מצב נוכחי:"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:54
 msgid "Current node only, including would-throttle decisions in observe mode. Up to 200 entries. Blocking generates a note from the displayed reason and rejection count."
-msgstr ""
+msgstr "הצומת הנוכחי בלבד, כולל בקשות שהיו מוגבלות במצב observe. עד 200 רשומות. בעת חסימה נוצרת הערה המבוססת על הסיבה המוצגת ועל מספר הבקשות שנדחו."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:53
 msgid "Currently throttled IP addresses"
-msgstr ""
+msgstr "כתובות IP שקצב הבקשות שלהן מוגבל כעת"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:40
 msgid "Delete IP entry"
-msgstr ""
+msgstr "מחיקת רשומת IP"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:37
 msgid "Delete IP entry?"
-msgstr ""
+msgstr "למחוק את רשומת ה-IP?"
 
 #: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_delete_confirm.tpl:1
 msgid "Delete this IP entry?"
-msgstr ""
+msgstr "האם למחוק את רשומת ה-IP הזו?"
 
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:71
 msgid "Each list can contain at most 256 entries."
-msgstr ""
+msgstr "כל רשימה יכולה להכיל לכל היותר 256 ערכים."
 
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:57
 msgid "Edit IP entry"
-msgstr ""
+msgstr "עריכת רשומת IP"
 
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:72
 msgid "Enter valid IP addresses, a note and a future expiry date or duration. No changes were saved."
-msgstr ""
+msgstr "הזן כתובות IP תקפות, הערה ותאריך תפוגה עתידי או משך זמן. לא נשמרו שינויים."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:27
 msgid "Expiry dates are UTC. Expired entries stop applying immediately and are removed automatically. Global entries are managed in zotonic.config."
-msgstr ""
+msgstr "תאריכי התפוגה הם לפי UTC. ערכים שתוקפם פג מפסיקים לחול באופן מיידי ומוסרים באופן אוטומטי. ערכים גלובליים מנוהלים בקובץ zotonic.config."
 
 #: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:1
 msgid "Hour"
-msgstr ""
+msgstr "שעה"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:65
 msgid "IP address"
-msgstr ""
+msgstr "כתובת IP"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:18
 msgid "IP addresses"
-msgstr ""
+msgstr "כתובות IP"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:26
 msgid "IP entries"
-msgstr ""
+msgstr "רשומות IP"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:11
 msgid "List"
-msgstr ""
+msgstr "רשימה"
 
 #: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:4
 msgid "Month (30 days)"
-msgstr ""
+msgstr "חודש (30 ימים)"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:50
 msgid "No IP entries."
-msgstr ""
+msgstr "אין רשומות IP."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:98
 msgid "No currently throttled IP addresses."
-msgstr ""
+msgstr "כרגע אין כתובות IP המוגבלות."
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:40
 msgid "Or until (UTC)"
-msgstr ""
+msgstr "או עד (UTC)"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:66
 msgid "Reason"
-msgstr ""
+msgstr "הסיבה"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:68
 msgid "Rejections"
-msgstr ""
+msgstr "דחיות"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:69
 msgid "Retry in seconds"
-msgstr ""
+msgstr "זמן עד לניסיון חוזר (בשניות)"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:46
 msgid "Save IP entries"
-msgstr ""
+msgstr "שמירת רשומות IP"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:9
 msgid "Separate IPv4 or IPv6 addresses with spaces, commas or newlines. Re-adding an address to the same list updates its note and expiry."
-msgstr ""
+msgstr "הפרד בין כתובות IPv4 או IPv6 באמצעות רווחים, פסיקים או שורות חדשות. הוספה מחודשת של כתובת לאותה רשימה מעדכנת את ההערה והתוקף שלה."
 
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:70
 msgid "This IP is no longer throttled. Refresh the page."
-msgstr ""
+msgstr "כתובת ה-IP הזו כבר לא מוגבלת. רענן את הדף."
 
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:58
 msgid "This entry is no longer available. Refresh the page."
-msgstr ""
+msgstr "הערך הזה כבר אינו זמין. רענן את הדף."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:3
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:10
 #: zotonic_mod_traffic_guard/src/mod_traffic_guard.erl:124
 msgid "Traffic guard"
-msgstr ""
+msgstr "הגנה על תעבורת רשת"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:59
 msgid "Traffic guard is temporarily unavailable."
-msgstr ""
+msgstr "ההגנה על תעבורת הרשת אינה זמינה באופן זמני."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
 msgid "Until (UTC):"
-msgstr ""
+msgstr "עד (UTC):"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:29
 msgid "Until (UTC; empty means forever)"
-msgstr ""
+msgstr "עד (UTC; ריק פירושו לנצח)"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:34
 msgid "Valid for"
-msgstr ""
+msgstr "תקף ל-"
 
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:69
 msgid "You are not allowed to change these entries."
-msgstr ""
+msgstr "אין לך הרשאה לשנות את הערכים הללו."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:16
 msgid "Your current IP address:"
-msgstr ""
+msgstr "כתובת ה-IP הנוכחית שלך:"
 
 #: zotonic_mod_translation/priv/templates/_translation_edit_text.tpl:9
 msgid "(empty)"
