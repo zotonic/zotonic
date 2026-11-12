@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-11 11:42\n"
+"PO-Revision-Date: 2026-11-12 13:49\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -420,6 +420,7 @@ msgstr "Voulez-vous vraiment rétablir la version actuellement publiée de toute
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:173
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:185
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:45
 #: zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:116
 #: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:43
@@ -535,7 +536,7 @@ msgstr "Considérez les auteurs de ressources comme propriétaires."
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4
 #: zotonic_mod_admin/src/mod_admin.erl:516
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:70
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 msgid "Content"
 msgstr "Contenu"
@@ -607,6 +608,7 @@ msgstr "Impossible de déplacer vers le groupe collaboratif"
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125
 #: zotonic_mod_survey/src/mod_survey.erl:427
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:36
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:12
 msgid "Delete"
@@ -631,6 +633,9 @@ msgid "Deleting..."
 msgstr "Suppression..."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:33
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:14
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:31
 msgid "Deny"
 msgstr "Refuser"
 
@@ -896,6 +901,7 @@ msgstr "Règles rétablies"
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:75
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
 #: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:95
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:46
 #: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:44
 msgid "Save"
 msgstr "Enregistrer"
@@ -1981,6 +1987,7 @@ msgstr "Adresse E-mail"
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:131
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:117
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:119
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:35
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:44
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:14
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:16
@@ -3178,6 +3185,7 @@ msgstr "Pages faisant référence à"
 #: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:51
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:56
 msgid "Refresh"
 msgstr "Rafraîchir"
 
@@ -6682,7 +6690,7 @@ msgstr "Les compteurs d'activité ne sont pas disponibles tant que l'analyse n'a
 msgid "Add analytics measurement"
 msgstr "Ajouter une mesure analytique"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:41
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:44
 msgid "All breakdown values"
 msgstr "Toutes les valeurs détaillées"
 
@@ -6698,13 +6706,13 @@ msgstr "Valeurs autorisées (séparées par des virgules)"
 msgid "Allowed values:"
 msgstr "Valeurs autorisées :"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:268
+#: zotonic_mod_analytics/src/mod_analytics.erl:296
 msgid "An equivalent analytics measurement already exists."
 msgstr "Il existe déjà un indicateur analytique équivalent."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
-#: zotonic_mod_analytics/src/mod_analytics.erl:197
+#: zotonic_mod_analytics/src/mod_analytics.erl:225
 msgid "Analytics configuration"
 msgstr "Configuration de l'analyse"
 
@@ -6737,7 +6745,7 @@ msgstr "Mesures analytiques"
 msgid "Analytics status"
 msgstr "État de l'analyse"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:32
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:35
 msgid "Bars show the lower bound. Counts are ranges, ordered by their lower bound. Overlapping ranges may change order. Content outside the retained candidates has at most"
 msgstr "Les barres indiquent la limite inférieure. Les nombres correspondent à des plages, classées par ordre croissant de leur limite inférieure. Les plages qui se chevauchent peuvent modifier l'ordre. Le contenu ne figurant pas parmi les candidats retenus compte au maximum"
 
@@ -6750,7 +6758,7 @@ msgstr "Historique limité"
 msgid "Break down by"
 msgstr "Répartition par"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:42
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:45
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "Breakdown"
 msgstr "Répartition"
@@ -6775,11 +6783,11 @@ msgstr "Demandes classifiées — pages, API et autres types de traitement"
 msgid "Configure analytics measurements"
 msgstr "Configurer les mesures d'analyse"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:236
+#: zotonic_mod_analytics/src/mod_analytics.erl:264
 msgid "Could not delete the analytics measurement."
 msgstr "Impossible de supprimer la mesure d'analyse."
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:269
+#: zotonic_mod_analytics/src/mod_analytics.erl:297
 msgid "Could not save. Check the event, breakdown and filter values."
 msgstr "Impossible d'enregistrer. Vérifiez les valeurs de l'événement, de la ventilation et du filtre."
 
@@ -6833,7 +6841,7 @@ msgstr "Appareil : téléphone, tablette, ordinateur de bureau ou inconnu"
 msgid "Display order"
 msgstr "Ordre d'affichage"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:242
+#: zotonic_mod_analytics/src/mod_analytics.erl:270
 msgid "Display order saved."
 msgstr "L'ordre d'affichage a été enregistré."
 
@@ -6878,7 +6886,7 @@ msgstr "Tampon d'événements"
 msgid "Event processing"
 msgstr "Traitement des événements"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:42
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:45
 msgid "Events"
 msgstr "Événements"
 
@@ -6899,14 +6907,18 @@ msgid "Fixed filters"
 msgstr "Filtres fixes"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:25
-msgid "Gaps are unrecorded intervals. Partial intervals may undercount activity. Page-request totals, device breakdowns and popular content exclude detected crawlers. API and traffic-classification measurements include crawlers unless filtered out. Counts exclude editor activity and do not measure unique visitors."
-msgstr "Les lacunes correspondent à des intervalles non enregistrés. Les intervalles partiels peuvent entraîner une sous-estimation de l'activité. Les totaux de requêtes de pages, la répartition par appareil et le contenu le plus consulté excluent les robots d'indexation détectés. Les mesures issues de l'API et de la classification du trafic incluent les robots d'indexation, sauf s'ils ont été filtrés. Les chiffres excluent l'activité des éditeurs et ne mesurent pas le nombre de visiteurs uniques."
+msgid "Gaps are unrecorded intervals. Partial intervals may undercount activity. Page-request totals, device breakdowns and popular content exclude detected crawlers and agents unless explicitly selected. API and traffic-classification measurements include them unless filtered out. Counts exclude editor activity and do not measure unique visitors."
+msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:13
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:15
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "Group limit"
 msgstr "Limite par groupe"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
+msgid "Guard lines count page attempts from other and unknown traffic. Throttled requests are not page views; do not add these lines to the total."
+msgstr ""
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:8
 msgid "HTTP method — GET, POST, HEAD and others"
@@ -6924,7 +6936,7 @@ msgstr "Code d'état HTTP — par exemple 200, 404 ou 500"
 msgid "History detail and retention"
 msgstr "Détails et conservation de l'historique"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:47
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:50
 msgid "Includes incomplete or unrecorded intervals"
 msgstr "Comprend les intervalles incomplets ou non enregistrés"
 
@@ -6952,7 +6964,7 @@ msgstr "Au cours des six dernières heures"
 msgid "Maximum number of analytics measurements"
 msgstr "Nombre maximal de mesures analytiques"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
 msgid "Most popular content in this period"
 msgstr "Contenus les plus populaires au cours de cette période"
 
@@ -7002,11 +7014,11 @@ msgstr "Pas de ventilation (total)"
 msgid "No filter — include all values"
 msgstr "Pas de filtre — inclure toutes les valeurs"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:33
 msgid "No leading content identified in this period."
 msgstr "Aucun contenu phare n'a été identifié au cours de cette période."
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:38
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:41
 msgid "No recorded events yet."
 msgstr "Aucun événement n'a encore été enregistré."
 
@@ -7058,11 +7070,11 @@ msgstr "Pause"
 msgid "Period"
 msgstr "Période"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
 msgid "Rank"
 msgstr "Classement"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:25
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:28
 msgid "Ranked by recorded requests in the selected moving period. The window advances in steps of"
 msgstr "Classement en fonction du nombre de demandes enregistrées au cours de la période choisie. La fenêtre avance par incréments de"
 
@@ -7078,7 +7090,7 @@ msgstr "Type de requête : page, API ou type de traitement personnalisé"
 msgid "Request types found in this site's dispatch rules:"
 msgstr "Types de demandes figurant dans les règles de répartition de ce site :"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
 msgid "Requests"
 msgstr "Demandes"
 
@@ -7108,7 +7120,7 @@ msgstr "Brève description"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
-#: zotonic_mod_analytics/src/mod_analytics.erl:189
+#: zotonic_mod_analytics/src/mod_analytics.erl:217
 msgid "Site Analytics"
 msgstr "Statistiques du site"
 
@@ -7160,11 +7172,11 @@ msgstr "Intervalles enregistrés / capacité"
 msgid "Stored time intervals"
 msgstr "Intervalles de temps enregistrés"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:244
+#: zotonic_mod_analytics/src/mod_analytics.erl:272
 msgid "The analytics measurements changed. Reloading their current display order."
 msgstr "Les mesures analytiques ont changé. Rechargement de leur ordre d’affichage actuel."
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:267
+#: zotonic_mod_analytics/src/mod_analytics.erl:295
 msgid "This analytics measurement exceeds the storage budget."
 msgstr "Cette mesure analytique dépasse le budget alloué au stockage."
 
@@ -7217,11 +7229,11 @@ msgstr "événements"
 msgid "group/time slots"
 msgstr "groupes/créneaux horaires"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:32
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:35
 msgid "requests."
 msgstr "demandes."
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:25
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:28
 msgid "seconds."
 msgstr "secondes."
 
@@ -9681,11 +9693,11 @@ msgstr "Le nouvel emplacement peut être un chemin d'accès local ou une URL com
 msgid "You are not allowed to change this."
 msgstr "Vous n’êtes pas autorisé à modifier cela."
 
-#: zotonic_mod_development/src/mod_development.erl:701
+#: zotonic_mod_development/src/mod_development.erl:718
 msgid "<i>Function name does not exist.</i>"
 msgstr "<i>Le nom de la fonction n'existe pas.</i>"
 
-#: zotonic_mod_development/src/mod_development.erl:704
+#: zotonic_mod_development/src/mod_development.erl:721
 msgid "<i>Module not found.</i>"
 msgstr "<i>Module introuvable.</i>"
 
@@ -9699,6 +9711,7 @@ msgid "A graph of all templates, and by whom they are included, is generated and
 msgstr "Un graphe de tous les modèles et des modèles qui les incluent est généré et mis à jour automatiquement."
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:9
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:67
 msgid "Action"
 msgstr "Action"
 
@@ -9756,8 +9769,8 @@ msgstr "Calculez et affichez un graphe de dépendances de tous les modèles."
 msgid "Check debug points in the template source to see debug data here."
 msgstr "Vérifiez les points de débogage dans la source du modèle pour voir les données de débogage ici."
 
-#: zotonic_mod_development/src/mod_development.erl:509
-#: zotonic_mod_development/src/mod_development.erl:524
+#: zotonic_mod_development/src/mod_development.erl:526
+#: zotonic_mod_development/src/mod_development.erl:541
 msgid "Checking all templates..."
 msgstr "Vérification de tous les modèles..."
 
@@ -9829,7 +9842,7 @@ msgstr "Impossible de charger ou d'enregistrer les paramètres de l'éditeur."
 msgid "Could not load templates"
 msgstr "Impossible de charger les modèles"
 
-#: zotonic_mod_development/src/mod_development.erl:500
+#: zotonic_mod_development/src/mod_development.erl:517
 msgid "Could not open the directory on this computer."
 msgstr "Impossible d'ouvrir le répertoire sur cet ordinateur."
 
@@ -9893,7 +9906,7 @@ msgid "Detecting editors…"
 msgstr "Détection des éditeurs…"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:7
-#: zotonic_mod_development/src/mod_development.erl:1386
+#: zotonic_mod_development/src/mod_development.erl:1403
 msgid "Development"
 msgstr "Développement"
 
@@ -10013,11 +10026,11 @@ msgstr "Suivi des requêtes de base de données activé"
 msgid "Enter the module and function you want to trace. If no function is given, all functions in the module will be traced. Enter how many calls to trace before stopping."
 msgstr "Saisissez le module et la fonction que vous souhaitez retracer. Si aucune fonction n'est indiquée, toutes les fonctions du module seront tracées. Saisissez le nombre d'appels à tracer avant d'arrêter."
 
-#: zotonic_mod_development/src/mod_development.erl:673
+#: zotonic_mod_development/src/mod_development.erl:690
 msgid "Error changing the console logs."
 msgstr "Erreur lors de la modification des journaux de la console."
 
-#: zotonic_mod_development/src/mod_development.erl:767
+#: zotonic_mod_development/src/mod_development.erl:784
 msgid "Error parsing template."
 msgstr "Erreur d'analyse du modèle."
 
@@ -10075,7 +10088,7 @@ msgstr "Traçage des appels de fonction"
 msgid "Function call tracing has been disabled. Use the following to enable function call tracing:"
 msgstr "Le traçage des appels de fonction a été désactivé. Pour activer le suivi des appels de fonction, procédez comme suit :"
 
-#: zotonic_mod_development/src/mod_development.erl:707
+#: zotonic_mod_development/src/mod_development.erl:724
 msgid "Function tracing has been disabled in the Zotonic config."
 msgstr "Le traçage des fonctions a été désactivé dans la configuration de Zotonic."
 
@@ -10220,18 +10233,18 @@ msgstr "Aucune règle de routage correspondante n'a été trouvée"
 msgid "No matching templates found."
 msgstr "Aucun modèle correspondant n'a été trouvé."
 
-#: zotonic_mod_development/src/mod_development.erl:671
+#: zotonic_mod_development/src/mod_development.erl:688
 msgid "No permission to access the console logs."
 msgstr "Aucune autorisation pour accéder aux journaux de la console."
 
-#: zotonic_mod_development/src/mod_development.erl:514
-#: zotonic_mod_development/src/mod_development.erl:529
-#: zotonic_mod_development/src/mod_development.erl:544
-#: zotonic_mod_development/src/mod_development.erl:552
-#: zotonic_mod_development/src/mod_development.erl:579
-#: zotonic_mod_development/src/mod_development.erl:621
+#: zotonic_mod_development/src/mod_development.erl:531
+#: zotonic_mod_development/src/mod_development.erl:546
+#: zotonic_mod_development/src/mod_development.erl:561
+#: zotonic_mod_development/src/mod_development.erl:569
+#: zotonic_mod_development/src/mod_development.erl:596
 #: zotonic_mod_development/src/mod_development.erl:638
 #: zotonic_mod_development/src/mod_development.erl:655
+#: zotonic_mod_development/src/mod_development.erl:672
 msgid "No permission to use mod_development."
 msgstr "Aucune autorisation d'utiliser mod_development."
 
@@ -10240,7 +10253,7 @@ msgstr "Aucune autorisation d'utiliser mod_development."
 msgid "No references found."
 msgstr "Aucune référence trouvée."
 
-#: zotonic_mod_development/src/mod_development.erl:633
+#: zotonic_mod_development/src/mod_development.erl:650
 msgid "No template found in the context."
 msgstr "Aucun modèle n'a été trouvé dans le contexte."
 
@@ -10265,7 +10278,7 @@ msgstr "Non trouvé"
 msgid "Observers"
 msgstr "Observateurs"
 
-#: zotonic_mod_development/src/mod_development.erl:710
+#: zotonic_mod_development/src/mod_development.erl:727
 msgid "Only the admin user can set traces."
 msgstr "Seul l'utilisateur administrateur peut définir des traces."
 
@@ -10403,19 +10416,19 @@ msgstr "Démarrer le traçage"
 msgid "Start matching dispatch rules"
 msgstr "Commencer à faire correspondre les règles de routage"
 
-#: zotonic_mod_development/src/mod_development.erl:667
+#: zotonic_mod_development/src/mod_development.erl:684
 msgid "Started logging to the console of your browser tab."
 msgstr "L'écriture des journaux dans la console de votre onglet de navigateur a commencé."
 
-#: zotonic_mod_development/src/mod_development.erl:541
+#: zotonic_mod_development/src/mod_development.erl:558
 msgid "Started tracing all template inclusions."
 msgstr "Le traçage de toutes les inclusions de modèles a commencé."
 
-#: zotonic_mod_development/src/mod_development.erl:616
+#: zotonic_mod_development/src/mod_development.erl:633
 msgid "Started tracing template inclusions by rendering the page."
 msgstr "Le traçage des inclusions de modèles a commencé avec le rendu de la page."
 
-#: zotonic_mod_development/src/mod_development.erl:538
+#: zotonic_mod_development/src/mod_development.erl:555
 msgid "Started tracing template inclusions for your session."
 msgstr "Début du suivi des inclusions de modèles pour votre session."
 
@@ -10429,11 +10442,11 @@ msgstr "Arrêter"
 msgid "Stop capture"
 msgstr "Arrêter la capture"
 
-#: zotonic_mod_development/src/mod_development.erl:669
+#: zotonic_mod_development/src/mod_development.erl:686
 msgid "Stopped logging to the console of all browser tabs."
 msgstr "L'écriture des journaux dans la console a été arrêtée pour tous les onglets du navigateur."
 
-#: zotonic_mod_development/src/mod_development.erl:550
+#: zotonic_mod_development/src/mod_development.erl:567
 msgid "Stopped tracing template inclusions for all sessions."
 msgstr "Le traçage des inclusions de modèles a été arrêté pour toutes les sessions."
 
@@ -10472,7 +10485,7 @@ msgstr "Modèle"
 msgid "Template debugging"
 msgstr "Débogage de modèle"
 
-#: zotonic_mod_development/src/mod_development.erl:770
+#: zotonic_mod_development/src/mod_development.erl:787
 msgid "Template file not found."
 msgstr "Fichier de modèle introuvable."
 
@@ -10492,7 +10505,7 @@ msgstr "Chemin du modèle"
 msgid "Test with this template"
 msgstr "Tester avec ce modèle"
 
-#: zotonic_mod_development/src/mod_development.erl:618
+#: zotonic_mod_development/src/mod_development.erl:635
 msgid "The path must be a local URL."
 msgstr "Le chemin d'accès doit être une URL locale."
 
@@ -10586,7 +10599,7 @@ msgstr "Modèle d'URI"
 msgid "Uncheck to debug only your current session."
 msgstr "Décochez cette case pour déboguer uniquement la session en cours."
 
-#: zotonic_mod_development/src/mod_development.erl:652
+#: zotonic_mod_development/src/mod_development.erl:669
 msgid "Updated template debug points."
 msgstr "Mise à jour des points de débogage des modèles."
 
@@ -10895,6 +10908,7 @@ msgstr "Fusionner des cellules"
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:43
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:51
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_fields.tpl:37
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:23
 msgid "Note"
 msgstr "Note"
 
@@ -15390,6 +15404,7 @@ msgid "Create connections with content on {local}."
 msgstr "Créez des connexions avec du contenu sur {local}."
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:106
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:2
 msgid "Day"
 msgstr "Jour"
 
@@ -15487,6 +15502,8 @@ msgid "For every combination of a user and a label there can only be a single ac
 msgstr "Pour chaque combinaison d'un utilisateur et d'un libellé, il ne peut y avoir qu'un seul jeton d'accès. Les jetons d'accès existants portant ce libellé seront remplacés."
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:110
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:5
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
 msgid "Forever"
 msgstr "Pour toujours"
 
@@ -15757,6 +15774,7 @@ msgid "Valid redirect URLs, one per line"
 msgstr "URL de redirection valides, une par ligne"
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:107
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:3
 msgid "Week"
 msgstr "Semaine"
 
@@ -18297,6 +18315,171 @@ msgstr "texte"
 #: zotonic_mod_survey/priv/templates/_survey_result_test_score.tpl:21
 msgid "{points} of {max} points"
 msgstr "{points} points sur {max}"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:23
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:53
+msgid "Add IP entries"
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:18
+msgid "Add to allow list"
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:13
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:31
+msgid "Allow"
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:12
+msgid "Allow entries take precedence. Blocks follow observe/enforce/off mode and only affect guarded routes."
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:90
+msgid "Block IP"
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:87
+msgid "Block duration"
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:70
+msgid "Block for"
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:13
+msgid "Current mode:"
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:54
+msgid "Current node only, including would-throttle decisions in observe mode. Up to 200 entries. Blocking generates a note from the displayed reason and rejection count."
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:53
+msgid "Currently throttled IP addresses"
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:40
+msgid "Delete IP entry"
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:37
+msgid "Delete IP entry?"
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_delete_confirm.tpl:1
+msgid "Delete this IP entry?"
+msgstr ""
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:71
+msgid "Each list can contain at most 256 entries."
+msgstr ""
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:57
+msgid "Edit IP entry"
+msgstr ""
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:72
+msgid "Enter valid IP addresses, a note and a future expiry date or duration. No changes were saved."
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:27
+msgid "Expiry dates are UTC. Expired entries stop applying immediately and are removed automatically. Global entries are managed in zotonic.config."
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:1
+msgid "Hour"
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:65
+msgid "IP address"
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:18
+msgid "IP addresses"
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:26
+msgid "IP entries"
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:11
+msgid "List"
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:4
+msgid "Month (30 days)"
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:50
+msgid "No IP entries."
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:98
+msgid "No currently throttled IP addresses."
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:40
+msgid "Or until (UTC)"
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:66
+msgid "Reason"
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:68
+msgid "Rejections"
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:69
+msgid "Retry in seconds"
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:46
+msgid "Save IP entries"
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:9
+msgid "Separate IPv4 or IPv6 addresses with spaces, commas or newlines. Re-adding an address to the same list updates its note and expiry."
+msgstr ""
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:70
+msgid "This IP is no longer throttled. Refresh the page."
+msgstr ""
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:58
+msgid "This entry is no longer available. Refresh the page."
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:3
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:10
+#: zotonic_mod_traffic_guard/src/mod_traffic_guard.erl:124
+msgid "Traffic guard"
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:59
+msgid "Traffic guard is temporarily unavailable."
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
+msgid "Until (UTC):"
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:29
+msgid "Until (UTC; empty means forever)"
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:34
+msgid "Valid for"
+msgstr ""
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:69
+msgid "You are not allowed to change these entries."
+msgstr ""
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:16
+msgid "Your current IP address:"
+msgstr ""
 
 #: zotonic_mod_translation/priv/templates/_translation_edit_text.tpl:9
 msgid "(empty)"
