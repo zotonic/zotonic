@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-12 13:51\n"
+"PO-Revision-Date: 2026-11-12 14:02\n"
 "Last-Translator: \n"
 "Language-Team: Romanian\n"
 "MIME-Version: 1.0\n"
@@ -18350,7 +18350,7 @@ msgstr "Adăugare intrări IP"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:18
 msgid "Add to allow list"
-msgstr "Adaugă la lista de permisiuni"
+msgstr "Adăugați în lista de adrese permise"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:13
@@ -18360,7 +18360,7 @@ msgstr "Permiteți"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:12
 msgid "Allow entries take precedence. Blocks follow observe/enforce/off mode and only affect guarded routes."
-msgstr "Permisiunile au prioritate. Blocările respectă modul „observe/enforce/off” și afectează doar rutele protejate."
+msgstr "Intrările din lista de adrese permise au prioritate. Blocările respectă modul observe/enforce/off și afectează doar rutele protejate."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:90
 msgid "Block IP"
@@ -18368,11 +18368,11 @@ msgstr "Blocare IP"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:87
 msgid "Block duration"
-msgstr "Durata blocului"
+msgstr "Durata blocării"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:70
 msgid "Block for"
-msgstr "Bloc pentru"
+msgstr "Blocare pentru"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:13
 msgid "Current mode:"
@@ -18380,7 +18380,7 @@ msgstr "Modul curent:"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:54
 msgid "Current node only, including would-throttle decisions in observe mode. Up to 200 entries. Blocking generates a note from the displayed reason and rejection count."
-msgstr "Numai nodul curent, inclusiv deciziile de limitare a vitezei în modul de observare. Până la 200 de intrări. Blocarea generează o notă pe baza motivului afișat și a numărului de respingeri."
+msgstr "Doar nodul curent, inclusiv cererile care ar fi limitate în modul observe. Până la 200 de intrări. Blocarea generează o notă pe baza motivului afișat și a numărului de cereri respinse."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:53
 msgid "Currently throttled IP addresses"
@@ -18388,15 +18388,15 @@ msgstr "Adrese IP cu viteză limitată în prezent"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:40
 msgid "Delete IP entry"
-msgstr "Șterge înregistrarea IP"
+msgstr "Ștergeți intrarea IP"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:37
 msgid "Delete IP entry?"
-msgstr "Să șterg înregistrarea IP-ului?"
+msgstr "Ștergeți intrarea IP?"
 
 #: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_delete_confirm.tpl:1
 msgid "Delete this IP entry?"
-msgstr "Să ștergem această intrare IP?"
+msgstr "Ștergeți această intrare IP?"
 
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:71
 msgid "Each list can contain at most 256 entries."
@@ -18404,7 +18404,7 @@ msgstr "Fiecare listă poate conține cel mult 256 de intrări."
 
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:57
 msgid "Edit IP entry"
-msgstr "Editează înregistrarea IP"
+msgstr "Editați intrarea IP"
 
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:72
 msgid "Enter valid IP addresses, a note and a future expiry date or duration. No changes were saved."
@@ -18436,7 +18436,7 @@ msgstr "Listă"
 
 #: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:4
 msgid "Month (30 days)"
-msgstr "Luna (30 de zile)"
+msgstr "Lună (30 de zile)"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:50
 msgid "No IP entries."
@@ -18460,7 +18460,7 @@ msgstr "Respingeri"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:69
 msgid "Retry in seconds"
-msgstr "Reîncearcă în câteva secunde"
+msgstr "Reîncercare peste (secunde)"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:46
 msgid "Save IP entries"
@@ -18482,11 +18482,11 @@ msgstr "Această intrare nu mai este disponibilă. Reîmprospătați pagina."
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:10
 #: zotonic_mod_traffic_guard/src/mod_traffic_guard.erl:124
 msgid "Traffic guard"
-msgstr "Agent de circulație"
+msgstr "Protecția traficului"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:59
 msgid "Traffic guard is temporarily unavailable."
-msgstr "Serviciul de dirijare a traficului este temporar indisponibil."
+msgstr "Protecția traficului este temporar indisponibilă."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
 msgid "Until (UTC):"
@@ -18506,7 +18506,7 @@ msgstr "Nu aveți voie să modificați aceste înregistrări."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:16
 msgid "Your current IP address:"
-msgstr "Adresa ta IP actuală:"
+msgstr "Adresa IP actuală:"
 
 #: zotonic_mod_translation/priv/templates/_translation_edit_text.tpl:9
 msgid "(empty)"
