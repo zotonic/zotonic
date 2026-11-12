@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-11 11:44\n"
+"PO-Revision-Date: 2026-11-12 14:03\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "MIME-Version: 1.0\n"
@@ -402,6 +402,7 @@ msgstr "모든 ACL 규칙을 현재 게시된 버전으로 복원하시겠습니
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:173
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:185
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:45
 #: zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:116
 #: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:43
@@ -517,7 +518,7 @@ msgstr "자료 작성자를 소유자로 간주하십시오."
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4
 #: zotonic_mod_admin/src/mod_admin.erl:516
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:70
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 msgid "Content"
 msgstr "콘텐츠"
@@ -589,6 +590,7 @@ msgstr "협업 그룹으로 이동할 수 없습니다."
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125
 #: zotonic_mod_survey/src/mod_survey.erl:427
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:36
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:12
 msgid "Delete"
@@ -613,6 +615,9 @@ msgid "Deleting..."
 msgstr "삭제 중..."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:33
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:14
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:31
 msgid "Deny"
 msgstr "거부"
 
@@ -878,6 +883,7 @@ msgstr "되돌려진 규칙"
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:75
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
 #: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:95
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:46
 #: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:44
 msgid "Save"
 msgstr "저장"
@@ -1959,6 +1965,7 @@ msgstr "이메일 주소"
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:131
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:117
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:119
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:35
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:44
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:14
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:16
@@ -3156,6 +3163,7 @@ msgstr "다음 페이지를 참조하는 페이지:"
 #: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:51
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:56
 msgid "Refresh"
 msgstr "새로 고침"
 
@@ -6660,7 +6668,7 @@ msgstr "분석 기능이 재개될 때까지 활동 카운터는 사용할 수 �
 msgid "Add analytics measurement"
 msgstr "분석 측정 항목 추가"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:41
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:44
 msgid "All breakdown values"
 msgstr "모든 세부 항목 값"
 
@@ -6676,13 +6684,13 @@ msgstr "허용되는 값 (쉼표로 구분)"
 msgid "Allowed values:"
 msgstr "허용되는 값:"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:268
+#: zotonic_mod_analytics/src/mod_analytics.erl:296
 msgid "An equivalent analytics measurement already exists."
 msgstr "이에 상응하는 분석 지표는 이미 존재합니다."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
-#: zotonic_mod_analytics/src/mod_analytics.erl:197
+#: zotonic_mod_analytics/src/mod_analytics.erl:225
 msgid "Analytics configuration"
 msgstr "분석 설정"
 
@@ -6715,7 +6723,7 @@ msgstr "분석 지표"
 msgid "Analytics status"
 msgstr "분석 현황"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:32
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:35
 msgid "Bars show the lower bound. Counts are ranges, ordered by their lower bound. Overlapping ranges may change order. Content outside the retained candidates has at most"
 msgstr "막대는 하한을 나타냅니다. 개수는 범위이며, 하한 순으로 정렬되어 있습니다. 범위가 겹치는 경우 순서가 바뀔 수 있습니다. 유지된 후보 집합 외부의 내용은 최대"
 
@@ -6728,7 +6736,7 @@ msgstr "제한된 역사"
 msgid "Break down by"
 msgstr "분류 기준:"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:42
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:45
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "Breakdown"
 msgstr "내역"
@@ -6753,11 +6761,11 @@ msgstr "비공개 요청 — 페이지, API 및 기타 디스패치 유형"
 msgid "Configure analytics measurements"
 msgstr "분석 측정 항목 구성"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:236
+#: zotonic_mod_analytics/src/mod_analytics.erl:264
 msgid "Could not delete the analytics measurement."
 msgstr "분석 측정 항목을 삭제할 수 없습니다."
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:269
+#: zotonic_mod_analytics/src/mod_analytics.erl:297
 msgid "Could not save. Check the event, breakdown and filter values."
 msgstr "저장할 수 없습니다. 이벤트, 세부 내역 및 필터 값을 확인해 주세요."
 
@@ -6811,7 +6819,7 @@ msgstr "기기 — 휴대폰, 태블릿, 데스크톱 또는 알 수 없음"
 msgid "Display order"
 msgstr "표시 순서"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:242
+#: zotonic_mod_analytics/src/mod_analytics.erl:270
 msgid "Display order saved."
 msgstr "정렬 순서가 저장되었습니다."
 
@@ -6856,7 +6864,7 @@ msgstr "이벤트 버퍼"
 msgid "Event processing"
 msgstr "이벤트 처리"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:42
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:45
 msgid "Events"
 msgstr "이벤트"
 
@@ -6877,14 +6885,18 @@ msgid "Fixed filters"
 msgstr "고정형 필터"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:25
-msgid "Gaps are unrecorded intervals. Partial intervals may undercount activity. Page-request totals, device breakdowns and popular content exclude detected crawlers. API and traffic-classification measurements include crawlers unless filtered out. Counts exclude editor activity and do not measure unique visitors."
-msgstr "‘공백’은 기록되지 않은 구간을 의미합니다. 부분 구간은 활동량을 과소 산정할 수 있습니다. 페이지 요청 총계, 기기별 분석 및 인기 콘텐츠 통계에서는 탐지된 크롤러가 제외됩니다. API 및 트래픽 분류 측정값에는 필터링되지 않은 한 크롤러가 포함됩니다. 집계 수치에는 편집자 활동이 제외되며, 순 방문자 수는 측정되지 않습니다."
+msgid "Gaps are unrecorded intervals. Partial intervals may undercount activity. Page-request totals, device breakdowns and popular content exclude detected crawlers and agents unless explicitly selected. API and traffic-classification measurements include them unless filtered out. Counts exclude editor activity and do not measure unique visitors."
+msgstr "‘공백’은 기록되지 않은 구간을 의미합니다. 부분 구간은 활동량을 과소 집계할 수 있습니다. 페이지 요청 총계, 기기별 분석 및 인기 콘텐츠는 명시적으로 선택하지 않는 한 탐지된 크롤러와 에이전트를 제외합니다. API 및 트래픽 분류 측정값은 필터링되지 않는 한 이를 포함합니다. 집계 수치는 편집자 활동을 제외하며, 고유 방문자 수는 측정하지 않습니다."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:13
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:15
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "Group limit"
 msgstr "그룹 인원 제한"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
+msgid "Guard lines count page attempts from other and unknown traffic. Throttled requests are not page views; do not add these lines to the total."
+msgstr "가드 라인은 외부 및 출처를 알 수 없는 트래픽에서 발생한 페이지 접속 시도를 집계합니다. 속도 제한이 적용된 요청은 페이지 조회수로 간주되지 않으므로, 이러한 항목을 총계에 포함하지 마십시오."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:8
 msgid "HTTP method — GET, POST, HEAD and others"
@@ -6902,7 +6914,7 @@ msgstr "HTTP 상태 코드 — 예: 200, 404 또는 500"
 msgid "History detail and retention"
 msgstr "이력 상세 정보 및 보존"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:47
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:50
 msgid "Includes incomplete or unrecorded intervals"
 msgstr "불완전하거나 기록되지 않은 간격이 포함됩니다"
 
@@ -6930,7 +6942,7 @@ msgstr "지난 6시간"
 msgid "Maximum number of analytics measurements"
 msgstr "분석 측정 항목의 최대 개수"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
 msgid "Most popular content in this period"
 msgstr "이 기간 동안 가장 인기 있는 콘텐츠"
 
@@ -6980,11 +6992,11 @@ msgstr "분류 없음 (합계)"
 msgid "No filter — include all values"
 msgstr "필터 적용하지 않음 — 모든 값 포함"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:33
 msgid "No leading content identified in this period."
 msgstr "이 기간 동안 주요 콘텐츠가 확인되지 않았습니다."
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:38
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:41
 msgid "No recorded events yet."
 msgstr "아직 기록된 이벤트가 없습니다."
 
@@ -7036,11 +7048,11 @@ msgstr "일시 정지"
 msgid "Period"
 msgstr "기간"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
 msgid "Rank"
 msgstr "순위"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:25
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:28
 msgid "Ranked by recorded requests in the selected moving period. The window advances in steps of"
 msgstr "선택한 이동 기간 동안 기록된 요청 수를 기준으로 순위를 매깁니다. 이 기간은 다음 단계별로 진행됩니다."
 
@@ -7056,7 +7068,7 @@ msgstr "요청 유형 — 페이지, API 또는 사용자 정의 디스패치 �
 msgid "Request types found in this site's dispatch rules:"
 msgstr "이 사이트의 디스패치 규칙에서 발견되는 요청 유형:"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
 msgid "Requests"
 msgstr "요청 사항"
 
@@ -7086,7 +7098,7 @@ msgstr "간략한 설명"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
-#: zotonic_mod_analytics/src/mod_analytics.erl:189
+#: zotonic_mod_analytics/src/mod_analytics.erl:217
 msgid "Site Analytics"
 msgstr "사이트 분석"
 
@@ -7138,11 +7150,11 @@ msgstr "저장된 시간 구간 / 용량"
 msgid "Stored time intervals"
 msgstr "저장된 시간 구간"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:244
+#: zotonic_mod_analytics/src/mod_analytics.erl:272
 msgid "The analytics measurements changed. Reloading their current display order."
 msgstr "분석 측정 항목이 변경되었습니다. 현재 표시 순서를 다시 불러옵니다."
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:267
+#: zotonic_mod_analytics/src/mod_analytics.erl:295
 msgid "This analytics measurement exceeds the storage budget."
 msgstr "이 분석 측정값이 스토리지 예산을 초과합니다."
 
@@ -7195,11 +7207,11 @@ msgstr "이벤트"
 msgid "group/time slots"
 msgstr "그룹/시간대"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:32
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:35
 msgid "requests."
 msgstr "요청."
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:25
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:28
 msgid "seconds."
 msgstr "초."
 
@@ -9660,11 +9672,11 @@ msgstr "새 위치는 로컬 경로 또는 전체 URL일 수 있습니다. 이 �
 msgid "You are not allowed to change this."
 msgstr "이것은 변경할 수 없습니다."
 
-#: zotonic_mod_development/src/mod_development.erl:701
+#: zotonic_mod_development/src/mod_development.erl:718
 msgid "<i>Function name does not exist.</i>"
 msgstr "<i>함수 이름이 존재하지 않습니다.</i>"
 
-#: zotonic_mod_development/src/mod_development.erl:704
+#: zotonic_mod_development/src/mod_development.erl:721
 msgid "<i>Module not found.</i>"
 msgstr "<i>모듈을 찾을 수 없습니다.</i>"
 
@@ -9678,6 +9690,7 @@ msgid "A graph of all templates, and by whom they are included, is generated and
 msgstr "모든 템플릿과 각 템플릿을 포함하는 템플릿의 그래프가 생성되고 자동으로 업데이트됩니다."
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:9
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:67
 msgid "Action"
 msgstr "작업"
 
@@ -9735,8 +9748,8 @@ msgstr "모든 템플릿의 종속성 그래프를 계산하고 시각화합니�
 msgid "Check debug points in the template source to see debug data here."
 msgstr "여기에서 디버그 데이터를 보려면 템플릿 소스의 디버그 지점을 선택하십시오."
 
-#: zotonic_mod_development/src/mod_development.erl:509
-#: zotonic_mod_development/src/mod_development.erl:524
+#: zotonic_mod_development/src/mod_development.erl:526
+#: zotonic_mod_development/src/mod_development.erl:541
 msgid "Checking all templates..."
 msgstr "모든 템플릿을 확인하는 중..."
 
@@ -9808,7 +9821,7 @@ msgstr "편집기 설정을 불러오거나 저장할 수 없습니다."
 msgid "Could not load templates"
 msgstr "템플릿을 불러올 수 없습니다."
 
-#: zotonic_mod_development/src/mod_development.erl:500
+#: zotonic_mod_development/src/mod_development.erl:517
 msgid "Could not open the directory on this computer."
 msgstr "이 컴퓨터에서 해당 디렉터리를 열 수 없습니다."
 
@@ -9872,7 +9885,7 @@ msgid "Detecting editors…"
 msgstr "편집기 감지…"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:7
-#: zotonic_mod_development/src/mod_development.erl:1386
+#: zotonic_mod_development/src/mod_development.erl:1403
 msgid "Development"
 msgstr "개발"
 
@@ -9992,11 +10005,11 @@ msgstr "데이터베이스 쿼리 추적을 활성화했습니다."
 msgid "Enter the module and function you want to trace. If no function is given, all functions in the module will be traced. Enter how many calls to trace before stopping."
 msgstr "추적할 모듈과 함수를 입력하십시오. 함수를 지정하지 않으면 모듈의 모든 함수를 추적합니다. 중지하기 전에 추적할 호출 횟수를 입력하십시오."
 
-#: zotonic_mod_development/src/mod_development.erl:673
+#: zotonic_mod_development/src/mod_development.erl:690
 msgid "Error changing the console logs."
 msgstr "콘솔 로그를 변경하는 중 오류가 발생했습니다."
 
-#: zotonic_mod_development/src/mod_development.erl:767
+#: zotonic_mod_development/src/mod_development.erl:784
 msgid "Error parsing template."
 msgstr "템플릿 구문 분석 오류입니다."
 
@@ -10054,7 +10067,7 @@ msgstr "함수 호출 추적"
 msgid "Function call tracing has been disabled. Use the following to enable function call tracing:"
 msgstr "함수 호출 추적 기능이 비활성화되었습니다. 함수 호출 추적을 활성화하려면 다음을 사용하십시오."
 
-#: zotonic_mod_development/src/mod_development.erl:707
+#: zotonic_mod_development/src/mod_development.erl:724
 msgid "Function tracing has been disabled in the Zotonic config."
 msgstr "Zotonic 설정에서 함수 추적 기능이 비활성화되었습니다."
 
@@ -10199,18 +10212,18 @@ msgstr "일치하는 디스패치 규칙을 찾을 수 없습니다."
 msgid "No matching templates found."
 msgstr "일치하는 템플릿을 찾을 수 없습니다."
 
-#: zotonic_mod_development/src/mod_development.erl:671
+#: zotonic_mod_development/src/mod_development.erl:688
 msgid "No permission to access the console logs."
 msgstr "콘솔 로그에 접근할 권한이 없습니다."
 
-#: zotonic_mod_development/src/mod_development.erl:514
-#: zotonic_mod_development/src/mod_development.erl:529
-#: zotonic_mod_development/src/mod_development.erl:544
-#: zotonic_mod_development/src/mod_development.erl:552
-#: zotonic_mod_development/src/mod_development.erl:579
-#: zotonic_mod_development/src/mod_development.erl:621
+#: zotonic_mod_development/src/mod_development.erl:531
+#: zotonic_mod_development/src/mod_development.erl:546
+#: zotonic_mod_development/src/mod_development.erl:561
+#: zotonic_mod_development/src/mod_development.erl:569
+#: zotonic_mod_development/src/mod_development.erl:596
 #: zotonic_mod_development/src/mod_development.erl:638
 #: zotonic_mod_development/src/mod_development.erl:655
+#: zotonic_mod_development/src/mod_development.erl:672
 msgid "No permission to use mod_development."
 msgstr "mod_development를 사용할 권한이 없습니다."
 
@@ -10219,7 +10232,7 @@ msgstr "mod_development를 사용할 권한이 없습니다."
 msgid "No references found."
 msgstr "참고 자료를 찾을 수 없습니다."
 
-#: zotonic_mod_development/src/mod_development.erl:633
+#: zotonic_mod_development/src/mod_development.erl:650
 msgid "No template found in the context."
 msgstr "해당 문맥에서 템플릿을 찾을 수 없습니다."
 
@@ -10244,7 +10257,7 @@ msgstr "찾을 수 없음"
 msgid "Observers"
 msgstr "옵저버"
 
-#: zotonic_mod_development/src/mod_development.erl:710
+#: zotonic_mod_development/src/mod_development.erl:727
 msgid "Only the admin user can set traces."
 msgstr "관리자 사용자만 추적을 설정할 수 있습니다."
 
@@ -10382,19 +10395,19 @@ msgstr "추적 시작"
 msgid "Start matching dispatch rules"
 msgstr "디스패치 규칙 매칭 시작"
 
-#: zotonic_mod_development/src/mod_development.erl:667
+#: zotonic_mod_development/src/mod_development.erl:684
 msgid "Started logging to the console of your browser tab."
 msgstr "브라우저 탭의 콘솔에 로그를 기록하기 시작했습니다."
 
-#: zotonic_mod_development/src/mod_development.erl:541
+#: zotonic_mod_development/src/mod_development.erl:558
 msgid "Started tracing all template inclusions."
 msgstr "템플릿에 포함된 모든 항목을 추적하기 시작했습니다."
 
-#: zotonic_mod_development/src/mod_development.erl:616
+#: zotonic_mod_development/src/mod_development.erl:633
 msgid "Started tracing template inclusions by rendering the page."
 msgstr "페이지를 렌더링하여 템플릿 포함 여부 추적을 시작했습니다."
 
-#: zotonic_mod_development/src/mod_development.erl:538
+#: zotonic_mod_development/src/mod_development.erl:555
 msgid "Started tracing template inclusions for your session."
 msgstr "세션에 포함될 템플릿 항목을 추적하기 시작했습니다."
 
@@ -10408,11 +10421,11 @@ msgstr "중지"
 msgid "Stop capture"
 msgstr "캡처 중지"
 
-#: zotonic_mod_development/src/mod_development.erl:669
+#: zotonic_mod_development/src/mod_development.erl:686
 msgid "Stopped logging to the console of all browser tabs."
 msgstr "모든 브라우저 탭의 콘솔 로그 기록을 중지했습니다."
 
-#: zotonic_mod_development/src/mod_development.erl:550
+#: zotonic_mod_development/src/mod_development.erl:567
 msgid "Stopped tracing template inclusions for all sessions."
 msgstr "모든 세션에 대한 템플릿 포함 추적을 중지했습니다."
 
@@ -10451,7 +10464,7 @@ msgstr "템플릿"
 msgid "Template debugging"
 msgstr "템플릿 디버깅"
 
-#: zotonic_mod_development/src/mod_development.erl:770
+#: zotonic_mod_development/src/mod_development.erl:787
 msgid "Template file not found."
 msgstr "템플릿 파일을 찾을 수 없습니다."
 
@@ -10471,7 +10484,7 @@ msgstr "템플릿 경로"
 msgid "Test with this template"
 msgstr "이 템플릿으로 테스트"
 
-#: zotonic_mod_development/src/mod_development.erl:618
+#: zotonic_mod_development/src/mod_development.erl:635
 msgid "The path must be a local URL."
 msgstr "경로는 로컬 URL이어야 합니다."
 
@@ -10565,7 +10578,7 @@ msgstr "URI 패턴"
 msgid "Uncheck to debug only your current session."
 msgstr "현재 세션만 디버깅하려면 선택을 해제하십시오."
 
-#: zotonic_mod_development/src/mod_development.erl:652
+#: zotonic_mod_development/src/mod_development.erl:669
 msgid "Updated template debug points."
 msgstr "템플릿 디버그 포인트가 업데이트되었습니다."
 
@@ -10874,6 +10887,7 @@ msgstr "셀 병합"
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:43
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:51
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_fields.tpl:37
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:23
 msgid "Note"
 msgstr "메모"
 
@@ -15361,6 +15375,7 @@ msgid "Create connections with content on {local}."
 msgstr "{local}의 콘텐츠와 연결을 만듭니다."
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:106
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:2
 msgid "Day"
 msgstr "일"
 
@@ -15458,6 +15473,8 @@ msgid "For every combination of a user and a label there can only be a single ac
 msgstr "사용자와 레이블의 조합마다 하나의 액세스 토큰만 존재할 수 있습니다. 해당 레이블이 지정된 기존 액세스 토큰은 모두 교체됩니다."
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:110
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:5
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
 msgid "Forever"
 msgstr "영원히"
 
@@ -15728,6 +15745,7 @@ msgid "Valid redirect URLs, one per line"
 msgstr "유효한 리디렉션 URL, 한 줄에 하나씩"
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:107
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:3
 msgid "Week"
 msgstr "주"
 
@@ -18268,6 +18286,171 @@ msgstr "텍스트"
 #: zotonic_mod_survey/priv/templates/_survey_result_test_score.tpl:21
 msgid "{points} of {max} points"
 msgstr "{max}점 중 {points}점"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:23
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:53
+msgid "Add IP entries"
+msgstr "IP 항목 추가"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:18
+msgid "Add to allow list"
+msgstr "허용 목록에 추가"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:13
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:31
+msgid "Allow"
+msgstr "허용"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:12
+msgid "Allow entries take precedence. Blocks follow observe/enforce/off mode and only affect guarded routes."
+msgstr "허용 목록의 항목이 우선 적용됩니다. 차단은 observe/enforce/off 모드를 따르며 보호 대상 경로에만 적용됩니다."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:90
+msgid "Block IP"
+msgstr "IP 차단"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:87
+msgid "Block duration"
+msgstr "차단 기간"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:70
+msgid "Block for"
+msgstr "차단 기간"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:13
+msgid "Current mode:"
+msgstr "현재 모드:"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:54
+msgid "Current node only, including would-throttle decisions in observe mode. Up to 200 entries. Blocking generates a note from the displayed reason and rejection count."
+msgstr "현재 노드만 표시하며 observe 모드에서 제한 대상이 되는 요청도 포함합니다. 최대 200개 항목을 표시합니다. 차단 시 표시된 사유와 거부된 요청 수를 바탕으로 메모가 생성됩니다."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:53
+msgid "Currently throttled IP addresses"
+msgstr "현재 요청 수 제한이 적용된 IP 주소"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:40
+msgid "Delete IP entry"
+msgstr "IP 항목 삭제"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:37
+msgid "Delete IP entry?"
+msgstr "IP 항목을 삭제하시겠습니까?"
+
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_delete_confirm.tpl:1
+msgid "Delete this IP entry?"
+msgstr "이 IP 항목을 삭제하시겠습니까?"
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:71
+msgid "Each list can contain at most 256 entries."
+msgstr "각 목록에는 최대 256개의 항목이 포함될 수 있습니다."
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:57
+msgid "Edit IP entry"
+msgstr "IP 항목 편집"
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:72
+msgid "Enter valid IP addresses, a note and a future expiry date or duration. No changes were saved."
+msgstr "유효한 IP 주소, 메모, 향후 만료일 또는 기간을 입력하세요. 변경 사항이 저장되지 않았습니다."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:27
+msgid "Expiry dates are UTC. Expired entries stop applying immediately and are removed automatically. Global entries are managed in zotonic.config."
+msgstr "만료일은 UTC 기준입니다. 만료된 항목은 즉시 적용이 중지되며 자동으로 삭제됩니다. 전역 항목은 zotonic.config에서 관리됩니다."
+
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:1
+msgid "Hour"
+msgstr "시간"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:65
+msgid "IP address"
+msgstr "IP 주소"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:18
+msgid "IP addresses"
+msgstr "IP 주소"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:26
+msgid "IP entries"
+msgstr "IP 항목"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:11
+msgid "List"
+msgstr "목록"
+
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:4
+msgid "Month (30 days)"
+msgstr "월 (30일)"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:50
+msgid "No IP entries."
+msgstr "IP 항목이 없습니다."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:98
+msgid "No currently throttled IP addresses."
+msgstr "현재 제한 중인 IP 주소는 없습니다."
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:40
+msgid "Or until (UTC)"
+msgstr "또는 (UTC)까지"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:66
+msgid "Reason"
+msgstr "이유"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:68
+msgid "Rejections"
+msgstr "거부 횟수"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:69
+msgid "Retry in seconds"
+msgstr "재시도까지 남은 시간(초)"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:46
+msgid "Save IP entries"
+msgstr "IP 항목 저장"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:9
+msgid "Separate IPv4 or IPv6 addresses with spaces, commas or newlines. Re-adding an address to the same list updates its note and expiry."
+msgstr "IPv4 또는 IPv6 주소는 공백, 쉼표 또는 줄바꿈으로 구분하십시오. 동일한 목록에 주소를 다시 추가하면 해당 주소의 메모와 만료일이 업데이트됩니다."
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:70
+msgid "This IP is no longer throttled. Refresh the page."
+msgstr "이 IP 주소에 대한 요청 수 제한이 해제되었습니다. 페이지를 새로 고침하세요."
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:58
+msgid "This entry is no longer available. Refresh the page."
+msgstr "이 항목은 더 이상 사용할 수 없습니다. 페이지를 새로 고침하십시오."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:3
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:10
+#: zotonic_mod_traffic_guard/src/mod_traffic_guard.erl:124
+msgid "Traffic guard"
+msgstr "트래픽 보호"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:59
+msgid "Traffic guard is temporarily unavailable."
+msgstr "트래픽 보호를 일시적으로 사용할 수 없습니다."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
+msgid "Until (UTC):"
+msgstr "만료 시각(UTC):"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:29
+msgid "Until (UTC; empty means forever)"
+msgstr "만료 시각(UTC, 비워 두면 무기한)"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:34
+msgid "Valid for"
+msgstr "유효 기간:"
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:69
+msgid "You are not allowed to change these entries."
+msgstr "이 항목들은 수정할 수 없습니다."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:16
+msgid "Your current IP address:"
+msgstr "현재 IP 주소:"
 
 #: zotonic_mod_translation/priv/templates/_translation_edit_text.tpl:9
 msgid "(empty)"

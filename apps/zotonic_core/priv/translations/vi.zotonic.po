@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-11 11:44\n"
+"PO-Revision-Date: 2026-11-12 14:03\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
 "MIME-Version: 1.0\n"
@@ -402,6 +402,7 @@ msgstr "Bạn có chắc muốn khôi phục tất cả quy tắc ACL về phiê
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:173
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:185
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:45
 #: zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:116
 #: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:43
@@ -517,7 +518,7 @@ msgstr "Coi tác giả tài nguyên là chủ sở hữu."
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4
 #: zotonic_mod_admin/src/mod_admin.erl:516
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:70
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 msgid "Content"
 msgstr "Nội dung"
@@ -589,6 +590,7 @@ msgstr "Không thể chuyển vào nhóm cộng tác."
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125
 #: zotonic_mod_survey/src/mod_survey.erl:427
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:36
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:12
 msgid "Delete"
@@ -613,6 +615,9 @@ msgid "Deleting..."
 msgstr "Đang xóa..."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:33
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:14
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:31
 msgid "Deny"
 msgstr "Từ chối"
 
@@ -878,6 +883,7 @@ msgstr "Đã hoàn nguyên quy tắc"
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:75
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
 #: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:95
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:46
 #: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:44
 msgid "Save"
 msgstr "Lưu"
@@ -1959,6 +1965,7 @@ msgstr "Địa chỉ email"
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:131
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:117
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:119
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:35
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:44
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:14
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:16
@@ -3156,6 +3163,7 @@ msgstr "Các trang tham chiếu đến"
 #: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:51
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:56
 msgid "Refresh"
 msgstr "Làm mới"
 
@@ -6658,7 +6666,7 @@ msgstr "Các bộ đếm hoạt động sẽ không khả dụng cho đến khi 
 msgid "Add analytics measurement"
 msgstr "Thêm chỉ số phân tích"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:41
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:44
 msgid "All breakdown values"
 msgstr "Tất cả các giá trị phân tích"
 
@@ -6674,13 +6682,13 @@ msgstr "Các giá trị được phép (ngăn cách bằng dấu phẩy)"
 msgid "Allowed values:"
 msgstr "Các giá trị được phép:"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:268
+#: zotonic_mod_analytics/src/mod_analytics.erl:296
 msgid "An equivalent analytics measurement already exists."
 msgstr "Hiện đã có một chỉ số phân tích tương đương."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
-#: zotonic_mod_analytics/src/mod_analytics.erl:197
+#: zotonic_mod_analytics/src/mod_analytics.erl:225
 msgid "Analytics configuration"
 msgstr "Cấu hình phân tích"
 
@@ -6713,7 +6721,7 @@ msgstr "Các chỉ số phân tích"
 msgid "Analytics status"
 msgstr "Tình trạng phân tích"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:32
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:35
 msgid "Bars show the lower bound. Counts are ranges, ordered by their lower bound. Overlapping ranges may change order. Content outside the retained candidates has at most"
 msgstr "Các thanh biểu diễn giới hạn dưới. Số lượng là các khoảng, được sắp xếp theo giới hạn dưới của chúng. Các khoảng chồng chéo có thể làm thay đổi thứ tự. Nội dung nằm ngoài các ứng viên được giữ lại có tối đa"
 
@@ -6726,7 +6734,7 @@ msgstr "Lịch sử có giới hạn"
 msgid "Break down by"
 msgstr "Phân tích theo"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:42
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:45
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "Breakdown"
 msgstr "Phân tích chi tiết"
@@ -6751,11 +6759,11 @@ msgstr "Yêu cầu được phân loại — trang, API và các loại yêu c�
 msgid "Configure analytics measurements"
 msgstr "Cấu hình các chỉ số phân tích"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:236
+#: zotonic_mod_analytics/src/mod_analytics.erl:264
 msgid "Could not delete the analytics measurement."
 msgstr "Không thể xóa chỉ số phân tích."
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:269
+#: zotonic_mod_analytics/src/mod_analytics.erl:297
 msgid "Could not save. Check the event, breakdown and filter values."
 msgstr "Không thể lưu. Vui lòng kiểm tra các giá trị của sự kiện, phân tích chi tiết và bộ lọc."
 
@@ -6809,7 +6817,7 @@ msgstr "Thiết bị — điện thoại, máy tính bảng, máy tính để b�
 msgid "Display order"
 msgstr "Thứ tự hiển thị"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:242
+#: zotonic_mod_analytics/src/mod_analytics.erl:270
 msgid "Display order saved."
 msgstr "Thứ tự hiển thị đã được lưu."
 
@@ -6854,7 +6862,7 @@ msgstr "Bộ đệm sự kiện"
 msgid "Event processing"
 msgstr "Xử lý sự kiện"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:42
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:45
 msgid "Events"
 msgstr "Sự kiện"
 
@@ -6875,14 +6883,18 @@ msgid "Fixed filters"
 msgstr "Bộ lọc cố định"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:25
-msgid "Gaps are unrecorded intervals. Partial intervals may undercount activity. Page-request totals, device breakdowns and popular content exclude detected crawlers. API and traffic-classification measurements include crawlers unless filtered out. Counts exclude editor activity and do not measure unique visitors."
-msgstr "Khoảng trống là những khoảng thời gian chưa được ghi nhận. Các khoảng thời gian không đầy đủ có thể dẫn đến việc thống kê hoạt động không đầy đủ. Tổng số yêu cầu trang, phân tích theo thiết bị và nội dung phổ biến không bao gồm các trình thu thập dữ liệu được phát hiện. Các số liệu từ API và phân loại lưu lượng truy cập bao gồm các trình thu thập dữ liệu trừ khi chúng được lọc ra. Số liệu thống kê không bao gồm hoạt động của biên tập viên và không đo lường số lượng khách truy cập duy nhất."
+msgid "Gaps are unrecorded intervals. Partial intervals may undercount activity. Page-request totals, device breakdowns and popular content exclude detected crawlers and agents unless explicitly selected. API and traffic-classification measurements include them unless filtered out. Counts exclude editor activity and do not measure unique visitors."
+msgstr "Khoảng trống là những khoảng thời gian không được ghi nhận. Các khoảng thời gian không đầy đủ có thể dẫn đến việc thống kê hoạt động không đầy đủ. Tổng số yêu cầu trang, phân tích theo thiết bị và nội dung phổ biến sẽ loại trừ các trình thu thập dữ liệu và tác nhân được phát hiện, trừ khi được chọn rõ ràng. Các số liệu đo lường từ API và phân loại lưu lượng truy cập sẽ bao gồm chúng, trừ khi bị lọc ra. Số liệu thống kê không bao gồm hoạt động của biên tập viên và không đo lường số lượng khách truy cập duy nhất."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:13
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:15
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "Group limit"
 msgstr "Giới hạn nhóm"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
+msgid "Guard lines count page attempts from other and unknown traffic. Throttled requests are not page views; do not add these lines to the total."
+msgstr "Các dòng Guard tính số lần truy cập trang từ lưu lượng truy cập khác và lưu lượng truy cập không xác định. Các yêu cầu bị giới hạn không được tính là lượt xem trang; không tính các dòng này vào tổng số."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:8
 msgid "HTTP method — GET, POST, HEAD and others"
@@ -6900,7 +6912,7 @@ msgstr "Mã trạng thái HTTP — ví dụ: 200, 404 hoặc 500"
 msgid "History detail and retention"
 msgstr "Chi tiết và thời gian lưu trữ lịch sử"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:47
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:50
 msgid "Includes incomplete or unrecorded intervals"
 msgstr "Bao gồm các quãng chưa hoàn chỉnh hoặc chưa được ghi lại"
 
@@ -6928,7 +6940,7 @@ msgstr "Sáu giờ qua"
 msgid "Maximum number of analytics measurements"
 msgstr "Số lượng phép đo phân tích tối đa"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
 msgid "Most popular content in this period"
 msgstr "Nội dung được yêu thích nhất trong giai đoạn này"
 
@@ -6978,11 +6990,11 @@ msgstr "Không có sự cố (tổng cộng)"
 msgid "No filter — include all values"
 msgstr "Không lọc — bao gồm tất cả các giá trị"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:33
 msgid "No leading content identified in this period."
 msgstr "Không phát hiện nội dung nổi bật nào trong giai đoạn này."
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:38
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:41
 msgid "No recorded events yet."
 msgstr "Chưa có sự kiện nào được ghi lại."
 
@@ -7034,11 +7046,11 @@ msgstr "Tạm dừng"
 msgid "Period"
 msgstr "Kỳ"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
 msgid "Rank"
 msgstr "Xếp hạng"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:25
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:28
 msgid "Ranked by recorded requests in the selected moving period. The window advances in steps of"
 msgstr "Xếp hạng theo số lượng yêu cầu được ghi nhận trong khoảng thời gian di chuyển đã chọn. Khoảng thời gian này được điều chỉnh theo từng bước"
 
@@ -7054,7 +7066,7 @@ msgstr "Loại yêu cầu — trang, API hoặc loại xử lý tùy chỉnh"
 msgid "Request types found in this site's dispatch rules:"
 msgstr "Các loại yêu cầu có trong quy tắc phân phối của trang web này:"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
 msgid "Requests"
 msgstr "Yêu cầu"
 
@@ -7084,7 +7096,7 @@ msgstr "Mô tả ngắn gọn"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
-#: zotonic_mod_analytics/src/mod_analytics.erl:189
+#: zotonic_mod_analytics/src/mod_analytics.erl:217
 msgid "Site Analytics"
 msgstr "Phân tích trang web"
 
@@ -7136,11 +7148,11 @@ msgstr "Khoảng thời gian lưu trữ / dung lượng"
 msgid "Stored time intervals"
 msgstr "Các khoảng thời gian đã lưu trữ"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:244
+#: zotonic_mod_analytics/src/mod_analytics.erl:272
 msgid "The analytics measurements changed. Reloading their current display order."
 msgstr "Các chỉ số phân tích đã thay đổi. Đang tải lại thứ tự hiển thị hiện tại."
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:267
+#: zotonic_mod_analytics/src/mod_analytics.erl:295
 msgid "This analytics measurement exceeds the storage budget."
 msgstr "Chỉ số phân tích này đã vượt quá ngân sách lưu trữ."
 
@@ -7193,11 +7205,11 @@ msgstr "sự kiện"
 msgid "group/time slots"
 msgstr "nhóm/khung giờ"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:32
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:35
 msgid "requests."
 msgstr "yêu cầu."
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:25
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:28
 msgid "seconds."
 msgstr "giây."
 
@@ -9655,11 +9667,11 @@ msgstr "Vị trí mới có thể là đường dẫn cục bộ hoặc URL đ�
 msgid "You are not allowed to change this."
 msgstr "Bạn không được phép thay đổi mục này."
 
-#: zotonic_mod_development/src/mod_development.erl:701
+#: zotonic_mod_development/src/mod_development.erl:718
 msgid "<i>Function name does not exist.</i>"
 msgstr "<i>Tên hàm không tồn tại.</i>"
 
-#: zotonic_mod_development/src/mod_development.erl:704
+#: zotonic_mod_development/src/mod_development.erl:721
 msgid "<i>Module not found.</i>"
 msgstr "<i>Không tìm thấy mô-đun.</i>"
 
@@ -9673,6 +9685,7 @@ msgid "A graph of all templates, and by whom they are included, is generated and
 msgstr "Đồ thị của tất cả mẫu và các mẫu nhúng chúng được tạo và cập nhật tự động."
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:9
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:67
 msgid "Action"
 msgstr "Thao tác"
 
@@ -9730,8 +9743,8 @@ msgstr "Tính toán và hiển thị đồ thị phụ thuộc của tất cả 
 msgid "Check debug points in the template source to see debug data here."
 msgstr "Đánh dấu các điểm gỡ lỗi trong mã nguồn mẫu để xem dữ liệu gỡ lỗi tại đây."
 
-#: zotonic_mod_development/src/mod_development.erl:509
-#: zotonic_mod_development/src/mod_development.erl:524
+#: zotonic_mod_development/src/mod_development.erl:526
+#: zotonic_mod_development/src/mod_development.erl:541
 msgid "Checking all templates..."
 msgstr "Đang kiểm tra tất cả mẫu..."
 
@@ -9803,7 +9816,7 @@ msgstr "Không thể tải hoặc lưu cài đặt trình soạn thảo."
 msgid "Could not load templates"
 msgstr "Không thể tải mẫu"
 
-#: zotonic_mod_development/src/mod_development.erl:500
+#: zotonic_mod_development/src/mod_development.erl:517
 msgid "Could not open the directory on this computer."
 msgstr "Không thể mở thư mục trên máy tính này."
 
@@ -9867,7 +9880,7 @@ msgid "Detecting editors…"
 msgstr "Đang phát hiện trình soạn thảo…"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:7
-#: zotonic_mod_development/src/mod_development.erl:1386
+#: zotonic_mod_development/src/mod_development.erl:1403
 msgid "Development"
 msgstr "Phát triển"
 
@@ -9987,11 +10000,11 @@ msgstr "Đã bật theo dõi truy vấn cơ sở dữ liệu"
 msgid "Enter the module and function you want to trace. If no function is given, all functions in the module will be traced. Enter how many calls to trace before stopping."
 msgstr "Nhập mô-đun và hàm muốn theo dõi. Nếu không nhập hàm, tất cả hàm trong mô-đun sẽ được theo dõi. Nhập số lời gọi cần theo dõi trước khi dừng."
 
-#: zotonic_mod_development/src/mod_development.erl:673
+#: zotonic_mod_development/src/mod_development.erl:690
 msgid "Error changing the console logs."
 msgstr "Lỗi khi thay đổi nhật ký bảng điều khiển."
 
-#: zotonic_mod_development/src/mod_development.erl:767
+#: zotonic_mod_development/src/mod_development.erl:784
 msgid "Error parsing template."
 msgstr "Lỗi phân tích mẫu."
 
@@ -10049,7 +10062,7 @@ msgstr "Theo dõi lời gọi hàm"
 msgid "Function call tracing has been disabled. Use the following to enable function call tracing:"
 msgstr "Theo dõi lời gọi hàm đã bị vô hiệu hóa. Dùng cấu hình sau để bật:"
 
-#: zotonic_mod_development/src/mod_development.erl:707
+#: zotonic_mod_development/src/mod_development.erl:724
 msgid "Function tracing has been disabled in the Zotonic config."
 msgstr "Theo dõi hàm đã bị vô hiệu hóa trong cấu hình Zotonic."
 
@@ -10194,18 +10207,18 @@ msgstr "Không tìm thấy quy tắc định tuyến phù hợp"
 msgid "No matching templates found."
 msgstr "Không tìm thấy mẫu phù hợp."
 
-#: zotonic_mod_development/src/mod_development.erl:671
+#: zotonic_mod_development/src/mod_development.erl:688
 msgid "No permission to access the console logs."
 msgstr "Không có quyền truy cập nhật ký bảng điều khiển."
 
-#: zotonic_mod_development/src/mod_development.erl:514
-#: zotonic_mod_development/src/mod_development.erl:529
-#: zotonic_mod_development/src/mod_development.erl:544
-#: zotonic_mod_development/src/mod_development.erl:552
-#: zotonic_mod_development/src/mod_development.erl:579
-#: zotonic_mod_development/src/mod_development.erl:621
+#: zotonic_mod_development/src/mod_development.erl:531
+#: zotonic_mod_development/src/mod_development.erl:546
+#: zotonic_mod_development/src/mod_development.erl:561
+#: zotonic_mod_development/src/mod_development.erl:569
+#: zotonic_mod_development/src/mod_development.erl:596
 #: zotonic_mod_development/src/mod_development.erl:638
 #: zotonic_mod_development/src/mod_development.erl:655
+#: zotonic_mod_development/src/mod_development.erl:672
 msgid "No permission to use mod_development."
 msgstr "Không có quyền dùng mod_development."
 
@@ -10214,7 +10227,7 @@ msgstr "Không có quyền dùng mod_development."
 msgid "No references found."
 msgstr "Không tìm thấy tham chiếu."
 
-#: zotonic_mod_development/src/mod_development.erl:633
+#: zotonic_mod_development/src/mod_development.erl:650
 msgid "No template found in the context."
 msgstr "Không tìm thấy mẫu trong ngữ cảnh."
 
@@ -10239,7 +10252,7 @@ msgstr "Không tìm thấy"
 msgid "Observers"
 msgstr "Bộ quan sát"
 
-#: zotonic_mod_development/src/mod_development.erl:710
+#: zotonic_mod_development/src/mod_development.erl:727
 msgid "Only the admin user can set traces."
 msgstr "Chỉ người dùng quản trị mới có thể thiết lập theo dõi."
 
@@ -10377,19 +10390,19 @@ msgstr "Bắt đầu theo dõi"
 msgid "Start matching dispatch rules"
 msgstr "Bắt đầu đối chiếu quy tắc định tuyến"
 
-#: zotonic_mod_development/src/mod_development.erl:667
+#: zotonic_mod_development/src/mod_development.erl:684
 msgid "Started logging to the console of your browser tab."
 msgstr "Đã bắt đầu ghi nhật ký vào bảng điều khiển của tab trình duyệt."
 
-#: zotonic_mod_development/src/mod_development.erl:541
+#: zotonic_mod_development/src/mod_development.erl:558
 msgid "Started tracing all template inclusions."
 msgstr "Đã bắt đầu theo dõi tất cả thao tác nhúng mẫu."
 
-#: zotonic_mod_development/src/mod_development.erl:616
+#: zotonic_mod_development/src/mod_development.erl:633
 msgid "Started tracing template inclusions by rendering the page."
 msgstr "Đã bắt đầu theo dõi thao tác nhúng mẫu bằng cách kết xuất trang."
 
-#: zotonic_mod_development/src/mod_development.erl:538
+#: zotonic_mod_development/src/mod_development.erl:555
 msgid "Started tracing template inclusions for your session."
 msgstr "Đã bắt đầu theo dõi thao tác nhúng mẫu trong phiên của bạn."
 
@@ -10403,11 +10416,11 @@ msgstr "Dừng"
 msgid "Stop capture"
 msgstr "Dừng ghi dữ liệu"
 
-#: zotonic_mod_development/src/mod_development.erl:669
+#: zotonic_mod_development/src/mod_development.erl:686
 msgid "Stopped logging to the console of all browser tabs."
 msgstr "Đã dừng ghi nhật ký vào bảng điều khiển của tất cả tab trình duyệt."
 
-#: zotonic_mod_development/src/mod_development.erl:550
+#: zotonic_mod_development/src/mod_development.erl:567
 msgid "Stopped tracing template inclusions for all sessions."
 msgstr "Đã dừng theo dõi thao tác nhúng mẫu trong tất cả phiên."
 
@@ -10446,7 +10459,7 @@ msgstr "Mẫu"
 msgid "Template debugging"
 msgstr "Gỡ lỗi mẫu"
 
-#: zotonic_mod_development/src/mod_development.erl:770
+#: zotonic_mod_development/src/mod_development.erl:787
 msgid "Template file not found."
 msgstr "Không tìm thấy tệp mẫu."
 
@@ -10466,7 +10479,7 @@ msgstr "Đường dẫn mẫu"
 msgid "Test with this template"
 msgstr "Thử với mẫu này"
 
-#: zotonic_mod_development/src/mod_development.erl:618
+#: zotonic_mod_development/src/mod_development.erl:635
 msgid "The path must be a local URL."
 msgstr "Đường dẫn phải là URL cục bộ."
 
@@ -10560,7 +10573,7 @@ msgstr "Mẫu URI"
 msgid "Uncheck to debug only your current session."
 msgstr "Bỏ đánh dấu để chỉ gỡ lỗi phiên hiện tại."
 
-#: zotonic_mod_development/src/mod_development.erl:652
+#: zotonic_mod_development/src/mod_development.erl:669
 msgid "Updated template debug points."
 msgstr "Đã cập nhật các điểm gỡ lỗi mẫu."
 
@@ -10869,6 +10882,7 @@ msgstr "Gộp ô"
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:43
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:51
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_fields.tpl:37
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:23
 msgid "Note"
 msgstr "Ghi chú"
 
@@ -15355,6 +15369,7 @@ msgid "Create connections with content on {local}."
 msgstr "Tạo kết nối với nội dung trên {local}."
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:106
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:2
 msgid "Day"
 msgstr "Ngày"
 
@@ -15452,6 +15467,8 @@ msgid "For every combination of a user and a label there can only be a single ac
 msgstr "Mỗi cặp người dùng và nhãn chỉ có thể có một mã thông báo truy cập. Mã thông báo hiện có mang nhãn này sẽ bị thay thế."
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:110
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:5
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
 msgid "Forever"
 msgstr "Vĩnh viễn"
 
@@ -15722,6 +15739,7 @@ msgid "Valid redirect URLs, one per line"
 msgstr "URL chuyển hướng hợp lệ, mỗi URL một dòng"
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:107
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:3
 msgid "Week"
 msgstr "Tuần"
 
@@ -18262,6 +18280,171 @@ msgstr "văn bản"
 #: zotonic_mod_survey/priv/templates/_survey_result_test_score.tpl:21
 msgid "{points} of {max} points"
 msgstr "{points} trên {max} điểm"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:23
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:53
+msgid "Add IP entries"
+msgstr "Thêm các mục IP"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:18
+msgid "Add to allow list"
+msgstr "Thêm vào danh sách cho phép"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:13
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:31
+msgid "Allow"
+msgstr "Cho phép"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:12
+msgid "Allow entries take precedence. Blocks follow observe/enforce/off mode and only affect guarded routes."
+msgstr "Các mục trong danh sách cho phép được ưu tiên. Việc chặn tuân theo chế độ observe/enforce/off và chỉ áp dụng cho các tuyến được bảo vệ."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:90
+msgid "Block IP"
+msgstr "Chặn địa chỉ IP"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:87
+msgid "Block duration"
+msgstr "Thời gian chặn"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:70
+msgid "Block for"
+msgstr "Chặn trong"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:13
+msgid "Current mode:"
+msgstr "Chế độ hiện tại:"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:54
+msgid "Current node only, including would-throttle decisions in observe mode. Up to 200 entries. Blocking generates a note from the displayed reason and rejection count."
+msgstr "Chỉ nút hiện tại, bao gồm các yêu cầu sẽ bị giới hạn nếu áp dụng quyết định trong chế độ observe. Tối đa 200 mục. Khi chặn, hệ thống tạo ghi chú từ lý do hiển thị và số yêu cầu bị từ chối."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:53
+msgid "Currently throttled IP addresses"
+msgstr "Các địa chỉ IP hiện bị giới hạn số lượng yêu cầu"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:40
+msgid "Delete IP entry"
+msgstr "Xóa mục IP"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:37
+msgid "Delete IP entry?"
+msgstr "Xóa mục IP?"
+
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_delete_confirm.tpl:1
+msgid "Delete this IP entry?"
+msgstr "Xóa mục IP này?"
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:71
+msgid "Each list can contain at most 256 entries."
+msgstr "Mỗi danh sách có thể chứa tối đa 256 mục."
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:57
+msgid "Edit IP entry"
+msgstr "Chỉnh sửa mục IP"
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:72
+msgid "Enter valid IP addresses, a note and a future expiry date or duration. No changes were saved."
+msgstr "Vui lòng nhập các địa chỉ IP hợp lệ, ghi chú và ngày hết hạn hoặc thời hạn trong tương lai. Không có thay đổi nào được lưu lại."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:27
+msgid "Expiry dates are UTC. Expired entries stop applying immediately and are removed automatically. Global entries are managed in zotonic.config."
+msgstr "Ngày hết hạn được tính theo múi giờ UTC. Các mục đã hết hạn sẽ ngừng có hiệu lực ngay lập tức và được xóa tự động. Các mục toàn cục được quản lý trong tệp zotonic.config."
+
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:1
+msgid "Hour"
+msgstr "Giờ"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:65
+msgid "IP address"
+msgstr "Địa chỉ IP"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:18
+msgid "IP addresses"
+msgstr "Địa chỉ IP"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:26
+msgid "IP entries"
+msgstr "Các mục IP"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:11
+msgid "List"
+msgstr "Danh sách"
+
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:4
+msgid "Month (30 days)"
+msgstr "Tháng (30 ngày)"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:50
+msgid "No IP entries."
+msgstr "Không có mục IP nào."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:98
+msgid "No currently throttled IP addresses."
+msgstr "Hiện không có địa chỉ IP nào bị giới hạn số lượng yêu cầu."
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:40
+msgid "Or until (UTC)"
+msgstr "Hoặc cho đến khi (UTC)"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:66
+msgid "Reason"
+msgstr "Lý do"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:68
+msgid "Rejections"
+msgstr "Các trường hợp bị từ chối"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:69
+msgid "Retry in seconds"
+msgstr "Thời gian chờ thử lại (giây)"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:46
+msgid "Save IP entries"
+msgstr "Lưu các mục IP"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:9
+msgid "Separate IPv4 or IPv6 addresses with spaces, commas or newlines. Re-adding an address to the same list updates its note and expiry."
+msgstr "Dùng dấu cách, dấu phẩy hoặc dòng mới để phân tách các địa chỉ IPv4 hoặc IPv6. Khi thêm lại một địa chỉ vào cùng danh sách này, ghi chú và thời hạn hiệu lực của địa chỉ đó sẽ được cập nhật."
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:70
+msgid "This IP is no longer throttled. Refresh the page."
+msgstr "Địa chỉ IP này không còn bị giới hạn số lượng yêu cầu. Vui lòng làm mới trang."
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:58
+msgid "This entry is no longer available. Refresh the page."
+msgstr "Mục này hiện không còn khả dụng. Vui lòng làm mới trang."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:3
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:10
+#: zotonic_mod_traffic_guard/src/mod_traffic_guard.erl:124
+msgid "Traffic guard"
+msgstr "Bảo vệ lưu lượng"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:59
+msgid "Traffic guard is temporarily unavailable."
+msgstr "Tính năng bảo vệ lưu lượng tạm thời không khả dụng."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
+msgid "Until (UTC):"
+msgstr "Cho đến (UTC):"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:29
+msgid "Until (UTC; empty means forever)"
+msgstr "Cho đến khi (UTC; nếu để trống thì có nghĩa là mãi mãi)"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:34
+msgid "Valid for"
+msgstr "Có hiệu lực trong"
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:69
+msgid "You are not allowed to change these entries."
+msgstr "Bạn không được phép thay đổi các mục này."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:16
+msgid "Your current IP address:"
+msgstr "Địa chỉ IP hiện tại của bạn:"
 
 #: zotonic_mod_translation/priv/templates/_translation_edit_text.tpl:9
 msgid "(empty)"

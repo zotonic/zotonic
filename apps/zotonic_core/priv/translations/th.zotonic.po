@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-11 11:43\n"
+"PO-Revision-Date: 2026-11-12 14:02\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -402,6 +402,7 @@ msgstr "คุณแน่ใจหรือไม่ว่าต้องกา
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:173
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:185
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:45
 #: zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:116
 #: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:43
@@ -517,7 +518,7 @@ msgstr "ถือว่าผู้เขียนทรัพยากรเป
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4
 #: zotonic_mod_admin/src/mod_admin.erl:516
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:70
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 msgid "Content"
 msgstr "เนื้อหา"
@@ -589,6 +590,7 @@ msgstr "ไม่สามารถย้ายไปที่กลุ่มก
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125
 #: zotonic_mod_survey/src/mod_survey.erl:427
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:36
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:12
 msgid "Delete"
@@ -613,6 +615,9 @@ msgid "Deleting..."
 msgstr "กำลังลบ ..."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:33
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:14
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:31
 msgid "Deny"
 msgstr "ปฏิเสธ"
 
@@ -878,6 +883,7 @@ msgstr "กฎที่เปลี่ยนกลับ"
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:75
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
 #: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:95
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:46
 #: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:44
 msgid "Save"
 msgstr "บันทึก"
@@ -1959,6 +1965,7 @@ msgstr "ที่อยู่อีเมล"
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:131
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:117
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:119
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:35
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:44
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:14
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:16
@@ -3156,6 +3163,7 @@ msgstr "ผู้อ้างอิงถึง"
 #: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:51
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:56
 msgid "Refresh"
 msgstr "รีเฟรช"
 
@@ -6660,7 +6668,7 @@ msgstr "ตัวนับกิจกรรมจะไม่สามารถ
 msgid "Add analytics measurement"
 msgstr "เพิ่มการวัดผลวิเคราะห์"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:41
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:44
 msgid "All breakdown values"
 msgstr "ค่าทั้งหมดที่แยกย่อย"
 
@@ -6676,13 +6684,13 @@ msgstr "ค่าที่อนุญาต (แยกด้วยเครื�
 msgid "Allowed values:"
 msgstr "ค่าที่อนุญาต:"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:268
+#: zotonic_mod_analytics/src/mod_analytics.erl:296
 msgid "An equivalent analytics measurement already exists."
 msgstr "มีตัวชี้วัดการวิเคราะห์ที่เทียบเท่ากันอยู่แล้ว"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
-#: zotonic_mod_analytics/src/mod_analytics.erl:197
+#: zotonic_mod_analytics/src/mod_analytics.erl:225
 msgid "Analytics configuration"
 msgstr "การตั้งค่าการวิเคราะห์"
 
@@ -6715,7 +6723,7 @@ msgstr "การวัดผลวิเคราะห์"
 msgid "Analytics status"
 msgstr "สถานะการวิเคราะห์"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:32
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:35
 msgid "Bars show the lower bound. Counts are ranges, ordered by their lower bound. Overlapping ranges may change order. Content outside the retained candidates has at most"
 msgstr "แถบแสดงค่าขอบล่าง จำนวนเป็นช่วงค่า ซึ่งจัดเรียงตามค่าขอบล่าง ช่วงค่าที่ทับซ้อนกันอาจทำให้ลำดับเปลี่ยนแปลงได้ เนื้อหาที่อยู่นอกกลุ่มผู้สมัครที่ได้รับการคัดเลือกมีจำนวนสูงสุด"
 
@@ -6728,7 +6736,7 @@ msgstr "ประวัติศาสตร์ที่มีขอบเขต
 msgid "Break down by"
 msgstr "แบ่งตาม"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:42
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:45
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "Breakdown"
 msgstr "รายละเอียด"
@@ -6753,11 +6761,11 @@ msgstr "คำขอที่จัดประเภท — หน้าเว�
 msgid "Configure analytics measurements"
 msgstr "ตั้งค่าการวัดผลวิเคราะห์"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:236
+#: zotonic_mod_analytics/src/mod_analytics.erl:264
 msgid "Could not delete the analytics measurement."
 msgstr "ไม่สามารถลบข้อมูลการวัดผลวิเคราะห์ได้"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:269
+#: zotonic_mod_analytics/src/mod_analytics.erl:297
 msgid "Could not save. Check the event, breakdown and filter values."
 msgstr "ไม่สามารถบันทึกได้ โปรดตรวจสอบค่าของเหตุการณ์ รายละเอียด และตัวกรอง"
 
@@ -6811,7 +6819,7 @@ msgstr "อุปกรณ์ — โทรศัพท์มือถือ, �
 msgid "Display order"
 msgstr "ลำดับการแสดง"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:242
+#: zotonic_mod_analytics/src/mod_analytics.erl:270
 msgid "Display order saved."
 msgstr "ลำดับการแสดงผลได้บันทึกแล้ว"
 
@@ -6856,7 +6864,7 @@ msgstr "บัฟเฟอร์เหตุการณ์"
 msgid "Event processing"
 msgstr "การประมวลผลเหตุการณ์"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:42
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:45
 msgid "Events"
 msgstr "เหตุการณ์"
 
@@ -6877,14 +6885,18 @@ msgid "Fixed filters"
 msgstr "ตัวกรองแบบคงที่"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:25
-msgid "Gaps are unrecorded intervals. Partial intervals may undercount activity. Page-request totals, device breakdowns and popular content exclude detected crawlers. API and traffic-classification measurements include crawlers unless filtered out. Counts exclude editor activity and do not measure unique visitors."
-msgstr "ช่องว่างคือช่วงเวลาที่ไม่ได้บันทึกไว้ ช่วงเวลารวมบางส่วนอาจทำให้การนับกิจกรรมไม่ครบถ้วน จำนวนคำขอหน้าเว็บ การแบ่งประเภทตามอุปกรณ์ และเนื้อหาที่ได้รับความนิยม ไม่รวมโปรแกรมรวบรวมข้อมูล (crawlers) ที่ถูกตรวจพบ การวัดผล API และการจัดประเภทการจราจรทางอินเทอร์เน็ต รวมถึงโปรแกรมรวบรวมข้อมูล (crawlers) เว้นแต่จะถูกกรองออก การนับไม่รวมกิจกรรมของผู้บรรณาธิการ และไม่วัดจำนวนผู้เยี่ยมชมที่ไม่ซ้ำกัน"
+msgid "Gaps are unrecorded intervals. Partial intervals may undercount activity. Page-request totals, device breakdowns and popular content exclude detected crawlers and agents unless explicitly selected. API and traffic-classification measurements include them unless filtered out. Counts exclude editor activity and do not measure unique visitors."
+msgstr "ช่องว่างคือช่วงที่ไม่ได้บันทึก ช่วงบางส่วนอาจทำให้การนับกิจกรรมไม่ครบถ้วน จำนวนคำขอหน้าเว็บ การแบ่งประเภทตามอุปกรณ์ และเนื้อหาที่ได้รับความนิยม จะไม่รวมตัวรวบรวมข้อมูลและเอเจนต์ที่ตรวจพบ เว้นแต่จะเลือกไว้อย่างชัดเจน การวัดผล API และการจัดประเภทการจราจรจะรวมตัวรวบรวมข้อมูลและเอเจนต์ดังกล่าว เว้นแต่จะถูกกรองออก การนับจำนวนไม่รวมกิจกรรมของผู้แก้ไข และไม่วัดจำนวนผู้เยี่ยมชมที่ไม่ซ้ำกัน"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:13
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:15
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "Group limit"
 msgstr "ขีดจำกัดของกลุ่ม"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
+msgid "Guard lines count page attempts from other and unknown traffic. Throttled requests are not page views; do not add these lines to the total."
+msgstr "บรรทัดของ Guard นับจำนวนการพยายามเข้าถึงหน้าจากทราฟฟิกอื่นและทราฟฟิกที่ไม่รู้จัก คำขอที่ถูกจำกัดความเร็วไม่ถือเป็นจำนวนการดูหน้า ดังนั้นอย่าเพิ่มบรรทัดเหล่านี้เข้าไปในยอดรวม"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:8
 msgid "HTTP method — GET, POST, HEAD and others"
@@ -6902,7 +6914,7 @@ msgstr "รหัสสถานะ HTTP — เช่น 200, 404 หรือ 
 msgid "History detail and retention"
 msgstr "รายละเอียดและระยะเวลาการเก็บรักษาข้อมูล"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:47
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:50
 msgid "Includes incomplete or unrecorded intervals"
 msgstr "รวมถึงช่วงที่ยังไม่สมบูรณ์หรือยังไม่ได้บันทึก"
 
@@ -6930,7 +6942,7 @@ msgstr "หกชั่วโมงที่ผ่านมา"
 msgid "Maximum number of analytics measurements"
 msgstr "จำนวนการวัดวิเคราะห์สูงสุด"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
 msgid "Most popular content in this period"
 msgstr "เนื้อหาที่ได้รับความนิยมมากที่สุดในช่วงนี้"
 
@@ -6980,11 +6992,11 @@ msgstr "ไม่มีข้อมูลรายละเอียด (รว�
 msgid "No filter — include all values"
 msgstr "ไม่ใช้ตัวกรอง — รวมทุกค่า"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:33
 msgid "No leading content identified in this period."
 msgstr "ไม่พบเนื้อหาหลักในช่วงนี้"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:38
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:41
 msgid "No recorded events yet."
 msgstr "ยังไม่มีเหตุการณ์ที่บันทึกไว้"
 
@@ -7036,11 +7048,11 @@ msgstr "หยุดชั่วคราว"
 msgid "Period"
 msgstr "ช่วงเวลา"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
 msgid "Rank"
 msgstr "อันดับ"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:25
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:28
 msgid "Ranked by recorded requests in the selected moving period. The window advances in steps of"
 msgstr "จัดอันดับตามจำนวนคำขอที่บันทึกไว้ในช่วงเวลาที่เลือก หน้าต่างจะเลื่อนไปทีละ"
 
@@ -7056,7 +7068,7 @@ msgstr "ประเภทคำขอ — หน้าเว็บ, API หร�
 msgid "Request types found in this site's dispatch rules:"
 msgstr "ประเภทคำขอที่พบในกฎการส่งคำขอของเว็บไซต์นี้:"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
 msgid "Requests"
 msgstr "คำขอ"
 
@@ -7086,7 +7098,7 @@ msgstr "คำอธิบายสั้นๆ"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
-#: zotonic_mod_analytics/src/mod_analytics.erl:189
+#: zotonic_mod_analytics/src/mod_analytics.erl:217
 msgid "Site Analytics"
 msgstr "วิเคราะห์ข้อมูลเว็บไซต์"
 
@@ -7138,11 +7150,11 @@ msgstr "ช่วงเวลาที่จัดเก็บไว้ / คว
 msgid "Stored time intervals"
 msgstr "ช่วงเวลาที่จัดเก็บไว้"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:244
+#: zotonic_mod_analytics/src/mod_analytics.erl:272
 msgid "The analytics measurements changed. Reloading their current display order."
 msgstr "ข้อมูลวิเคราะห์ได้เปลี่ยนแปลงแล้ว กำลังโหลดลำดับการแสดงผลปัจจุบันใหม่"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:267
+#: zotonic_mod_analytics/src/mod_analytics.erl:295
 msgid "This analytics measurement exceeds the storage budget."
 msgstr "การวัดผลวิเคราะห์นี้เกินงบประมาณการจัดเก็บข้อมูล"
 
@@ -7195,11 +7207,11 @@ msgstr "เหตุการณ์"
 msgid "group/time slots"
 msgstr "กลุ่ม/ช่วงเวลา"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:32
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:35
 msgid "requests."
 msgstr "คำขอ"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:25
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:28
 msgid "seconds."
 msgstr "วินาที"
 
@@ -9661,11 +9673,11 @@ msgstr "ตำแหน่งใหม่อาจเป็นเส้นทา
 msgid "You are not allowed to change this."
 msgstr "คุณไม่ได้รับอนุญาตให้เปลี่ยนแปลงสิ่งนี้"
 
-#: zotonic_mod_development/src/mod_development.erl:701
+#: zotonic_mod_development/src/mod_development.erl:718
 msgid "<i>Function name does not exist.</i>"
 msgstr "<i>ไม่มีชื่อฟังก์ชันนี้</i>"
 
-#: zotonic_mod_development/src/mod_development.erl:704
+#: zotonic_mod_development/src/mod_development.erl:721
 msgid "<i>Module not found.</i>"
 msgstr "<i>ไม่พบโมดูล</i>"
 
@@ -9679,6 +9691,7 @@ msgid "A graph of all templates, and by whom they are included, is generated and
 msgstr "สร้างกราฟแสดงเทมเพลตทั้งหมดและเทมเพลตที่รวมเทมเพลตเหล่านั้นไว้ พร้อมอัปเดตโดยอัตโนมัติ"
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:9
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:67
 msgid "Action"
 msgstr "การดำเนินการ"
 
@@ -9736,8 +9749,8 @@ msgstr "คำนวณและแสดงภาพกราฟการขึ
 msgid "Check debug points in the template source to see debug data here."
 msgstr "ตรวจสอบจุดดีบักในแหล่งที่มาของเทมเพลตเพื่อดูข้อมูลดีบักที่นี่"
 
-#: zotonic_mod_development/src/mod_development.erl:509
-#: zotonic_mod_development/src/mod_development.erl:524
+#: zotonic_mod_development/src/mod_development.erl:526
+#: zotonic_mod_development/src/mod_development.erl:541
 msgid "Checking all templates..."
 msgstr "กำลังตรวจสอบเทมเพลตทั้งหมด..."
 
@@ -9809,7 +9822,7 @@ msgstr "ไม่สามารถโหลดหรือบันทึกก
 msgid "Could not load templates"
 msgstr "ไม่สามารถโหลดเทมเพลตได้"
 
-#: zotonic_mod_development/src/mod_development.erl:500
+#: zotonic_mod_development/src/mod_development.erl:517
 msgid "Could not open the directory on this computer."
 msgstr "ไม่สามารถเปิดโฟลเดอร์บนคอมพิวเตอร์นี้ได้"
 
@@ -9873,7 +9886,7 @@ msgid "Detecting editors…"
 msgstr "กำลังตรวจหาโปรแกรมแก้ไข…"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:7
-#: zotonic_mod_development/src/mod_development.erl:1386
+#: zotonic_mod_development/src/mod_development.erl:1403
 msgid "Development"
 msgstr "การพัฒนา"
 
@@ -9993,11 +10006,11 @@ msgstr "เปิดใช้งานการติดตามการสื
 msgid "Enter the module and function you want to trace. If no function is given, all functions in the module will be traced. Enter how many calls to trace before stopping."
 msgstr "ป้อนโมดูลและฟังก์ชันที่คุณต้องการติดตาม หากไม่ได้ระบุฟังก์ชันใด ระบบจะติดตามทุกฟังก์ชันในโมดูลนั้น ป้อนจำนวนครั้งที่ต้องการติดตามก่อนที่จะหยุด"
 
-#: zotonic_mod_development/src/mod_development.erl:673
+#: zotonic_mod_development/src/mod_development.erl:690
 msgid "Error changing the console logs."
 msgstr "เกิดข้อผิดพลาดในการเปลี่ยนบันทึกคอนโซล"
 
-#: zotonic_mod_development/src/mod_development.erl:767
+#: zotonic_mod_development/src/mod_development.erl:784
 msgid "Error parsing template."
 msgstr "เกิดข้อผิดพลาดในการประมวลผลเทมเพลต"
 
@@ -10055,7 +10068,7 @@ msgstr "การติดตามการเรียกใช้งานฟ
 msgid "Function call tracing has been disabled. Use the following to enable function call tracing:"
 msgstr "การติดตามการเรียกใช้ฟังก์ชันถูกปิดใช้งานแล้ว กรุณาใช้คำสั่งต่อไปนี้เพื่อเปิดใช้งานการติดตามการเรียกใช้ฟังก์ชัน:"
 
-#: zotonic_mod_development/src/mod_development.erl:707
+#: zotonic_mod_development/src/mod_development.erl:724
 msgid "Function tracing has been disabled in the Zotonic config."
 msgstr "การติดตามการทำงานของฟังก์ชันถูกปิดใช้งานในค่ากำหนดของ Zotonic"
 
@@ -10200,18 +10213,18 @@ msgstr "ไม่พบกฎการกำหนดเส้นทางที
 msgid "No matching templates found."
 msgstr "ไม่พบแม่แบบที่ตรงกัน"
 
-#: zotonic_mod_development/src/mod_development.erl:671
+#: zotonic_mod_development/src/mod_development.erl:688
 msgid "No permission to access the console logs."
 msgstr "ไม่มีสิทธิ์ในการเข้าถึงบันทึกของคอนโซล"
 
-#: zotonic_mod_development/src/mod_development.erl:514
-#: zotonic_mod_development/src/mod_development.erl:529
-#: zotonic_mod_development/src/mod_development.erl:544
-#: zotonic_mod_development/src/mod_development.erl:552
-#: zotonic_mod_development/src/mod_development.erl:579
-#: zotonic_mod_development/src/mod_development.erl:621
+#: zotonic_mod_development/src/mod_development.erl:531
+#: zotonic_mod_development/src/mod_development.erl:546
+#: zotonic_mod_development/src/mod_development.erl:561
+#: zotonic_mod_development/src/mod_development.erl:569
+#: zotonic_mod_development/src/mod_development.erl:596
 #: zotonic_mod_development/src/mod_development.erl:638
 #: zotonic_mod_development/src/mod_development.erl:655
+#: zotonic_mod_development/src/mod_development.erl:672
 msgid "No permission to use mod_development."
 msgstr "ไม่ได้รับอนุญาตให้ใช้ mod_development"
 
@@ -10220,7 +10233,7 @@ msgstr "ไม่ได้รับอนุญาตให้ใช้ mod_deve
 msgid "No references found."
 msgstr "ไม่พบแหล่งอ้างอิงใด"
 
-#: zotonic_mod_development/src/mod_development.erl:633
+#: zotonic_mod_development/src/mod_development.erl:650
 msgid "No template found in the context."
 msgstr "ไม่พบเทมเพลตในบริบท"
 
@@ -10245,7 +10258,7 @@ msgstr "ไม่พบ"
 msgid "Observers"
 msgstr "ผู้สังเกตการณ์"
 
-#: zotonic_mod_development/src/mod_development.erl:710
+#: zotonic_mod_development/src/mod_development.erl:727
 msgid "Only the admin user can set traces."
 msgstr "เฉพาะผู้ใช้ผู้ดูแลระบบเท่านั้นที่สามารถตั้งค่าการติดตามได้"
 
@@ -10383,19 +10396,19 @@ msgstr "เริ่มติดตาม"
 msgid "Start matching dispatch rules"
 msgstr "เริ่มจับคู่กฎการกำหนดเส้นทาง"
 
-#: zotonic_mod_development/src/mod_development.erl:667
+#: zotonic_mod_development/src/mod_development.erl:684
 msgid "Started logging to the console of your browser tab."
 msgstr "เริ่มบันทึกล็อกไปยังคอนโซลของแท็บเบราว์เซอร์แล้ว"
 
-#: zotonic_mod_development/src/mod_development.erl:541
+#: zotonic_mod_development/src/mod_development.erl:558
 msgid "Started tracing all template inclusions."
 msgstr "เริ่มติดตามการรวมเทมเพลตทั้งหมด"
 
-#: zotonic_mod_development/src/mod_development.erl:616
+#: zotonic_mod_development/src/mod_development.erl:633
 msgid "Started tracing template inclusions by rendering the page."
 msgstr "เริ่มติดตามการรวมของเทมเพลตโดยการแสดงผลหน้าเว็บ"
 
-#: zotonic_mod_development/src/mod_development.erl:538
+#: zotonic_mod_development/src/mod_development.erl:555
 msgid "Started tracing template inclusions for your session."
 msgstr "เริ่มติดตามการรวมเทมเพลตสำหรับเซสชันของคุณแล้ว"
 
@@ -10409,11 +10422,11 @@ msgstr "เลิก"
 msgid "Stop capture"
 msgstr "หยุดการบันทึกข้อมูล"
 
-#: zotonic_mod_development/src/mod_development.erl:669
+#: zotonic_mod_development/src/mod_development.erl:686
 msgid "Stopped logging to the console of all browser tabs."
 msgstr "หยุดบันทึกข้อความลงในคอนโซลของทุกแท็บเบราว์เซอร์แล้ว"
 
-#: zotonic_mod_development/src/mod_development.erl:550
+#: zotonic_mod_development/src/mod_development.erl:567
 msgid "Stopped tracing template inclusions for all sessions."
 msgstr "หยุดติดตามการรวมเทมเพลตสำหรับทุกเซสชันแล้ว"
 
@@ -10452,7 +10465,7 @@ msgstr "เทมเพลต"
 msgid "Template debugging"
 msgstr "การดีบักเทมเพลต"
 
-#: zotonic_mod_development/src/mod_development.erl:770
+#: zotonic_mod_development/src/mod_development.erl:787
 msgid "Template file not found."
 msgstr "ไม่พบไฟล์แม่แบบ"
 
@@ -10472,7 +10485,7 @@ msgstr "เส้นทางเทมเพลต"
 msgid "Test with this template"
 msgstr "ลองใช้แม่แบบนี้"
 
-#: zotonic_mod_development/src/mod_development.erl:618
+#: zotonic_mod_development/src/mod_development.erl:635
 msgid "The path must be a local URL."
 msgstr "เส้นทางต้องเป็น URL ภายในเครื่องเท่านั้น"
 
@@ -10566,7 +10579,7 @@ msgstr "รูปแบบ URI"
 msgid "Uncheck to debug only your current session."
 msgstr "ยกเลิกการเลือกเพื่อดีบักเฉพาะเซสชันปัจจุบันของคุณ"
 
-#: zotonic_mod_development/src/mod_development.erl:652
+#: zotonic_mod_development/src/mod_development.erl:669
 msgid "Updated template debug points."
 msgstr "อัปเดตจุดตรวจสอบข้อบกพร่องของเทมเพลต"
 
@@ -10875,6 +10888,7 @@ msgstr "รวมเซลล์"
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:43
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:51
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_fields.tpl:37
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:23
 msgid "Note"
 msgstr "บันทึก"
 
@@ -15370,6 +15384,7 @@ msgid "Create connections with content on {local}."
 msgstr "สร้างการเชื่อมต่อกับเนื้อหาใน {local}."
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:106
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:2
 msgid "Day"
 msgstr "วัน"
 
@@ -15467,6 +15482,8 @@ msgid "For every combination of a user and a label there can only be a single ac
 msgstr "สำหรับการรวมกันระหว่างผู้ใช้และป้ายกำกับนั้น สามารถมีโทเค็นการเข้าถึงได้เพียงอันเดียวเท่านั้น โทเค็นการเข้าถึงที่มีอยู่ซึ่งมีป้ายกำกับนี้จะถูกแทนที่"
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:110
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:5
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
 msgid "Forever"
 msgstr "ตลอดไป"
 
@@ -15737,6 +15754,7 @@ msgid "Valid redirect URLs, one per line"
 msgstr "URL เปลี่ยนเส้นทางที่ถูกต้อง หนึ่งรายการต่อบรรทัด"
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:107
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:3
 msgid "Week"
 msgstr "สัปดาห์"
 
@@ -18277,6 +18295,171 @@ msgstr "ข้อความ"
 #: zotonic_mod_survey/priv/templates/_survey_result_test_score.tpl:21
 msgid "{points} of {max} points"
 msgstr "{points} จาก {max} คะแนน"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:23
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:53
+msgid "Add IP entries"
+msgstr "เพิ่มรายการ IP"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:18
+msgid "Add to allow list"
+msgstr "เพิ่มลงในรายชื่ออนุญาต"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:13
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:31
+msgid "Allow"
+msgstr "อนุญาต"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:12
+msgid "Allow entries take precedence. Blocks follow observe/enforce/off mode and only affect guarded routes."
+msgstr "รายการในรายชื่ออนุญาตมีลำดับความสำคัญสูงกว่า การบล็อกเป็นไปตามโหมด observe/enforce/off และมีผลเฉพาะกับเส้นทางที่ได้รับการป้องกันเท่านั้น"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:90
+msgid "Block IP"
+msgstr "บล็อก IP"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:87
+msgid "Block duration"
+msgstr "ระยะเวลาการบล็อก"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:70
+msgid "Block for"
+msgstr "บล็อกเป็นเวลา"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:13
+msgid "Current mode:"
+msgstr "โหมดปัจจุบัน:"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:54
+msgid "Current node only, including would-throttle decisions in observe mode. Up to 200 entries. Blocking generates a note from the displayed reason and rejection count."
+msgstr "เฉพาะโหนดปัจจุบัน รวมถึงคำขอที่ควรถูกจำกัดในโหมด observe สูงสุด 200 รายการ การบล็อกจะสร้างหมายเหตุจากเหตุผลที่แสดงและจำนวนคำขอที่ถูกปฏิเสธ"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:53
+msgid "Currently throttled IP addresses"
+msgstr "ที่อยู่ IP ที่ถูกจำกัดอัตราคำขอในขณะนี้"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:40
+msgid "Delete IP entry"
+msgstr "ลบข้อมูล IP"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:37
+msgid "Delete IP entry?"
+msgstr "จะลบข้อมูล IP นี้หรือไม่?"
+
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_delete_confirm.tpl:1
+msgid "Delete this IP entry?"
+msgstr "จะลบข้อมูล IP นี้หรือไม่?"
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:71
+msgid "Each list can contain at most 256 entries."
+msgstr "แต่ละรายชื่อมีได้สูงสุด 256 รายการ"
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:57
+msgid "Edit IP entry"
+msgstr "แก้ไขข้อมูล IP"
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:72
+msgid "Enter valid IP addresses, a note and a future expiry date or duration. No changes were saved."
+msgstr "กรอกที่อยู่ IP ที่ถูกต้อง, ข้อความหมายเหตุ และวันที่หมดอายุหรือระยะเวลาในอนาคต ไม่มีการบันทึกการเปลี่ยนแปลงใดๆ"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:27
+msgid "Expiry dates are UTC. Expired entries stop applying immediately and are removed automatically. Global entries are managed in zotonic.config."
+msgstr "วันหมดอายุระบุตามเวลา UTC รายการที่หมดอายุจะหยุดมีผลทันทีและถูกลบโดยอัตโนมัติ รายการส่วนกลางจัดการใน zotonic.config"
+
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:1
+msgid "Hour"
+msgstr "ชั่วโมง"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:65
+msgid "IP address"
+msgstr "ที่อยู่ IP"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:18
+msgid "IP addresses"
+msgstr "ที่อยู่ IP"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:26
+msgid "IP entries"
+msgstr "รายการ IP"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:11
+msgid "List"
+msgstr "รายชื่อ"
+
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:4
+msgid "Month (30 days)"
+msgstr "เดือน (30 วัน)"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:50
+msgid "No IP entries."
+msgstr "ไม่มีรายการ IP"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:98
+msgid "No currently throttled IP addresses."
+msgstr "ขณะนี้ไม่มีที่อยู่ IP ที่ถูกจำกัดอัตราคำขอ"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:40
+msgid "Or until (UTC)"
+msgstr "หรือจนกว่า (UTC)"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:66
+msgid "Reason"
+msgstr "เหตุผล"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:68
+msgid "Rejections"
+msgstr "การถูกปฏิเสธ"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:69
+msgid "Retry in seconds"
+msgstr "เวลารอก่อนลองใหม่ (วินาที)"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:46
+msgid "Save IP entries"
+msgstr "บันทึกข้อมูล IP"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:9
+msgid "Separate IPv4 or IPv6 addresses with spaces, commas or newlines. Re-adding an address to the same list updates its note and expiry."
+msgstr "แยกที่อยู่ IPv4 หรือ IPv6 ด้วยช่องว่าง เครื่องหมายจุลภาค หรือบรรทัดใหม่ การเพิ่มที่อยู่เดิมกลับเข้าไปในรายการเดียวกันจะอัปเดตหมายเหตุและวันหมดอายุของที่อยู่ดังกล่าว"
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:70
+msgid "This IP is no longer throttled. Refresh the page."
+msgstr "IP นี้ไม่ถูกจำกัดอัตราคำขออีกต่อไป โปรดรีเฟรชหน้า"
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:58
+msgid "This entry is no longer available. Refresh the page."
+msgstr "รายการนี้ไม่มีให้ใช้งานแล้ว โปรดรีเฟรชหน้า"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:3
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:10
+#: zotonic_mod_traffic_guard/src/mod_traffic_guard.erl:124
+msgid "Traffic guard"
+msgstr "การป้องกันทราฟฟิก"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:59
+msgid "Traffic guard is temporarily unavailable."
+msgstr "การป้องกันทราฟฟิกไม่พร้อมใช้งานชั่วคราว"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
+msgid "Until (UTC):"
+msgstr "จนถึง (UTC):"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:29
+msgid "Until (UTC; empty means forever)"
+msgstr "จนถึง (UTC; หากไม่ระบุค่าใด ๆ หมายถึงตลอดไป)"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:34
+msgid "Valid for"
+msgstr "ระยะเวลาที่มีผล"
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:69
+msgid "You are not allowed to change these entries."
+msgstr "คุณไม่สามารถแก้ไขข้อมูลเหล่านี้ได้"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:16
+msgid "Your current IP address:"
+msgstr "ที่อยู่ IP ของคุณในขณะนี้:"
 
 #: zotonic_mod_translation/priv/templates/_translation_edit_text.tpl:9
 msgid "(empty)"
