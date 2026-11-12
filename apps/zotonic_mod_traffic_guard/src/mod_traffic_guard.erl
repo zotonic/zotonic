@@ -17,11 +17,12 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(mod_crawl_guard).
+-module(mod_traffic_guard).
 -behaviour(supervisor).
--mod_title("Crawl guard").
+-mod_title("Traffic guard").
 -mod_description("Observe and throttle excessive content requests, independently of user agents.").
 -mod_prio(400).
+-mod_schema(1).
 -mod_depends([]).
 -mod_config([
     #{key => mode, type => string, default => <<"observe">>,
@@ -42,7 +43,7 @@
 -moduledoc(#{zotonic_keywords => ["reference", "module", "operator", "backend_developer", "security", "performance", "logging_and_monitoring"]}).
 -moduledoc("
 Observe or throttle rapid content retrieval without trusting browser user agents.
-Enable `mod_crawl_guard` in Modules. The default mode is **observe**, which allows
+Enable `mod_traffic_guard` in Modules. The default mode is **observe**, which allows
 all requests and reports when a configured budget would reject one. **enforce**
 returns HTTP 429 with Retry-After and no-cache headers. **off** bypasses checks.
 
@@ -50,8 +51,8 @@ returns HTTP 429 with Retry-After and no-cache headers. **off** bypasses checks.
 
 The guard covers GET/HEAD requests to page, template, HTTP model API and agent
 interface controllers. Static assets, POST requests and MQTT messages are excluded.
-Dispatch option `{crawl_guard, true}` opts another controller in; `false` opts a
-route out. Configuration is under `mod_crawl_guard` in System Configuration.
+Dispatch option `{traffic_guard, true}` opts another controller in; `false` opts a
+route out. Configuration is under `mod_traffic_guard` in System Configuration.
 
 | Key | Default | Meaning |
 | --- | --- | --- |
@@ -69,16 +70,31 @@ networks share budgets: calibrate in observe mode before enforcing. Invalid valu
 fall back to defaults. Configuration changes reset transient budgets on the next
 check. Off mode performs no detection or analytics emission.
 
+## IP exceptions
+
+Use **System → Traffic guard** to edit exact IPv4 and IPv6 allow/block lists (up to
+256 addresses per list). Allow takes precedence and bypasses rate limits. Block
+entries follow the mode: observe reports would_throttle, enforce returns 429, off
+bypasses checks. Lists cover only guarded routes and methods. Saves require a
+writable administrator and invalidate the in-memory copy. Invalid entries reject
+the whole save. IPv4-mapped IPv6 addresses match IPv4 entries. CIDR networks and
+hostnames are not supported. Entries are stored in `traffic_guard_ip`, with a required note and optional UTC
+expiry. Expired rules stop applying immediately; hourly cleanup deletes them.
+The admin page shows currently rate-limited IPs on this node and offers timed
+blocks with automatically generated notes. Global `traffic_guard_allow` and
+`traffic_guard_block` lists in zotonic.config are merged on settings load and
+shown read-only. See `m_traffic_guard` for model APIs.
+
 ## Analytics
 
 With `mod_analytics` enabled, the default Page requests chart includes Would
 throttle and Throttled lines for `other` and `unknown` page attempts. A separate
 companion recording reserves 10,734 rows within the site budget, preserving the
-existing page-view history. Additional breakdowns can use `mod_crawl_guard:request`.
+existing page-view history. Additional breakdowns can use `mod_traffic_guard:request`.
 Each checked request emits one decision, including early rejections. Dimensions
 are `crawl_behavior` (normal, excessive, unknown), `guard_action` (allow,
 would_throttle, throttle), `guard_reason` (none, request_rate, distinct_targets,
-state_capacity, unavailable), `traffic`, and `type` (page, api, other).
+state_capacity, unavailable, ip_allow, ip_block), `traffic`, and `type` (page, api, other).
 Existing request events also receive the three guard dimensions. Unknown means
 no reliable guard assessment was available, not a suspected crawler.
 Analytics consent and admin exclusions still apply; enforcement never depends on
@@ -101,29 +117,39 @@ budgets, concurrency limits, or bot verification. See the module README for setu
 and validation examples.
 ").
 -export([start_link/1, init/1, observe_middleware/3, observe_analytics_events/3, observe_m_config_update/2,
-    eligible/3, signals/1, response/2]).
+    eligible/3, signals/1, response/2, observe_admin_menu/3, manage_schema/2, observe_tick_1h/2]).
 -include_lib("zotonic_core/include/zotonic.hrl").
 %% The analytics declaration is optional; no runtime dependency on mod_analytics.
 -include_lib("zotonic_mod_analytics/include/analytics.hrl").
+
+-include_lib("zotonic_mod_admin/include/admin_menu.hrl").
+
+observe_admin_menu(#admin_menu{}, Acc, C) ->
+    [#menu_item{id=admin_traffic_guard, parent=admin_system, sort=960,
+        label=?__("Traffic guard",C), url={admin_traffic_guard},
+        visiblecheck={acl,use,mod_admin_config}} | Acc].
+
+manage_schema(_,C) -> m_traffic_guard:install(C).
+observe_tick_1h(tick_1h,C) -> m_traffic_guard:cleanup(C).
 
 start_link(Args) -> supervisor:start_link(?MODULE, Args).
 
 init(Args) ->
     {ok, {#{strategy => one_for_one, intensity => 3, period => 60}, [
-        #{id => z_crawl_guard, start => {z_crawl_guard, start_link, [Args]},
-          restart => permanent, shutdown => 5000, type => worker, modules => [z_crawl_guard]}
+        #{id => z_traffic_guard, start => {z_traffic_guard, start_link, [Args]},
+          restart => permanent, shutdown => 5000, type => worker, modules => [z_traffic_guard]}
     ]}}.
 
-observe_m_config_update(#m_config_update{module = mod_crawl_guard}, Context) ->
-    z_crawl_guard:reset(Context);
+observe_m_config_update(#m_config_update{module = mod_traffic_guard}, Context) ->
+    z_traffic_guard:reset(Context);
 observe_m_config_update(_, _) -> ok.
 
 observe_middleware(#middleware{on = guard}, Context, _) ->
     case eligible(cowmachine_req:method(Context), z_context:get_controller_module(Context),
-            z_context:get(crawl_guard, Context)) of
+            z_context:get(traffic_guard, Context)) of
         false -> Context;
         true ->
-            Settings = z_crawl_guard:settings(Context),
+            Settings = z_traffic_guard:settings(Context),
             case maps:get(mode, Settings) of
                 off -> Context;
                 _ -> guard(Settings, Context)
@@ -147,10 +173,10 @@ guard(Settings, Context) ->
     Client = m_req:get(peer_ip, Context),
     Target = crypto:hash(sha256, cowmachine_req:path(Context)),
     Result = case Client of
-        undefined -> z_crawl_guard:decision(maps:get(mode, Settings), unavailable, 0);
-        _ -> z_crawl_guard:check(Client, Target, Settings, Context)
+        undefined -> z_traffic_guard:decision(maps:get(mode, Settings), unavailable, 0);
+        _ -> z_traffic_guard:check(Client, Target, Settings, Context)
     end,
-    Ctx1 = z_context:set(crawl_guard_result, Result, Context),
+    Ctx1 = z_context:set(traffic_guard_result, Result, Context),
     case maps:get(guard_action, Result) of
         <<"throttle">> ->
             Ctx2 = rejection_context(Ctx1),
@@ -179,7 +205,7 @@ rejection_context(Context) ->
 
 analytics_interested(Context) ->
     try z_module_manager:active(mod_analytics, Context) andalso
-        z_analytics_worker:interested(<<"mod_crawl_guard:request">>,Context)
+        z_analytics_worker:interested(<<"mod_traffic_guard:request">>,Context)
     catch _:_ -> false end.
 
 -spec response(Retry, Context) -> z:context() when
@@ -194,14 +220,14 @@ response(Retry, Context) ->
 
 -spec signals(Context) -> map() when Context :: z:context().
 signals(Context) ->
-    case z_context:get(crawl_guard_result, Context) of
+    case z_context:get(traffic_guard_result, Context) of
         #{crawl_behavior := B, guard_action := A, guard_reason := R} ->
             #{<<"crawl_behavior">> => B, <<"guard_action">> => A, <<"guard_reason">> => R};
         _ -> #{}
     end.
 
 emit(Context) ->
-    case z_context:get(crawl_guard_result, Context) of
+    case z_context:get(traffic_guard_result, Context) of
         undefined -> ok;
         _ ->
             %% Optional best-effort telemetry must never alter admission decisions.
@@ -215,19 +241,19 @@ emit(Context) ->
                     controller_agent_discovery -> <<"api">>;
                     _ -> <<"other">>
                 end,
-                m_analytics:record_event(<<"mod_crawl_guard:request">>, #{<<"type">> => Type},
+                m_analytics:record_event(<<"mod_traffic_guard:request">>, #{<<"type">> => Type},
                     z_context:get_reqdata(Context), Context)
             catch _:_ -> ok end
     end.
 
 observe_analytics_events(#analytics_events{}, Acc, _) ->
-    [#{name => <<"mod_crawl_guard:request">>, version => 1,
-       title => <<"Crawl guard decisions">>,
+    [#{name => <<"mod_traffic_guard:request">>, version => 1,
+       title => <<"Traffic guard decisions">>,
        dimensions => #{
            <<"crawl_behavior">> => [<<"normal">>, <<"excessive">>, <<"unknown">>],
            <<"guard_action">> => [<<"allow">>, <<"would_throttle">>, <<"throttle">>],
            <<"guard_reason">> => [<<"none">>, <<"request_rate">>, <<"distinct_targets">>,
-               <<"state_capacity">>, <<"unavailable">>],
+               <<"state_capacity">>, <<"unavailable">>, <<"ip_allow">>, <<"ip_block">>],
            <<"traffic">> => [<<"crawler">>, <<"agent">>, <<"other">>, <<"unknown">>],
            <<"type">> => [<<"page">>, <<"api">>, <<"other">>]
        }} | Acc].

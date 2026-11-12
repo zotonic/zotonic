@@ -1,4 +1,4 @@
-{application, zotonic_mod_crawl_guard, [
+{application, zotonic_mod_traffic_guard, [
     {description, "Observe and throttle excessive content requests."},
     {vsn, {file, "../../VERSION"}},
     {registered, []},

@@ -40,7 +40,7 @@ registry(Context) ->
         <<"crawl_behavior">> => [<<"normal">>, <<"excessive">>, <<"unknown">>],
         <<"guard_action">> => [<<"allow">>, <<"would_throttle">>, <<"throttle">>],
         <<"guard_reason">> => [<<"none">>, <<"request_rate">>, <<"distinct_targets">>,
-            <<"state_capacity">>, <<"unavailable">>]
+            <<"state_capacity">>, <<"unavailable">>, <<"ip_allow">>, <<"ip_block">>]
     },
     Builtin = #{name => <<"page_request">>, version => 1,
         title => <<"Public page requests">>,

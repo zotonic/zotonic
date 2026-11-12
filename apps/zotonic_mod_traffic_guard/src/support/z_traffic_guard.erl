@@ -17,17 +17,26 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(z_crawl_guard).
+-module(z_traffic_guard).
 -behaviour(gen_server).
--export([start_link/1, check/4, settings/1, mode/1, reset/1, step/4, decision/3]).
+-export([start_link/1, check/4, settings/1, mode/1, reset/1, step/4, decision/3,throttled/1,matches/3,reload_rules/1]).
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2]).
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 start_link(Args) ->
     Context = proplists:get_value(context, Args),
     gen_server:start_link({local, name(Context)}, ?MODULE, [Context], []).
-reset(Context) -> gen_server:cast(name(Context), reset).
-name(Context) -> z_utils:name_for_site(crawl_guard, z_context:site(Context)).
+reset(Context) ->
+    %% Synchronous invalidation: a completed admin save cannot leave a stale list.
+    try gen_server:call(name(Context), reset, infinity)
+    catch exit:_ -> ok end.
+reload_rules(Context) ->
+    try gen_server:call(name(Context),reload_rules,infinity)
+    catch exit:_ -> ok end.
+throttled(Context) ->
+    try gen_server:call(name(Context),throttled,1000)
+    catch exit:_ -> {error,unavailable} end.
+name(Context) -> z_utils:name_for_site(traffic_guard, z_context:site(Context)).
 
 -spec mode(Value) -> off | observe | enforce when Value :: term().
 mode(off) -> off;
@@ -47,7 +56,8 @@ settings(Context) ->
     end.
 
 read_settings(Context) ->
-    #{mode => mode(m_config:get_value(mod_crawl_guard, mode, Context)),
+    #{ip_lists => m_traffic_guard:stored(Context),
+      mode => mode(m_config:get_value(mod_traffic_guard, mode, Context)),
       period => integer_config(period, 60, 1, 3600, Context) * 1000,
       request_limit => integer_config(request_limit, 120, 1, 100000, Context),
       request_burst => integer_config(request_burst, 30, 1, 1000, Context),
@@ -56,7 +66,7 @@ read_settings(Context) ->
       max_clients => integer_config(max_clients, 5000, 1, 50000, Context)}.
 
 integer_config(Key, Default, Min, Max, Context) ->
-    try z_convert:to_integer(m_config:get_value(mod_crawl_guard, Key, Default, Context)) of
+    try z_convert:to_integer(m_config:get_value(mod_traffic_guard, Key, Default, Context)) of
         N when is_integer(N), N >= Min, N =< Max -> N;
         _ -> Default
     catch _:_ -> Default end.
@@ -80,6 +90,27 @@ init([Context]) ->
     erlang:send_after(30000, self(), prune),
     {ok, #{clients => #{}, settings => undefined, context => Context, managed => false}}.
 
+handle_call(reload_rules, _, State) ->
+    C=maps:get(context,State),
+    Settings=read_settings(C),
+    ets:insert(name(C),{config,Settings}),
+    %% A rule edit must not forgive other clients' debt or erase their evidence.
+    {reply,ok,State#{settings=>Settings,managed=>true}};
+handle_call(throttled, _, State) ->
+    Now=erlang:monotonic_time(millisecond),
+    Wall=erlang:system_time(second),
+    S=current_settings(maps:get(settings,State),State),
+    Lists=case S of #{ip_lists:=L}->L; _->#{allow=>[],block=>[]} end,
+    Rows=[#{ip=>list_to_binary(inet:ntoa(IP)),reason=>maps:get(reason,E),
+        count=>maps:get(rejections,E),retry_after=>(Until-Now+999) div 1000,
+        action=>maps:get(action,E)} || {IP,#{throttled_until:=Until}=E} <- maps:to_list(maps:get(clients,State)),
+        Until>Now, is_tuple(IP), (tuple_size(IP)=:=4 orelse tuple_size(IP)=:=8),
+        not matches(IP,maps:get(allow,Lists),Wall),
+        not matches(IP,maps:get(block,Lists),Wall)],
+    {reply,{ok,lists:sublist(lists:sort(fun(A,B)->maps:get(count,A)>maps:get(count,B) end,Rows),200)},State};
+handle_call(reset, _, State) ->
+    ets:delete(name(maps:get(context,State)), config),
+    {reply, ok, State#{clients => #{}, settings => undefined}};
 handle_call(settings, _, State) ->
     Settings = current_settings(undefined, State#{managed => true}),
     {reply, Settings, State#{managed => true}};
@@ -109,6 +140,16 @@ current_settings(Provided, State) ->
 
 admit(_, _, #{mode := off}, State) -> {reply, decision(off,none,0), State};
 admit(Client, Target, Settings, State) ->
+    Lists = maps:get(ip_lists,Settings,#{allow => [], block => []}),
+    IP = m_traffic_guard:normalize(Client),
+    case {matches(IP,maps:get(allow,Lists),erlang:system_time(second)),
+          matches(IP,maps:get(block,Lists),erlang:system_time(second))} of
+        {true,_} -> {reply,decision(maps:get(mode,Settings),ip_allow,0),State};
+        {_,true} -> {reply,decision(maps:get(mode,Settings),ip_block,60),State};
+        _ -> admit_budget(IP,Target,Settings,State)
+    end.
+
+admit_budget(Client, Target, Settings, State) ->
     %% Changing settings resets transient budgets, including mode transitions.
     Clients = case maps:get(settings, State) =:= Settings of
         true -> maps:get(clients, State);
@@ -118,9 +159,25 @@ admit(Client, Target, Settings, State) ->
     case Existing =:= undefined andalso map_size(Clients) >= maps:get(max_clients, Settings) of
         true -> {reply, decision(maps:get(mode, Settings), state_capacity, 0), State};
         false ->
-            {Result, Entry} = step(Target, erlang:monotonic_time(millisecond), Settings, Existing),
-            {reply, Result, State#{clients => Clients#{Client => Entry}, settings => Settings}}
+            Now=erlang:monotonic_time(millisecond),
+            {Result, Entry} = step(Target, Now, Settings, Existing),
+            Tracked=track(Result,Entry,Existing,Now),
+            {reply, Result, State#{clients => Clients#{Client => Tracked}, settings => Settings}}
     end.
+
+%% Match deadlines on every request, even while the table copy is cached.
+matches(IP,Entries,Now) ->
+    lists:any(fun
+        ({Address,Until}) -> Address=:=IP andalso (Until=:=0 orelse Until>Now);
+        (Address) -> Address=:=IP
+    end,Entries).
+
+track(#{guard_action:=<<"allow">>},Entry,_,_) -> Entry;
+track(Result,Entry,Previous,Now) ->
+    Count=case Previous of #{rejections:=N}->N; _->0 end,
+    Entry#{throttled_until=>Now+maps:get(retry_after,Result)*1000,
+        reason=>maps:get(guard_reason,Result),action=>maps:get(guard_action,Result),
+        rejections=>Count+1}.
 
 handle_cast(reset, State) ->
     ets:delete(name(maps:get(context,State)), config),
@@ -192,6 +249,11 @@ wait_time(Tokens, Cost, Rate) -> (Cost - Tokens + Rate - 1) div Rate.
 decision(_, Reason, _) when Reason =:= unavailable; Reason =:= state_capacity ->
     #{crawl_behavior => <<"unknown">>, guard_action => <<"allow">>,
       guard_reason => atom_to_binary(Reason,utf8), retry_after => 0};
+decision(_, ip_allow, _) ->
+    #{crawl_behavior => <<"normal">>, guard_action => <<"allow">>,
+      guard_reason => <<"ip_allow">>, retry_after => 0};
+decision(Mode, ip_block, Retry) ->
+    (decision(Mode,request_rate,Retry))#{crawl_behavior => <<"unknown">>, guard_reason => <<"ip_block">>};
 decision(_, none, _) ->
     #{crawl_behavior => <<"normal">>, guard_action => <<"allow">>,
       guard_reason => <<"none">>, retry_after => 0};

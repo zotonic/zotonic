@@ -91,7 +91,7 @@ mark_page(Context) ->
         Key = page_id(Context),
         CT = z_context:get_resp_header(<<"content-type">>,Context),
         IsHtml = is_binary(CT) andalso binary:match(CT,<<"text/html">>) =:= {0,9},
-        case allowed(Context) andalso IsHtml andalso public(Key,Context) of
+        case page_allowed(Key,Context) andalso IsHtml andalso public(Key,Context) of
             true ->
                 D0 = (dimensions(Context))#{<<"has_page_id">>=>has_page_id(Key)},
                 D = case Key of
@@ -172,8 +172,19 @@ public(_,_) ->
 
 -spec allowed(Context) -> boolean() when Context :: z:context().
 allowed(Context) ->
+    not z_acl:is_allowed(use,mod_admin,Context) andalso consent_allowed(Context).
+
+%% Resource editors also include frontend editors without admin access. Do not
+%% exclude an admin's visit to a resource they cannot edit.
+page_allowed(Id,Context) when is_integer(Id) ->
+    not z_acl:rsc_editable(Id,Context) andalso consent_allowed(Context);
+page_allowed(undefined,Context) ->
+    allowed(Context);
+page_allowed(_,_) ->
+    false.
+
+consent_allowed(Context) ->
     not z_convert:to_bool(z_context:get(analytics_exclude,Context))
-        andalso not z_acl:is_allowed(use,mod_admin,Context)
         andalso (not m_config:get_boolean(mod_analytics,require_consent,Context)
             orelse z_context:get(analytics_consent,Context) =:= true).
 
@@ -191,7 +202,7 @@ dimensions(Context) ->
 
 %% Guard context is server-owned; never copy client/session identifiers.
 guard_signals(Context) ->
-    case z_context:get(crawl_guard_result, Context) of
+    case z_context:get(traffic_guard_result, Context) of
         #{crawl_behavior := B, guard_action := A, guard_reason := R} ->
             #{<<"crawl_behavior">> => B, <<"guard_action">> => A, <<"guard_reason">> => R};
         _ -> #{}

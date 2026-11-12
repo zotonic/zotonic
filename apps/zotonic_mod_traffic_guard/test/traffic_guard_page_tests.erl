@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2026 Marc Worrell
-%% @doc Crawl guard admission, privacy and recovery regression tests.
+%% @doc Traffic guard admission, privacy and recovery regression tests.
 %% @end
 
 %% Copyright 2026 Marc Worrell
@@ -17,13 +17,13 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(crawl_guard_page_tests).
+-module(traffic_guard_page_tests).
 -export([run/1]).
 -include_lib("eunit/include/eunit.hrl").
 
 run(C) ->
     development = m_site:environment(C),
-    true = z_module_manager:active(mod_crawl_guard,C),
+    true = z_module_manager:active(mod_traffic_guard,C),
     A = z_acl:sudo(C),
     ok = m_analytics:store_ensure_page_guard(C),
     Cs = m_analytics:store_collectors(C),
@@ -87,7 +87,7 @@ fill_budget(N,C) ->
 
 page_requests(Guard,C) ->
     Keys=[mode,period,request_limit,request_burst,distinct_burst],
-    Old=[{K,m_config:get_value(mod_crawl_guard,K,C)}||K<-Keys],
+    Old=[{K,m_config:get_value(mod_traffic_guard,K,C)}||K<-Keys],
     Id=maps:get(id,Guard), Before=counts(Id,C),
     URL=z_convert:to_list(z_context:abs_url(z_dispatcher:url_for(home,C),C)),
     try
@@ -99,10 +99,10 @@ page_requests(Guard,C) ->
         ?assertEqual([200,429,429],[status(URL)||_<-lists:seq(1,3)]),
         wait(Id,Before,C,200)
     after
-        [case V of undefined->m_config:delete(mod_crawl_guard,K,C); _->m_config:set_value(mod_crawl_guard,K,V,C) end||{K,V}<-Old]
+        [case V of undefined->m_config:delete(mod_traffic_guard,K,C); _->m_config:set_value(mod_traffic_guard,K,V,C) end||{K,V}<-Old]
     end.
 set(Pairs,C) ->
-    [m_config:set_value(mod_crawl_guard,K,V,C)||{K,V}<-Pairs],timer:sleep(100),z_crawl_guard:reset(C).
+    [m_config:set_value(mod_traffic_guard,K,V,C)||{K,V}<-Pairs],timer:sleep(100),z_traffic_guard:reset(C).
 status(URL) ->
     {ok,{{_,Status,_},_,_}}=httpc:request(get,{URL,[{"user-agent","Mozilla/5.0"}]},
         [{ssl,[{verify,verify_none}]},{timeout,10000},{autoredirect,false}],[]),Status.

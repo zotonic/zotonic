@@ -41,7 +41,7 @@ page_guard_definition_test() ->
     Default = #{event=><<"page_request">>,dimension=><<>>,filters=>#{}},
     ?assert(m_analytics:is_default_page(Default)),
     ?assertNot(m_analytics:is_default_page(Default#{filters=>#{<<"language">>=>[<<"nl">>]}})),
-    Guard = #{event=><<"mod_crawl_guard:request">>,dimension=><<"guard_action">>,groups=>3,
+    Guard = #{event=><<"mod_traffic_guard:request">>,dimension=><<"guard_action">>,groups=>3,
         filters=>#{<<"type">>=>[<<"page">>],<<"traffic">>=>[<<"other">>,<<"unknown">>],
             <<"guard_action">>=>[<<"throttle">>,<<"would_throttle">>]}},
     ?assert(m_analytics:is_page_guard(Guard)),

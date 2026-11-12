@@ -17,7 +17,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(crawl_guard_bench).
+-module(traffic_guard_bench).
 -export([run/0, settings/1]).
 -include_lib("zotonic_core/include/zotonic.hrl").
 
@@ -25,20 +25,20 @@ run() ->
     S = #{mode=>observe, period=>60000, request_limit=>100000, request_burst=>1000,
         distinct_limit=>100000, distinct_burst=>64, max_clients=>5000},
     Hashes = [crypto:hash(sha256,integer_to_binary(I)) || I <- lists:seq(1,64)],
-    Entry = lists:foldl(fun(H,E) -> {_,Next}=z_crawl_guard:step(H,0,S,E), Next end,undefined,Hashes),
+    Entry = lists:foldl(fun(H,E) -> {_,Next}=z_traffic_guard:step(H,0,S,E), Next end,undefined,Hashes),
     H = hd(Hashes),
     {PureUs,_} = timer:tc(fun()-> pure(50000,H,S,Entry) end),
-    C = #context{site=crawl_guard_benchmark},
-    {ok,Pid} = z_crawl_guard:start_link([{context,C}]),
+    C = #context{site=traffic_guard_benchmark},
+    {ok,Pid} = z_traffic_guard:start_link([{context,C}]),
     try
         {SequentialUs,_} = timer:tc(fun() ->
-            [z_crawl_guard:check(I rem 100,H,S,C) || I <- lists:seq(1,20000)]
+            [z_traffic_guard:check(I rem 100,H,S,C) || I <- lists:seq(1,20000)]
         end),
         Parent = self(),
         {ConcurrentUs,Results} = timer:tc(fun() ->
             Refs = [begin Ref=make_ref(),spawn(fun()->
                 Samples = [begin
-                    {Us,R}=timer:tc(fun()->z_crawl_guard:check({Client,I rem 10},H,S,C) end),
+                    {Us,R}=timer:tc(fun()->z_traffic_guard:check({Client,I rem 10},H,S,C) end),
                     {Us,maps:get(guard_reason,R)}
                 end || I<-lists:seq(1,1000)], Parent!{Ref,Samples}
             end),Ref end || Client<-lists:seq(1,32)],
@@ -55,8 +55,8 @@ run() ->
     after gen_server:stop(Pid) end.
 
 pure(0,_,_,E)->E;
-pure(N,H,S,E)->{_,Next}=z_crawl_guard:step(H,0,S,E),pure(N-1,H,S,Next).
+pure(N,H,S,E)->{_,Next}=z_traffic_guard:step(H,0,S,E),pure(N-1,H,S,Next).
 
 settings(C) ->
-    {Us,_}=timer:tc(fun()->[z_crawl_guard:settings(C)||_<-lists:seq(1,10000)] end),
+    {Us,_}=timer:tc(fun()->[z_traffic_guard:settings(C)||_<-lists:seq(1,10000)] end),
     #{settings_ns_per_call=>Us*1000 div 10000}.

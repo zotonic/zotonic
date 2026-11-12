@@ -43,7 +43,14 @@ The default Languages recording starts paused and can be resumed there.
 
 Reports require `use mod_analytics`. Configuration and recording mutations require
 site administrator access (`use mod_admin_config`); the two permissions are independent.
-Request events exclude users with `use mod_admin` and requests marked `analytics_exclude`.
+Page views exclude users who can edit the resolved resource (`z_acl:rsc_editable/2`),
+including frontend editors viewing previews or opening the page directly. Users who
+cannot edit that resource can still count, even when they have `use mod_admin`.
+For pages without a resource ID, `use mod_admin` is the fallback exclusion.
+Read-only sessions cannot edit resources and therefore can count as resource views.
+This policy applies to both `page_request` and the page type of `request` events.
+API and other request types continue to exclude users with `use mod_admin`.
+All request types respect `analytics_exclude` and the configured consent requirement.
 DNT and GPC headers do not exclude requests from aggregate analytics. With
 `require_consent` enabled, the context must contain `analytics_consent = true`.
 Ordinary logged-in users are otherwise eligible.
@@ -185,7 +192,7 @@ observe_middleware(#middleware{on=handled},Context,_Context) -> z_analytics_requ
 observe_middleware(_,Context,_) -> Context.
 
 observe_module_activate(#module_activate{module = M},Context)
-        when M =:= mod_crawl_guard; M =:= mod_analytics ->
+        when M =:= mod_traffic_guard; M =:= mod_analytics ->
     ensure_page_guard(Context),
     z_analytics_worker:reload(Context);
 observe_module_activate(_,Context) -> z_analytics_worker:reload(Context).
@@ -194,7 +201,7 @@ ensure_page_guard(Context) ->
     case m_analytics:store_ensure_page_guard(Context) of
         ok -> ok;
         Error ->
-            ?LOG_WARNING(#{in => mod_analytics, text => <<"Could not add default crawl guard graphs">>,
+            ?LOG_WARNING(#{in => mod_analytics, text => <<"Could not add default traffic guard graphs">>,
                 result => error, reason => Error}),
             ok
     end.

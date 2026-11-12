@@ -426,7 +426,7 @@ store_create(_,_,_) -> {error, invalid_state}.
 store_ensure_page_guard(Context) ->
     %% Activation can precede the analytics worker registry refresh.
     Registry = z_analytics:registry(Context),
-    case maps:is_key(<<"mod_crawl_guard:request">>,Registry) of
+    case maps:is_key(<<"mod_traffic_guard:request">>,Registry) of
         false -> ok;
         true ->
             z_db:transaction(fun(Tx) ->
@@ -440,9 +440,9 @@ store_ensure_page_guard(Context) ->
                             true -> ok;
                             false ->
                                 {ok,D} = z_analytics:definition(#{
-                                    <<"name">> => <<"Page requests: crawl guard">>,
+                                    <<"name">> => <<"Page requests: traffic guard">>,
                                     <<"description">> => <<"Companion graphs for the normal Page requests view.">>,
-                                    <<"event">> => <<"mod_crawl_guard:request">>,
+                                    <<"event">> => <<"mod_traffic_guard:request">>,
                                     <<"dimension">> => <<"guard_action">>, <<"groups">> => 3,
                                     <<"filters">> => page_guard_filters()},Registry),
                                 case store_create(D,<<"active">>,Tx) of
@@ -464,7 +464,7 @@ page_guard_filters() ->
       <<"guard_action">> => [<<"throttle">>,<<"would_throttle">>]}.
 
 -spec is_page_guard(Collector) -> boolean() when Collector :: map().
-is_page_guard(#{event := <<"mod_crawl_guard:request">>, dimension := <<"guard_action">>,
+is_page_guard(#{event := <<"mod_traffic_guard:request">>, dimension := <<"guard_action">>,
         groups := G, filters := Filters}) -> G >= 3 andalso Filters =:= page_guard_filters();
 is_page_guard(_) -> false.
 

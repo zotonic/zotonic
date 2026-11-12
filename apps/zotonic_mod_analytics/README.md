@@ -20,8 +20,14 @@ immediately. Reordering does not alter recording definitions or history.
 ## What is recorded
 
 The built-in `page_request` event counts successful GET requests for public HTML
-pages served by Zotonic, including template pages without a resource ID. It excludes private pages, admin/editor requests,
-assets and redirects. DNT and GPC headers do not exclude requests. Page-request
+pages served by Zotonic, including template pages without a resource ID. It excludes
+private pages, assets and redirects. For resource pages, users who can edit that
+resource (`z_acl:rsc_editable/2`) are excluded, including frontend previews and
+direct visits. Admin access alone does not exclude views of resources the user
+cannot edit. Without a resource ID, users with `use mod_admin` are excluded instead.
+Read-only sessions cannot edit resources, so their resource views can count.
+These rules also apply to the page type of the general `request` event. API and
+other request types keep their existing `use mod_admin` exclusion. DNT and GPC headers do not exclude requests. Page-request
 totals, device breakdowns and popular content exclude detected crawlers and agents
 unless the recording explicitly selects them with a `traffic` filter.
 Traffic classification and API measurements include both unless their filters exclude them.
@@ -430,24 +436,24 @@ resource IDs, search terms and request bodies are not stored for these interface
 MQTT model calls are not counted. Requests made through the generic model HTTP API
 retain the `api` type; these types apply to the dedicated agent dispatch routes.
 
-## Crawl guard signals
+## Traffic guard signals
 
-When `mod_crawl_guard` is enabled, assessed requests carry `crawl_behavior`,
+When `mod_traffic_guard` is enabled, assessed requests carry `crawl_behavior`,
 `guard_action` and `guard_reason` on the built-in page, API and dispatch-type
 request events. For example, filter `guard_action = would_throttle` in observe
 mode to inspect content that would be limited. These signals describe behavior,
 independently of the declared `traffic` classification.
 
-The optional `mod_crawl_guard:request` event also counts early 429 decisions that
+The optional `mod_traffic_guard:request` event also counts early 429 decisions that
 never reach normal request analytics. It overlaps with ordinary request events;
 do not sum their totals. Existing analytics consent, admin and exclusion policies
-apply. See [Crawl guard](../zotonic_mod_crawl_guard/README.md) for configuration,
+apply. See [Traffic guard](../zotonic_mod_traffic_guard/README.md) for configuration,
 values, coverage and operational limitations.
 
 
-Schema upgrade 5 and module activation add a **Page requests: crawl guard**
+Schema upgrade 5 and module activation add a **Page requests: traffic guard**
 companion when a default normal-traffic Page requests recording and
-`mod_crawl_guard` are available. The default chart displays **Would throttle** and
+`mod_traffic_guard` are available. The default chart displays **Would throttle** and
 **Throttled** alongside page views. These lines count page attempts of `other` and
 `unknown` traffic, including early rejections; they must not be added to page views.
 The companion remains configurable but is not shown as a separate dashboard panel

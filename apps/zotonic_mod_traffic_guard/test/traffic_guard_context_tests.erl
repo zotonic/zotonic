@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2026 Marc Worrell
-%% @doc Crawl guard admission, privacy and recovery regression tests.
+%% @doc Traffic guard admission, privacy and recovery regression tests.
 %% @end
 
 %% Copyright 2026 Marc Worrell
@@ -17,7 +17,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(crawl_guard_context_tests).
+-module(traffic_guard_context_tests).
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").
 
@@ -59,22 +59,41 @@ config_setup() ->
     ets:new(guard_config_test,[named_table,public]),
     ets:insert(guard_config_test,[{mode,<<"observe">>},{request_burst,1}]),
     meck:new(m_config,[passthrough,no_link]),
+    meck:new(m_traffic_guard,[passthrough,no_link]),
+    meck:expect(m_traffic_guard,stored,fun(_) -> config_value(ip_lists,#{allow=>[],block=>[]}) end),
     meck:expect(m_config,get_value,fun(_,K,_) -> config_value(K,undefined) end),
-    meck:expect(m_config,get_value,fun(_,K,D,_) -> config_value(K,D) end).
-config_cleanup(_) -> meck:unload(m_config),ets:delete(guard_config_test).
+    meck:expect(m_config,get_value,fun(_,K,D,_) -> config_value(K,D) end),
+    meck:expect(m_config,set_value,fun(mod_traffic_guard,K,V,_) -> ets:insert(guard_config_test,{K,V}), ok end).
+config_cleanup(_) -> meck:unload(m_traffic_guard),meck:unload(m_config),ets:delete(guard_config_test).
 config_value(K,D) -> case ets:lookup(guard_config_test,K) of [{_,V}]->V; []->D end.
 config_cache() ->
-    C = #context{site=crawl_guard_cache_test},
-    {ok,P} = z_crawl_guard:start_link([{context,C}]),
+    C = #context{site=traffic_guard_cache_test},
+    {ok,P} = z_traffic_guard:start_link([{context,C}]),
     try
-        Old = z_crawl_guard:settings(C),
-        [Old=z_crawl_guard:settings(C)||_<-lists:seq(1,100)],
+        Old = z_traffic_guard:settings(C),
+        [Old=z_traffic_guard:settings(C)||_<-lists:seq(1,100)],
         ?assertEqual(7,meck:num_calls(m_config,get_value,'_')),
         ets:insert(guard_config_test,{mode,<<"enforce">>}),
-        z_crawl_guard:reset(C),
+        z_traffic_guard:reset(C),
         %% A call serializes after reset even if no fresh HTTP settings lookup ran.
-        ?assertEqual(<<"allow">>,maps:get(guard_action,z_crawl_guard:check(client,<<"x">>,Old,C))),
-        ?assertEqual(<<"throttle">>,maps:get(guard_action,z_crawl_guard:check(client,<<"x">>,Old,C))),
-        ?assertEqual(enforce,maps:get(mode,z_crawl_guard:settings(C))),
-        ?assertEqual(14,meck:num_calls(m_config,get_value,'_'))
+        ?assertEqual(<<"allow">>,maps:get(guard_action,z_traffic_guard:check(client,<<"x">>,Old,C))),
+        ?assertEqual(<<"throttle">>,maps:get(guard_action,z_traffic_guard:check(client,<<"x">>,Old,C))),
+        ?assertEqual(enforce,maps:get(mode,z_traffic_guard:settings(C))),
+        ?assertEqual(14,meck:num_calls(m_config,get_value,'_')),
+        ets:insert(guard_config_test,{ip_lists,#{allow=>[],block=>[{{192,0,2,1},0}]}}),
+        ok=z_traffic_guard:reset(C),
+        ?assertEqual(<<"ip_block">>,maps:get(guard_reason,z_traffic_guard:check({192,0,2,1},<<"x">>,Old,C))),
+        ets:insert(guard_config_test,{ip_lists,#{allow=>[{{192,0,2,1},0}],block=>[{{192,0,2,1},0}]}}),
+        ok=z_traffic_guard:reset(C),
+        ?assertEqual(<<"ip_allow">>,maps:get(guard_reason,z_traffic_guard:check({192,0,2,1},<<"x">>,Old,C)))
     after gen_server:stop(P) end.
+
+
+global_config_test_() ->
+    z_test_support:isolated(fun() ->
+        application:set_env(zotonic,traffic_guard_allow,["192.0.2.1","::ffff:192.0.2.1"]),
+        application:set_env(zotonic,traffic_guard_block,[<<"2001:db8::1">>]),
+        Rows=m_traffic_guard:global(),
+        ?assertEqual(3,length(Rows)),
+        ?assert(lists:all(fun(#{source:=S,expires:=E})->S=:=<<"zotonic.config">> andalso E=:=0 end,Rows))
+    end).

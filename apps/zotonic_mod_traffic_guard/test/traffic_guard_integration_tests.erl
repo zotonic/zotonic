@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2026 Marc Worrell
-%% @doc Explicit development-site HTTP regression for crawl guard.
+%% @doc Explicit development-site HTTP regression for traffic guard.
 %% @end
 
 %% Copyright 2026 Marc Worrell
@@ -17,7 +17,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(crawl_guard_integration_tests).
+-module(traffic_guard_integration_tests).
 -export([run/1]).
 -include_lib("eunit/include/eunit.hrl").
 
@@ -26,20 +26,20 @@ run(C) ->
     development = m_site:environment(C),
     true = z_module_manager:active(mod_agent_discovery,C),
     true = z_module_manager:active(mod_analytics,C),
-    Active = z_module_manager:active(mod_crawl_guard,C),
+    Active = z_module_manager:active(mod_traffic_guard,C),
     Keys = [mode,period,request_limit,request_burst,distinct_limit,distinct_burst],
-    Original = [{K,m_config:get_value(mod_crawl_guard,K,C)} || K <- Keys],
+    Original = [{K,m_config:get_value(mod_traffic_guard,K,C)} || K <- Keys],
     try
-        ok = z_module_manager:activate_await(mod_crawl_guard,C),
+        ok = z_module_manager:activate_await(mod_traffic_guard,C),
         configure([{period,60},{request_limit,1},{request_burst,2},
                    {distinct_limit,1000},{distinct_burst,64},{mode,<<"observe">>}],C),
         z_analytics_worker:reload(C),
         z_analytics_worker:status(C),
-        {ok,Id} = m_analytics:create(#{<<"name">>=><<"Crawl guard regression (temporary)">>,
-            <<"event">>=><<"mod_crawl_guard:request">>, <<"dimension">>=><<"guard_action">>,
+        {ok,Id} = m_analytics:create(#{<<"name">>=><<"Traffic guard regression (temporary)">>,
+            <<"event">>=><<"mod_traffic_guard:request">>, <<"dimension">>=><<"guard_action">>,
             <<"groups">>=>4, <<"filters">>=>#{<<"traffic">>=>[<<"agent">>]}},<<"active">>,z_acl:sudo(C)),
         try
-            {ok,RequestId} = m_analytics:create(#{<<"name">>=><<"Crawl guard request signals (temporary)">>,
+            {ok,RequestId} = m_analytics:create(#{<<"name">>=><<"Traffic guard request signals (temporary)">>,
                 <<"event">>=><<"request">>, <<"dimension">>=><<"guard_action">>, <<"groups">>=>4,
                 <<"filters">>=>#{<<"traffic">>=>[<<"agent">>],<<"type">>=>[<<"agent_llms">>]}},
                 <<"active">>,z_acl:sudo(C)),
@@ -48,17 +48,17 @@ run(C) ->
         after m_analytics:purge(Id,z_acl:sudo(C)) end
     after
         lists:foreach(fun
-            ({K,undefined}) -> m_config:delete(mod_crawl_guard,K,C);
-            ({K,V}) -> m_config:set_value(mod_crawl_guard,K,V,C)
+            ({K,undefined}) -> m_config:delete(mod_traffic_guard,K,C);
+            ({K,V}) -> m_config:set_value(mod_traffic_guard,K,V,C)
         end,Original),
-        case Active of false -> z_module_manager:deactivate(mod_crawl_guard,C); true -> ok end
+        case Active of false -> z_module_manager:deactivate(mod_traffic_guard,C); true -> ok end
     end.
 
 configure(Pairs,C) ->
-    lists:foreach(fun({K,V}) -> m_config:set_value(mod_crawl_guard,K,V,C) end,Pairs),
+    lists:foreach(fun({K,V}) -> m_config:set_value(mod_traffic_guard,K,V,C) end,Pairs),
     %% Config notifications are asynchronous; let reset observers settle.
     timer:sleep(100),
-    z_crawl_guard:reset(C).
+    z_traffic_guard:reset(C).
 
 test_http(Id,RequestId,C) ->
     URL = z_convert:to_list(z_context:abs_url(z_dispatcher:url_for(agent_llms,C),C)),
