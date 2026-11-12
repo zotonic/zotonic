@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-12 13:50\n"
+"PO-Revision-Date: 2026-11-12 14:01\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -6911,7 +6911,7 @@ msgstr "Vaste filters"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:25
 msgid "Gaps are unrecorded intervals. Partial intervals may undercount activity. Page-request totals, device breakdowns and popular content exclude detected crawlers and agents unless explicitly selected. API and traffic-classification measurements include them unless filtered out. Counts exclude editor activity and do not measure unique visitors."
-msgstr ""
+msgstr "Lacunes zijn niet-geregistreerde intervallen. Bij gedeeltelijke intervallen kan de activiteit te laag worden weergegeven. Bij de totalen van pagina-aanvragen, uitsplitsingen per apparaat en populaire inhoud worden gedetecteerde crawlers en agents buiten beschouwing gelaten, tenzij deze expliciet zijn geselecteerd. Bij API- en verkeersclassificatiemetingen worden ze wel meegeteld, tenzij ze worden uitgefilterd. De tellingen houden geen rekening met activiteiten van redacteuren en meten geen unieke bezoekers."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:13
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:15
@@ -6921,7 +6921,7 @@ msgstr "Groepslimiet"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
 msgid "Guard lines count page attempts from other and unknown traffic. Throttled requests are not page views; do not add these lines to the total."
-msgstr ""
+msgstr "Guard-regels tellen pogingen om pagina's te openen afkomstig van ander en onbekend verkeer. Beperkte verzoeken worden niet als paginaweergaven geteld; tel deze regels niet mee bij het totaal."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:8
 msgid "HTTP method — GET, POST, HEAD and others"
@@ -18326,11 +18326,11 @@ msgstr "{points} van {max} punten"
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:23
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:53
 msgid "Add IP entries"
-msgstr ""
+msgstr "Voeg IP-vermeldingen toe"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:18
 msgid "Add to allow list"
-msgstr ""
+msgstr "Voeg toe aan de toestaanlijst"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:13
@@ -18340,153 +18340,153 @@ msgstr "Toestaan"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:12
 msgid "Allow entries take precedence. Blocks follow observe/enforce/off mode and only affect guarded routes."
-msgstr ""
+msgstr "Vermeldingen in de toestaanlijst hebben voorrang. Blokkeringen volgen de modus observe/enforce/off en gelden alleen voor bewaakte routes."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:90
 msgid "Block IP"
-msgstr ""
+msgstr "Blokkeer IP-adres"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:87
 msgid "Block duration"
-msgstr ""
+msgstr "Blokkeerduur"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:70
 msgid "Block for"
-msgstr ""
+msgstr "Blokkeer gedurende"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:13
 msgid "Current mode:"
-msgstr ""
+msgstr "Huidige modus:"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:54
 msgid "Current node only, including would-throttle decisions in observe mode. Up to 200 entries. Blocking generates a note from the displayed reason and rejection count."
-msgstr ""
+msgstr "Alleen de huidige node, inclusief verzoeken die in de modus observe beperkt zouden worden. Maximaal 200 vermeldingen. Bij blokkering wordt een opmerking aangemaakt op basis van de getoonde reden en het aantal afgewezen verzoeken."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:53
 msgid "Currently throttled IP addresses"
-msgstr ""
+msgstr "IP-adressen waarvoor momenteel een beperking geldt"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:40
 msgid "Delete IP entry"
-msgstr ""
+msgstr "Verwijder IP-vermelding"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:37
 msgid "Delete IP entry?"
-msgstr ""
+msgstr "IP-vermelding verwijderen?"
 
 #: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_delete_confirm.tpl:1
 msgid "Delete this IP entry?"
-msgstr ""
+msgstr "Deze IP-vermelding verwijderen?"
 
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:71
 msgid "Each list can contain at most 256 entries."
-msgstr ""
+msgstr "Elke lijst kan maximaal 256 items bevatten."
 
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:57
 msgid "Edit IP entry"
-msgstr ""
+msgstr "Bewerk IP-vermelding"
 
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:72
 msgid "Enter valid IP addresses, a note and a future expiry date or duration. No changes were saved."
-msgstr ""
+msgstr "Voer geldige IP-adressen, een opmerking en een toekomstige vervaldatum of geldigheidsduur in. Er zijn geen wijzigingen opgeslagen."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:27
 msgid "Expiry dates are UTC. Expired entries stop applying immediately and are removed automatically. Global entries are managed in zotonic.config."
-msgstr ""
+msgstr "De vervaldata zijn in UTC. Vervallen vermeldingen zijn onmiddellijk niet meer van toepassing en worden automatisch verwijderd. Algemene vermeldingen worden beheerd in zotonic.config."
 
 #: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:1
 msgid "Hour"
-msgstr ""
+msgstr "Uur"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:65
 msgid "IP address"
-msgstr ""
+msgstr "IP-adres"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:18
 msgid "IP addresses"
-msgstr ""
+msgstr "IP-adressen"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:26
 msgid "IP entries"
-msgstr ""
+msgstr "IP-vermeldingen"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:11
 msgid "List"
-msgstr ""
+msgstr "Lijst"
 
 #: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:4
 msgid "Month (30 days)"
-msgstr ""
+msgstr "Maand (30 dagen)"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:50
 msgid "No IP entries."
-msgstr ""
+msgstr "Geen IP-vermeldingen."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:98
 msgid "No currently throttled IP addresses."
-msgstr ""
+msgstr "Er zijn momenteel geen IP-adressen met een verzoeklimiet."
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:40
 msgid "Or until (UTC)"
-msgstr ""
+msgstr "Of tot (UTC)"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:66
 msgid "Reason"
-msgstr ""
+msgstr "Reden"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:68
 msgid "Rejections"
-msgstr ""
+msgstr "Afwijzingen"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:69
 msgid "Retry in seconds"
-msgstr ""
+msgstr "Opnieuw proberen over (seconden)"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:46
 msgid "Save IP entries"
-msgstr ""
+msgstr "Bewaar IP-vermeldingen"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:9
 msgid "Separate IPv4 or IPv6 addresses with spaces, commas or newlines. Re-adding an address to the same list updates its note and expiry."
-msgstr ""
+msgstr "Scheid IPv4- of IPv6-adressen met spaties, komma’s of nieuwe regels. Als je een adres opnieuw aan dezelfde lijst toevoegt, worden de opmerking en de vervaldatum bijgewerkt."
 
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:70
 msgid "This IP is no longer throttled. Refresh the page."
-msgstr ""
+msgstr "De verzoeklimiet voor dit IP-adres is opgeheven. Ververs de pagina."
 
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:58
 msgid "This entry is no longer available. Refresh the page."
-msgstr ""
+msgstr "Deze vermelding is niet meer beschikbaar. Ververs de pagina."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:3
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:10
 #: zotonic_mod_traffic_guard/src/mod_traffic_guard.erl:124
 msgid "Traffic guard"
-msgstr ""
+msgstr "Verkeersbeveiliging"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:59
 msgid "Traffic guard is temporarily unavailable."
-msgstr ""
+msgstr "Verkeersbeveiliging is tijdelijk niet beschikbaar."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
 msgid "Until (UTC):"
-msgstr ""
+msgstr "Tot (UTC):"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:29
 msgid "Until (UTC; empty means forever)"
-msgstr ""
+msgstr "Tot (UTC; leeg betekent voor altijd)"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:34
 msgid "Valid for"
-msgstr ""
+msgstr "Geldig gedurende"
 
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:69
 msgid "You are not allowed to change these entries."
-msgstr ""
+msgstr "Je mag deze vermeldingen niet wijzigen."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:16
 msgid "Your current IP address:"
-msgstr ""
+msgstr "Je huidige IP-adres:"
 
 #: zotonic_mod_translation/priv/templates/_translation_edit_text.tpl:9
 msgid "(empty)"
