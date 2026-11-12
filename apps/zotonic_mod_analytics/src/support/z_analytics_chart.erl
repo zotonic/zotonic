@@ -19,8 +19,16 @@
 
 -module(z_analytics_chart).
 -moduledoc("Build total and breakdown series on a shared time axis, preserving missing intervals.").
--export([series/8]).
+-export([series/8,guard_series/6]).
 -include_lib("zotonic_core/include/zotonic.hrl").
+
+%% Explicit groups keep both lines present even before their first event.
+guard_series(Rows,Start,End,R,N,Context) ->
+    Groups = [#{key => <<"v:would_throttle">>, label => ?__("Would throttle",Context)},
+              #{key => <<"v:throttle">>, label => ?__("Throttled",Context)}],
+    [_Total,Would,Throttled] = series(Rows,Start,End,R,N,Groups,
+        #{dimension => <<"guard_action">>},Context),
+    [Would#{color => <<"#d98c00">>,width => 2}, Throttled#{color => <<"#d64343">>,width => 2}].
 
 series(Rows,Start,End,R,N,Groups,Col,Context) ->
     Index=maps:from_list([{maps:get(start,X),X}||X<-Rows]),

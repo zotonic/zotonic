@@ -1,0 +1,22 @@
+.traffic-guard-entry {
+    border-left: 5px solid transparent;
+}
+.traffic-guard-entry-allow {
+    border-left-color: #288447;
+}
+.traffic-guard-entry-deny {
+    border-left-color: #c23b38;
+}
+.traffic-guard-entry-heading {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5em;
+}
+.traffic-guard-entry-actions {
+    margin-left: auto;
+}
+.traffic-guard-entry-note {
+    margin: 0.5em 0;
+    overflow-wrap: anywhere;
+}

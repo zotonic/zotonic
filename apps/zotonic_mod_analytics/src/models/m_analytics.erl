@@ -93,7 +93,7 @@ a custom controller's page; normal public-page eligibility checks still apply.
 -export([m_get/3,m_post/3,record_event/3,record_event/4,mark_page/2,
     create/3,set_state/3,purge/2,reorder/2,overview/2,configuration/1,dashboard/3,registry/1]).
 %% Trusted internal persistence API. Public model paths use the ACL-checked APIs above.
--export([store_upgrade_traffic_groups/1,store_install/1,store_collectors/1,store_create/3,store_state/3,
+-export([store_ensure_page_guard/1,is_page_guard/1,is_default_page/1,store_upgrade_traffic_groups/1,store_install/1,store_collectors/1,store_create/3,store_state/3,
     store_purge/2,store_reorder/2,store_flush/5,store_rows/5,store_usage/1,store_info/2]).
 -include_lib("zotonic_core/include/zotonic.hrl").
 
@@ -169,7 +169,8 @@ overview(Period,Context) ->
             Collectors=store_collectors(Context),
             Panels=[#{collector=>Col,available=>z_analytics:available(Col,Reg),
                       report=>report(Col,Period,Context)} || Col <- Collectors,
-                      maps:get(state,Col) =/= <<"paused">>],
+                      maps:get(state,Col) =/= <<"paused">>,
+                      not (is_page_guard(Col) andalso lists:any(fun(X) -> is_default_page(X) andalso maps:get(state,X) =/= <<"paused">> end,Collectors))],
             #{panels=>Panels,period=>Period}
     end.
 
@@ -262,6 +263,23 @@ dashboard(Id0,Period,Context) ->
     end.
 report(undefined,_,_) -> #{};
 report(Col,Period,Context) ->
+    Report = report_base(Col,Period,Context),
+    case is_default_page(Col) of
+        false -> Report;
+        true ->
+            Sources = [X || X <- store_collectors(Context), is_page_guard(X)],
+            case Sources of
+                [Source|_] ->
+                    {R,N} = period(Period),
+                    Start = maps:get(from,Report), End = Start + R*N,
+                    Rows = store_rows(maps:get(id,Source),R,Start,End,Context),
+                    Series = z_analytics_chart:guard_series(Rows,Start,End,R,N,Context),
+                    Report#{chart => maps:get(chart,Report) ++ Series, guard_comparison => true};
+                [] -> Report
+            end
+    end.
+
+report_base(Col,Period,Context) ->
     {R,N}=period(Period), Now=erlang:system_time(second), End=z_analytics:bucket(Now,R)+R,
     Start=End-R*N, Rows=store_rows(maps:get(id,Col),R,Start,End,Context),
     Popular=z_analytics_frequency:enabled(Col),
@@ -400,6 +418,60 @@ store_create(D, State, Context) when State =:= <<"draft">>; State =:= <<"active"
         end
     end,Context);
 store_create(_,_,_) -> {error, invalid_state}.
+
+%% A companion recording preserves normal page-view history while counting early
+%% rejections independently. Bit 0 prevents re-creating an administrator deletion.
+-spec store_ensure_page_guard(Context) -> ok | {error, term()} | {rollback, term()}
+    when Context :: z:context().
+store_ensure_page_guard(Context) ->
+    %% Activation can precede the analytics worker registry refresh.
+    Registry = z_analytics:registry(Context),
+    case maps:is_key(<<"mod_traffic_guard:request">>,Registry) of
+        false -> ok;
+        true ->
+            z_db:transaction(fun(Tx) ->
+                lock(Tx),
+                Marker = z_db:q1("select marker from analytics_budget where id=1",Tx),
+                Cs = store_collectors(Tx),
+                case Marker band 1 =/= 0 orelse not lists:any(fun is_default_page/1,Cs) of
+                    true -> ok;
+                    false ->
+                        Result = case lists:any(fun is_page_guard/1,Cs) of
+                            true -> ok;
+                            false ->
+                                {ok,D} = z_analytics:definition(#{
+                                    <<"name">> => <<"Page requests: traffic guard">>,
+                                    <<"description">> => <<"Companion graphs for the normal Page requests view.">>,
+                                    <<"event">> => <<"mod_traffic_guard:request">>,
+                                    <<"dimension">> => <<"guard_action">>, <<"groups">> => 3,
+                                    <<"filters">> => page_guard_filters()},Registry),
+                                case store_create(D,<<"active">>,Tx) of
+                                    {ok,_} -> ok;
+                                    {error,{exists,_}} -> ok;
+                                    Error -> Error
+                                end
+                        end,
+                        case Result of
+                            ok -> z_db:q("update analytics_budget set marker=marker | 1 where id=1",Tx), ok;
+                            Error1 -> Error1
+                        end
+                end
+            end,Context)
+    end.
+
+page_guard_filters() ->
+    #{<<"type">> => [<<"page">>], <<"traffic">> => [<<"other">>,<<"unknown">>],
+      <<"guard_action">> => [<<"throttle">>,<<"would_throttle">>]}.
+
+-spec is_page_guard(Collector) -> boolean() when Collector :: map().
+is_page_guard(#{event := <<"mod_traffic_guard:request">>, dimension := <<"guard_action">>,
+        groups := G, filters := Filters}) -> G >= 3 andalso Filters =:= page_guard_filters();
+is_page_guard(_) -> false.
+
+-spec is_default_page(Collector) -> boolean() when Collector :: map().
+is_default_page(#{event := <<"page_request">>, dimension := <<>>, filters := Filters}) ->
+    Filters =:= #{} orelse Filters =:= #{<<"traffic">> => [<<"other">>,<<"unknown">>]};
+is_default_page(_) -> false.
 
 %% Expand existing built-in traffic recordings without rewriting their buckets.
 %% Serialize budget reservations with creation, deletion and batch persistence.

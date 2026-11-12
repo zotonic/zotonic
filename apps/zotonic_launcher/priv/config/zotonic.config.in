@@ -469,6 +469,13 @@
       %%% admin_panel configuration.
       {admin_panel, false},
 
+      %%% Global exact IPv4/IPv6 exceptions, merged with every site's traffic guard
+      %%% rules whenever they are loaded. Allow wins over block. Entries are
+      %%% permanent and read-only in the admin UI; blocks still follow guard mode.
+      %%% Example: {traffic_guard_allow, ["192.0.2.1", "2001:db8::1"]}
+      {traffic_guard_allow, []},
+      {traffic_guard_block, []},
+
       %%% Allow a user with the use.mod_backup permission to download backup files.
       {allow_backup_download, true},
 

@@ -19,6 +19,9 @@
             {% chart type="line" title=c.name series=panel.report.chart width=680 height=190 hide_table %}
         {% endif %}
     </div>
+    {% if panel.report.guard_comparison %}
+        <p class="text-muted">{_ Guard lines count page attempts from other and unknown traffic. Throttled requests are not page views; do not add these lines to the total. _}</p>
+    {% endif %}
     {% if panel.report.popular %}
         <details class="analytics-details">
         <summary>{_ Most popular content in this period _}</summary>
