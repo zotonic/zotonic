@@ -18,6 +18,12 @@
 %% limitations under the License.
 
 -module(filter_admin_menu_items).
+-moduledoc(#{
+    zotonic_keywords => [
+        "reference", "frontend_developer", "template_filter",
+        "navigation", "user_interface_and_interaction"
+    ]
+}).
 -moduledoc("Flatten admin dropdown subgroups into headings and links, with separators
 around groups. Remove leading, trailing and consecutive separators after flattening,
 including those contributed explicitly by modules or nested groups.").
