@@ -1,77 +1,46 @@
 # Site Analytics
 
-Lightweight analytics for site traffic, content, email, and custom events, using the site's PostgreSQL database. Enable `mod_analytics`
-and open **Content → Site Analytics** (`admin_analytics`). There is no external
-tracker, tracking cookie, visitor identifier or persisted event log.
+`mod_analytics` measures site traffic, popular content, outgoing email activity and
+custom events. It helps operators understand usage and operational trends without
+an external tracker, tracking cookies, visitor identifiers or persisted event logs.
 
-The default Languages recording starts paused. Enable it with **Resume** in
-the recording configuration when a language breakdown is useful. Existing
-recordings retain their configured state.
+## When to use it
 
-The dashboard displays all non-paused recordings in their saved order, with one shared
-period selector. Chart labels use the request context’s timezone, shown beside the
-period selector; storage and bucket boundaries remain UTC. The first recording has a wide lead graph; remaining recordings
-use a responsive graph grid. The site limit is 32 recordings.
-Use **Configure recordings** (`admin_analytics_config`) for the separate
-administrator-only page with creation, pause/resume and analytics status. Drag
-recording handles to change their site-wide dashboard order; changes save
-immediately. Reordering does not alter recording definitions or history.
+Use Site Analytics for aggregate counts and trends. Counts are not unique visitors,
+and collection is best-effort rather than a billing ledger or audit trail. Requests
+served entirely by a CDN do not reach Zotonic and are not counted. Run one collecting
+node per site; distributed collection is not supported.
 
-## What is recorded
+## Getting started
 
-The built-in `page_request` event counts successful GET requests for public HTML
-pages served by Zotonic, including template pages without a resource ID. It excludes
-private pages, assets and redirects. For resource pages, users who can edit that
-resource (`z_acl:rsc_editable/2`) are excluded, including frontend previews and
-direct visits. Admin access alone does not exclude views of resources the user
-cannot edit. Without a resource ID, users with `use mod_admin` are excluded instead.
-Read-only sessions cannot edit resources, so their resource views can count.
-These rules also apply to the page type of the general `request` event. API and
-other request types keep their existing `use mod_admin` exclusion. DNT and GPC headers do not exclude requests. Page-request
-totals, device breakdowns and popular content exclude detected crawlers and agents
-unless the recording explicitly selects them with a `traffic` filter.
-Traffic classification and API measurements include both unless their filters exclude them.
-The coarse `traffic` dimension distinguishes:
+1. Enable `mod_analytics` in the site's Modules screen.
+2. Open **Content → Site Analytics** (`admin_analytics`) to view standard recordings.
+3. Open **System → Analytics configuration** (`admin_analytics_config`) to add,
+   pause or resume recordings. The default Languages recording starts paused;
+   resume it when a language breakdown is useful.
 
-- `agent`: declared user-triggered assistants (`ChatGPT-User` and `Claude-User`).
-- `crawler`: detected crawlers, including GPTBot, OAI-SearchBot, ClaudeBot and Claude-SearchBot.
-- `other`: a user agent is present but no crawler or assistant is recognized.
-- `unknown`: no usable user agent is available.
+For example, add **HTTP API requests** with a `status` breakdown to compare response
+classes. New recordings collect future events, without historical backfill.
 
-Assistant tokens are checked before the cached generic `is_crawler` classification.
-These are declared identities, not verified providers. Ordinary browser automation
-can appear as `other`; this category does not mean human. No network verification
-or fingerprinting is performed. These rules apply to new events; stored history is
-unchanged. CDN hits that never reach Zotonic are not counted. Counts are not unique visitors.
-The default traffic recording reserves five groups (four categories plus overflow).
-Schema upgrade 4 expands existing built-in traffic recordings with fewer than five
-groups to five, including paused and draft recordings. It preserves their IDs,
-settings, order and historical buckets. Each extra group reserves 3,578 rows.
-Recordings are considered in display order under the shared budget lock; those
-that cannot fit remain unchanged and produce a warning. Increasing the budget
-allows an administrator to retry `m_analytics:store_upgrade_traffic_groups/1`, then
-reload the analytics worker. Repeating the upgrade is safe. Previously aggregated
-overflow cannot be split back into its original categories.
+## Configuration and usage
 
-Initial recordings cover total requests, language, public content, device and
-traffic classification. Optional dimensions are country (from an already enabled
-local `mod_geoip` database) and referrer hostname. No IP, user-agent string, URL
-path, query string or complete referrer is stored by this module. Other Zotonic
-logging modules have their own policies.
+Per-site settings under `mod_analytics`:
 
-Custom page controllers can mark a public resource with the returned context:
+| Setting | Default | Meaning |
+| --- | --- | --- |
+| `row_budget` | `1000000` | Reserved group/time slots across retained recordings, not physical SQL rows or bytes. |
+| `require_consent` | `false` | Require `analytics_consent = true` for request-associated events. |
 
-```erlang
-Context1 = m_analytics:mark_page(ResourceId, Context).
-```
+The dashboard displays non-paused recordings in their saved order, with a shared
+period selector. Labels use the request context's timezone, shown beside the
+selector; storage and bucket boundaries remain UTC. The first recording has a wide
+lead graph; the others use a responsive grid. A site can retain up to 32 recordings.
 
-The final response must still pass the request eligibility checks. To exclude a
-request, set `analytics_exclude` to `true` in its context. Configuration
-`mod_analytics.require_consent = true` requires `analytics_consent = true` in the
-trusted request context. Sites must supply that flag from their own consent
-integration; this module does not read browser local storage or install a beacon.
+Use **Configure recordings** for creation, pause/resume and status. Drag recording
+handles to change their site-wide dashboard order; changes save immediately and
+preserve definitions and history. Existing recordings retain their configured state.
 
-## Choosing recordings
+### Choosing recordings
 
 Administrators select an event, zero or one breakdown, a group limit, and fixed
 filters. Filter fields are ANDed; allowed values within one field are ORed. For
@@ -108,6 +77,274 @@ Use `<<"draft">>` instead of `<<"active">>` to create without collecting. Empty
 `dimension` means total only and reserves one group. Draft and paused recordings
 also reserve capacity. History ages out on subsequent flushes; its definition
 retains the reservation until purged.
+
+### Adding a recording
+
+Use **Add recording** on the configuration page. The dialog first asks for a
+name, an optional short description and an event type. The second step offers
+only that event's breakdown and filter dimensions. Enumerated filters show their
+allowed values. Returning to the first step preserves the settings; changing the
+event clears the old breakdown and filters. Total recordings do not need a group
+limit. All submitted dimensions and values are validated again on the server.
+
+Descriptions are plain text, displayed with the recording on the dashboard and
+configuration page. The form allows 250 characters; the API accepts at most
+1,000 UTF-8 bytes. Descriptions are optional for existing recordings and stored
+in the definition payload, so no table migration is needed. Names and descriptions
+do not affect whether two recordings have an equivalent measurement definition.
+
+### Recording information
+
+Each recording on the configuration page has an **Info** button. Its read-only,
+site-administrator-only dialog shows the description, event/schema, state,
+breakdown, filters, group limit, creation/start timestamps and storage usage.
+Per-resolution details include bucket counts, available slots, aggregate payload
+bytes and oldest/latest bucket start times. Dates use the context's timezone.
+
+Stored payload is measured with PostgreSQL `pg_column_size` for the counts and
+recording definition; it excludes row headers, indexes, shared allocation and
+unsaved in-memory events. Reserved group/time slots are shown separately as the
+budget commitment, not physical disk usage. Statistics are queried only when the
+dialog opens, for that recording, with no aggregate payload decoding or scans of
+other recordings. Missing/deleted recordings show an unavailable message.
+
+## What is recorded
+
+The built-in `page_request` event counts successful GET requests for public HTML
+pages served by Zotonic, including template pages without a resource ID. It excludes
+private pages, assets and redirects. For resource pages, users who can edit that
+resource (`z_acl:rsc_editable/2`) are excluded, including frontend previews and
+direct visits. Admin access alone does not exclude views of resources the user
+cannot edit. Without a resource ID, users with `use mod_admin` are excluded instead.
+Read-only sessions cannot edit resources, so their resource views can count.
+These rules also apply to the page type of the general `request` event. API and
+other request types keep their existing `use mod_admin` exclusion. DNT and GPC headers do not exclude requests. Page-request
+totals, device breakdowns and popular content exclude detected crawlers and agents
+unless the recording explicitly selects them with a `traffic` filter.
+Traffic classification and API measurements include both unless their filters exclude them.
+The coarse `traffic` dimension distinguishes:
+
+- `agent`: declared user-triggered assistants (`ChatGPT-User` and `Claude-User`).
+- `crawler`: detected crawlers, including GPTBot, OAI-SearchBot, ClaudeBot and Claude-SearchBot.
+- `other`: a user agent is present but no crawler or assistant is recognized.
+- `unknown`: no usable user agent is available.
+
+Assistant tokens are checked before the cached generic `is_crawler` classification.
+These are declared identities, not verified providers. Ordinary browser automation
+can appear as `other`; this category does not mean human. No network verification
+or fingerprinting is performed. These rules apply to new events; stored history is
+unchanged. CDN hits that never reach Zotonic are not counted. Counts are not unique visitors.
+The default traffic recording reserves five groups (four categories plus overflow).
+
+
+Initial recordings cover total requests, language, public content, device and
+traffic classification. Optional dimensions are country (from an already enabled
+local `mod_geoip` database) and referrer hostname. No IP, user-agent string, URL
+path, query string or complete referrer is stored by this module. Other Zotonic
+logging modules have their own policies.
+
+Custom page controllers can mark a public resource with the returned context:
+
+```erlang
+Context1 = m_analytics:mark_page(ResourceId, Context).
+```
+
+The final response must still pass the request eligibility checks. To exclude a
+request, set `analytics_exclude` to `true` in its context. Configuration
+`mod_analytics.require_consent = true` requires `analytics_consent = true` in the
+trusted request context. Sites must supply that flag from their own consent
+integration; this module does not read browser local storage or install a beacon.
+
+### Popular content
+
+Popular content shows which pages receive the most recorded requests. Newly
+popular pages can enter the ranking even when the configured counter capacity is reached. The dashboard shows up to 20 leading candidates
+for the selected moving period (one hour, six hours, 24 hours, week, month, year
+or five years). Counts are ranges when approximation is necessary; overlapping
+ranges do not establish an exact rank. Totals remain exact for recorded events.
+
+The default 100 counters retain every page exceeding roughly 1% of recorded
+traffic, but cannot guarantee an exact top 20 among thousands of near-equal pages.
+Old traffic stops contributing when its bucket leaves the selected window.
+Windows advance at the selected tier resolution, include the current partial
+bucket, and can be up to one bucket shorter than their nominal duration. Refresh
+the dashboard to see newly flushed data. A horizontal bar chart compares the leading pages, with the ranked list and
+count ranges beneath it. Bars show the lower bounds. No total-traffic time graph
+is generated for popular content.
+
+Existing history is preserved. Old anonymous Other counts widen the uncertainty
+bounds until that history expires. Storage remains capped at the configured
+number of counters per retained bucket plus constant summary metadata. No
+visitor identity or raw request log is added.
+
+See the [research and architecture decision](../../doc/technotes/simple-analytics.md#popular-content-bounded-rankings-over-moving-periods-implemented-november-2026)
+for alternatives, references, error bounds and implementation details.
+
+### SMTP (Email)
+
+A standard **SMTP (Email)** recording counts outgoing email transport notifications
+and breaks them down by `outcome`: `sent`, `retry`, `failed`, or `bounced`. Its
+line graph shows notification activity over time; the breakdown shows outcomes
+within the selected period. It is appended to the standard recordings and shown with all other recordings.
+Drag it higher in configuration to change its dashboard position.
+
+`email_sent` with `is_final=false` counts as sent (accepted by the transport).
+The later `is_final=true` confirmation is ignored to avoid counting a normal send
+twice. Non-final failures count as retries, final failures as failed, and bounce
+notifications or failures with reason `bounce` as bounced. A sent message can
+later bounce, and retries can repeat: these are notifications, not unique emails,
+inbox deliveries or opens. Repeated provider notifications are not deduplicated;
+providers that only report final success do not contribute to the sent count.
+Inbound email is not counted.
+
+Only the outcome is retained. No recipient/sender addresses, message identifiers,
+SMTP response text, subjects or bodies are recorded. Email activity is operational
+and independent of browser consent/editor exclusions. It uses the same bounded
+queue, rollups, reporting ACL and configuration permissions as other recordings.
+
+Fresh installations include this recording. Schema upgrade 3 appends it to
+existing installations if the budget permits; an equivalent existing recording
+is preserved. Its five groups reserve 17,890 group/time slots. If the budget is
+full, free capacity and create an SMTP recording from configuration. Deleting the
+recording after upgrade does not cause it to reappear on restart.
+
+### HTTP API requests
+
+Select **HTTP API requests** when creating a recording to count completed HTTP
+requests handled by `controller_api` (`/api/...`). This is the `api_request` event,
+separate from public page requests. All methods and response classes are counted,
+including HEAD, OPTIONS, redirects and errors that reach the controller middleware.
+Requests rejected before that middleware and MQTT/WebSocket model calls are not
+included. The HTTP status describes the response, not necessarily the outcome of
+an asynchronously published model call.
+
+Choose one breakdown: `method`, `status` (1xx–5xx), `language`, `country` or
+`traffic`. For example, record a total filtered by `status = 4xx, 5xx`, or break
+down by method. The same bounded storage and fixed filters apply. Create the
+recordings you need; existing installations do not get an extra recording automatically.
+
+The existing request exclusions apply: admin-interface users, `analytics_exclude`
+and missing consent when `require_consent` is enabled. API requests do not need to refer to a public page.
+No topic/path, query string, body, token or user identifier is retained.
+
+## Dispatch classification
+
+Use `{analytics, Type}` in dispatch options to classify a request:
+
+```erlang
+{catalog, ["catalog", id], controller_page,
+    [{template, <<"catalog.tpl">>}, {analytics, page}]},
+{api, ["api", '*'], controller_api, [{analytics, api}]},
+{download, ["download", id], controller_file, [{analytics, download}]}
+```
+
+Standard type names are `page`, `api`, `download` and `asset`. Custom names such
+as `webhook` are also supported: atoms or binaries matching `[a-z][a-z0-9_]*`,
+up to 64 bytes. These are fixed route labels, never values derived from request
+paths, resource names or user input. `{analytics, false}` disables a route.
+Without an option, `controller_page` and `controller_template` default to `page` and `controller_api`
+defaults to `api`; other controllers are not tracked. Assets and downloads are
+therefore opt-in. Explicit options always override those defaults.
+
+Select **Requests by dispatch type** (`request`) and break down by `type`, or
+use `type` as a fixed filter with another breakdown such as `status` or `method`.
+Configuration discovers type names from the site's effective dispatch rules on
+each page load, including controller defaults, and lists them as an inline hint below the filters.
+Custom labels do not require an event-schema registration or collector restart.
+Historical labels remain valid filters even after a dispatch rule is removed.
+
+The `page` type retains the public HTML GET/200 policy and requires anonymous access; a resource ID, when present, must be publicly visible. Other types count completed responses of any method/status that
+reach the middleware. All types retain the existing privacy/consent exclusions.
+`page_request` and `api_request` remain available for existing recordings; the
+new `request` event provides the cross-type view. Each event updates only its
+own recordings, so an individual recording does not count a request twice.
+MQTT traffic and requests rejected before controller middleware remain excluded.
+
+For **HTTP API requests** and **Requests by dispatch type**, `http_status` is
+also available as a breakdown or fixed filter. It contains the exact final HTTP
+response code (100–599), for example `200`, `404` or `500`. The existing `status`
+dimension continues to contain classes such as `2xx` and `5xx`. For example,
+filter `http_status = 401, 403` and break down by `type` to compare access-denied
+responses across route types. New recordings start with new requests; existing
+aggregate history cannot be reclassified by exact status.
+
+
+### Template pages and resource presence
+
+`controller_template` defaults to the `page` analytics type, like
+`controller_page`. Successful HTML GET responses without a resource ID are
+eligible when the route allows anonymous access. An invalid configured resource
+is not treated as an ID-less page; resources with IDs must be publicly visible.
+The existing privacy exclusions and `{analytics, false}` override still apply.
+
+The `has_page_id` dimension is available for page, API and dispatch-type request
+recordings. Use the fixed filter `has_page_id = true` for requests with a resolved
+resource ID, or `false` for requests without one; omit the filter to include both.
+It is also available as a breakdown. For `controller_template`, only its configured
+resource ID (or explicit `mark_page/2` ID) counts, matching what the controller
+renders. A query-string ID does not attach a resource to an unrelated template.
+Requests without an ID omit the `page` dimension and appear as unknown when
+breaking down by page. Existing aggregate history is not retroactively classified.
+
+### Agent interface analytics
+
+With `mod_agent_discovery` and `mod_analytics` enabled, create a **Requests by
+dispatch type** (`request`) recording with dimension `type`. The agent interfaces
+use these types:
+
+| Type | Interface |
+| --- | --- |
+| `agent_search` | Agent search |
+| `agent_resource` | Resource data |
+| `agent_related` | Related resources |
+| `agent_schema` | Content schema |
+| `agent_markdown` | Markdown resource representation |
+| `agent_llms` | llms.txt |
+| `agent_api_catalog` | API catalog |
+| `agent_openapi` | OpenAPI document |
+| `agent_api_help` | API help page |
+
+Filter by these types to measure interface usage, or also by `traffic = agent` to
+measure recognized assistants using them. Interface usage alone does not identify
+an agent. To inspect errors, filter by type and break down by `http_status` or
+`status`. Allow ten groups for all nine types plus overflow.
+
+Recording is opt-in through the usual analytics configuration and row budget.
+Admin exclusions and consent settings still apply. Completed responses, including
+errors, are counted when they reach the handled controller middleware. Paths,
+resource IDs, search terms and request bodies are not stored for these interfaces.
+MQTT model calls are not counted. Requests made through the generic model HTTP API
+retain the `api` type; these types apply to the dedicated agent dispatch routes.
+
+### Traffic guard signals
+
+When `mod_traffic_guard` is enabled, assessed requests carry `crawl_behavior`,
+`guard_action` and `guard_reason` on the built-in page, API and dispatch-type
+request events. For example, filter `guard_action = would_throttle` in observe
+mode to inspect content that would be limited. These signals describe behavior,
+independently of the declared `traffic` classification.
+
+The optional `mod_traffic_guard:request` event also counts early 429 decisions that
+never reach normal request analytics. It overlaps with ordinary request events;
+do not sum their totals. Existing analytics consent, admin and exclusion policies
+apply. See [Traffic guard](../zotonic_mod_traffic_guard/README.md) for configuration,
+values, coverage and operational limitations.
+
+
+Schema upgrade 5 and module activation add a **Page requests: traffic guard**
+companion when a default normal-traffic Page requests recording and
+`mod_traffic_guard` are available. The default chart displays **Would throttle** and
+**Throttled** alongside page views. These lines count page attempts of `other` and
+`unknown` traffic, including early rejections; they must not be added to page views.
+The companion remains configurable but is not shown as a separate dashboard panel
+while an unpaused default Page requests panel is present.
+
+The companion reserves three groups (10,734 group/time slots), respecting the shared row budget
+and 32-recording limit. Existing recordings and their history are unchanged. Guard
+history starts on creation, with gaps before that time. If capacity is exhausted,
+free capacity and retry `m_analytics:store_ensure_page_guard(Context)`, followed by
+an analytics worker reload. Once initialized, deleting the companion is respected;
+module restarts do not recreate it.
 
 ## Module-defined events
 
@@ -159,7 +396,34 @@ admission, including disabled/excluded collection, not durable acknowledgement.
 Validation failures return `{error, Reason}`. Repeating a business operation's
 record call counts again; database-flush deduplication does not deduplicate jobs.
 
+## Operational limits
+
+Run one collecting Zotonic node per site. Distributed ownership/fencing is not
+implemented. This is an audience counter, not a billing ledger or durable bus.
+Shutdown or a worker crash can lose buffered and uncommitted work; restarts retain
+committed history. Database outages and overload can lose counts deliberately to
+keep memory bounded. Status reports dropped updates, writer failures and the last
+successful flush. The global access-log ring can also lose events upstream.
+
+Browser page-view collection, visitor/session estimates, the optional one-second
+live tier and CSV export are later extensions described in the design document.
+The current module uses only aggregate request and declared module-event counts.
+
+### Upgrading traffic classifications
+
+Schema upgrade 4 expands existing built-in traffic recordings with fewer than five
+groups to five, including paused and draft recordings. It preserves their IDs,
+settings, order and historical buckets. Each extra group reserves 3,578 group/time slots.
+Recordings are considered in display order under the shared budget lock; those
+that cannot fit remain unchanged and produce a warning. Increasing the budget
+allows an administrator to retry `m_analytics:store_upgrade_traffic_groups/1`, then
+reload the analytics worker. Repeating the upgrade is safe. Previously aggregated
+overflow cannot be split back into its original categories.
+
 ## Bounded storage and aggregation
+
+Page rankings use bounded, mergeable Misra–Gries summaries rather than retaining
+the first pages seen.
 
 | Resolution | Slots per recording | Retention |
 | --- | ---: | --- |
@@ -197,18 +461,14 @@ reports show gaps instead of inventing zero traffic. Nonzero partial buckets are
 shown as lower bounds with an incompleteness notice. Reports choose a single tier
 and return at most 240 chart samples, using Zotonic's `{% chart %}` scomp.
 
-## Operational limits
+### Performance verification
 
-Run one collecting Zotonic node per site. Distributed ownership/fencing is not
-implemented. This is an audience counter, not a billing ledger or durable bus.
-Shutdown or a worker crash can lose buffered and uncommitted work; restarts retain
-committed history. Database outages and overload can lose counts deliberately to
-keep memory bounded. Status reports dropped updates, writer failures and the last
-successful flush. The global access-log ring can also lose events upstream.
-
-Browser page-view collection, visitor/session estimates, the optional one-second
-live tier and CSV export are later extensions described in the design document.
-The current module uses only aggregate request and declared module-event counts.
+See [performance audit](../../doc/technotes/simple-analytics-performance-audit.md) for the performance audit,
+measured aggregation benchmark, overload tests and remaining operational limits.
+The request path skips metadata enrichment when no active recording consumes its
+event stream. Event-local ETS schemas avoid copying the complete registry during
+ingestion. Admission expiry runs once per minute, and events visit only matching
+active recording definitions. Database flushes avoid unchanged bucket rewrites.
 
 ## Source and validation
 
@@ -231,237 +491,3 @@ the original order afterwards. The main integration test creates and cleans up o
 `analytics_integration_tests:access_control(Context)` checks controller and model
 access for viewer-only, configuration-only, denied and administrator contexts.
 It uses a scoped test observer and does not change stored ACL rules.
-
-### HTTP API requests
-
-Select **HTTP API requests** when creating a recording to count completed HTTP
-requests handled by `controller_api` (`/api/...`). This is the `api_request` event,
-separate from public page requests. All methods and response classes are counted,
-including HEAD, OPTIONS, redirects and errors that reach the controller middleware.
-Requests rejected before that middleware and MQTT/WebSocket model calls are not
-included. The HTTP status describes the response, not necessarily the outcome of
-an asynchronously published model call.
-
-Choose one breakdown: `method`, `status` (1xx–5xx), `language`, `country` or
-`traffic`. For example, record a total filtered by `status = 4xx, 5xx`, or break
-down by method. The same bounded storage and fixed filters apply. Create the
-recordings you need; existing installations do not get an extra recording automatically.
-
-The existing request exclusions apply: admin-interface users, `analytics_exclude`
-and missing consent when `require_consent` is enabled. API requests do not need to refer to a public page.
-No topic/path, query string, body, token or user identifier is retained.
-
-### Dispatch classification
-
-Use `{analytics, Type}` in dispatch options to classify a request:
-
-```erlang
-{catalog, ["catalog", id], controller_page,
-    [{template, <<"catalog.tpl">>}, {analytics, page}]},
-{api, ["api", '*'], controller_api, [{analytics, api}]},
-{download, ["download", id], controller_file, [{analytics, download}]}
-```
-
-Standard type names are `page`, `api`, `download` and `asset`. Custom names such
-as `webhook` are also supported: atoms or binaries matching `[a-z][a-z0-9_]*`,
-up to 64 bytes. These are fixed route labels, never values derived from request
-paths, resource names or user input. `{analytics, false}` disables a route.
-Without an option, `controller_page` and `controller_template` default to `page` and `controller_api`
-defaults to `api`; other controllers are not tracked. Assets and downloads are
-therefore opt-in. Explicit options always override those defaults.
-
-Select **Requests by dispatch type** (`request`) and break down by `type`, or
-use `type` as a fixed filter with another breakdown such as `status` or `method`.
-Configuration discovers type names from the site's effective dispatch rules on
-each page load, including controller defaults, and lists them as an inline hint below the filters.
-Custom labels do not require an event-schema registration or collector restart.
-Historical labels remain valid filters even after a dispatch rule is removed.
-
-The `page` type retains the public HTML GET/200 policy and requires anonymous access; a resource ID, when present, must be publicly visible. Other types count completed responses of any method/status that
-reach the middleware. All types retain the existing privacy/consent exclusions.
-`page_request` and `api_request` remain available for existing recordings; the
-new `request` event provides the cross-type view. Each event updates only its
-own recordings, so an individual recording does not count a request twice.
-MQTT traffic and requests rejected before controller middleware remain excluded.
-
-For **HTTP API requests** and **Requests by dispatch type**, `http_status` is
-also available as a breakdown or fixed filter. It contains the exact final HTTP
-response code (100–599), for example `200`, `404` or `500`. The existing `status`
-dimension continues to contain classes such as `2xx` and `5xx`. For example,
-filter `http_status = 401, 403` and break down by `type` to compare access-denied
-responses across route types. New recordings start with new requests; existing
-aggregate history cannot be reclassified by exact status.
-
-
-Template pages and resource presence
-------------------------------------
-
-`controller_template` defaults to the `page` analytics type, like
-`controller_page`. Successful HTML GET responses without a resource ID are
-eligible when the route allows anonymous access. An invalid configured resource
-is not treated as an ID-less page; resources with IDs must be publicly visible.
-The existing privacy exclusions and `{analytics, false}` override still apply.
-
-The `has_page_id` dimension is available for page, API and dispatch-type request
-recordings. Use the fixed filter `has_page_id = true` for requests with a resolved
-resource ID, or `false` for requests without one; omit the filter to include both.
-It is also available as a breakdown. For `controller_template`, only its configured
-resource ID (or explicit `mark_page/2` ID) counts, matching what the controller
-renders. A query-string ID does not attach a resource to an unrelated template.
-Requests without an ID omit the `page` dimension and appear as unknown when
-breaking down by page. Existing aggregate history is not retroactively classified.
-
-
-## Performance verification
-
-See `doc/technotes/simple-analytics-performance-audit.md` for the performance audit,
-measured aggregation benchmark, overload tests and remaining operational limits.
-The request path skips metadata enrichment when no active recording consumes its
-event stream. Event-local ETS schemas avoid copying the complete registry during
-ingestion. Admission expiry runs once per minute, and events visit only matching
-active recording definitions. Database flushes avoid unchanged bucket rewrites.
-
-
-## Popular content
-
-Page breakdowns use a bounded, mergeable Misra–Gries summary instead of retaining
-the first pages seen. Newly popular pages can enter the ranking even after the
-counter capacity is reached. The dashboard shows up to 20 leading candidates
-for the selected moving period (one hour, six hours, 24 hours, week, month, year
-or five years). Counts are ranges when approximation is necessary; overlapping
-ranges do not establish an exact rank. Totals remain exact for recorded events.
-
-The default 100 counters retain every page exceeding roughly 1% of recorded
-traffic, but cannot guarantee an exact top 20 among thousands of near-equal pages.
-Old traffic stops contributing when its bucket leaves the selected window.
-Windows advance at the selected tier resolution, include the current partial
-bucket, and can be up to one bucket shorter than their nominal duration. Refresh
-the dashboard to see newly flushed data. A horizontal bar chart compares the leading pages, with the ranked list and
-count ranges beneath it. Bars show the lower bounds. No total-traffic time graph
-is generated for popular content.
-
-Existing history is preserved. Old anonymous Other counts widen the uncertainty
-bounds until that history expires. Storage remains capped at the configured
-number of counters per retained bucket plus constant summary metadata. No
-visitor identity or raw request log is added.
-
-See the [research and architecture decision](../../doc/technotes/simple-analytics.md#popular-content-bounded-rankings-over-moving-periods-implemented-november-2026)
-for alternatives, references, error bounds and implementation details.
-
-## SMTP (Email)
-
-A standard **SMTP (Email)** recording counts outgoing email transport notifications
-and breaks them down by `outcome`: `sent`, `retry`, `failed`, or `bounced`. Its
-line graph shows notification activity over time; the breakdown shows outcomes
-within the selected period. It is appended to the standard recordings and shown with all other recordings.
-Drag it higher in configuration to change its dashboard position.
-
-`email_sent` with `is_final=false` counts as sent (accepted by the transport).
-The later `is_final=true` confirmation is ignored to avoid counting a normal send
-twice. Non-final failures count as retries, final failures as failed, and bounce
-notifications or failures with reason `bounce` as bounced. A sent message can
-later bounce, and retries can repeat: these are notifications, not unique emails,
-inbox deliveries or opens. Repeated provider notifications are not deduplicated;
-providers that only report final success do not contribute to the sent count.
-Inbound email is not counted.
-
-Only the outcome is retained. No recipient/sender addresses, message identifiers,
-SMTP response text, subjects or bodies are recorded. Email activity is operational
-and independent of browser consent/editor exclusions. It uses the same bounded
-queue, rollups, reporting ACL and configuration permissions as other recordings.
-
-Fresh installations include this recording. Schema upgrade 3 appends it to
-existing installations if the budget permits; an equivalent existing recording
-is preserved. Its five groups reserve 17,890 group/time slots. If the budget is
-full, free capacity and create an SMTP recording from configuration. Deleting the
-recording after upgrade does not cause it to reappear on restart.
-
-## Adding a recording
-
-Use **Add recording** on the configuration page. The dialog first asks for a
-name, an optional short description and an event type. The second step offers
-only that event's breakdown and filter dimensions. Enumerated filters show their
-allowed values. Returning to the first step preserves the settings; changing the
-event clears the old breakdown and filters. Total recordings do not need a group
-limit. All submitted dimensions and values are validated again on the server.
-
-Descriptions are plain text, displayed with the recording on the dashboard and
-configuration page. The form allows 250 characters; the API accepts at most
-1,000 UTF-8 bytes. Descriptions are optional for existing recordings and stored
-in the definition payload, so no table migration is needed. Names and descriptions
-do not affect whether two recordings have an equivalent measurement definition.
-
-## Recording information
-
-Each recording on the configuration page has an **Info** button. Its read-only,
-site-administrator-only dialog shows the description, event/schema, state,
-breakdown, filters, group limit, creation/start timestamps and storage usage.
-Per-resolution details include bucket counts, available slots, aggregate payload
-bytes and oldest/latest bucket start times. Dates use the context's timezone.
-
-Stored payload is measured with PostgreSQL `pg_column_size` for the counts and
-recording definition; it excludes row headers, indexes, shared allocation and
-unsaved in-memory events. Reserved group/time slots are shown separately as the
-budget commitment, not physical disk usage. Statistics are queried only when the
-dialog opens, for that recording, with no aggregate payload decoding or scans of
-other recordings. Missing/deleted recordings show an unavailable message.
-
-## Agent interface analytics
-
-With `mod_agent_discovery` and `mod_analytics` enabled, create a **Requests by
-dispatch type** (`request`) recording with dimension `type`. The agent interfaces
-use these types:
-
-| Type | Interface |
-| --- | --- |
-| `agent_search` | Agent search |
-| `agent_resource` | Resource data |
-| `agent_related` | Related resources |
-| `agent_schema` | Content schema |
-| `agent_markdown` | Markdown resource representation |
-| `agent_llms` | llms.txt |
-| `agent_api_catalog` | API catalog |
-| `agent_openapi` | OpenAPI document |
-| `agent_api_help` | API help page |
-
-Filter by these types to measure interface usage, or also by `traffic = agent` to
-measure recognized assistants using them. Interface usage alone does not identify
-an agent. To inspect errors, filter by type and break down by `http_status` or
-`status`. Allow ten groups for all nine types plus overflow.
-
-Recording is opt-in through the usual analytics configuration and row budget.
-Admin exclusions and consent settings still apply. Completed responses, including
-errors, are counted when they reach the handled controller middleware. Paths,
-resource IDs, search terms and request bodies are not stored for these interfaces.
-MQTT model calls are not counted. Requests made through the generic model HTTP API
-retain the `api` type; these types apply to the dedicated agent dispatch routes.
-
-## Traffic guard signals
-
-When `mod_traffic_guard` is enabled, assessed requests carry `crawl_behavior`,
-`guard_action` and `guard_reason` on the built-in page, API and dispatch-type
-request events. For example, filter `guard_action = would_throttle` in observe
-mode to inspect content that would be limited. These signals describe behavior,
-independently of the declared `traffic` classification.
-
-The optional `mod_traffic_guard:request` event also counts early 429 decisions that
-never reach normal request analytics. It overlaps with ordinary request events;
-do not sum their totals. Existing analytics consent, admin and exclusion policies
-apply. See [Traffic guard](../zotonic_mod_traffic_guard/README.md) for configuration,
-values, coverage and operational limitations.
-
-
-Schema upgrade 5 and module activation add a **Page requests: traffic guard**
-companion when a default normal-traffic Page requests recording and
-`mod_traffic_guard` are available. The default chart displays **Would throttle** and
-**Throttled** alongside page views. These lines count page attempts of `other` and
-`unknown` traffic, including early rejections; they must not be added to page views.
-The companion remains configurable but is not shown as a separate dashboard panel
-while an unpaused default Page requests panel is present.
-
-The companion reserves three groups (10,734 rows), respecting the shared row budget
-and 32-recording limit. Existing recordings and their history are unchanged. Guard
-history starts on creation, with gaps before that time. If capacity is exhausted,
-free capacity and retry `m_analytics:store_ensure_page_guard(Context)`, followed by
-an analytics worker reload. Once initialized, deleting the companion is respected;
-module restarts do not recreate it.

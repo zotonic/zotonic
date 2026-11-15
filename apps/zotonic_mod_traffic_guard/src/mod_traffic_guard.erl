@@ -38,78 +38,122 @@
 ]).
 -moduledoc(#{zotonic_keywords => ["reference", "module", "operator", "backend_developer", "security", "performance", "logging_and_monitoring"]}).
 -moduledoc("
-Observe or throttle rapid content retrieval without trusting browser user agents.
-Enable `mod_traffic_guard` in Modules. The default mode is **observe**, which allows
-all requests and reports when a configured budget would reject one. **enforce**
-returns HTTP 429 with Retry-After and no-cache headers. **off** bypasses checks.
+Traffic Guard detects and limits excessive requests from individual IP addresses.
+It protects a site from rapid crawling and repeated page requests, including
+clients that present themselves as ordinary browsers. It starts in **observe**
+mode, recording decisions without rejecting requests.
 
-## Scope and configuration
+## When to use it
 
-The guard covers GET/HEAD requests to page, template, HTTP model API and agent
-interface controllers. Static assets, POST requests and MQTT messages are excluded.
-Custom controllers classified as pages by analytics (`{analytics, page}`) are also
-covered, even without analytics enabled. Dispatch option `{traffic_guard, true}`
-opts another controller in; `false` opts a
-route out. Configuration is under `mod_traffic_guard` in System Configuration.
+Use Traffic Guard to limit excessive origin requests without browser challenges,
+cookies or user-agent verification. It does not require `mod_analytics`.
+
+Limits are shared by all covered requests from one IP on one site and node.
+Offices, carrier NAT and proxies share an allowance, so inspect observe-mode
+results before enforcing. Configure trusted proxies correctly: client addresses
+come from Cowmachine's trusted-proxy processing. This is not a DDoS firewall;
+distributed attacks still need proxy-level protection.
+
+## Getting started
+
+1. Enable `mod_traffic_guard` in the site's Modules screen. Leave the default
+   mode at `observe` initially.
+2. Open **System → Traffic guard** to inspect currently limited addresses and
+   manage IP exceptions.
+3. Tune settings under `mod_traffic_guard` in **System → Configuration**, then
+   set `mode` to `enforce` when the observed decisions are appropriate.
+
+For example, the default settings allow an initial burst of 30 requests per IP
+and replenish two request credits per second. Reloading the same page consumes
+the same allowance as visiting different pages.
+
+## Configuration and usage
 
 | Key | Default | Meaning |
 | --- | --- | --- |
-| mode | observe | off, observe, enforce |
-| period | 60 | Rate period, in seconds |
-| request_limit | 120 | Requests replenished per period |
-| request_burst | 30 | Maximum request credits |
-| max_clients | 5000 | Retained client budgets per site/node |
+| `mode` | `observe` | `off`, `observe` or `enforce`. |
+| `period` | `60` | Rate period in seconds (1–3600). |
+| `request_limit` | `120` | Request credits replenished per period (1–100000). |
+| `request_burst` | `30` | Maximum request credits (1–1000). |
+| `max_clients` | `5000` | Retained client budgets per site/node (1–50000). |
 
-Budgets are shared by all covered routes for a client IP. Cookies and user agents
-cannot reset them. There are no automatic admin or claimed-bot exemptions. Shared
-networks share budgets: calibrate in observe mode before enforcing. Invalid values
-fall back to defaults. Configuration changes reset transient budgets on the next
-check. Off mode performs no detection or analytics emission.
+**observe** allows requests and reports `would_throttle` when the rate limit would
+reject them. **enforce** rejects excess requests with HTTP 429, `Retry-After` and
+no-cache headers. **off** bypasses checks and guard analytics. Rejected requests
+do not consume more credits; clients recover automatically. Invalid settings use
+the defaults. Rate-setting changes reset transient budgets.
 
-## IP exceptions
+### IP exceptions
 
-Use **System → Traffic guard** to edit exact IPv4 and IPv6 allow/block lists (up to
-256 addresses per list). Allow takes precedence and bypasses rate limits. Block
-entries follow the mode: observe reports would_throttle, enforce returns 429, off
-bypasses checks. Lists cover only guarded routes and methods. Saves require a
-writable administrator and invalidate the in-memory copy. Invalid entries reject
-the whole save. IPv4-mapped IPv6 addresses match IPv4 entries. CIDR networks and
-hostnames are not supported. Entries are stored in `traffic_guard_ip`, with a required note and optional UTC
-expiry. Expired rules stop applying immediately; hourly cleanup deletes them.
-The admin page shows currently rate-limited IPs on this node and offers timed
-blocks with automatically generated notes. Global `traffic_guard_allow` and
-`traffic_guard_block` lists in zotonic.config are merged on settings load and
-shown read-only. See `m_traffic_guard` for model APIs.
+Use **System → Traffic guard** to add or edit exact IPv4/IPv6 addresses, with a
+required note and optional UTC expiry. Each site list supports up to 256 entries.
+Separate addresses with spaces, commas or newlines. Invalid entries reject the
+whole save. IPv4-mapped IPv6 addresses match IPv4 entries; CIDR ranges and hostnames
+are not supported.
+
+Allow entries take precedence over blocks and bypass the request-rate limit.
+Blocks follow the configured mode and only affect guarded routes and methods.
+Choose an hour, day, week, 30-day month, forever or an explicit UTC deadline.
+Expired entries stop applying immediately. Rule edits preserve other clients'
+budgets and throttling evidence.
+
+The current-throttling panel shows up to 200 addresses on this node, including
+observe-mode decisions. **Block IP** creates a timed block with a note derived
+from the displayed evidence. Both panels require administrator access; writes
+also require credentials that are not read-only. See `m_traffic_guard` for APIs.
+
+Global `traffic_guard_allow` and `traffic_guard_block` lists in `zotonic.config`
+are merged whenever site settings load. They are permanent, appear read-only in
+the admin page, and cannot be removed by deleting site entries. Allow precedence
+also applies across global and site rules. The README includes configuration examples.
+
+## Request coverage and behavior
+
+The guard covers GET/HEAD requests to page, template, HTTP model API and agent
+interface controllers. Custom controllers classified as pages by analytics
+(`{analytics, page}`) are also covered, without requiring analytics collection.
+Use `{traffic_guard, true}` to opt another controller in, or `{traffic_guard, false}`
+to exempt a route. POST requests and MQTT messages are not covered; static assets
+are not covered by default.
+
+There are no automatic administrator or self-declared crawler exemptions.
+Cookies and user-agent changes cannot reset an IP's allowance. Limits are
+node-local, not cluster-wide; clients rotating IP addresses can evade them.
+
+If rate-limit admission is unavailable, overloaded or at client capacity, requests
+fail open with an unknown assessment. Explicit IP-rule hits use a separate lookup
+and bypass the admission worker. Unknown does not mean a suspected crawler.
 
 ## Analytics
 
-With `mod_analytics` enabled, the default Page requests chart includes Would
-throttle and Throttled lines for `other` and `unknown` page attempts. A separate
-companion recording reserves 10,734 rows within the site budget, preserving the
-existing page-view history. Additional breakdowns can use `mod_traffic_guard:request`.
-Each checked request emits one decision, including early rejections. Dimensions
-are `crawl_behavior` (normal, excessive, unknown), `guard_action` (allow,
-would_throttle, throttle), `guard_reason` (none, request_rate,
-state_capacity, unavailable, ip_allow, ip_block), `traffic`, and `type` (page, api, other).
-Existing request events also receive the three guard dimensions. Unknown means
-no reliable guard assessment was available, not a suspected crawler.
-Analytics consent and admin exclusions still apply; enforcement never depends on
-analytics availability or recording configuration. Guard events and ordinary
-request events overlap and should not be added together as a request total.
+With `mod_analytics` enabled, the default Page requests chart adds **Would throttle**
+and **Throttled** lines for `other` and `unknown` page attempts, including early
+rejections. A companion recording preserves existing page-view history and starts
+collecting guard history when created. It reserves 10,734 group/time slots within
+the site budget. Attempts overlap with page views; do not add their totals.
 
-## Limits and privacy
+For additional breakdowns, record `mod_traffic_guard:request`. Dimensions include
+`crawl_behavior` (normal, excessive, unknown), `guard_action` (allow,
+would_throttle, throttle), `guard_reason` (none, request_rate, state_capacity,
+unavailable, ip_allow, ip_block), `traffic`, and `type` (page, api, other).
+Ordinary request events also receive the three guard dimensions when assessed.
+Analytics exclusions and consent still apply; enforcement is independent of them.
+Analytics events contain no client IPs or raw paths.
 
-State is transient and bounded: only client IPs and request-rate budgets are
-tracked, with no paths, query strings or cookies. Every covered request consumes
-the same budget, including repeated reloads of one page. Idle clients expire and
-a restart resets all budgets. Limits are node-local, not shared across a cluster.
+## Implementation and lifecycle
 
-Unavailable or busy workers and exhausted client capacity fail open with an
-unknown assessment. This is origin protection, not a DDoS firewall. Use trusted
-proxy configuration for the client IP and proxy-level protection for distributed
-attacks. This version does not implement fingerprinting, challenges, account
-budgets, concurrency limits, or bot verification. See the module README for setup
-and validation examples.
+One admission worker per site serializes request-rate accounting. Its bounded,
+transient client state contains IP addresses and budgets, not paths, query strings
+or cookies. Idle clients expire after their budgets could recover; a restart clears
+rate-limit state.
+
+IP exceptions persist in the site's `traffic_guard_ip` table. Requests check a
+site-isolated named ETS table directly, with allow precedence. A separate supervised
+process removes expired entries every second; lookups also check deadlines, so
+cleanup cannot prolong a rule's validity. The admission worker retains indexed
+rules as a fallback while the shared table loads. Hourly maintenance deletes
+expired database rows. The README contains failure limits, benchmarks and
+regression-test commands.
 ").
 -export([start_link/1, init/1, observe_middleware/3, observe_analytics_events/3, observe_m_config_update/2,
     eligible/3, eligible/4, signals/1, response/2, observe_admin_menu/3, manage_schema/2, observe_tick_1h/2]).

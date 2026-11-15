@@ -20,3 +20,22 @@
     margin: 0.5em 0;
     overflow-wrap: anywhere;
 }
+
+.traffic-guard-panel > .traffic-guard-panel-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75em;
+}
+.traffic-guard-panel-heading > h3 {
+    margin: 0;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+}
+.traffic-guard-panel .traffic-guard-entry:last-child,
+.traffic-guard-panel .widget-content > p:last-child,
+.traffic-guard-panel .table {
+    margin-bottom: 0;
+}

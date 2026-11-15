@@ -34,55 +34,107 @@
     zotonic_keywords => ["reference", "module", "operator", "backend_developer", "logging_and_monitoring", "privacy_and_consent", "email_delivery"]
 }).
 -moduledoc(<<"
-Site Analytics provides lightweight local analytics for site traffic, popular content,
-email activity and module-defined events. Enable `mod_analytics` and open
-**Content → Site Analytics**. Configure recordings under **System → Analytics configuration**.
-The default Languages recording starts paused and can be resumed there.
+Site Analytics measures site traffic, popular content, outgoing email activity and
+module-defined events without an external tracker. It helps operators understand
+site usage and operational trends without storing visitor identifiers, tracking
+cookies or raw request logs.
 
-## Permissions and privacy
+## When to use it
 
-Reports require `use mod_analytics`. Configuration and recording mutations require
-site administrator access (`use mod_admin_config`); the two permissions are independent.
-Page views exclude users who can edit the resolved resource (`z_acl:rsc_editable/2`),
-including frontend editors viewing previews or opening the page directly. Users who
-cannot edit that resource can still count, even when they have `use mod_admin`.
-For pages without a resource ID, `use mod_admin` is the fallback exclusion.
-Read-only sessions cannot edit resources and therefore can count as resource views.
-This policy applies to both `page_request` and the page type of `request` events.
-API and other request types continue to exclude users with `use mod_admin`.
-All request types respect `analytics_exclude` and the configured consent requirement.
-DNT and GPC headers do not exclude requests from aggregate analytics. With
-`require_consent` enabled, the context must contain `analytics_consent = true`.
-Ordinary logged-in users are otherwise eligible.
-No visitor identifiers, tracking cookies or raw request logs are stored.
+Use this module for aggregate counts and trends, not unique-visitor measurement,
+billing or an audit trail. It counts requests that reach Zotonic; requests served
+entirely by a CDN are not counted. Collection is best-effort, and reports identify
+incomplete data. Run one collecting node per site; distributed collection is not
+supported.
 
-## Recordings and storage
+## Getting started
 
-Each recording selects one event, fixed filters and at most one breakdown dimension.
-Counters are aggregated asynchronously into capped minute, quarter-hour, hour and day
-slots in the site's PostgreSQL database. Popular content uses bounded approximate
-rankings over moving periods. These are event counts, not unique visitors.
-Ingestion is best-effort: overload can drop events, and reports indicate incomplete data.
-Pausing preserves history and its storage reservation; deleting releases the reservation.
+1. Enable `mod_analytics` in the site's Modules screen.
+2. Open **Content → Site Analytics** to view the standard recordings.
+3. Open **System → Analytics configuration** to add recordings or pause/resume
+   existing ones. The default Languages recording starts paused.
 
-Per-site configuration:
+For example, add a recording for **HTTP API requests** with a `status` breakdown
+to compare successful responses and errors. New recordings collect future events;
+there is no historical backfill.
+
+## Configuration and usage
+
+A recording selects one event, fixed filters and at most one breakdown dimension.
+Use totals for overall activity, breakdowns to compare groups, and filters to
+select the population of interest. Popular content shows approximate rankings
+with count ranges, rather than unique visitors or exact ranks.
+
+Definitions are immutable: create a new recording to change what is measured.
+Pausing preserves history and its storage reservation. Deleting a recording
+removes its history and releases that reservation. Drag recordings in configuration
+to change their dashboard order without changing their data.
+
+Per-site settings under `mod_analytics`:
 
 | Key | Default | Meaning |
 | --- | --- | --- |
-| `row_budget` | `1000000` | Maximum reserved group/time slots across recordings. |
-| `require_consent` | `false` | Require explicit context consent for request-associated events. |
+| `row_budget` | `1000000` | Maximum reserved group/time slots across retained recordings; not physical SQL rows or bytes. |
+| `require_consent` | `false` | Require `analytics_consent = true` in the context for request-associated events. |
+
+Reports require `use mod_analytics`. Configuration and recording mutations require
+site administrator access (`use mod_admin_config`). These permissions are independent.
+
+## What is counted
+
+Page events count successful public HTML GET responses, including eligible template
+pages without a resource ID. A user who can edit the resolved resource is excluded
+from that resource's views, including frontend previews and direct visits. Admin
+access alone does not exclude a resource view. Without a resource ID, users with
+`use mod_admin` are excluded. Read-only sessions cannot edit resources and can
+therefore count as resource views. This applies to both `page_request` and the
+page type of `request` events.
+
+API and other classified requests can count errors and expose their final HTTP
+status. They continue to exclude users with `use mod_admin`. All request types
+respect `analytics_exclude` and the configured consent requirement. Sites supply
+the consent flag through their own integration. DNT and GPC headers do not exclude
+requests from these aggregate counts.
+
+The `traffic` dimension distinguishes declared user-triggered agents, crawlers,
+other clients and unknown clients. These are classifications, not verified
+identities; `other` does not necessarily mean human. Page totals, device breakdowns
+and popular content exclude detected agents and crawlers unless a recording
+explicitly selects them. Traffic-classification and API measurements include them
+unless filtered out.
+
+SMTP observers count sent, retry, failed and bounced notifications independently
+of requests. These are transport events, not unique emails, inbox deliveries or
+opens. Traffic Guard can add would-throttle and throttled attempts to the default
+Page requests chart. Guard attempts and page views overlap; do not sum them.
 
 ## Integration
 
-`controller_page` and `controller_template` default to the `page` dispatch analytics type;
-`controller_api` defaults to `api`. Override with `{analytics, Type}`, or disable a route
-with `{analytics, false}`. Page events count successful public HTML GET responses.
-Other classified requests can include errors and expose HTTP status for filters or breakdowns.
-SMTP observers count sent, retry, failed and bounced notifications independently of requests.
+`controller_page` and `controller_template` default to the `page` dispatch analytics
+type; `controller_api` defaults to `api`. Override with `{analytics, Type}`, or
+exclude a route with `{analytics, false}`. Other controllers are opt-in. Dedicated
+agent interfaces expose their own dispatch types. MQTT model calls are not counted
+by HTTP request analytics.
 
-Modules declare namespaced events using the `analytics_events` fold notification and call
-`m_analytics:record_event/3` for background events or `/4` with the current request.
-See `m_analytics` and the application README for calling conventions and schema examples.
+Modules declare namespaced events with the `analytics_events` fold notification.
+Call `m_analytics:record_event/3` for background events, or `/4` to associate an
+event explicitly with the current request. Declare coarse dimensions and avoid
+personal data or free-form input. See `m_analytics` and the application README for
+calling conventions, schemas and examples.
+
+## Implementation and operational limits
+
+A bounded ingress queue feeds an aggregation worker and a separate database writer.
+Counters are stored asynchronously in capped minute, quarter-hour, hour and day
+slots in the site's PostgreSQL database. Popular content uses bounded approximate
+summaries over moving periods. No database call is needed on the normal ingestion
+path.
+
+Overload, outages or restarts can lose buffered events; committed history survives
+restarts. Reports show gaps or partial counts instead of inventing zero traffic.
+Pausing retains storage reservations, and a row budget bounds aggregate capacity,
+not PostgreSQL disk usage. Database maintenance remains necessary. The README
+contains retention limits, implementation details and validation commands.
 "/utf8>>).
 
 -export([

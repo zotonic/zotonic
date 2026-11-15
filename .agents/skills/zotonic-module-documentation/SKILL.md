@@ -29,6 +29,21 @@ For public components, document the actual calling interface and a short usable 
 
 Prefer concise Markdown in literal `-moduledoc` attributes. Retain existing author/license headers. Documentation changes should not alter runtime behavior.
 
+## Order module documentation for the reader
+
+Especially in the main `mod_*.erl` file's `-moduledoc`, explain purpose and usage before implementation. Use this default order:
+
+1. **What it does and why:** open with a short paragraph combining the module's purpose and the problem it solves.
+2. **When to use it:** explain scope, suitable situations, and important limitations that affect adoption.
+3. **Getting started:** show how to enable it and give a minimal working example.
+4. **Configuration and usage:** describe defaults, settings, admin controls, and typical workflows.
+5. **Behavior and operational details:** explain permissions, precedence, expiry, failure handling, integration points, and observability as applicable.
+6. **Implementation details:** describe architecture, storage, processes, and performance only where useful to maintainers or operators.
+
+Combine or omit sections for small modules; these are an information order, not mandatory headings. Apply the same order to module READMEs where appropriate. Keep public component references focused on their calling interface and examples.
+
+Distinguish behavior users need to configure the module from internal implementation. For example, Traffic Guard's allow-list precedence belongs with usage or behavior; its ETS tables and worker processes belong later. Readers should be able to decide whether to use a module and get started without first learning its internals.
+
 ## Select controlled keywords
 
 Use only `keyword_slug` values present in the current checkout's `doc/zotonic_subject_topics.csv`. Read relevant rows, including their meanings; do not invent slugs or substitute labels or aliases.
