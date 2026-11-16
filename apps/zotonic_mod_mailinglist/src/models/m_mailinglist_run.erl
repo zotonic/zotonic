@@ -37,6 +37,7 @@ Available Model API Paths
 | `get` | `/` | List accessible runs, optionally filtered by a payload map. |
 | `get` | `/history/...` | Return accessible runs and a next-page offset, using the same payload filters as the root path. |
 | `get` | `/run/+run_id/...` | Return a run with aggregate statistics, language results and saved-content metadata. |
+| `get` | `/recipients_page/+run_id` | Return recipient results with email/status filters and page counts. |
 | `get` | `/recipients/+run_id/...` | Return up to 100 recipient results, optionally filtered and paged using the payload. |
 | `get` | `/page/+page_id/...` | List accessible runs for a page. Resource names and ids are accepted. |
 | `get` | `/list/+list_id/...` | List accessible runs for a mailinglist. Resource names and ids are accepted. |
@@ -100,6 +101,13 @@ Saved HTML is read through `content/3` and the saved-content controller, not an 
 
 Recipient results
 -----------------
+
+The `/recipients_page/+run_id` payload accepts `status`, `email` and `page` with
+binary keys. `email` matches any literal part of the address, case-insensitively;
+surrounding whitespace is ignored. Results are ordered by id, 100 rows per page.
+The returned map contains `result`, `total`, `page` and `pages`. Page numbers are
+clamped to the available range; empty results have page 1 of 1. Expired details
+return no rows. Both filters apply to the rows and the total count.
 
 The `/recipients/+run_id` payload accepts `status` and `after` with binary keys.
 `status` can be `pending`, `submitting`, `queued`, `retrying`, `sent`, `failed`,
@@ -221,7 +229,9 @@ m_get([<<"run">>, Id | Rest], _Msg, Context) ->
         _ ->
             {error, eacces}
     end;
-m_get([<<"recipients">>, Id | Rest], Msg, Context) ->
+m_get([Recipients, Id | Rest], Msg, Context)
+    when Recipients =:= <<"recipients">>; Recipients =:= <<"recipients_page">>
+->
     case get(to_id(Id), Context) of
         {ok, Run} ->
             case allowed(Run, Context) of
@@ -231,20 +241,11 @@ m_get([<<"recipients">>, Id | Rest], Msg, Context) ->
                             #{payload := P} when is_map(P) -> P;
                             _ -> #{}
                         end,
-                    State = maps:get(<<"status">>, Payload, <<>>),
-                    After = max(0, to_id(maps:get(<<"after">>, Payload, 0))),
-                    {ok, Rows} = z_db:qmap(
-                        "select id, email, language, status, reason, modified
-                         from mailinglist_run_recipient
-                         where run_id=$1
-                           and id > $2
-                           and exists(select 1 from mailinglist_run where id=$1 and details_expired is null)
-                           and ($3 = '' or status=$3)
-                         order by id limit 100",
-                        [to_id(Id), After, valid_status(State)],
-                        Context
-                    ),
-                    {ok, {Rows, Rest}};
+                    Result = case Recipients of
+                        <<"recipients">> -> recipient_rows(to_id(Id), Payload, Context);
+                        <<"recipients_page">> -> recipient_page(to_id(Id), Payload, Context)
+                    end,
+                    {ok, {Result, Rest}};
                 false ->
                     {error, eacces}
             end;
@@ -275,6 +276,54 @@ m_get([], _Msg, Context) ->
     {ok, {list(all, Context), []}};
 m_get(_, _, _) ->
     {error, unknown_path}.
+
+%% Keep the cursor-based API available for existing clients.
+recipient_rows(Id, Payload, Context) ->
+    State = maps:get(<<"status">>, Payload, <<>>),
+    After = max(0, to_id(maps:get(<<"after">>, Payload, 0))),
+    {ok, Rows} = z_db:qmap(
+        "select id, email, language, status, reason, modified
+         from mailinglist_run_recipient
+         where run_id=$1
+           and id > $2
+           and exists(select 1 from mailinglist_run where id=$1 and details_expired is null)
+           and ($3 = '' or status=$3)
+         order by id limit 100",
+        [Id, After, valid_status(State)],
+        Context
+    ),
+    Rows.
+
+%% Count using the same filters as the rows, and clamp stale/out-of-range pages.
+%% strpos treats %, _ and backslashes as literal parts of an email address.
+-spec recipient_page(Id, Payload, Context) -> map() when
+    Id :: integer(), Payload :: map(), Context :: z:context().
+recipient_page(Id, Payload, Context) ->
+    Email = case maps:get(<<"email">>, Payload, <<>>) of
+        B when is_binary(B) -> z_string:trim(B);
+        _ -> <<>>
+    end,
+    Args = [Id, valid_status(maps:get(<<"status">>, Payload, <<>>)), Email],
+    Where = " from mailinglist_run_recipient
+              where run_id=$1
+                and exists(select 1 from mailinglist_run where id=$1 and details_expired is null)
+                and ($2 = '' or status=$2)
+                and ($3 = '' or strpos(lower(email), lower($3)) > 0)",
+    Total = z_db:q1("select count(*)" ++ Where, Args, Context),
+    Pages = max(1, (Total + 99) div 100),
+    Page = min(Pages, max(1, to_id(maps:get(<<"page">>, Payload, 1)))),
+    {ok, Rows} = z_db:qmap(
+        "select id, email, language, status, reason, modified" ++ Where ++
+        " order by id limit 100 offset $4",
+        Args ++ [(Page - 1) * 100],
+        Context
+    ),
+    #{
+        <<"result">> => Rows,
+        <<"total">> => Total,
+        <<"page">> => Page,
+        <<"pages">> => Pages
+    }.
 
 to_id(I) when is_integer(I), I >= 0 -> I;
 to_id(B) when is_binary(B), byte_size(B) < 20 ->
@@ -950,11 +999,8 @@ detail(missing_context) ->
     <<"The scheduled sender context is missing. Create a new mailing.">>;
 detail(invalid_context) ->
     <<"The scheduled sender context is invalid. Create a new mailing.">>;
-detail(undefined) ->
-    undefined;
-detail(B) when is_binary(B) -> B;
-detail(T) ->
-    iolist_to_binary(io_lib:format("~p", [T])).
+detail(Detail) ->
+    z_mailinglist_delivery_detail:format(Detail).
 
 -spec stats(Id, Context) -> map() when Id :: integer(), Context :: z:context().
 stats(Id, Context) ->

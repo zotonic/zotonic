@@ -25,6 +25,10 @@
 -moduledoc("
 Tracks the send/bounce/error status of all outgoing emails.
 
+Recognized sender blocklisting and spam-policy failures leave recipient validity
+and suppression counters unchanged. Delivery logs and mailing runs still record
+these failures. Existing address blocks are never cleared by a policy failure.
+
 Available Model API Paths
 -------------------------
 
@@ -418,13 +422,22 @@ mark_sent(Email0, true, Context) ->
 
 %% @doc Mark as failed, happens on connection errors or on errors returned by the receiving smtp server.
 %% The final flag is set if our smtp server received a permanent error or gave up sending the email.
+%% Sender blocklisting and spam-policy errors do not affect recipient validity.
 %% Keep a counter (recent_error_ct) and date (recent_error) which are updated at most once a day.
 -spec mark_failed(Email, IsFinal, Status, Context) -> ok when
     Email :: binary(),
     IsFinal :: boolean(),
-    Status :: binary() | {error, term()} | undefined,
+    Status :: binary() | {error, term()} | {bounce, term()} | undefined,
     Context :: z:context().
-mark_failed(Email0, IsFinal, Status, Context) ->
+mark_failed(Email, IsFinal, Status, Context) ->
+    case z_email_delivery_status:policy_failure(Status) of
+        false -> mark_recipient_failed(Email, IsFinal, Status, Context);
+        _Policy -> ok
+    end.
+
+%% Delivery logs and mailing-run observers still record policy failures. Do not
+%% change address health here, including an existing complaint or manual block.
+mark_recipient_failed(Email0, IsFinal, Status, Context) ->
     case normalize(Email0) of
         <<>> ->
             ok;

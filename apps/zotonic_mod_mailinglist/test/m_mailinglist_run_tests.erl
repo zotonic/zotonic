@@ -276,6 +276,7 @@ postgres(Db) ->
         language_policies(Context),
         recovery_regressions(Context),
         history_pagination(Context),
+        recipient_pagination(Context),
         delivery(Context),
         worker(Context),
         lifecycle(Context),
@@ -704,7 +705,7 @@ queue_ack() ->
     try
         {atomic, ok} = mnesia:create_table(email_queue, [
             {disc_copies, [node()]},
-            {attributes, [id, retry_on, retry, recipient, email, created, sent, pickled_context]}
+            {attributes, [id, retry_on, retry, recipient, email, created, sent, pickled_context, last_error]}
         ]),
         ok = mnesia:wait_for_tables([email_queue], 5000),
         Email = #email{to = <<"nobody@example.com">>, queue = true},
@@ -807,6 +808,59 @@ recovery_regressions(Ctx) ->
         <<"sending">>, z_db:q1("select status from mailinglist_run where id=$1", [Waiting], Ctx)
     ),
     z_db:q("delete from mailinglist_run where id=$1", [Waiting], Ctx).
+
+recipient_pagination(Ctx) ->
+    Run = new_run([{send_mode, <<"all">>}], Ctx),
+    z_db:q(
+        "insert into mailinglist_run_recipient(run_id,email,language,status)
+         select $1, 'person-' || n || '@Example.com', 'en',
+                case when n <= 200 then 'sent' else 'failed' end
+         from generate_series(1,201) n",
+        [Run], Ctx
+    ),
+    Fetch = fun(Payload) ->
+        {ok, {Result, []}} = m_mailinglist_run:m_get(
+            [<<"recipients_page">>, Run], #{payload => Payload}, Ctx
+        ),
+        Result
+    end,
+    First = Fetch(#{}),
+    Second = Fetch(#{<<"page">> => 2}),
+    Last = Fetch(#{<<"page">> => 3}),
+    ?assertEqual(201, maps:get(<<"total">>, First)),
+    ?assertEqual(3, maps:get(<<"pages">>, First)),
+    ?assertEqual(100, length(maps:get(<<"result">>, First))),
+    ?assertEqual(100, length(maps:get(<<"result">>, Second))),
+    ?assertEqual(1, length(maps:get(<<"result">>, Last))),
+    Ids = [maps:get(<<"id">>, R) || P <- [First, Second, Last],
+                                  R <- maps:get(<<"result">>, P)],
+    ?assertEqual(201, length(lists:usort(Ids))),
+    ?assertEqual(lists:sort(Ids), Ids),
+    ?assertEqual(First, Fetch(#{<<"page">> => <<"invalid">>})),
+    ?assertEqual(First, Fetch(#{<<"page">> => -1})),
+    ?assertEqual(Last, Fetch(#{<<"page">> => <<"999">>})),
+    ?assertEqual(First, Fetch(#{<<"email">> => <<"  @EXAMPLE.COM  ">>})),
+    Sent = Fetch(#{<<"status">> => <<"sent">>, <<"email">> => <<"person-">>, <<"page">> => 3}),
+    ?assertEqual(200, maps:get(<<"total">>, Sent)),
+    ?assertEqual(2, maps:get(<<"page">>, Sent)),
+    ?assertEqual(2, maps:get(<<"pages">>, Sent)),
+    lists:foreach(fun(Email) ->
+        ?assertMatch(#{<<"result">> := [], <<"total">> := 0,
+                       <<"page">> := 1, <<"pages">> := 1},
+                     Fetch(#{<<"email">> => Email, <<"page">> => 2}))
+    end, [<<"missing">>, <<"%">>, <<"_">>, <<"' OR true --">>]),
+    meck:new(z_acl, [passthrough, no_link]),
+    try
+        meck:expect(z_acl, is_allowed, fun(_, _, _) -> false end),
+        ?assertEqual({error, eacces}, m_mailinglist_run:m_get(
+            [<<"recipients_page">>, Run], undefined, Ctx
+        ))
+    after
+        meck:unload(z_acl)
+    end,
+    z_db:q("update mailinglist_run set details_expired=now() where id=$1", [Run], Ctx),
+    ?assertMatch(#{<<"result">> := [], <<"total">> := 0}, Fetch(#{})),
+    z_db:q("delete from mailinglist_run where id=$1", [Run], Ctx).
 
 history_pagination(Ctx) ->
     %% One hidden run must not remove the link to the remaining accessible run.
