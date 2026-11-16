@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-16 22:13\n"
+"PO-Revision-Date: 2026-11-16 23:28\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -13570,7 +13570,7 @@ msgstr "מנויים לדוא\"ל"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:40
 msgid "Email-only subscription"
-msgstr ""
+msgstr "מנוי באמצעות דוא\"ל בלבד"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:9
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_summary.tpl:10
@@ -13591,11 +13591,11 @@ msgstr "מופעל"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:37
 msgid "Enter a valid email address to look up mailing results."
-msgstr ""
+msgstr "הזן כתובת דוא\"ל תקפה כדי להציג את תוצאות התפוצה."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:86
 msgid "Enter a valid email address to look up subscriptions."
-msgstr ""
+msgstr "הזן כתובת דוא\"ל תקפה כדי לחפש מנויים."
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:278
 msgid "Enter a valid future mailing date and time."
@@ -13636,15 +13636,15 @@ msgstr "שפת גיבוי:"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:12
 msgid "Find mailings by email address"
-msgstr ""
+msgstr "חפש דיוורים לפי כתובת דוא\"ל"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:24
 msgid "Find recent mailings to this address"
-msgstr ""
+msgstr "חפש דיוורים אחרונים שנשלחו לכתובת זו"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22
 msgid "Find subscriptions by email address"
-msgstr ""
+msgstr "חפש מנויים לפי כתובת דוא\"ל"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:10
 msgid "Finished — some emails could not be sent"
@@ -13653,7 +13653,7 @@ msgstr "הושלם — לא ניתן היה לשלוח חלק מהמיילים"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:44
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:47
 msgid "First"
-msgstr ""
+msgstr "ראשית"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:33
@@ -13757,11 +13757,11 @@ msgstr "שפה:"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:52
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:55
 msgid "Last"
-msgstr ""
+msgstr "אחרון"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:6
 msgid "Last updated"
-msgstr ""
+msgstr "עודכן לאחרונה"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:2
 msgid "Mailing"
@@ -13873,7 +13873,7 @@ msgstr "התאמה לשפות המועדפות בלבד"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:55
 msgid "Matching resources"
-msgstr ""
+msgstr "משאבים תואמים"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:35
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:56
@@ -13903,7 +13903,7 @@ msgstr "לא נשלחו מיילים"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:49
 msgid "No explicit subscriptions found for this email address."
-msgstr ""
+msgstr "לא נמצאו מנויים מפורשים לכתובת דוא\"ל זו."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:50
 msgid "No mailing lists found."
@@ -13919,7 +13919,7 @@ msgstr "עדיין אין דיוורים. שלח דיוור ממסך העריכ�
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:25
 msgid "No recent mailing results found for this email address."
-msgstr ""
+msgstr "לא נמצאו תוצאות דיוור אחרונות עבור כתובת דוא\"ל זו."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:72
 msgid "No recipients found."
@@ -13957,7 +13957,7 @@ msgstr "אין צורך — לא נבחרו נמענים"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:73
 msgid "Not opted out of mailings"
-msgstr ""
+msgstr "לא ביטלתי את הרישום לקבלת דיוור"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:9
 msgid "Not sent — stopped"
@@ -14017,7 +14017,7 @@ msgstr "פתח תצוגה מקדימה בלשונית חדשה לפני שתמש
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:20
 msgid "Open email log in a new window"
-msgstr ""
+msgstr "פתח את יומן הדוא\"ל בחלון חדש"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:80
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:143
@@ -14039,7 +14039,7 @@ msgstr "ביטול הסכמה לכל רשימות התפוצה המקושרות 
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:71
 msgid "Opted out of mailings"
-msgstr ""
+msgstr "ביטלתי את הרישום לרשימת התפוצה"
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:23
 msgid "Our excuses for the inconvenience."
@@ -14051,7 +14051,7 @@ msgstr "סקירה כללית"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:40
 msgid "Page {page} of {pages} ({total} recipients)"
-msgstr ""
+msgstr "דף {page} מתוך {pages} ({total} נמענים)"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:53
 msgid "Pages that have the 'subscriberof' edge to the mailinglist."
@@ -14063,7 +14063,7 @@ msgstr "דפים התואמים את שאילתת החיפוש של הנמעני
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:42
 msgid "Part of the email address"
-msgstr ""
+msgstr "חלק מכתובת הדוא\"ל"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:121
 msgid "People who have not received this page in this language"
@@ -14134,7 +14134,7 @@ msgstr "משלוחים קודמים"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:38
 msgid "Primary email address"
-msgstr ""
+msgstr "כתובת דוא\"ל ראשית"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:149
@@ -14151,7 +14151,7 @@ msgstr "שאילתה, לדוגמה:"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:53
 msgid "Query-based subscriptions are not included. Disabled email-only subscriptions are retained for three months."
-msgstr ""
+msgstr "מנויים המבוססים על שאילתות אינם כלולים. מנויים המושבתים המוגבלים לדוא\"ל בלבד נשמרים למשך שלושה חודשים."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:3
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:3
@@ -14164,7 +14164,7 @@ msgstr "קרא עוד באינטרנט"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:2
 msgid "Recent mailing results"
-msgstr ""
+msgstr "תוצאות דיוור אחרונות"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist.tpl:4
 msgid "Recent mailings"
@@ -14192,7 +14192,7 @@ msgstr "תוקף היסטוריית הנמענים פג. התחל שליחה ח�
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:38
 msgid "Recipient pages"
-msgstr ""
+msgstr "דפי נמענים"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:20
@@ -14501,11 +14501,11 @@ msgstr "שולח:"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:17
 msgid "Sending is allowed."
-msgstr ""
+msgstr "מותר לשלוח."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:13
 msgid "Sending is suppressed after delivery failures."
-msgstr ""
+msgstr "המשלוח נחסם לאחר כשלים במסירה."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:12
 msgid "Sending needs attention"
@@ -14553,7 +14553,7 @@ msgstr "נשלח: {count};"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:16
 msgid "Show all mailings"
-msgstr ""
+msgstr "הצג את כל הדיוורים"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:26
 msgid "Show all pages"
@@ -14565,7 +14565,7 @@ msgstr "הצג את כל הנמענים"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:35
 msgid "Showing up to 200 recipient results per page from the last three months, including failed and skipped deliveries. Expired details and mailings from before run tracking are unavailable. Sent means accepted by the mail server; later bounces can still change the result."
-msgstr ""
+msgstr "מוצגים עד 200 תוצאות נמענים בכל עמוד מהשלושה חודשים האחרונים, כולל משלוחים שנכשלו או שהוחמצו. פרטים שפג תוקפם ומשלוחים מלפני תחילת המעקב אינם זמינים. \"נשלח\" פירושו שהודעה התקבלה על ידי שרת הדואר; החזרות מאוחרות יותר עשויות עדיין לשנות את התוצאה."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:18
 msgid "Showing up to 200 runs per page, with active runs first. Sent means accepted by the mail server; later bounces can still change the results."
@@ -14658,7 +14658,7 @@ msgstr "הרשם ל"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:44
 msgid "Subscribed"
-msgstr ""
+msgstr "נרשם"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:47
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:99
@@ -14667,7 +14667,7 @@ msgstr "נרשם עם"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:28
 msgid "Subscriber"
-msgstr ""
+msgstr "מנויים"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:6
 msgid "Subscriber Edges"
@@ -14683,11 +14683,11 @@ msgstr "דוא\"ל למנויים: <b>{email}</b>"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:29
 msgid "Subscription status"
-msgstr ""
+msgstr "סטטוס המנוי"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:4
 msgid "Subscriptions"
-msgstr ""
+msgstr "מנויים"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:33
 msgid "Target mailing list"
@@ -14850,7 +14850,7 @@ msgstr "דף זה אינו זמין בשפתם."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:45
 msgid "This resource has opted out of mailings."
-msgstr ""
+msgstr "מקור מידע זה בחר שלא לקבל דיוורים."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:24
 msgid "This rough total includes all query matches. Duplicate recipients are not removed yet."
@@ -14895,7 +14895,7 @@ msgstr "בטל את הרישום לרשימת התפוצה"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:44
 msgid "Unsubscribed"
-msgstr ""
+msgstr "ביטול המנוי"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:106
 msgid "Unsubscribed recipients, blocked or invalid addresses, and recipients excluded by your delivery-history selection will not receive an email."
@@ -14951,7 +14951,7 @@ msgstr "צפה בהודעת הדוא\"ל המקורית"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:3
 msgid "View subscriptions and email status"
-msgstr ""
+msgstr "הצגת המנויים ומצב הדוא\"ל"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:152
 msgid "View test result"
@@ -15094,7 +15094,7 @@ msgstr "אתה יכול לנסות להירשם מחדש לאחת מרשימות
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:21
 msgid "You do not have permission to view the email status."
-msgstr ""
+msgstr "אין לך הרשאה לצפות במצב הדוא\"ל."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:2
 msgid "You received this mail because someone wanted to send you this information. We did not store your e-mail address and will not send you any other mail because of this mail."
