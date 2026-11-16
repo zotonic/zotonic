@@ -22,6 +22,19 @@
                 {% endif %}
             </p>
             <p><a href="{% url admin_mailings email=lookup.email %}">{_ Find recent mailings to this address _}</a></p>
+            {% if lookup.resources %}
+                <h4>{_ Matching resources _}</h4>
+                <ul class="list-unstyled">
+                    {% for resource in lookup.resources %}
+                        <li>
+                            <a href="{% url admin_edit_rsc id=resource.rsc_id %}">{{ m.rsc[resource.rsc_id].title|default:resource.rsc_id }}</a>
+                            {% if resource.is_opt_out %}
+                                <span class="label label-warning">{_ Opted out of mailings _}</span>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
             <table class="table table-striped">
                 <thead><tr>
                     <th>{_ Mailing list _}</th>

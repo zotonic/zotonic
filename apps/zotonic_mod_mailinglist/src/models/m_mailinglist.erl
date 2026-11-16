@@ -44,7 +44,7 @@ Available Model API Paths
 | `get` | `/tasks/+rscid/...` | Return publication-dependent and dated mailing tasks associated with resource `+rscid`, grouped by mailing list id. |
 | `get` | `/confirm_key/+confirmkey/...` | Return subscription confirmation payload for confirmation key `+confirmkey`. |
 | `get` | `/subscription/+listid/+email/...` | Return `subscription` result for `+listid` and `+email` using `z_acl:is_allowed`. |
-| `get` | `/email_subscriptions/+email` | Administrative exact-email lookup of enabled/disabled email recipients and subscriber/exsubscriber edges, plus email health. Requires use of mod_mailinglist; lists must be editable and matching resources and their email properties visible. Email health is returned only when authorized by m_email_status. Queries are excluded. |
+| `get` | `/email_subscriptions/+email` | Administrative exact-email lookup of enabled/disabled email recipients and subscriber/exsubscriber edges, plus deduplicated matching resources (including email identities without subscriptions) with opt-out flags and email health. Requires use of mod_mailinglist; lists must be editable and matching resources and their email properties visible. Email health is returned only when authorized by m_email_status. Queries are excluded. |
 | `get` | `/subscriptions` | Return mailinglist subscriptions for the currently authenticated user. No further lookups. |
 | `get` | `/subscriptions/key/+undefined/...` | Return subscriptions for the currently authenticated user (same result as `/subscriptions`) when no key value is present. |
 | `get` | `/subscriptions/key/+key/...` | Decode recipient key `+key` and return matching subscriptions by email or recipient/list id encoded in that key. |
@@ -829,8 +829,8 @@ list_subscriptions_by_rsc_id(RscId0, Context) ->
     end.
 
 %% Administrative lookup of explicit subscriptions, including disabled entries.
-%% Scan subscription edges rather than identities: not every resource with a
-%% primary email has an email identity. Query-based memberships are excluded.
+%% Match primary emails independently of subscriptions and identities.
+%% Query-based memberships are excluded.
 -spec email_subscriptions(Email, Context) -> map() when
     Email :: binary(), Context :: z:context().
 email_subscriptions(Email, Context) ->
@@ -846,18 +846,32 @@ email_subscriptions(Email, Context) ->
          where predicate_id=any($1::int[]) order by object_id, subject_id, predicate_id",
         [[P || P <- [Subscriber, ExSubscriber], is_integer(P)]], Context
     ),
+    Identities = m_identity:lookup_by_type_and_key_multi(email, Email, Context),
+    CandidateIds = lists:usort(
+        [proplists:get_value(rsc_id, I) || I <- Identities]
+        ++ [Id || {Id, _, _} <- Edges]
+    ),
+    MatchingResources = [
+        #{<<"rsc_id">> => Id,
+          <<"is_opt_out">> => z_convert:to_bool(m_rsc:p(Id, <<"is_mailing_opt_out">>, Context))}
+        || Id <- CandidateIds,
+           is_integer(Id),
+           z_acl:rsc_visible(Id, Context),
+           normalize_email(m_rsc:p(Id, <<"email_raw">>, Context)) =:= Email
+    ],
+    ResourceIds = maps:from_list([{Id, true} || #{<<"rsc_id">> := Id} <- MatchingResources]),
     Resources = [
         #{<<"rsc_id">> => RscId, <<"mailinglist_id">> => ListId,
           <<"is_enabled">> => Predicate =:= Subscriber,
           <<"is_opt_out">> => z_convert:to_bool(m_rsc:p(RscId, <<"is_mailing_opt_out">>, Context))}
         || {RscId, ListId, Predicate} <- Edges,
-           z_acl:rsc_editable(ListId, Context),
-           z_acl:rsc_visible(RscId, Context),
-           normalize_email(m_rsc:p(RscId, <<"email_raw">>, Context)) =:= Email
+           maps:is_key(RscId, ResourceIds),
+           z_acl:rsc_editable(ListId, Context)
     ],
     VisibleDirect = [R || R <- Direct, z_acl:rsc_editable(maps:get(<<"mailinglist_id">>, R), Context)],
     #{
         <<"email">> => Email,
+        <<"resources">> => MatchingResources,
         <<"subscriptions">> => lists:sort(fun(A, B) ->
             maps:get(<<"mailinglist_id">>, A) =< maps:get(<<"mailinglist_id">>, B)
         end, VisibleDirect ++ Resources),

@@ -1281,7 +1281,8 @@ email_lookups(Ctx) ->
     z_db:q("alter table email_status add column recent_error timestamptz,
         add column recent_error_ct integer default 0, add column error_is_final boolean default false", Ctx),
     z_db:q("insert into email_status(email,is_valid,is_blocked) values ('lookup@example.org',false,true)", Ctx),
-    z_db:q("insert into rsc(id) values (5),(6),(10),(11),(12),(13)", Ctx),
+    z_db:q("insert into rsc(id) values (5),(6),(10),(11),(12),(13),(14),(15),(16)", Ctx),
+    %% 14 and 15 have email identities but no subscriptions; 16 is invisible.
     z_db:q("create table edge(subject_id int, object_id int, predicate_id int)", Ctx),
     z_db:q("insert into edge values (10,5,901),(11,5,902),(12,5,901),(13,5,901),(10,6,901),(10,5,999)", Ctx),
     z_db:q("insert into mailinglist_recipient(mailinglist_id,email,confirm_key,is_enabled) values
@@ -1299,8 +1300,8 @@ email_lookups(Ctx) ->
         (21, <<"email_raw">>, _) -> <<"status-editor@example.org">>;
         (22, <<"email_raw">>, _) -> <<"resource-editor@example.org">>;
         (12, <<"email_raw">>, _) -> <<"secondary-only@example.org">>;
-        (_, <<"email_raw">>, _) -> <<"LOOKUP@example.org">>;
-        (11, <<"is_mailing_opt_out">>, _) -> true;
+        (Id, <<"email_raw">>, _) when Id >= 10, Id =< 16 -> <<"LOOKUP@example.org">>;
+        (Id, <<"is_mailing_opt_out">>, _) when Id =:= 11; Id =:= 14 -> true;
         (_, _, _) -> undefined
     end),
     %% Model boundary fixture: p/3 hides properties denied by the ACL, while
@@ -1317,16 +1318,29 @@ email_lookups(Ctx) ->
     try
         meck:expect(z_depcache, memo, fun(Fun, _, _, _) -> Fun() end),
         meck:expect(m_identity, lookup_by_type_and_key_multi, fun
-            (email, <<"lookup@example.org">>, _) -> [[{rsc_id, 10}]];
+            (email, <<"lookup@example.org">>, _) ->
+                [[{rsc_id, Id}] || Id <- [10,12,14,15,16]];
             (email, _, _) -> []
         end),
-        meck:expect(z_acl, rsc_visible, fun(Id, _) -> Id =/= 13 end),
+        meck:expect(z_acl, rsc_visible, fun(Id, _) -> Id =/= 13 andalso Id =/= 16 end),
         meck:expect(z_acl, rsc_editable, fun(Id, _) -> Id =/= 6 end),
         {ok, {Lookup, []}} = m_mailinglist:m_get(
             [<<"email_subscriptions">>, <<" LOOKUP@example.org ">>], undefined, Ctx),
         ?assertMatch(#{<<"email">> := <<"lookup@example.org">>,
                        <<"email_status">> := #{<<"is_valid">> := false,
                            <<"is_ok_to_send">> := false, <<"is_blocked">> := true}}, Lookup),
+        ?assertEqual([
+            #{<<"rsc_id">> => 10, <<"is_opt_out">> => false},
+            #{<<"rsc_id">> => 11, <<"is_opt_out">> => true},
+            #{<<"rsc_id">> => 14, <<"is_opt_out">> => true},
+            #{<<"rsc_id">> => 15, <<"is_opt_out">> => false}
+        ], maps:get(<<"resources">>, Lookup)),
+        %% A resource subscribed to multiple lists appears only once above them.
+        z_db:q("insert into edge values (10,2,901)", Ctx),
+        {ok, {MultipleLists, []}} = m_mailinglist:m_get(
+            [<<"email_subscriptions">>, <<"lookup@example.org">>], undefined, Ctx),
+        ?assertEqual(maps:get(<<"resources">>, Lookup), maps:get(<<"resources">>, MultipleLists)),
+        z_db:q("delete from edge where subject_id=10 and object_id=2", Ctx),
         Subs = maps:get(<<"subscriptions">>, Lookup),
         ?assertEqual(4, length(Subs)),
         ?assertEqual([false, true], lists:sort([maps:get(<<"is_enabled">>, R) || R <- Subs,
@@ -1337,6 +1351,7 @@ email_lookups(Ctx) ->
         ?assertEqual({error, badarg}, m_mailinglist:m_get([<<"email_subscriptions">>, <<>>], undefined, Ctx)),
         {ok, {NoSubs, []}} = m_mailinglist:m_get([<<"email_subscriptions">>, <<"lookup+other@example.org">>], undefined, Ctx),
         ?assertEqual([], maps:get(<<"subscriptions">>, NoSubs)),
+        ?assertEqual([], maps:get(<<"resources">>, NoSubs)),
         email_history_lookup(Ctx),
         email_lookup_permissions(Ctx),
         meck:expect(z_acl, is_allowed, fun(_, _, _) -> false end),
@@ -1400,7 +1415,7 @@ email_lookup_permissions(AdminCtx) ->
     end),
     meck:expect(z_acl, rsc_prop_visible, fun
         (10, <<"email">>, #context{user_id=22}) -> true;
-        (10, <<"email">>, _) -> false;
+        (Id, <<"email">>, _) when Id =:= 10; Id =:= 15 -> false;
         (_, _, _) -> true
     end),
     lists:foreach(fun(Context) -> ?assertNot(z_acl:is_admin(Context)) end,
@@ -1415,6 +1430,10 @@ email_lookup_permissions(AdminCtx) ->
     ?assert(z_acl:rsc_editable(5, Editor)),
     ?assertNot(z_acl:rsc_prop_visible(10, <<"email">>, Editor)),
     ?assertEqual([11], [Id || #{<<"rsc_id">> := Id} <- maps:get(<<"subscriptions">>, Private)]),
+    ?assertEqual([
+        #{<<"rsc_id">> => 11, <<"is_opt_out">> => true},
+        #{<<"rsc_id">> => 14, <<"is_opt_out">> => true}
+    ], maps:get(<<"resources">>, Private)),
     ?assertEqual(undefined, maps:get(<<"email_status">>, Private)),
     ?assertNot(maps:is_key(<<"is_blocked">>, Private)),
     ?assertNot(maps:is_key(<<"is_ok_to_send">>, Private)),
