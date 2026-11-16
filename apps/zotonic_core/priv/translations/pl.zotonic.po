@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-12 14:01\n"
+"PO-Revision-Date: 2026-11-16 22:13\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -644,7 +644,7 @@ msgstr "Nie udało się przenieść do grupy współpracy."
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125
 #: zotonic_mod_survey/src/mod_survey.erl:427
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:36
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:12
 msgid "Delete"
@@ -671,7 +671,7 @@ msgstr "Usuwam ..."
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:33
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:14
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:31
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:42
 msgid "Deny"
 msgstr "Zabroń"
 
@@ -1594,6 +1594,7 @@ msgid "City"
 msgstr "Miasto"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_connection.tpl:34
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:26
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:37
 msgid "Clear"
 msgstr "Wyczyść"
@@ -2031,7 +2032,7 @@ msgstr "Adres e-mail"
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:131
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:117
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:119
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:35
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:46
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:44
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:14
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:16
@@ -2232,9 +2233,9 @@ msgstr "Pliki są przetwarzane w tle przez moduł importujący odbiorców listy 
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:46
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:183
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:46
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:41
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:44
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:74
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:59
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:71
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:60
 msgid "Filter"
 msgstr "Filtruj"
@@ -3229,7 +3230,7 @@ msgstr "Strony odsyłające do"
 #: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:51
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:56
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:69
 msgid "Refresh"
 msgstr "Odśwież"
 
@@ -3696,7 +3697,7 @@ msgstr "Stan lub prowincja"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:11
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:57
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:22
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:34
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:17
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:19
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:21
@@ -4169,6 +4170,7 @@ msgstr "Niepublikowane"
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:15
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:31
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:68
 #: zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:13
 #: zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
 #: zotonic_mod_seo/src/support/seo_jsonld_webpage.erl:276
@@ -4771,6 +4773,7 @@ msgstr "Konfiguracja"
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:24
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:32
 #: zotonic_mod_admin_config/src/mod_admin_config.erl:96
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:14
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:79
 msgid "Configuration"
 msgstr "Konfiguracja"
@@ -5258,7 +5261,7 @@ msgstr "Ukryj menu"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:6
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:75
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:65
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:37
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:49
 #: zotonic_mod_translation/priv/templates/_dialog_new_rsc_extra.tpl:2
 #: zotonic_mod_translation/priv/templates/_translation_language_status.tpl:46
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:41
@@ -5345,6 +5348,7 @@ msgstr "Czy na pewno chcesz usunąć ten wpis?"
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:99
 #: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:36
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:159
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:11
 msgid "Blocked"
 msgstr "Zablokowane"
 
@@ -6749,13 +6753,13 @@ msgstr "Dopuszczalne wartości (oddzielone przecinkami)"
 msgid "Allowed values:"
 msgstr "Dopuszczalne wartości:"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:296
+#: zotonic_mod_analytics/src/mod_analytics.erl:348
 msgid "An equivalent analytics measurement already exists."
 msgstr "Istnieje już równoważny wskaźnik analityczny."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
-#: zotonic_mod_analytics/src/mod_analytics.erl:225
+#: zotonic_mod_analytics/src/mod_analytics.erl:277
 msgid "Analytics configuration"
 msgstr "Konfiguracja narzędzi analitycznych"
 
@@ -6826,11 +6830,11 @@ msgstr "Żądania klasyfikowane — strony, interfejsy API i inne typy wysyłani
 msgid "Configure analytics measurements"
 msgstr "Skonfiguruj pomiary analityczne"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:264
+#: zotonic_mod_analytics/src/mod_analytics.erl:316
 msgid "Could not delete the analytics measurement."
 msgstr "Nie udało się usunąć wskaźnika analitycznego."
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:297
+#: zotonic_mod_analytics/src/mod_analytics.erl:349
 msgid "Could not save. Check the event, breakdown and filter values."
 msgstr "Nie udało się zapisać. Sprawdź wartości zdarzenia, podziału i filtra."
 
@@ -6884,7 +6888,7 @@ msgstr "Urządzenie — telefon, tablet, komputer stacjonarny lub nieznane"
 msgid "Display order"
 msgstr "Kolejność wyświetlania"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:270
+#: zotonic_mod_analytics/src/mod_analytics.erl:322
 msgid "Display order saved."
 msgstr "Kolejność wyświetlania została zapisana."
 
@@ -7033,6 +7037,8 @@ msgstr "Najnowszy zapisany przedział"
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:210
 #: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:55
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:88
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:51
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:54
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:33
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:55
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
@@ -7163,7 +7169,7 @@ msgstr "Krótki opis"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
-#: zotonic_mod_analytics/src/mod_analytics.erl:217
+#: zotonic_mod_analytics/src/mod_analytics.erl:269
 msgid "Site Analytics"
 msgstr "Analiza ruchu na stronie"
 
@@ -7215,11 +7221,11 @@ msgstr "Zapisane przedziały / pojemność"
 msgid "Stored time intervals"
 msgstr "Zapisane przedziały czasowe"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:272
+#: zotonic_mod_analytics/src/mod_analytics.erl:324
 msgid "The analytics measurements changed. Reloading their current display order."
 msgstr "Pomiary analityczne uległy zmianie. Ponowne wczytywanie ich aktualnej kolejności wyświetlania."
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:295
+#: zotonic_mod_analytics/src/mod_analytics.erl:347
 msgid "This analytics measurement exceeds the storage budget."
 msgstr "Ten wskaźnik analityczny przekracza limit przestrzeni dyskowej."
 
@@ -9433,6 +9439,7 @@ msgstr "Uwaga: Komentarze są moderowane"
 
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:20
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:29
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:4
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:199
 msgid "Page"
@@ -9755,7 +9762,7 @@ msgid "A graph of all templates, and by whom they are included, is generated and
 msgstr "Generowany i automatycznie aktualizowany jest graf wszystkich szablonów oraz szablonów, które je dołączają."
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:9
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:67
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:83
 msgid "Action"
 msgstr "Działanie"
 
@@ -10099,6 +10106,8 @@ msgid "Final dispatch"
 msgstr "Końcowe wywołanie"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:181
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:25
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:15
 msgid "Find"
 msgstr "Znajdź"
 
@@ -11752,6 +11761,8 @@ msgstr "Tylko konto administratora (użytkownik 1) może oznaczyć pliki jako ni
 
 #: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:54
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:85
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:45
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:48
 msgid "Previous"
 msgstr "Poprzedni"
 
@@ -12288,6 +12299,7 @@ msgid "Dependent media"
 msgstr "Media zależne"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:14
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:10
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:12
 #: zotonic_mod_site_update/priv/templates/_site_deploy_commit.tpl:9
 #: zotonic_mod_translation/priv/templates/_translation_language_status.tpl:43
@@ -13033,6 +13045,7 @@ msgid "Email log"
 msgstr "Rejestr e-mail"
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:39
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:8
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_status_flag.tpl:10
 msgid "Email status"
 msgstr "Status e-maila"
@@ -13285,12 +13298,12 @@ msgstr "Dodano odbiorcę."
 msgid "After the page is published"
 msgstr "Po opublikowaniu strony"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:39
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:51
 #: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail.tpl:19
 msgid "All languages"
 msgstr "Wszystkie języki"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:49
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:61
 msgid "All lists"
 msgstr "Wszystkie listy"
 
@@ -13312,8 +13325,8 @@ msgstr "Wszyscy odbiorcy listy mailingowej. Możesz przesłać lub pobrać tę l
 msgid "All recipients, using that language"
 msgstr "Wszyscy odbiorcy posługujący się tym językiem"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:29
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:24
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:27
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:36
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:45
 msgid "All statuses"
 msgstr "Wszystkie statusy"
@@ -13490,6 +13503,10 @@ msgstr "Usunięto listę mailingową."
 msgid "Delivery history is preserved. Sending again may result in recipients receiving the same content twice. Older mailings from before run tracking are not used for duplicate detection."
 msgstr "Historia dostaw jest zachowywana. Ponowne wysłanie może spowodować, że odbiorcy otrzymają tę samą treść dwukrotnie. Starsze wysyłki sprzed wprowadzenia śledzenia przesyłek nie są wykorzystywane do wykrywania duplikatów."
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:15
+msgid "Delivery problems have been recorded; sending is still allowed."
+msgstr "Odnotowano problemy z dostawą; wysyłka jest nadal dozwolona."
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:26
 msgid "Disabled email subscriptions are automatically deleted after three months."
 msgstr "Nieaktywne subskrypcje e-mailowe są automatycznie usuwane po upływie trzech miesięcy."
@@ -13554,6 +13571,10 @@ msgstr "Może otrzymywać wiadomości"
 msgid "Eligible recipients will be counted in the review step."
 msgstr "Odbiorcy spełniający warunki wysyłki zostaną policzeni na etapie sprawdzania."
 
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:39
+msgid "Email address"
+msgstr "Adres e-mail"
+
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:62
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:54
 msgid "Email language"
@@ -13566,6 +13587,10 @@ msgstr "Język wiadomości e-mail to wersja językowa wiadomości wybrana do wys
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:5
 msgid "Email subscriptions"
 msgstr "Subskrypcje e-mailowe"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:40
+msgid "Email-only subscription"
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:9
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_summary.tpl:10
@@ -13583,6 +13608,14 @@ msgstr "E-maile oczekujące na wysłanie: {count}."
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:47
 msgid "Enabled"
 msgstr "Włączone"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:37
+msgid "Enter a valid email address to look up mailing results."
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:86
+msgid "Enter a valid email address to look up subscriptions."
+msgstr ""
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:278
 msgid "Enter a valid future mailing date and time."
@@ -13621,12 +13654,29 @@ msgstr "Język awaryjny"
 msgid "Fallback language:"
 msgstr "Język rezerwowy:"
 
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:12
+msgid "Find mailings by email address"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:24
+msgid "Find recent mailings to this address"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22
+msgid "Find subscriptions by email address"
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:10
 msgid "Finished — some emails could not be sent"
 msgstr "Zakończono — nie udało się wysłać niektórych wiadomości e-mail"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:44
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:47
+msgid "First"
+msgstr "Pierwsze"
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:14
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:42
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:33
 msgid "First page"
 msgstr "Pierwsza strona"
 
@@ -13700,7 +13750,7 @@ msgstr "Uwzględnij tylko tych odbiorców, których preferencje są zgodne z tym
 msgid "Include recipients whose preference matches this language and recipients without a language preference."
 msgstr "Uwzględnij odbiorców, których preferencje językowe są zgodne z tym językiem, oraz odbiorców bez określonych preferencji językowych."
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:25
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:23
 msgid "Individual delivery results, shown 100 recipients at a time."
 msgstr "Indywidualne wyniki dostaw, wyświetlane po 100 odbiorców na raz."
 
@@ -13723,6 +13773,15 @@ msgstr "Język, gdy nie są znane żadne preferencje:"
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:19
 msgid "Language:"
 msgstr "Język:"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:52
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:55
+msgid "Last"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:6
+msgid "Last updated"
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:2
 msgid "Mailing"
@@ -13748,8 +13807,10 @@ msgstr "Historia wysyłek dla tej strony"
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:5
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:14
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:8
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:5
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:47
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:27
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:59
 msgid "Mailing list"
 msgstr "Lista mailingowa"
 
@@ -13810,7 +13871,7 @@ msgstr "Wysyłki"
 msgid "Mailings are sent to:"
 msgstr "Mailingi są wysyłane do:"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:13
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:25
 msgid "Mailings of page: <strong>{title}</strong>"
 msgstr "Wysyłki strony: <strong>{title}</strong>"
 
@@ -13830,6 +13891,10 @@ msgstr "Dopasowane poprzez zapytanie"
 msgid "Matching preferred languages only"
 msgstr "Tylko dopasowanie według preferowanych języków"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:55
+msgid "Matching resources"
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:35
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:56
 msgid "Needs attention"
@@ -13843,11 +13908,8 @@ msgstr "Nowa lista mailingowa"
 msgid "Newest"
 msgstr "Najnowsze"
 
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:38
-msgid "Next 100 recipients"
-msgstr "Kolejnych 100 odbiorców"
-
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:11
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:30
 msgid "Next page"
 msgstr "Następna strona"
 
@@ -13858,6 +13920,10 @@ msgstr "Nie podano adresu e-mail."
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:65
 msgid "No emails submitted"
 msgstr "Nie przesłano żadnych wiadomości e-mail"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:49
+msgid "No explicit subscriptions found for this email address."
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:50
 msgid "No mailing lists found."
@@ -13871,11 +13937,15 @@ msgstr "Na razie nie ma żadnych wysyłek."
 msgid "No mailings yet. Send a mailing from a page’s edit screen to see its progress here."
 msgstr "Na razie nie ma żadnych wysyłek. Wyślij wiadomość z ekranu edycji strony, aby śledzić jej status tutaj."
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:25
+msgid "No recent mailing results found for this email address."
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:72
 msgid "No recipients found."
 msgstr "Nie znaleziono żadnych odbiorców."
 
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:27
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:29
 msgid "No recipients match this filter."
 msgstr "Nie znaleziono odbiorców spełniających te kryteria."
 
@@ -13904,6 +13974,10 @@ msgstr "Nieukończone"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:50
 msgid "Not needed — no recipients selected"
 msgstr "Nie jest to konieczne — nie wybrano żadnych odbiorców"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:73
+msgid "Not opted out of mailings"
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:9
 msgid "Not sent — stopped"
@@ -13961,6 +14035,10 @@ msgstr "Ta wiadomość trafi tylko na adres testowy. Wybrane tutaj ustawienia wy
 msgid "Open a preview in a new tab before continuing:"
 msgstr "Przed kontynuowaniem otwórz podgląd w nowej karcie:"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:20
+msgid "Open email log in a new window"
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:80
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:143
 #: zotonic_mod_translation/priv/templates/_translation_tree_skipped.tpl:9
@@ -13979,6 +14057,10 @@ msgstr "Rezygnacja"
 msgid "Opt-out of all mailing lists coupled to my account"
 msgstr "Zrezygnuj ze wszystkich list mailingowych powiązanych z moim kontem"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:71
+msgid "Opted out of mailings"
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:23
 msgid "Our excuses for the inconvenience."
 msgstr "Przepraszamy za niedogodności."
@@ -13987,6 +14069,10 @@ msgstr "Przepraszamy za niedogodności."
 msgid "Overview"
 msgstr "Przegląd"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:40
+msgid "Page {page} of {pages} ({total} recipients)"
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:53
 msgid "Pages that have the 'subscriberof' edge to the mailinglist."
 msgstr "Strony połączone z listą mailingową relacją 'subscriberof'."
@@ -13994,6 +14080,10 @@ msgstr "Strony połączone z listą mailingową relacją 'subscriberof'."
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:54
 msgid "Pages that match the recipients search query below."
 msgstr "Strony odpowiadające poniższemu zapytaniu odbiorców."
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:42
+msgid "Part of the email address"
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:121
 msgid "People who have not received this page in this language"
@@ -14062,6 +14152,10 @@ msgstr "Podgląd mailingu"
 msgid "Previous deliveries"
 msgstr "Poprzednie doręczenia"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:38
+msgid "Primary email address"
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:149
 msgid "Progress"
@@ -14075,6 +14169,10 @@ msgstr "Początek publikacji"
 msgid "Query, for example:"
 msgstr "Zapytanie, na przykład:"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:53
+msgid "Query-based subscriptions are not included. Disabled email-only subscriptions are retained for three months."
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:3
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:3
 msgid "Queued"
@@ -14083,6 +14181,10 @@ msgstr "W kolejce"
 #: zotonic_mod_mailinglist/priv/templates/mailing_page.collection.tpl:28
 msgid "Read more on the web"
 msgstr "Przeczytaj więcej w internecie"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:2
+msgid "Recent mailing results"
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist.tpl:4
 msgid "Recent mailings"
@@ -14108,17 +14210,21 @@ msgstr "Okres ważności historii odbiorców upłynął. Cofnij się i zaznacz w
 msgid "Recipient history has expired. Start a new mailing and explicitly select all recipients; some people may receive this page again."
 msgstr "Historia odbiorców wygasła. Rozpocznij nową wysyłkę i wyraźnie zaznacz wszystkich odbiorców; niektóre osoby mogą ponownie otrzymać tę stronę."
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:38
+msgid "Recipient pages"
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:20
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:25
 msgid "Recipient preference"
 msgstr "Preferencje odbiorcy"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:22
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:20
 msgid "Recipient results"
 msgstr "Wyniki odbiorców"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:27
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:25
 msgid "Recipient status"
 msgstr "Status odbiorcy"
 
@@ -14141,7 +14247,7 @@ msgstr "Odbiorcy, dla których ten język jest odpowiedni, oraz ci, którzy nie 
 msgid "Recipients search query"
 msgstr "Zapytanie wyszukiwania odbiorców"
 
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:28
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:30
 msgid "Recipients will appear when preparation starts."
 msgstr "Lista odbiorców pojawi się po rozpoczęciu przygotowań."
 
@@ -14160,6 +14266,7 @@ msgid "Removed subscription."
 msgstr "Usunięto subskrypcję."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:97
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:9
 msgid "Result"
 msgstr "Wynik"
 
@@ -14412,6 +14519,14 @@ msgstr "Nazwa nadawcy dla e-maili (opcjonalnie)"
 msgid "Sender:"
 msgstr "Nadawca:"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:17
+msgid "Sending is allowed."
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:13
+msgid "Sending is suppressed after delivery failures."
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:12
 msgid "Sending needs attention"
 msgstr "Wysyłanie wymaga uwagi"
@@ -14456,13 +14571,21 @@ msgstr "Wysłano: <strong>{count}</strong>"
 msgid "Sent: {count};"
 msgstr "Wysłano: {count};"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:14
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:16
+msgid "Show all mailings"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:26
 msgid "Show all pages"
 msgstr "Pokaż wszystkie strony"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:57
 msgid "Show all recipients"
 msgstr "Pokaż wszystkich odbiorców"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:35
+msgid "Showing up to 200 recipient results per page from the last three months, including failed and skipped deliveries. Expired details and mailings from before run tracking are unavailable. Sent means accepted by the mail server; later bounces can still change the result."
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:18
 msgid "Showing up to 200 runs per page, with active runs first. Sent means accepted by the mail server; later bounces can still change the results."
@@ -14553,10 +14676,18 @@ msgstr "Zatrzymano; wiadomości e-mail, które znalazły się już w kolejce, s�
 msgid "Subscribe to"
 msgstr "Subskrybuj"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:44
+msgid "Subscribed"
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:47
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:99
 msgid "Subscribed with"
 msgstr "Subskrypcja z"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:28
+msgid "Subscriber"
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:6
 msgid "Subscriber Edges"
@@ -14570,6 +14701,14 @@ msgstr "Abonenci, dodawani za pomocą formularza subskrypcji."
 msgid "Subscription email: <b>{email}</b>"
 msgstr "Adres e-mail do subskrypcji: <b>{email}</b>"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:29
+msgid "Subscription status"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:4
+msgid "Subscriptions"
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:33
 msgid "Target mailing list"
 msgstr "Docelowa lista mailingowa"
@@ -14582,6 +14721,7 @@ msgstr "Szczegóły techniczne"
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:8
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:3
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:8
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:18
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:16
 msgid "Test email"
 msgstr "E-mail testowy"
@@ -14716,7 +14856,7 @@ msgstr "To jest lista „prywatna” zarządzana zewnętrznie. Odbiorcy nie będ
 msgid "This is a resend of an earlier mailing."
 msgstr "To jest ponowne wysłanie wcześniejszej wiadomości."
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:53
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:57
 msgid "This mailing is unavailable or you do not have permission to view it."
 msgstr "Ta wiadomość jest niedostępna lub nie masz uprawnień do jej wyświetlenia."
 
@@ -14727,6 +14867,10 @@ msgstr "Ta wysyłka jest niedostępna."
 #: zotonic_mod_mailinglist/priv/templates/_mailing_skip_reason.tpl:2
 msgid "This page is not available in their language."
 msgstr "Ta strona nie jest dostępna w ich języku."
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:45
+msgid "This resource has opted out of mailings."
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:24
 msgid "This rough total includes all query matches. Duplicate recipients are not removed yet."
@@ -14768,6 +14912,10 @@ msgstr "Anuluj subskrypcję"
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:3
 msgid "Unsubscribe from mailing list"
 msgstr "Wypisz się z listy mailingowej"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:44
+msgid "Unsubscribed"
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:106
 msgid "Unsubscribed recipients, blocked or invalid addresses, and recipients excluded by your delivery-history selection will not receive an email."
@@ -14820,6 +14968,10 @@ msgstr "Wyświetl historię wysyłek"
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:41
 msgid "View original mailing"
 msgstr "Zobacz oryginalną wiadomość e-mail"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:3
+msgid "View subscriptions and email status"
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:152
 msgid "View test result"
@@ -14959,6 +15111,10 @@ msgstr "Możesz zrezygnować ze wszystkich bieżących i przyszłych wysyłek za
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:28
 msgid "You can try to re-subscribe to one of our mailing lists in the side column."
 msgstr "W bocznej kolumnie możesz spróbować ponownie zapisać się na jedną z naszych list mailingowych."
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:21
+msgid "You do not have permission to view the email status."
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:2
 msgid "You received this mail because someone wanted to send you this information. We did not store your e-mail address and will not send you any other mail because of this mail."
@@ -15547,7 +15703,7 @@ msgstr "Dla każdej kombinacji użytkownika i etykiety może być tylko jeden to
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:110
 #: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:5
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:58
 msgid "Forever"
 msgstr "Na zawsze"
 
@@ -18360,54 +18516,54 @@ msgstr "tekst"
 msgid "{points} of {max} points"
 msgstr "{points} z {max} punktów"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:23
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:34
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:53
 msgid "Add IP entries"
 msgstr "Dodaj wpisy adresów IP"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:18
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:23
 msgid "Add to allow list"
 msgstr "Dodaj do listy dozwolonych"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:13
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:31
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:42
 msgid "Allow"
 msgstr "Zezwól"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:12
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:17
 msgid "Allow entries take precedence. Blocks follow observe/enforce/off mode and only affect guarded routes."
 msgstr "Wpisy na liście dozwolonych adresów mają pierwszeństwo. Blokady działają zgodnie z trybem observe/enforce/off i dotyczą tylko chronionych tras."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:90
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:106
 msgid "Block IP"
 msgstr "Zablokuj adres IP"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:87
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:103
 msgid "Block duration"
 msgstr "Czas blokady"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:70
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:86
 msgid "Block for"
 msgstr "Zablokuj na"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:13
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:18
 msgid "Current mode:"
 msgstr "Aktualny tryb:"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:54
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:72
 msgid "Current node only, including would-throttle decisions in observe mode. Up to 200 entries. Blocking generates a note from the displayed reason and rejection count."
 msgstr "Tylko bieżący węzeł, w tym żądania, które zostałyby ograniczone w trybie observe. Maksymalnie 200 wpisów. Zablokowanie tworzy notatkę na podstawie wyświetlonego powodu i liczby odrzuconych żądań."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:53
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:68
 msgid "Currently throttled IP addresses"
 msgstr "Adresy IP z aktualnym ograniczeniem liczby żądań"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:40
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:51
 msgid "Delete IP entry"
 msgstr "Usuń wpis adresu IP"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:37
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:48
 msgid "Delete IP entry?"
 msgstr "Usunąć wpis adresu IP?"
 
@@ -18427,7 +18583,7 @@ msgstr "Edytuj wpis IP"
 msgid "Enter valid IP addresses, a note and a future expiry date or duration. No changes were saved."
 msgstr "Wprowadź prawidłowe adresy IP, notatkę oraz przyszłą datę wygaśnięcia lub okres ważności. Żadne zmiany nie zostały zapisane."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:27
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:38
 msgid "Expiry dates are UTC. Expired entries stop applying immediately and are removed automatically. Global entries are managed in zotonic.config."
 msgstr "Daty wygaśnięcia podane są w czasie UTC. Wpisy, których termin wygaśnięcia upłynął, przestają obowiązywać natychmiast i są automatycznie usuwane. Wpisami globalnymi zarządza się w pliku zotonic.config."
 
@@ -18435,7 +18591,7 @@ msgstr "Daty wygaśnięcia podane są w czasie UTC. Wpisy, których termin wyga�
 msgid "Hour"
 msgstr "Godzina"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:65
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:81
 msgid "IP address"
 msgstr "Adres IP"
 
@@ -18443,7 +18599,7 @@ msgstr "Adres IP"
 msgid "IP addresses"
 msgstr "Adresy IP"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:26
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:32
 msgid "IP entries"
 msgstr "Wpisy IP"
 
@@ -18455,11 +18611,11 @@ msgstr "Lista"
 msgid "Month (30 days)"
 msgstr "Miesiąc (30 dni)"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:50
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:61
 msgid "No IP entries."
 msgstr "Brak wpisów dotyczących adresów IP."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:98
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:114
 msgid "No currently throttled IP addresses."
 msgstr "Obecnie żaden adres IP nie ma ograniczonej liczby żądań."
 
@@ -18467,15 +18623,15 @@ msgstr "Obecnie żaden adres IP nie ma ograniczonej liczby żądań."
 msgid "Or until (UTC)"
 msgstr "Lub do (UTC)"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:66
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:82
 msgid "Reason"
 msgstr "Powód"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:68
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:84
 msgid "Rejections"
 msgstr "Odrzucenia"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:69
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:85
 msgid "Retry in seconds"
 msgstr "Ponowna próba za (sekundy)"
 
@@ -18497,15 +18653,15 @@ msgstr "Ten wpis nie jest już dostępny. Odśwież stronę."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:3
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:10
-#: zotonic_mod_traffic_guard/src/mod_traffic_guard.erl:124
+#: zotonic_mod_traffic_guard/src/mod_traffic_guard.erl:168
 msgid "Traffic guard"
 msgstr "Ochrona ruchu sieciowego"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:59
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:74
 msgid "Traffic guard is temporarily unavailable."
 msgstr "Ochrona ruchu sieciowego jest chwilowo niedostępna."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:58
 msgid "Until (UTC):"
 msgstr "Do (UTC):"
 
@@ -18521,7 +18677,7 @@ msgstr "Ważne przez"
 msgid "You are not allowed to change these entries."
 msgstr "Nie wolno zmieniać tych wpisów."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:16
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:21
 msgid "Your current IP address:"
 msgstr "Twój aktualny adres IP:"
 
@@ -19198,7 +19354,7 @@ msgstr "Nie udało się zakończyć automatycznych aktualizacji. Sprawdź szczeg
 msgid "Choose a known failed hostname or enter an exact hostname, without a scheme, port, or path."
 msgstr "Wybierz nazwę hosta, o której wiadomo, że nie działa, lub wprowadź dokładną nazwę hosta bez schematu, portu ani ścieżki."
 
-#: zotonic_mod_websub/src/mod_websub.erl:285
+#: zotonic_mod_websub/src/mod_websub.erl:298
 msgid "Could not change the automatic update subscription."
 msgstr "Nie udało się zmienić subskrypcji automatycznych aktualizacji."
 
@@ -19399,7 +19555,7 @@ msgstr "Subskrybujemy"
 #: zotonic_mod_websub/priv/templates/_admin_edit_sidebar_websub.tpl:4
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:3
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:7
-#: zotonic_mod_websub/src/mod_websub.erl:257
+#: zotonic_mod_websub/src/mod_websub.erl:270
 msgid "WebSub subscriptions"
 msgstr "Subskrypcje WebSub"
 
