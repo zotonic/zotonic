@@ -22,19 +22,6 @@
                 {% endif %}
             </p>
             <p><a href="{% url admin_mailings email=lookup.email %}">{_ Find recent mailings to this address _}</a></p>
-            {% if lookup.resources %}
-                <h4>{_ Matching resources _}</h4>
-                <ul class="list-unstyled">
-                    {% for resource in lookup.resources %}
-                        <li>
-                            <a href="{% url admin_edit_rsc id=resource.rsc_id %}">{{ m.rsc[resource.rsc_id].title|default:resource.rsc_id }}</a>
-                            {% if resource.is_opt_out %}
-                                <span class="label label-warning">{_ Opted out of mailings _}</span>
-                            {% endif %}
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
             <table class="table table-striped">
                 <thead><tr>
                     <th>{_ Mailing list _}</th>
@@ -64,6 +51,35 @@
                 </tbody>
             </table>
             <p class="help-block">{_ Query-based subscriptions are not included. Disabled email-only subscriptions are retained for three months. _}</p>
+            {% if lookup.resources %}
+                <h4>{_ Matching resources _}</h4>
+                <div class="row">
+                    {% for resource in lookup.resources %}
+                        {% with resource.rsc_id as id %}
+                            <div class="col-sm-6 col-md-4">
+                                <a class="thumbnail{% if id.depiction %} z-image-thumbnail{% endif %}" href="{% url admin_edit_rsc id=resource.rsc_id %}">
+                                    {% if id.depiction as depiction %}
+                                        <div class="z-thumbnail-image">
+                                            {% image depiction mediaclass="admin-list-overview" class="thumb" %}
+                                        </div>
+                                    {% endif %}
+                                    <div class="z-thumbnail-text">
+                                        <h6>{{ id.category_id.title }}</h6>
+                                        <h5>{{ id.title|default:id.short_title|default:_"Untitled"|truncate:45 }}</h5>
+                                        <p>
+                                            {% if resource.is_opt_out %}
+                                                <span class="label label-warning">{_ Opted out of mailings _}</span>
+                                            {% else %}
+                                                <span class="label label-success">{_ Not opted out of mailings _}</span>
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                </a>
+                            </div>
+                        {% endwith %}
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
     </section>
 {% else %}
