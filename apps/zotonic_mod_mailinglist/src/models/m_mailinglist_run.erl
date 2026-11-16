@@ -37,6 +37,7 @@ Available Model API Paths
 | `get` | `/` | List accessible runs, optionally filtered by a payload map. |
 | `get` | `/history/...` | Return accessible runs and a next-page offset, using the same payload filters as the root path. |
 | `get` | `/run/+run_id/...` | Return a run with aggregate statistics, language results and saved-content metadata. |
+| `get` | `/email_history/+email` | Exact-email recipient results updated within three months, excluding expired details. Payload accepts offset; returns email, results and next_offset. Uses the same run access checks as other history. |
 | `get` | `/recipients_page/+run_id` | Return recipient results with email/status filters and page counts. |
 | `get` | `/recipients/+run_id/...` | Return up to 100 recipient results, optionally filtered and paged using the payload. |
 | `get` | `/page/+page_id/...` | List accessible runs for a page. Resource names and ids are accepted. |
@@ -175,6 +176,22 @@ and use any remaining path segments for further lookups.
 ]).
 
 -spec m_get(list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
+m_get([<<"email_history">>, Email | Rest], Msg, Context) when is_binary(Email) ->
+    case z_acl:is_allowed(use, mod_mailinglist, Context) of
+        false -> {error, eacces};
+        true ->
+            Normalized = m_identity:normalize_key(email, z_string:trim(Email)),
+            case z_email_utils:is_email(Normalized) of
+                false -> {error, badarg};
+                true ->
+                    Payload = case Msg of
+                        #{payload := P} when is_map(P) -> P;
+                        _ -> #{}
+                    end,
+                    Offset = min(1000000, to_id(maps:get(<<"offset">>, Payload, 0))),
+                    {ok, {email_history(Normalized, Offset, Context), Rest}}
+            end
+    end;
 m_get([<<"run">>, Id | Rest], _Msg, Context) ->
     case get(to_id(Id), Context) of
         {ok, Run} ->
@@ -276,6 +293,27 @@ m_get([], _Msg, Context) ->
     {ok, {list(all, Context), []}};
 m_get(_, _, _) ->
     {error, unknown_path}.
+
+%% The extra row determines navigation before ACL filtering, so an inaccessible
+%% mailing cannot hide later results. Retention limits this to recent details.
+-spec email_history(Email, Offset, Context) -> map() when
+    Email :: binary(), Offset :: non_neg_integer(), Context :: z:context().
+email_history(Email, Offset, Context) ->
+    {ok, Rows} = z_db:qmap(
+        "select r.id, r.page_id, r.mailinglist_id, r.sender_id, r.is_test,
+                r.created, rr.modified, rr.status, rr.reason, rr.language
+         from mailinglist_run_recipient rr
+         join mailinglist_run r on r.id=rr.run_id
+         where rr.email=$1 and r.details_expired is null
+           and rr.modified >= now()-interval '3 months'
+         order by rr.modified desc, r.id desc, rr.id desc limit 201 offset $2",
+        [Email, Offset], Context
+    ),
+    #{
+        <<"email">> => Email,
+        <<"results">> => [R || R <- lists:sublist(Rows, 200), allowed(R, Context)],
+        <<"next_offset">> => case length(Rows) > 200 of true -> Offset + 200; false -> undefined end
+    }.
 
 %% Keep the cursor-based API available for existing clients.
 recipient_rows(Id, Payload, Context) ->

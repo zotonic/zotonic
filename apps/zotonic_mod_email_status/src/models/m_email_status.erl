@@ -34,6 +34,7 @@ Available Model API Paths
 
 | Method | Path pattern | Description |
 | --- | --- | --- |
+| `get` | `/summary/+email/...` | Return is_valid, is_ok_to_send and is_blocked using the same authorization as full status; denied callers receive eacces. Authorized unknown addresses default to valid and sendable. |
 | `get` | `/is_valid/+email/...` | Return the effective validity flag for `+email` from cached `email_status` data (normalized email, blocked/final-error aware); unknown addresses default to valid. |
 | `get` | `/+email/...` | Return the full `email_status` row for `+email` (delivery/error/block counters and timestamps) when caller is admin, has `mod_email_status` use rights, or may edit the user/resource owning that email identity. |
 
@@ -45,6 +46,7 @@ Available Model API Paths
 -export([
     m_get/3,
 
+    summary/2,
     is_valid/2,
     is_ok_to_send/2,
     is_blocked/2,
@@ -71,6 +73,11 @@ Available Model API Paths
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([<<"summary">>, Email | Rest], _Msg, Context) when is_binary(Email) ->
+    case summary(Email, Context) of
+        {ok, Summary} -> {ok, {Summary, Rest}};
+        {error, _} = Error -> Error
+    end;
 m_get([ <<"is_valid">>, Email | Rest ], _Msg, Context) ->
     {ok, {is_valid(Email, Context), Rest}};
 m_get([ Email | Rest ], _Msg, Context) ->
@@ -91,6 +98,25 @@ m_get([ Email | Rest ], _Msg, Context) ->
     end;
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
+
+
+%% @doc Read address health using the same authorization as detailed status.
+%% Check permission before consulting the status cache, including unknown emails.
+-spec summary(Email, Context) -> {ok, map()} | {error, eacces} when
+    Email :: binary() | string(), Context :: z:context().
+summary(Email0, Context) ->
+    Email = normalize(Email0),
+    case is_allowed(Email, Context) of
+        true ->
+            {IsValid, IsOkToSend, IsBlocked} = is_valid_cached(Email, Context),
+            {ok, #{
+                <<"is_valid">> => IsValid,
+                <<"is_ok_to_send">> => IsOkToSend,
+                <<"is_blocked">> => IsBlocked
+            }};
+        false ->
+            {error, eacces}
+    end.
 
 
 is_allowed(Email, Context) ->

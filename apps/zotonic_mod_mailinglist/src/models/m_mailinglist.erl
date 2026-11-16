@@ -44,6 +44,7 @@ Available Model API Paths
 | `get` | `/tasks/+rscid/...` | Return publication-dependent and dated mailing tasks associated with resource `+rscid`, grouped by mailing list id. |
 | `get` | `/confirm_key/+confirmkey/...` | Return subscription confirmation payload for confirmation key `+confirmkey`. |
 | `get` | `/subscription/+listid/+email/...` | Return `subscription` result for `+listid` and `+email` using `z_acl:is_allowed`. |
+| `get` | `/email_subscriptions/+email` | Administrative exact-email lookup of enabled/disabled email recipients and subscriber/exsubscriber edges, plus email health. Requires use of mod_mailinglist; lists must be editable and matching resources and their email properties visible. Email health is returned only when authorized by m_email_status. Queries are excluded. |
 | `get` | `/subscriptions` | Return mailinglist subscriptions for the currently authenticated user. No further lookups. |
 | `get` | `/subscriptions/key/+undefined/...` | Return subscriptions for the currently authenticated user (same result as `/subscriptions`) when no key value is present. |
 | `get` | `/subscriptions/key/+key/...` | Decode recipient key `+key` and return matching subscriptions by email or recipient/list id encoded in that key. |
@@ -118,6 +119,15 @@ Available Model API Paths
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([<<"email_subscriptions">>, Email | Rest], _Msg, Context) when is_binary(Email) ->
+    case z_acl:is_allowed(use, mod_mailinglist, Context) of
+        true ->
+            case normalize_email(z_string:trim(Email)) of
+                undefined -> {error, badarg};
+                Normalized -> {ok, {email_subscriptions(Normalized, Context), Rest}}
+            end;
+        false -> {error, eacces}
+    end;
 m_get([ <<"count_recipients">>, MailingId | Rest ], _Msg, Context) ->
     case z_acl:is_allowed(view, MailingId, Context) of
         true ->
@@ -817,6 +827,45 @@ list_subscriptions_by_rsc_id(RscId0, Context) ->
             ViaEmail = lists:flatten(lists:map(fun(E) -> subscriptions_by_email_1(E, Context) end, Emails)),
             {ok, subs_merge_sort(ViaEmail ++ ViaRsc)}
     end.
+
+%% Administrative lookup of explicit subscriptions, including disabled entries.
+%% Scan subscription edges rather than identities: not every resource with a
+%% primary email has an email identity. Query-based memberships are excluded.
+-spec email_subscriptions(Email, Context) -> map() when
+    Email :: binary(), Context :: z:context().
+email_subscriptions(Email, Context) ->
+    {ok, Direct} = z_db:qmap(
+        "select id as recipient_id, mailinglist_id, is_enabled
+         from mailinglist_recipient where email=$1 order by mailinglist_id, id",
+        [Email], Context
+    ),
+    Subscriber = m_rsc:rid(subscriberof, Context),
+    ExSubscriber = m_rsc:rid(exsubscriberof, Context),
+    Edges = z_db:q(
+        "select subject_id, object_id, predicate_id from edge
+         where predicate_id=any($1::int[]) order by object_id, subject_id, predicate_id",
+        [[P || P <- [Subscriber, ExSubscriber], is_integer(P)]], Context
+    ),
+    Resources = [
+        #{<<"rsc_id">> => RscId, <<"mailinglist_id">> => ListId,
+          <<"is_enabled">> => Predicate =:= Subscriber,
+          <<"is_opt_out">> => z_convert:to_bool(m_rsc:p(RscId, <<"is_mailing_opt_out">>, Context))}
+        || {RscId, ListId, Predicate} <- Edges,
+           z_acl:rsc_editable(ListId, Context),
+           z_acl:rsc_visible(RscId, Context),
+           normalize_email(m_rsc:p(RscId, <<"email_raw">>, Context)) =:= Email
+    ],
+    VisibleDirect = [R || R <- Direct, z_acl:rsc_editable(maps:get(<<"mailinglist_id">>, R), Context)],
+    #{
+        <<"email">> => Email,
+        <<"subscriptions">> => lists:sort(fun(A, B) ->
+            maps:get(<<"mailinglist_id">>, A) =< maps:get(<<"mailinglist_id">>, B)
+        end, VisibleDirect ++ Resources),
+        <<"email_status">> => case m_email_status:summary(Email, Context) of
+            {ok, Summary} -> Summary;
+            {error, eacces} -> undefined
+        end
+    }.
 
 %% @doc Get all mailingslists with this email address, checking both the recipients and the
 %% subscriberof edges. The found resources must have the email address as their primary email address.

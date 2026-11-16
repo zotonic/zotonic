@@ -18,6 +18,17 @@
 </div>
 
 
+<form method="get" action="{% url admin_mailinglist %}" class="form-inline well">
+    <label>{_ Find subscriptions by email address _}
+        <input type="email" name="email" class="form-control" value="{{ q.email|escape }}" required>
+    </label>
+    <button type="submit" class="btn btn-default">{_ Find _}</button>
+    {% if q.email %}<a href="{% url admin_mailinglist %}" class="btn btn-default">{_ Clear _}</a>{% endif %}
+</form>
+{% if q.email %}
+    {% include "_mailinglist_email_lookup.tpl" email=q.email %}
+{% endif %}
+
 {% live topic=["bridge", "origin", "model", "mailinglist", "event", "+", "+"]
         throttle=3000
         template="_admin_mailinglist_overview.tpl"
