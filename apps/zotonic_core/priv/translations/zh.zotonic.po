@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-12 14:02\n"
+"PO-Revision-Date: 2026-11-16 22:13\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -590,7 +590,7 @@ msgstr "无法移至合作团队"
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125
 #: zotonic_mod_survey/src/mod_survey.erl:427
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:36
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:12
 msgid "Delete"
@@ -617,7 +617,7 @@ msgstr "删除中"
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:33
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:14
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:31
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:42
 msgid "Deny"
 msgstr "拒绝"
 
@@ -1528,6 +1528,7 @@ msgid "City"
 msgstr "城市"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_connection.tpl:34
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:26
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:37
 msgid "Clear"
 msgstr "清除"
@@ -1965,7 +1966,7 @@ msgstr "电子邮件地址"
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:131
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:117
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:119
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:35
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:46
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:44
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:14
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:16
@@ -2166,9 +2167,9 @@ msgstr "文件由邮件列表收件人导入模块以及监听drop文件夹的�
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:46
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:183
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:46
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:41
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:44
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:74
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:59
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:71
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:60
 msgid "Filter"
 msgstr "过滤"
@@ -3163,7 +3164,7 @@ msgstr "链接至以下页面的页面："
 #: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:51
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:56
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:69
 msgid "Refresh"
 msgstr "刷新"
 
@@ -3630,7 +3631,7 @@ msgstr "州或省"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:11
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:57
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:22
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:34
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:17
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:19
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:21
@@ -4103,6 +4104,7 @@ msgstr "未发表"
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:15
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:31
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:68
 #: zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:13
 #: zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
 #: zotonic_mod_seo/src/support/seo_jsonld_webpage.erl:276
@@ -4705,6 +4707,7 @@ msgstr "配置"
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:24
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:32
 #: zotonic_mod_admin_config/src/mod_admin_config.erl:96
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:14
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:79
 msgid "Configuration"
 msgstr "配置"
@@ -5192,7 +5195,7 @@ msgstr "隐藏菜单"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:6
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:75
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:65
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:37
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:49
 #: zotonic_mod_translation/priv/templates/_dialog_new_rsc_extra.tpl:2
 #: zotonic_mod_translation/priv/templates/_translation_language_status.tpl:46
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:41
@@ -5279,6 +5282,7 @@ msgstr "你确定要删除这条记录吗？"
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:99
 #: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:36
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:159
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:11
 msgid "Blocked"
 msgstr "已屏蔽"
 
@@ -6684,13 +6688,13 @@ msgstr "允许的值（以逗号分隔）"
 msgid "Allowed values:"
 msgstr "允许的值："
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:296
+#: zotonic_mod_analytics/src/mod_analytics.erl:348
 msgid "An equivalent analytics measurement already exists."
 msgstr "已经存在一种等效的分析指标。"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
-#: zotonic_mod_analytics/src/mod_analytics.erl:225
+#: zotonic_mod_analytics/src/mod_analytics.erl:277
 msgid "Analytics configuration"
 msgstr "分析配置"
 
@@ -6761,11 +6765,11 @@ msgstr "机密请求——页面、API 及其他分发类型"
 msgid "Configure analytics measurements"
 msgstr "配置分析指标"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:264
+#: zotonic_mod_analytics/src/mod_analytics.erl:316
 msgid "Could not delete the analytics measurement."
 msgstr "无法删除分析指标。"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:297
+#: zotonic_mod_analytics/src/mod_analytics.erl:349
 msgid "Could not save. Check the event, breakdown and filter values."
 msgstr "无法保存。请检查事件、分类和筛选条件。"
 
@@ -6819,7 +6823,7 @@ msgstr "设备——手机、平板电脑、台式机或未知"
 msgid "Display order"
 msgstr "显示顺序"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:270
+#: zotonic_mod_analytics/src/mod_analytics.erl:322
 msgid "Display order saved."
 msgstr "显示顺序已保存。"
 
@@ -6968,6 +6972,8 @@ msgstr "最新存储的时间段"
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:210
 #: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:55
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:88
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:51
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:54
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:33
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:55
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
@@ -7098,7 +7104,7 @@ msgstr "简要说明"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
-#: zotonic_mod_analytics/src/mod_analytics.erl:217
+#: zotonic_mod_analytics/src/mod_analytics.erl:269
 msgid "Site Analytics"
 msgstr "网站分析"
 
@@ -7150,11 +7156,11 @@ msgstr "已存储的时间区间 / 容量"
 msgid "Stored time intervals"
 msgstr "存储的时间间隔"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:272
+#: zotonic_mod_analytics/src/mod_analytics.erl:324
 msgid "The analytics measurements changed. Reloading their current display order."
 msgstr "分析指标已发生变化。正在重新加载当前的显示顺序。"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:295
+#: zotonic_mod_analytics/src/mod_analytics.erl:347
 msgid "This analytics measurement exceeds the storage budget."
 msgstr "此项分析指标超出了存储预算。"
 
@@ -9369,6 +9375,7 @@ msgstr "注意：评论需要审核"
 
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:20
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:29
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:4
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:199
 msgid "Page"
@@ -9691,7 +9698,7 @@ msgid "A graph of all templates, and by whom they are included, is generated and
 msgstr "生成并自动更新所有模板及其包含者的图表。"
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:9
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:67
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:83
 msgid "Action"
 msgstr "操作"
 
@@ -10035,6 +10042,8 @@ msgid "Final dispatch"
 msgstr "最终路由"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:181
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:25
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:15
 msgid "Find"
 msgstr "寻找"
 
@@ -11688,6 +11697,8 @@ msgstr "只有管理员账户（用户 1）可以将文件标记为无法恢复�
 
 #: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:54
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:85
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:45
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:48
 msgid "Previous"
 msgstr "前一页"
 
@@ -12224,6 +12235,7 @@ msgid "Dependent media"
 msgstr "从属媒体"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:14
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:10
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:12
 #: zotonic_mod_site_update/priv/templates/_site_deploy_commit.tpl:9
 #: zotonic_mod_translation/priv/templates/_translation_language_status.tpl:43
@@ -12969,6 +12981,7 @@ msgid "Email log"
 msgstr "Email 日志"
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:39
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:8
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_status_flag.tpl:10
 msgid "Email status"
 msgstr "电子邮件状态"
@@ -13221,12 +13234,12 @@ msgstr "收件人已添加。"
 msgid "After the page is published"
 msgstr "页面发布后"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:39
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:51
 #: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail.tpl:19
 msgid "All languages"
 msgstr "所有语言"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:49
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:61
 msgid "All lists"
 msgstr "所有列表"
 
@@ -13248,8 +13261,8 @@ msgstr "邮件列表的所有收件人。你可以上传或者下载这个列表
 msgid "All recipients, using that language"
 msgstr "所有收件人，邮件使用该语言"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:29
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:24
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:27
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:36
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:45
 msgid "All statuses"
 msgstr "所有状态"
@@ -13426,6 +13439,10 @@ msgstr "删除了邮件列表。"
 msgid "Delivery history is preserved. Sending again may result in recipients receiving the same content twice. Older mailings from before run tracking are not used for duplicate detection."
 msgstr "投递记录会被保留。再次发送可能会导致收件人收到相同的内容两次。在启用投递跟踪功能之前发送的旧邮件不会用于重复检测。"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:15
+msgid "Delivery problems have been recorded; sending is still allowed."
+msgstr "已记录到配送问题；但仍允许发货。"
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:26
 msgid "Disabled email subscriptions are automatically deleted after three months."
 msgstr "已停用的电子邮件订阅将在三个月后自动删除。"
@@ -13490,6 +13507,10 @@ msgstr "符合邮件发送条件"
 msgid "Eligible recipients will be counted in the review step."
 msgstr "符合条件的接收方将在审核阶段进行统计。"
 
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:39
+msgid "Email address"
+msgstr "电子邮箱地址"
+
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:62
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:54
 msgid "Email language"
@@ -13502,6 +13523,10 @@ msgstr "电子邮件语言是指选定用于发送的邮件的语言版本。当
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:5
 msgid "Email subscriptions"
 msgstr "电子邮件订阅"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:40
+msgid "Email-only subscription"
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:9
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_summary.tpl:10
@@ -13519,6 +13544,14 @@ msgstr "待发送的电子邮件： {count}。"
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:47
 msgid "Enabled"
 msgstr "启用"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:37
+msgid "Enter a valid email address to look up mailing results."
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:86
+msgid "Enter a valid email address to look up subscriptions."
+msgstr ""
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:278
 msgid "Enter a valid future mailing date and time."
@@ -13557,12 +13590,29 @@ msgstr "后备语言"
 msgid "Fallback language:"
 msgstr "备用语言："
 
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:12
+msgid "Find mailings by email address"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:24
+msgid "Find recent mailings to this address"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22
+msgid "Find subscriptions by email address"
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:10
 msgid "Finished — some emails could not be sent"
 msgstr "已完成——部分电子邮件无法发送"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:44
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:47
+msgid "First"
+msgstr "名字"
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:14
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:42
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:33
 msgid "First page"
 msgstr "第一页"
 
@@ -13636,7 +13686,7 @@ msgstr "仅包含语言偏好与该语言匹配的收件人。未设置语言偏
 msgid "Include recipients whose preference matches this language and recipients without a language preference."
 msgstr "包含语言偏好与该语言匹配的收件人，以及没有语言偏好的收件人。"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:25
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:23
 msgid "Individual delivery results, shown 100 recipients at a time."
 msgstr "单条投递结果，每次显示100位收件人。"
 
@@ -13659,6 +13709,15 @@ msgstr "未知语言偏好时的语言："
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:19
 msgid "Language:"
 msgstr "语言："
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:52
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:55
+msgid "Last"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:6
+msgid "Last updated"
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:2
 msgid "Mailing"
@@ -13684,8 +13743,10 @@ msgstr "此页面的邮件历史记录"
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:5
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:14
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:8
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:5
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:47
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:27
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:59
 msgid "Mailing list"
 msgstr "邮件列表"
 
@@ -13746,7 +13807,7 @@ msgstr "邮件发送"
 msgid "Mailings are sent to:"
 msgstr "邮件发送给："
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:13
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:25
 msgid "Mailings of page: <strong>{title}</strong>"
 msgstr "该页面的邮件发送： <strong>{title}</strong>"
 
@@ -13766,6 +13827,10 @@ msgstr "通过查询匹配"
 msgid "Matching preferred languages only"
 msgstr "仅匹配首选语言"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:55
+msgid "Matching resources"
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:35
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:56
 msgid "Needs attention"
@@ -13779,11 +13844,8 @@ msgstr "新建邮件列表"
 msgid "Newest"
 msgstr "最新"
 
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:38
-msgid "Next 100 recipients"
-msgstr "接下来的100位收件人"
-
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:11
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:30
 msgid "Next page"
 msgstr "下一页"
 
@@ -13794,6 +13856,10 @@ msgstr "没有可用的电子邮件地址。"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:65
 msgid "No emails submitted"
 msgstr "未提交任何电子邮件"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:49
+msgid "No explicit subscriptions found for this email address."
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:50
 msgid "No mailing lists found."
@@ -13807,11 +13873,15 @@ msgstr "目前还没有邮件。"
 msgid "No mailings yet. Send a mailing from a page’s edit screen to see its progress here."
 msgstr "目前尚未发送邮件。请从页面的编辑界面发送邮件，以便在此查看其处理进度。"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:25
+msgid "No recent mailing results found for this email address."
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:72
 msgid "No recipients found."
 msgstr "未找到收件人。"
 
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:27
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:29
 msgid "No recipients match this filter."
 msgstr "没有符合此筛选条件的收件人。"
 
@@ -13840,6 +13910,10 @@ msgstr "未完成"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:50
 msgid "Not needed — no recipients selected"
 msgstr "不需要——未选择收件人"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:73
+msgid "Not opted out of mailings"
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:9
 msgid "Not sent — stopped"
@@ -13897,6 +13971,10 @@ msgstr "只有测试地址会收到此邮件。你选择的发送设置会保留
 msgid "Open a preview in a new tab before continuing:"
 msgstr "在继续之前，请在新标签页中打开预览："
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:20
+msgid "Open email log in a new window"
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:80
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:143
 #: zotonic_mod_translation/priv/templates/_translation_tree_skipped.tpl:9
@@ -13915,6 +13993,10 @@ msgstr "拒收邮件"
 msgid "Opt-out of all mailing lists coupled to my account"
 msgstr "拒收与我的帐户关联的所有邮件列表的邮件"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:71
+msgid "Opted out of mailings"
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:23
 msgid "Our excuses for the inconvenience."
 msgstr "对此带来的不便我们表示抱歉。"
@@ -13923,6 +14005,10 @@ msgstr "对此带来的不便我们表示抱歉。"
 msgid "Overview"
 msgstr "概述"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:40
+msgid "Page {page} of {pages} ({total} recipients)"
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:53
 msgid "Pages that have the 'subscriberof' edge to the mailinglist."
 msgstr "通过 'subscriberof' 连接关联到此邮件列表的页面。"
@@ -13930,6 +14016,10 @@ msgstr "通过 'subscriberof' 连接关联到此邮件列表的页面。"
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:54
 msgid "Pages that match the recipients search query below."
 msgstr "与以下收件人搜索查询相匹配的页面。"
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:42
+msgid "Part of the email address"
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:121
 msgid "People who have not received this page in this language"
@@ -13998,6 +14088,10 @@ msgstr "预览邮件"
 msgid "Previous deliveries"
 msgstr "先前的投递记录"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:38
+msgid "Primary email address"
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:149
 msgid "Progress"
@@ -14011,6 +14105,10 @@ msgstr "发布开始时间"
 msgid "Query, for example:"
 msgstr "查询例如："
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:53
+msgid "Query-based subscriptions are not included. Disabled email-only subscriptions are retained for three months."
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:3
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:3
 msgid "Queued"
@@ -14019,6 +14117,10 @@ msgstr "已加入队列"
 #: zotonic_mod_mailinglist/priv/templates/mailing_page.collection.tpl:28
 msgid "Read more on the web"
 msgstr "在网络上阅读更多内容"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:2
+msgid "Recent mailing results"
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist.tpl:4
 msgid "Recent mailings"
@@ -14044,17 +14146,21 @@ msgstr "收件人记录已过期。请返回并重新选择所有收件人，然
 msgid "Recipient history has expired. Start a new mailing and explicitly select all recipients; some people may receive this page again."
 msgstr "收件人记录已过期。请开始一封新的邮件，并明确选中所有收件人；部分收件人可能会再次收到此页面。"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:38
+msgid "Recipient pages"
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:20
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:25
 msgid "Recipient preference"
 msgstr "收件人偏好"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:22
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:20
 msgid "Recipient results"
 msgstr "收件人结果"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:27
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:25
 msgid "Recipient status"
 msgstr "收件人状态"
 
@@ -14077,7 +14183,7 @@ msgstr "符合此语言条件的收件人，以及未指定语言偏好的收件
 msgid "Recipients search query"
 msgstr "收件人搜索查询"
 
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:28
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:30
 msgid "Recipients will appear when preparation starts."
 msgstr "准备工作开始后，收件人名单将会显示出来。"
 
@@ -14096,6 +14202,7 @@ msgid "Removed subscription."
 msgstr "已删除订阅。"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:97
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:9
 msgid "Result"
 msgstr "结果"
 
@@ -14348,6 +14455,14 @@ msgstr "E-mail 的发送者名字（可选）"
 msgid "Sender:"
 msgstr "发件人："
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:17
+msgid "Sending is allowed."
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:13
+msgid "Sending is suppressed after delivery failures."
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:12
 msgid "Sending needs attention"
 msgstr "发送出现需要处理的问题"
@@ -14392,13 +14507,21 @@ msgstr "已发送：<strong>{count}</strong>"
 msgid "Sent: {count};"
 msgstr "已发送：{count}；"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:14
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:16
+msgid "Show all mailings"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:26
 msgid "Show all pages"
 msgstr "显示所有页面"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:57
 msgid "Show all recipients"
 msgstr "显示所有收件人"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:35
+msgid "Showing up to 200 recipient results per page from the last three months, including failed and skipped deliveries. Expired details and mailings from before run tracking are unavailable. Sent means accepted by the mail server; later bounces can still change the result."
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:18
 msgid "Showing up to 200 runs per page, with active runs first. Sent means accepted by the mail server; later bounces can still change the results."
@@ -14489,10 +14612,18 @@ msgstr "已停止；已排入队列的电子邮件仍在处理中"
 msgid "Subscribe to"
 msgstr "订阅到"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:44
+msgid "Subscribed"
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:47
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:99
 msgid "Subscribed with"
 msgstr "订阅了"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:28
+msgid "Subscriber"
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:6
 msgid "Subscriber Edges"
@@ -14506,6 +14637,14 @@ msgstr "订阅者，通过订阅表格添加。"
 msgid "Subscription email: <b>{email}</b>"
 msgstr "订阅邮箱： <b>{email}</b>"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:29
+msgid "Subscription status"
+msgstr ""
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:4
+msgid "Subscriptions"
+msgstr ""
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:33
 msgid "Target mailing list"
 msgstr "目标邮寄名单"
@@ -14518,6 +14657,7 @@ msgstr "技术细节"
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:8
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:3
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:8
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:18
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:16
 msgid "Test email"
 msgstr "测试邮件"
@@ -14652,7 +14792,7 @@ msgstr "这是一个“私有的”，外部管理的列表。收件人不会收
 msgid "This is a resend of an earlier mailing."
 msgstr "这是之前一封邮件的重新发送。"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:53
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:57
 msgid "This mailing is unavailable or you do not have permission to view it."
 msgstr "此邮件发送任务不可用，或你无权查看。"
 
@@ -14663,6 +14803,10 @@ msgstr "此邮件发送任务不可用。"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_skip_reason.tpl:2
 msgid "This page is not available in their language."
 msgstr "此页面暂无该语言版本。"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:45
+msgid "This resource has opted out of mailings."
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:24
 msgid "This rough total includes all query matches. Duplicate recipients are not removed yet."
@@ -14704,6 +14848,10 @@ msgstr "取消订阅自"
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:3
 msgid "Unsubscribe from mailing list"
 msgstr "取消邮件列表订阅"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:44
+msgid "Unsubscribed"
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:106
 msgid "Unsubscribed recipients, blocked or invalid addresses, and recipients excluded by your delivery-history selection will not receive an email."
@@ -14756,6 +14904,10 @@ msgstr "查看邮件历史记录"
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:41
 msgid "View original mailing"
 msgstr "查看原始邮件"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:3
+msgid "View subscriptions and email status"
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:152
 msgid "View test result"
@@ -14895,6 +15047,10 @@ msgstr "你可以通过本网站的帐户，选择拒收所有当前及未来的
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:28
 msgid "You can try to re-subscribe to one of our mailing lists in the side column."
 msgstr "你可以尝试在侧边栏重新订阅我们的邮件列表。"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:21
+msgid "You do not have permission to view the email status."
+msgstr ""
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:2
 msgid "You received this mail because someone wanted to send you this information. We did not store your e-mail address and will not send you any other mail because of this mail."
@@ -15483,7 +15639,7 @@ msgstr "对于每个用户和标签的组合，只能有一个访问令牌。具
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:110
 #: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:5
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:58
 msgid "Forever"
 msgstr "永远"
 
@@ -18296,54 +18452,54 @@ msgstr "文本"
 msgid "{points} of {max} points"
 msgstr "{points} 分，满分 {max} 分"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:23
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:34
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:53
 msgid "Add IP entries"
 msgstr "添加 IP 条目"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:18
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:23
 msgid "Add to allow list"
 msgstr "添加到白名单"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:13
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:31
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:42
 msgid "Allow"
 msgstr "允许"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:12
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:17
 msgid "Allow entries take precedence. Blocks follow observe/enforce/off mode and only affect guarded routes."
 msgstr "允许列表中的条目优先。封锁规则遵循 observe/enforce/off 模式，且仅作用于受保护的路由。"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:90
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:106
 msgid "Block IP"
 msgstr "屏蔽 IP"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:87
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:103
 msgid "Block duration"
 msgstr "封锁时长"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:70
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:86
 msgid "Block for"
 msgstr "封锁时长"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:13
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:18
 msgid "Current mode:"
 msgstr "当前模式："
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:54
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:72
 msgid "Current node only, including would-throttle decisions in observe mode. Up to 200 entries. Blocking generates a note from the displayed reason and rejection count."
 msgstr "仅限当前节点，包括在 observe 模式下本应被限流的请求。最多显示 200 条记录。封锁时会根据显示的原因和被拒绝的请求数生成备注。"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:53
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:68
 msgid "Currently throttled IP addresses"
 msgstr "当前被限流的 IP 地址"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:40
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:51
 msgid "Delete IP entry"
 msgstr "删除 IP 条目"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:37
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:48
 msgid "Delete IP entry?"
 msgstr "删除 IP 条目？"
 
@@ -18363,7 +18519,7 @@ msgstr "编辑 IP 条目"
 msgid "Enter valid IP addresses, a note and a future expiry date or duration. No changes were saved."
 msgstr "请输入有效的 IP 地址、备注以及未来的到期日期或有效期。未保存任何更改。"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:27
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:38
 msgid "Expiry dates are UTC. Expired entries stop applying immediately and are removed automatically. Global entries are managed in zotonic.config."
 msgstr "过期日期以UTC为基准。过期的条目将立即停止生效，并被自动删除。全局条目在 zotonic.config 中进行管理。"
 
@@ -18371,7 +18527,7 @@ msgstr "过期日期以UTC为基准。过期的条目将立即停止生效，并
 msgid "Hour"
 msgstr "小时"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:65
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:81
 msgid "IP address"
 msgstr "IP地址"
 
@@ -18379,7 +18535,7 @@ msgstr "IP地址"
 msgid "IP addresses"
 msgstr "IP地址"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:26
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:32
 msgid "IP entries"
 msgstr "IP条目"
 
@@ -18391,11 +18547,11 @@ msgstr "列表"
 msgid "Month (30 days)"
 msgstr "月（30天）"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:50
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:61
 msgid "No IP entries."
 msgstr "没有 IP 条目。"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:98
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:114
 msgid "No currently throttled IP addresses."
 msgstr "当前没有被限流的 IP 地址。"
 
@@ -18403,15 +18559,15 @@ msgstr "当前没有被限流的 IP 地址。"
 msgid "Or until (UTC)"
 msgstr "或直至（UTC）"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:66
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:82
 msgid "Reason"
 msgstr "理由"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:68
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:84
 msgid "Rejections"
 msgstr "拒绝次数"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:69
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:85
 msgid "Retry in seconds"
 msgstr "重试等待时间（秒）"
 
@@ -18433,15 +18589,15 @@ msgstr "该条目已不可用。请刷新页面。"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:3
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:10
-#: zotonic_mod_traffic_guard/src/mod_traffic_guard.erl:124
+#: zotonic_mod_traffic_guard/src/mod_traffic_guard.erl:168
 msgid "Traffic guard"
 msgstr "流量防护"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:59
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:74
 msgid "Traffic guard is temporarily unavailable."
 msgstr "流量防护暂时不可用。"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:58
 msgid "Until (UTC):"
 msgstr "截至（UTC）："
 
@@ -18457,7 +18613,7 @@ msgstr "有效时长"
 msgid "You are not allowed to change these entries."
 msgstr "你无权修改这些条目。"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:16
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:21
 msgid "Your current IP address:"
 msgstr "你当前的 IP 地址："
 
@@ -19134,7 +19290,7 @@ msgstr "无法完成自动更新。请查看所报告错误的技术详情。"
 msgid "Choose a known failed hostname or enter an exact hostname, without a scheme, port, or path."
 msgstr "请选择一个已知无法访问的主机名，或输入精确的主机名（不包含协议、端口或路径）。"
 
-#: zotonic_mod_websub/src/mod_websub.erl:285
+#: zotonic_mod_websub/src/mod_websub.erl:298
 msgid "Could not change the automatic update subscription."
 msgstr "无法更改自动更新订阅。"
 
@@ -19335,7 +19491,7 @@ msgstr "我们订阅"
 #: zotonic_mod_websub/priv/templates/_admin_edit_sidebar_websub.tpl:4
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:3
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:7
-#: zotonic_mod_websub/src/mod_websub.erl:257
+#: zotonic_mod_websub/src/mod_websub.erl:270
 msgid "WebSub subscriptions"
 msgstr "WebSub 订阅"
 
