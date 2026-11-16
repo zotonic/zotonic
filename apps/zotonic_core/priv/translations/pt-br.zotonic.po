@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-16 22:14\n"
+"PO-Revision-Date: 2026-11-16 23:28\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "MIME-Version: 1.0\n"
@@ -13548,7 +13548,7 @@ msgstr "Assinaturas por e-mail"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:40
 msgid "Email-only subscription"
-msgstr ""
+msgstr "Assinatura apenas por e-mail"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:9
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_summary.tpl:10
@@ -13569,11 +13569,11 @@ msgstr "Habilitado"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:37
 msgid "Enter a valid email address to look up mailing results."
-msgstr ""
+msgstr "Digite um endereço de e-mail válido para consultar os resultados da correspondência."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:86
 msgid "Enter a valid email address to look up subscriptions."
-msgstr ""
+msgstr "Digite um endereço de e-mail válido para consultar as assinaturas."
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:278
 msgid "Enter a valid future mailing date and time."
@@ -13614,15 +13614,15 @@ msgstr "Idioma alternativo:"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:12
 msgid "Find mailings by email address"
-msgstr ""
+msgstr "Encontrar correspondências por endereço de e-mail"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:24
 msgid "Find recent mailings to this address"
-msgstr ""
+msgstr "Veja as correspondências recentes enviadas para este endereço"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22
 msgid "Find subscriptions by email address"
-msgstr ""
+msgstr "Encontrar assinaturas por endereço de e-mail"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:10
 msgid "Finished — some emails could not be sent"
@@ -13631,7 +13631,7 @@ msgstr "Concluído — alguns e-mails não puderam ser enviados"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:44
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:47
 msgid "First"
-msgstr ""
+msgstr "Primeiro"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:33
@@ -13735,11 +13735,11 @@ msgstr "Idioma:"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:52
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:55
 msgid "Last"
-msgstr ""
+msgstr "Último"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:6
 msgid "Last updated"
-msgstr ""
+msgstr "Última atualização"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:2
 msgid "Mailing"
@@ -13851,7 +13851,7 @@ msgstr "Apenas correspondência com os idiomas preferidos"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:55
 msgid "Matching resources"
-msgstr ""
+msgstr "Recursos correspondentes"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:35
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:56
@@ -13881,7 +13881,7 @@ msgstr "Nenhum e-mail foi enviado"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:49
 msgid "No explicit subscriptions found for this email address."
-msgstr ""
+msgstr "Não foram encontradas assinaturas explícitas para este endereço de e-mail."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:50
 msgid "No mailing lists found."
@@ -13897,7 +13897,7 @@ msgstr "Ainda não há envios. Envie uma mensagem a partir da tela de edição d
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:25
 msgid "No recent mailing results found for this email address."
-msgstr ""
+msgstr "Não foram encontrados resultados recentes de envios para este endereço de e-mail."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:72
 msgid "No recipients found."
@@ -13935,7 +13935,7 @@ msgstr "Não é necessário — nenhum destinatário foi selecionado"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:73
 msgid "Not opted out of mailings"
-msgstr ""
+msgstr "Não cancelou o recebimento de correspondências"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:9
 msgid "Not sent — stopped"
@@ -13995,7 +13995,7 @@ msgstr "Abra uma pré-visualização em uma nova aba antes de continuar:"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:20
 msgid "Open email log in a new window"
-msgstr ""
+msgstr "Abrir o registro de e-mails em uma nova janela"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:80
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:143
@@ -14017,7 +14017,7 @@ msgstr "Não receber envios de nenhuma lista de e-mails associada à minha conta
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:71
 msgid "Opted out of mailings"
-msgstr ""
+msgstr "Cancelei o recebimento de correspondências"
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:23
 msgid "Our excuses for the inconvenience."
@@ -14029,7 +14029,7 @@ msgstr "Visão geral"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:40
 msgid "Page {page} of {pages} ({total} recipients)"
-msgstr ""
+msgstr "Página {page} de {pages} (destinatários de{total})"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:53
 msgid "Pages that have the 'subscriberof' edge to the mailinglist."
@@ -14041,7 +14041,7 @@ msgstr "Páginas que correspondem à consulta de pesquisa dos destinatários aba
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:42
 msgid "Part of the email address"
-msgstr ""
+msgstr "Parte do endereço de e-mail"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:121
 msgid "People who have not received this page in this language"
@@ -14112,7 +14112,7 @@ msgstr "Entregas anteriores"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:38
 msgid "Primary email address"
-msgstr ""
+msgstr "Endereço de e-mail principal"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:149
@@ -14129,7 +14129,7 @@ msgstr "Consulta, por exemplo:"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:53
 msgid "Query-based subscriptions are not included. Disabled email-only subscriptions are retained for three months."
-msgstr ""
+msgstr "As assinaturas baseadas em consultas não estão incluídas. As assinaturas desativadas que são exclusivamente por e-mail são mantidas por três meses."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:3
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:3
@@ -14142,7 +14142,7 @@ msgstr "Leia mais na web"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:2
 msgid "Recent mailing results"
-msgstr ""
+msgstr "Resultados recentes das correspondências"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist.tpl:4
 msgid "Recent mailings"
@@ -14170,7 +14170,7 @@ msgstr "O histórico dos destinatários expirou. Inicie uma nova remessa e selec
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:38
 msgid "Recipient pages"
-msgstr ""
+msgstr "Páginas de destino"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:20
@@ -14479,11 +14479,11 @@ msgstr "Remetente:"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:17
 msgid "Sending is allowed."
-msgstr ""
+msgstr "É permitido enviar."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:13
 msgid "Sending is suppressed after delivery failures."
-msgstr ""
+msgstr "O envio é suspenso após falhas na entrega."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:12
 msgid "Sending needs attention"
@@ -14531,7 +14531,7 @@ msgstr "E-mails enviados: {count};"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:16
 msgid "Show all mailings"
-msgstr ""
+msgstr "Mostrar todas as correspondências"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:26
 msgid "Show all pages"
@@ -14543,7 +14543,7 @@ msgstr "Mostrar todos os destinatários"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:35
 msgid "Showing up to 200 recipient results per page from the last three months, including failed and skipped deliveries. Expired details and mailings from before run tracking are unavailable. Sent means accepted by the mail server; later bounces can still change the result."
-msgstr ""
+msgstr "Exibe até 200 resultados de destinatários por página referentes aos últimos três meses, incluindo entregas com falha e ignoradas. Detalhes vencidos e correspondências anteriores ao início do rastreamento não estão disponíveis. “Enviado” significa que a mensagem foi aceita pelo servidor de e-mail; rejeições posteriores ainda podem alterar o resultado."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:18
 msgid "Showing up to 200 runs per page, with active runs first. Sent means accepted by the mail server; later bounces can still change the results."
@@ -14636,7 +14636,7 @@ msgstr "Inscrever-se para"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:44
 msgid "Subscribed"
-msgstr ""
+msgstr "Inscrito"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:47
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:99
@@ -14645,7 +14645,7 @@ msgstr "Inscrição com"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:28
 msgid "Subscriber"
-msgstr ""
+msgstr "Assinante"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:6
 msgid "Subscriber Edges"
@@ -14661,11 +14661,11 @@ msgstr "E-mail de assinatura: <b>{email}</b>"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:29
 msgid "Subscription status"
-msgstr ""
+msgstr "Status da assinatura"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:4
 msgid "Subscriptions"
-msgstr ""
+msgstr "Assinaturas"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:33
 msgid "Target mailing list"
@@ -14828,7 +14828,7 @@ msgstr "Esta página não está disponível no idioma deles."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:45
 msgid "This resource has opted out of mailings."
-msgstr ""
+msgstr "Este usuário optou por não receber correspondências."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:24
 msgid "This rough total includes all query matches. Duplicate recipients are not removed yet."
@@ -14873,7 +14873,7 @@ msgstr "Cancelar inscrição da lista de e-mails"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:44
 msgid "Unsubscribed"
-msgstr ""
+msgstr "Cancelar inscrição"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:106
 msgid "Unsubscribed recipients, blocked or invalid addresses, and recipients excluded by your delivery-history selection will not receive an email."
@@ -14929,7 +14929,7 @@ msgstr "Ver o e-mail original"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:3
 msgid "View subscriptions and email status"
-msgstr ""
+msgstr "Visualizar assinaturas e status dos e-mails"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:152
 msgid "View test result"
@@ -15072,7 +15072,7 @@ msgstr "Você pode tentar se inscrever novamente em uma de nossas listas de disc
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:21
 msgid "You do not have permission to view the email status."
-msgstr ""
+msgstr "Você não tem permissão para visualizar o status do e-mail."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:2
 msgid "You received this mail because someone wanted to send you this information. We did not store your e-mail address and will not send you any other mail because of this mail."
