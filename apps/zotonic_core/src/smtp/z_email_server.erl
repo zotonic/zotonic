@@ -78,7 +78,7 @@
                 sending=[], delete_sent_after, poll_ref, smtp_max_senders}).
 -record(email_queue, {id, retry_on=inc_timestamp(os:timestamp(), 1), retry=0,
                       recipient, email, created=os:timestamp(), sent,
-                      pickled_context}).
+                      pickled_context, last_error}).
 
 -record(email_sender, {id, sender_pid, domain, is_connected=false}).
 
@@ -481,6 +481,7 @@ terminate(_Reason, _State) ->
 -spec code_change(term(), term(), term()) -> {ok, term()}.
 %% @doc Convert process state when code is changed
 code_change(_OldVsn, State, _Extra) ->
+    ok = create_email_queue(),
     {ok, State}.
 
 
@@ -624,7 +625,19 @@ create_email_queue() ->
     ],
     case mnesia:create_table(email_queue, TabDef) of
         {atomic, ok} -> ok;
-        {aborted, {already_exists, email_queue}} -> ok
+        {aborted, {already_exists, email_queue}} ->
+            ok = mnesia:wait_for_tables([email_queue], 30000),
+            Fields = record_info(fields, email_queue),
+            case mnesia:table_info(email_queue, attributes) of
+                Fields -> ok;
+                OldFields when length(OldFields) =:= length(Fields) - 1 ->
+                    %% Append the diagnostic without changing existing queued mail.
+                    OldFields = lists:droplast(Fields),
+                    {atomic, ok} = mnesia:transform_table(
+                        email_queue, fun(Row) -> erlang:append_element(Row, undefined) end, Fields
+                    ),
+                    ok
+            end
     end.
 
 
@@ -1165,7 +1178,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                                                             mailer_host = Host
                                                         }
                                               }, Context),
-                            update_emailq_delay(Id, OptDelayMinutes),
+                            update_emailq_delay(Id, OptDelayMinutes, Message),
                             ok;
                         false ->
                             % permanent failure, something is wrong with the receiving server or the recipient
@@ -1394,9 +1407,10 @@ is_retry_possible(_Reason, permanent_failure, Message) when is_binary(Message) -
         false ->
             % If it is spam block then we retry after some time.
             % Also apply a random delay to avoid thundering herd.
-            case check_spam_block(Message) of
-                blacklist -> {true, random_delay(12*60,14*60)};  % Retry after 12 hours
+            case z_email_delivery_status:policy_failure(Message) of
+                rbl -> {true, random_delay(12*60,14*60)};  % Retry after 12 hours
                 gmail -> {true, random_delay(2*60,3*60)};        % Retry after 2 hours
+                spam -> false;  % Keep the failed delivery; do not retry unchanged content.
                 false -> false
             end
     end;
@@ -1413,30 +1427,6 @@ random_delay(From, To) ->
 %   messages was exceeded. Try again later.
 is_proxy_issue(Message) ->
     binary:match(Message, <<"Try again later.">>) =/= nomatch.
-
-% Spamcop blocks for approx 12-24 hours:
-%   550 5.7.1 5.7.1 Service unavailable; client [...] blocked using bl.spamcop.net
-%
-% Gmail blocks for approx 2 hours:
-%   550-5.7.1 [IP-address] Gmail has detected that this message is
-%   550-5.7.1 likely unsolicited mail. To reduce the amount of spam sent to Gmail,
-%   550-5.7.1 this message has been blocked. For more information, go to
-%   550 5.7.1 https://support.google.com/mail/?p=UnsolicitedMessageError [hex-code] - gsmtp
-check_spam_block(Message) ->
-    Blocks = [
-        {<<"blocked using bl.spamcop.net">>, blacklist},
-        {<<"https://support.google.com/mail/?p=UnsolicitedMessageError">>, gmail},
-        {<<"To reduce the amount of spam sent to Gmail">>, gmail}
-    ],
-    check_spam_block_1(Blocks, Message).
-
-check_spam_block_1([], _Message) ->
-    false;
-check_spam_block_1([{Pattern, Type} | Rest], Message) ->
-    case binary:match(Message, Pattern) of
-        {_,_} -> Type;
-        nomatch -> check_spam_block_1(Rest, Message)
-    end.
 
 encode_email(_Id, #email{raw=Raw}, _MessageId, _From, _Context) when is_list(Raw); is_binary(Raw) ->
     {ok, z_convert:to_binary(Raw)};
@@ -1934,21 +1924,17 @@ delete_emailq(Id) ->
             {error, Reason}
     end.
 
-%% @doc Set the next delay for the given message
-update_emailq_delay(_Id, undefined) ->
-    % Automatic
-    ok;
-update_emailq_delay(Id, DelayMinutes) ->
-    Next = inc_timestamp(os:timestamp(), DelayMinutes),
+%% @doc Retain the last diagnostic even when using the automatic retry delay.
+%% It must survive queue exhaustion and the relay's delivery-report round trip.
+update_emailq_delay(Id, DelayMinutes, Message) ->
     Tr = fun() ->
-        case mnesia:read(email_queue, Id) of
+        case mnesia:read(email_queue, Id, write) of
             [QEmail] ->
-                if
-                    QEmail#email_queue.retry_on < Next ->
-                        mnesia:write(QEmail#email_queue{ retry_on = Next });
-                    true ->
-                        ok
-                end;
+                Next = case DelayMinutes of
+                    undefined -> QEmail#email_queue.retry_on;
+                    _ -> max(QEmail#email_queue.retry_on, inc_timestamp(os:timestamp(), DelayMinutes))
+                end,
+                mnesia:write(QEmail#email_queue{retry_on = Next, last_error = Message});
             [] ->
                 {error, notfound}
         end
@@ -2046,6 +2032,7 @@ delete_failed_messages(StatusSites) ->
                         {QEmail#email_queue.id,
                          QEmail#email_queue.recipient,
                          QEmail#email_queue.retry,
+                         QEmail#email_queue.last_error,
                          QEmail#email_queue.pickled_context};
                     {ok, _} ->
                         false;
@@ -2061,14 +2048,14 @@ delete_failed_messages(StatusSites) ->
         {atomic, NotifyList} ->
             lists:foreach(
                 fun
-                    ({Id, Recipient, RetryCt, PickledContext}) ->
+                    ({Id, Recipient, RetryCt, LastError, PickledContext}) ->
                         z_notifier:notify(#email_failed{
                             message_nr=Id,
                             recipient=Recipient,
                             is_final=true,
                             reason=retry,
                             retry_ct=RetryCt,
-                            status= <<"Retries exceeded">>
+                            status= exhausted_status(LastError)
                         }, z_context:depickle(PickledContext));
                     (false) ->
                         ok
@@ -2083,6 +2070,12 @@ delete_failed_messages(StatusSites) ->
             }),
             ok
     end.
+
+%% Keep the diagnostic as text so older relay peers preserve its classification.
+exhausted_status(undefined) ->
+    <<"Retries exceeded">>;
+exhausted_status(LastError) ->
+    <<"Retries exceeded: ", (message(LastError))/binary>>.
 
 %% Fetch a batch of messages for sending
 send_next_batch(MaxListSize, _StatusSites, State) when MaxListSize =< 0 ->
