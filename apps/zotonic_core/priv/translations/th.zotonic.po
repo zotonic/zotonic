@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-16 22:14\n"
+"PO-Revision-Date: 2026-11-16 23:28\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -13526,7 +13526,7 @@ msgstr "การสมัครรับข่าวสารทางอีเ
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:40
 msgid "Email-only subscription"
-msgstr ""
+msgstr "สมัครรับข่าวสารผ่านอีเมลเท่านั้น"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:9
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_summary.tpl:10
@@ -13547,11 +13547,11 @@ msgstr "เปิดใช้งาน"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:37
 msgid "Enter a valid email address to look up mailing results."
-msgstr ""
+msgstr "กรอกที่อยู่อีเมลที่ถูกต้องเพื่อตรวจสอบผลการส่งจดหมาย"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:86
 msgid "Enter a valid email address to look up subscriptions."
-msgstr ""
+msgstr "กรอกที่อยู่อีเมลที่ถูกต้องเพื่อตรวจสอบการสมัครรับข่าวสาร"
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:278
 msgid "Enter a valid future mailing date and time."
@@ -13592,15 +13592,15 @@ msgstr "ภาษาสำรอง:"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:12
 msgid "Find mailings by email address"
-msgstr ""
+msgstr "ค้นหาจดหมายตามที่อยู่อีเมล"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:24
 msgid "Find recent mailings to this address"
-msgstr ""
+msgstr "ค้นหาจดหมายที่ส่งมาเมื่อเร็วๆ นี้ไปยังที่อยู่แห่งนี้"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22
 msgid "Find subscriptions by email address"
-msgstr ""
+msgstr "ค้นหาการสมัครสมาชิกตามที่อยู่อีเมล"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:10
 msgid "Finished — some emails could not be sent"
@@ -13609,7 +13609,7 @@ msgstr "เสร็จแล้ว — มีอีเมลบางฉบั�
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:44
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:47
 msgid "First"
-msgstr ""
+msgstr "แรก"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:33
@@ -13713,11 +13713,11 @@ msgstr "ภาษา:"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:52
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:55
 msgid "Last"
-msgstr ""
+msgstr "สุดท้าย"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:6
 msgid "Last updated"
-msgstr ""
+msgstr "อัปเดตครั้งสุดท้าย"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:2
 msgid "Mailing"
@@ -13829,7 +13829,7 @@ msgstr "แสดงผลเฉพาะภาษาที่เลือกไ
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:55
 msgid "Matching resources"
-msgstr ""
+msgstr "ทรัพยากรที่สอดคล้องกัน"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:35
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:56
@@ -13859,7 +13859,7 @@ msgstr "ยังไม่มีอีเมลที่ส่งเข้าส
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:49
 msgid "No explicit subscriptions found for this email address."
-msgstr ""
+msgstr "ไม่พบการสมัครรับข่าวสารใดที่ระบุไว้อย่างชัดเจนสำหรับที่อยู่อีเมลนี้"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:50
 msgid "No mailing lists found."
@@ -13875,7 +13875,7 @@ msgstr "ยังไม่มีจดหมายส่งออกไปเล
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:25
 msgid "No recent mailing results found for this email address."
-msgstr ""
+msgstr "ไม่พบผลการส่งอีเมลล่าสุดสำหรับที่อยู่อีเมลนี้"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:72
 msgid "No recipients found."
@@ -13913,7 +13913,7 @@ msgstr "ไม่จำเป็น — ยังไม่มีการเล�
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:73
 msgid "Not opted out of mailings"
-msgstr ""
+msgstr "ยังไม่ได้เลือกไม่รับจดหมาย"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:9
 msgid "Not sent — stopped"
@@ -13973,7 +13973,7 @@ msgstr "เปิดดูตัวอย่างในแท็บใหม่
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:20
 msgid "Open email log in a new window"
-msgstr ""
+msgstr "เปิดบันทึกอีเมลในหน้าต่างใหม่"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:80
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:143
@@ -13995,7 +13995,7 @@ msgstr "เลือกไม่ใช้รายชื่อผู้รับ
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:71
 msgid "Opted out of mailings"
-msgstr ""
+msgstr "ยกเลิกการรับจดหมาย"
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:23
 msgid "Our excuses for the inconvenience."
@@ -14007,7 +14007,7 @@ msgstr "ภาพรวม"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:40
 msgid "Page {page} of {pages} ({total} recipients)"
-msgstr ""
+msgstr "หน้า {page} ของ {pages} (ผู้รับ{total})"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:53
 msgid "Pages that have the 'subscriberof' edge to the mailinglist."
@@ -14019,7 +14019,7 @@ msgstr "หน้าที่ตรงกับคำค้นหาของผ
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:42
 msgid "Part of the email address"
-msgstr ""
+msgstr "ส่วนหนึ่งของที่อยู่อีเมล"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:121
 msgid "People who have not received this page in this language"
@@ -14090,7 +14090,7 @@ msgstr "การจัดส่งก่อนหน้านี้"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:38
 msgid "Primary email address"
-msgstr ""
+msgstr "ที่อยู่อีเมลหลัก"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:149
@@ -14107,7 +14107,7 @@ msgstr "คำสืบค้น เช่น:"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:53
 msgid "Query-based subscriptions are not included. Disabled email-only subscriptions are retained for three months."
-msgstr ""
+msgstr "การสมัครรับข่าวสารแบบใช้คำค้นหาไม่รวมอยู่ด้วย การสมัครรับข่าวสารทางอีเมลที่ถูกปิดใช้งานจะได้รับการเก็บไว้เป็นเวลาสามเดือน"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:3
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:3
@@ -14120,7 +14120,7 @@ msgstr "อ่านเพิ่มเติมได้ที่เว็บ"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:2
 msgid "Recent mailing results"
-msgstr ""
+msgstr "ผลการส่งจดหมายล่าสุด"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist.tpl:4
 msgid "Recent mailings"
@@ -14148,7 +14148,7 @@ msgstr "ประวัติผู้รับได้หมดอายุแ
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:38
 msgid "Recipient pages"
-msgstr ""
+msgstr "หน้าผู้รับ"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:20
@@ -14457,11 +14457,11 @@ msgstr "ผู้ส่ง:"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:17
 msgid "Sending is allowed."
-msgstr ""
+msgstr "สามารถส่งได้"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:13
 msgid "Sending is suppressed after delivery failures."
-msgstr ""
+msgstr "การส่งจะถูกระงับหลังจากเกิดข้อผิดพลาดในการส่งถึงผู้รับ"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:12
 msgid "Sending needs attention"
@@ -14509,7 +14509,7 @@ msgstr "ส่งแล้ว: {count};"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:16
 msgid "Show all mailings"
-msgstr ""
+msgstr "แสดงจดหมายทั้งหมด"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:26
 msgid "Show all pages"
@@ -14521,7 +14521,7 @@ msgstr "แสดงผู้รับทั้งหมด"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:35
 msgid "Showing up to 200 recipient results per page from the last three months, including failed and skipped deliveries. Expired details and mailings from before run tracking are unavailable. Sent means accepted by the mail server; later bounces can still change the result."
-msgstr ""
+msgstr "แสดงผลผู้รับสูงสุด 200 รายต่อหน้า จาก 3 เดือนที่ผ่านมา รวมถึงการส่งที่ล้มเหลวและถูกข้ามไป ข้อมูลที่หมดอายุและจดหมายที่ส่งก่อนการเริ่มติดตามการส่งจะไม่สามารถดูได้ คำว่า \"ส่งแล้ว\" หมายถึงจดหมายได้รับการยอมรับจากเซิร์ฟเวอร์อีเมล แต่การถูกตีกลับในภายหลังอาจทำให้ผลลัพธ์เปลี่ยนแปลงได้"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:18
 msgid "Showing up to 200 runs per page, with active runs first. Sent means accepted by the mail server; later bounces can still change the results."
@@ -14614,7 +14614,7 @@ msgstr "ติดตาม"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:44
 msgid "Subscribed"
-msgstr ""
+msgstr "สมัครแล้ว"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:47
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:99
@@ -14623,7 +14623,7 @@ msgstr "สมัครสมาชิกกับ"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:28
 msgid "Subscriber"
-msgstr ""
+msgstr "ผู้สมัครสมาชิก"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:6
 msgid "Subscriber Edges"
@@ -14639,11 +14639,11 @@ msgstr "อีเมลสมัครรับข่าวสาร: <b>{email}
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:29
 msgid "Subscription status"
-msgstr ""
+msgstr "สถานะการสมัครสมาชิก"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:4
 msgid "Subscriptions"
-msgstr ""
+msgstr "การสมัครสมาชิก"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:33
 msgid "Target mailing list"
@@ -14806,7 +14806,7 @@ msgstr "หน้านี้ไม่มีในภาษาของพวก
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:45
 msgid "This resource has opted out of mailings."
-msgstr ""
+msgstr "ผู้รับข้อมูลนี้ได้เลือกไม่รับจดหมายข่าวแล้ว"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:24
 msgid "This rough total includes all query matches. Duplicate recipients are not removed yet."
@@ -14851,7 +14851,7 @@ msgstr "ยกเลิกการสมัครรับข้อมูลจ
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:44
 msgid "Unsubscribed"
-msgstr ""
+msgstr "ยกเลิกการสมัคร"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:106
 msgid "Unsubscribed recipients, blocked or invalid addresses, and recipients excluded by your delivery-history selection will not receive an email."
@@ -14907,7 +14907,7 @@ msgstr "ดูจดหมายต้นฉบับ"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:3
 msgid "View subscriptions and email status"
-msgstr ""
+msgstr "ดูการสมัครรับข่าวสารและสถานะอีเมล"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:152
 msgid "View test result"
@@ -15050,7 +15050,7 @@ msgstr "คุณสามารถลองสมัครสมาชิกร
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:21
 msgid "You do not have permission to view the email status."
-msgstr ""
+msgstr "คุณไม่มีสิทธิ์ในการดูสถานะอีเมล"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:2
 msgid "You received this mail because someone wanted to send you this information. We did not store your e-mail address and will not send you any other mail because of this mail."
