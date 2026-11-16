@@ -161,7 +161,7 @@ relay_round_trip(Context) ->
             (#zlog{}, _) -> ok
         end),
         %% Fresh install, followed by an old queue upgrade with mail retained.
-        ok = z_email_server:create_email_queue(),
+        ok = queue_call(create_email_queue, []),
         Fields = mnesia:table_info(email_queue, attributes),
         {atomic, ok} = mnesia:delete_table(email_queue),
         {atomic, ok} = mnesia:create_table(email_queue, [{attributes, lists:droplast(Fields)}]),
@@ -169,9 +169,9 @@ relay_round_trip(Context) ->
         Old = {email_queue, <<"old-message">>, {0,0,0}, 0, Email,
                #email{to=Email}, {0,0,0}, undefined, Context},
         mnesia:dirty_write(Old),
-        ok = z_email_server:create_email_queue(),
+        ok = queue_call(create_email_queue, []),
         ?assertEqual([erlang:append_element(Old, undefined)], mnesia:dirty_read(email_queue, <<"old-message">>)),
-        ok = z_email_server:create_email_queue(),
+        ok = queue_call(create_email_queue, []),
         ?assertEqual(Fields, mnesia:table_info(email_queue, attributes)),
         mnesia:dirty_delete(email_queue, <<"old-message">>),
         true = register(z_email_server, self()),
@@ -181,10 +181,10 @@ relay_round_trip(Context) ->
             mnesia:dirty_write(Row),
             %% Both delayed RBL retries and automatic retry scheduling retain errors.
             Delay = case IsPolicy of true -> 720; false -> undefined end,
-            ok = z_email_server:update_emailq_delay(<<"relay-message">>, Delay, Diagnostic),
+            ok = queue_call(update_emailq_delay, [<<"relay-message">>, Delay, Diagnostic]),
             [Updated] = mnesia:dirty_read(email_queue, <<"relay-message">>),
             ?assertEqual(Diagnostic, element(10, Updated)),
-            ok = z_email_server:delete_failed_messages(#{policy_test => running}),
+            ok = queue_call(delete_failed_messages, [#{policy_test => running}]),
             Event = receive {failure, E} -> E after 1000 -> error(no_exhaustion) end,
             ?assertMatch(#email_failed{reason=retry, is_final=true}, Event),
             check_address_effect(Event, IsPolicy, Context),
@@ -232,6 +232,11 @@ check_address_effect(Event, false, Context) ->
         {address_update, [<<"recipient@example.org">>, true, _, 1, _]} -> ok
     after 1000 -> error(non_policy_failure_not_counted)
     end.
+
+%% These exports exist only after export_queue_helpers/0 recompiles the module
+%% in the isolated peer. Resolve them dynamically, not as production API calls.
+queue_call(Function, Args) ->
+    erlang:apply(z_email_server, Function, Args).
 
 %% Expose queue internals only inside this isolated test VM; production exports
 %% remain unchanged. This lets the regression cover actual persistence/expiry.

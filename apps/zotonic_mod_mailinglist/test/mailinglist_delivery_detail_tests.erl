@@ -1,5 +1,6 @@
 -module(mailinglist_delivery_detail_tests).
 -include_lib("eunit/include/eunit.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 legacy_details_test() ->
     lists:foreach(fun(Reason) ->
@@ -24,7 +25,7 @@ html_remains_text_test() ->
         format(<<"{bounce,<<\"<script>alert(1)</script>\">>}">>)).
 
 format(Text) ->
-    filter_mailinglist_delivery_detail:mailinglist_delivery_detail(Text, undefined).
+    filter_mailinglist_delivery_detail:mailinglist_delivery_detail(Text, #context{}).
 
 
 nested_and_missing_details_test() ->
