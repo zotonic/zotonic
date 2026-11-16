@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-16 22:13\n"
+"PO-Revision-Date: 2026-11-16 23:28\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -13526,7 +13526,7 @@ msgstr "电子邮件订阅"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:40
 msgid "Email-only subscription"
-msgstr ""
+msgstr "仅限电子邮件订阅"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:9
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_summary.tpl:10
@@ -13547,11 +13547,11 @@ msgstr "启用"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:37
 msgid "Enter a valid email address to look up mailing results."
-msgstr ""
+msgstr "请输入有效的电子邮件地址以查询邮件发送结果。"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:86
 msgid "Enter a valid email address to look up subscriptions."
-msgstr ""
+msgstr "请输入有效的电子邮件地址以查询订阅信息。"
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:278
 msgid "Enter a valid future mailing date and time."
@@ -13592,15 +13592,15 @@ msgstr "备用语言："
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:12
 msgid "Find mailings by email address"
-msgstr ""
+msgstr "按电子邮箱地址查找邮件"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:24
 msgid "Find recent mailings to this address"
-msgstr ""
+msgstr "查找发往此地址的近期邮件"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22
 msgid "Find subscriptions by email address"
-msgstr ""
+msgstr "按电子邮箱地址查找订阅"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:10
 msgid "Finished — some emails could not be sent"
@@ -13713,11 +13713,11 @@ msgstr "语言："
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:52
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:55
 msgid "Last"
-msgstr ""
+msgstr "最后"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:6
 msgid "Last updated"
-msgstr ""
+msgstr "最后更新时间"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:2
 msgid "Mailing"
@@ -13829,7 +13829,7 @@ msgstr "仅匹配首选语言"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:55
 msgid "Matching resources"
-msgstr ""
+msgstr "匹配资源"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:35
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:56
@@ -13859,7 +13859,7 @@ msgstr "未提交任何电子邮件"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:49
 msgid "No explicit subscriptions found for this email address."
-msgstr ""
+msgstr "未找到该电子邮箱地址的明确订阅记录。"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:50
 msgid "No mailing lists found."
@@ -13875,7 +13875,7 @@ msgstr "目前尚未发送邮件。请从页面的编辑界面发送邮件，以
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:25
 msgid "No recent mailing results found for this email address."
-msgstr ""
+msgstr "未找到该电子邮箱地址的近期邮件发送记录。"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:72
 msgid "No recipients found."
@@ -13913,7 +13913,7 @@ msgstr "不需要——未选择收件人"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:73
 msgid "Not opted out of mailings"
-msgstr ""
+msgstr "未选择退订邮件"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:9
 msgid "Not sent — stopped"
@@ -13973,7 +13973,7 @@ msgstr "在继续之前，请在新标签页中打开预览："
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:20
 msgid "Open email log in a new window"
-msgstr ""
+msgstr "在新窗口中打开电子邮件日志"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:80
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:143
@@ -13995,7 +13995,7 @@ msgstr "拒收与我的帐户关联的所有邮件列表的邮件"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:71
 msgid "Opted out of mailings"
-msgstr ""
+msgstr "已取消订阅邮件"
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:23
 msgid "Our excuses for the inconvenience."
@@ -14007,7 +14007,7 @@ msgstr "概述"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:40
 msgid "Page {page} of {pages} ({total} recipients)"
-msgstr ""
+msgstr "第 {page} 页，来自 {pages} （{total} 订阅者）"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:53
 msgid "Pages that have the 'subscriberof' edge to the mailinglist."
@@ -14019,7 +14019,7 @@ msgstr "与以下收件人搜索查询相匹配的页面。"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:42
 msgid "Part of the email address"
-msgstr ""
+msgstr "电子邮件地址的一部分"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:121
 msgid "People who have not received this page in this language"
@@ -14090,7 +14090,7 @@ msgstr "先前的投递记录"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:38
 msgid "Primary email address"
-msgstr ""
+msgstr "主要电子邮箱地址"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:149
@@ -14107,7 +14107,7 @@ msgstr "查询例如："
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:53
 msgid "Query-based subscriptions are not included. Disabled email-only subscriptions are retained for three months."
-msgstr ""
+msgstr "不包括基于查询的订阅。已停用的仅限电子邮件的订阅将保留三个月。"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:3
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:3
@@ -14120,7 +14120,7 @@ msgstr "在网络上阅读更多内容"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:2
 msgid "Recent mailing results"
-msgstr ""
+msgstr "最近的邮寄结果"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist.tpl:4
 msgid "Recent mailings"
@@ -14148,7 +14148,7 @@ msgstr "收件人记录已过期。请开始一封新的邮件，并明确选中
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:38
 msgid "Recipient pages"
-msgstr ""
+msgstr "收件人页面"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:20
@@ -14457,11 +14457,11 @@ msgstr "发件人："
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:17
 msgid "Sending is allowed."
-msgstr ""
+msgstr "允许发送。"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:13
 msgid "Sending is suppressed after delivery failures."
-msgstr ""
+msgstr "发送失败后将暂停发送。"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:12
 msgid "Sending needs attention"
@@ -14509,7 +14509,7 @@ msgstr "已发送：{count}；"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:16
 msgid "Show all mailings"
-msgstr ""
+msgstr "显示所有邮件"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:26
 msgid "Show all pages"
@@ -14521,7 +14521,7 @@ msgstr "显示所有收件人"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:35
 msgid "Showing up to 200 recipient results per page from the last three months, including failed and skipped deliveries. Expired details and mailings from before run tracking are unavailable. Sent means accepted by the mail server; later bounces can still change the result."
-msgstr ""
+msgstr "每页显示过去三个月内的最多 200 条收件人结果，包括投递失败和跳过的邮件。已过期的详细信息以及在启用投递跟踪功能之前的邮件无法查询。“已发送”指邮件已被邮件服务器接收；后续出现的退信仍可能导致结果发生变化。"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:18
 msgid "Showing up to 200 runs per page, with active runs first. Sent means accepted by the mail server; later bounces can still change the results."
@@ -14614,7 +14614,7 @@ msgstr "订阅到"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:44
 msgid "Subscribed"
-msgstr ""
+msgstr "已订阅"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:47
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:99
@@ -14623,7 +14623,7 @@ msgstr "订阅了"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:28
 msgid "Subscriber"
-msgstr ""
+msgstr "订阅者"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:6
 msgid "Subscriber Edges"
@@ -14639,11 +14639,11 @@ msgstr "订阅邮箱： <b>{email}</b>"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:29
 msgid "Subscription status"
-msgstr ""
+msgstr "订阅状态"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:4
 msgid "Subscriptions"
-msgstr ""
+msgstr "订阅"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:33
 msgid "Target mailing list"
@@ -14806,7 +14806,7 @@ msgstr "此页面暂无该语言版本。"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:45
 msgid "This resource has opted out of mailings."
-msgstr ""
+msgstr "该资源已选择不接收邮件。"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:24
 msgid "This rough total includes all query matches. Duplicate recipients are not removed yet."
@@ -14851,7 +14851,7 @@ msgstr "取消邮件列表订阅"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:44
 msgid "Unsubscribed"
-msgstr ""
+msgstr "已取消订阅"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:106
 msgid "Unsubscribed recipients, blocked or invalid addresses, and recipients excluded by your delivery-history selection will not receive an email."
@@ -14907,7 +14907,7 @@ msgstr "查看原始邮件"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:3
 msgid "View subscriptions and email status"
-msgstr ""
+msgstr "查看订阅和电子邮件状态"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:152
 msgid "View test result"
@@ -15050,7 +15050,7 @@ msgstr "你可以尝试在侧边栏重新订阅我们的邮件列表。"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:21
 msgid "You do not have permission to view the email status."
-msgstr ""
+msgstr "您无权查看该电子邮件的状态。"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:2
 msgid "You received this mail because someone wanted to send you this information. We did not store your e-mail address and will not send you any other mail because of this mail."
