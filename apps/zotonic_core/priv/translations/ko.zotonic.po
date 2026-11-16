@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-12 14:03\n"
+"PO-Revision-Date: 2026-11-16 22:14\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "MIME-Version: 1.0\n"
@@ -590,7 +590,7 @@ msgstr "협업 그룹으로 이동할 수 없습니다."
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125
 #: zotonic_mod_survey/src/mod_survey.erl:427
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:36
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:12
 msgid "Delete"
@@ -617,7 +617,7 @@ msgstr "삭제 중..."
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:33
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:14
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:31
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:42
 msgid "Deny"
 msgstr "거부"
 
@@ -1528,6 +1528,7 @@ msgid "City"
 msgstr "도시"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_connection.tpl:34
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:26
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:37
 msgid "Clear"
 msgstr "지우기"
@@ -1965,7 +1966,7 @@ msgstr "이메일 주소"
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:131
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:117
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:119
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:35
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:46
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:44
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:14
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:16
@@ -2166,9 +2167,9 @@ msgstr "파일은 메일링리스트 수신자 가져오기 모듈 및 드롭 �
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:46
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:183
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:46
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:41
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:44
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:74
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:59
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:71
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:60
 msgid "Filter"
 msgstr "필터"
@@ -3163,7 +3164,7 @@ msgstr "다음 페이지를 참조하는 페이지:"
 #: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:51
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:56
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:69
 msgid "Refresh"
 msgstr "새로 고침"
 
@@ -3630,7 +3631,7 @@ msgstr "주 또는 지방"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:11
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:57
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:22
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:34
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:17
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:19
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:21
@@ -4103,6 +4104,7 @@ msgstr "비공개"
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:15
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:31
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:68
 #: zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:13
 #: zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
 #: zotonic_mod_seo/src/support/seo_jsonld_webpage.erl:276
@@ -4705,6 +4707,7 @@ msgstr "설정"
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:24
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:32
 #: zotonic_mod_admin_config/src/mod_admin_config.erl:96
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:14
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:79
 msgid "Configuration"
 msgstr "설정"
@@ -5192,7 +5195,7 @@ msgstr "메뉴 숨기기"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:6
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:75
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:65
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:37
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:49
 #: zotonic_mod_translation/priv/templates/_dialog_new_rsc_extra.tpl:2
 #: zotonic_mod_translation/priv/templates/_translation_language_status.tpl:46
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:41
@@ -5279,6 +5282,7 @@ msgstr "이 항목을 삭제하시겠습니까?"
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:99
 #: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:36
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:159
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:11
 msgid "Blocked"
 msgstr "차단됨"
 
@@ -6684,13 +6688,13 @@ msgstr "허용되는 값 (쉼표로 구분)"
 msgid "Allowed values:"
 msgstr "허용되는 값:"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:296
+#: zotonic_mod_analytics/src/mod_analytics.erl:348
 msgid "An equivalent analytics measurement already exists."
 msgstr "이에 상응하는 분석 지표는 이미 존재합니다."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
-#: zotonic_mod_analytics/src/mod_analytics.erl:225
+#: zotonic_mod_analytics/src/mod_analytics.erl:277
 msgid "Analytics configuration"
 msgstr "분석 설정"
 
@@ -6761,11 +6765,11 @@ msgstr "비공개 요청 — 페이지, API 및 기타 디스패치 유형"
 msgid "Configure analytics measurements"
 msgstr "분석 측정 항목 구성"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:264
+#: zotonic_mod_analytics/src/mod_analytics.erl:316
 msgid "Could not delete the analytics measurement."
 msgstr "분석 측정 항목을 삭제할 수 없습니다."
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:297
+#: zotonic_mod_analytics/src/mod_analytics.erl:349
 msgid "Could not save. Check the event, breakdown and filter values."
 msgstr "저장할 수 없습니다. 이벤트, 세부 내역 및 필터 값을 확인해 주세요."
 
@@ -6819,7 +6823,7 @@ msgstr "기기 — 휴대폰, 태블릿, 데스크톱 또는 알 수 없음"
 msgid "Display order"
 msgstr "표시 순서"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:270
+#: zotonic_mod_analytics/src/mod_analytics.erl:322
 msgid "Display order saved."
 msgstr "정렬 순서가 저장되었습니다."
 
@@ -6968,6 +6972,8 @@ msgstr "저장된 최신 시간 구간"
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:210
 #: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:55
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:88
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:51
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:54
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:33
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:55
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
@@ -7098,7 +7104,7 @@ msgstr "간략한 설명"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
-#: zotonic_mod_analytics/src/mod_analytics.erl:217
+#: zotonic_mod_analytics/src/mod_analytics.erl:269
 msgid "Site Analytics"
 msgstr "사이트 분석"
 
@@ -7150,11 +7156,11 @@ msgstr "저장된 시간 구간 / 용량"
 msgid "Stored time intervals"
 msgstr "저장된 시간 구간"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:272
+#: zotonic_mod_analytics/src/mod_analytics.erl:324
 msgid "The analytics measurements changed. Reloading their current display order."
 msgstr "분석 측정 항목이 변경되었습니다. 현재 표시 순서를 다시 불러옵니다."
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:295
+#: zotonic_mod_analytics/src/mod_analytics.erl:347
 msgid "This analytics measurement exceeds the storage budget."
 msgstr "이 분석 측정값이 스토리지 예산을 초과합니다."
 
@@ -9368,6 +9374,7 @@ msgstr "참고: 댓글은 검토 후 게시됩니다."
 
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:20
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:29
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:4
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:199
 msgid "Page"
@@ -9690,7 +9697,7 @@ msgid "A graph of all templates, and by whom they are included, is generated and
 msgstr "모든 템플릿과 각 템플릿을 포함하는 템플릿의 그래프가 생성되고 자동으로 업데이트됩니다."
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:9
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:67
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:83
 msgid "Action"
 msgstr "작업"
 
@@ -10034,6 +10041,8 @@ msgid "Final dispatch"
 msgstr "최종 디스패치"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:181
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:25
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:15
 msgid "Find"
 msgstr "찾기"
 
@@ -11687,6 +11696,8 @@ msgstr "관리자 계정(사용자 1)만 파일을 복구 불가능으로 표시
 
 #: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:54
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:85
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:45
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:48
 msgid "Previous"
 msgstr "이전"
 
@@ -12223,6 +12234,7 @@ msgid "Dependent media"
 msgstr "종속 미디어"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:14
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:10
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:12
 #: zotonic_mod_site_update/priv/templates/_site_deploy_commit.tpl:9
 #: zotonic_mod_translation/priv/templates/_translation_language_status.tpl:43
@@ -12959,6 +12971,7 @@ msgid "Email log"
 msgstr "이메일 로그"
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:39
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:8
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_status_flag.tpl:10
 msgid "Email status"
 msgstr "이메일 상태"
@@ -13211,12 +13224,12 @@ msgstr "수신자를 추가했습니다."
 msgid "After the page is published"
 msgstr "페이지가 게시된 후"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:39
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:51
 #: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail.tpl:19
 msgid "All languages"
 msgstr "모든 언어"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:49
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:61
 msgid "All lists"
 msgstr "모든 목록"
 
@@ -13238,8 +13251,8 @@ msgstr "메일링 리스트의 모든 수신자입니다. 이 리스트는 업�
 msgid "All recipients, using that language"
 msgstr "모든 수신자에게 해당 언어 사용"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:29
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:24
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:27
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:36
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:45
 msgid "All statuses"
 msgstr "모든 상태"
@@ -13416,6 +13429,10 @@ msgstr "메일링 리스트를 삭제했습니다."
 msgid "Delivery history is preserved. Sending again may result in recipients receiving the same content twice. Older mailings from before run tracking are not used for duplicate detection."
 msgstr "전송 기록은 보존됩니다. 다시 보내면 수신자가 같은 콘텐츠를 두 번 받을 수 있습니다. 실행 추적이 도입되기 전의 메일링은 중복 감지에 사용되지 않습니다."
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:15
+msgid "Delivery problems have been recorded; sending is still allowed."
+msgstr "배송 문제가 보고된 바 있으나, 발송은 여전히 가능합니다."
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:26
 msgid "Disabled email subscriptions are automatically deleted after three months."
 msgstr "이메일 구독을 해제하면 3개월 후 자동으로 삭제됩니다."
@@ -13480,6 +13497,10 @@ msgstr "발송 대상"
 msgid "Eligible recipients will be counted in the review step."
 msgstr "검토 단계에서 발송 대상 수신자 수를 집계합니다."
 
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:39
+msgid "Email address"
+msgstr "이메일 주소"
+
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:62
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:54
 msgid "Email language"
@@ -13492,6 +13513,10 @@ msgstr "이메일 언어는 발송을 위해 선택된 메일의 언어 버전�
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:5
 msgid "Email subscriptions"
 msgstr "이메일 구독"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:40
+msgid "Email-only subscription"
+msgstr "이메일 전용 구독"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:9
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_summary.tpl:10
@@ -13509,6 +13534,14 @@ msgstr "전송 대기 중인 이메일: {count}."
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:47
 msgid "Enabled"
 msgstr "활성화됨"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:37
+msgid "Enter a valid email address to look up mailing results."
+msgstr "메일 발송 결과를 조회하려면 유효한 이메일 주소를 입력하세요."
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:86
+msgid "Enter a valid email address to look up subscriptions."
+msgstr "구독 내역을 조회하려면 유효한 이메일 주소를 입력하세요."
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:278
 msgid "Enter a valid future mailing date and time."
@@ -13547,12 +13580,29 @@ msgstr "대체 언어"
 msgid "Fallback language:"
 msgstr "대체 언어:"
 
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:12
+msgid "Find mailings by email address"
+msgstr "이메일 주소로 메일 검색하기"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:24
+msgid "Find recent mailings to this address"
+msgstr "이 주소로 발송된 최근 우편물을 찾아보세요"
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22
+msgid "Find subscriptions by email address"
+msgstr "이메일 주소로 구독 내역 찾기"
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:10
 msgid "Finished — some emails could not be sent"
 msgstr "완료되었습니다. 일부 이메일은 전송되지 않았습니다."
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:44
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:47
+msgid "First"
+msgstr "첫 번째"
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:14
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:42
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:33
 msgid "First page"
 msgstr "첫 페이지"
 
@@ -13626,7 +13676,7 @@ msgstr "이 언어를 선호하는 수신자만 포함합니다. 선호 언어�
 msgid "Include recipients whose preference matches this language and recipients without a language preference."
 msgstr "이 언어 선호도에 맞는 수신자와 언어 선호도가 없는 수신자를 모두 포함하십시오."
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:25
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:23
 msgid "Individual delivery results, shown 100 recipients at a time."
 msgstr "개별 전송 결과를 수신자 100명씩 표시합니다."
 
@@ -13649,6 +13699,15 @@ msgstr "선호하는 언어가 알려지지 않은 경우:"
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:19
 msgid "Language:"
 msgstr "언어:"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:52
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:55
+msgid "Last"
+msgstr "마지막"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:6
+msgid "Last updated"
+msgstr "최종 업데이트"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:2
 msgid "Mailing"
@@ -13674,8 +13733,10 @@ msgstr "이 페이지의 메일링 이력"
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:5
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:14
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:8
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:5
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:47
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:27
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:59
 msgid "Mailing list"
 msgstr "메일링 리스트"
 
@@ -13736,7 +13797,7 @@ msgstr "메일 발송"
 msgid "Mailings are sent to:"
 msgstr "메일 발송 대상:"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:13
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:25
 msgid "Mailings of page: <strong>{title}</strong>"
 msgstr "페이지 메일링: <strong>{title}</strong>"
 
@@ -13756,6 +13817,10 @@ msgstr "쿼리를 통해 일치됨"
 msgid "Matching preferred languages only"
 msgstr "선호 언어가 일치하는 수신자만"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:55
+msgid "Matching resources"
+msgstr "관련 자료"
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:35
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:56
 msgid "Needs attention"
@@ -13769,11 +13834,8 @@ msgstr "새로운 메일링 리스트"
 msgid "Newest"
 msgstr "최신"
 
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:38
-msgid "Next 100 recipients"
-msgstr "다음 수신자 100명"
-
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:11
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:30
 msgid "Next page"
 msgstr "다음 페이지"
 
@@ -13784,6 +13846,10 @@ msgstr "이메일 주소가 없습니다."
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:65
 msgid "No emails submitted"
 msgstr "이메일이 제출되지 않았습니다."
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:49
+msgid "No explicit subscriptions found for this email address."
+msgstr "이 이메일 주소에 대해 등록된 구독 내역이 없습니다."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:50
 msgid "No mailing lists found."
@@ -13797,11 +13863,15 @@ msgstr "아직 발송된 메일이 없습니다."
 msgid "No mailings yet. Send a mailing from a page’s edit screen to see its progress here."
 msgstr "아직 발송된 메일이 없습니다. 페이지 편집 화면에서 메일을 보내시면 여기에서 진행 상황을 확인할 수 있습니다."
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:25
+msgid "No recent mailing results found for this email address."
+msgstr "이 이메일 주소에 대한 최근 발송 내역이 없습니다."
+
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:72
 msgid "No recipients found."
 msgstr "수신자를 찾을 수 없습니다."
 
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:27
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:29
 msgid "No recipients match this filter."
 msgstr "이 필터 조건에 맞는 수신자가 없습니다."
 
@@ -13830,6 +13900,10 @@ msgstr "미완료"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:50
 msgid "Not needed — no recipients selected"
 msgstr "필요 없음 - 수신자가 선택되지 않았습니다."
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:73
+msgid "Not opted out of mailings"
+msgstr "메일 수신 거부하지 않음"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:9
 msgid "Not sent — stopped"
@@ -13887,6 +13961,10 @@ msgstr "이 이메일은 테스트 주소로만 발송됩니다. 수신 설정�
 msgid "Open a preview in a new tab before continuing:"
 msgstr "계속하기 전에 새 탭에서 미리보기를 여십시오:"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:20
+msgid "Open email log in a new window"
+msgstr "이메일 로그를 새 창에서 열기"
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:80
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:143
 #: zotonic_mod_translation/priv/templates/_translation_tree_skipped.tpl:9
@@ -13905,6 +13983,10 @@ msgstr "수신 거부"
 msgid "Opt-out of all mailing lists coupled to my account"
 msgstr "내 계정에 연결된 모든 메일링 리스트 수신 거부"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:71
+msgid "Opted out of mailings"
+msgstr "메일 수신 거부"
+
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:23
 msgid "Our excuses for the inconvenience."
 msgstr "불편을 드려 죄송합니다."
@@ -13913,6 +13995,10 @@ msgstr "불편을 드려 죄송합니다."
 msgid "Overview"
 msgstr "개요"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:40
+msgid "Page {page} of {pages} ({total} recipients)"
+msgstr "{pages} 의 {page} 페이지 ({total} 수신자)"
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:53
 msgid "Pages that have the 'subscriberof' edge to the mailinglist."
 msgstr "메일링 리스트로 향하는 'subscriberof' 연결이 있는 페이지."
@@ -13920,6 +14006,10 @@ msgstr "메일링 리스트로 향하는 'subscriberof' 연결이 있는 페이�
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:54
 msgid "Pages that match the recipients search query below."
 msgstr "아래 수신자 검색어와 일치하는 페이지입니다."
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:42
+msgid "Part of the email address"
+msgstr "이메일 주소의 일부"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:121
 msgid "People who have not received this page in this language"
@@ -13988,6 +14078,10 @@ msgstr "메일 미리보기"
 msgid "Previous deliveries"
 msgstr "이전 전송"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:38
+msgid "Primary email address"
+msgstr "주 이메일 주소"
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:149
 msgid "Progress"
@@ -14001,6 +14095,10 @@ msgstr "게시 시작"
 msgid "Query, for example:"
 msgstr "예를 들어 다음과 같은 쿼리를 입력해 보세요."
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:53
+msgid "Query-based subscriptions are not included. Disabled email-only subscriptions are retained for three months."
+msgstr "쿼리 기반 구독은 포함되지 않습니다. 비활성화된 이메일 전용 구독은 3개월 동안 유지됩니다."
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:3
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:3
 msgid "Queued"
@@ -14009,6 +14107,10 @@ msgstr "대기열에 있음"
 #: zotonic_mod_mailinglist/priv/templates/mailing_page.collection.tpl:28
 msgid "Read more on the web"
 msgstr "웹에서 더 읽기"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:2
+msgid "Recent mailing results"
+msgstr "최근 메일 발송 결과"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist.tpl:4
 msgid "Recent mailings"
@@ -14034,17 +14136,21 @@ msgstr "수신자 이력이 만료되었습니다. 돌아가서 모든 수신자
 msgid "Recipient history has expired. Start a new mailing and explicitly select all recipients; some people may receive this page again."
 msgstr "수신자 이력이 만료되었습니다. 새 메일링을 시작하고 모든 수신자를 명시적으로 선택하십시오. 일부 수신자는 이 페이지를 다시 받을 수 있습니다."
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:38
+msgid "Recipient pages"
+msgstr "수신자 페이지"
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:20
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:25
 msgid "Recipient preference"
 msgstr "수신자 선호도"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:22
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:20
 msgid "Recipient results"
 msgstr "수신자 결과"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:27
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:25
 msgid "Recipient status"
 msgstr "수신자 상태"
 
@@ -14067,7 +14173,7 @@ msgstr "이 언어와 일치하는 수신자 및 언어 선호도가 없는 수�
 msgid "Recipients search query"
 msgstr "수신자 검색 쿼리"
 
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:28
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:30
 msgid "Recipients will appear when preparation starts."
 msgstr "수신자는 준비가 시작될 때 표시됩니다."
 
@@ -14086,6 +14192,7 @@ msgid "Removed subscription."
 msgstr "구독을 취소했습니다."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:97
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:9
 msgid "Result"
 msgstr "결과"
 
@@ -14338,6 +14445,14 @@ msgstr "이메일 발신자 이름 (선택 사항)"
 msgid "Sender:"
 msgstr "보내는 사람:"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:17
+msgid "Sending is allowed."
+msgstr "보내는 것이 허용됩니다."
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:13
+msgid "Sending is suppressed after delivery failures."
+msgstr "전송 실패 시에는 추가 전송이 차단됩니다."
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:12
 msgid "Sending needs attention"
 msgstr "전송 시 주의가 필요합니다."
@@ -14382,13 +14497,21 @@ msgstr "전송됨: <strong>{count}</strong>"
 msgid "Sent: {count};"
 msgstr "전송됨: {count};"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:14
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:16
+msgid "Show all mailings"
+msgstr "모든 메일링 보기"
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:26
 msgid "Show all pages"
 msgstr "모든 페이지 표시"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:57
 msgid "Show all recipients"
 msgstr "모든 수신자 표시"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:35
+msgid "Showing up to 200 recipient results per page from the last three months, including failed and skipped deliveries. Expired details and mailings from before run tracking are unavailable. Sent means accepted by the mail server; later bounces can still change the result."
+msgstr "지난 3개월 동안의 수신자 결과 중, 배송 실패 및 건너뛴 건을 포함하여 페이지당 최대 200건을 표시합니다. 유효 기간이 만료된 정보와 배송 추적 기능이 도입되기 이전의 발송 내역은 확인할 수 없습니다. ‘발송됨’은 메일 서버에서 수락되었음을 의미하며, 이후 반송되는 경우 결과에 변경이 있을 수 있습니다."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:18
 msgid "Showing up to 200 runs per page, with active runs first. Sent means accepted by the mail server; later bounces can still change the results."
@@ -14479,10 +14602,18 @@ msgstr "중지되었습니다. 이미 대기 중인 이메일은 여전히 처�
 msgid "Subscribe to"
 msgstr "구독 대상:"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:44
+msgid "Subscribed"
+msgstr "구독 중"
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:47
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:99
 msgid "Subscribed with"
 msgstr "구독에 사용한 주소"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:28
+msgid "Subscriber"
+msgstr "구독자"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:6
 msgid "Subscriber Edges"
@@ -14496,6 +14627,14 @@ msgstr "구독자는 구독 양식을 통해 추가되었습니다."
 msgid "Subscription email: <b>{email}</b>"
 msgstr "구독 이메일: <b>{email}</b>"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:29
+msgid "Subscription status"
+msgstr "구독 상태"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:4
+msgid "Subscriptions"
+msgstr "구독"
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:33
 msgid "Target mailing list"
 msgstr "타겟 메일링 리스트"
@@ -14508,6 +14647,7 @@ msgstr "기술적 세부 사항"
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:8
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:3
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:8
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:18
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:16
 msgid "Test email"
 msgstr "테스트 이메일"
@@ -14642,7 +14782,7 @@ msgstr "이 메일링 리스트는 외부에서 관리하는 \"비공개\" 메�
 msgid "This is a resend of an earlier mailing."
 msgstr "이전에 발송했던 메일을 다시 보내드립니다."
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:53
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:57
 msgid "This mailing is unavailable or you do not have permission to view it."
 msgstr "이 메일은 볼 수 없거나 볼 권한이 없습니다."
 
@@ -14653,6 +14793,10 @@ msgstr "이 메일링을 사용할 수 없습니다."
 #: zotonic_mod_mailinglist/priv/templates/_mailing_skip_reason.tpl:2
 msgid "This page is not available in their language."
 msgstr "이 페이지는 해당 언어로 제공되지 않습니다."
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:45
+msgid "This resource has opted out of mailings."
+msgstr "이 자료는 메일 수신을 거부했습니다."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:24
 msgid "This rough total includes all query matches. Duplicate recipients are not removed yet."
@@ -14694,6 +14838,10 @@ msgstr "구독 취소 대상:"
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:3
 msgid "Unsubscribe from mailing list"
 msgstr "메일링 리스트 구독 취소"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:44
+msgid "Unsubscribed"
+msgstr "구독 취소됨"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:106
 msgid "Unsubscribed recipients, blocked or invalid addresses, and recipients excluded by your delivery-history selection will not receive an email."
@@ -14746,6 +14894,10 @@ msgstr "메일링 이력 보기"
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:41
 msgid "View original mailing"
 msgstr "원본 메일 보기"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:3
+msgid "View subscriptions and email status"
+msgstr "구독 내역 및 이메일 상태 확인"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:152
 msgid "View test result"
@@ -14885,6 +15037,10 @@ msgstr "이 웹사이트의 계정을 사용하여 현재 및 향후 모든 메�
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:28
 msgid "You can try to re-subscribe to one of our mailing lists in the side column."
 msgstr "옆 열에서 메일링 리스트를 선택하여 다시 가입할 수 있습니다."
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:21
+msgid "You do not have permission to view the email status."
+msgstr "이메일 상태를 확인하실 수 있는 권한이 없습니다."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:2
 msgid "You received this mail because someone wanted to send you this information. We did not store your e-mail address and will not send you any other mail because of this mail."
@@ -15474,7 +15630,7 @@ msgstr "사용자와 레이블의 조합마다 하나의 액세스 토큰만 존
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:110
 #: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:5
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:58
 msgid "Forever"
 msgstr "영원히"
 
@@ -18287,54 +18443,54 @@ msgstr "텍스트"
 msgid "{points} of {max} points"
 msgstr "{max}점 중 {points}점"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:23
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:34
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:53
 msgid "Add IP entries"
 msgstr "IP 항목 추가"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:18
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:23
 msgid "Add to allow list"
 msgstr "허용 목록에 추가"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:13
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:31
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:42
 msgid "Allow"
 msgstr "허용"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:12
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:17
 msgid "Allow entries take precedence. Blocks follow observe/enforce/off mode and only affect guarded routes."
 msgstr "허용 목록의 항목이 우선 적용됩니다. 차단은 observe/enforce/off 모드를 따르며 보호 대상 경로에만 적용됩니다."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:90
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:106
 msgid "Block IP"
 msgstr "IP 차단"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:87
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:103
 msgid "Block duration"
 msgstr "차단 기간"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:70
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:86
 msgid "Block for"
 msgstr "차단 기간"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:13
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:18
 msgid "Current mode:"
 msgstr "현재 모드:"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:54
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:72
 msgid "Current node only, including would-throttle decisions in observe mode. Up to 200 entries. Blocking generates a note from the displayed reason and rejection count."
 msgstr "현재 노드만 표시하며 observe 모드에서 제한 대상이 되는 요청도 포함합니다. 최대 200개 항목을 표시합니다. 차단 시 표시된 사유와 거부된 요청 수를 바탕으로 메모가 생성됩니다."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:53
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:68
 msgid "Currently throttled IP addresses"
 msgstr "현재 요청 수 제한이 적용된 IP 주소"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:40
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:51
 msgid "Delete IP entry"
 msgstr "IP 항목 삭제"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:37
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:48
 msgid "Delete IP entry?"
 msgstr "IP 항목을 삭제하시겠습니까?"
 
@@ -18354,7 +18510,7 @@ msgstr "IP 항목 편집"
 msgid "Enter valid IP addresses, a note and a future expiry date or duration. No changes were saved."
 msgstr "유효한 IP 주소, 메모, 향후 만료일 또는 기간을 입력하세요. 변경 사항이 저장되지 않았습니다."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:27
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:38
 msgid "Expiry dates are UTC. Expired entries stop applying immediately and are removed automatically. Global entries are managed in zotonic.config."
 msgstr "만료일은 UTC 기준입니다. 만료된 항목은 즉시 적용이 중지되며 자동으로 삭제됩니다. 전역 항목은 zotonic.config에서 관리됩니다."
 
@@ -18362,7 +18518,7 @@ msgstr "만료일은 UTC 기준입니다. 만료된 항목은 즉시 적용이 �
 msgid "Hour"
 msgstr "시간"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:65
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:81
 msgid "IP address"
 msgstr "IP 주소"
 
@@ -18370,7 +18526,7 @@ msgstr "IP 주소"
 msgid "IP addresses"
 msgstr "IP 주소"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:26
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:32
 msgid "IP entries"
 msgstr "IP 항목"
 
@@ -18382,11 +18538,11 @@ msgstr "목록"
 msgid "Month (30 days)"
 msgstr "월 (30일)"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:50
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:61
 msgid "No IP entries."
 msgstr "IP 항목이 없습니다."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:98
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:114
 msgid "No currently throttled IP addresses."
 msgstr "현재 제한 중인 IP 주소는 없습니다."
 
@@ -18394,15 +18550,15 @@ msgstr "현재 제한 중인 IP 주소는 없습니다."
 msgid "Or until (UTC)"
 msgstr "또는 (UTC)까지"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:66
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:82
 msgid "Reason"
 msgstr "이유"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:68
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:84
 msgid "Rejections"
 msgstr "거부 횟수"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:69
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:85
 msgid "Retry in seconds"
 msgstr "재시도까지 남은 시간(초)"
 
@@ -18424,15 +18580,15 @@ msgstr "이 항목은 더 이상 사용할 수 없습니다. 페이지를 새로
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:3
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:10
-#: zotonic_mod_traffic_guard/src/mod_traffic_guard.erl:124
+#: zotonic_mod_traffic_guard/src/mod_traffic_guard.erl:168
 msgid "Traffic guard"
 msgstr "트래픽 보호"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:59
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:74
 msgid "Traffic guard is temporarily unavailable."
 msgstr "트래픽 보호를 일시적으로 사용할 수 없습니다."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:58
 msgid "Until (UTC):"
 msgstr "만료 시각(UTC):"
 
@@ -18448,7 +18604,7 @@ msgstr "유효 기간:"
 msgid "You are not allowed to change these entries."
 msgstr "이 항목들은 수정할 수 없습니다."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:16
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:21
 msgid "Your current IP address:"
 msgstr "현재 IP 주소:"
 
@@ -19125,7 +19281,7 @@ msgstr "자동 업데이트를 완료할 수 없습니다. 보고된 오류에 �
 msgid "Choose a known failed hostname or enter an exact hostname, without a scheme, port, or path."
 msgstr "알려진 실패 호스트 이름을 선택하거나 스키마, 포트 또는 경로를 제외하고 정확한 호스트 이름을 입력하십시오."
 
-#: zotonic_mod_websub/src/mod_websub.erl:285
+#: zotonic_mod_websub/src/mod_websub.erl:298
 msgid "Could not change the automatic update subscription."
 msgstr "자동 업데이트 구독을 변경할 수 없습니다."
 
@@ -19326,7 +19482,7 @@ msgstr "구독합니다"
 #: zotonic_mod_websub/priv/templates/_admin_edit_sidebar_websub.tpl:4
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:3
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:7
-#: zotonic_mod_websub/src/mod_websub.erl:257
+#: zotonic_mod_websub/src/mod_websub.erl:270
 msgid "WebSub subscriptions"
 msgstr "WebSub 구독"
 
