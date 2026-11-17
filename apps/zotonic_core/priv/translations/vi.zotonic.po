@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-12 14:03\n"
+"PO-Revision-Date: 2026-11-16 22:14\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
 "MIME-Version: 1.0\n"
@@ -590,7 +590,7 @@ msgstr "Không thể chuyển vào nhóm cộng tác."
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125
 #: zotonic_mod_survey/src/mod_survey.erl:427
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:36
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:12
 msgid "Delete"
@@ -617,7 +617,7 @@ msgstr "Đang xóa..."
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:33
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:14
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:31
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:42
 msgid "Deny"
 msgstr "Từ chối"
 
@@ -1528,6 +1528,7 @@ msgid "City"
 msgstr "Thành phố"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_connection.tpl:34
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:26
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:37
 msgid "Clear"
 msgstr "Xóa sạch"
@@ -1965,7 +1966,7 @@ msgstr "Địa chỉ email"
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:131
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:117
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:119
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:35
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:46
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:44
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:14
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:16
@@ -2166,9 +2167,9 @@ msgstr "Các tệp được xử lý ở chế độ nền bởi mô-đun nhập
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:46
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:183
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:46
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:41
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:44
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:74
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:59
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:71
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:60
 msgid "Filter"
 msgstr "Lọc"
@@ -3163,7 +3164,7 @@ msgstr "Các trang tham chiếu đến"
 #: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:51
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:56
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:69
 msgid "Refresh"
 msgstr "Làm mới"
 
@@ -3630,7 +3631,7 @@ msgstr "Bang hoặc tỉnh"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:11
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:57
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:22
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:34
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:17
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:19
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:21
@@ -4103,6 +4104,7 @@ msgstr "Chưa công bố"
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:15
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:31
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:68
 #: zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:13
 #: zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
 #: zotonic_mod_seo/src/support/seo_jsonld_webpage.erl:276
@@ -4705,6 +4707,7 @@ msgstr "Cấu hình"
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:24
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:32
 #: zotonic_mod_admin_config/src/mod_admin_config.erl:96
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:14
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:79
 msgid "Configuration"
 msgstr "Cấu hình"
@@ -5192,7 +5195,7 @@ msgstr "Ẩn menu"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:6
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:75
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:65
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:37
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:49
 #: zotonic_mod_translation/priv/templates/_dialog_new_rsc_extra.tpl:2
 #: zotonic_mod_translation/priv/templates/_translation_language_status.tpl:46
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:41
@@ -5279,6 +5282,7 @@ msgstr "Bạn có chắc muốn xóa mục này?"
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:99
 #: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:36
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:159
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:11
 msgid "Blocked"
 msgstr "Đã chặn"
 
@@ -6682,13 +6686,13 @@ msgstr "Các giá trị được phép (ngăn cách bằng dấu phẩy)"
 msgid "Allowed values:"
 msgstr "Các giá trị được phép:"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:296
+#: zotonic_mod_analytics/src/mod_analytics.erl:348
 msgid "An equivalent analytics measurement already exists."
 msgstr "Hiện đã có một chỉ số phân tích tương đương."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
-#: zotonic_mod_analytics/src/mod_analytics.erl:225
+#: zotonic_mod_analytics/src/mod_analytics.erl:277
 msgid "Analytics configuration"
 msgstr "Cấu hình phân tích"
 
@@ -6759,11 +6763,11 @@ msgstr "Yêu cầu được phân loại — trang, API và các loại yêu c�
 msgid "Configure analytics measurements"
 msgstr "Cấu hình các chỉ số phân tích"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:264
+#: zotonic_mod_analytics/src/mod_analytics.erl:316
 msgid "Could not delete the analytics measurement."
 msgstr "Không thể xóa chỉ số phân tích."
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:297
+#: zotonic_mod_analytics/src/mod_analytics.erl:349
 msgid "Could not save. Check the event, breakdown and filter values."
 msgstr "Không thể lưu. Vui lòng kiểm tra các giá trị của sự kiện, phân tích chi tiết và bộ lọc."
 
@@ -6817,7 +6821,7 @@ msgstr "Thiết bị — điện thoại, máy tính bảng, máy tính để b�
 msgid "Display order"
 msgstr "Thứ tự hiển thị"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:270
+#: zotonic_mod_analytics/src/mod_analytics.erl:322
 msgid "Display order saved."
 msgstr "Thứ tự hiển thị đã được lưu."
 
@@ -6966,6 +6970,8 @@ msgstr "Khoảng thời gian mới nhất đã lưu"
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:210
 #: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:55
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:88
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:51
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:54
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:33
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:55
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
@@ -7096,7 +7102,7 @@ msgstr "Mô tả ngắn gọn"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
-#: zotonic_mod_analytics/src/mod_analytics.erl:217
+#: zotonic_mod_analytics/src/mod_analytics.erl:269
 msgid "Site Analytics"
 msgstr "Phân tích trang web"
 
@@ -7148,11 +7154,11 @@ msgstr "Khoảng thời gian lưu trữ / dung lượng"
 msgid "Stored time intervals"
 msgstr "Các khoảng thời gian đã lưu trữ"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:272
+#: zotonic_mod_analytics/src/mod_analytics.erl:324
 msgid "The analytics measurements changed. Reloading their current display order."
 msgstr "Các chỉ số phân tích đã thay đổi. Đang tải lại thứ tự hiển thị hiện tại."
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:295
+#: zotonic_mod_analytics/src/mod_analytics.erl:347
 msgid "This analytics measurement exceeds the storage budget."
 msgstr "Chỉ số phân tích này đã vượt quá ngân sách lưu trữ."
 
@@ -9363,6 +9369,7 @@ msgstr "Lưu ý: Bình luận được kiểm duyệt"
 
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:20
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:29
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:4
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:199
 msgid "Page"
@@ -9685,7 +9692,7 @@ msgid "A graph of all templates, and by whom they are included, is generated and
 msgstr "Đồ thị của tất cả mẫu và các mẫu nhúng chúng được tạo và cập nhật tự động."
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:9
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:67
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:83
 msgid "Action"
 msgstr "Thao tác"
 
@@ -10029,6 +10036,8 @@ msgid "Final dispatch"
 msgstr "Định tuyến cuối cùng"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:181
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:25
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:15
 msgid "Find"
 msgstr "Tìm"
 
@@ -11682,6 +11691,8 @@ msgstr "Chỉ tài khoản admin (người dùng 1) mới có thể đánh dấu
 
 #: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:54
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:85
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:45
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:48
 msgid "Previous"
 msgstr "Trước"
 
@@ -12218,6 +12229,7 @@ msgid "Dependent media"
 msgstr "Nội dung đa phương tiện phụ thuộc"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:14
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:10
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:12
 #: zotonic_mod_site_update/priv/templates/_site_deploy_commit.tpl:9
 #: zotonic_mod_translation/priv/templates/_translation_language_status.tpl:43
@@ -12954,6 +12966,7 @@ msgid "Email log"
 msgstr "Nhật ký email"
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:39
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:8
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_status_flag.tpl:10
 msgid "Email status"
 msgstr "Trạng thái email"
@@ -13206,12 +13219,12 @@ msgstr "Đã thêm người nhận."
 msgid "After the page is published"
 msgstr "Sau khi trang được công bố"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:39
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:51
 #: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail.tpl:19
 msgid "All languages"
 msgstr "Tất cả ngôn ngữ"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:49
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:61
 msgid "All lists"
 msgstr "Tất cả danh sách"
 
@@ -13233,8 +13246,8 @@ msgstr "Tất cả người nhận trong danh sách gửi thư. Bạn có thể 
 msgid "All recipients, using that language"
 msgstr "Tất cả người nhận, dùng ngôn ngữ đó"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:29
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:24
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:27
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:36
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:45
 msgid "All statuses"
 msgstr "Tất cả trạng thái"
@@ -13411,6 +13424,10 @@ msgstr "Đã xóa danh sách gửi thư."
 msgid "Delivery history is preserved. Sending again may result in recipients receiving the same content twice. Older mailings from before run tracking are not used for duplicate detection."
 msgstr "Lịch sử gửi được giữ lại. Gửi lại có thể khiến người nhận nhận cùng nội dung hai lần. Các đợt gửi cũ trước khi có chức năng theo dõi đợt gửi không được dùng để phát hiện trùng lặp."
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:15
+msgid "Delivery problems have been recorded; sending is still allowed."
+msgstr "Đã ghi nhận một số sự cố liên quan đến việc giao hàng; tuy nhiên, việc gửi hàng vẫn được phép."
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:26
 msgid "Disabled email subscriptions are automatically deleted after three months."
 msgstr "Đăng ký email bị tắt sẽ tự động bị xóa sau ba tháng."
@@ -13475,6 +13492,10 @@ msgstr "Đủ điều kiện gửi"
 msgid "Eligible recipients will be counted in the review step."
 msgstr "Người nhận đủ điều kiện sẽ được đếm ở bước kiểm tra."
 
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:39
+msgid "Email address"
+msgstr "Địa chỉ email"
+
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:62
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:54
 msgid "Email language"
@@ -13487,6 +13508,10 @@ msgstr "Ngôn ngữ email là phiên bản ngôn ngữ của thư được chọ
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:5
 msgid "Email subscriptions"
 msgstr "Đăng ký email"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:40
+msgid "Email-only subscription"
+msgstr "Đăng ký chỉ nhận email"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:9
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_summary.tpl:10
@@ -13504,6 +13529,14 @@ msgstr "Email đang chờ gửi: {count}."
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:47
 msgid "Enabled"
 msgstr "Đã bật"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:37
+msgid "Enter a valid email address to look up mailing results."
+msgstr "Vui lòng nhập địa chỉ email hợp lệ để tra cứu kết quả gửi thư."
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:86
+msgid "Enter a valid email address to look up subscriptions."
+msgstr "Vui lòng nhập địa chỉ email hợp lệ để tra cứu các đăng ký."
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:278
 msgid "Enter a valid future mailing date and time."
@@ -13542,12 +13575,29 @@ msgstr "Ngôn ngữ dự phòng"
 msgid "Fallback language:"
 msgstr "Ngôn ngữ dự phòng:"
 
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:12
+msgid "Find mailings by email address"
+msgstr "Tìm các thư gửi theo địa chỉ email"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:24
+msgid "Find recent mailings to this address"
+msgstr "Tìm các thư đã gửi gần đây đến địa chỉ này"
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22
+msgid "Find subscriptions by email address"
+msgstr "Tìm các gói đăng ký theo địa chỉ email"
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:10
 msgid "Finished — some emails could not be sent"
 msgstr "Đã hoàn tất — một số email không gửi được"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:44
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:47
+msgid "First"
+msgstr "Thứ nhất"
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:14
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:42
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:33
 msgid "First page"
 msgstr "Trang đầu"
 
@@ -13621,7 +13671,7 @@ msgstr "Chỉ bao gồm người nhận có ngôn ngữ ưu tiên khớp với n
 msgid "Include recipients whose preference matches this language and recipients without a language preference."
 msgstr "Bao gồm người nhận có ngôn ngữ ưu tiên khớp với ngôn ngữ này và người chưa chọn ngôn ngữ ưu tiên."
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:25
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:23
 msgid "Individual delivery results, shown 100 recipients at a time."
 msgstr "Kết quả gửi cho từng người nhận, mỗi lần hiển thị 100 người."
 
@@ -13644,6 +13694,15 @@ msgstr "Ngôn ngữ khi chưa biết lựa chọn ưu tiên:"
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:19
 msgid "Language:"
 msgstr "Ngôn ngữ:"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:52
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:55
+msgid "Last"
+msgstr "Cuối cùng"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:6
+msgid "Last updated"
+msgstr "Cập nhật lần cuối"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:2
 msgid "Mailing"
@@ -13669,8 +13728,10 @@ msgstr "Lịch sử gửi thư của trang này"
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:5
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:14
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:8
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:5
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:47
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:27
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:59
 msgid "Mailing list"
 msgstr "Danh sách gửi thư"
 
@@ -13731,7 +13792,7 @@ msgstr "Các đợt gửi thư"
 msgid "Mailings are sent to:"
 msgstr "Thư được gửi đến:"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:13
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:25
 msgid "Mailings of page: <strong>{title}</strong>"
 msgstr "Các đợt gửi thư của trang: <strong>{title}</strong>"
 
@@ -13751,6 +13812,10 @@ msgstr "Khớp qua truy vấn"
 msgid "Matching preferred languages only"
 msgstr "Chỉ ngôn ngữ ưu tiên phù hợp"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:55
+msgid "Matching resources"
+msgstr "Các nguồn lực phù hợp"
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:35
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:56
 msgid "Needs attention"
@@ -13764,11 +13829,8 @@ msgstr "Danh sách gửi thư mới"
 msgid "Newest"
 msgstr "Mới nhất"
 
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:38
-msgid "Next 100 recipients"
-msgstr "100 người nhận tiếp theo"
-
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:11
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:30
 msgid "Next page"
 msgstr "Trang tiếp theo"
 
@@ -13779,6 +13841,10 @@ msgstr "Không có địa chỉ email."
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:65
 msgid "No emails submitted"
 msgstr "Chưa chuyển email nào để gửi"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:49
+msgid "No explicit subscriptions found for this email address."
+msgstr "Không tìm thấy bất kỳ đăng ký nào được chỉ định rõ ràng cho địa chỉ email này."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:50
 msgid "No mailing lists found."
@@ -13792,11 +13858,15 @@ msgstr "Chưa có đợt gửi thư."
 msgid "No mailings yet. Send a mailing from a page’s edit screen to see its progress here."
 msgstr "Chưa có đợt gửi thư. Gửi thư từ màn hình chỉnh sửa trang để xem tiến độ tại đây."
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:25
+msgid "No recent mailing results found for this email address."
+msgstr "Không tìm thấy kết quả gửi thư gần đây nào cho địa chỉ email này."
+
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:72
 msgid "No recipients found."
 msgstr "Không tìm thấy người nhận."
 
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:27
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:29
 msgid "No recipients match this filter."
 msgstr "Không có người nhận phù hợp với bộ lọc này."
 
@@ -13825,6 +13895,10 @@ msgstr "Chưa hoàn tất"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:50
 msgid "Not needed — no recipients selected"
 msgstr "Không cần — chưa chọn người nhận"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:73
+msgid "Not opted out of mailings"
+msgstr "Chưa từ chối nhận thư"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:9
 msgid "Not sent — stopped"
@@ -13882,6 +13956,10 @@ msgstr "Chỉ địa chỉ thử nghiệm nhận email này. Các lựa chọn g
 msgid "Open a preview in a new tab before continuing:"
 msgstr "Mở bản xem trước trong tab mới trước khi tiếp tục:"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:20
+msgid "Open email log in a new window"
+msgstr "Mở nhật ký email trong một cửa sổ mới"
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:80
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:143
 #: zotonic_mod_translation/priv/templates/_translation_tree_skipped.tpl:9
@@ -13900,6 +13978,10 @@ msgstr "Từ chối nhận thư"
 msgid "Opt-out of all mailing lists coupled to my account"
 msgstr "Từ chối tất cả danh sách gửi thư liên kết với tài khoản của tôi"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:71
+msgid "Opted out of mailings"
+msgstr "Đã chọn không nhận thư"
+
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:23
 msgid "Our excuses for the inconvenience."
 msgstr "Chúng tôi xin lỗi vì sự bất tiện này."
@@ -13908,6 +13990,10 @@ msgstr "Chúng tôi xin lỗi vì sự bất tiện này."
 msgid "Overview"
 msgstr "Tổng quan"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:40
+msgid "Page {page} of {pages} ({total} recipients)"
+msgstr "Trang {page} thuộc {pages} ({total} người nhận)"
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:53
 msgid "Pages that have the 'subscriberof' edge to the mailinglist."
 msgstr "Các trang có cạnh 'subscriberof' nối đến danh sách gửi thư."
@@ -13915,6 +14001,10 @@ msgstr "Các trang có cạnh 'subscriberof' nối đến danh sách gửi thư.
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:54
 msgid "Pages that match the recipients search query below."
 msgstr "Các trang phù hợp với truy vấn tìm kiếm người nhận bên dưới."
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:42
+msgid "Part of the email address"
+msgstr "Một phần của địa chỉ email"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:121
 msgid "People who have not received this page in this language"
@@ -13983,6 +14073,10 @@ msgstr "Xem trước thư gửi"
 msgid "Previous deliveries"
 msgstr "Các lần gửi trước"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:38
+msgid "Primary email address"
+msgstr "Địa chỉ email chính"
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:149
 msgid "Progress"
@@ -13996,6 +14090,10 @@ msgstr "Bắt đầu công bố"
 msgid "Query, for example:"
 msgstr "Truy vấn, ví dụ:"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:53
+msgid "Query-based subscriptions are not included. Disabled email-only subscriptions are retained for three months."
+msgstr "Các đăng ký dựa trên truy vấn không được tính vào. Các đăng ký chỉ qua email đã bị vô hiệu hóa sẽ được lưu giữ trong ba tháng."
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:3
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:3
 msgid "Queued"
@@ -14004,6 +14102,10 @@ msgstr "Đã vào hàng đợi"
 #: zotonic_mod_mailinglist/priv/templates/mailing_page.collection.tpl:28
 msgid "Read more on the web"
 msgstr "Đọc thêm trên web"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:2
+msgid "Recent mailing results"
+msgstr "Kết quả gửi thư gần đây"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist.tpl:4
 msgid "Recent mailings"
@@ -14029,17 +14131,21 @@ msgstr "Lịch sử người nhận đã hết hạn. Quay lại và chọn tấ
 msgid "Recipient history has expired. Start a new mailing and explicitly select all recipients; some people may receive this page again."
 msgstr "Lịch sử người nhận đã hết hạn. Bắt đầu đợt gửi mới và chọn rõ tất cả người nhận; một số người có thể nhận lại trang này."
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:38
+msgid "Recipient pages"
+msgstr "Các trang nhận"
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:20
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:25
 msgid "Recipient preference"
 msgstr "Ngôn ngữ ưu tiên của người nhận"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:22
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:20
 msgid "Recipient results"
 msgstr "Kết quả theo người nhận"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:27
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:25
 msgid "Recipient status"
 msgstr "Trạng thái người nhận"
 
@@ -14062,7 +14168,7 @@ msgstr "Người nhận khớp với ngôn ngữ này, cùng những người ch
 msgid "Recipients search query"
 msgstr "Truy vấn tìm kiếm người nhận"
 
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:28
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:30
 msgid "Recipients will appear when preparation starts."
 msgstr "Người nhận sẽ xuất hiện khi bắt đầu chuẩn bị."
 
@@ -14081,6 +14187,7 @@ msgid "Removed subscription."
 msgstr "Đã xóa đăng ký."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:97
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:9
 msgid "Result"
 msgstr "Kết quả"
 
@@ -14333,6 +14440,14 @@ msgstr "Tên người gửi email (tùy chọn)"
 msgid "Sender:"
 msgstr "Người gửi:"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:17
+msgid "Sending is allowed."
+msgstr "Được phép gửi."
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:13
+msgid "Sending is suppressed after delivery failures."
+msgstr "Việc gửi sẽ bị tạm dừng sau khi xảy ra lỗi giao hàng."
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:12
 msgid "Sending needs attention"
 msgstr "Việc gửi cần chú ý"
@@ -14377,13 +14492,21 @@ msgstr "Đã gửi: <strong>{count}</strong>"
 msgid "Sent: {count};"
 msgstr "Đã gửi: {count};"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:14
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:16
+msgid "Show all mailings"
+msgstr "Hiển thị tất cả các bản tin"
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:26
 msgid "Show all pages"
 msgstr "Hiển thị tất cả trang"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:57
 msgid "Show all recipients"
 msgstr "Hiển thị tất cả người nhận"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:35
+msgid "Showing up to 200 recipient results per page from the last three months, including failed and skipped deliveries. Expired details and mailings from before run tracking are unavailable. Sent means accepted by the mail server; later bounces can still change the result."
+msgstr "Hiển thị tối đa 200 kết quả người nhận trên mỗi trang trong ba tháng gần nhất, bao gồm cả các trường hợp gửi thất bại và bị bỏ qua. Thông tin đã hết hạn và các đợt gửi thư trước khi có tính năng theo dõi quá trình gửi sẽ không được hiển thị. “Đã gửi” có nghĩa là đã được máy chủ thư chấp nhận; các trường hợp thư bị trả lại sau đó vẫn có thể làm thay đổi kết quả."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:18
 msgid "Showing up to 200 runs per page, with active runs first. Sent means accepted by the mail server; later bounces can still change the results."
@@ -14474,10 +14597,18 @@ msgstr "Đã dừng; email đã vào hàng đợi vẫn đang được xử lý"
 msgid "Subscribe to"
 msgstr "Đăng ký nhận thư từ"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:44
+msgid "Subscribed"
+msgstr "Đã đăng ký"
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:47
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:99
 msgid "Subscribed with"
 msgstr "Đăng ký bằng"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:28
+msgid "Subscriber"
+msgstr "Người đăng ký"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:6
 msgid "Subscriber Edges"
@@ -14491,6 +14622,14 @@ msgstr "Người đăng ký được thêm qua biểu mẫu đăng ký."
 msgid "Subscription email: <b>{email}</b>"
 msgstr "Email đăng ký: <b>{email}</b>"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:29
+msgid "Subscription status"
+msgstr "Tình trạng đăng ký"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:4
+msgid "Subscriptions"
+msgstr "Gói đăng ký"
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:33
 msgid "Target mailing list"
 msgstr "Danh sách gửi thư đích"
@@ -14503,6 +14642,7 @@ msgstr "Chi tiết kỹ thuật"
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:8
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:3
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:8
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:18
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:16
 msgid "Test email"
 msgstr "Email thử nghiệm"
@@ -14637,7 +14777,7 @@ msgstr "Đây là danh sách \"riêng tư\" được quản lý bên ngoài. Ng�
 msgid "This is a resend of an earlier mailing."
 msgstr "Đây là lần gửi lại của một đợt gửi trước."
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:53
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:57
 msgid "This mailing is unavailable or you do not have permission to view it."
 msgstr "Đợt gửi này không khả dụng hoặc bạn không có quyền xem."
 
@@ -14648,6 +14788,10 @@ msgstr "Đợt gửi này không khả dụng."
 #: zotonic_mod_mailinglist/priv/templates/_mailing_skip_reason.tpl:2
 msgid "This page is not available in their language."
 msgstr "Trang này chưa có bằng ngôn ngữ của họ."
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:45
+msgid "This resource has opted out of mailings."
+msgstr "Nguồn tài nguyên này đã chọn không nhận các bản tin qua thư."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:24
 msgid "This rough total includes all query matches. Duplicate recipients are not removed yet."
@@ -14689,6 +14833,10 @@ msgstr "Hủy đăng ký nhận thư từ"
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:3
 msgid "Unsubscribe from mailing list"
 msgstr "Hủy đăng ký danh sách gửi thư"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:44
+msgid "Unsubscribed"
+msgstr "Đã hủy đăng ký"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:106
 msgid "Unsubscribed recipients, blocked or invalid addresses, and recipients excluded by your delivery-history selection will not receive an email."
@@ -14741,6 +14889,10 @@ msgstr "Xem lịch sử gửi thư"
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:41
 msgid "View original mailing"
 msgstr "Xem đợt gửi gốc"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:3
+msgid "View subscriptions and email status"
+msgstr "Xem các đăng ký và trạng thái email"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:152
 msgid "View test result"
@@ -14880,6 +15032,10 @@ msgstr "Bạn có thể từ chối tất cả thư hàng loạt hiện tại v�
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:28
 msgid "You can try to re-subscribe to one of our mailing lists in the side column."
 msgstr "Bạn có thể thử đăng ký lại một trong các danh sách gửi thư ở cột bên."
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:21
+msgid "You do not have permission to view the email status."
+msgstr "Bạn không có quyền xem trạng thái email."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:2
 msgid "You received this mail because someone wanted to send you this information. We did not store your e-mail address and will not send you any other mail because of this mail."
@@ -15468,7 +15624,7 @@ msgstr "Mỗi cặp người dùng và nhãn chỉ có thể có một mã thôn
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:110
 #: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:5
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:58
 msgid "Forever"
 msgstr "Vĩnh viễn"
 
@@ -18281,54 +18437,54 @@ msgstr "văn bản"
 msgid "{points} of {max} points"
 msgstr "{points} trên {max} điểm"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:23
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:34
 #: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:53
 msgid "Add IP entries"
 msgstr "Thêm các mục IP"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:18
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:23
 msgid "Add to allow list"
 msgstr "Thêm vào danh sách cho phép"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:13
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:31
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:42
 msgid "Allow"
 msgstr "Cho phép"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:12
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:17
 msgid "Allow entries take precedence. Blocks follow observe/enforce/off mode and only affect guarded routes."
 msgstr "Các mục trong danh sách cho phép được ưu tiên. Việc chặn tuân theo chế độ observe/enforce/off và chỉ áp dụng cho các tuyến được bảo vệ."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:90
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:106
 msgid "Block IP"
 msgstr "Chặn địa chỉ IP"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:87
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:103
 msgid "Block duration"
 msgstr "Thời gian chặn"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:70
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:86
 msgid "Block for"
 msgstr "Chặn trong"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:13
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:18
 msgid "Current mode:"
 msgstr "Chế độ hiện tại:"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:54
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:72
 msgid "Current node only, including would-throttle decisions in observe mode. Up to 200 entries. Blocking generates a note from the displayed reason and rejection count."
 msgstr "Chỉ nút hiện tại, bao gồm các yêu cầu sẽ bị giới hạn nếu áp dụng quyết định trong chế độ observe. Tối đa 200 mục. Khi chặn, hệ thống tạo ghi chú từ lý do hiển thị và số yêu cầu bị từ chối."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:53
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:68
 msgid "Currently throttled IP addresses"
 msgstr "Các địa chỉ IP hiện bị giới hạn số lượng yêu cầu"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:40
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:51
 msgid "Delete IP entry"
 msgstr "Xóa mục IP"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:37
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:48
 msgid "Delete IP entry?"
 msgstr "Xóa mục IP?"
 
@@ -18348,7 +18504,7 @@ msgstr "Chỉnh sửa mục IP"
 msgid "Enter valid IP addresses, a note and a future expiry date or duration. No changes were saved."
 msgstr "Vui lòng nhập các địa chỉ IP hợp lệ, ghi chú và ngày hết hạn hoặc thời hạn trong tương lai. Không có thay đổi nào được lưu lại."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:27
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:38
 msgid "Expiry dates are UTC. Expired entries stop applying immediately and are removed automatically. Global entries are managed in zotonic.config."
 msgstr "Ngày hết hạn được tính theo múi giờ UTC. Các mục đã hết hạn sẽ ngừng có hiệu lực ngay lập tức và được xóa tự động. Các mục toàn cục được quản lý trong tệp zotonic.config."
 
@@ -18356,7 +18512,7 @@ msgstr "Ngày hết hạn được tính theo múi giờ UTC. Các mục đã h�
 msgid "Hour"
 msgstr "Giờ"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:65
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:81
 msgid "IP address"
 msgstr "Địa chỉ IP"
 
@@ -18364,7 +18520,7 @@ msgstr "Địa chỉ IP"
 msgid "IP addresses"
 msgstr "Địa chỉ IP"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:26
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:32
 msgid "IP entries"
 msgstr "Các mục IP"
 
@@ -18376,11 +18532,11 @@ msgstr "Danh sách"
 msgid "Month (30 days)"
 msgstr "Tháng (30 ngày)"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:50
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:61
 msgid "No IP entries."
 msgstr "Không có mục IP nào."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:98
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:114
 msgid "No currently throttled IP addresses."
 msgstr "Hiện không có địa chỉ IP nào bị giới hạn số lượng yêu cầu."
 
@@ -18388,15 +18544,15 @@ msgstr "Hiện không có địa chỉ IP nào bị giới hạn số lượng y
 msgid "Or until (UTC)"
 msgstr "Hoặc cho đến khi (UTC)"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:66
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:82
 msgid "Reason"
 msgstr "Lý do"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:68
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:84
 msgid "Rejections"
 msgstr "Các trường hợp bị từ chối"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:69
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:85
 msgid "Retry in seconds"
 msgstr "Thời gian chờ thử lại (giây)"
 
@@ -18418,15 +18574,15 @@ msgstr "Mục này hiện không còn khả dụng. Vui lòng làm mới trang."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:3
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:10
-#: zotonic_mod_traffic_guard/src/mod_traffic_guard.erl:124
+#: zotonic_mod_traffic_guard/src/mod_traffic_guard.erl:168
 msgid "Traffic guard"
 msgstr "Bảo vệ lưu lượng"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:59
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:74
 msgid "Traffic guard is temporarily unavailable."
 msgstr "Tính năng bảo vệ lưu lượng tạm thời không khả dụng."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:58
 msgid "Until (UTC):"
 msgstr "Cho đến (UTC):"
 
@@ -18442,7 +18598,7 @@ msgstr "Có hiệu lực trong"
 msgid "You are not allowed to change these entries."
 msgstr "Bạn không được phép thay đổi các mục này."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:16
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:21
 msgid "Your current IP address:"
 msgstr "Địa chỉ IP hiện tại của bạn:"
 
@@ -19119,7 +19275,7 @@ msgstr "Không thể hoàn tất cập nhật tự động. Xem chi tiết kỹ 
 msgid "Choose a known failed hostname or enter an exact hostname, without a scheme, port, or path."
 msgstr "Chọn tên máy chủ đã gặp lỗi hoặc nhập chính xác tên máy chủ, không có giao thức, cổng hay đường dẫn."
 
-#: zotonic_mod_websub/src/mod_websub.erl:285
+#: zotonic_mod_websub/src/mod_websub.erl:298
 msgid "Could not change the automatic update subscription."
 msgstr "Không thể thay đổi đăng ký cập nhật tự động."
 
@@ -19320,7 +19476,7 @@ msgstr "Chúng ta đăng ký"
 #: zotonic_mod_websub/priv/templates/_admin_edit_sidebar_websub.tpl:4
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:3
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:7
-#: zotonic_mod_websub/src/mod_websub.erl:257
+#: zotonic_mod_websub/src/mod_websub.erl:270
 msgid "WebSub subscriptions"
 msgstr "Đăng ký WebSub"
 
