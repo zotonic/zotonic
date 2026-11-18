@@ -145,3 +145,33 @@ disconnect_test() ->
         end, Context),
 
     ok.
+
+%% Payment imports explicitly abort with a reason which must reach their caller.
+%% Nested aborts must roll back writes and discard queued notifications as well.
+explicit_rollback_test() ->
+    Context = z_context:new(zotonic_site_testsandbox),
+    Event = z_db_payment_rollback_test,
+    ok = z_notifier:observe(Event, self(), Context),
+    try
+        lists:foreach(fun(Nested) ->
+            Ref = make_ref(),
+            ?assertEqual({rollback, payment_rejected}, z_db:transaction(fun(Tx) ->
+                z_notifier:notify({Event, Ref}, Tx),
+                [] = z_db:q("create table payment_rollback_probe (id int)", Tx),
+                Abort = fun(_) -> throw({rollback, payment_rejected}) end,
+                case Nested of
+                    true -> z_db:transaction(Abort, Tx);
+                    false -> Abort(Tx)
+                end
+            end, Context)),
+            ?assertEqual(undefined, erlang:get(notify_queue)),
+            ?assertEqual(undefined, z_db:q1("select to_regclass('payment_rollback_probe')", Context)),
+            receive
+                {'$gen_cast', {{Event, Ref}, _}} -> error(rollback_notification)
+            after 100 -> ok
+            end
+        end, [false, true])
+    after
+        z_notifier:detach(Event, Context),
+        z_notifier:notify_queue_flush(Context)
+    end.

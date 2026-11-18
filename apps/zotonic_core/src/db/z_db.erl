@@ -271,6 +271,16 @@ transaction1(Function, #context{dbc=undefined} = Context) ->
                                 end
                         end
                     catch
+                        %% Explicit aborts are expected control flow for payment imports.
+                        %% Keep their reason intact, including through nested transactions.
+                        throw:{rollback, ThrowR} ->
+                            case DbDriver:is_connection_alive(C) of
+                                true ->
+                                    DbDriver:squery(C, "ROLLBACK", ?TIMEOUT);
+                                false ->
+                                    ok
+                            end,
+                            {rollback, ThrowR};
                         E:Why:S ->
                             ?LOG_ERROR(#{
                                 text => <<"Error on database transaction">>,

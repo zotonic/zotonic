@@ -167,6 +167,9 @@ upgrade(Context) ->
 %% @doc Wait till all modules are started, used when starting up a new or test site.
 -spec upgrade_await(z:context()) -> ok | {error, timeout}.
 upgrade_await(Context) ->
+    % Like upgrade/1, discard any active-module list cached before the change
+    % committed. The manager must read the current list when handling upgrade.
+    flush(Context),
     upgrade_await_1(Context, 20).
 
 upgrade_await_1(_Context, 0) ->
@@ -417,7 +420,10 @@ active(Module, Context) ->
             F = fun() ->
                 is_module_activated(Module, Context)
             end,
-            z_depcache:memo(F, {?MODULE, {active, Module}, z_context:site(Context)}, Context);
+            Deps = [
+                {?MODULE, active, z_context:site(Context)}
+            ],
+            z_depcache:memo(F, {?MODULE, {active, Module}, z_context:site(Context)}, 3600, Deps, Context);
         false ->
             lists:member(Module, active(Context))
     end.
@@ -1757,11 +1763,7 @@ call_manage_schema(Module, Current, Target, _Context)
     ok;
 call_manage_schema(Module, undefined, Target, Context) ->
     % New install
-    SchemaRet = z_db:transaction(
-                    fun(C) ->
-                        Module:manage_schema(install, C)
-                    end,
-                    Context),
+    SchemaRet = schema_transaction(Module, install, Context),
     datamodel_manage(Module, SchemaRet, Context),
     z_db:flush(Context),
     maybe_manage_data(Module, install, Context),
@@ -1770,11 +1772,7 @@ call_manage_schema(Module, undefined, Target, Context) ->
 call_manage_schema(Module, Current, Target, Context)
     when is_integer(Current), is_integer(Target), Target > Current ->
     % Upgrade
-    SchemaRet = z_db:transaction(
-                    fun(C) ->
-                        Module:manage_schema({upgrade, Current+1}, C)
-                    end,
-                    Context),
+    SchemaRet = schema_transaction(Module, {upgrade, Current+1}, Context),
     datamodel_manage(Module, SchemaRet, Context),
     z_db:flush(Context),
     maybe_manage_data(Module, {upgrade, Current+1}, Context),
@@ -1846,14 +1844,25 @@ reinstall(Module, Context) ->
             nop;
         2 ->
             %% has manage_schema/2
-            SchemaRet = z_db:transaction(
-                            fun(C) ->
-                                Module:manage_schema(install, C)
-                            end,
-                            Context),
+            SchemaRet = schema_transaction(Module, install, Context),
             datamodel_manage(Module, SchemaRet, Context),
             z_db:flush(Context),
             maybe_manage_data(Module, install, Context)
+    end.
+
+%% @doc Invalidate column metadata after commit, before applying the datamodel.
+%% A flush inside manage_schema/2 can be repopulated by parallel queries that
+%% still see the old schema. Also discard metadata cached by a rolled-back install.
+-spec schema_transaction(Module, Version, Context) -> Result when
+    Module :: module(),
+    Version :: manage_schema(),
+    Context :: z:context(),
+    Result :: term().
+schema_transaction(Module, Version, Context) ->
+    try
+        z_db:transaction(fun(C) -> Module:manage_schema(Version, C) end, Context)
+    after
+        z_db:flush(Context)
     end.
 
 datamodel_manage(_Module, ok, _Context) ->
