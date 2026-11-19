@@ -54,9 +54,10 @@ existing_insert() ->
     assert_published([Edge]).
 
 existing_update() ->
-    check_rows([{1, <<"UPDATE">>, 20, <<"relation">>, 30, 40,
-        7, undefined, {{2026, 11, 18}, {12, 0, 0}}}]),
-    Edge = #edge_update{subject_id = 20, predicate = relation, object_id = 30, edge_id = 40},
+    Created = {{2026, 11, 18}, {12, 0, 0}},
+    check_rows([{1, <<"UPDATE">>, 20, <<"relation">>, 30, 40, 7, 50, Created}]),
+    Edge = #edge_update{subject_id = 20, predicate = relation, object_id = 30,
+        edge_id = 40, seq = 7, creator_id = 50, created = Created},
     ?assertEqual(1, meck:num_calls(z_notifier, notify_sync, '_')),
     ?assert(meck:called(z_notifier, notify_sync, [Edge, '_'])),
     assert_published([Edge]).

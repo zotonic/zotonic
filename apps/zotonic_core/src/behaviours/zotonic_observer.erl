@@ -3708,6 +3708,7 @@ observe_edge_delete(#edge_delete{edge_id = Id}, Context) ->
 An edge has been updated. Note that the Context for this notification does not have the user who updated the edge.
 
 Only emitted if the edge is still present when the edge log batch is read.
+The sequence, creator and creation time reflect the edge at that time.
 
 Type:
 
@@ -3723,6 +3724,9 @@ return value is ignored
 *   predicate: `atom`
 *   object_id: `m_rsc:resource()`
 *   edge_id: `pos_integer`
+*   seq: `integer`
+*   creator_id: `m_rsc:resource_id() | undefined`
+*   created: `calendar:datetime()`
 ").
 -callback observe_edge_update(#edge_update{}, z:context()) -> any().
 -callback pid_observe_edge_update(pid(), #edge_update{}, z:context()) -> any().

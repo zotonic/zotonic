@@ -208,8 +208,17 @@ do_edge_notify(<<"DELETE">>, SubjectId, PredName, ObjectId, EdgeId, _Details, Ac
         T1 => [ Edge | maps:get(T1, Acc, []) ],
         T2 => [ Edge | maps:get(T2, Acc, []) ]
     };
-do_edge_notify(<<"UPDATE">>, SubjectId, PredName, ObjectId, EdgeId, _Details, Acc, Context) ->
-    Edge = #edge_update{subject_id=SubjectId, predicate=PredName, object_id=ObjectId, edge_id=EdgeId},
+do_edge_notify(<<"UPDATE">>, SubjectId, PredName, ObjectId, EdgeId,
+        {Seq, CreatorId, Created}, Acc, Context) ->
+    Edge = #edge_update{
+        subject_id = SubjectId,
+        predicate = PredName,
+        object_id = ObjectId,
+        edge_id = EdgeId,
+        seq = Seq,
+        creator_id = CreatorId,
+        created = Created
+    },
     z_notifier:notify_sync(Edge, Context),
     T1 = [ <<"model">>, <<"edge">>, <<"event">>, SubjectId, <<"o">>, z_convert:to_binary(PredName) ],
     T2 = [ <<"model">>, <<"edge">>, <<"event">>, ObjectId, <<"s">>, z_convert:to_binary(PredName) ],

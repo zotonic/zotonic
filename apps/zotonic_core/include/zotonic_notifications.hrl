@@ -945,13 +945,17 @@
 %% Note that the Context for this notification does not have the user who
 %% updated the edge.
 %% Only emitted for edges present when the edge log batch is read.
+%% The sequence, creator and creation time are taken from that edge.
 %% Type: notify
 %% Return: return value is ignored
 -record(edge_update, {
     subject_id :: m_rsc:resource(),
     predicate :: atom(),
     object_id :: m_rsc:resource(),
-    edge_id :: pos_integer()
+    edge_id :: pos_integer(),
+    seq :: integer(),
+    creator_id :: m_rsc:resource_id() | undefined,
+    created :: calendar:datetime()
 }).
 
 %% @doc Site configuration parameter was changed
