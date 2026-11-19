@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-16 23:27\n"
+"PO-Revision-Date: 2026-11-19 15:33\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -11108,7 +11108,7 @@ msgstr "Zotonic-Relay"
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:240
 msgid "Accepted for delivery"
-msgstr "Zur Auslieferung freigegeben"
+msgstr "Zum E-Mail-Versand angenommen"
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:238
 msgid "Being sent"
@@ -13271,7 +13271,7 @@ msgstr "Alle Mailinglisten"
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist.tpl:5
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_mailing_runs_panel.tpl:31
 msgid "All mailings"
-msgstr "Alle Sendungen"
+msgstr "Alle Mailings"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:29
 msgid "All recipients of the mailing list. You can upload or download this list, which must be a file with one e-mail address per line."
@@ -13457,11 +13457,11 @@ msgstr "Die Mailingliste wurde gelöscht."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:131
 msgid "Delivery history is preserved. Sending again may result in recipients receiving the same content twice. Older mailings from before run tracking are not used for duplicate detection."
-msgstr "Der Versandverlauf bleibt erhalten. Ein erneuter Versand kann dazu führen, dass Empfänger denselben Inhalt zweimal erhalten. Ältere Mailings aus der Zeit vor der Sendungsverfolgung werden nicht zur Duplikatserkennung herangezogen."
+msgstr "Der Versandverlauf bleibt erhalten. Ein erneuter Versand kann dazu führen, dass Empfänger denselben Inhalt zweimal erhalten. Ältere Mailings aus der Zeit vor der Protokollierung der E-Mail-Versandläufe werden nicht zur Duplikatserkennung herangezogen."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:15
 msgid "Delivery problems have been recorded; sending is still allowed."
-msgstr "Es wurden Lieferprobleme festgestellt; der Versand ist weiterhin erlaubt."
+msgstr "Es wurden Zustellprobleme festgestellt; der Versand ist weiterhin erlaubt."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:26
 msgid "Disabled email subscriptions are automatically deleted after three months."
@@ -13571,7 +13571,7 @@ msgstr "Geben Sie eine gültige E-Mail-Adresse ein, um die Versandergebnisse abz
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:86
 msgid "Enter a valid email address to look up subscriptions."
-msgstr "Geben Sie eine gültige E-Mail-Adresse ein, um Ihre Abonnements abzufragen."
+msgstr "Geben Sie eine gültige E-Mail-Adresse ein, um Abonnements abzufragen."
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:278
 msgid "Enter a valid future mailing date and time."
@@ -13612,11 +13612,11 @@ msgstr "Ersatzsprache:"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:12
 msgid "Find mailings by email address"
-msgstr "Sendungen nach E-Mail-Adresse suchen"
+msgstr "E-Mail-Mailings nach E-Mail-Adresse suchen"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:24
 msgid "Find recent mailings to this address"
-msgstr "Aktuelle Sendungen an diese Adresse anzeigen"
+msgstr "Aktuelle E-Mail-Mailings an diese Adresse anzeigen"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22
 msgid "Find subscriptions by email address"
@@ -13629,7 +13629,7 @@ msgstr "Abgeschlossen – einige E-Mails konnten nicht versendet werden"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:44
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:47
 msgid "First"
-msgstr "Vorname"
+msgstr "Erste"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:33
@@ -13733,7 +13733,7 @@ msgstr "Sprache:"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:52
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:55
 msgid "Last"
-msgstr "Zuletzt"
+msgstr "Letzte"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:6
 msgid "Last updated"
@@ -13825,7 +13825,7 @@ msgstr "Mailings"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:50
 msgid "Mailings are sent to:"
-msgstr "Die Sendungen werden an folgende Adresse gesendet:"
+msgstr "Mailings werden an folgende Empfänger gesendet:"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:25
 msgid "Mailings of page: <strong>{title}</strong>"
@@ -13887,7 +13887,7 @@ msgstr "Es wurden keine Mailinglisten gefunden."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_mailing_runs_panel.tpl:28
 msgid "No mailings yet."
-msgstr "Bisher keine Sendungen."
+msgstr "Noch keine Mailings."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:31
 msgid "No mailings yet. Send a mailing from a page’s edit screen to see its progress here."
@@ -13907,11 +13907,11 @@ msgstr "Es wurden keine Empfänger gefunden, die diesem Filter entsprechen."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:88
 msgid "No saved copies are available. Older mailings and mailings without selected recipients may have no copies."
-msgstr "Es sind keine gespeicherten Kopien verfügbar. Bei älteren Sendungen und Sendungen ohne ausgewählte Empfänger sind möglicherweise keine Kopien vorhanden."
+msgstr "Es sind keine gespeicherten Kopien verfügbar. Bei älteren Mailings und Mailings ohne ausgewählte Empfänger sind möglicherweise keine Kopien vorhanden."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:42
 msgid "No tracked mailings yet. History before run tracking was enabled is not available here."
-msgstr "Es liegen noch keine Sendungen mit Sendungsverfolgung vor. Der Verlauf vor der Aktivierung der Sendungsverfolgung ist hier nicht verfügbar."
+msgstr "Es liegen noch keine Mailings mit Versandprotokoll vor. Der Verlauf vor der Aktivierung der Protokollierung der E-Mail-Versandläufe ist hier nicht verfügbar."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:49
 msgid "Nobody received this mailing. Check the recipient below for the reasons, then change the language or recipient selection."
@@ -13933,7 +13933,7 @@ msgstr "Nicht erforderlich – es wurden keine Empfänger ausgewählt"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:73
 msgid "Not opted out of mailings"
-msgstr "Keine Abmeldung vom Newsletter"
+msgstr "Mailings nicht abgelehnt"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:9
 msgid "Not sent — stopped"
@@ -14015,7 +14015,7 @@ msgstr "Opt-out von allen Mailinglisten, die mit meinem Konto gekoppelt sind"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:71
 msgid "Opted out of mailings"
-msgstr "Vom Newsletter abgemeldet"
+msgstr "Mailings abgelehnt"
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:23
 msgid "Our excuses for the inconvenience."
@@ -14027,7 +14027,7 @@ msgstr "Übersicht"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:40
 msgid "Page {page} of {pages} ({total} recipients)"
-msgstr "Seite {page} von {pages} ({total} -Empfänger)"
+msgstr "Seite {page} von {pages} ({total} Empfänger)"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:53
 msgid "Pages that have the 'subscriberof' edge to the mailinglist."
@@ -14168,7 +14168,7 @@ msgstr "Der Empfängerverlauf ist abgelaufen. Starten Sie eine neue E-Mail-Sendu
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:38
 msgid "Recipient pages"
-msgstr "Zielseiten"
+msgstr "Empfängerseiten"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:20
@@ -14343,7 +14343,7 @@ msgstr "Noch einmal an alle senden"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:122
 msgid "Send another mailing"
-msgstr "Eine weitere Sendung versenden"
+msgstr "Ein weiteres Mailing versenden"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:186
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:41
@@ -14541,7 +14541,7 @@ msgstr "Alle Empfänger anzeigen"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:35
 msgid "Showing up to 200 recipient results per page from the last three months, including failed and skipped deliveries. Expired details and mailings from before run tracking are unavailable. Sent means accepted by the mail server; later bounces can still change the result."
-msgstr "Es werden bis zu 200 Empfängerergebnisse pro Seite aus den letzten drei Monaten angezeigt, einschließlich fehlgeschlagener und übersprungener Zustellungen. Abgelaufene Daten und Sendungen aus der Zeit vor Einführung der Sendungsverfolgung sind nicht verfügbar. „Gesendet“ bedeutet, dass die Nachricht vom Mailserver angenommen wurde; spätere Rückläufer können das Ergebnis noch beeinflussen."
+msgstr "Es werden bis zu 200 Empfängerergebnisse pro Seite aus den letzten drei Monaten angezeigt, einschließlich fehlgeschlagener und übersprungener Zustellungen. Abgelaufene Daten und Mailings aus der Zeit vor Einführung der Protokollierung der E-Mail-Versandläufe sind nicht verfügbar. „Gesendet“ bedeutet, dass die Nachricht vom Mailserver angenommen wurde; spätere Rückläufer können das Ergebnis noch beeinflussen."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:18
 msgid "Showing up to 200 runs per page, with active runs first. Sent means accepted by the mail server; later bounces can still change the results."
@@ -14818,7 +14818,7 @@ msgstr "Diese E-Mail ist nicht verfügbar oder Sie haben keine Berechtigung, sie
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:106
 msgid "This mailing is unavailable."
-msgstr "Diese Sendung ist nicht verfügbar."
+msgstr "Dieses Mailing ist nicht verfügbar."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_skip_reason.tpl:2
 msgid "This page is not available in their language."
@@ -14826,7 +14826,7 @@ msgstr "Diese Seite ist in ihrer Sprache nicht verfügbar."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:45
 msgid "This resource has opted out of mailings."
-msgstr "Diese Quelle hat sich vom Newsletter-Versand abgemeldet."
+msgstr "Diese Ressource hat den Empfang von Mailings abgelehnt."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:24
 msgid "This rough total includes all query matches. Duplicate recipients are not removed yet."
@@ -14973,7 +14973,7 @@ msgstr "Willkommen bei"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:181
 msgid "When should the mailing be sent?"
-msgstr "Wann sollte die Sendung verschickt werden?"
+msgstr "Wann soll das Mailing versendet werden?"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:108
 msgid "Who should receive the mailing in the selected Email language?"
@@ -14981,7 +14981,7 @@ msgstr "Wer soll die E-Mail in der ausgewählten Sprache erhalten?"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:76
 msgid "Who should receive this mailing?"
-msgstr "An wen soll diese Sendung verschickt werden?"
+msgstr "Wer soll dieses Mailing erhalten?"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:80
 msgid "Why some recipients are not selected"
