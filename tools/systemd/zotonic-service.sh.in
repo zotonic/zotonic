@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+set -e
+
+#
+# Zotonic service wrapper script template
+#
+
+# Activate Erlang/OTP version built/installed via kerl
+if [ -f "@KERL_ACTIVATE@" ]; then
+    . "@KERL_ACTIVATE@"
+elif [ -d "@KERL_OTP_PATH@/bin" ]; then
+    export PATH="@KERL_OTP_PATH@/bin:$PATH"
+fi
+
+ZOTONIC_DIR="@ZOTONIC_DIR@"
+cd "$ZOTONIC_DIR"
+
+case "$1" in
+    start)
+        exec "$ZOTONIC_DIR/bin/zotonic" start
+        ;;
+    stop)
+        exec "$ZOTONIC_DIR/bin/zotonic" stop
+        ;;
+    restart)
+        exec "$ZOTONIC_DIR/bin/zotonic" restart
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart}" >&2
+        exit 1
+        ;;
+esac

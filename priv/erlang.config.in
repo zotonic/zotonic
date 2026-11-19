@@ -1,6 +1,10 @@
 %% -*- mode: erlang -*-
 [
 
+ {kernel, [
+    {inet_dist_use_interface, {127, 0, 0, 1}}
+ ]},
+
  {exometer_core, [{predefined, [
     {[erlang, memory], {function, erlang, memory, [], value, []}, []},
     {[erlang, system_info], {function, erlang, system_info, ['$dp'], value, [process_count]}, []},
