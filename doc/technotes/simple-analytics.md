@@ -20,7 +20,7 @@ Make some combinations, start collecting them in a statistics overview.
 If site-admin wants to know a new combination, then we can configure new collectors.
 Make overview page of all collectors.
 
-Collectors: 
+Collectors:
 - graph for last minute / week / month / year / years
 - this could be a generic thing
 

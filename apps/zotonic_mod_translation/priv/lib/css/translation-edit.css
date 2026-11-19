@@ -2,7 +2,7 @@
     position: sticky;
     top: 0;
     z-index: 2;
-    background: #fff;
+    background: var(--z-admin-surface, #fff);
 }
 
 .translation-texts-table > thead > tr > th:first-child,
@@ -10,12 +10,12 @@
     position: sticky;
     left: 0;
     z-index: 1;
-    background: #fff;
-    box-shadow: 1px 0 0 #ddd;
+    background: var(--z-admin-surface, #fff);
+    box-shadow: 1px 0 0 var(--z-admin-border, #ddd);
 }
 
 .translation-texts-table > tbody > tr:nth-of-type(odd) > th {
-    background: #f9f9f9;
+    background: var(--z-admin-surface-muted, #f9f9f9);
 }
 
 .translation-texts-table > thead > tr > th:not(:first-child),
@@ -31,9 +31,9 @@
 }
 .translation-edit-text:hover,
 .translation-edit-text:focus-visible {
-    outline: 2px solid #087a9d;
+    outline: 2px solid var(--bs-link-color, #087a9d);
     outline-offset: 2px;
-    background: #edf6f8;
+    background: var(--bs-primary-bg-subtle, #edf6f8);
 }
 
 [data-translation-edit-form] .z-tiptap:not(.is-fullscreen) .z-tiptap-content {

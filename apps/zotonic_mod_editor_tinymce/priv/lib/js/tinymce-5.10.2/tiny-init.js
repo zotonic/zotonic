@@ -1,5 +1,11 @@
 
 window.z_editorConfig = window.z_editorConfig || {};
+
+var z_tinymceTheme = (function() {
+    var theme = document.documentElement.getAttribute("data-bs-theme");
+    return theme === "dark" ? "dark" : "light";
+})();
+
 window.z_editorConfig.default = window.z_editorConfig.default || {
     selector: "textarea",
 
@@ -57,8 +63,9 @@ window.z_editorConfig.default = window.z_editorConfig.default || {
         { text: 'C++', value: 'cpp' }
     ],
 
-    content_css: "/lib/css/tinymce-zotonic~2.css",
+    content_css: "/lib/css/tinymce-zotonic~3.css",
     content_style: "",
+    skin: z_tinymceTheme === "dark" ? "oxide-dark" : "oxide",
 
     // language : "en", // set in _admin_tinymce_overrides_js.tpl
 

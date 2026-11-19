@@ -6,4 +6,3 @@
         {% button class="btn btn-default" text=_"Rescan modules" action={module_rescan} %}
     </div>
 </div>
-

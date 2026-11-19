@@ -8,8 +8,8 @@
     left: 0px;
     height: 100vh;
     width: 100vw;
-    background-color: rgba(255, 255, 255, 0.6);
-    color: rgba(0, 0, 0, .5);
+    background-color: var(--z-admin-drag-overlay-bg);
+    color: var(--z-admin-drag-overlay-color);
     font-size: 128px;
     line-height: 1;
     z-index: 10000;
@@ -21,6 +21,5 @@
 
 .dragover-medium #edit-content-media,
 .dragover-medium #edit-content-media .admin-edit-media {
-    background-color: rgba(255, 255, 0, 0.3);
+    background-color: var(--z-admin-drag-media-bg);
 }
-

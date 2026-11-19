@@ -1,3 +1,12 @@
+// Preserve source typography for source editor links when rebuilding the CSS.
+.template-debug-source .development-source-link > button {
+    font: inherit;
+    line-height: inherit;
+    padding: 0;
+    border: 0;
+    vertical-align: baseline;
+}
+
 .development-dispatch-rules {
     .list-inline {
         margin-bottom: 0;
