@@ -22,6 +22,9 @@ work; it is not an outstanding implementation checklist.
 - [Text-reader experiment](text-reader-discovery.md): why hidden HTML links were
   rejected, the extraction matrix and reusable synthetic fixtures.
 
+The [production smoke test](production-smoke-test.md) records the deployed
+HTTP checks on zotonic.com and production-specific client/configuration limits.
+
 ## Current discovery surface
 
 The module is optional and depends on `mod_base` and `mod_search`, not `mod_seo`.

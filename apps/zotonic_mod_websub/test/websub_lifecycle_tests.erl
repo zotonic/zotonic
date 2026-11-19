@@ -697,8 +697,18 @@ edge_publication() ->
             end,
             ?assertEqual(Revision + 1, z_db:q1("select version from websub_push_queue where local_rsc_id=$1", [Id], C))
         end, [
-            fun(Ctx) -> mod_websub:observe_edge_insert(#edge_insert{subject_id = Id, edge_id = 1}, Ctx) end,
-            fun(Ctx) -> mod_websub:observe_edge_update(#edge_update{subject_id = Id, edge_id = 1}, Ctx) end,
+            fun(Ctx) ->
+                mod_websub:observe_edge_insert(#edge_insert{
+                    subject_id = Id, predicate = relation, object_id = 1, edge_id = 1,
+                    seq = 1, creator_id = 1, created = {{2026, 11, 18}, {12, 0, 0}}
+                }, Ctx)
+            end,
+            fun(Ctx) ->
+                mod_websub:observe_edge_update(#edge_update{
+                    subject_id = Id, predicate = relation, object_id = 1, edge_id = 1,
+                    seq = 1, creator_id = 1, created = {{2026, 11, 18}, {12, 0, 0}}
+                }, Ctx)
+            end,
             fun(Ctx) -> mod_websub:observe_edge_delete(#edge_delete{subject_id = Id, edge_id = 1}, Ctx) end
         ])
     after
@@ -723,8 +733,11 @@ export_revision() ->
         ?assertEqual(Version, maps:get(<<"export_revision">>, Initial)),
         Before = m_rsc:get_raw(Id, C),
         {ok, EdgeId} = m_edge:insert(Id, relation, 1, C),
-        await_edge_notification(EdgeTopic,
-            #edge_insert{subject_id = Id, predicate = relation, object_id = 1, edge_id = EdgeId}),
+        await_edge_notification(EdgeTopic, fun
+            (#edge_insert{subject_id = S, predicate = relation, object_id = 1, edge_id = E})
+                    when S =:= Id, E =:= EdgeId -> true;
+            (_) -> false
+        end),
         {ok, Linked} = m_rsc_export:full(Id, C),
         ?assertEqual(Version + 1, maps:get(<<"export_revision">>, Linked)),
         ?assertEqual(Before, m_rsc:get_raw(Id, C)),
@@ -733,8 +746,11 @@ export_revision() ->
         ok = m_websub:install(C),
         {ok, Linked} = m_rsc_export:full(Id, C),
         ok = m_edge:delete(Id, relation, 1, C),
-        await_edge_notification(EdgeTopic,
-            #edge_delete{subject_id = Id, predicate = relation, object_id = 1, edge_id = EdgeId}),
+        await_edge_notification(EdgeTopic, fun
+            (#edge_delete{subject_id = S, predicate = relation, object_id = 1, edge_id = E})
+                    when S =:= Id, E =:= EdgeId -> true;
+            (_) -> false
+        end),
         {ok, Unlinked} = m_rsc_export:full(Id, C),
         ?assertEqual(Version + 2, maps:get(<<"export_revision">>, Unlinked)),
         ?assertEqual(Before, m_rsc:get_raw(Id, C)),
@@ -756,21 +772,26 @@ export_revision() ->
 
 %% The edge-log server publishes only after the synchronous observers finish.
 %% Other tests can leave MQTT messages in this process; they are not a barrier.
-await_edge_notification(Topic, Edge) ->
+%% Match the operation and edge identity without requiring metadata defaults.
+await_edge_notification(Topic, Match) ->
     receive
         {mqtt_msg, #{topic := Topic, message := #{payload := Events}}} ->
-            ?assert(lists:member(Edge, Events))
-    after 5000 -> error({missing_edge_notification, Topic, Edge})
+            ?assert(lists:any(Match, Events))
+    after 5000 -> error({missing_edge_notification, Topic})
     end.
 
 edge_notification_wait_test() ->
     Topic = [<<"model">>, <<"edge">>, <<"event">>, <<"123">>, <<"o">>, <<"relation">>],
-    Edge = #edge_insert{subject_id = 123, predicate = relation, object_id = 1, edge_id = 456},
+    Edge = #edge_insert{subject_id = 123, predicate = relation, object_id = 1, edge_id = 456,
+        seq = 7, creator_id = 1, created = {{2026, 11, 18}, {12, 0, 0}}},
     Unrelated = {mqtt_msg, #{topic => [<<"model">>, <<"rsc">>, <<"event">>, <<"123">>, <<"update">>],
         message => #{payload => #{id => 123, version => 2}}}},
     self() ! Unrelated,
     self() ! {mqtt_msg, #{topic => Topic, message => #{payload => [Edge]}}},
-    await_edge_notification(Topic, Edge),
+    await_edge_notification(Topic, fun
+        (#edge_insert{subject_id = 123, predicate = relation, object_id = 1, edge_id = 456}) -> true;
+        (_) -> false
+    end),
     receive Unrelated -> ok
     after 0 -> error(consumed_unrelated_notification)
     end.
