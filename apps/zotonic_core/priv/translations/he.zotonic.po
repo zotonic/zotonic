@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-16 23:28\n"
+"PO-Revision-Date: 2026-11-19 15:33\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -13653,7 +13653,7 @@ msgstr "הושלם — לא ניתן היה לשלוח חלק מהמיילים"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:44
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:47
 msgid "First"
-msgstr "ראשית"
+msgstr "ראשון"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:33
@@ -13935,7 +13935,7 @@ msgstr "אין עותקים שמורים זמינים. ייתכן שלא יהי�
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:42
 msgid "No tracked mailings yet. History before run tracking was enabled is not available here."
-msgstr "עדיין אין משלוחים במעקב. לא ניתן לצפות כאן בהיסטוריית המשלוחים מלפני הפעלת המעקב."
+msgstr "עדיין אין דיוורים עם תיעוד של תהליך השליחה. היסטוריית הדיוורים מלפני הפעלת התיעוד אינה זמינה כאן."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:49
 msgid "Nobody received this mailing. Check the recipient below for the reasons, then change the language or recipient selection."
@@ -13957,7 +13957,7 @@ msgstr "אין צורך — לא נבחרו נמענים"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:73
 msgid "Not opted out of mailings"
-msgstr "לא ביטלתי את הרישום לקבלת דיוור"
+msgstr "לא הוגדר סירוב לקבלת דיוור"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:9
 msgid "Not sent — stopped"
@@ -14039,7 +14039,7 @@ msgstr "ביטול הסכמה לכל רשימות התפוצה המקושרות 
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:71
 msgid "Opted out of mailings"
-msgstr "ביטלתי את הרישום לרשימת התפוצה"
+msgstr "הוגדר סירוב לקבלת דיוור"
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:23
 msgid "Our excuses for the inconvenience."
@@ -14667,7 +14667,7 @@ msgstr "נרשם עם"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:28
 msgid "Subscriber"
-msgstr "מנויים"
+msgstr "מנוי"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:6
 msgid "Subscriber Edges"
@@ -14850,7 +14850,7 @@ msgstr "דף זה אינו זמין בשפתם."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:45
 msgid "This resource has opted out of mailings."
-msgstr "מקור מידע זה בחר שלא לקבל דיוורים."
+msgstr "משאב זה בחר שלא לקבל דיוורים."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:24
 msgid "This rough total includes all query matches. Duplicate recipients are not removed yet."
@@ -14895,7 +14895,7 @@ msgstr "בטל את הרישום לרשימת התפוצה"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:44
 msgid "Unsubscribed"
-msgstr "ביטול המנוי"
+msgstr "המנוי בוטל"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:106
 msgid "Unsubscribed recipients, blocked or invalid addresses, and recipients excluded by your delivery-history selection will not receive an email."
