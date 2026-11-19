@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-16 22:14\n"
+"PO-Revision-Date: 2026-11-19 15:34\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
 "MIME-Version: 1.0\n"
@@ -11082,7 +11082,7 @@ msgstr "Chuyển tiếp Zotonic"
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:240
 msgid "Accepted for delivery"
-msgstr "Đã chấp nhận để chuyển phát"
+msgstr "Đã chấp nhận để gửi email"
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:238
 msgid "Being sent"
@@ -13426,7 +13426,7 @@ msgstr "Lịch sử gửi được giữ lại. Gửi lại có thể khiến ng
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:15
 msgid "Delivery problems have been recorded; sending is still allowed."
-msgstr "Đã ghi nhận một số sự cố liên quan đến việc giao hàng; tuy nhiên, việc gửi hàng vẫn được phép."
+msgstr "Đã ghi nhận sự cố gửi email; vẫn được phép gửi."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:26
 msgid "Disabled email subscriptions are automatically deleted after three months."
@@ -13594,7 +13594,7 @@ msgstr "Đã hoàn tất — một số email không gửi được"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:44
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:47
 msgid "First"
-msgstr "Thứ nhất"
+msgstr "Đầu tiên"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:33
@@ -13814,7 +13814,7 @@ msgstr "Chỉ ngôn ngữ ưu tiên phù hợp"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:55
 msgid "Matching resources"
-msgstr "Các nguồn lực phù hợp"
+msgstr "Tài nguyên phù hợp"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:35
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:56
@@ -13992,7 +13992,7 @@ msgstr "Tổng quan"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:40
 msgid "Page {page} of {pages} ({total} recipients)"
-msgstr "Trang {page} thuộc {pages} ({total} người nhận)"
+msgstr "Trang {page} trên {pages} ({total} người nhận)"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:53
 msgid "Pages that have the 'subscriberof' edge to the mailinglist."
@@ -14133,7 +14133,7 @@ msgstr "Lịch sử người nhận đã hết hạn. Bắt đầu đợt gửi 
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:38
 msgid "Recipient pages"
-msgstr "Các trang nhận"
+msgstr "Các trang danh sách người nhận"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:20
@@ -14446,7 +14446,7 @@ msgstr "Được phép gửi."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:13
 msgid "Sending is suppressed after delivery failures."
-msgstr "Việc gửi sẽ bị tạm dừng sau khi xảy ra lỗi giao hàng."
+msgstr "Việc gửi bị tạm dừng sau các lần gửi email thất bại."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:12
 msgid "Sending needs attention"
@@ -14628,7 +14628,7 @@ msgstr "Tình trạng đăng ký"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:4
 msgid "Subscriptions"
-msgstr "Gói đăng ký"
+msgstr "Các đăng ký"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:33
 msgid "Target mailing list"
@@ -14791,7 +14791,7 @@ msgstr "Trang này chưa có bằng ngôn ngữ của họ."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:45
 msgid "This resource has opted out of mailings."
-msgstr "Nguồn tài nguyên này đã chọn không nhận các bản tin qua thư."
+msgstr "Tài nguyên này đã chọn không nhận email."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:24
 msgid "This rough total includes all query matches. Duplicate recipients are not removed yet."

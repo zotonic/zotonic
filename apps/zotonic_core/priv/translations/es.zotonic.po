@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-16 23:27\n"
+"PO-Revision-Date: 2026-11-19 15:33\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -13630,7 +13630,7 @@ msgstr "Finalizado: no se han podido enviar algunos correos electrónicos"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:44
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:47
 msgid "First"
-msgstr "Primer nombre"
+msgstr "Primera"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:33
@@ -13734,7 +13734,7 @@ msgstr "Idioma:"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:52
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:55
 msgid "Last"
-msgstr "Último"
+msgstr "Última"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:6
 msgid "Last updated"
@@ -13742,7 +13742,7 @@ msgstr "Última actualización"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:2
 msgid "Mailing"
-msgstr "Correo"
+msgstr "Envío de correo electrónico"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:3
 msgid "Mailing Lists"
@@ -13850,7 +13850,7 @@ msgstr "Solo se tienen en cuenta los idiomas preferidos"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:55
 msgid "Matching resources"
-msgstr "Recursos relacionados"
+msgstr "Recursos coincidentes"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:35
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:56
@@ -13896,7 +13896,7 @@ msgstr "Aún no hay envíos. Envía un correo desde la pantalla de edición de u
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:25
 msgid "No recent mailing results found for this email address."
-msgstr "No se han encontrado resultados recientes de envíos postales para esta dirección de correo electrónico."
+msgstr "No se han encontrado resultados recientes de envíos de correo electrónico para esta dirección."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:72
 msgid "No recipients found."
@@ -13912,7 +13912,7 @@ msgstr "No hay copias guardadas disponibles. Es posible que los envíos más ant
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:42
 msgid "No tracked mailings yet. History before run tracking was enabled is not available here."
-msgstr "Aún no hay envíos con seguimiento. El historial anterior a la activación del seguimiento de envíos no está disponible aquí."
+msgstr "Aún no hay envíos de correo electrónico registrados. El historial anterior a la activación del registro de los envíos no está disponible aquí."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:49
 msgid "Nobody received this mailing. Check the recipient below for the reasons, then change the language or recipient selection."
@@ -13934,7 +13934,7 @@ msgstr "No es necesario: no se ha seleccionado ningún destinatario"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:73
 msgid "Not opted out of mailings"
-msgstr "No se ha dado de baja de los envíos por correo"
+msgstr "No ha rechazado los envíos de correo electrónico"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:9
 msgid "Not sent — stopped"
@@ -14016,7 +14016,7 @@ msgstr "Darse de baja de todas las listas de correo asociadas a mi cuenta"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:71
 msgid "Opted out of mailings"
-msgstr "Me he dado de baja de las comunicaciones por correo"
+msgstr "Ha rechazado los envíos de correo electrónico"
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:23
 msgid "Our excuses for the inconvenience."
@@ -14028,7 +14028,7 @@ msgstr "Resumen"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:40
 msgid "Page {page} of {pages} ({total} recipients)"
-msgstr "Página {page} de {pages} (destinatarios de{total})"
+msgstr "Página {page} de {pages} ({total} destinatarios)"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:53
 msgid "Pages that have the 'subscriberof' edge to the mailinglist."
@@ -14141,7 +14141,7 @@ msgstr "Leer más en la web"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:2
 msgid "Recent mailing results"
-msgstr "Resultados recientes de los envíos postales"
+msgstr "Resultados recientes de los envíos de correo electrónico"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist.tpl:4
 msgid "Recent mailings"
@@ -14169,7 +14169,7 @@ msgstr "El historial de destinatarios ha caducado. Inicia un nuevo envío y sele
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:38
 msgid "Recipient pages"
-msgstr "Páginas de destino"
+msgstr "Páginas de destinatarios"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:20
@@ -14827,7 +14827,7 @@ msgstr "Esta página no está disponible en su idioma."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:45
 msgid "This resource has opted out of mailings."
-msgstr "Este usuario ha optado por no recibir correos."
+msgstr "Este recurso ha optado por no recibir envíos de correo electrónico."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:24
 msgid "This rough total includes all query matches. Duplicate recipients are not removed yet."
@@ -14872,7 +14872,7 @@ msgstr "Cancelar suscripción de la lista de distribución de correo"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:44
 msgid "Unsubscribed"
-msgstr "Darse de baja"
+msgstr "Dado de baja"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:106
 msgid "Unsubscribed recipients, blocked or invalid addresses, and recipients excluded by your delivery-history selection will not receive an email."
@@ -16594,7 +16594,7 @@ msgstr "Trataremos con mucho cuidado toda la información que nos facilites y nu
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:37
 msgid "We will mail you a code to confirm your email address."
-msgstr "Te enviaremos por correo un código para confirmar tu dirección de correo electrónico."
+msgstr "Te enviaremos por correo electrónico un código para confirmar tu dirección de correo electrónico."
 
 #: zotonic_mod_signup/priv/templates/signup_confirm.tpl:23
 msgid "When you created your account, you received an email with a link but it looks like something went wrong."
@@ -17569,7 +17569,7 @@ msgstr "Respuesta larga"
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:202
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:203
 msgid "Mail results to"
-msgstr "Enviar los resultados por correo a"
+msgstr "Enviar los resultados por correo electrónico a"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:36
 msgid "Mailinglist"

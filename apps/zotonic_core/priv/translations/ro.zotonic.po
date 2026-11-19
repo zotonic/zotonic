@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-16 22:14\n"
+"PO-Revision-Date: 2026-11-19 15:34\n"
 "Last-Translator: \n"
 "Language-Team: Romanian\n"
 "MIME-Version: 1.0\n"
@@ -13655,7 +13655,7 @@ msgstr "Încheiat — unele e-mailuri nu au putut fi trimise"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:44
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:47
 msgid "First"
-msgstr "În primul rând"
+msgstr "Prima"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:33
@@ -13959,7 +13959,7 @@ msgstr "Nu este necesar — niciun destinatar selectat"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:73
 msgid "Not opted out of mailings"
-msgstr "Nu v-ați dezabonat de la primirea de e-mailuri"
+msgstr "Nu a renunțat la primirea de e-mailuri"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:9
 msgid "Not sent — stopped"
@@ -14041,7 +14041,7 @@ msgstr "Dezabonează-mă de la toate listele de distribuție asociate contului m
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:71
 msgid "Opted out of mailings"
-msgstr "S-a dezabonat de la primirea de e-mailuri"
+msgstr "A renunțat la primirea de e-mailuri"
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:23
 msgid "Our excuses for the inconvenience."
@@ -14053,7 +14053,7 @@ msgstr "Prezentare generală"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:40
 msgid "Page {page} of {pages} ({total} recipients)"
-msgstr "Pagina {page} din {pages} (beneficiarii programului{total})"
+msgstr "Pagina {page} din {pages} ({total} destinatari)"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:53
 msgid "Pages that have the 'subscriberof' edge to the mailinglist."
@@ -14194,7 +14194,7 @@ msgstr "Istoricul destinatarilor a expirat. Porniți o trimitere nouă și selec
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:38
 msgid "Recipient pages"
-msgstr "Pagini destinatarilor"
+msgstr "Pagini cu destinatari"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:20
@@ -14660,7 +14660,7 @@ msgstr "Abonați-vă la"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:44
 msgid "Subscribed"
-msgstr "Abonați"
+msgstr "Abonat"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:47
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:99

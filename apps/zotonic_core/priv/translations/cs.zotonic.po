@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-16 22:14\n"
+"PO-Revision-Date: 2026-11-19 15:34\n"
 "Last-Translator: \n"
 "Language-Team: Czech\n"
 "MIME-Version: 1.0\n"
@@ -13659,11 +13659,11 @@ msgstr "Záložní jazyk:"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:12
 msgid "Find mailings by email address"
-msgstr "Vyhledat korespondenci podle e-mailové adresy"
+msgstr "Vyhledat e-mailové rozesílky podle e-mailové adresy"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:24
 msgid "Find recent mailings to this address"
-msgstr "Zobrazit poslední zásilky na tuto adresu"
+msgstr "Zobrazit poslední e-mailové rozesílky na tuto adresu"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22
 msgid "Find subscriptions by email address"
@@ -13676,7 +13676,7 @@ msgstr "Dokončeno – některé e-maily se nepodařilo odeslat"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:44
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:47
 msgid "First"
-msgstr "Za prvé"
+msgstr "První"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:33
@@ -13896,7 +13896,7 @@ msgstr "Pouze odpovídající preferované jazyky"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:55
 msgid "Matching resources"
-msgstr "Související zdroje"
+msgstr "Odpovídající zdroje"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:35
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:56
@@ -13980,7 +13980,7 @@ msgstr "Není potřeba – nebyli vybráni žádní příjemci"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:73
 msgid "Not opted out of mailings"
-msgstr "Neodhlásil se z odběru e-mailů"
+msgstr "Příjem e-mailových rozesílek neodmítnut"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:9
 msgid "Not sent — stopped"
@@ -14062,7 +14062,7 @@ msgstr "Odhlásit se ze všech e-mailových seznamů propojených s mým účtem
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:71
 msgid "Opted out of mailings"
-msgstr "Odhlásil jsem se z odběru e-mailů"
+msgstr "Příjem e-mailových rozesílek odmítnut"
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:23
 msgid "Our excuses for the inconvenience."
@@ -14074,7 +14074,7 @@ msgstr "Přehled"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:40
 msgid "Page {page} of {pages} ({total} recipients)"
-msgstr "Stránka {page} na webu {pages} ({total} příjemci)"
+msgstr "Stránka {page} z {pages} (počet příjemců: {total})"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:53
 msgid "Pages that have the 'subscriberof' edge to the mailinglist."
@@ -14215,7 +14215,7 @@ msgstr "Historie příjemců již není uchovávána. Zahajte novou rozesílku a
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:38
 msgid "Recipient pages"
-msgstr "Cílové stránky"
+msgstr "Stránky příjemců"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:20
@@ -14588,7 +14588,7 @@ msgstr "Zobrazit všechny příjemce"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:35
 msgid "Showing up to 200 recipient results per page from the last three months, including failed and skipped deliveries. Expired details and mailings from before run tracking are unavailable. Sent means accepted by the mail server; later bounces can still change the result."
-msgstr "Na stránce se zobrazuje až 200 výsledků příjemců za poslední tři měsíce, včetně neúspěšných a přeskočených doručení. Údaje, jejichž platnost vypršela, a zásilky z doby před zavedením sledování zásilek nejsou k dispozici. Označení „Odesláno“ znamená, že zásilka byla přijata poštovním serverem; pozdější vrácené zásilky mohou výsledek ještě změnit."
+msgstr "Na stránce se zobrazuje až 200 výsledků příjemců za poslední tři měsíce, včetně neúspěšných a přeskočených doručení. Údaje, jejichž platnost vypršela, a e-mailové rozesílky z doby před zavedením evidence rozesílek nejsou k dispozici. Označení „Odesláno“ znamená, že e-mail byl přijat poštovním serverem; pozdější zprávy o nedoručení mohou výsledek ještě změnit."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:18
 msgid "Showing up to 200 runs per page, with active runs first. Sent means accepted by the mail server; later bounces can still change the results."
@@ -14873,7 +14873,7 @@ msgstr "Tato stránka není k dispozici v jejich jazyce."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:45
 msgid "This resource has opted out of mailings."
-msgstr "Tento uživatel se odhlásil z odběru e-mailových zpráv."
+msgstr "Tento zdroj odmítl příjem e-mailových rozesílek."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:24
 msgid "This rough total includes all query matches. Duplicate recipients are not removed yet."
@@ -14918,7 +14918,7 @@ msgstr "Odhlásit odběr ze seznamu adresátů"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:44
 msgid "Unsubscribed"
-msgstr "Odhlášení odběru"
+msgstr "Odhlášeno"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:106
 msgid "Unsubscribed recipients, blocked or invalid addresses, and recipients excluded by your delivery-history selection will not receive an email."

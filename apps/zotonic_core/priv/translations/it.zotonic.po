@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-16 23:28\n"
+"PO-Revision-Date: 2026-11-19 15:33\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -13577,7 +13577,7 @@ msgstr "Inserisci un indirizzo e-mail valido per verificare gli abbonamenti."
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:278
 msgid "Enter a valid future mailing date and time."
-msgstr "Inserisci una data e un'ora di spedizione future valide."
+msgstr "Inserisci una data e un'ora future valide per l'invio di e-mail."
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:381
 msgid "Enter a valid test email address."
@@ -13631,7 +13631,7 @@ msgstr "Operazione completata — non è stato possibile inviare alcune e-mail"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:44
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:47
 msgid "First"
-msgstr "Nome"
+msgstr "Prima"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:33
@@ -13735,7 +13735,7 @@ msgstr "Lingua:"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:52
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:55
 msgid "Last"
-msgstr "Ultimo"
+msgstr "Ultima"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:6
 msgid "Last updated"
@@ -13799,15 +13799,15 @@ msgstr "Stato dell'invio"
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:8
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:11
 msgid "Mailing status"
-msgstr "Stato della spedizione"
+msgstr "Stato dell'invio di e-mail"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:16
 msgid "Mailing status and history"
-msgstr "Stato e cronologia delle spedizioni"
+msgstr "Stato e cronologia degli invii di e-mail"
 
 #: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1074
 msgid "Mailing status updated."
-msgstr "Stato della spedizione aggiornato."
+msgstr "Stato dell'invio di e-mail aggiornato."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:6
 msgid "Mailinglist email text and recipients query"
@@ -13851,7 +13851,7 @@ msgstr "Solo corrispondenze con le lingue preferite"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:55
 msgid "Matching resources"
-msgstr "Risorse correlate"
+msgstr "Risorse corrispondenti"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:35
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:56
@@ -13913,7 +13913,7 @@ msgstr "Non sono disponibili copie salvate. Gli invii più vecchi e quelli senza
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:42
 msgid "No tracked mailings yet. History before run tracking was enabled is not available here."
-msgstr "Non ci sono ancora spedizioni tracciate. La cronologia relativa al periodo precedente all’attivazione del tracciamento non è disponibile qui."
+msgstr "Non ci sono ancora invii di e-mail registrati. La cronologia precedente all'attivazione della registrazione degli invii non è disponibile qui."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:49
 msgid "Nobody received this mailing. Check the recipient below for the reasons, then change the language or recipient selection."
@@ -13935,7 +13935,7 @@ msgstr "Non necessario — nessun destinatario selezionato"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:73
 msgid "Not opted out of mailings"
-msgstr "Non ha rinunciato alla ricezione delle comunicazioni via e-mail"
+msgstr "Ricezione delle comunicazioni via e-mail non rifiutata"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:9
 msgid "Not sent — stopped"
@@ -14017,7 +14017,7 @@ msgstr "Non ricevere invii da tutte le mailing list associate al mio account"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:71
 msgid "Opted out of mailings"
-msgstr "Ho rinunciato alla ricezione delle comunicazioni via posta"
+msgstr "Ricezione delle comunicazioni via e-mail rifiutata"
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:23
 msgid "Our excuses for the inconvenience."
@@ -14029,7 +14029,7 @@ msgstr "Panoramica"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:40
 msgid "Page {page} of {pages} ({total} recipients)"
-msgstr "Pagina {page} del sito {pages} (destinatari di{total})"
+msgstr "Pagina {page} di {pages} ({total} destinatari)"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:53
 msgid "Pages that have the 'subscriberof' edge to the mailinglist."
@@ -14170,7 +14170,7 @@ msgstr "La cronologia dei destinatari è scaduta. Avvia un nuovo invio e selezio
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:38
 msgid "Recipient pages"
-msgstr "Pagine di destinazione"
+msgstr "Pagine dei destinatari"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:20
@@ -14828,7 +14828,7 @@ msgstr "Questa pagina non è disponibile nella loro lingua."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:45
 msgid "This resource has opted out of mailings."
-msgstr "Questo utente ha scelto di non ricevere più comunicazioni via e-mail."
+msgstr "Questa risorsa ha scelto di non ricevere comunicazioni via e-mail."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:24
 msgid "This rough total includes all query matches. Duplicate recipients are not removed yet."
@@ -14873,7 +14873,7 @@ msgstr "Annulla l’iscrizione alla mailing list"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:44
 msgid "Unsubscribed"
-msgstr "Annullamento iscrizione"
+msgstr "Iscrizione annullata"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:106
 msgid "Unsubscribed recipients, blocked or invalid addresses, and recipients excluded by your delivery-history selection will not receive an email."

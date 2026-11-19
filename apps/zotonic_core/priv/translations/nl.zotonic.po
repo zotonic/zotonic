@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-16 23:28\n"
+"PO-Revision-Date: 2026-11-19 15:33\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -11113,7 +11113,7 @@ msgstr "Zotonic Relay"
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:240
 msgid "Accepted for delivery"
-msgstr "Geaccepteerd voor levering"
+msgstr "Geaccepteerd voor bezorging"
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:238
 msgid "Being sent"
@@ -13462,11 +13462,11 @@ msgstr "De mailinglijst is verwijderd."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:131
 msgid "Delivery history is preserved. Sending again may result in recipients receiving the same content twice. Older mailings from before run tracking are not used for duplicate detection."
-msgstr "De verzendgeschiedenis blijft behouden. Als je een bericht opnieuw verstuurt, kan het zijn dat ontvangers dezelfde inhoud twee keer ontvangen. Oudere verzendingen van vóór de invoering van het tracking-systeem worden niet gebruikt voor het opsporen van dubbele berichten."
+msgstr "De verzendgeschiedenis blijft behouden. Als je een bericht opnieuw verstuurt, kan het zijn dat ontvangers dezelfde inhoud twee keer ontvangen. Oudere mailings van vóór het inschakelen van de verzendregistratie worden niet gebruikt voor het opsporen van dubbele berichten."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:15
 msgid "Delivery problems have been recorded; sending is still allowed."
-msgstr "Er zijn leveringsproblemen gemeld; verzending is nog steeds toegestaan."
+msgstr "Er zijn bezorgproblemen geregistreerd; verzenden is nog steeds toegestaan."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:26
 msgid "Disabled email subscriptions are automatically deleted after three months."
@@ -13576,7 +13576,7 @@ msgstr "Voer een geldig e-mailadres in om de verzendresultaten op te zoeken."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:86
 msgid "Enter a valid email address to look up subscriptions."
-msgstr "Voer een geldig e-mailadres in om je abonnementen op te zoeken."
+msgstr "Voer een geldig e-mailadres in om abonnementen op te zoeken."
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:278
 msgid "Enter a valid future mailing date and time."
@@ -13617,15 +13617,15 @@ msgstr "Reservetaal:"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:12
 msgid "Find mailings by email address"
-msgstr "Mailings zoeken op e-mailadres"
+msgstr "Zoek mailings op e-mailadres"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:24
 msgid "Find recent mailings to this address"
-msgstr "Bekijk recente poststukken die naar dit adres zijn verzonden"
+msgstr "Zoek recente mailings aan dit adres"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22
 msgid "Find subscriptions by email address"
-msgstr "Abonnementen zoeken op e-mailadres"
+msgstr "Zoek abonnementen op e-mailadres"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:10
 msgid "Finished — some emails could not be sent"
@@ -13854,7 +13854,7 @@ msgstr "Alleen bijpassende voorkeurstalen"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:55
 msgid "Matching resources"
-msgstr "Bijbehorende bronnen"
+msgstr "Overeenkomende pagina’s"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:35
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:56
@@ -13916,7 +13916,7 @@ msgstr "Er zijn geen opgeslagen kopieën beschikbaar. Van oudere mailings en mai
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:42
 msgid "No tracked mailings yet. History before run tracking was enabled is not available here."
-msgstr "Er zijn nog geen zendingen met tracking. De geschiedenis van vóór het moment waarop tracking werd ingeschakeld, is hier niet beschikbaar."
+msgstr "Er zijn nog geen mailings met verzendregistratie. De geschiedenis van vóór het inschakelen van de verzendregistratie is hier niet beschikbaar."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:49
 msgid "Nobody received this mailing. Check the recipient below for the reasons, then change the language or recipient selection."
@@ -13938,7 +13938,7 @@ msgstr "Niet nodig — er zijn geen ontvangers geselecteerd"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:73
 msgid "Not opted out of mailings"
-msgstr "Heeft zich niet afgemeld voor mailings"
+msgstr "Niet afgemeld voor mailings"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:9
 msgid "Not sent — stopped"
@@ -13998,7 +13998,7 @@ msgstr "Open een voorbeeld in een nieuw tabblad voordat je verdergaat:"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:20
 msgid "Open email log in a new window"
-msgstr "E-maillogboek in een nieuw venster openen"
+msgstr "Open het e-maillogboek in een nieuw venster"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:80
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:143
@@ -14032,7 +14032,7 @@ msgstr "Overzicht"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:40
 msgid "Page {page} of {pages} ({total} recipients)"
-msgstr "Pagina {page} van {pages} ({total} -ontvangers)"
+msgstr "Pagina {page} van {pages} ({total} ontvangers)"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:53
 msgid "Pages that have the 'subscriberof' edge to the mailinglist."
@@ -14173,7 +14173,7 @@ msgstr "De geschiedenis van de ontvangers is verlopen. Begin een nieuwe mailing 
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:38
 msgid "Recipient pages"
-msgstr "Bestemmingspagina's"
+msgstr "Ontvangerspagina’s"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:20
@@ -14534,7 +14534,7 @@ msgstr "Verzonden: {count};"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:16
 msgid "Show all mailings"
-msgstr "Alle mailings weergeven"
+msgstr "Toon alle mailings"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:26
 msgid "Show all pages"
@@ -14831,7 +14831,7 @@ msgstr "Deze pagina is niet beschikbaar in hun taal."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:45
 msgid "This resource has opted out of mailings."
-msgstr "Deze gebruiker heeft zich afgemeld voor mailings."
+msgstr "Deze pagina heeft zich afgemeld voor mailings."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:24
 msgid "This rough total includes all query matches. Duplicate recipients are not removed yet."
@@ -14932,7 +14932,7 @@ msgstr "Bekijk de originele mailing"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:3
 msgid "View subscriptions and email status"
-msgstr "Abonnementen en e-mailstatus bekijken"
+msgstr "Bekijk abonnementen en e-mailstatus"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:152
 msgid "View test result"
@@ -15075,7 +15075,7 @@ msgstr "Je kan proberen om je opnieuw in te schrijven op een van onze mailinglij
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:21
 msgid "You do not have permission to view the email status."
-msgstr "U hebt geen toestemming om de e-mailstatus te bekijken."
+msgstr "Je hebt geen toestemming om de e-mailstatus te bekijken."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:2
 msgid "You received this mail because someone wanted to send you this information. We did not store your e-mail address and will not send you any other mail because of this mail."
@@ -16591,7 +16591,7 @@ msgstr "Verificatiecode"
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:30
 msgid "We have sent a code to <strong>{email}</strong> to confirm your email address."
-msgstr "We hebben een code naar <strong>{email}</strong> gestuurd om je e-mailadres te bevestigen."
+msgstr "Er is een code naar <strong>{email}</strong> gestuurd om je e-mailadres te bevestigen."
 
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step3.tpl:148
 msgid "We will be very careful with all the information given to us and will never give your name or address away without your permission. We do have some rules that we need you to agree with."

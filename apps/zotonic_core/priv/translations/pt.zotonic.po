@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-16 23:28\n"
+"PO-Revision-Date: 2026-11-19 15:33\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
@@ -1915,7 +1915,7 @@ msgstr "Não importe conexões."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:61
 msgid "Do not send mailings (opt out)"
-msgstr "Não envie correspondências (opt out)"
+msgstr "Não enviar e-mails para listas de distribuição (recusar envios)"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:49
 msgid "Do you want to remove this page block?"
@@ -13455,7 +13455,7 @@ msgstr "Eliminada a lista de correio."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:131
 msgid "Delivery history is preserved. Sending again may result in recipients receiving the same content twice. Older mailings from before run tracking are not used for duplicate detection."
-msgstr "O histórico de entregas é mantido. O reenvio pode fazer com que os destinatários recebam o mesmo conteúdo duas vezes. As remessas mais antigas, anteriores à implementação do sistema de rastreio, não são utilizadas para a deteção de duplicados."
+msgstr "O histórico de entregas é mantido. O reenvio pode fazer com que os destinatários recebam o mesmo conteúdo duas vezes. Os envios de e-mail mais antigos, anteriores à implementação do registo dos envios de e-mail, não são utilizadas para a deteção de duplicados."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:15
 msgid "Delivery problems have been recorded; sending is still allowed."
@@ -13565,7 +13565,7 @@ msgstr "Habilitado"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:37
 msgid "Enter a valid email address to look up mailing results."
-msgstr "Introduza um endereço de e-mail válido para consultar os resultados da pesquisa."
+msgstr "Introduza um endereço de e-mail válido para consultar os resultados dos envios."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:86
 msgid "Enter a valid email address to look up subscriptions."
@@ -13614,7 +13614,7 @@ msgstr "Encontrar correspondência por endereço de e-mail"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:24
 msgid "Find recent mailings to this address"
-msgstr "Ver as correspondências recentes enviadas para esta morada"
+msgstr "Encontrar envios recentes para este endereço de e-mail"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22
 msgid "Find subscriptions by email address"
@@ -13909,7 +13909,7 @@ msgstr "Não existem cópias guardadas disponíveis. Os envios mais antigos e os
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:42
 msgid "No tracked mailings yet. History before run tracking was enabled is not available here."
-msgstr "Ainda não existem envios com acompanhamento. O histórico anterior à ativação do acompanhamento de envios não está disponível aqui."
+msgstr "Ainda não existem envios de e-mail registados. O histórico anterior à ativação do registo dos envios de e-mail não está disponível aqui."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:49
 msgid "Nobody received this mailing. Check the recipient below for the reasons, then change the language or recipient selection."
@@ -13931,7 +13931,7 @@ msgstr "Não é necessário — não foram selecionados destinatários"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:73
 msgid "Not opted out of mailings"
-msgstr "Não cancelou a subscrição das comunicações por correio"
+msgstr "Receção de envios por e-mail não recusada"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:9
 msgid "Not sent — stopped"
@@ -14013,7 +14013,7 @@ msgstr "Não receber envios de nenhuma lista de correio associada à minha conta
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:71
 msgid "Opted out of mailings"
-msgstr "Cancelei a subscrição das comunicações por correio"
+msgstr "Receção de envios por e-mail recusada"
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:23
 msgid "Our excuses for the inconvenience."
@@ -14138,7 +14138,7 @@ msgstr "Leia mais na web"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:2
 msgid "Recent mailing results"
-msgstr "Resultados recentes das campanhas de correio"
+msgstr "Resultados recentes dos envios por e-mail"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist.tpl:4
 msgid "Recent mailings"
@@ -14166,7 +14166,7 @@ msgstr "O histórico dos destinatários expirou. Inicie um novo envio e selecion
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:38
 msgid "Recipient pages"
-msgstr "Páginas de destino"
+msgstr "Páginas de destinatários"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:20
@@ -14283,7 +14283,7 @@ msgstr "Verifique as definições de acesso à lista de correio de teste"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:73
 msgid "Saved mailing content"
-msgstr "Conteúdo de correspondência guardado"
+msgstr "Conteúdo do envio de e-mail guardado"
 
 #: zotonic_mod_mailinglist/src/mod_mailinglist.erl:597
 msgid "Saved the opt-out preference."
@@ -14661,7 +14661,7 @@ msgstr "Estado da subscrição"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:4
 msgid "Subscriptions"
-msgstr "Assinaturas"
+msgstr "Subscrições"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:33
 msgid "Target mailing list"
@@ -14824,7 +14824,7 @@ msgstr "Esta página não está disponível no idioma deles."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:45
 msgid "This resource has opted out of mailings."
-msgstr "Este utilizador optou por não receber comunicações por e-mail."
+msgstr "Este recurso optou por não receber envios por e-mail."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:24
 msgid "This rough total includes all query matches. Duplicate recipients are not removed yet."
@@ -14869,7 +14869,7 @@ msgstr "Anular a subscrição da lista de correio"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:44
 msgid "Unsubscribed"
-msgstr "Cancelar subscrição"
+msgstr "Subscrição cancelada"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:106
 msgid "Unsubscribed recipients, blocked or invalid addresses, and recipients excluded by your delivery-history selection will not receive an email."
@@ -14979,7 +14979,7 @@ msgstr "Quem deve receber a mensagem no idioma selecionado para o e-mail?"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:76
 msgid "Who should receive this mailing?"
-msgstr "Quem deve receber esta correspondência?"
+msgstr "Quem deve receber este envio de e-mail?"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:80
 msgid "Why some recipients are not selected"
@@ -15009,7 +15009,7 @@ msgstr "Não é permitido alterar os destinatários"
 
 #: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1077
 msgid "You are not allowed to change this mailing."
-msgstr "Não está autorizado a alterar esta correspondência."
+msgstr "Não está autorizado a alterar este envio de e-mail."
 
 #: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:77
 msgid "You are not allowed to delete the mailing list."
