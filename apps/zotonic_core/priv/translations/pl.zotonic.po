@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-16 23:28\n"
+"PO-Revision-Date: 2026-11-19 15:33\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -12997,7 +12997,7 @@ msgstr "<ul>\n"
 "      <li><b>Przekazany</b>: serwer pocztowy zgłasza, że wiadomość została przekazana do następnego serwera</li>\n"
 "                                            <li><b>Zwrot wiadomości</b>: wiadomość e-mail została odrzucona przez zdalny serwer pocztowy; jest to błąd krytyczny</li>\n"
 "                                            <li><b>Niepowiodło się</b>: zdalny serwer pocztowy nie przyjął naszej wiadomości e-mail, nie będzie kolejnych prób</li>\n"
-"                                            <li><b>Ponowna próba dostawy</b>: nie udało nam się wysłać wiadomości e-mail i spróbujemy ponownie później</li>\n"
+"                                            <li><b>Ponowna próba doręczenia e-maila</b>: nie udało nam się wysłać wiadomości e-mail i spróbujemy ponownie później</li>\n"
 "        <li><b>Zablokowane</b>: adres e-mail odbiorcy jest zablokowany, sprawdź status adresu e-mail</li>\n"
 "                                            <li><b>Odebrane</b>: serwer pocztowy wysłał do nas wiadomość e-mail</li>\n"
 "              </ul>"
@@ -13033,7 +13033,7 @@ msgstr "Debugowanie"
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:158
 msgid "Delivery retry"
-msgstr "Ponowna próba dostawy"
+msgstr "Ponowna próba doręczenia e-maila"
 
 #: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:35
 msgid "Directive"
@@ -13501,7 +13501,7 @@ msgstr "Usunięto listę mailingową."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:131
 msgid "Delivery history is preserved. Sending again may result in recipients receiving the same content twice. Older mailings from before run tracking are not used for duplicate detection."
-msgstr "Historia dostaw jest zachowywana. Ponowne wysłanie może spowodować, że odbiorcy otrzymają tę samą treść dwukrotnie. Starsze wysyłki sprzed wprowadzenia śledzenia przesyłek nie są wykorzystywane do wykrywania duplikatów."
+msgstr "Historia doręczeń e-mail jest zachowywana. Ponowne wysłanie może spowodować, że odbiorcy otrzymają tę samą treść dwukrotnie. Starsze wysyłki sprzed wprowadzenia rejestrowania wysyłek e-mail nie są wykorzystywane do wykrywania duplikatów."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:15
 msgid "Delivery problems have been recorded; sending is still allowed."
@@ -13660,7 +13660,7 @@ msgstr "Wyszukaj wiadomości według adresu e-mail"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:24
 msgid "Find recent mailings to this address"
-msgstr "Zobacz ostatnie przesyłki na ten adres"
+msgstr "Zobacz ostatnie mailingi na ten adres"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22
 msgid "Find subscriptions by email address"
@@ -13673,7 +13673,7 @@ msgstr "Zakończono — nie udało się wysłać niektórych wiadomości e-mail"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:44
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:47
 msgid "First"
-msgstr "Pierwsze"
+msgstr "Pierwsza"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:33
@@ -13777,7 +13777,7 @@ msgstr "Język:"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:52
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:55
 msgid "Last"
-msgstr "Ostatni"
+msgstr "Ostatnia"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:6
 msgid "Last updated"
@@ -13955,7 +13955,7 @@ msgstr "Nie ma żadnych zapisanych kopii. W przypadku starszych wysyłek oraz wy
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:42
 msgid "No tracked mailings yet. History before run tracking was enabled is not available here."
-msgstr "Nie ma jeszcze żadnych przesyłek z możliwością śledzenia. Historia przesyłek sprzed włączenia funkcji śledzenia nie jest tutaj dostępna."
+msgstr "Nie ma jeszcze mailingów z zarejestrowanym przebiegiem wysyłki. Historia sprzed włączenia rejestrowania wysyłek e-mail nie jest tutaj dostępna."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:49
 msgid "Nobody received this mailing. Check the recipient below for the reasons, then change the language or recipient selection."
@@ -14059,7 +14059,7 @@ msgstr "Zrezygnuj ze wszystkich list mailingowych powiązanych z moim kontem"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:71
 msgid "Opted out of mailings"
-msgstr "Zrezygnowałem z otrzymywania wiadomości e-mail"
+msgstr "Zrezygnowano z otrzymywania wiadomości e-mail"
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:23
 msgid "Our excuses for the inconvenience."
@@ -14071,7 +14071,7 @@ msgstr "Przegląd"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:40
 msgid "Page {page} of {pages} ({total} recipients)"
-msgstr "Strona {page} z serwisu {pages} ({total} odbiorcy)"
+msgstr "Strona {page} z {pages} (liczba odbiorców: {total})"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:53
 msgid "Pages that have the 'subscriberof' edge to the mailinglist."
@@ -14585,7 +14585,7 @@ msgstr "Pokaż wszystkich odbiorców"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:35
 msgid "Showing up to 200 recipient results per page from the last three months, including failed and skipped deliveries. Expired details and mailings from before run tracking are unavailable. Sent means accepted by the mail server; later bounces can still change the result."
-msgstr "Wyświetla się do 200 wyników dotyczących odbiorców na stronie z ostatnich trzech miesięcy, w tym dostawy nieudane i pominięte. Dane dotyczące przedawnionych wiadomości oraz wysyłek sprzed wprowadzenia śledzenia przesyłek są niedostępne. Status „Wysłano” oznacza, że wiadomość została przyjęta przez serwer pocztowy; późniejsze odrzucenia mogą nadal wpłynąć na wynik."
+msgstr "Wyświetla się do 200 wyników dotyczących odbiorców na stronie z ostatnich trzech miesięcy, w tym dostawy nieudane i pominięte. Dane dotyczące przedawnionych wiadomości oraz wysyłek sprzed wprowadzenia rejestrowania wysyłek e-mail są niedostępne. Status „Wysłano” oznacza, że wiadomość została przyjęta przez serwer pocztowy; późniejsze odrzucenia mogą nadal wpłynąć na wynik."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:18
 msgid "Showing up to 200 runs per page, with active runs first. Sent means accepted by the mail server; later bounces can still change the results."
@@ -14870,7 +14870,7 @@ msgstr "Ta strona nie jest dostępna w ich języku."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:45
 msgid "This resource has opted out of mailings."
-msgstr "Ten użytkownik zrezygnował z otrzymywania wiadomości e-mail."
+msgstr "Ten zasób zrezygnował z otrzymywania wiadomości e-mail."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:24
 msgid "This rough total includes all query matches. Duplicate recipients are not removed yet."
@@ -15025,7 +15025,7 @@ msgstr "Kto powinien otrzymać wiadomość w wybranym języku e-maila?"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:76
 msgid "Who should receive this mailing?"
-msgstr "Kto powinien otrzymać tę przesyłkę?"
+msgstr "Kto powinien otrzymać ten mailing?"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:80
 msgid "Why some recipients are not selected"
@@ -17306,7 +17306,7 @@ msgstr "Nie można dodać odbiorców."
 
 #: zotonic_mod_survey/src/support/survey_admin.erl:199
 msgid "Could not create the mailinglist."
-msgstr "Nie można utworzyć listy adresowej."
+msgstr "Nie można utworzyć listy mailingowej."
 
 #: zotonic_mod_survey/src/mod_survey.erl:661
 msgid "Country select"
