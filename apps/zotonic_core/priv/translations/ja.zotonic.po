@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-16 22:14\n"
+"PO-Revision-Date: 2026-11-19 15:34\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "MIME-Version: 1.0\n"
@@ -11084,7 +11084,7 @@ msgstr "Zotonicリレー"
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:240
 msgid "Accepted for delivery"
-msgstr "配達を受け付けました"
+msgstr "メール配信のために受け付けました"
 
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:238
 msgid "Being sent"
@@ -13437,7 +13437,7 @@ msgstr "配信履歴は保持されます。再送信すると、受信者に同
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:15
 msgid "Delivery problems have been recorded; sending is still allowed."
-msgstr "配送に関する問題が報告されていますが、発送は引き続き可能です。"
+msgstr "メール配信の問題が記録されていますが、送信は引き続き許可されています。"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:26
 msgid "Disabled email subscriptions are automatically deleted after three months."
@@ -13592,7 +13592,7 @@ msgstr "メールアドレスでメールを検索する"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:24
 msgid "Find recent mailings to this address"
-msgstr "この宛先への最近の郵送物を探す"
+msgstr "このアドレスへの最近のメール配信を検索"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22
 msgid "Find subscriptions by email address"
@@ -13605,7 +13605,7 @@ msgstr "完了しました — 一部のメールは送信できませんでし�
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:44
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:47
 msgid "First"
-msgstr "まず"
+msgstr "最初"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:33
@@ -13684,7 +13684,7 @@ msgstr "希望言語がこの言語と一致する受信者と、言語の希望
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:23
 msgid "Individual delivery results, shown 100 recipients at a time."
-msgstr "個別の配送結果を、一度に100件ずつ表示します。"
+msgstr "個別のメール配信結果を、一度に100件ずつ表示します。"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_cancel_confirm.tpl:4
 msgid "Keep mailing"
@@ -13825,7 +13825,7 @@ msgstr "希望する言語のみ一致"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:55
 msgid "Matching resources"
-msgstr "関連リソース"
+msgstr "一致するリソース"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:35
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:56
@@ -14003,7 +14003,7 @@ msgstr "概要"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:40
 msgid "Page {page} of {pages} ({total} recipients)"
-msgstr "{pages} の {page} ページ ({total} の受信者)"
+msgstr "{page} / {pages} ページ（受信者 {total} 件）"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:53
 msgid "Pages that have the 'subscriberof' edge to the mailinglist."
@@ -14116,7 +14116,7 @@ msgstr "詳細はウェブサイトをご覧ください"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:2
 msgid "Recent mailing results"
-msgstr "最近の郵送結果"
+msgstr "最近のメール配信結果"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist.tpl:4
 msgid "Recent mailings"
