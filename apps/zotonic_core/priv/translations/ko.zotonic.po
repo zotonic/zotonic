@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-16 22:14\n"
+"PO-Revision-Date: 2026-11-19 15:34\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "MIME-Version: 1.0\n"
@@ -13431,7 +13431,7 @@ msgstr "전송 기록은 보존됩니다. 다시 보내면 수신자가 같은 �
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:15
 msgid "Delivery problems have been recorded; sending is still allowed."
-msgstr "배송 문제가 보고된 바 있으나, 발송은 여전히 가능합니다."
+msgstr "이메일 전달 문제가 기록되었지만 발송은 여전히 허용됩니다."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:26
 msgid "Disabled email subscriptions are automatically deleted after three months."
@@ -13586,7 +13586,7 @@ msgstr "이메일 주소로 메일 검색하기"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:24
 msgid "Find recent mailings to this address"
-msgstr "이 주소로 발송된 최근 우편물을 찾아보세요"
+msgstr "이 주소로 발송된 최근 이메일 찾기"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22
 msgid "Find subscriptions by email address"
@@ -13819,7 +13819,7 @@ msgstr "선호 언어가 일치하는 수신자만"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:55
 msgid "Matching resources"
-msgstr "관련 자료"
+msgstr "일치하는 리소스"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:35
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:56
@@ -13997,7 +13997,7 @@ msgstr "개요"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:40
 msgid "Page {page} of {pages} ({total} recipients)"
-msgstr "{pages} 의 {page} 페이지 ({total} 수신자)"
+msgstr "{pages}페이지 중 {page}페이지 (수신자 {total}명)"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:53
 msgid "Pages that have the 'subscriberof' edge to the mailinglist."
@@ -14511,7 +14511,7 @@ msgstr "모든 수신자 표시"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:35
 msgid "Showing up to 200 recipient results per page from the last three months, including failed and skipped deliveries. Expired details and mailings from before run tracking are unavailable. Sent means accepted by the mail server; later bounces can still change the result."
-msgstr "지난 3개월 동안의 수신자 결과 중, 배송 실패 및 건너뛴 건을 포함하여 페이지당 최대 200건을 표시합니다. 유효 기간이 만료된 정보와 배송 추적 기능이 도입되기 이전의 발송 내역은 확인할 수 없습니다. ‘발송됨’은 메일 서버에서 수락되었음을 의미하며, 이후 반송되는 경우 결과에 변경이 있을 수 있습니다."
+msgstr "지난 3개월 동안의 수신자 결과 중, 이메일 전송 실패 및 건너뛴 건을 포함하여 페이지당 최대 200건을 표시합니다. 유효 기간이 만료된 정보와 이메일 발송 기록 기능이 도입되기 이전의 발송 내역은 확인할 수 없습니다. ‘발송됨’은 메일 서버에서 수락되었음을 의미하며, 이후 반송되는 경우 결과에 변경이 있을 수 있습니다."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:18
 msgid "Showing up to 200 runs per page, with active runs first. Sent means accepted by the mail server; later bounces can still change the results."
@@ -14796,7 +14796,7 @@ msgstr "이 페이지는 해당 언어로 제공되지 않습니다."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:45
 msgid "This resource has opted out of mailings."
-msgstr "이 자료는 메일 수신을 거부했습니다."
+msgstr "이 리소스는 이메일 수신을 거부했습니다."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:24
 msgid "This rough total includes all query matches. Duplicate recipients are not removed yet."
