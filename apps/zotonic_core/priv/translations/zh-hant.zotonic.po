@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-16 23:28\n"
+"PO-Revision-Date: 2026-11-19 15:33\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -13207,11 +13207,11 @@ msgstr "<em>移除</em> 此清單中所有也在目標清單上的收件人"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:11
 msgid "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, click on the “show all recipients” link.</p><h3>Sender name and e-mail address</h3><p>The sender name and e-mail address can be set per mailing list. This defaults to the config key <tt>site.email_from</tt>.  The <i>From</i> of the sent e-mails will be set to the sender name and address.</p><h3>Automatic upload of recipient lists</h3><p>The drop folder filename is used for the automatic upload of complete recipients list. The filename must match the filename of the uploaded recipient list. The complete list of recipients will be replaced with the recipients in the drop folder file.</p><h3>Access control</h3><p>Everybody who can edit a mailing list is also allowed to send a page to the mailing list. Everybody who can view the mailing list is allowed to add an e-mail address to the mailing list.</p>"
-msgstr "<h3>收件者</h3><p>若要新增、移除或檢視郵寄清單的收件者，請按一下「顯示所有收件者」連結。</p><h3>寄件者名稱和電子郵件地址</h3><p>可以為每個郵寄清單設定寄件者名稱和電子郵件地址，預設使用設定鍵 <tt>site.email_from</tt> 的值。寄出郵件的<i>寄件者</i>欄位將設為該名稱和地址。</p><h3>自動上傳收件者清單</h3><p>接收資料夾中的檔案名稱用於自動上傳完整的收件者清單。此檔案名稱必須與上傳的收件者清單檔案名稱一致。完整的收件者清單將被接收資料夾中的檔案所列的收件者取代。</p><h3>存取控制</h3><p>有權編輯郵寄清單的人也可以向該清單寄送頁面。有權檢視郵寄清單的人可以向該清單新增電子郵件地址。</p>"
+msgstr "<h3>收件者</h3><p>若要新增、移除或檢視電子郵件寄送名單的收件者，請按一下「顯示所有收件者」連結。</p><h3>寄件者名稱和電子郵件地址</h3><p>可以為每個電子郵件寄送名單設定寄件者名稱和電子郵件地址，預設使用設定鍵 <tt>site.email_from</tt> 的值。寄出郵件的<i>寄件者</i>欄位將設為該名稱和地址。</p><h3>自動上傳收件者清單</h3><p>接收資料夾中的檔案名稱用於自動上傳完整的收件者清單。此檔案名稱必須與上傳的收件者清單檔案名稱一致。完整的收件者清單將被接收資料夾中的檔案所列的收件者取代。</p><h3>存取控制</h3><p>有權編輯電子郵件寄送名單的人也可以向該清單寄送頁面。有權檢視電子郵件寄送名單的人可以向該清單新增電子郵件地址。</p>"
 
 #: zotonic_mod_mailinglist/src/mod_mailinglist.erl:444
 msgid "A mailing list cannot be sent as a mailing."
-msgstr "郵寄清單無法作為郵件發送。"
+msgstr "電子郵件寄送名單無法作為郵件發送。"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_skip_reason.tpl:7
 msgid "A previous delivery failed. Choose retry failed recipients to try again."
@@ -13246,7 +13246,7 @@ msgstr "所有清單"
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:1
 #: zotonic_mod_mailinglist/priv/templates/mailinglist.tpl:14
 msgid "All mailing lists"
-msgstr "所有郵寄名單"
+msgstr "所有電子郵件寄送名單"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist.tpl:5
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_mailing_runs_panel.tpl:31
@@ -13255,7 +13255,7 @@ msgstr "所有郵件"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:29
 msgid "All recipients of the mailing list. You can upload or download this list, which must be a file with one e-mail address per line."
-msgstr "郵寄名單的所有收件人。你可以上傳或下載此名單，檔案每行必須包含一個電子郵件地址。"
+msgstr "電子郵件寄送名單的所有收件人。你可以上傳或下載此名單，檔案每行必須包含一個電子郵件地址。"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:112
 msgid "All recipients, using that language"
@@ -13273,7 +13273,7 @@ msgstr "已加入佇列： {count}；"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:9
 msgid "Any page can be sent as a mailing. You can send a mailing from any edit page. On this page you can add or remove mailing lists and their recipients."
-msgstr "任何頁面都可以作為郵件寄送。你可以從任何編輯頁面寄送郵件，並在此頁面新增或移除郵寄名單及其收件人。"
+msgstr "任何頁面都可以作為郵件寄送。你可以從任何編輯頁面寄送郵件，並在此頁面新增或移除電子郵件寄送名單及其收件人。"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_cancel_confirm.tpl:1
 msgid "Are you sure you want to cancel the mailing to “{list}”?"
@@ -13281,7 +13281,7 @@ msgstr "確定要取消寄送至「{list}」的郵件嗎？"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:2
 msgid "Are you sure you want to delete the mailing list “{list}”?"
-msgstr "確定要刪除郵寄清單「{list}」嗎？"
+msgstr "確定要刪除電子郵件寄送名單「{list}」嗎？"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_test_public_alert.tpl:9
 msgid "Ask an administrator to change the test mailing list’s access settings."
@@ -13330,15 +13330,15 @@ msgstr "為每位收件人選擇最適合的語言"
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:10
 msgid "Click <strong>unsubscribe</strong> to remove yourself from the mailing list."
-msgstr "點按<strong>取消訂閱</strong>，即可將自己從郵寄名單中移除。"
+msgstr "點按<strong>取消訂閱</strong>，即可將自己從電子郵件寄送名單中移除。"
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:14
 msgid "Click the button below to confirm your subscription to this mailing list."
-msgstr "按一下下方按鈕，確認訂閱此郵寄清單。"
+msgstr "按一下下方按鈕，確認訂閱此電子郵件寄送名單。"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:38
 msgid "Combine mailing list"
-msgstr "合併郵寄名單"
+msgstr "合併電子郵件寄送名單"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:38
 msgid "Combine…"
@@ -13386,7 +13386,7 @@ msgstr "無法建立新的郵件寄送作業。"
 
 #: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:80
 msgid "Could not delete the mailing list."
-msgstr "無法刪除郵寄名單。"
+msgstr "無法刪除電子郵件寄送名單。"
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_mailing_page_test.erl:92
 msgid "Could not queue the test mailing."
@@ -13433,7 +13433,7 @@ msgstr "要刪除此名單中的所有收件人嗎？"
 
 #: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:73
 msgid "Deleted the mailing list."
-msgstr "已刪除郵寄名單。"
+msgstr "已刪除電子郵件寄送名單。"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:131
 msgid "Delivery history is preserved. Sending again may result in recipients receiving the same content twice. Older mailings from before run tracking are not used for duplicate detection."
@@ -13441,7 +13441,7 @@ msgstr "寄送紀錄會被保留。若再次寄送，收件者可能會收到相
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:15
 msgid "Delivery problems have been recorded; sending is still allowed."
-msgstr "已接獲送貨問題的通報；目前仍允許寄送。"
+msgstr "已記錄郵件投遞問題，但仍允許寄送。"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:26
 msgid "Disabled email subscriptions are automatically deleted after three months."
@@ -13509,7 +13509,7 @@ msgstr "符合寄送條件的收件者將在檢查步驟中計數。"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:39
 msgid "Email address"
-msgstr "电子邮件地址"
+msgstr "電子郵件地址"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:62
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:54
@@ -13547,7 +13547,7 @@ msgstr "已啟用"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:37
 msgid "Enter a valid email address to look up mailing results."
-msgstr "請輸入有效的電子郵件地址以查詢郵寄結果。"
+msgstr "請輸入有效的電子郵件地址以查詢寄送結果。"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:86
 msgid "Enter a valid email address to look up subscriptions."
@@ -13555,7 +13555,7 @@ msgstr "請輸入有效的電子郵件地址以查詢訂閱資訊。"
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:278
 msgid "Enter a valid future mailing date and time."
-msgstr "請輸入有效的未來郵寄日期和時間。"
+msgstr "請輸入有效的未來電子郵件寄送日期和時間。"
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:381
 msgid "Enter a valid test email address."
@@ -13609,7 +13609,7 @@ msgstr "已完成 — 部分電子郵件無法發送"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:44
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:47
 msgid "First"
-msgstr "第一"
+msgstr "首頁"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:33
@@ -13622,7 +13622,7 @@ msgstr "追蹤正在進行的郵件發送，並檢視過往的結果。若要發
 
 #: zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:13
 msgid "From now on you will receive mail from our mailing list."
-msgstr "從現在起，你將收到我們郵寄名單寄出的郵件。"
+msgstr "從現在起，你將收到我們電子郵件寄送名單寄出的郵件。"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:2
 msgid "Future phases have no actual timestamp yet."
@@ -13644,7 +13644,7 @@ msgstr "你好，"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:10
 msgid "Help about mailing lists"
-msgstr "郵寄名單說明"
+msgstr "電子郵件寄送名單說明"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:21
 msgid "Help with sending a page"
@@ -13672,7 +13672,7 @@ msgstr "如果你不想再收到任何郵件，請 <a href=\"{url}\">按此取�
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:50
 msgid "If you opt-out then it is still possible to subscribe to mailing lists using an e-mail address (instead of your account)."
-msgstr "即使選擇拒收郵件，你仍可使用電子郵件地址（而非你的帳號）訂閱郵寄清單。"
+msgstr "即使選擇拒收郵件，你仍可使用電子郵件地址（而非你的帳號）訂閱電子郵件寄送名單。"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:22
 msgid "Include everyone regardless of language preference."
@@ -13713,7 +13713,7 @@ msgstr "語言："
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:52
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:55
 msgid "Last"
-msgstr "最後"
+msgstr "末頁"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:6
 msgid "Last updated"
@@ -13725,7 +13725,7 @@ msgstr "電子郵件寄送"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:3
 msgid "Mailing Lists"
-msgstr "郵寄名單"
+msgstr "電子郵件寄送名單"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:118
 msgid "Mailing actions"
@@ -13748,20 +13748,20 @@ msgstr "此頁面的郵件記錄"
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:27
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:59
 msgid "Mailing list"
-msgstr "郵寄名單"
+msgstr "電子郵件寄送名單"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:3
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:8
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:12
 msgid "Mailing list recipients: {title}"
-msgstr "郵寄清單收件人：{title}"
+msgstr "電子郵件寄送名單收件人：{title}"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:12
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:7
 #: zotonic_mod_mailinglist/src/mod_mailinglist.erl:1064
 msgid "Mailing lists"
-msgstr "郵寄名單"
+msgstr "電子郵件寄送名單"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:67
 msgid "Mailing phases"
@@ -13794,7 +13794,7 @@ msgstr "郵件清單電子郵件文字和收件者查詢"
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:8
 #: zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:4
 msgid "Mailinglist subscriptions"
-msgstr "郵寄清單訂閱"
+msgstr "電子郵件寄送名單訂閱"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:11
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:3
@@ -13817,7 +13817,7 @@ msgstr "管理郵件列表"
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:3
 msgid "Manage your mailing list subscriptions"
-msgstr "管理你的郵寄清單訂閱"
+msgstr "管理你的電子郵件寄送名單訂閱"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:7
 msgid "Matched via Query"
@@ -13829,7 +13829,7 @@ msgstr "僅匹配首選語言"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:55
 msgid "Matching resources"
-msgstr "相關資源"
+msgstr "相符的資源"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:35
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:56
@@ -13838,7 +13838,7 @@ msgstr "需要關注"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:17
 msgid "New mailing list"
-msgstr "新增郵寄名單"
+msgstr "新增電子郵件寄送名單"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:52
 msgid "Newest"
@@ -13913,7 +13913,7 @@ msgstr "不需要 — 未選取任何收件人"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:73
 msgid "Not opted out of mailings"
-msgstr "未選擇退出郵件發送"
+msgstr "未拒收郵件"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:9
 msgid "Not sent — stopped"
@@ -13991,11 +13991,11 @@ msgstr "拒收郵件"
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:56
 msgid "Opt-out of all mailing lists coupled to my account"
-msgstr "拒收與我的帳號連結的所有郵寄清單的郵件"
+msgstr "拒收與我的帳號連結的所有電子郵件寄送名單的郵件"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:71
 msgid "Opted out of mailings"
-msgstr "已選擇不接收郵件"
+msgstr "已拒收郵件"
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:23
 msgid "Our excuses for the inconvenience."
@@ -14007,11 +14007,11 @@ msgstr "概覽"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:40
 msgid "Page {page} of {pages} ({total} recipients)"
-msgstr "第 {page} 頁，來自 {pages} （{total} 收件者）"
+msgstr "第 {page} 頁，共 {pages} 頁（{total} 位收件者）"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:53
 msgid "Pages that have the 'subscriberof' edge to the mailinglist."
-msgstr "以 'subscriberof' 連結至此郵寄名單的頁面。"
+msgstr "以 'subscriberof' 連結至此電子郵件寄送名單的頁面。"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:54
 msgid "Pages that match the recipients search query below."
@@ -14120,7 +14120,7 @@ msgstr "在網路上閱讀更多內容"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:2
 msgid "Recent mailing results"
-msgstr "最近的郵寄結果"
+msgstr "最近的郵件寄送結果"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist.tpl:4
 msgid "Recent mailings"
@@ -14286,7 +14286,7 @@ msgstr "預定時間："
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:19
 msgid "Select a mailing list below, or preview and test the mailing first."
-msgstr "請從下方選擇一個郵寄名單，或先預覽並測試這封郵件。"
+msgstr "請從下方選擇一個電子郵件寄送名單，或先預覽並測試這封郵件。"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:2
 msgid "Select a mailing list, then choose language, recipients and timing. Previous results are preserved."
@@ -14409,7 +14409,7 @@ msgstr "請立即將此頁面發送至測試郵件列表。此頁面無需發佈
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_mailing_runs_panel.tpl:33
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar_mailinglist.tpl:14
 msgid "Send this page to a mailinglist and view mailinglist statistics."
-msgstr "將此頁面寄送至郵寄名單，並檢視名單統計資料。"
+msgstr "將此頁面寄送至電子郵件寄送名單，並檢視名單統計資料。"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar_mailinglist.tpl:31
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:36
@@ -14547,7 +14547,7 @@ msgstr "部分收件者的記錄已於三個月後過期。我們已無法辨識
 
 #: zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:31
 msgid "Sorry, I could not subscribe you to the mailing list. Please try again later or with another e-mail address."
-msgstr "抱歉，無法為你訂閱此郵寄名單。請稍後重試，或使用其他電子郵件地址。"
+msgstr "抱歉，無法為你訂閱此電子郵件寄送名單。請稍後重試，或使用其他電子郵件地址。"
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:25
 msgid "Sorry, can’t confirm your subscription"
@@ -14647,7 +14647,7 @@ msgstr "訂閱"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:33
 msgid "Target mailing list"
-msgstr "目標郵寄名單"
+msgstr "目標電子郵件寄送名單"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:186
 #: zotonic_mod_websub/priv/templates/_websub_error.tpl:3
@@ -14714,7 +14714,7 @@ msgstr "該電子郵件地址無效。"
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:22
 msgid "The key in your link does not match any subscription. Either you already unsubscribed, or the mailing list has been deleted."
-msgstr "連結中的金鑰不符合任何訂閱。你可能已取消訂閱，或郵寄名單已刪除。"
+msgstr "連結中的金鑰不符合任何訂閱。你可能已取消訂閱，或電子郵件寄送名單已刪除。"
 
 #: zotonic_mod_mailinglist/src/mod_mailinglist.erl:430
 msgid "The mailing has been canceled."
@@ -14726,7 +14726,7 @@ msgstr "頁面無需發布，但你必須有權檢視該頁面。"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:3
 msgid "The recipients list of the mailing list will be deleted as well."
-msgstr "郵寄名單中的收件人名單也會一併刪除。"
+msgstr "電子郵件寄送名單中的收件人名單也會一併刪除。"
 
 #: zotonic_mod_mailinglist/src/mod_mailinglist.erl:462
 msgid "The selected page could not be found."
@@ -14758,7 +14758,7 @@ msgstr "沒有任何送達失敗的紀錄需要重新嘗試。"
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_mailing_page_test.erl:96
 msgid "There is no mailing list with the name ‘mailinglist_test’."
-msgstr "找不到名稱為 'mailinglist_test' 的郵寄名單。"
+msgstr "找不到名稱為 'mailinglist_test' 的電子郵件寄送名單。"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:89
 msgid "These counts are estimates. Recipients and translations are checked again when sending starts."
@@ -14847,7 +14847,7 @@ msgstr "取消訂閱"
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:3
 msgid "Unsubscribe from mailing list"
-msgstr "取消訂閱郵寄名單"
+msgstr "取消訂閱電子郵件寄送名單"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:44
 msgid "Unsubscribed"
@@ -14995,7 +14995,7 @@ msgstr "你無權變更此郵件寄送作業。"
 
 #: zotonic_mod_mailinglist/src/controllers/controller_admin_mailinglist.erl:77
 msgid "You are not allowed to delete the mailing list."
-msgstr "你無權刪除此郵寄名單。"
+msgstr "你無權刪除此電子郵件寄送名單。"
 
 #: zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:141
 msgid "You are not allowed to edit recipients."
@@ -15018,11 +15018,11 @@ msgstr "你無權寄送此頁面。"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:14
 msgid "You are not allowed to view or edit the recipients list. You need to have edit permission on the mailing list to change and view the recipients."
-msgstr "你無權檢視或編輯收件人名單。你必須擁有此郵寄名單的編輯權限，才能變更及檢視收件人。"
+msgstr "你無權檢視或編輯收件人名單。你必須擁有此電子郵件寄送名單的編輯權限，才能變更及檢視收件人。"
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:108
 msgid "You are not subscribed to any mailing lists."
-msgstr "你沒有訂閱任何郵寄清單。"
+msgstr "你沒有訂閱任何電子郵件寄送名單。"
 
 #: zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:8
 msgid "You are now subscribed to our mailing list <b><a href=\"{url}\">{title}</a></b> with your e-mail address <b>{email}</b>."
@@ -15034,11 +15034,11 @@ msgstr "你已取消訂閱"
 
 #: zotonic_mod_mailinglist/priv/templates/email_mailinglist_goodbye.tpl:9
 msgid "You are now unsubscribed from the mailing list <b>{title}</b>. Hope to see you again."
-msgstr "你已取消訂閱郵寄清單 <b>{title}</b>。期待再次與你相見。"
+msgstr "你已取消訂閱電子郵件寄送名單 <b>{title}</b>。期待再次與你相見。"
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:69
 msgid "You are subscribed to the following mailing lists."
-msgstr "你訂閱了以下郵寄清單。"
+msgstr "你訂閱了以下電子郵件寄送名單。"
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:47
 msgid "You can opt-out of all current and future mailings using your account on this website."
@@ -15046,11 +15046,11 @@ msgstr "你可以透過本網站的帳號，選擇拒收所有目前及未來的
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:28
 msgid "You can try to re-subscribe to one of our mailing lists in the side column."
-msgstr "你可以在側欄嘗試重新訂閱我們的郵寄名單。"
+msgstr "你可以在側欄嘗試重新訂閱我們的電子郵件寄送名單。"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:21
 msgid "You do not have permission to view the email status."
-msgstr "您無權查看該電子郵件的狀態。"
+msgstr "你沒有權限檢視此電子郵件地址的狀態。"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:2
 msgid "You received this mail because someone wanted to send you this information. We did not store your e-mail address and will not send you any other mail because of this mail."
@@ -15058,7 +15058,7 @@ msgstr "你收到這封郵件，是因為有人想將這些資訊傳送給你。
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:5
 msgid "You received this mail because you are subscribed to the mailing list"
-msgstr "你收到這封郵件，是因為你訂閱了郵寄名單"
+msgstr "你收到這封郵件，是因為你訂閱了電子郵件寄送名單"
 
 #: zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:11
 msgid "You will receive a confirmation in your e-mail."
@@ -15074,7 +15074,7 @@ msgstr "你的電子郵件地址已新增至郵件清單。確認郵件已發送
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:16
 msgid "Your mailing list subscriptions"
-msgstr "你的郵寄清單訂閱"
+msgstr "你的電子郵件寄送名單訂閱"
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:67
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:107
@@ -15104,11 +15104,11 @@ msgstr "已啟用"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:10
 #: zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:13
 msgid "if you don't want to receive any further mail from this list."
-msgstr "如果你不想再收到此郵寄清單的郵件。"
+msgstr "如果你不想再收到此電子郵件寄送名單的郵件。"
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:9
 msgid "mailing list"
-msgstr "郵寄名單"
+msgstr "電子郵件寄送名單"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:16
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:21
@@ -16991,7 +16991,7 @@ msgstr "新增問題或區塊"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:1
 msgid "Add all email addresses to a mailinglist. Users are subscribed by connecting them to the mailinglist."
-msgstr "將所有電子郵件地址加入郵寄清單。將使用者連結至郵寄清單，即可讓他們訂閱。"
+msgstr "將所有電子郵件地址加入電子郵件寄送名單。將使用者連結至電子郵件寄送名單，即可讓他們訂閱。"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:127
 msgid "Add an introduction or explanation including uploaded or embedded images or video's. Add full width blocks or set a percentage to combine blocks."
@@ -17040,12 +17040,12 @@ msgstr "使用選單新增區塊，即可加入問題。"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:4
 msgid "Add to existing mailinglist"
-msgstr "加入現有郵寄清單"
+msgstr "加入現有電子郵件寄送名單"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:48
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:50
 msgid "Add to mailinglist"
-msgstr "加入郵寄清單"
+msgstr "加入電子郵件寄送名單"
 
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:108
 msgid "Admin only"
@@ -17242,7 +17242,7 @@ msgstr "無法新增收件者。"
 
 #: zotonic_mod_survey/src/support/survey_admin.erl:199
 msgid "Could not create the mailinglist."
-msgstr "無法建立郵寄清單。"
+msgstr "無法建立電子郵件寄送名單。"
 
 #: zotonic_mod_survey/src/mod_survey.erl:661
 msgid "Country select"
@@ -17262,11 +17262,11 @@ msgstr "建立跳至其他問題或區塊的跳轉。"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:50
 msgid "Create mailinglist"
-msgstr "建立郵寄清單"
+msgstr "建立電子郵件寄送名單"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:28
 msgid "Create new mailinglist"
-msgstr "建立新郵寄清單"
+msgstr "建立新電子郵件寄送名單"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:101
 msgid "Create new person"
@@ -17552,12 +17552,12 @@ msgstr "將結果以電子郵件寄送至"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:36
 msgid "Mailinglist"
-msgstr "郵寄清單"
+msgstr "電子郵件寄送名單"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:36
 #: zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:37
 msgid "Mailinglist title"
-msgstr "郵寄清單標題"
+msgstr "電子郵件寄送名單標題"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:17
 msgid "Matching email address"
@@ -17676,7 +17676,7 @@ msgstr "請注意，如果你在下方選擇特殊處理程式，該處理程式
 #: zotonic_mod_survey/src/support/survey_admin.erl:129
 #: zotonic_mod_survey/src/support/survey_admin.erl:173
 msgid "Number of recipients added to mailinglist:"
-msgstr "加入郵寄清單的收件者人數："
+msgstr "加入電子郵件寄送名單的收件者人數："
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:39
 msgid "Numeric input, show totals for this field in the results."
@@ -17905,7 +17905,7 @@ msgstr "選擇國家"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:12
 msgid "Select mailinglist"
-msgstr "選擇郵寄清單"
+msgstr "選擇電子郵件寄送名單"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:107
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:13
