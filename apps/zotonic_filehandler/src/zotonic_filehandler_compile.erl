@@ -38,6 +38,7 @@
     ld/1,
     ld_batch/1,
     deploy/2,
+    recover/1,
     code_path_check/1
 ]).
 
@@ -110,10 +111,10 @@ activate(Which) ->
 %% A failed pull/build keeps watcher events and schema upgrades blocked for retry.
 -spec deploy(git | hg, file:filename_all()) -> {ok, iolist()} | {error, term()}.
 deploy(Vcs, Path) ->
-    Result = zotonic_filehandler_update:build(fun() ->
+    Result = zotonic_filehandler_update:deploy(fun() ->
         case pull(Vcs, Path) of
             {ok, Output} ->
-                case compile_build() of
+                case deploy_build(Path) of
                     ok -> {ok, proplists:get_value(stdout, Output, [])};
                     {error, _} = Error -> Error
                 end;
@@ -121,6 +122,36 @@ deploy(Vcs, Path) ->
         end
     end),
     finish_build(Result).
+
+%% @doc Repair a checkout exclusively, then rebuild and activate before releasing
+%% a failed deployment barrier. The callback must return ok or an error.
+-spec recover(Fun) -> ok | {error, term()} when Fun :: fun(() -> ok | {error, term()}).
+recover(Fun) ->
+    Result = zotonic_filehandler_update:deploy(fun() ->
+        case Fun() of
+            ok -> compile_build();
+            {error, _} = Error -> Error
+        end
+    end),
+    finish_build(Result).
+
+%% Only an update of the umbrella itself refreshes the shared Cotonic runtime.
+%% Site/module deployments still compile the umbrella, without updating Cotonic.
+deploy_build(Path) ->
+    Root = case os:getenv("ZOTONIC") of
+        false -> {ok, Cwd} = file:get_cwd(), Cwd;
+        Dir -> Dir
+    end,
+    %% Compare directory identity so symlinked checkouts work too.
+    case {file:read_file_info(Path), file:read_file_info(Root)} of
+        {{ok, Info}, {ok, Info}} ->
+            Base = filename:join([Root, "apps", "zotonic_mod_base"]),
+            case run_cmd_task("bash ./cotonic-update.sh", [{cd, Base}], []) of
+                ok -> compile_build();
+                {error, _} = Error -> Error
+            end;
+        _ -> compile_build()
+    end.
 
 %% Compilation can rewrite the tracked lock file with apps_user dependencies.
 %% Restore only that file, inside the barrier and before Git updates the tree.
@@ -211,9 +242,16 @@ do_all_task(OptPid) ->
     Result.
 
 compile_build() ->
+    %% The checkout may omit rebar3 when it is installed on the node's PATH.
+    %% Resolve before changing directory, and quote paths containing spaces.
+    Rebar = case os:find_executable("rebar3") of
+        false -> "./rebar3";
+        Executable -> z_filelib:os_filename(filename:absname(Executable))
+    end,
+    CompileCmd = Rebar ++ " compile",
     Cmd = case os:getenv("ZOTONIC") of
-        false -> "./rebar3 compile";
-        ZotonicDir -> "cd " ++ z_filelib:os_filename(ZotonicDir) ++ " && ./rebar3 compile"
+        false -> CompileCmd;
+        ZotonicDir -> "cd " ++ z_filelib:os_filename(ZotonicDir) ++ " && " ++ CompileCmd
     end,
     zotonic_filehandler:terminal_notifier("Compile all: start"),
     case cleanup_stdout(run_cmd_task(Cmd, [], [])) of
@@ -361,7 +399,7 @@ maybe_ignore_dir(#{ ignore_dir := Dir }, true) ->
 maybe_ignore_dir(_, _) ->
     ok.
 
-%% When "./rebar3 compile" runs, then all .../test/*.erl file are touched.
+%% When "rebar3 compile" runs, then all .../test/*.erl file are touched.
 %% This forces a recompile of all these files. We might not want to
 %% automatically recompile these files during a rebar3 run.
 -spec recompile(file:filename_all()) -> ok.
@@ -391,15 +429,14 @@ recompile_locked(File) ->
             {ok, Options} ->
                 recompile_activate(File, Options);
             false ->
-                % Rebar touches test sources not compiled in this profile.
-                % New applications also need a full build first. Skipping these
-                % files must not mark the activation/schema barrier as failed.
-                ?LOG_DEBUG(#{
-                    text => <<"Skipping Erlang file without compile options">>,
-                    in => zotonic_filehandler,
-                    file => File
-                }),
-                ok
+                case is_application_source(File) andalso not is_test_source(File) of
+                    true ->
+                        %% Rebar must resolve dependencies and generate the .app
+                        %% before a new application can be activated.
+                        all();
+                    false ->
+                        skip_recompile(File)
+                end
         end
     end).
 
@@ -407,12 +444,61 @@ recompile_activate(File, Options) ->
     case recompile_file(File, Options) of
         ok ->
             Module = list_to_atom(filename:basename(File, ".erl")),
-            case activate([Module]) of
-                {error, _} = Error -> Error;
-                _ -> ok
+            case {code:where_is_file(atom_to_list(Module) ++ ".beam"), is_test_source(File)} of
+                {non_existing, true} ->
+                    %% Rebar also compiles tests into directories which are not
+                    %% on a running site's code path. Do not activate those.
+                    skip_recompile(File);
+                {non_existing, false} ->
+                    activate_new_application(Module, Options);
+                {_Path, _} ->
+                    activate_compiled(Module)
             end;
         {error, _} = Error -> Error
     end.
+
+activate_compiled(Module) ->
+    case activate([Module]) of
+        {error, _} = Error -> Error;
+        _ -> ok
+    end.
+
+activate_new_application(Module, Options) ->
+    Outdir = proplists:get_value(outdir, Options, "."),
+    case filename:basename(Outdir) =:= "ebin"
+        andalso filelib:wildcard(filename:join(Outdir, "*.app")) =/= []
+    of
+        true ->
+            %% The .beam event can precede the .app event for a new dependency
+            %% or apps_user application. Keep non-application paths out.
+            case code:add_patha(Outdir) of
+                true -> activate_compiled(Module);
+                {error, _} = Error -> Error
+            end;
+        false ->
+            %% Preserve errors for missing production BEAMs.
+            activate_compiled(Module)
+    end.
+
+is_test_source(File) ->
+    lists:member("test", filename:split(z_convert:to_list(File))).
+
+is_application_source(File) ->
+    Parts = filename:split(z_convert:to_list(File)),
+    case lists:splitwith(fun is_not_src/1, Parts) of
+        {Root, ["src" | _]} ->
+            filelib:is_regular(File) andalso
+                filelib:wildcard(filename:join(Root ++ ["src", "*.app.src"])) =/= [];
+        _ -> false
+    end.
+
+skip_recompile(File) ->
+    ?LOG_DEBUG(#{
+        text => <<"Skipping activation of Erlang file outside the code path or without compile options">>,
+        in => zotonic_filehandler,
+        file => File
+    }),
+    ok.
 
 recompile_file(File, Options) ->
     ?LOG_DEBUG(#{

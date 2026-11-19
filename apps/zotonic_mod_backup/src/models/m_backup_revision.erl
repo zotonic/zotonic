@@ -30,6 +30,14 @@ Restoration additionally checks insert permission in the selected category and c
 category/content-group references require explicit choices; local followups are suggestions only.
 Missing creator/modifier references are followed to a live resource or cleared.
 
+`restore_options` also reports `media.original` and `media.preview` as `none`,
+`local`, `remote`, `missing`, or `unknown`. This advisory pre-flight check uses the
+same medium-version selection as restore, only for the explicitly selected
+resource. It reads local files and remote registry metadata without downloading
+or contacting storage servers. Remote registration is not a guarantee of delivery;
+files may also change between confirmation and restore. Warnings do not block
+restoration or change how dependent resources are restored.
+
 Revisions store URI aliases as `backup_uri_aliases` metadata, separate from resource properties.
 Deletion revisions are saved before aliases are cascade-deleted. Recovery and rollback add the archived
 aliases without removing current aliases or taking aliases assigned to another resource. Older revisions
@@ -44,7 +52,7 @@ Available Model API Paths
 | Method | Path pattern | Description |
 | --- | --- | --- |
 | `get` | `/can_view/+id/...` | Whether the caller may read this resource’s revisions. |
-| `get` | `/restore_options/+revision_id/...` | Authorized historical reference labels and followup suggestions. |
+| `get` | `/restore_options/+revision_id/...` | Authorized historical reference labels, followup suggestions, and a read-only media recovery pre-flight check. |
 | `get` | `/list/+id/...` | Return revision history entries for resource `+id` as associative rows, newest-first where applicable. |
 | `get` | `/title/+id/...` | Return title for `+id`: current resource title when it exists, otherwise archived revision title (saved resource update permission). |
 | `get` | `/retention_months/...` | Return `mod_backup.revision_retention_months` (months to keep revision backups). |
@@ -90,6 +98,7 @@ Available Model API Paths
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic_file.hrl").
 
 % The revision log contains entries for updates (P) and the props
 % saved when deleting a resource (D).
@@ -296,36 +305,29 @@ revert_edges(RscId, Options, Created, Context) ->
 %% was saved when the medium record was created. So we fetch the medium record
 %% that best matched, but could actually have been created much later.
 revert_medium(Id, Created, Context) ->
+    case medium_revision(Id, Created, Context) of
+        {ok, MediumLog} -> revert_medium_1(MediumLog, Context);
+        {error, _} = Error -> Error
+    end.
+
+%% Share the selection with the confirmation dialog, so it checks exactly
+%% the medium version that recovery will attempt to restore.
+medium_revision(Id, Created, Context) ->
     case z_db:qmap_row("
-        select *
-        from backup_medium_log
+        select * from backup_medium_log
         where rsc_id = $1
           and (medium_deleted is null or medium_deleted >= $2)
         order by medium_created
         limit 1",
-        [ Id, z_datetime:prev_second(Created, ?DELTA_MEDIUM_REVERT_MIN) ],
-        Context)
-    of
-        {ok, MediumLog} ->
-            revert_medium_1(MediumLog, Context);
+        [Id, z_datetime:prev_second(Created, ?DELTA_MEDIUM_REVERT_MIN)], Context) of
+        {ok, _} = Found -> Found;
         {error, _} ->
-            % Might be a timing issue - check if there was a very
-            % recent deleted medium record, if so, then take that one.
-            case z_db:qmap_row("
-                select *
-                from backup_medium_log
-                where rsc_id = $1
-                  and medium_deleted >= $2
+            z_db:qmap_row("
+                select * from backup_medium_log
+                where rsc_id = $1 and medium_deleted >= $2
                 order by medium_created
                 limit 1",
-                [ Id, z_datetime:prev_second(Created, ?DELTA_MEDIUM_REVERT_MAX) ],
-                Context)
-            of
-                {ok, MediumLog} ->
-                    revert_medium_1(MediumLog, Context);
-                {error, _} = Error ->
-                    Error
-            end
+                [Id, z_datetime:prev_second(Created, ?DELTA_MEDIUM_REVERT_MAX)], Context)
     end.
 
 revert_medium_1(#{
@@ -851,15 +853,62 @@ can_view(Id0, Context) ->
     RevId :: term(), Context :: z:context().
 restore_options(RevId, Context) ->
     case get_revision(RevId, Context) of
-        {ok, #{ <<"rsc_id">> := RscId, <<"data">> := Props }} ->
+        {ok, #{ <<"rsc_id">> := RscId, <<"data">> := Props, <<"created">> := Created }} ->
             Saved = case z_db:qmap_props_row("select * from rsc_gone where id = $1", [RscId], Context) of
                 {ok, Gone} -> maps:get(<<"references">>, Gone, #{});
                 _ -> #{}
             end,
-            maps:from_list([
+            References = maps:from_list([
                 {Key, reference_option(Key, Props, Saved, Context)}
-                || Key <- [<<"category_id">>, <<"content_group_id">>] ]);
+                || Key <- [<<"category_id">>, <<"content_group_id">>] ]),
+            References#{<<"media">> => media_preflight(RscId, Created, Context)};
         _ -> undefined
+    end.
+
+%% This is advisory: no downloads, promotions, pins, or remote requests. A
+%% remote registry entry is not proof that the server will deliver the bytes.
+%% Only the explicitly selected revision is checked, not dependent resources.
+media_preflight(Id, Created, Context) ->
+    case medium_revision(Id, Created, Context) of
+        {ok, #{<<"props">> := Medium}} ->
+            #{original => recovery_file_status(maps:get(<<"filename">>, Medium, undefined), Context),
+              preview => recovery_file_status(maps:get(<<"preview_filename">>, Medium, undefined), Context)};
+        {error, enoent} -> #{original => none, preview => none};
+        {error, _} -> #{original => unknown, preview => unknown}
+    end.
+
+recovery_file_status(undefined, _Context) -> none;
+recovery_file_status(<<>>, _Context) -> none;
+recovery_file_status(<<"lib/", File/binary>>, Context) ->
+    case z_module_indexer:find(lib, File, Context) of
+        {ok, #module_index{filepath=Path}} ->
+            case filelib:is_regular(Path) of true -> local; false -> missing end;
+        _ -> unknown
+    end;
+recovery_file_status(Filename, Context) ->
+    case m_cafs:lookup(Filename, Context) of
+        {ok, Hash} ->
+            case z_db:q1("select state from cafs where hash=$1", [Hash], Context) of
+                <<"ready">> -> recovery_path_status(m_cafs:path(Hash), Context);
+                _ -> missing
+            end;
+        {error, enoent} -> recovery_path_status(<<"archive/", Filename/binary>>, Context)
+    end.
+
+recovery_path_status(Path, Context) ->
+    case filelib:is_regular(z_path:files_subdir(Path, Context)) of
+        true -> local;
+        false ->
+            case z_notifier:first(#filestore{action=exists, path=Path}, Context) of
+                true -> remote;
+                false -> missing;
+                undefined ->
+                    case m_config:get_boolean(site, filestore_used, Context) of
+                        true -> unknown;
+                        false -> missing
+                    end;
+                {error, _} -> unknown
+            end
     end.
 
 reference_option(Key, Props, Saved, Context) ->

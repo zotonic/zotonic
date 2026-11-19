@@ -478,7 +478,7 @@ remove_invisible([Id|Rest], Acc, Context) ->
 %% @doc Save the current menu to a resource.
 set_menu(Id, Menu, Context) ->
     Menu1 = validate(Menu, []),
-    m_rsc:update(Id, #{ <<"menu">> => Menu1 }, Context).
+    m_rsc:update(Id, #{ <<"menu">> => Menu1 }, [{update_reason, menu}], Context).
 
 
 %% @doc Flatten the menu structure in a list, used for display purposes in templates

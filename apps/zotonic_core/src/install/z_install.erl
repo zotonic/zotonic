@@ -90,7 +90,8 @@ install(Context) ->
 install_models(Context) ->
     ok = m_rsc:install(Context),
     m_rsc_gone:install(Context),
-    m_rsc_import:install(Context).
+    ok = m_rsc_import:install(Context),
+    m_cafs:install(Context).
 
 
 -spec install_sql_list(Context, Sql) -> ok when
@@ -457,6 +458,7 @@ model_pgsql() ->
         id serial NOT NULL,
         filename character varying (400) NOT NULL,
         deleted timestamp with time zone NOT NULL default now(),
+        retry_after timestamp with time zone NOT NULL default now(),
 
         CONSTRAINT medium_deleted_pkey PRIMARY KEY (id)
     )",
@@ -666,21 +668,21 @@ medium_update_function() ->
             end if;
         elseif (tg_op = 'UPDATE') then
             select into user_id r.creator_id from rsc r where r.id = new.id;
-            if (new.filename <> '' and new.filename is not null and new.is_deletable_file and new.filename != old.filename) then
+            if (new.filename <> '' and new.filename is not null and new.is_deletable_file and new.filename is distinct from old.filename) then
                 insert into medium_log (filename, usr_id)
                 values (new.filename, user_id)
                 on conflict (filename) do nothing;
             end if;
-            if (new.preview_filename <> '' and new.preview_filename is not null and new.is_deletable_preview and new.preview_filename != old.preview_filename) then
+            if (new.preview_filename <> '' and new.preview_filename is not null and new.is_deletable_preview and new.preview_filename is distinct from old.preview_filename) then
                 insert into medium_log (filename, usr_id)
                 values (new.preview_filename, user_id)
                 on conflict (filename) do nothing;
             end if;
             -- Insert files into the medium_deleted queue table
-            if (old.filename <> '' and old.filename is not null and old.is_deletable_file and new.filename != old.filename) then
+            if (old.filename <> '' and old.filename is not null and old.is_deletable_file and new.filename is distinct from old.filename) then
                 insert into medium_deleted (filename) values (old.filename);
             end if;
-            if (old.preview_filename <> '' and old.preview_filename is not null and old.is_deletable_preview and new.preview_filename != old.preview_filename) then
+            if (old.preview_filename <> '' and old.preview_filename is not null and old.is_deletable_preview and new.preview_filename is distinct from old.preview_filename) then
                 insert into medium_deleted (filename) values (old.preview_filename);
             end if;
         elseif (tg_op = 'DELETE') then

@@ -1,0 +1,9 @@
+{application, zotonic_mod_analytics, [
+    {description, "Lightweight analytics for site traffic, content, email, and custom events."},
+    {vsn, {file, "../../VERSION"}},
+    {registered, []},
+    {applications, [kernel, stdlib, zotonic_core]},
+    {env, []},
+    {modules, []},
+    {licenses, ["Apache-2.0"]}
+]}.

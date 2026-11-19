@@ -976,16 +976,16 @@ match1(TId, Pattern) ->
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
      #menu_item{id=admin_acl_user_groups,
-                parent=admin_auth,
+                parent=admin_access_control_group,
                 label=?__("User groups", Context),
                 url={admin_menu_hierarchy, [{name, "acl_user_group"}]},
                 visiblecheck={acl, use, mod_acl_user_groups}},
      #menu_item{id=admin_collaboration_groups,
-                parent=admin_auth,
+                parent=admin_access_control_group,
                 label=?__("Collaboration groups", Context),
                 url={admin_overview_rsc, [{qcat, "acl_collaboration_group"}]}},
      #menu_item{id=admin_content_groups,
-                parent=admin_auth,
+                parent=admin_access_control_group,
                 label=?__("Access control rules", Context),
                 url={admin_acl_rules_rsc, []},
                 visiblecheck={acl, use, mod_acl_user_groups}}

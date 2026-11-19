@@ -24,6 +24,21 @@ Installation
 * Read the [**Installation chapter**](https://zotonic.com/docs/1526/getting-started#installation)
   in the documentation.
 
+On Windows, install Ubuntu WSL 2 and enable its Docker Desktop WSL integration,
+then double-click `setup-wsl.cmd`. Setup clones Zotonic into Ubuntu's Linux
+filesystem and creates a desktop folder shortcut with **Start Zotonic**,
+**Stop Zotonic**, **Open Zotonic Folder**, **Edit Zotonic**, **Shell Zotonic**,
+and **Logs Zotonic** launchers. Start builds and starts the server automatically
+and opens the browser when it is ready. VS Code uses its WSL extension.
+See the [Windows development guide](doc/guides/docker-windows.md) for setup and
+migration from an existing Windows checkout.
+
+`start-docker.cmd` and `stop-docker.cmd` now control that saved WSL setup; they
+do not mount the Windows checkout. Stop keeps the database and files and leaves
+Docker Desktop running. The managed WSL setup uses its own Compose project.
+For containers started manually with `./start-docker.sh` on macOS/Linux/WSL,
+use `./stop-docker.sh` from another terminal in the same checkout.
+
 The development launchers `./start-docker.sh` and `./start-podman.sh` use your local
 UID and GID for the container's Zotonic user. Start them as your normal user.
 Override either ID when necessary, for example:

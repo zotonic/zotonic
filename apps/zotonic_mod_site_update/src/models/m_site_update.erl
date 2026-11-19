@@ -48,6 +48,7 @@ Available Model API Paths
 | `get` | `/is_vcs_site/...` | Return whether the current site source directory resolves to a VCS checkout (`.git`, `.hg`, or symlinked checkout). |
 | `get` | `/vcs_site/+site/...` | Return admin-only VCS tuple for site `+site` (`{git|hg, Path}`) or `false` when no repository is detected. |
 | `get` | `/vcs_zotonic/...` | Return admin-only VCS tuple for the Zotonic core library directory (`{git|hg, Path}`) or `false` when not under VCS. |
+| `get` | `/deployment_status/...` | Return node-wide coordinator status (`active`, `deployment`, `blocked`, `restart_required`). Requires administrator or `use mod_site_update` permission. A deployment is running only when both `active` and `deployment` are true. |
 | `post` | `/webhook` | Read webhook token from query arg `token`; if it matches `mod_site_update.webhook_token`, run the protected pull/build/activation deployment for the current site. No further lookups. |
 | `post` | `/webhook/+token` | Use path token `+token`; if it matches `mod_site_update.webhook_token`, run the protected pull/build/activation deployment for the current site. No further lookups. |
 
@@ -68,6 +69,8 @@ Available Model API Paths
     vcs_module/1,
 
     preview_vcs/1,
+    local_changes/1,
+    reset_vcs/1,
     update_vcs/2
 ]).
 
@@ -80,6 +83,11 @@ Available Model API Paths
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ <<"deployment_status">> | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) orelse z_acl:is_allowed(use, mod_site_update, Context) of
+        true -> {ok, {zotonic_filehandler_update:status(), Rest}};
+        false -> {error, eacces}
+    end;
 m_get([ <<"user_modules">> | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
         true ->
@@ -150,7 +158,19 @@ vcs_module(Module) ->
 preview_vcs(false) ->
     {error, no_vcs};
 preview_vcs(VCS) ->
-    zotonic_filehandler_update:schema(fun() -> z_site_update_preview:preview(VCS) end).
+    zotonic_filehandler_update:inspect(fun() -> z_site_update_preview:preview(VCS) end).
+
+%% @doc List local changes, including after a failed deploy. Call after ACL checks.
+-spec local_changes(vcs() | false) -> {ok, binary()} | {error, term()}.
+local_changes(false) -> {error, no_vcs};
+local_changes(VCS) ->
+    zotonic_filehandler_update:inspect(fun() -> z_site_update_reset:changes(VCS) end).
+
+%% @doc Discard local changes and rebuild. Call only after confirmation and ACL checks.
+-spec reset_vcs(vcs() | false) -> ok | {error, term()}.
+reset_vcs(false) -> {error, no_vcs};
+reset_vcs(VCS) ->
+    zotonic_filehandler_compile:recover(fun() -> z_site_update_reset:reset(VCS) end).
 
 %% @doc Deploy a directory through the same barrier as the CLI, for admin/status and webhooks.
 update_vcs(false, _Context) ->

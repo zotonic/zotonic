@@ -13,6 +13,8 @@
     {% endif %}
     <p class="help-block">{_ Recovering a deleted page requires permission to create pages in the selected category and content group. _}</p>
 
+    {% include "_backup_restore_media_check.tpl" media=restore.media page_exists=rsc_id.exists %}
+
     {% if restore.category_id.is_missing or restore.content_group_id.is_missing %}
         <div class="alert alert-warning">
             {_ The original category or content group no longer exists. Confirm the suggested replacement or select another one. _}

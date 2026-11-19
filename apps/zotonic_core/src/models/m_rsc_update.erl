@@ -35,6 +35,9 @@ Resource insert/update MQTT events include `version`, `previous_version` and
 only if that resource's properties are unchanged apart from `version`, `modified`
 and `modifier_id`; otherwise it is `update`. Clients must still check consecutive
 versions before acknowledging processing updates on an unsaved form.
+Menu saves can pass `{update_reason, menu}`; this reason is preserved only when
+no properties other than `menu` and the modification metadata changed. Derived
+`pivot_*` fields and absent versus undefined values are ignored for both reasons.
 ").
 -author("Marc Worrell <marc@worrell.nl").
 
@@ -1398,21 +1401,38 @@ check_expected(Raw, [{Key, Value} | Es], Context) ->
     end.
 
 
-%% @doc Background media processing may be acknowledged by editors only if no editable
+%% @doc Menu saves and background media processing may be acknowledged only if no other editable
 %% resource properties changed. The reason belongs to this update's options,
 %% not to the context shared with observers.
--spec update_reason(Reason, Before, After) -> update | media_processing when
+-spec update_reason(Reason, Before, After) -> update | media_processing | menu when
     Reason :: term(),
     Before :: map(),
     After :: map().
 update_reason(media_processing, Before, After) ->
-    Metadata = [<<"version">>, <<"modified">>, <<"modifier_id">>],
-    case maps:without(Metadata, Before) =:= maps:without(Metadata, After) of
-        true -> media_processing;
-        false -> update
-    end;
+    update_reason_only(media_processing, [], Before, After);
+update_reason(menu, Before, After) ->
+    update_reason_only(menu, [<<"menu">>], Before, After);
 update_reason(_Reason, _Before, _After) ->
     update.
+
+update_reason_only(Reason, Allowed, Before, After) ->
+    Metadata = [<<"version">>, <<"modified">>, <<"modifier_id">>],
+    case update_reason_props(Metadata ++ Allowed, Before) =:= update_reason_props(Metadata ++ Allowed, After) of
+        true -> Reason;
+        false -> update
+    end.
+
+
+%% Pre-pivot fields are derived, and absent properties can be returned as
+%% undefined during normalization. Neither is an edit to the resource content.
+update_reason_props(Ignore, Props) ->
+    maps:filter(
+        fun
+            (<<"pivot_", _/binary>>, _) -> false;
+            (_, undefined) -> false;
+            (_, _) -> true
+        end,
+        maps:without(Ignore, Props)).
 
 
 update_transaction_fun_db(RscUpd, Id, Props, Raw, IsABefore, IsCatInsert, Context) ->

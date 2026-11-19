@@ -14,6 +14,8 @@ button_deployment_test() ->
         meck:expect(m_site_update, preview_vcs, fun({git, _}) ->
             {ok, #{current => #{subject => <<"Current">>}, log => [#{subject => <<"Incoming">>}], can_deploy => true}}
         end),
+        meck:expect(m_site_update, local_changes, fun({git, _}) -> {ok, <<" M page.tpl\n">>} end),
+        meck:expect(m_site_update, reset_vcs, fun({git, _}) -> ok end),
         meck:expect(z_acl, is_admin, fun(_) -> true end),
         meck:expect(z_acl, is_allowed, fun(use, mod_site_update, _) -> true end),
         meck:expect(z_notifier, notify, fun(_, _) -> ok end),
@@ -36,6 +38,13 @@ button_deployment_test() ->
             {dialog, "_dialog_site_deploy_loading.tpl", Vars} =
                 render_event(#postback{message = Message}, Context),
             ?assertEqual(Target, proplists:get_value(target, Vars)),
+            {dialog, "_dialog_site_reset.tpl", ResetVars} = render_event(
+                #postback{message = {vcs_reset, [{target, Target}]}}, Context),
+            ?assertEqual(#{changes => <<" M page.tpl\n">>}, proplists:get_value(preview, ResetVars)),
+            ?assertNot(meck:called(m_site_update, reset_vcs, ['_'])),
+            ?assertMatch({growl, _}, render_event(
+                #postback{message = {vcs_reset_confirm, [{target, Target}]}}, Context)),
+            ?assert(meck:called(m_site_update, reset_vcs, [{git, Path}])),
             ?assertNot(meck:called(m_site_update, preview_vcs, ['_'])),
             meck:reset(z_render),
             {update, "unique-preview", #render{template = "_dialog_site_deploy.tpl", vars = PreviewVars}} =
@@ -63,6 +72,10 @@ button_deployment_test() ->
         lists:foreach(fun({Message, Target, Site, _}) ->
             Context = #context{site = Site, language = [en]},
             ?assertMatch({error, _}, render_event(#postback{message = Message}, Context)),
+            ?assertMatch({error, _}, render_event(
+                #postback{message = {vcs_reset, [{target, Target}]}}, Context)),
+            ?assertMatch({error, _}, render_event(
+                #postback{message = {vcs_reset_confirm, [{target, Target}]}}, Context)),
             {update, "unique-preview", #render{vars = DeniedVars}} = render_event(
                 #postback{message = {vcs_preview, [{target, Target}, {element_id, "unique-preview"}]}}, Context),
             ?assertEqual(#{error => eacces}, proplists:get_value(preview, DeniedVars)),
@@ -70,6 +83,8 @@ button_deployment_test() ->
                 #postback{message = {vcs_deploy, [{target, Target}]}}, Context))
         end, Cases),
         ?assertNot(meck:called(m_site_update, preview_vcs, ['_'])),
+        ?assertNot(meck:called(m_site_update, reset_vcs, ['_'])),
+        ?assertNot(meck:called(m_site_update, local_changes, ['_'])),
         ?assertNot(meck:called(zotonic_filehandler_compile, deploy, ['_', '_']))
     after
         lists:foreach(fun(M) -> meck:unload(M) end, Modules)

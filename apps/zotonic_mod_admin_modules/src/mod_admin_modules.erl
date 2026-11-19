@@ -129,7 +129,8 @@ descr(Module) ->
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
      #menu_item{id=admin_modules_,
-                parent=admin_system,
+                sort = 20,
+                parent=admin_config_group,
                 label=?__("Modules", Context),
                 url={admin_modules},
                 visiblecheck={acl, use, mod_admin_modules}}

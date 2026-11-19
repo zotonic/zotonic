@@ -71,17 +71,31 @@ filestore_redelete() ->
             ok
         end),
         File = filename:join(code:priv_dir(zotonic_site_testsandbox), "files/archive/koe.jpg"),
-        {ok, Original} = file:read_file(File),
+        {ok, Image} = file:read_file(File),
+        %% A distinct JPEG comment gives this fixture its own CAFS object.
+        %% Reusing koe.jpg shares bytes and background cache readers with other
+        %% resources, so their downloads can race with the recovery assertion.
+        <<16#ff, 16#d8, ImageRest/binary>> = Image,
+        Comment = z_ids:id(),
+        CommentSize = byte_size(Comment) + 2,
+        Original = <<16#ff, 16#d8, 16#ff, 16#fe, CommentSize:16,
+            Comment/binary, ImageRest/binary>>,
         {ok, Id} = m_media:insert_file(#upload{ filename = <<"koe.jpg">>, data = Original }, Context),
         FilestorePid = whereis(z_utils:name_for_site(mod_filestore, Context)),
         ?assert(is_pid(FilestorePid)),
         lists:foreach(fun(_) ->
-            offload_media(Id, Context),
+            Location = offload_media(Id, Context),
+            StreamArgs = ['_', Location, '_'],
+            Reads = meck:num_calls(s3filez, stream, StreamArgs),
             redelete_media(Id, Context),
+            ?assertEqual(Reads, meck:num_calls(s3filez, stream, StreamArgs)),
             #{ <<"filename">> := Restored } = m_media:get(Id, Context),
-            ?assertEqual({ok, Original}, file:read_file(z_media_archive:abspath(Restored, Context))),
+            {ok, RestoredHash} = m_cafs:lookup(Restored, Context),
+            ?assertEqual({ok, Original}, m_cafs:with_local_file(RestoredHash, fun file:read_file/1, Context)),
+            ?assert(meck:num_calls(s3filez, stream, StreamArgs) > Reads),
             ?assertEqual(FilestorePid, whereis(z_utils:name_for_site(mod_filestore, Context)))
         end, lists:seq(1, 2)),
+        ?assertEqual(1, ets:info(Remote, size)),
         ?assert(meck:num_calls(s3filez, stream, '_') > 0),
         ?assert(meck:validate(s3filez))
     after
@@ -93,7 +107,8 @@ filestore_redelete() ->
 
 offload_media(Id, Context) ->
     #{ <<"filename">> := Filename } = Medium = m_media:get(Id, Context),
-    Path = <<"archive/", Filename/binary>>,
+    {ok, Hash} = m_cafs:lookup(Filename, Context),
+    Path = m_cafs:path(Hash),
     % Synchronize queueing with the test; duplicate queue entries are harmless.
     _ = mod_filestore:observe_media_update_done(
         #media_update_done{
@@ -111,11 +126,14 @@ offload_media(Id, Context) ->
         {'DOWN', Ref, process, Pid, Reason} -> ?assertEqual(normal, Reason)
     after 10000 -> error(upload_timeout)
     end,
-    ?assertNot(filelib:is_regular(z_media_archive:abspath(Filename, Context))),
+    ?assertNot(filelib:is_regular(z_path:files_subdir(Path, Context))),
     {ok, #{ location := Location }} = m_filestore:lookup(Path, Context),
     % Evict the uploaded copy, forcing recovery through the download stream.
     % Terminate the temporary file entry synchronously: its graceful stop uses
     % an inactivity timeout that refreshes and cache events can interrupt.
+    lists:foreach(fun(FilePid) ->
+        supervisor:terminate_child(z_file_sup, FilePid)
+    end, m_cafs:readers(Path, Context)),
     case z_file_entry:where(Filename, Context) of
         undefined -> ok;
         FilePid ->
@@ -124,12 +142,18 @@ offload_media(Id, Context) ->
                 {error, not_found} -> ok
             end
     end,
-    ok = delete_cached_media(Location, 3).
+    ok = delete_cached_media(Location, 3),
+    Location.
 
 %% A cache entry can stop normally after being logged, between lookup and the
-%% delete call. Retry the public API so it also removes the persisted entry.
+%% delete call, or still be busy releasing readers. Retry the public API so it
+%% also removes the persisted entry; return the last error if retries run out.
 delete_cached_media(Location, Retries) ->
-    try filezcache:delete(Location)
+    try filezcache:delete(Location) of
+        {error, _Reason} when Retries > 0 ->
+            timer:sleep(20),
+            delete_cached_media(Location, Retries - 1);
+        Result -> Result
     catch
         exit:{normal, {gen_statem, call, [_Pid, delete, infinity]}} when Retries > 0 ->
             delete_cached_media(Location, Retries - 1)
@@ -176,3 +200,55 @@ cache_eviction_race() ->
         meck:unload(filezcache)
     end,
     ok.
+
+media_preflight_test_() ->
+    {timeout, 60, fun media_preflight/0}.
+
+media_preflight() ->
+    C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    ok = z_module_manager:activate_await(mod_backup, C),
+    ok = m_filestore:install(install, C),
+    ok = z_notifier:observe(filestore, {mod_filestore, observe_filestore, []}, self(), 1, C),
+    Data = <<"preflight-", (z_ids:id())/binary>>,
+    Hash = z_crypto:hex_sha2(Data),
+    Physical = z_path:files_subdir(m_cafs:path(Hash), C),
+    try
+        Result = z_db:transaction(fun(Ctx) ->
+            {ok, Id} = m_media:insert_file(#upload{filename = <<"preflight.txt">>, data = Data}, Ctx),
+            Medium = m_media:get(Id, Ctx),
+            %% Notifications are deferred until commit; seed the log inside
+            %% this rollback-only fixture so pre-flight can see it.
+            ok = m_backup_revision:medium_insert(Id, Medium, Ctx),
+            ok = m_backup_revision:save_revision(Id, m_rsc:get(Id, Ctx), Ctx),
+            Rev = z_db:q1("select id from backup_revision where rsc_id=$1 order by id desc limit 1", [Id], Ctx),
+            Check = fun() -> maps:get(<<"media">>, m_backup_revision:restore_options(Rev, Ctx)) end,
+            ?assertEqual(#{original => local, preview => none}, Check()),
+            ?assertEqual(undefined, m_backup_revision:restore_options(Rev, z_acl:anondo(Ctx))),
+            Poster = <<"preflight/", (z_ids:id())/binary, ".jpg">>,
+            ok = m_backup_revision:medium_update(Id, Medium#{<<"preview_filename">> => Poster}, Ctx),
+            ?assertEqual(#{original => local, preview => missing}, Check()),
+            {Html, _} = z_template:render_to_iolist("_backup_restore_media_check.tpl", [{media, Check()}], Ctx),
+            ?assertNotEqual(nomatch, binary:match(iolist_to_binary(Html), <<"saved preview image">>)),
+            %% Remote checks inspect registry metadata without starting a download.
+            ok = file:delete(Physical),
+            {ok, _} = m_filestore:store(m_cafs:path(Hash), byte_size(Data), <<"s3">>,
+                <<"https://example.invalid/preflight/", Hash/binary>>, false, Ctx),
+            ?assertEqual(#{original => remote, preview => missing}, Check()),
+            z_db:q("update filestore set error='timeout' where path=$1", [m_cafs:path(Hash)], Ctx),
+            ?assertEqual(#{original => unknown, preview => missing}, Check()),
+            z_db:q("update filestore set is_deleted=true where path=$1", [m_cafs:path(Hash)], Ctx),
+            ?assertEqual(#{original => missing, preview => missing}, Check()),
+            %% Legacy revisions without CAFS mappings use their original path.
+            Legacy = z_media_archive:abspath(maps:get(<<"filename">>, Medium), Ctx),
+            z_db:q("delete from filename_cafs where filename=$1", [maps:get(<<"filename">>, Medium)], Ctx),
+            ok = z_filelib:ensure_dir(Legacy),
+            ok = file:write_file(Legacy, Data),
+            try ?assertEqual(#{original => local, preview => missing}, Check())
+            after file:delete(Legacy) end,
+            throw({rollback, checked})
+        end, C),
+        ?assertEqual({rollback, checked}, Result)
+    after
+        z_notifier:detach(filestore, self(), C),
+        file:delete(Physical)
+    end.

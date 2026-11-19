@@ -218,50 +218,10 @@
                 <div class="widget">
                     <h3 class="widget-header">{_ Cloud File Store Utilities and Statistics _}</h3>
                     <div class="widget-content">
-                        {% with m.filestore.stats as stats %}
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>{_ Media Resources _}</th>
-                                        <th>{_ Local Files _}</th>
-                                        <th>{_ Cloud Files _}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th>{_ Files _}</th>
-                                        <td>{{ stats.archived }}</td>
-                                        <td>{{ stats.local }}</td>
-                                        <td>{{ stats.cloud }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>{_ Storage _}</th>
-                                        <td>{{ stats.archive_size|filesizeformat }}</td>
-                                        <td>{{ stats.local_size|filesizeformat }}</td>
-                                        <td>{{ stats.cloud_size|filesizeformat }}</td>
-                                    </tr>
-                                </tbody>
-
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th><br>{_ Upload Queue _}</th>
-                                        <th><br>{_ Download Queue _}</th>
-                                        <th><br>{_ Deletion queue _}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th>{_ Files _}</th>
-                                        <td id="s3queue">{{ stats.queued|default:0 }}</td>
-                                        <td id="s3queue-local">{{ stats.queued_local|default:0 }}</td>
-                                        <td>{{ stats.queued_deleted|default:0 }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                        {% endwith %}
+                        <div id="{{ #filestore_statistics }}" role="status" aria-live="polite">
+                            <p><img src="{% lib_url "images/spinner.gif" %}" width="16" height="16" alt=""> {_ Loading… _}</p>
+                        </div>
+                        {% lazy target=#filestore_statistics template="_filestore_statistics.tpl" %}
 
                         <h3>{_ Actions _}</h3>
 

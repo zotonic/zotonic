@@ -9,6 +9,8 @@
             while others are externally developed. This page shows an overview of all modules which are currently known to this Zotonic installation. _}</p>
     </div>
 
+    {% all include "_admin_modules_tools.tpl" %}
+
     {% if m.modules.uninstalled as uninstalled %}
         <div class="well">
             <p>

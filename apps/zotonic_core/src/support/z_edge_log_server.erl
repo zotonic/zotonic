@@ -135,9 +135,11 @@ do_check(Site) ->
     try
         Context = z_acl:sudo(z_context:new(Site)),
         do_check_1(z_db:q("
-                        select id,op,subject_id,predicate,object_id,edge_id
-                        from edge_log
-                        order by id
+                        select l.id, l.op, l.subject_id, l.predicate, l.object_id, l.edge_id,
+                               e.seq, e.creator_id, e.created
+                        from edge_log l
+                        left join edge e on e.id = l.edge_id
+                        order by l.id
                         limit $1",
                         [?CLEANUP_BATCH_SIZE],
                         Context),
@@ -157,10 +159,11 @@ do_check_1(Rs, Context) ->
                   end,
                   RscIds),
     Ns = lists:foldl(
-        fun({_Id,Op,SubjectId,Predicate,ObjectId,EdgeId}, Acc) ->
+        fun({_Id,Op,SubjectId,Predicate,ObjectId,EdgeId,Seq,CreatorId,Created}, Acc) ->
             PredName = z_convert:to_atom(Predicate),
             z_depcache:flush({predicate, m_rsc:rid(PredName, Context)}, Context),
-            do_edge_notify(Op, SubjectId, PredName, ObjectId, EdgeId, Acc, Context)
+            do_edge_notify(Op, SubjectId, PredName, ObjectId, EdgeId,
+                {Seq, CreatorId, Created}, Acc, Context)
         end,
         #{},
         Rs),
@@ -186,10 +189,16 @@ do_check_1(Rs, Context) ->
 
 fetch_ids([], Acc) ->
     Acc;
-fetch_ids([{_Id,_Op,SubjectId,_Pred,ObjectId,_EdgeId}|Rs], Acc) ->
+fetch_ids([{_Id,_Op,SubjectId,_Pred,ObjectId,_EdgeId,_Seq,_CreatorId,_Created}|Rs], Acc) ->
     fetch_ids(Rs, [SubjectId,ObjectId|Acc]).
 
-do_edge_notify(<<"DELETE">>, SubjectId, PredName, ObjectId, EdgeId, Acc, Context) ->
+do_edge_notify(Op, _SubjectId, _PredName, _ObjectId, _EdgeId,
+        {_Seq, _CreatorId, undefined}, Acc, _Context)
+        when Op =:= <<"INSERT">>; Op =:= <<"UPDATE">> ->
+    %% edge.created is NOT NULL: a missing value means the edge was already deleted.
+    %% Keep the log row in the batch so it is removed without emitting a notification.
+    Acc;
+do_edge_notify(<<"DELETE">>, SubjectId, PredName, ObjectId, EdgeId, _Details, Acc, Context) ->
     Edge = #edge_delete{subject_id=SubjectId, predicate=PredName, object_id=ObjectId, edge_id=EdgeId},
     z_notifier:notify_sync(Edge, Context),
     maybe_delete_dependent(ObjectId, Context),
@@ -199,8 +208,17 @@ do_edge_notify(<<"DELETE">>, SubjectId, PredName, ObjectId, EdgeId, Acc, Context
         T1 => [ Edge | maps:get(T1, Acc, []) ],
         T2 => [ Edge | maps:get(T2, Acc, []) ]
     };
-do_edge_notify(<<"UPDATE">>, SubjectId, PredName, ObjectId, EdgeId, Acc, Context) ->
-    Edge = #edge_update{subject_id=SubjectId, predicate=PredName, object_id=ObjectId, edge_id=EdgeId},
+do_edge_notify(<<"UPDATE">>, SubjectId, PredName, ObjectId, EdgeId,
+        {Seq, CreatorId, Created}, Acc, Context) ->
+    Edge = #edge_update{
+        subject_id = SubjectId,
+        predicate = PredName,
+        object_id = ObjectId,
+        edge_id = EdgeId,
+        seq = Seq,
+        creator_id = CreatorId,
+        created = Created
+    },
     z_notifier:notify_sync(Edge, Context),
     T1 = [ <<"model">>, <<"edge">>, <<"event">>, SubjectId, <<"o">>, z_convert:to_binary(PredName) ],
     T2 = [ <<"model">>, <<"edge">>, <<"event">>, ObjectId, <<"s">>, z_convert:to_binary(PredName) ],
@@ -208,8 +226,17 @@ do_edge_notify(<<"UPDATE">>, SubjectId, PredName, ObjectId, EdgeId, Acc, Context
         T1 => [ Edge | maps:get(T1, Acc, []) ],
         T2 => [ Edge | maps:get(T2, Acc, []) ]
     };
-do_edge_notify(<<"INSERT">>, SubjectId, PredName, ObjectId, EdgeId, Acc, Context) ->
-    Edge = #edge_insert{subject_id=SubjectId, predicate=PredName, object_id=ObjectId, edge_id=EdgeId},
+do_edge_notify(<<"INSERT">>, SubjectId, PredName, ObjectId, EdgeId,
+        {Seq, CreatorId, Created}, Acc, Context) ->
+    Edge = #edge_insert{
+        subject_id = SubjectId,
+        predicate = PredName,
+        object_id = ObjectId,
+        edge_id = EdgeId,
+        seq = Seq,
+        creator_id = CreatorId,
+        created = Created
+    },
     z_notifier:notify_sync(Edge, Context),
     T1 = [ <<"model">>, <<"edge">>, <<"event">>, SubjectId, <<"o">>, z_convert:to_binary(PredName) ],
     T2 = [ <<"model">>, <<"edge">>, <<"event">>, ObjectId, <<"s">>, z_convert:to_binary(PredName) ],

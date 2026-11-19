@@ -27,6 +27,21 @@ This model holds the admin menu, which is built up by calling each module to add
 You can extend the admin menu by observing the `notification#admin_menu` notification.
 
 
+Menu Subgroups
+--------------
+
+Create a subgroup with a `#menu_item{}` whose `parent` is the enclosing menu's
+ID and whose `url` is undefined. Add entries by setting their `parent` to the
+subgroup's `id`; entries may be contributed by different modules.
+
+The admin dropdown renders subgroups as non-clickable section headings followed
+by their children. Siblings are ordered by `sort` (ascending). With the default
+visibility check, an empty subgroup is hidden automatically.
+
+For example, configuration entries use `parent = admin_config_group`, which is
+a subgroup of `admin_system` provided by `mod_admin_config`.
+
+
 Menu Item Visibility
 --------------------
 

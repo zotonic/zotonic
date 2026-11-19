@@ -19,7 +19,7 @@
 
 -module(m_media).
 -moduledoc(#{
-    zotonic_keywords => ["reference", "backend_developer", "model", "media_management", "media_resource", "query"]
+    zotonic_keywords => ["reference", "backend_developer", "model", "media_management", "media_resource", "file_storage", "query"]
 }).
 -moduledoc("
 Access to data about uploaded files and other media.
@@ -32,6 +32,65 @@ function as with `m.rsc[id].medium` except, that the m_rsc model does access con
 
 The `m_media` model implements all functions to handle media files and is used by other Erlang modules.
 
+Owned uploaded files and explicit previews use `m_cafs` for content-addressable
+storage. `filename` and `preview_filename` remain logical filenames used by image
+and media URLs; they need not exist as individual files in the archive directory.
+Resolve files through Zotonic's file APIs instead of constructing local paths.
+Identical bytes can share storage without sharing resource permissions.
+
+The optional `digest` property is the lowercase hexadecimal SHA-256 digest of the
+original bytes. Legacy media can lack a digest or CAFS mapping; existing files are
+promoted on demand when their bytes are available. Reading a medium does not fetch
+remote bytes to calculate a digest. See `model#m_cafs` for the storage lifecycle,
+preview retention, and internal Erlang APIs.
+
+
+Copy a medium to another resource
+--------------------------------
+
+`m_media:migrate_to_cafs(Context)` queues a resumable scan of all current medium
+records. It requires `use mod_admin_config`. Owned originals and extracted preview
+images are deduplicated into CAFS; logical filenames remain unchanged. Local bytes
+are hashed, while remote-only originals with a valid SHA-256 digest reuse their
+existing remote location. Remote-only files without a digest are logged and skipped,
+never downloaded for hashing. Retry tasks handle unavailable backends separately
+from the scan. Legacy remote copies are retired only after a healthy canonical
+remote copy exists; deletion follows filestore retention. Rerunning is safe.
+
+`m_media:delete_generated_previews(Context)` queues background deletion of resized
+variants and requires `use` permission on `mod_admin_config`. Original files and
+`preview_filename` images are preserved, including CAFS bytes shared with them.
+The maintenance page exposes this operation. Remote deletion follows filestore
+retention; requests may regenerate previews during or after cleanup.
+
+Use `m_media:copy(Source, Destination, Context)` to replace an existing resource's
+medium with a copy of another resource's medium. Both arguments accept resource
+ids or names. The result is `ok` or `{error, Reason}`.
+
+```erlang
+m_media:copy(SourceId, DestinationId, Context).
+```
+
+The caller must be allowed to view the source, edit the destination, and insert
+media of the source's MIME type and size. Permission failures return
+`{error, eacces}`; missing resources or a source without a medium return
+`{error, enoent}`. Copying a resource onto itself is a no-op after these checks.
+A missing source medium never clears the destination.
+
+The source is preserved. Destination resource properties, including category,
+title, and image-edit settings, are unchanged. Medium properties are copied with
+the destination id and a new creation timestamp. Owned originals and explicit
+previews receive independent logical filenames sharing CAFS bytes; mapped remote
+objects need no download. Legacy owned files are promoted on demand. Non-owned
+files, including library assets, are snapshotted into CAFS under new owned filenames
+without changing the source reference. Failure to prepare either owned file leaves the
+destination medium untouched and releases newly created aliases.
+
+Replacement uses the normal medium notifications, cache invalidation, MQTT update,
+and recovery retention for the destination's previous files. This is an Erlang API;
+no HTTP or MQTT copy endpoint is provided. `duplicate/3` remains the internal
+insertion-only helper used when duplicating a whole resource.
+
 
 
 Properties of a medium record
@@ -42,7 +101,7 @@ A medium record has minimally the following properties, other properties can be 
 | Property                 | Description                                                                      | Example value                          |
 | ------------------------ | -------------------------------------------------------------------------------- | -------------------------------------- |
 | id | Id of the medium record, equal to the page id. | `512` |
-| filename | Filename and path of the uploaded file, relative to the archive directory. | `<<\"2009/10/20/zotonic-datamodel.jpg\">>` |
+| filename | Logical filename of the uploaded file. For legacy storage, this is relative to the archive directory. | `<<\"2009/10/20/zotonic-datamodel.jpg\">>` |
 | rootname | Root name of the filename. | `<<\"zotonic-datamodel\">>` |
 | original_filename | Filename as suggested by the user agent when uploading the file. Directory paths are removed and unsafe characters replaced with underscores. The root name is limited to 80 Unicode characters; the extension is preserved. | `<<\"Zotonic-datamodel.jpg\">>` |
 | mime | Mime type of the medium. | `<<\"image/jpeg\">>` |
@@ -50,6 +109,7 @@ A medium record has minimally the following properties, other properties can be 
 | height | Height in pixels. | `737` |
 | orientation | Exif oritentation of the image. | `1` |
 | sha1                     | Optional sha1 checksum of uploaded file. Undefined when not present.             |                                        |
+| digest | Optional SHA-256 digest of the original bytes as 64 lowercase hexadecimal characters. Legacy media can lack this value. | |
 | size | Size in bytes of the uploaded file. | `71585` |
 | preview_filename       | Optional filename for a generated file preview.                                  |                                        |
 | preview_width          | Optional. Width of the generated preview.                                        |                                        |
@@ -64,9 +124,20 @@ Available Model API Paths
 | Method | Path pattern | Description |
 | --- | --- | --- |
 | `get` | `/+id/...` | Return medium record for resource `+id` when the resource is visible; returns `enoent` for unknown resource and `eacces` when not visible. |
+| `post` | `/upload_check` | Check payload `digest` (SHA-256), `size`, and `filename` for a visible current CAFS original. Returns `needed: true` on a miss, or `needed: false` plus `media_upload_token`. |
 | `post` | `/+id` | Replace medium of existing resource `+id` from payload `url` or uploaded `file` (`#upload`); optional payload `rsc` map updates resource props. No further lookups. |
 | `post` | `/` | Create a new resource+medium from payload `url` or uploaded `file` (`#upload`), with optional payload `rsc` properties for the new resource. No further lookups. |
 | `delete` | `/+id` | Delete medium linked to resource `+id` (queues file cleanup, emits media events); requires editable resource access. No further lookups. |
+
+Upload clients can first call `/upload_check`. Unknown, inaccessible and unavailable
+files return the same miss response. A successful token is signed, user-bound,
+and valid for one hour. Pass `file: {media_upload_token: Token}` to the insert or
+replace API, or use this map as a wired form field value. Source visibility and
+its current CAFS mapping are rechecked at submission. Destination ACLs, scanning,
+sanitization and media observers still run normally. Remote-only CAFS bytes can
+be fetched server-side for this processing. Visible legacy originals with a
+matching checksum are lazily promoted before reuse. Originals without a known checksum and files changed by previous
+conversion require a normal upload.
 
 `/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
@@ -87,7 +158,10 @@ Available Model API Paths
     depiction/2,
     depicts/2,
     delete/2,
+    migrate_to_cafs/1,
+    delete_generated_previews/1,
     replace/3,
+    copy/3,
     duplicate/3,
     merge/3,
     insert_file/2,
@@ -129,9 +203,50 @@ Available Model API Paths
                 | {preview_url, media_url()}
                 | {max_length, non_neg_integer()}
                 | {timeout, non_neg_integer()}
+                | {expected_medium, {binary(), term()}}
                 | m_rsc:update_option().
 
 -export_type([media_url/0, options/0, option/0]).
+
+%% @doc Queue a resumable scan of owned medium files for CAFS deduplication.
+%% Remote-only files without a SHA-256 digest are skipped, never downloaded.
+-spec migrate_to_cafs(Context) -> ok | {error, term()} when Context :: z:context().
+migrate_to_cafs(Context) ->
+    case z_acl:is_allowed(use, mod_admin_config, Context) of
+        false -> {error, eacces};
+        true ->
+            case m_cafs:is_enabled(Context) of
+                false -> {error, nodb};
+                true ->
+                    Last = z_db:q1("select coalesce(max(id), 0) from medium", Context),
+                    case z_pivot_rsc:insert_task_after(0, z_media_cafs_migrate, run,
+                            <<"medium">>, [0, Last], Context) of
+                        {ok, _} -> ok;
+                        {error, _} = Error -> Error
+                    end
+            end
+    end.
+
+%% @doc Queue deletion of resized variants, preserving originals and extracted
+%% preview_filename images. Remote deletion follows the backend retention policy.
+-spec delete_generated_previews(Context) -> ok | {error, term()} when Context :: z:context().
+delete_generated_previews(Context) ->
+    case z_acl:is_allowed(use, mod_admin_config, Context) of
+        false -> {error, eacces};
+        true ->
+            case m_cafs:is_enabled(Context) of
+                false -> {error, nodb};
+                true ->
+                    Before = z_db:q1("select clock_timestamp()::text", Context),
+                    Args = [Before, erlang:system_time(second), cafs],
+                    case z_pivot_rsc:insert_task_after(0, z_media_preview_purge, run,
+                            z_ids:id(), Args, Context) of
+                        {ok, _} -> ok;
+                        {error, _} = Error -> Error
+                    end
+            end
+    end.
+
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
@@ -150,6 +265,13 @@ m_get(_Vs, _Msg, _Context) ->
 
 %% @doc API to update or insert resources.
 -spec m_post( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> {ok, term()} | ok | {error, term()}.
+m_post([ <<"upload_check">> ], #{payload := Payload}, Context) when is_map(Payload) ->
+    z_media_upload:check(Payload, Context);
+m_post(Path, #{payload := #{<<"file">> := #{<<"media_upload_token">> := _} = File} = Payload}, Context) ->
+    case z_media_upload:materialize(File, Context) of
+        {ok, Upload} -> m_post(Path, #{payload => Payload#{<<"file">> => Upload}}, Context);
+        Error -> Error
+    end;
 m_post([ Id ], #{ payload := Payload }, Context) when is_map(Payload) ->
     case m_rsc:rid(Id, Context) of
         undefined ->
@@ -188,7 +310,8 @@ m_delete([ Id ], _Msg, Context) ->
 
 
 %% @doc Return the identification of a medium. Used by z_media_identify:identify()
--spec identify( m_rsc:resource_id(), z:context() ) -> {ok, z_media_identify:media_info()} | {error, term()}.
+-spec identify(IdOrFilename, Context) -> {ok, z_media_identify:media_info()} | {error, term()}
+    when IdOrFilename :: m_rsc:resource_id() | file:filename_all(), Context :: z:context().
 identify(Id, Context) when is_integer(Id) ->
     z_db:qmap_props_row("
         select id, mime, width, height, orientation, frame_count
@@ -393,6 +516,90 @@ replace(Id, MediaProps, Context) ->
     end.
 
 
+%% @doc Copy a medium onto an existing resource, replacing its current medium.
+%% Authorize before copying files. File preparation happens outside the replacement
+%% transaction; failed preparation leaves the destination untouched.
+-spec copy(From, To, Context) -> ok | {error, term()} when
+    From :: m_rsc:resource(),
+    To :: m_rsc:resource(),
+    Context :: z:context().
+copy(From, To, Context) ->
+    FromId = m_rsc:rid(From, Context),
+    ToId = m_rsc:rid(To, Context),
+    case m_rsc:exists(FromId, Context) andalso m_rsc:exists(ToId, Context) of
+        false -> {error, enoent};
+        true ->
+            case z_acl:rsc_visible(FromId, Context) andalso z_acl:rsc_editable(ToId, Context) of
+                false -> {error, eacces};
+                true -> copy_visible_medium(FromId, ToId, Context)
+            end
+    end.
+
+copy_visible_medium(FromId, ToId, Context) ->
+    case z_db:qmap_props_row("select * from medium where id=$1", [FromId], Context) of
+        {ok, Medium} ->
+            Mime = maps:get(<<"mime">>, Medium, undefined),
+            Size = maps:get(<<"size">>, Medium, 1),
+            case z_acl:is_allowed(insert, #acl_media{mime=Mime, size=Size}, Context) of
+                false -> {error, eacces};
+                true when FromId =:= ToId -> ok;
+                true -> copy_medium(ToId, Medium, Context)
+            end;
+        {error, _} = Error -> Error
+    end.
+
+copy_medium(ToId, Medium, Context) ->
+    case maybe_duplicate_file(Medium, Context) of
+        {ok, WithFile} ->
+            with_copy_alias(<<"filename">>, Medium, WithFile, fun() ->
+                case copy_medium_preview(WithFile, Context) of
+                    {ok, Copied} ->
+                        with_copy_alias(<<"preview_filename">>, Medium, Copied, fun() ->
+                            replace(ToId, maps:without([<<"id">>, <<"created">>], Copied), Context)
+                        end, Context);
+                    {error, _} = Error -> Error
+                end
+            end, Context);
+        {error, _} = Error -> Error
+    end.
+
+with_copy_alias(Key, Source, Copied, Fun, Context) ->
+    try Fun() of
+        ok -> ok;
+        {error, _} = Error ->
+            release_copy_alias(Key, Source, Copied, Context),
+            Error
+    catch
+        Class:Reason:Stack ->
+            release_copy_alias(Key, Source, Copied, Context),
+            erlang:raise(Class, Reason, Stack)
+    end.
+
+%% Unlike resource duplication's best-effort preview, copying onto an existing
+%% resource must not replace its medium with an incomplete copy.
+copy_medium_preview(#{<<"preview_filename">> := Filename} = Medium, Context)
+    when is_binary(Filename), Filename =/= <<>> ->
+    Owned = maps:get(<<"is_deletable_preview">>, Medium, false),
+    case duplicate_file(preview, Filename, Owned, Context) of
+        {ok, NewFile} -> {ok, Medium#{<<"preview_filename">> => NewFile, <<"is_deletable_preview">> => true}};
+        {error, _} = Error -> Error
+    end;
+copy_medium_preview(Medium, _Context) ->
+    {ok, Medium}.
+
+%% On failure retire only the new aliases, never the source's filenames.
+%% After success leave cleanup to the normal medium recovery lifecycle.
+release_copy_alias(Key, Source, Copied, Context) ->
+    case maps:get(Key, Copied, undefined) of
+        Filename when is_binary(Filename), Filename =/= <<>> ->
+            case maps:get(Key, Source, undefined) of
+                Filename -> ok;
+                _ -> m_cafs:retire_filename(Filename, Context)
+            end;
+        _ -> ok
+    end.
+
+
 %% @doc Move a medium between resources, iff the destination doesn't have an associated medium.
 %%      This is called when merging two resources (and the FromId is subsequently deleted).
 merge(WinnerId, LoserId, Context) ->
@@ -445,17 +652,18 @@ maybe_duplicate_file(#{ <<"filename">> := <<>> } = Ms, _Context) ->
     {ok, Ms};
 maybe_duplicate_file(#{ <<"filename">> := undefined } = Ms, _Context) ->
     {ok, Ms};
-maybe_duplicate_file(#{ <<"filename">> := _, <<"is_deletable_file">> := false } = Ms, _Context) ->
-    {ok, Ms};
-maybe_duplicate_file(#{ <<"filename">> := Filename, <<"is_deletable_file">> := true } = Ms, Context) ->
-    case duplicate_file(archive, Filename, Context) of
+maybe_duplicate_file(#{ <<"filename">> := Filename } = Ms, Context) ->
+    Owned = maps:get(<<"is_deletable_file">>, Ms, false),
+    case duplicate_file(archive, Filename, Owned, Context) of
         {ok, NewFile} ->
+            {ok, Hash} = m_cafs:lookup(NewFile, Context),
             RootName = z_string:truncatechars(
                 filename:rootname(filename:basename(NewFile)),
                 ?MEDIA_MAX_ROOTNAME_LENGTH, <<>>),
             Ms2 = Ms#{
                 <<"filename">> => NewFile,
                 <<"rootname">> => RootName,
+                <<"digest">> => Hash,
                 <<"is_deletable_file">> => true
             },
             {ok, Ms2};
@@ -474,8 +682,9 @@ maybe_duplicate_preview(#{ <<"preview_filename">> := <<>> } = Ms, _Context) ->
     {ok, Ms};
 maybe_duplicate_preview(#{ <<"preview_filename">> := undefined } = Ms, _Context) ->
     {ok, Ms};
-maybe_duplicate_preview(#{ <<"preview_filename">> := Filename, <<"is_deletable_preview">> := true } = Ms, Context) ->
-    case duplicate_file(preview, Filename, Context) of
+maybe_duplicate_preview(#{ <<"preview_filename">> := Filename } = Ms, Context) ->
+    Owned = maps:get(<<"is_deletable_preview">>, Ms, false),
+    case duplicate_file(preview, Filename, Owned, Context) of
         {ok, NewFile} ->
             Ms1 = Ms#{
                 <<"preview_filename">> => NewFile,
@@ -499,13 +708,49 @@ maybe_duplicate_preview(#{ <<"preview_filename">> := Filename, <<"is_deletable_p
 maybe_duplicate_preview(#{} = Ms, _Context) ->
     {ok, Ms}.
 
-duplicate_file(Type, Filename, Context) ->
-    case z_file_request:lookup_file(Filename, [archive], [], Context) of
-        {ok, FileInfo} ->
-            {ok, File} = z_file_request:content_file(FileInfo, Context),
-            {ok, z_media_archive:archive_copy(Type, File, filename:basename(Filename), Context)};
-        {error, _} = Error ->
-            Error
+duplicate_file(Type, Filename, Owned, Context) ->
+    NewFile = case Type of
+        archive -> z_media_archive:archive_filename(filename:basename(Filename), Context);
+        preview -> z_media_archive:preview_filename(filename:basename(Filename), Context)
+    end,
+    case m_cafs:clone_filename(Filename, NewFile, Context) of
+        ok -> {ok, NewFile};
+        {error, enoent} ->
+            Roots = case Filename of <<"lib/", _/binary>> -> []; _ -> [archive] end,
+            case z_file_request:lookup_file(Filename, Roots, [], Context) of
+                {ok, FileInfo} ->
+                    case z_file_request:content_file(FileInfo, Context) of
+                        {ok, File} -> duplicate_legacy_file(Filename, File, NewFile, Owned, Context);
+                        Error -> Error
+                    end;
+                Error -> Error
+            end;
+        Error -> Error
+    end.
+
+%% Owned archive files can be promoted in place. Non-owned references can be
+%% mutable library assets: snapshot their bytes without masking the source path.
+duplicate_legacy_file(Filename, File, NewFile, true, Context) ->
+    case m_cafs:promote(Filename, File, Context) of
+        {ok, _} ->
+            case m_cafs:clone_filename(Filename, NewFile, Context) of
+                ok -> {ok, NewFile};
+                Error -> Error
+            end;
+        Error -> Error
+    end;
+duplicate_legacy_file(_Filename, File, NewFile, _Owned, Context) ->
+    case m_cafs:stage_file(File, Context) of
+        {ok, Staged} ->
+            try
+                case m_cafs:attach(NewFile, Staged, Context) of
+                    ok -> {ok, NewFile};
+                    Error -> Error
+                end
+            after
+                m_cafs:release([{NewFile, Staged}], Context)
+            end;
+        Error -> Error
     end.
 
 %% @doc Make a new resource for the file, when the file is not in the archive
@@ -951,7 +1196,24 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
             PropsM
     end,
 
+    %% Only the fresh archive copy made by this upload is exclusively ours.
+    %% Existing archive files and observer-supplied filenames keep verification.
+    ControlledFilename = case is_deletable_file(PreProc#media_upload_preprocess.file, Context) of
+        true -> ArchiveFile;
+        false -> undefined
+    end,
+    case m_cafs:stage_medium(Medium1, ControlledFilename, Context) of
+        {ok, Staged} ->
+            replace_file_staged(RscId, PreProc, Props, PropsM1, Medium1, Opts, Staged, Context);
+        {error, _} = Error -> Error
+    end.
+
+replace_file_staged(RscId, PreProc, Props, PropsM1, Medium1, Opts, Staged, Context) ->
+    Mime = z_convert:to_binary(PreProc#media_upload_preprocess.mime),
+    Digest = media_digest(maps:get(<<"filename">>, Medium1, undefined), Staged, Context),
     F = fun(Ctx) ->
+        ok = check_expected_medium(RscId, Opts, Ctx),
+        ok = m_cafs:attach_medium(Staged, Ctx),
         %% If the resource is in the media category, then move it to the correct sub-category depending
         %% on the mime type of the uploaded file.
         PropsCat = case maps:is_key(<<"category">>, PropsM1)
@@ -979,17 +1241,6 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
                 medium_delete(RscId, Ctx),
                 {ok, RscId}
         end,
-        Digest = case maps:get(<<"filename">>, Medium1) of
-            undefined -> undefined;
-            MediumFilename ->
-                FileAbs = z_media_archive:abspath(MediumFilename, Context),
-                case z_crypto:hex_sha2_file(FileAbs) of
-                    {ok, HexHash} -> HexHash;
-                    {error, Reason} ->
-                        ?zError("Could not calculate the hash digest of ~p, reason: ~p", [ FileAbs, Reason ], Context),
-                        undefined
-                end
-        end,
         Medium2 = Medium1#{
             <<"id">> => Id,
             <<"digest">> => Digest
@@ -1003,7 +1254,9 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
         end
     end,
 
-    case z_db:transaction(F, Context) of
+    Result = try z_db:transaction(F, Context)
+        after m_cafs:release(Staged, Context) end,
+    case Result of
         {ok, Id} ->
             Depicts = depicts(Id, Context),
             [z_depcache:flush(DepictId, Context) || DepictId <- Depicts],
@@ -1033,6 +1286,10 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
                 [ <<"model">>, <<"media">>, <<"event">>, Id, <<"update">> ],
                 mqtt_event_info(NewMedium),
                 Context),
+            lists:foreach(fun
+                ({Name, #{cleanup := true}}) -> file:delete(z_media_archive:abspath(Name, Context));
+                (_) -> ok
+            end, Staged),
             {ok, Id};
         {rollback, {error, _} = Error} ->
             Error;
@@ -1042,6 +1299,41 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
             {error, Reason};
         {error, _} = Error ->
             Error
+    end.
+
+%% Non-owned archive files retain their existing digest behavior too. All file
+%% hashing happens before the medium transaction.
+media_digest(undefined, _Staged, _Context) -> undefined;
+media_digest(Filename, Staged, Context) ->
+    case lists:keyfind(Filename, 1, Staged) of
+        {_, #{hash := Hash}} -> Hash;
+        false ->
+            case m_cafs:lookup(Filename, Context) of
+                {ok, Hash} -> Hash;
+                {error, enoent} ->
+                    case z_crypto:hex_sha2_file(z_media_archive:abspath(Filename, Context)) of
+                        {ok, Hash} -> Hash;
+                        {error, _} -> undefined
+                    end
+            end
+    end.
+
+%% Serialize the final processing result with replacements, after expensive file
+%% work has finished. Background jobs may only replace their own pending medium.
+check_expected_medium(insert_rsc, _Opts, _Context) -> ok;
+check_expected_medium(Id, Opts, Context) ->
+    z_db:q1("select id from rsc where id=$1 for update", [Id], Context),
+    case proplists:get_value(expected_medium, Opts) of
+        undefined -> ok;
+        {Key, Expected} ->
+            case z_db:qmap_props_row("select * from medium where id=$1 for update", [Id], Context) of
+                {ok, Medium} ->
+                    case maps:get(Key, Medium, undefined) of
+                        Expected -> ok;
+                        _ -> throw({rollback, {error, stale_medium}})
+                    end;
+                _ -> throw({rollback, {error, stale_medium}})
+            end
     end.
 
 is_deletable_file(undefined, _Context) ->
@@ -1360,7 +1652,12 @@ save_preview_url(RscId, Url, Context) ->
                         },
                         PreProps = m_media:get(RscId, Context),
                         PostProps = maps:merge(PreProps, UpdateProps),
-                        {ok, 1} = z_db:update(medium, RscId, UpdateProps, Context),
+                        {ok, PreviewStage} = m_cafs:stage_file(FileUniqueAbs, Context),
+                        {ok, 1} = z_db:transaction(fun(Ctx) ->
+                            ok = m_cafs:attach(FileUnique, PreviewStage, Ctx),
+                            z_db:update(medium, RscId, UpdateProps, Ctx)
+                        end, Context),
+                        file:delete(FileUniqueAbs),
                         z_depcache:flush({medium, RscId}, Context),
                         IsA = m_rsc:is_a(RscId, Context),
                         z_notifier:notify(
@@ -1430,7 +1727,12 @@ save_preview(RscId, Data, Mime, Context) ->
                 },
                 PreProps = m_media:get(RscId, Context),
                 PostProps = maps:merge(PreProps, UpdateProps),
-                {ok, 1} = z_db:update(medium, RscId, UpdateProps, Context),
+                {ok, PreviewStage} = m_cafs:stage_file(FileUniqueAbs, Context),
+                {ok, 1} = z_db:transaction(fun(Ctx) ->
+                    ok = m_cafs:attach(FileUnique, PreviewStage, Ctx),
+                    z_db:update(medium, RscId, UpdateProps, Ctx)
+                end, Context),
+                file:delete(FileUniqueAbs),
                 z_depcache:flush({medium, RscId}, Context),
                 IsA = m_rsc:is_a(RscId, Context),
                 z_notifier:notify(
@@ -1481,7 +1783,8 @@ id_to_list(insert_rsc) -> "video".
     Filename :: file:filename_all(),
     Context :: z:context().
 is_unique_file(Filename, Context) ->
-    z_db:q1("select count(*) from medium_log where filename = $1", [Filename], Context) =:= 0.
+    z_db:q1("select exists(select 1 from medium_log where filename=$1)
+        or exists(select 1 from filename_cafs where filename=$1)", [Filename], Context) =:= false.
 
 %% @doc Recover a pre-existing medium record. Update the created timestamp to now.
 -spec recover_medium(Medium, Context) -> ok | {error, Reason} when

@@ -34,6 +34,7 @@
     render/2,
     render/3,
     render_to_iolist/3,
+    render_to_iolist_context/3,
 
     render_block/3,
     render_block/4,
@@ -148,26 +149,8 @@ render_block(Block, #render{template=Template, vars=Vars}, Context) ->
     render_block(Block, Template, Vars, Context).
 
 -spec render_block(atom(), template_compiler:template()|#module_index{}, list()|map(), #context{}) -> template_compiler:render_result().
-render_block(OptBlock, Template, Vars, Context) when is_list(Vars) ->
-    render_block(OptBlock, Template, props_to_map(Vars, #{}), Context);
-render_block(OptBlock, #module_index{filepath=Filename, key=Key}, Vars, Context) ->
-    Template = #template_file{
-        filename=Filename,
-        template=Key#module_index_key.name
-    },
-    render_block(OptBlock, Template, Vars, Context);
-render_block(OptBlock, Template, Vars, Context) when is_map(Vars) ->
-    OldCaching = z_depcache:in_process(true),
-    Opts = template_opts(Context),
-    Context1 = maybe_set_debug_context(Context),
-    Result = case OptBlock of
-                undefined ->
-                    template_compiler:render(Template, Vars, Opts, Context1);
-                Block when is_atom(Block) ->
-                    template_compiler:render_block(Block, Template, Vars, Opts, Context1)
-             end,
-    z_depcache:in_process(OldCaching),
-    case Result of
+render_block(OptBlock, Template, Vars, Context) ->
+    case render_result(OptBlock, Template, Vars, Context) of
         {ok, Output} ->
             Output;
         {error, Reason} when is_list(Reason); is_binary(Reason) ->
@@ -208,6 +191,27 @@ render_block(OptBlock, Template, Vars, Context) when is_map(Vars) ->
             <<>>
     end.
 
+render_result(OptBlock, Template, Vars, Context) when is_list(Vars) ->
+    render_result(OptBlock, Template, props_to_map(Vars, #{}), Context);
+render_result(OptBlock, #module_index{filepath=Filename, key=Key}, Vars, Context) ->
+    Template = #template_file{
+        filename=Filename,
+        template=Key#module_index_key.name
+    },
+    render_result(OptBlock, Template, Vars, Context);
+render_result(OptBlock, Template, Vars, Context) when is_map(Vars) ->
+    OldCaching = z_depcache:in_process(true),
+    Opts = template_opts(Context),
+    Context1 = maybe_set_debug_context(Context),
+    Result = case OptBlock of
+                undefined ->
+                    template_compiler:render(Template, Vars, Opts, Context1);
+                Block when is_atom(Block) ->
+                    template_compiler:render_block(Block, Template, Vars, Opts, Context1)
+             end,
+    z_depcache:in_process(OldCaching),
+    Result.
+
 props_to_map(L, Map) ->
     lists:foldr(
         fun
@@ -226,6 +230,20 @@ props_to_map(L, Map) ->
 render_to_iolist(File, Vars, Context) ->
     Html = render(File, Vars, Context),
     z_render:render_to_iolist(Html, Context).
+
+%% @doc Render without converting template errors into successful empty output.
+%% Use for representations that must distinguish unavailable content from empty content.
+-spec render_to_iolist_context(Template, Vars, Context) -> Result when
+    Template :: template_compiler:template() | #module_index{},
+    Vars :: list() | map(), Context :: z:context(),
+    Result :: {ok, iolist(), z:context()} | {error, term()}.
+render_to_iolist_context(Template, Vars, Context) ->
+    case render_result(undefined, Template, Vars, Context) of
+        {ok, Output} ->
+            {Html, RenderContext} = z_render:render_to_iolist(Output, Context),
+            {ok, Html, RenderContext};
+        {error, _} = Error -> Error
+    end.
 
 %% @doc Render a block template to an iolist().
 -spec render_block_to_iolist(atom(), template_compiler:template(), list()|map(), z:context()) ->

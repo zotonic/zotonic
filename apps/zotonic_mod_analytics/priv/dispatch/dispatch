@@ -1,0 +1,4 @@
+[
+    {admin_analytics_config, ["admin", "analytics", "config"], controller_admin_analytics, [{is_config,true}]},
+    {admin_analytics, ["admin", "analytics"], controller_admin_analytics, []}
+].

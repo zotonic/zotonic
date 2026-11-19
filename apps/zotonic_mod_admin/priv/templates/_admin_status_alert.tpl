@@ -1,4 +1,10 @@
 {% if m.acl.is_admin %}
+    {% if show_status %}
+        <h4>{_ System resources and configuration _}</h4>
+        {% if m.admin_status.is_ssl_application_configured and not m.admin_status.disks.alert and not m.admin_status.os_memory.alert %}
+            <p class="text-success"><span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span> {_ No problems found. _}</p>
+        {% endif %}
+    {% endif %}
     {% if not m.admin_status.is_ssl_application_configured %}
     <div class="alert alert-warning" role="alert">
         <strong>{_ Warning! _}</strong>

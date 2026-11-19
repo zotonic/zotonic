@@ -7,4 +7,8 @@
         {% include "_admin_menu_menu_view.tpl" id=id %}
     </div>
 </div>
+{% if m.acl.use.mod_menu %}
+<details class="widget"><summary class="widget-header">{_ Menu maintenance _}</summary>
+<div class="widget-content">{% include "_admin_menu_maintenance.tpl" %}</div></details>
+{% endif %}
 {% endblock %}

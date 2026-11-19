@@ -33,6 +33,31 @@ See `model#admin_menu` on how to extend the admin menu.
 
 
 
+System administration pages
+---------------------------
+
+`admin_status` (`/admin/status`) shows health, background work and services.
+`admin_maintenance` (`/admin/maintenance`) contains repairs and rebuild operations.
+`admin_system_info` (`/admin/system-info`) shows versions and installation paths.
+Maintenance and system information require `use.mod_admin_config`; sensitive
+runtime information remains restricted to system administrators.
+
+Modules can contribute complete status panels with `_admin_status_panel.tpl`
+and maintenance panels with `_admin_maintenance.tpl`. Both use `all include`.
+Compose `_admin_maintenance_panel.tpl` with a translated `title`, optional `scope`
+and `panel_id`, and override its `tools` block for a consistent panel layout.
+Within a panel, compose `_admin_maintenance_action.tpl` with `title` and
+`description`, overriding its `action` block for the operation controls.
+Check permissions in the contribution and in every server-side action handler.
+
+The legacy `_admin_status.tpl` button hook remains on `/admin/status`, inside
+Additional module tools. `_admin_system_status.tpl` still accepts external status
+widgets. External modules do not need to migrate. Bundled tools instead live on
+their owning pages: modules, configuration, SEO, media, users, menu and categories.
+Import tools use `_admin_import_tools.tpl` on `admin_imports` (`/admin/imports`).
+Search maintenance contributions use `_admin_maintenance_search.tpl`.
+
+
 Extending the admin edit page
 -----------------------------
 
@@ -500,9 +525,18 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
                 label = ?__("Media", Context),
                 url = admin_media,
                 sort = 2},
-     #menu_separator{
-                parent=admin_content,
-                sort = 10}
+     #menu_item{id = admin_query_group,
+                parent = admin_content,
+                label = ?__("Queries", Context),
+                sort = 10},
+     #menu_item{id = admin_import_tools,
+                parent = admin_import_group,
+                label = ?__("Import tools", Context),
+                url = admin_imports},
+     #menu_item{id = admin_import_group,
+                parent = admin_content,
+                label = ?__("Imports", Context),
+                sort = 100}
     ]
     ++ admin_menu_content_queries(Context) ++
     [
@@ -521,15 +555,40 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
      #menu_item{id = admin_auth,
                 label = ?__("Auth", Context)},
 
+     #menu_item{id = admin_access_control_group,
+                parent = admin_auth,
+                label = ?__("Access Control", Context),
+                sort = 100},
+     #menu_item{id = admin_authentication_group,
+                parent = admin_auth,
+                label = ?__("Authentication", Context),
+                sort = 200},
+     #menu_item{id = admin_integrations_group,
+                parent = admin_auth,
+                label = ?__("Integrations", Context)},
+
      %% SYSTEM %%
      #menu_item{id = admin_system,
                 label = ?__("System", Context)},
 
      #menu_item{id = admin_status,
+                sort = 10,
                 parent = admin_system,
                 visiblecheck = {acl, use, mod_admin_config},
                 label = ?__("Status", Context),
-                url = admin_status}
+                url = admin_status},
+     #menu_item{id = admin_maintenance,
+                sort = 300,
+                parent = admin_system,
+                visiblecheck = {acl, use, mod_admin_config},
+                label = ?__("Maintenance", Context),
+                url = admin_maintenance},
+     #menu_item{id = admin_system_info,
+                sort = 30,
+                parent = admin_system,
+                visiblecheck = {acl, use, mod_admin_config},
+                label = ?__("System information", Context),
+                url = admin_system_info}
 
      |Acc].
 
@@ -545,23 +604,17 @@ admin_menu_content_queries(Context) ->
             andalso Id =/= AdminOverviewQueryId
         end,
         Result),
-    CQ = lists:map(
+    lists:map(
         fun({Title, Id}) ->
             #menu_item{
                 id = {admin_query, Id},
-                parent = admin_content,
+                parent = admin_query_group,
                 label = ensure_title(Id, Title, Context),
                 url = {admin_overview_rsc, [{qquery_id, Id}]},
                 sort = 10
             }
         end,
-        Result1),
-    case CQ of
-        [] ->
-            [];
-        _ ->
-            CQ ++ [ #menu_separator{ parent = admin_content, sort = 10 } ]
-    end.
+        Result1).
 
 ensure_title(Id, Title, Context) ->
     case z_trans:lookup_fallback(Title, Context) of

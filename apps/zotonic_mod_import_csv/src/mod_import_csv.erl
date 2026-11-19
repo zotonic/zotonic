@@ -140,13 +140,9 @@ observe_dropbox_file(#dropbox_file{ filename = DropboxFile }, Context) ->
 -spec observe_admin_menu(#admin_menu{}, list(), z:context()) -> list().
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
-        #menu_separator{
-            parent = admin_content,
-            visiblecheck = {acl, use, mod_import_csv}
-        },
         #menu_item{
             id = admin_import,
-            parent = admin_content,
+            parent = admin_import_group,
             label = ?__("Import CSV or XLSX file", Context),
             url = {admin_import},
             visiblecheck = {acl, use, mod_import_csv}

@@ -17,6 +17,7 @@
 -module(m_rsc_update_tests).
 
 -include_lib("eunit/include/eunit.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 update_reason_test() ->
     Before = #{<<"version">> => 4, <<"title">> => <<"Title">>, <<"category_id">> => 10},
@@ -28,3 +29,13 @@ update_reason_test() ->
     ?assertEqual(update, m_rsc_update:update_reason(media_processing, Before, After#{<<"title">> => <<"Changed">>})),
     ?assertEqual(update, m_rsc_update:update_reason(media_processing, Before, After#{<<"category_id">> => 11})),
     ?assertEqual(update, m_rsc_update:update_reason(media_processing, Before, maps:remove(<<"title">>, After))).
+
+menu_update_reason_test() ->
+    Before = #{<<"version">> => 4, <<"title">> => <<"Unchanged">>, <<"menu">> => []},
+    After = Before#{<<"version">> => 5, <<"menu">> => [#rsc_tree{id = 123}]},
+    ?assertEqual(menu, m_rsc_update:update_reason(menu, Before, After)),
+    ?assertEqual(menu, m_rsc_update:update_reason(menu, Before,
+        After#{<<"date_start">> => undefined, <<"pivot_title">> => <<"unchanged">>})),
+    ?assertEqual(update, m_rsc_update:update_reason(update, Before, After)),
+    ?assertEqual(update, m_rsc_update:update_reason(menu, Before, After#{<<"title">> => <<"Changed">>})),
+    ?assertEqual(update, m_rsc_update:update_reason(menu, Before, maps:remove(<<"title">>, After))).

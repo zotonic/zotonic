@@ -1,0 +1,48 @@
+---
+config:
+  theme: base
+  themeVariables:
+    fontFamily: Arial, sans-serif
+    primaryColor: '#eef5fb'
+    primaryBorderColor: '#51718c'
+    primaryTextColor: '#243746'
+    lineColor: '#526574'
+    noteBkgColor: '#fff4df'
+    noteTextColor: '#243746'
+    noteBorderColor: '#b9a16d'
+  sequence:
+    mirrorActors: false
+    actorMargin: 65
+    messageMargin: 28
+    noteMargin: 12
+---
+sequenceDiagram
+    participant Site as Website / client
+    participant API as Runner API and queue
+    participant Worker as Processing worker
+
+    Site->>API: Submit job (hashes, profile, expiry)
+    opt Missing inputs
+        API-->>Site: Request missing inputs
+        Site->>API: Reserve and upload inputs
+        Site->>API: Resubmit the same job
+    end
+    API-->>Site: Accepted (job persisted)
+    API->>Worker: Schedule job and stage private inputs
+    activate Worker
+    Note over Worker: Execute within limits<br/>Store output bytes
+    Worker-->>API: Completed: output manifest
+    deactivate Worker
+
+    Note over API: Retain manifest and outputs<br/>until receipt or retention expiry
+    alt Callback delivered
+        API->>Site: Authenticated completion callback
+    else Callback lost
+        Site->>API: Poll job status
+        API-->>Site: Completed manifest
+    end
+    Site->>API: Download from selected runner
+    API-->>Site: Stream output bytes
+    Note over Site: Verify sizes and SHA-256<br/>Install outputs
+    Site->>API: Receipt (bounded, best effort)
+    Note over API: Release pins and clear manifest<br/>Lost receipt: clean up at expiry

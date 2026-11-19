@@ -1,25 +1,23 @@
 #!/usr/bin/env bash
 
-function install {
-    version=$1
-    base=https://raw.githubusercontent.com/cotonic/cotonic
+# Download the complete runtime before replacing the installed assets. A failed
+# refresh must fail deployment and leave the previous runtime available.
+set -euo pipefail
+cd -- "$(dirname -- "$0")"
 
-    echo " - Downloading cotonic ${version} from github"
+version=master
+base="https://raw.githubusercontent.com/cotonic/cotonic/${version}"
+staging=$(mktemp -d)
+trap 'rm -rf "$staging"' EXIT
+files=(cotonic.js cotonic-worker.js cotonic-service-worker.js)
 
-    mkdir -p priv/lib-src/cotonic/${version};
-    cd priv/lib-src/cotonic/${version};
+echo " - Downloading cotonic ${version} from github"
+for file in "${files[@]}"; do
+    curl --fail --show-error --silent --location --output "$staging/$file" "$base/$file"
+done
 
-    curl -#O ${base}/${version}/cotonic.js
-    curl -#O ${base}/${version}/cotonic-worker.js
-    curl -#O ${base}/${version}/cotonic-service-worker.js
-
-    cd ../../../..
-
-    mkdir -p priv/lib/cotonic;
-
-    cp priv/lib-src/cotonic/${version}/cotonic.js priv/lib/cotonic/cotonic.js
-    cp priv/lib-src/cotonic/${version}/cotonic-worker.js priv/lib/cotonic/cotonic-worker.js
-    cp priv/lib-src/cotonic/${version}/cotonic-service-worker.js priv/lib/cotonic/cotonic-service-worker.js
-}
-
-install "master"
+mkdir -p "priv/lib-src/cotonic/$version" priv/lib/cotonic
+for file in "${files[@]}"; do
+    cp "$staging/$file" "priv/lib-src/cotonic/$version/$file"
+    cp "$staging/$file" "priv/lib/cotonic/$file"
+done

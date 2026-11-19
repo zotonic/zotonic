@@ -97,7 +97,8 @@
 -include_lib("zotonic.hrl").
 
 
-% A date, same as the calendar:datetime() but with a larger year range.
+% Proleptic Gregorian dates with astronomical year numbering:
+% year 0 is 1 BCE, year -1 is 2 BCE. Negative years also work on OTP < 29.
 -type datetime() :: calendar:datetime()
                   | {{integer(),1..12,1..31}, {0..23,0..59,0..59}}.
 
@@ -139,8 +140,8 @@ format_opts(Date, Tz, Context) ->
     ].
 
 %% @doc Convert a time to the local context time using the current timezone.
--spec to_local(DateTime, TimeZone) -> calendar:datetime() | undefined when
-    DateTime :: calendar:datetime() | undefined | time_not_exists,
+-spec to_local(DateTime, TimeZone) -> datetime() | undefined when
+    DateTime :: datetime() | undefined | time_not_exists,
     TimeZone :: string() | binary() | z:context().
 to_local(undefined, _Tz) ->
     undefined;
@@ -160,6 +161,8 @@ to_local(DT, <<>>) ->
     DT;
 to_local(DT, #context{} = Context) ->
     to_local(DT, z_context:tz(Context));
+to_local({{Y, _, _}, _} = DT, Tz) when Y =< 0 ->
+    early_timezone(DT, Tz, fun to_local/2);
 to_local(DT, Tz) ->
     try
         case qdate:to_date(z_convert:to_list(Tz), {DT, "GMT"}) of
@@ -182,8 +185,8 @@ to_local(DT, Tz) ->
     end.
 
 %% @doc Convert a time to the local context time using the current timezone.
--spec to_utc(DateTime, TimeZone) -> calendar:datetime() | undefined when
-    DateTime :: calendar:datetime() | undefined | time_not_exists,
+-spec to_utc(DateTime, TimeZone) -> datetime() | undefined when
+    DateTime :: datetime() | undefined | time_not_exists,
     TimeZone :: string() | binary() | z:context().
 to_utc(undefined, _Tz) ->
     undefined;
@@ -195,9 +198,6 @@ to_utc({{9999, _, _}, _} = DT, _Tz) ->
     DT;
 to_utc({{Y, _, _}, _}, _Tz) when Y > 9999 ->
     ?ST_JUTTEMIS;
-to_utc({{Y, M, D}, T}, Tz) when Y =< 1 ->
-    {{Y1, M1, D1}, T1} = to_utc({{10, M, D}, T}, Tz),
-    {{Y1 - 10 + Y, M1, D1}, T1};
 to_utc(DT, <<"UTC">>) ->
     DT;
 to_utc(DT, <<"GMT">>) ->
@@ -206,6 +206,8 @@ to_utc(DT, <<>>) ->
     DT;
 to_utc(DT, #context{} = Context) ->
     to_utc(DT, z_context:tz(Context));
+to_utc({{Y, _, _}, _} = DT, Tz) when Y =< 0 ->
+    early_timezone(DT, Tz, fun to_utc/2);
 to_utc(DT, Tz) ->
     try
         case qdate:to_date("GMT", {DT, z_convert:to_list(Tz)}) of
@@ -228,11 +230,24 @@ to_utc(DT, Tz) ->
     end.
 
 
+%% qdate/calendar on older OTP cannot represent BCE. Use an early CE year
+%% in the same Gregorian cycle and apply only the resulting timezone offset.
+%% This extrapolates the timezone database's earliest rules, not historical BCE
+%% civil time. Unlike a fixed surrogate year, leap days and weekdays are retained.
+early_timezone({{Y, M, D}, Time} = DT, Tz, Convert) ->
+    Proxy = {{400 + Y - floor_div(Y, 400) * 400, M, D}, Time},
+    case Convert(Proxy, Tz) of
+        undefined -> undefined;
+        Converted ->
+            shift_seconds(DT, datetime_to_timestamp(Converted) - datetime_to_timestamp(Proxy))
+    end.
+
+
 %% @doc Convert an input to a (universal) datetime, using to_date/1 and
 %% to_time/1.  When the input is a string, it is expected to be in iso
 %% 8601 format, although it can also handle timestamps without time
 %% zones. The time component of the datetime is optional.
--spec to_datetime( Input ) -> calendar:datetime() | undefined when
+-spec to_datetime( Input ) -> datetime() | undefined when
     Input :: undefined
             | binary()
             | string()
@@ -462,7 +477,7 @@ week_start() ->
 
 week_start(StartDayNr, {D,_}) ->
     Today = {D,{0,0,0}},
-    WeekDay = calendar:day_of_the_week(D),
+    WeekDay = day_of_the_week(D),
     if
         WeekDay > StartDayNr -> prev_day(Today, WeekDay - StartDayNr);
         WeekDay =:= StartDayNr -> Today;
@@ -644,9 +659,13 @@ shift_seconds({Date, {H, I, S}}, N) ->
 floor_div(N, D) when N < 0 -> (N - D + 1) div D;
 floor_div(N, D) -> N div D.
 
+%% The Gregorian 400-year cycle contains a whole number of weeks.
+day_of_the_week({Y, M, D}) ->
+    calendar:day_of_the_week({Y - floor_div(Y, 400) * 400, M, D}).
+
 %% @doc Return the number of days in a certain year.
 days_in_year(Y) ->
-    case calendar:is_leap_year(Y) of
+    case is_leap_year(Y) of
         true -> 366;
         false -> 365
     end.
@@ -691,7 +710,7 @@ week_boundaries(Date) ->
     week_boundaries(Date, 1).
 
 week_boundaries({D,_T}=Date, WeekStart) ->
-    DOW = calendar:day_of_the_week(D),
+    DOW = day_of_the_week(D),
     Start = -weeknorm(DOW - WeekStart),
     {S,_} = day_add(Date, Start),
     {E,_} = day_add(Date, Start + 6),
@@ -721,15 +740,27 @@ msec() ->
 timestamp() ->
     calendar:datetime_to_gregorian_seconds(calendar:universal_time())-?SECS_1970.
 
-%% @doc Translate UNIX timestamp to local datetime.
+%% @doc Translate UNIX seconds to UTC, including BCE dates (year 0 is 1 BCE).
+-spec timestamp_to_datetime(Seconds) -> datetime()
+    when Seconds :: integer().
+timestamp_to_datetime(Seconds) when is_integer(Seconds), Seconds < -?SECS_1970 ->
+    %% Shift into years 0..399 before calling calendar on older OTP versions.
+    CycleSeconds = 146097 * 86400,
+    Cycle = floor_div(Seconds + ?SECS_1970, CycleSeconds),
+    {{Y, M, D}, Time} = calendar:system_time_to_universal_time(Seconds - Cycle * CycleSeconds, second),
+    {{Y + Cycle * 400, M, D}, Time};
 timestamp_to_datetime(Seconds) ->
-   calendar:gregorian_seconds_to_datetime(?SECS_1970 + Seconds).
+    calendar:system_time_to_universal_time(Seconds, second).
 
-%% @doc Translate a local time date to UNIX timestamp
+%% @doc Translate a UTC datetime to a UNIX timestamp in seconds.
 datetime_to_timestamp(?ST_JUTTEMIS) ->
     undefined;
 datetime_to_timestamp(undefined) ->
     undefined;
+datetime_to_timestamp({{Y, M, D}, Time}) when Y < 0 ->
+    Cycle = floor_div(Y, 400),
+    calendar:datetime_to_gregorian_seconds({{Y - Cycle * 400, M, D}, Time})
+        + Cycle * 146097 * 86400 - ?SECS_1970;
 datetime_to_timestamp(DT) ->
     calendar:datetime_to_gregorian_seconds(DT) - ?SECS_1970.
 

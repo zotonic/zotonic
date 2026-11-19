@@ -7,7 +7,8 @@
         <div class="admin-edit-preview-info">
             <strong><span class="admin-edit-preview-language" data-admin-preview-language
                 title="{_ Editing language _}" aria-live="polite"></span></strong>
-            <span class="admin-edit-preview-dirty" data-admin-preview-dirty hidden aria-live="polite">{_ Click "Save" to see your changes. _}</span>
+            <button type="button" class="btn btn-warning btn-sm admin-edit-preview-dirty"
+                    data-admin-preview="save" data-admin-preview-dirty hidden>{_ Save to see your changes _}</button>
         </div>
         <button type="button" class="btn btn-default btn-sm" data-admin-preview="refresh">{_ Refresh _}</button>
         <a class="btn btn-default btn-sm" data-admin-preview-link target="_blank" rel="noopener">{_ Open in new tab _}</a>

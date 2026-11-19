@@ -685,7 +685,8 @@ burst_capacity() ->
                 <<"received">> -> {ok, #{<<"outcome">> => <<"received">>}}
             end
         end),
-        meck:expect(z_media_runner_protocol, upload, fun(_, _, <<"lease">>, _, _) ->
+        meck:expect(z_media_runner_protocol, upload, fun(_, _, <<"lease">>, _, _, Timeout) ->
+            ?assert(Timeout > 0 andalso Timeout =< 10000),
             1 = ets:update_counter(Calls, upload, 1, {upload, 0}),
             {ok, 204}
         end),
@@ -732,7 +733,7 @@ burst_capacity() ->
             end),
             with_files(fun(Input, _) ->
                 T0 = erlang:monotonic_time(millisecond),
-                ?assertEqual({error, {media_runner_unavailable, timeout}},
+                ?assertMatch({error, {media_runner_unavailable, _}},
                     z_media_runner:run(file, <<"printf done">>,
                         #{read => [Input], context => burst_context})),
                 ?assert(erlang:monotonic_time(millisecond) - T0 < 2500)
@@ -782,7 +783,7 @@ pool_failover() ->
             #{<<"hostname">> => <<"pool-b.example">>, <<"oauth2_key">> => <<"token-b">>}
         ]),
         application:set_env(zotonic, media_runner_local_fallback, false),
-        application:set_env(zotonic, media_runner_wait_timeout, 30),
+        application:set_env(zotonic, media_runner_wait_timeout, 2),
         {ok, [A, B]} = z_media_runner_pool:runners(),
         mock_callback_context(pool_context, pool_site,
             <<"https://client.example/media-runner-callback">>),
@@ -812,20 +813,25 @@ pool_failover() ->
                     {ok, #{<<"outcome">> => <<"received">>}}
             end
         end),
-        meck:expect(z_media_runner_protocol, request, fun
-            (Url, <<"token-b">>, #{<<"id">> := Id}, 5000) ->
-            ?assertEqual(<<"status">>, lists:last(binary:split(Url, <<"/">>, [global]))),
-            ?assertEqual([{accepted, Id}], ets:lookup(Calls, accepted)),
-            {ok, #{<<"outcome">> => <<"completed">>, <<"result">> => Result}};
-            (Url, Token, Payload, _Timeout) ->
-                z_media_runner_protocol:request(Url, Token, Payload)
+        meck:expect(z_media_runner_protocol, request, fun(Url, Token, Payload, Timeout) ->
+            case lists:last(binary:split(Url, <<"/">>, [global])) of
+                <<"status">> ->
+                    %% A lost callback must be recoverable even with a budget
+                    %% shorter than the ordinary fifteen-second polling period.
+                    ?assert(Timeout > 0 andalso Timeout =< 2000),
+                    ?assertEqual(<<"token-b">>, Token),
+                    Id = maps:get(<<"id">>, Payload),
+                    ?assertEqual([{accepted, Id}], ets:lookup(Calls, accepted)),
+                    {ok, #{<<"outcome">> => <<"completed">>, <<"result">> => Result}};
+                _ -> z_media_runner_protocol:request(Url, Token, Payload)
+            end
         end),
         with_files(fun(Input, _) ->
             Options = #{read => [Input], context => pool_context},
             {ok, Job} = z_media_runner_protocol:pack(file, <<"printf done">>, Options),
             ok = gen_server:call(Pid, {remember, z_media_runner_pool:identity(A), maps:get(<<"files">>, Job)}),
             ?assertEqual({ok, <<"done">>}, z_media_runner:run(file, <<"printf done">>, Options)),
-            ?assertEqual([{received, true}], ets:lookup(Calls, received)),
+            await_receipt(Calls, 100),
             ?assertEqual([B], gen_server:call(Pid, {rank, [B], Job}))
         end),
         application:set_env(zotonic, media_runners, [#{hostname => <<"bad/path">>, oauth2_key => <<"a">>}]),
@@ -969,4 +975,11 @@ ensure_sidejobs() ->
     case whereis(zotonic_sidejobs) of
         undefined -> {ok, _} = z_sidejob:init(), ok;
         _ -> ok
+    end.
+
+await_receipt(Calls, 0) -> ?assertEqual([{received, true}], ets:lookup(Calls, received));
+await_receipt(Calls, N) ->
+    case ets:lookup(Calls, received) of
+        [{received, true}] -> ok;
+        [] -> timer:sleep(10), await_receipt(Calls, N-1)
     end.

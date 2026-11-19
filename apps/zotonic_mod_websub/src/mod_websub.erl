@@ -23,165 +23,178 @@
         "reference", "integrator", "module", "export_and_syndication", "api_and_integration", "structured_data", "http"
     ]
 }).
--moduledoc(<<"WebSub resource synchronization, following https://www.w3.org/TR/websub/.
+-moduledoc(<<"WebSub keeps imported resources up to date when their source changes. A publishing
+site notifies subscribers instead of requiring them to poll for every update.
+`mod_websub` provides both publication and subscription for Zotonic resources,
+using the WebSub protocol.
 
-## Integration points
+## When to use it
 
-Enable `mod_websub` on the publisher and importing site. Anyone who can view an original resource can subscribe to it, including anonymous
-visitors for public resources. Private subscriptions use explicit HTTP authorization
-and current resource access. The `use mod_websub` permission controls administration.
+Use this module to synchronize resources between sites while preserving their
+original identity and applying the importing editor's permissions and options.
+Changes to collections can also update membership and order. Subscribing to a
+collection does not, by itself, keep every member's content up to date.
 
-* `controller_websub` handles hub requests, callback verification, and deliveries.
-* `controller_websub_topic` serves the complete, fixed JSON topic representation.
-* The admin Content menu links to a subscription overview, filtered by direction
-  and local resource ID. It requires `use mod_websub`; edit pages show the
-  active incoming subscriber count and a filtered overview link.
-* `m_websub` provides the ACL-checked status/start/stop API and delivery/import queues.
-* `z_websub_subscription` persists subscriber intent, leases, and renewal work.
-* `z_websub_discovery` and `z_websub_http` handle discovery and outbound fetch policy.
+Both sites need reachable URLs for subscription verification and delivery; use
+HTTPS for deployment. Enable `mod_websub` on both sites when both run Zotonic.
+Other WebSub subscribers and hubs can participate, but Zotonic's resource importer
+requires its resource-export JSON schema. This module does not import arbitrary
+RSS, Atom or HTML documents as resources.
 
-The `resource_headers` and `rsc_export_done` observers advertise discovery links.
-Full resource exports also include `websub.hub` and `websub.topic` for clients
-subscribing from exported JSON. This optional JSON extension is present only on
-authoritative resources and agrees with the standard discovery links. The semantic
-resource identifier remains `uri`.
-`rsc_import_fetch_result` exposes subscription availability to the import dialog;
-`rsc_import_done` starts an explicitly requested subscription. `rsc_update_done`
-queues publication. Second ticks consult the module server's dirty flag and next due
-time; ten-minute ticks reconcile with the database. Enqueues signal after commit, and the
-daily tick performs maintenance. The protocol adapters are documented separately
-from the resource importer: external peers need no Zotonic-specific WebSub fields.
+## Getting started
 
-## Resource identity versus the WebSub topic
+1. Enable `mod_websub` on the publishing and importing Zotonic sites.
+2. On the importing site, import the original resource and explicitly select
+   automatic updates in the import dialog.
+3. Choose how deeply to import connections. Select **Also subscribe to connected
+   resources** if those resources should receive their own updates as well.
+4. Check the imported resource's automatic-update status. A subscription becomes
+   active only after the publisher verifies the callback, not merely after it
+   accepts the request.
 
-A resource's identity is its language-less `m_rsc:uri/2`, including `/id/name`.
-Imports store this in `source_uri` and the resource's `uri`. It is never replaced
-by a page, representation, or hub URL. Discovery advertises `rel=self` pointing
-to the fixed JSON `websub_topic` dispatch, and `rel=hub` to the local hub. The
-WebSub topic is stored separately in `topic_url`. This distinction lets `/id`
-retain semantic-web content negotiation while a WebSub topic has one media type.
+Use the resource editor's controls to start or stop updates. Stopping disables
+local automatic imports immediately and schedules remote unsubscription.
+**Content → WebSub subscriptions** provides an overview of incoming subscribers
+and outgoing subscriptions, including errors and a retry action.
 
-## Flow between two Zotonic systems
+## Configuration and usage
 
-1. On importing a connected resource from A into B, B fetches A's `/id` URI with
-   `Accept: application/json`. The JSON export retains A's semantic resource URI.
-   HTTP Link headers (or the JSON links extension) advertise A's JSON topic and hub.
-2. If the editor opts into automatic updates, B persists the source URI, local
-   resource, editor, and desired subscription state. Recursive imports do not opt in.
-3. B rediscovers the source and POSTs a standard URL-encoded subscription request
-   to the advertised hub. `hub.topic` is the discovered self URL, not necessarily
-   `/id`. B supplies a unique callback, random secret, and requested lease.
-4. A bounds and persists verification work and replies 202. Independently, A
-   checks the subscribing user's resource access and GETs B's callback with the
-   topic, mode, random challenge, and lease. B verifies pending intent and echoes
-   the challenge as plain text with nosniff. A records the verified subscription.
-5. Changes on A queue the topic's newest export revision. A rechecks access and lease,
-   then POSTs the complete JSON topic representation, Link hub/self headers, and
-   an HMAC-SHA256 signature to B. Private topics also send full authorized JSON;
-   there is no notification-only or Zotonic-specific wire format.
-6. B verifies the signature and callback, queues work, and quickly acknowledges.
-   Public imports consume the signed export; credentialed imports refetch A's
-   semantic URI using the editor's source credentials. Inside the import transaction
-   B checks that the stored source, current resource URI, and payload URI agree,
-   then applies newer content with the editor's current permissions and saved options.
-7. B renews before lease expiry, rediscovering the hub/topic and rotating its
-   callback and secret. The old callback remains active until the new one verifies.
-   Stopping immediately disables imports and queues verified remote unsubscription.
-   Confirmation also queues a catch-up fetch to recover missed updates.
+Settings are per site under `mod_websub` in module configuration:
 
-## Collections and connected resources
-
-Edge insertions, removals, and reordering advance the authoritative subject's
-export revision and publish its updated export. Receivers synchronize edges using saved
-import depth and filters, then fetch newly referenced placeholders after commit.
-Existing imported members are reused, not refreshed by the collection's delivery.
-
-The optional `is_subscribe_connections` import setting subscribes imported
-connected resources across all predicates, up to the saved connection depth.
-It defaults to false. Connected imports inherit the option with decremented depth,
-so later additions follow the same bound. Subscriptions remain independent:
-removing a connection or stopping the parent does not unsubscribe them. See the
-module README for the complete collection lifetime and retry behavior.
-
-## Interoperation with other WebSub implementations
-
-No peer-brand detection or private protocol extension is required. Any subscriber
-can discover the fixed JSON topic from headers or HTML, subscribe using standard
-form fields, answer verification, and receive its full `application/json` body.
-The body's `result.uri` is the semantic identity; the delivery Link self names the
-WebSub topic. Private subscriptions require explicit HTTP authorization and current access at
-A's hub (cookies alone are insufficient); granting one authorizes full content delivery to the verified callback.
-
-A non-Zotonic hub can relay the same JSON topic to B without changes. A non-Zotonic
-publisher can be imported if it supplies the resource-export JSON understood by
-Zotonic's resource importer. WebSub is media-type agnostic, but this application
-adapter imports resources, not arbitrary Atom/RSS/HTML documents. It does not
-claim that those document formats can be imported as Zotonic resources.
-
-Standard subscription verification, signatures, leases, 307/308 hub redirects,
-and unsubscription apply to all peers. A 202 alone never activates a subscription.
-Delivery retry exhaustion drops the notification and marks the subscription as
-errored with `retry_timeout`; the lease itself is preserved. Later resource updates
-can start a new delivery window. Semantic resource identity is independent of WebSub topic migration.
-
-## Configuration
-
-Settings are per site and available in module configuration:
-
-| Key (`mod_websub`) | Default | Valid range (seconds) | Purpose |
+| Key | Default | Valid range (seconds) | Purpose |
 | --- | --- | --- | --- |
-| `subscription_retry_timeout` | 604800 (one week) | 1–2147483647 | Overall subscription/unsubscription retry budget from the first attempt, including discovery. |
-| `push_quiet_seconds` | 10 | 0–86400 | Quiet period before publishing a changed resource. |
-| `push_deadline_seconds` | 300 | 1–86400 | Maximum batching delay from the first queued update. |
+| `subscription_retry_timeout` | `604800` (one week) | 1–2147483647 | Overall retry budget for subscription discovery, verification and unsubscription. |
+| `push_quiet_seconds` | `10` | 0–86400 | Quiet period after changes before publishing. |
+| `push_deadline_seconds` | `300` | 1–86400 | Maximum batching delay from the first queued update. |
 
 Missing or invalid settings use their defaults. For example:
 
 ```erlang
-m_config:set_value(mod_websub, subscription_retry_timeout, 604800, Context).
+m_config:set_value(mod_websub, push_quiet_seconds, 10, Context).
 ```
 
-Subscription failures, including unanswered verification, back off from 10 seconds
-up to 12 hours; these backoff limits are fixed. The persisted retry budget survives
-restarts. Renewals, unsubscriptions and explicit subscription retries each start a
-fresh budget. At expiry, attempts stop with `retry_timeout`; existing confirmed
-leases remain valid until expiry. Existing pending attempts start their budget on
-first processing after upgrade. Settings are read when work runs; changing the
-budget does not immediately wake sleeping retries or restart exhausted attempts.
+Newer changes restart the quiet period, but not the original batching deadline.
+Each delivery contains the latest complete resource. These settings bound batching,
+not network delivery time or retry delays. When `mod_presence` is active, fresh
+editing heartbeats can defer publication within the same deadline; without it,
+ordinary quiet-time batching applies.
 
-This budget does not control notification delivery, import queues or feed polling.
-The two push settings control batching only; they do not limit transport retries.
-Delivery retries use fixed quadratic delays (5, 20, 45 minutes, and so on), capped
-at 12 hours, for at most one week from the first delivery attempt. The persisted
-window and backoff survive newer queued versions and restarts; successful delivery
-clears them. Retry times are capped at the window deadline and lease expiry, and
-no new attempt starts after either deadline. Existing queues start their window
-on first processing after upgrade.
+### Permissions and administration
 
-## Security and operation
+Subscribers must be allowed to view the original resource. Public resources permit
+anonymous subscriptions; private subscriptions require explicit HTTP authorization
+and current resource access. Browser login cookies alone are insufficient. A private
+subscription authorizes delivery of the full JSON content to the verified callback.
 
-All WebSub requests use `z_fetch` with automatic redirects disabled. Destinations
-are checked for non-public addresses on each hop; private, loopback, link-local,
-and reserved networks are rejected. Development sites may use .test peers on
-loopback/private networks with self-signed TLS. Other destinations keep verified
-TLS and public-address checks. HTTPS downgrades are refused. Cross-origin
-GET redirects permanently drop user credentials for that chain. Callback requests
-are anonymous. `z_fetch` integrates `mod_oauth2` consumer tokens using the original
-HTTPS URL, hostname, and subscribing user; the source's same-origin hub can use
-that token as well. Token lookup and renewal remain owned by `mod_oauth2`.
+`use mod_websub` controls access to the subscription overview. Local status, start
+and stop operations require resource edit permission. The overview can filter by
+direction, local resource ID, remote hostname, state and errors. It exposes no
+callback URLs, secrets or tokens. Resource edit pages show incoming subscriber
+counts and automatic-update controls. See `m_websub` for the model and Erlang APIs.
 
-TODO: add validated-address pinning to `z_fetch`/`z_url_fetch`, preserving the
-original Host header and TLS hostname. The current DNS preflight does not prevent
-DNS rebinding between validation and connection establishment.
+### Collections and connected resources
 
-Hub admission deduplicates identical requests and limits each site to 120 new
-verification tasks per minute and 1000 queued tasks. Admission is serialized in the
-database across nodes; overload returns 503 before accepting work. Token group restrictions are retained when recreating delivery ACL contexts. Admin start,
-stop, and status require edit permission. Callback tokens and secrets are not exposed
-by status. Imports serialize identity and permission checks with the update.
+The saved connection depth and filters control which edges are synchronized.
+Publisher edge insertion, deletion and reordering trigger updates even without a
+resource edit. Newly referenced resources are imported after commit; existing
+imported members are reused rather than refreshed by a collection delivery.
 
-The unique per-site sidejob processes renewal, delivery, and import queues. Schema
-version 3 separates source identity from topic and adds durable admission accounting.
-See README.md for deployment details and the regression suite."/utf8>>).
+The optional `is_subscribe_connections` setting defaults to false. When enabled,
+connected resources across all predicates receive independent subscriptions within
+the saved depth, including later additions. Removing a connection or stopping the
+parent does not stop those subscriptions. Stop them on the individual resources.
+Manual deletions remain respected unless the saved import options explicitly allow
+re-importing deleted resources. The README describes the full collection lifecycle.
+
+## Subscription and delivery behavior
+
+The subscriber discovers the source's hub and JSON topic, records intent, and
+requests a subscription. The publisher verifies a unique callback before activating
+it. Deliveries carry the full JSON representation with an HMAC-SHA256 signature.
+The receiver validates the callback and signature, queues import work, and
+acknowledges promptly. Public imports consume the signed export; credentialed
+imports refetch with the editor's source credentials. Source identity and current
+permissions are checked again inside the import transaction.
+
+Renewal rediscovers the source and rotates the callback and secret. The previous
+callback remains active until the replacement verifies. Confirmation schedules a
+catch-up fetch to recover missed updates. Stopping immediately disables local
+imports, even while remote unsubscription is pending.
+
+Subscription failures and unanswered verification back off from 10 seconds to
+12 hours within the configured retry budget. The budget survives restarts; renewal,
+unsubscription and explicit retries start a fresh budget. Exhausted attempts stop
+with `retry_timeout`; a previous confirmed lease remains valid until expiry.
+Settings are read when work runs, so changing the budget does not immediately wake
+sleeping retries or restart exhausted attempts.
+
+Notification delivery has a separate, fixed retry window: one week from the first
+attempt, never beyond lease expiry. Delays are 5, 20, 45 minutes and so on, capped
+at 12 hours. Newer queued versions preserve that window. Exhaustion discards the
+notification and records `retry_timeout`, but preserves the lease; later resource
+updates can start a new delivery window. Import queues and feed polling are not
+controlled by `subscription_retry_timeout`.
+
+## Identity and interoperability
+
+A resource's identity remains its language-less `m_rsc:uri/2`, such as `/id/name`.
+Imports retain it as their resource `uri` and subscription `source_uri`. The fixed
+JSON WebSub topic is stored separately in `topic_url`; it never replaces the
+semantic identity.
+
+Discovery links advertise the JSON topic as `rel=self` and the hub as `rel=hub`.
+Authoritative resource exports also include optional `websub.hub` and `websub.topic`
+JSON convenience fields. External peers can use standard discovery and form fields
+without those extensions. Deliveries are complete `application/json` representations,
+not private change notices. The delivery's `result.uri` identifies the resource;
+its Link self identifies the topic.
+
+Only authoritative resources publish. Imported copies do not advertise a local
+hub or relay updates as a new source. For A → B → C, C should subscribe to A rather
+than B's imported copy. Local self-subscriptions are rejected. The README explains
+third-party interoperability, topic migration and circular-subscription boundaries.
+
+## Security and deployment
+
+Outbound requests use verified TLS and explicit redirect handling. Destinations
+are checked on every hop; private, loopback, link-local and reserved addresses are
+rejected. Development `.test` peers may use loopback/private addresses and
+self-signed TLS. Other destinations retain the normal checks. HTTPS downgrades are
+refused, and cross-origin GET redirects drop credentials for the rest of the chain.
+
+Subscriber callbacks must use DNS hostnames; IP literals are rejected by Zotonic's
+local policy. Callback verification and delivery are anonymous. `mod_oauth2`
+consumer tokens can authenticate source fetches and the source's same-origin hub,
+using the original HTTPS URL and subscribing user. Token lookup and renewal remain
+owned by `mod_oauth2`; current group restrictions are preserved for delivery access.
+
+DNS validation is currently a preflight check, not connection-address pinning.
+DNS rebinding between validation and connection remains an open limitation.
+
+Hub admission deduplicates pending requests and bounds each site to 120 new
+verification tasks per minute and 1000 queued tasks. Limits are serialized in the
+database across nodes; overload returns 503 before accepting work. Imports recheck
+identity and permissions under the resource lock, and disabled users cannot continue
+automatic subscription work.
+
+## Implementation and lifecycle
+
+`controller_websub` handles hub requests, verification and deliveries;
+`controller_websub_topic` serves the fixed JSON representation. Resource-header and
+export observers advertise discovery links, import observers apply explicit
+subscription choices, and resource/edge observers queue publication.
+
+`m_websub` provides checked APIs and queue processing. Subscription intent, leases,
+retry state and work queues persist in the database. A per-site server tracks a
+dirty flag and next due time; second ticks avoid database work while idle. A unique,
+monitored sidejob processes due work. Signals are sent after transaction commit,
+ten-minute scans reconcile persisted work, and daily maintenance cleans up records.
+
+Separate export revisions advance for resource and edge changes without changing
+the resource's edit version for edge-only updates. Schema upgrades preserve queues
+and identity. The README contains wire examples, storage details, operational limits
+and regression-test commands.
+"/utf8>>).
 
 -author("Marc Worrell <marc@worrell.nl>").
 -behaviour(gen_server).
@@ -253,7 +266,7 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
         #menu_item{
             id = admin_websub,
-            parent = admin_content,
+            parent = admin_import_group,
             label = ?__("WebSub subscriptions", Context),
             url = {admin_websub, []},
             visiblecheck = {acl, use, mod_websub}

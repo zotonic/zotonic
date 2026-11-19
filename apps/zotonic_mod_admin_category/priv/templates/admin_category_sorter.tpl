@@ -28,7 +28,14 @@
                 </p>
             </div>
         </div>
+        {% if m.acl.use.mod_admin_config %}
+        <details class="widget"><summary class="widget-header">{_ Maintenance _}</summary>
+            <div class="widget-content">
+                <p>{_ Recalculate the numbering of the category tree. This can take a long time. _}</p>
+                {% button class="btn btn-default" text=_"Renumber category tree" action={admin_tasks task='renumber_categories'} %}
+            </div>
+        </details>
+        {% endif %}
     </div>
-</div>
 </div>
 {% endblock %}

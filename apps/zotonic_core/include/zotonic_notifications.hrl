@@ -915,13 +915,18 @@
 %% @doc An edge has been inserted.
 %% Note that the Context for this notification does not have the user who
 %% created the edge.
+%% Only emitted for edges present when the edge log batch is read.
+%% The sequence, creator and creation time are taken from that edge.
 %% Type: notify
 %% Return: return value is ignored
 -record(edge_insert, {
     subject_id :: m_rsc:resource(),
     predicate :: atom(),
     object_id :: m_rsc:resource(),
-    edge_id :: pos_integer()
+    edge_id :: pos_integer(),
+    seq :: integer(),
+    creator_id :: m_rsc:resource_id() | undefined,
+    created :: calendar:datetime()
 }).
 
 %% @doc An edge has been deleted
@@ -939,13 +944,18 @@
 %% @doc An edge has been updated
 %% Note that the Context for this notification does not have the user who
 %% updated the edge.
+%% Only emitted for edges present when the edge log batch is read.
+%% The sequence, creator and creation time are taken from that edge.
 %% Type: notify
 %% Return: return value is ignored
 -record(edge_update, {
     subject_id :: m_rsc:resource(),
     predicate :: atom(),
     object_id :: m_rsc:resource(),
-    edge_id :: pos_integer()
+    edge_id :: pos_integer(),
+    seq :: integer(),
+    creator_id :: m_rsc:resource_id() | undefined,
+    created :: calendar:datetime()
 }).
 
 %% @doc Site configuration parameter was changed
@@ -1101,7 +1111,16 @@
     width :: non_neg_integer(),
     height :: non_neg_integer(),
     options :: proplists:proplist()
-    }).
+}).
+
+%% @doc Collect normalized settings that affect a resource's image edits.
+%% Contributions are hashed into signed preview URLs, independently of rendering
+%% operations. Modules should return stable terms and include their module name.
+%% Type: foldl
+%% Return: list of {Module, Settings} contributions.
+-record(media_preview_revision, {
+    id :: m_rsc:resource_id()
+}).
 
 %% @doc Request a translation of a list of strings. The resulting translations must
 %% be in the same order as the request. This notification is handled by modules
@@ -1113,7 +1132,7 @@
     from :: atom(),
     to :: atom(),
     texts = [] :: list( binary() )
-    }).
+}).
 
 %% @doc Try to detect the language of a translation. Set is_editable_only to false
 %% to detect any language, even if the language is not enabled for the site.
@@ -1436,7 +1455,7 @@
 %% Type: foldl
 %% Return: updated ``z:context()``
 -record(middleware, {
-    on :: request | welformed | handled
+    on :: guard | request | welformed | handled
 }).
 
 

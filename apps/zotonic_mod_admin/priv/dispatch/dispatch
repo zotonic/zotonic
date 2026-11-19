@@ -9,5 +9,8 @@
  {admin_referrers,     ["admin", "referrer", id],         controller_admin_referrers,     [ seo_noindex ]},
  {admin_media_preview, ["admin", "media", "preview", id], controller_admin_media_preview, [ seo_noindex ]},
 
- {admin_status,        ["admin", "status"],               controller_admin,               [{template, <<"admin_status.tpl">>}, {selected, <<"status">>}, seo_noindex]}
+ {admin_status,        ["admin", "status"],               controller_admin,               [{template, <<"admin_status.tpl">>}, {selected, <<"status">>}, seo_noindex]},
+ {admin_maintenance, ["admin", "maintenance"], controller_admin, [{template, <<"admin_maintenance.tpl">>}, {selected, <<"status">>}, {acl_module, mod_admin_config}, seo_noindex]},
+ {admin_system_info, ["admin", "system-info"], controller_admin, [{template, <<"admin_system_info.tpl">>}, {selected, <<"status">>}, {acl_module, mod_admin_config}, seo_noindex]},
+ {admin_imports, ["admin", "imports"], controller_admin, [{template, <<"admin_imports.tpl">>}, {selected, <<"imports">>}, seo_noindex]}
 ].

@@ -412,7 +412,7 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
         #menu_item{
             id = admin_authentication_services,
-            parent = admin_auth,
+            parent = admin_integrations_group,
             label = ?__("External Services", Context),
             url = {admin_authentication_services},
             visiblecheck = {acl, use, mod_admin_config}}

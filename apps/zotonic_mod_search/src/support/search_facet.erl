@@ -765,7 +765,13 @@ pivot_rsc(Id, Context) ->
             R = case z_db:q1("select id from search_facet where id = $1", [ Id ], Context) of
                 undefined ->
                     Upd1 = Upd#{ <<"id">> => Id },
-                    z_db:insert(search_facet, Upd1, Context);
+                    %% A background pivot can insert after our existence check.
+                    %% Ignore that conflict without aborting the transaction,
+                    %% then apply these facet values to the new row.
+                    case z_db:insert(search_facet, Upd1, [{conflict, ignore}], Context) of
+                        {ok, undefined} -> z_db:update(search_facet, Id, Upd, Context);
+                        InsertResult -> InsertResult
+                    end;
                 _ ->
                     z_db:update(search_facet, Id, Upd, Context)
             end,

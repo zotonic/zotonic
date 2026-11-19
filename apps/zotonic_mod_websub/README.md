@@ -1,25 +1,50 @@
 # Resource WebSub
 
-`mod_websub` implements resource publication and subscription using
-[WebSub](https://www.w3.org/TR/websub/). Enable it on both Zotonic sites. The
-subscriber must be allowed to view the original resource; anonymous visitors can
-subscribe to public resources. The `use mod_websub` permission is only needed for
-administration. Both sites need reachable HTTPS URLs.
+`mod_websub` keeps imported resources up to date when their source changes. It
+provides resource publication and subscription using [WebSub](https://www.w3.org/TR/websub/),
+so sites can receive updates without polling each source for every change.
 
-## Two Zotonic sites
+## When to use it
 
-Assume A publishes a resource and B imports it.
+Use WebSub to synchronize resources between sites while preserving their original
+identity and applying the importing editor's permissions and saved options.
+Collection subscriptions can synchronize membership and order; member content
+needs its own subscription if it should stay current too.
 
-| Step | Request or action | Persistent result |
-| --- | --- | --- |
-| Import | B GETs A's `/id/123` with `Accept: application/json` | B keeps A's language-less semantic URI as its resource `uri` and subscription `source_uri`. |
-| Discover | B reads Link hub/self, following representation redirects as needed | The self URL, e.g. `/.zotonic/websub/topic/123`, becomes `topic_url`; it never replaces the resource URI. |
-| Request | B POSTs `hub.mode=subscribe`, `hub.topic`, `hub.callback`, `hub.secret`, and `hub.lease_seconds` to A's hub | B records pending intent before sending; A accepts bounded durable work with 202. |
-| Verify | A GETs B's unique callback with mode, topic, challenge, and granted lease | B matches pending intent and returns the exact challenge; A activates only after a successful response. |
-| Publish | A POSTs the full JSON export to B with `Content-Type: application/json`, Link hub/self, and `X-Hub-Signature` | B verifies the body, queues work, and acknowledges promptly. |
-| Import update | B consumes public signed JSON, or refetches `/id/123` with the editor's credentials | B checks the source URI, payload URI, current resource URI, version, and current editor permissions under the resource lock. |
-| Renew | B rediscovers and requests a replacement callback/secret before expiry | The previous callback remains active until replacement verification succeeds. |
-| Stop | The editor stops updates; B requests verified unsubscription | B immediately disables local imports and discards queued work. |
+Enable the module on both sites when both run Zotonic. Other WebSub subscribers
+and hubs can participate, but importing into Zotonic requires its resource-export
+JSON schema. Arbitrary RSS, Atom and HTML documents are outside this importer's
+scope. Both sites need reachable URLs for verification and delivery; use HTTPS in
+deployment and read the outbound-address restrictions before connecting peers.
+
+## Getting started
+
+1. Enable `mod_websub` on the publishing and importing Zotonic sites.
+2. Import the source resource on the receiving site and select automatic updates.
+3. Choose the connection depth. Select **Also subscribe to connected resources**
+   if those resources should receive their own updates.
+4. Check the imported resource's automatic-update status. Activation requires
+   callback verification; an accepted subscription request alone is not enough.
+
+Use the resource editor to start or stop updates. Stopping disables local imports
+immediately. Open **Content → WebSub subscriptions** to inspect subscription status
+and errors, filter results, or retry failed subscriptions.
+
+## Configuration and usage
+
+Settings are per site under `mod_websub` in module configuration:
+
+| Setting | Default | Valid range (seconds) | Purpose |
+| --- | --- | --- | --- |
+| `subscription_retry_timeout` | `604800` (one week) | 1–2147483647 | Overall subscription/unsubscription retry budget, including discovery and verification. |
+| `push_quiet_seconds` | `10` | 0–86400 | Quiet period after resource changes before publishing. |
+| `push_deadline_seconds` | `300` | 1–86400 | Maximum batching delay from the first pending update. |
+
+Missing or invalid values use the defaults. Subscription retries, publication
+batching and notification delivery have separate timing policies, described below.
+The publication deadline does not guarantee delivery within that time.
+
+### Subscription choices
 
 Initial import requires an explicit checkbox. By default it applies only to the
 selected resource. A separate **Also subscribe to connected resources** checkbox
@@ -27,6 +52,83 @@ follows the **Connections** option across all predicates: none, direct connectio
 or connections up to the selected deep-copy depth. Re-import options do not
 silently restart a stopped parent subscription. Successful verification schedules
 a catch-up fetch.
+
+### Permissions
+
+Anyone who can view the original resource can subscribe, including anonymous
+visitors for public resources. Private subscriptions need explicit HTTP
+authorization and current resource access; cookies alone are insufficient. They
+authorize full content delivery to the verified callback.
+
+`use mod_websub` controls overview administration, not remote subscription rights.
+Local subscription status, start and stop require resource edit permission. These
+checks also apply through `m_websub`; the model has no public POST/DELETE routes
+for starting or stopping subscriptions.
+
+### Admin subscription overview
+
+Open **Content → WebSub subscriptions** (`admin_websub`, `/admin/websub`).
+The overview requires `use mod_websub`, checked by the controller and model.
+Filter by subscription type (incoming subscribers / outgoing subscriptions) and
+numeric **local resource ID**, **external hostname**, **status** (active, pending,
+expired, stopped), and **errors** (all, with errors, without errors). Filters combine
+and apply before pagination. Hostnames match exactly, case-insensitively, ignoring
+ports and a trailing DNS dot. The hostname field suggests known failed hosts for
+the selected subscription type, sorted and deduplicated across all pages. Submit
+the type filter to refresh its suggestions; manual hostname entry remains available. Enter a hostname without a scheme or path; IPv6
+literals are accepted with or without brackets. Incoming subscriptions match the
+callback host; outgoing subscriptions match the source resource host, not the hub.
+
+
+The errors filter uses the same error indicator as the table (delivery errors for
+incoming subscriptions; subscription or credential errors for outgoing ones). For an imported page, use the local copy's ID; its
+external semantic `/id` identity remains unchanged.
+
+Results show the local page, remote hostname, state, lease expiry, last sent or
+received update, and an error indicator. Failed outgoing subscriptions have a **Retry** button for users who can edit the
+imported page. It starts a fresh subscription attempt immediately and reloads the
+overview with its current filters. The standard pager uses the filtered subscription
+count and 50 rows per page. Filter URLs use `qtype`, `qrsc_id`, `qhostname`,
+`qstatus`, and `qerrors`, preserved by the pager’s `qargs` option. Retained
+expired/stopped records are included; renewal generations appear separately, so
+two active callbacks can temporarily refer to the same imported page. Incoming
+subscriptions remain active until lease expiry even after a delivery error.
+Callback URLs, secrets, tokens, and authentication data are never returned by the
+overview model. Invalid filters show an error instead of listing all resources.
+
+The resource edit sidebar shows the count of active incoming subscriptions and,
+for administrators with overview access, links filtered to that resource and
+direction. Editors without overview access can see the count for editable
+resources, but cannot inspect subscriber details. Imported resources retain their
+existing automatic-update status and start/stop controls.
+
+Template API: `m.websub.subscriptions::%{type: "export", rsc_id: id, page: 1}`
+(`type` also accepts `import` or `all`) and `m.websub.subscriber_count[id]`.
+The latter requires resource edit permission, as does `m.websub.status[id]`.
+
+### Batching outgoing updates
+
+`mod_websub.push_quiet_seconds` defaults to **10 seconds**. Each newer resource
+version restarts this quiet period. `mod_websub.push_deadline_seconds` defaults to
+**300 seconds**: publication becomes due at this deadline even if editing continues.
+The deadline starts at the first pending update for each subscriber; later changes
+retain it. Duplicate or older version notifications do not move either clock.
+Queue rows survive restarts, and each delivery contains the latest full resource.
+
+Both settings are available in module configuration. Quiet time accepts 0–86400
+seconds; the deadline accepts 1–86400 seconds. Invalid values use their defaults.
+The deadline caps the quiet period if configured shorter. It bounds batching, not
+network delivery time: sidejob capacity and transport retry backoff still apply.
+
+When optional `mod_presence` is active, WebSub consumes its MQTT
+`presence/status/mod_admin/<id>` heartbeats. Fresh `ACTIVE` (4) heartbeats defer
+publication by another quiet period, capped by the original deadline. Other states
+remove that tab's activity; multiple editors/tabs are tracked independently.
+Heartbeats expire after 20 seconds without refresh. Only authenticated publishers
+with admin access and edit permission for the topic resource can affect the delay;
+payload user IDs and locations are not trusted, and retained messages are ignored.
+No presence module dependency is required. Without it, ordinary quiet-time batching
+applies. Presence is an in-memory hint and is rebuilt from heartbeats after restart.
 
 ## Collection lifetime
 
@@ -75,6 +177,78 @@ not the complete content of every member.
 Failed item imports remain placeholders and can be retried by a later collection
 update or manual re-import. The optional item policy can re-enable a stopped item
 on a subsequent collection update; clear the collection option to prevent this.
+
+## Subscription errors
+
+The editor shows translated explanations with the original error under **Technical
+details**, including for older stored errors. An `access-denied-websub` denial
+can still come from older publishing sites which require `use mod_websub`.
+Current publishers authorize subscriptions by resource visibility, without that
+module permission. They recheck visibility before delivering updates.
+Browser login cookies do not authenticate the subscription request; private
+subscriptions need configured credentials. After upgrading a publisher or
+correcting access, start automatic updates again: a hub denial stops the subscription.
+
+The edit-page automatic-update status is a live template. Subscription confirmation,
+denial, and worker attempts publish an empty invalidation event on
+`model/websub/event/rsc/<id>`. Only editors of that resource can subscribe;
+the refreshed template and status model also enforce resource edit permissions.
+
+### Subscription retries
+
+The Zotonic subscriber backs off after discovery/request failures and unanswered
+verification. Backoff starts at 10 seconds, doubles after each failure, and caps
+at 43200 seconds (12 hours). An unanswered request first waits up to
+two minutes for verification, then waits the backoff delay before trying again.
+An active lease can shorten the backoff.
+
+Set `mod_websub.subscription_retry_timeout` to the overall retry budget in seconds
+(default: `604800`, or one week; valid range: `1`–`2147483647`). Configure it
+per site in module configuration, or from an Erlang shell with that site’s context:
+
+```erlang
+m_config:set_value(mod_websub, subscription_retry_timeout, 604800, Context).
+```
+
+Missing, zero, negative, out-of-range, or non-integer values use the default.
+The 10-second initial backoff and 12-hour cap are fixed, not configuration settings.
+This budget applies to subscription discovery, verification and unsubscription;
+it does not affect notification delivery, import queues, or `mod_import_feed` polling.
+
+The persisted budget starts at
+the first attempt, including discovery, and survives restarts. Each renewal,
+unsubscription, and explicit subscription restart gets a fresh budget. Retry and
+verification waits are capped at the deadline. Once it expires, work stops with
+`retry_timeout` in the admin overview; late verification is rejected. Any previous
+confirmed lease remains valid until expiry. Existing pending attempts receive a
+fresh budget when first processed after upgrade. The current setting is read when
+work runs and schedules its next attempt; changing it does not immediately wake
+sleeping retries or restart attempts that already gave up.
+
+A valid `hub.mode=denied` callback disables the pending subscription and stops
+retries immediately. Stopping a subscription disables local imports immediately;
+remote unsubscription attempts stop after successful verification, expiry of the
+confirmed lease, or the retry deadline, whichever comes first.
+
+### Notification delivery retries
+
+Failed deliveries retry after 5, 20, 45 minutes, and so on (five minutes times the
+squared attempt number), capped at 12 hours. The overall retry window is one week
+from the first delivery attempt, never beyond the subscription lease expiry. Both
+limits are fixed; `subscription_retry_timeout` controls subscription verification
+only. The next due time is capped at both deadlines, and the worker checks them
+before starting another attempt.
+
+The first-attempt timestamp and retry count are persisted, survive restarts, and
+are preserved when newer resource versions replace the queued notification. A
+successful delivery clears the failure window, including for newer work queued
+during that delivery. Existing queues start their window on first processing
+after upgrade.
+
+When the week expires, the notification is discarded and the subscription is
+marked with `retry_timeout`. The subscription lease is retained, so later resource
+updates can start a new delivery window. Lease expiry discards pending delivery
+without making another callback request.
 
 ## Identity and standard delivery
 
@@ -137,6 +311,29 @@ Zotonic receivers may still refetch using their own credentials. The previous pr
 notification-only fallback has been removed because it was not standard full-content
 delivery. Do not register an untrusted callback for private content.
 
+## Circular subscriptions
+
+WebSub specifies publisher-designated canonical topics and hub subscription policy,
+but no global cycle detection, hop count, or definition of an authoritative copy.
+See [Discovery](https://www.w3.org/TR/websub/#discovery) and
+[Subscription Validation](https://www.w3.org/TR/websub/#subscription-validation).
+Cycle prevention for resource replication is therefore an application policy.
+
+Zotonic publishes only authoritative resources. Imported non-authoritative copies
+advertise no local hub/topic, cannot register subscribers, and never enqueue
+outgoing notifications. If a published resource becomes non-authoritative, its
+next update removes its export subscriptions and queued deliveries. Delivery also
+rechecks authority. Unsubscription remains possible after authority changes or
+resource deletion; callback verification is still required.
+
+For A → B → C, B's imported copy is not a WebSub source: C should import from A
+and subscribe to A's advertised topic/hub. A copied page intentionally made
+independent and authoritative is a new publication, not an automatically relayed
+replica. Source URI checks, version checks, and the self-subscription guard provide
+additional protection. A third-party application that rewrites identity and
+republishes data as new authoritative content is outside this loop-prevention
+policy; WebSub itself cannot detect that provenance.
+
 ## Security and deployment
 
 Outbound requests use `z_fetch` with `{autoredirect, false}` and verified TLS.
@@ -158,13 +355,6 @@ renewal remain owned by `mod_oauth2`.
 Cross-origin GET redirects permanently switch to anonymous context;
 HTTPS-to-HTTP redirects fail. Requests have timeouts and response-size limits.
 
-### Open TODO: connection pinning
-
-Add validated-address pinning to `z_fetch`/`z_url_fetch` while preserving the
-original Host header and TLS hostname. The current DNS check is a preflight check:
-the fetch library resolves the hostname again, so DNS rebinding between validation
-and connection is not yet prevented.
-
 Hub admission deduplicates identical pending requests. Each site accepts at most
 120 new verification jobs per minute and holds at most 1000 pending verification
 jobs. Database serialization enforces limits across nodes. Excess requests receive
@@ -175,132 +365,36 @@ The hub attempts callback verification once per accepted request. Non-2xx respon
 are logged with their HTTP status; transport failures are logged separately. Failed
 verification does not create or renew an export subscription.
 
-The Zotonic subscriber backs off after discovery/request failures and unanswered
-verification. Backoff starts at 10 seconds, doubles after each failure, and caps
-at 43200 seconds (12 hours). An unanswered request first waits up to
-two minutes for verification, then waits the backoff delay before trying again.
-An active lease can shorten the backoff.
-
-Set `mod_websub.subscription_retry_timeout` to the overall retry budget in seconds
-(default: `604800`, or one week; valid range: `1`–`2147483647`). Configure it
-per site in module configuration, or from an Erlang shell with that site’s context:
-
-```erlang
-m_config:set_value(mod_websub, subscription_retry_timeout, 604800, Context).
-```
-
-Missing, zero, negative, out-of-range, or non-integer values use the default.
-The 10-second initial backoff and 12-hour cap are fixed, not configuration settings.
-This budget applies to subscription discovery, verification and unsubscription;
-it does not affect notification delivery, import queues, or `mod_import_feed` polling.
-
-The persisted budget starts at
-the first attempt, including discovery, and survives restarts. Each renewal,
-unsubscription, and explicit subscription restart gets a fresh budget. Retry and
-verification waits are capped at the deadline. Once it expires, work stops with
-`retry_timeout` in the admin overview; late verification is rejected. Any previous
-confirmed lease remains valid until expiry. Existing pending attempts receive a
-fresh budget when first processed after upgrade. The current setting is read when
-work runs and schedules its next attempt; changing it does not immediately wake
-sleeping retries or restart attempts that already gave up.
-
-A valid `hub.mode=denied` callback disables the pending subscription and stops
-retries immediately. Stopping a subscription disables local imports immediately;
-remote unsubscription attempts stop after successful verification, expiry of the
-confirmed lease, or the retry deadline, whichever comes first.
-
 Status/start/stop require resource edit permission. Verification matches callback,
 topic, action, and pending deadline. Responses are plain text with `nosniff`. Import
 identity and permissions are checked again in the transaction that updates the resource.
-Schema version 3 preserves existing semantic source URIs separately from discovered
-topics; active subscriptions rediscover on renewal.
+Active subscriptions rediscover source topics on renewal.
 
-## Admin subscription overview
+### DNS rebinding limitation
 
-Open **Content → WebSub subscriptions** (`admin_websub`, `/admin/websub`).
-The overview requires `use mod_websub`, checked by the controller and model.
-Filter by subscription type (incoming subscribers / outgoing subscriptions) and
-numeric **local resource ID**, **external hostname**, **status** (active, pending,
-expired, stopped), and **errors** (all, with errors, without errors). Filters combine
-and apply before pagination. Hostnames match exactly, case-insensitively, ignoring
-ports and a trailing DNS dot. The hostname field suggests known failed hosts for
-the selected subscription type, sorted and deduplicated across all pages. Submit
-the type filter to refresh its suggestions; manual hostname entry remains available. Enter a hostname without a scheme or path; IPv6
-literals are accepted with or without brackets. Incoming subscriptions match the
-callback host; outgoing subscriptions match the source resource host, not the hub.
-Normalized hostname expression indexes on callback/source URLs support both the
-filtered count and page query. PostgreSQL maintains them when URLs change.
-The optional `($n is null or column = $n)` filters are simplified in custom
-plans: missing arguments remove the filter; supplied arguments allow index
-conditions. Zotonic's `epgsql:equery` reparses an unnamed statement per call, so
-normal automatic planning uses custom plans. Forcing generic plans retains the
-`OR` and can prevent selective index scans.
+Validated-address pinning remains to be added to `z_fetch`/`z_url_fetch` while preserving the
+original Host header and TLS hostname. The current DNS check is a preflight check:
+the fetch library resolves the hostname again, so DNS rebinding between validation
+and connection is not yet prevented.
 
-The errors filter uses the same error indicator as the table (delivery errors for
-incoming subscriptions; subscription or credential errors for outgoing ones). For an imported page, use the local copy's ID; its
-external semantic `/id` identity remains unchanged.
+### Local subscriber callback policy
 
-Results show the local page, remote hostname, state, lease expiry, last sent or
-received update, and an error indicator. Failed outgoing subscriptions have a **Retry** button for users who can edit the
-imported page. It starts a fresh subscription attempt immediately and reloads the
-overview with its current filters. The standard pager uses the filtered subscription
-count and 50 rows per page. Filter URLs use `qtype`, `qrsc_id`, `qhostname`,
-`qstatus`, and `qerrors`, preserved by the pager’s `qargs` option. Retained
-expired/stopped records are included; renewal generations appear separately, so
-two active callbacks can temporarily refer to the same imported page. Incoming
-subscriptions remain active until lease expiry even after a delivery error.
-Callback URLs, secrets, tokens, and authentication data are never returned by the
-overview model. Invalid filters show an error instead of listing all resources.
+Zotonic accepts subscriber callback URLs only with a DNS hostname, using HTTP
+or HTTPS. IPv4 and IPv6 literals, including numeric IPv4 shorthand, are rejected.
+Use ASCII hostname labels (punycode for internationalized names); the final
+label must start with a letter. A single trailing DNS root dot is allowed.
+Invalid callbacks receive HTTP 400 with a plain-text policy explanation before
+verification is queued. The policy also applies before sending verification,
+denial, or delivery requests for previously stored subscriptions.
 
-The resource edit sidebar shows the count of active incoming subscriptions and,
-for administrators with overview access, links filtered to that resource and
-direction. Editors without overview access can see the count for editable
-resources, but cannot inspect subscriber details. Imported resources retain their
-existing automatic-update status and start/stop controls.
+This is a **local Zotonic policy**, permitted by
+[WebSub section 5.1.2](https://www.w3.org/TR/websub/#subscription-response-details),
+not a WebSub requirement to reject IP addresses. It applies to subscriber
+callbacks, not discovery URLs, remote hubs, or topics. DNS hostnames must still
+resolve exclusively to public addresses, except for the development `.test`
+exception above; using an arbitrary hostname does not bypass the SSRF checks. The existing DNS pinning TODO remains open.
 
-Template API: `m.websub.subscriptions::%{type: "export", rsc_id: id, page: 1}`
-(`type` also accepts `import` or `all`) and `m.websub.subscriber_count[id]`.
-The latter requires resource edit permission, as does `m.websub.status[id]`.
-
-## Export revisions
-
-Schema version 7 stores each authoritative resource's export revision in
-`websub_revision`, with a foreign key that removes it when the resource is deleted.
-Resource edits and outgoing edge insertions, deletions, and reordering advance this
-counter. Edge changes do not update the resource row, its edit version, modification
-date, or modifier, even when WebSub is enabled without any subscribers.
-
-Exports contain `export_revision` and a matching top-level `version` for existing
-Zotonic subscribers. The nested `resource.version` remains the resource edit version.
-Pushes and authenticated topic fetches use the same representation. New receivers
-prefer `export_revision`, falling back to the old version fields for older publishers.
-Queue columns named `version` and subscription version watermarks now track this
-export revision; their names are retained for schema and API compatibility.
-
-Counters start at the resource's current version, preserving existing delivery and
-import watermarks. A stored content-version watermark makes repeated or delayed
-content notifications idempotent. Schema upgrades are additive and preserve queues;
-reinstalling the schema does not reset counters. Downgrading a publisher after it
-has issued export revisions requires resetting subscriber watermarks or restoring
-the corresponding revision support: resource versions alone may be lower.
-
-Export assembly locks the resource while capturing the revision and rebuilding the
-representation with fresh caches. Revision allocation uses the same lock. Edges
-committed during assembly can be included early; their pending edge-log notification
-still advances the revision afterwards, so those changes are not lost.
-
-## Validation
-
-```
-./rebar3 compile
-bin/zotonic runtests websub_protocol_tests mod_websub_tests websub_lifecycle_tests websub_admin_tests m_rsc_import_db_tests
-```
-
-Tests cover discovery, semantic identity versus topic, signatures, IP restrictions,
-OAuth2 token handling, credential redirects, subscription lifecycle, import identity checks, admission limits,
-full JSON delivery, saved import options, and admin template rendering.
-
-### Audit hardening
+### Authorization and update integrity
 
 Automatic subscription work and imports reject disabled users. Subscription starts
 recheck the resource source URI under the resource lock. A denial callback is
@@ -331,30 +425,54 @@ stopped when a self-topic is detected. A self-subscription is stopped with `self
 the request. Resource resolution includes language-less `/id` and JSON topic URLs;
 other Zotonic sites on the same server remain eligible external sources.
 
-## Circular subscriptions
+## Implementation details
 
-WebSub specifies publisher-designated canonical topics and hub subscription policy,
-but no global cycle detection, hop count, or definition of an authoritative copy.
-See [Discovery](https://www.w3.org/TR/websub/#discovery) and
-[Subscription Validation](https://www.w3.org/TR/websub/#subscription-validation).
-Cycle prevention for resource replication is therefore an application policy.
+The following sections describe the protocol flow, persisted revisions and
+queue scheduling used by the module.
 
-Zotonic publishes only authoritative resources. Imported non-authoritative copies
-advertise no local hub/topic, cannot register subscribers, and never enqueue
-outgoing notifications. If a published resource becomes non-authoritative, its
-next update removes its export subscriptions and queued deliveries. Delivery also
-rechecks authority. Unsubscription remains possible after authority changes or
-resource deletion; callback verification is still required.
+### Protocol flow between two Zotonic sites
 
-For A → B → C, B's imported copy is not a WebSub source: C should import from A
-and subscribe to A's advertised topic/hub. A copied page intentionally made
-independent and authoritative is a new publication, not an automatically relayed
-replica. Source URI checks, version checks, and the self-subscription guard provide
-additional protection. A third-party application that rewrites identity and
-republishes data as new authoritative content is outside this loop-prevention
-policy; WebSub itself cannot detect that provenance.
+Assume A publishes a resource and B imports it.
 
-## Queue scheduling
+| Step | Request or action | Persistent result |
+| --- | --- | --- |
+| Import | B GETs A's `/id/123` with `Accept: application/json` | B keeps A's language-less semantic URI as its resource `uri` and subscription `source_uri`. |
+| Discover | B reads Link hub/self, following representation redirects as needed | The self URL, e.g. `/.zotonic/websub/topic/123`, becomes `topic_url`; it never replaces the resource URI. |
+| Request | B POSTs `hub.mode=subscribe`, `hub.topic`, `hub.callback`, `hub.secret`, and `hub.lease_seconds` to A's hub | B records pending intent before sending; A accepts bounded durable work with 202. |
+| Verify | A GETs B's unique callback with mode, topic, challenge, and granted lease | B matches pending intent and returns the exact challenge; A activates only after a successful response. |
+| Publish | A POSTs the full JSON export to B with `Content-Type: application/json`, Link hub/self, and `X-Hub-Signature` | B verifies the body, queues work, and acknowledges promptly. |
+| Import update | B consumes public signed JSON, or refetches `/id/123` with the editor's credentials | B checks the source URI, payload URI, current resource URI, version, and current editor permissions under the resource lock. |
+| Renew | B rediscovers and requests a replacement callback/secret before expiry | The previous callback remains active until replacement verification succeeds. |
+| Stop | The editor stops updates; B requests verified unsubscription | B immediately disables local imports and discards queued work. |
+
+### Export revisions
+
+Schema version 7 stores each authoritative resource's export revision in
+`websub_revision`, with a foreign key that removes it when the resource is deleted.
+Resource edits and outgoing edge insertions, deletions, and reordering advance this
+counter. Edge changes do not update the resource row, its edit version, modification
+date, or modifier, even when WebSub is enabled without any subscribers.
+
+Exports contain `export_revision` and a matching top-level `version` for existing
+Zotonic subscribers. The nested `resource.version` remains the resource edit version.
+Pushes and authenticated topic fetches use the same representation. New receivers
+prefer `export_revision`, falling back to the old version fields for older publishers.
+Queue columns named `version` and subscription version watermarks now track this
+export revision; their names are retained for schema and API compatibility.
+
+Counters start at the resource's current version, preserving existing delivery and
+import watermarks. A stored content-version watermark makes repeated or delayed
+content notifications idempotent. Schema upgrades are additive and preserve queues;
+reinstalling the schema does not reset counters. Downgrading a publisher after it
+has issued export revisions requires resetting subscriber watermarks or restoring
+the corresponding revision support: resource versions alone may be lower.
+
+Export assembly locks the resource while capturing the revision and rebuilding the
+representation with fresh caches. Revision allocation uses the same lock. Edges
+committed during assembly can be included early; their pending edge-log notification
+still advances the revision afterwards, so those changes are not lost.
+
+### Queue scheduling
 
 The per-site `mod_websub` server keeps a dirty flag and the earliest persisted due
 time. One-second ticks consult this state without querying the database or starting
@@ -368,79 +486,23 @@ pending. Failed workers and sidejob overload retain pending work for the next ti
 A startup scan and a ten-minute fallback scan recover persisted work after restarts,
 missed signals, or writes from another node. The database remains authoritative.
 
-## Batching outgoing updates
+### Overview query performance
 
-`mod_websub.push_quiet_seconds` defaults to **10 seconds**. Each newer resource
-version restarts this quiet period. `mod_websub.push_deadline_seconds` defaults to
-**300 seconds**: publication becomes due at this deadline even if editing continues.
-The deadline starts at the first pending update for each subscriber; later changes
-retain it. Duplicate or older version notifications do not move either clock.
-Queue rows survive restarts, and each delivery contains the latest full resource.
+Normalized hostname expression indexes on callback/source URLs support both the
+filtered count and page query. PostgreSQL maintains them when URLs change.
+The optional `($n is null or column = $n)` filters are simplified in custom
+plans: missing arguments remove the filter; supplied arguments allow index
+conditions. Zotonic's `epgsql:equery` reparses an unnamed statement per call, so
+normal automatic planning uses custom plans. Forcing generic plans retains the
+`OR` and can prevent selective index scans.
 
-Both settings are available in module configuration. Quiet time accepts 0–86400
-seconds; the deadline accepts 1–86400 seconds. Invalid values use their defaults.
-The deadline caps the quiet period if configured shorter. It bounds batching, not
-network delivery time: sidejob capacity and transport retry backoff still apply.
+## Validation
 
-When optional `mod_presence` is active, WebSub consumes its MQTT
-`presence/status/mod_admin/<id>` heartbeats. Fresh `ACTIVE` (4) heartbeats defer
-publication by another quiet period, capped by the original deadline. Other states
-remove that tab's activity; multiple editors/tabs are tracked independently.
-Heartbeats expire after 20 seconds without refresh. Only authenticated publishers
-with admin access and edit permission for the topic resource can affect the delay;
-payload user IDs and locations are not trusted, and retained messages are ignored.
-No presence module dependency is required. Without it, ordinary quiet-time batching
-applies. Presence is an in-memory hint and is rebuilt from heartbeats after restart.
+```
+./rebar3 compile
+bin/zotonic runtests websub_protocol_tests mod_websub_tests websub_lifecycle_tests websub_admin_tests m_rsc_import_db_tests
+```
 
-## Local subscriber callback policy
-
-Zotonic accepts subscriber callback URLs only with a DNS hostname, using HTTP
-or HTTPS. IPv4 and IPv6 literals, including numeric IPv4 shorthand, are rejected.
-Use ASCII hostname labels (punycode for internationalized names); the final
-label must start with a letter. A single trailing DNS root dot is allowed.
-Invalid callbacks receive HTTP 400 with a plain-text policy explanation before
-verification is queued. The policy also applies before sending verification,
-denial, or delivery requests for previously stored subscriptions.
-
-This is a **local Zotonic policy**, permitted by
-[WebSub section 5.1.2](https://www.w3.org/TR/websub/#subscription-response-details),
-not a WebSub requirement to reject IP addresses. It applies to subscriber
-callbacks, not discovery URLs, remote hubs, or topics. DNS hostnames must still
-resolve exclusively to public addresses, except for the development `.test`
-exception above; using an arbitrary hostname does not bypass the SSRF checks. The existing DNS pinning TODO remains open.
-
-### Subscription errors
-
-The editor shows translated explanations with the original error under **Technical
-details**, including for older stored errors. An `access-denied-websub` denial
-can still come from older publishing sites which require `use mod_websub`.
-Current publishers authorize subscriptions by resource visibility, without that
-module permission. They recheck visibility before delivering updates.
-Browser login cookies do not authenticate the subscription request; private
-subscriptions need configured credentials. After upgrading a publisher or
-correcting access, start automatic updates again: a hub denial stops the subscription.
-
-The edit-page automatic-update status is a live template. Subscription confirmation,
-denial, and worker attempts publish an empty invalidation event on
-`model/websub/event/rsc/<id>`. Only editors of that resource can subscribe;
-the refreshed template and status model also enforce resource edit permissions.
-
-### Notification delivery retries
-
-Failed deliveries retry after 5, 20, 45 minutes, and so on (five minutes times the
-squared attempt number), capped at 12 hours. The overall retry window is one week
-from the first delivery attempt, never beyond the subscription lease expiry. Both
-limits are fixed; `subscription_retry_timeout` controls subscription verification
-only. The next due time is capped at both deadlines, and the worker checks them
-before starting another attempt.
-
-The first-attempt timestamp and retry count are persisted, survive restarts, and
-are preserved when newer resource versions replace the queued notification. A
-successful delivery clears the failure window, including for newer work queued
-during that delivery. Existing queues start their window on first processing
-after upgrade.
-
-When the week expires, the notification is discarded and the subscription is
-marked with `retry_timeout`. The subscription lease is retained, so later resource
-updates can start a new delivery window. Lease expiry discards pending delivery
-without making another callback request.
+Tests cover discovery, semantic identity versus topic, signatures, IP restrictions,
+OAuth2 token handling, credential redirects, subscription lifecycle, import identity checks, admission limits,
+full JSON delivery, saved import options, and admin template rendering.

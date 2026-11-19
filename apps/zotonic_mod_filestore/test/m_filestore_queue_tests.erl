@@ -41,3 +41,36 @@ concurrent_queue() ->
     after
         z_db:q("delete from filestore_queue where path = $1", [Path], Context)
     end.
+
+%% Completed downloads keep their remote rows and clear the pending flag.
+%% A bounded traversal must advance past these rows, including local entries.
+move_to_local_cursor_test() ->
+    Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    ok = m_filestore:install(install, Context),
+    Result = z_db:transaction(fun(Ctx) ->
+        StartId = z_db:q1("select coalesce(max(id), 0) from filestore", Ctx),
+        Insert = fun(IsLocal) ->
+            {ok, Id} = z_db:insert(filestore, #{
+                path => <<"archive/local-queue-test-", (z_ids:id())/binary>>,
+                service => <<"ftp">>,
+                location => <<"ftp://example.invalid/test/", (z_ids:id())/binary>>,
+                is_local => IsLocal
+            }, Ctx),
+            Id
+        end,
+        First = Insert(true),
+        Second = Insert(false),
+        Last = Insert(false),
+        {delay, 0, [0, Last]} = filestore_admin:task_file_to_local(Ctx),
+        New = Insert(false),
+        ?assertEqual({ok, {2, Second}}, m_filestore:mark_move_to_local_limit(2, StartId, Last, Ctx)),
+        1 = m_filestore:purge_move_to_local(First, true, Ctx),
+        1 = m_filestore:purge_move_to_local(Second, true, Ctx),
+        ?assertEqual({delay, 1, [Last, Last]}, filestore_admin:task_file_to_local(Second, Last, Ctx)),
+        1 = m_filestore:purge_move_to_local(Last, true, Ctx),
+        ?assertEqual(ok, filestore_admin:task_file_to_local(Last, Last, Ctx)),
+        ?assertEqual(0, z_db:q1("select count(*) from filestore where id > $1 and is_move_to_local", [StartId], Ctx)),
+        ?assertEqual(false, z_db:q1("select is_move_to_local from filestore where id=$1", [New], Ctx)),
+        {rollback, checked}
+    end, Context),
+    ?assertEqual({rollback, checked}, Result).

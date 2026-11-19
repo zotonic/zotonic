@@ -3,6 +3,23 @@
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").
 
+nocache_headers_test_() ->
+    z_test_support:isolated({setup,
+        fun() ->
+            meck:new(m_site, [no_link]),
+            meck:expect(m_site, get, fun(service_api_cors, _) -> false end)
+        end,
+        fun(_) -> meck:unload(m_site) end,
+        fun(_) -> ?_test(begin
+            %% This callback precedes both successful and rejected API requests.
+            {true, Context} = controller_api:service_available(
+                request_context(<<"GET">>, <<"model/development_capture/get/console/id">>, <<>>)),
+            Headers = maps:get(resp_headers, Context#context.cowreq),
+            CacheControl = maps:get(<<"cache-control">>, Headers),
+            ?assertNotEqual(nomatch, binary:match(CacheControl, <<"no-store">>)),
+            ?assertNotEqual(nomatch, binary:match(CacheControl, <<"private">>))
+        end) end}).
+
 head_allowed_test() ->
     {Methods, _} = controller_api:allowed_methods(#context{}),
     ?assert(lists:member(<<"HEAD">>, Methods)).
@@ -38,8 +55,12 @@ get_response_topic_test() ->
     ?assertNot(is_malformed(<<"GET">>, <<"model/example/get/value">>, <<"response_topic=reply/topic">>)).
 
 is_malformed(Method, Topic, Query) ->
+    {IsMalformed, _} = controller_api:malformed_request(request_context(Method, Topic, Query)),
+    IsMalformed.
+
+request_context(Method, Topic, Query) ->
     % malformed_request runs before the middleware populates the context's query arguments.
-    Context = #context{
+    #context{
         cowreq = #{
             method => Method,
             version => 'HTTP/1.1',
@@ -59,6 +80,4 @@ is_malformed(Method, Topic, Query) ->
             body_length => 0
         },
         cowenv = #{ cowmachine_disp_path => Topic }
-    },
-    {IsMalformed, _} = controller_api:malformed_request(Context),
-    IsMalformed.
+    }.

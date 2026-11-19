@@ -60,8 +60,10 @@ execute(Req, #{ cowmachine_controller := Controller, cowmachine_controller_optio
                 undefined -> Ctx1;
                 HttpAccept -> set_accept_context(HttpAccept, Ctx1)
             end,
-            z_memo:enable(Ctx2),
-            z_notifier:foldl(#middleware{ on = welformed }, Ctx2, Ctx2)
+            Ctx3 = z_context:set(is_crawler,
+                z_user_agent:is_crawler(cowmachine_req:get_req_header(<<"user-agent">>, Ctx2)), Ctx2),
+            z_memo:enable(Ctx3),
+            z_notifier:foldl(#middleware{ on = welformed }, Ctx3, Ctx3)
         end,
         on_handled => fun(Ctx) ->
             z_context:set_req_metrics(#{
@@ -73,7 +75,26 @@ execute(Req, #{ cowmachine_controller := Controller, cowmachine_controller_optio
             z_notifier:foldl(#middleware{ on = handled }, Ctx, Ctx)
         end
     },
-    cowmachine:request(Context5, Options).
+    %% Guard observers may reject before controller callbacks/rendering. Initialize
+    %% proxy/cookie metadata, but restore the original environment for Cowmachine.
+    GuardContext = guard_context(Context5, Req1, Env),
+    case z_context:get(request_guard_response, GuardContext) of
+        {Status, Body} when is_integer(Status), Status >= 400, Status =< 599, is_binary(Body) ->
+            {stop, cowboy_req:reply(Status, #{}, Body, z_context:get_reqdata(GuardContext))};
+        _ -> cowmachine:request(cowmachine_req:set_env(Env, GuardContext), Options)
+    end.
+
+guard_context(Context, Req, Env) ->
+    try
+        Ctx = cowmachine_req:set_env(cowmachine_req:init_env(Req, Env), Context),
+        z_notifier:foldl(#middleware{on = guard}, Ctx, Ctx)
+    catch
+        %% Let Cowmachine perform its normal malformed-request/error handling.
+        throw:{stop_request, _} -> Context;
+        throw:{stop_request, _, _} -> Context;
+        throw:invalid_percent_encoding -> Context;
+        throw:invalid_qs_name -> Context
+    end.
 
 maybe_overrule_req_headers(#{ bindings := Bindings } = Req) ->
     case maps:get(zotonic_http_accept, Bindings, undefined) of

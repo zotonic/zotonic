@@ -31,9 +31,9 @@
 is_crawler(undefined) ->
     false;
 is_crawler(#context{} = Context) ->
-    case cowmachine_req:get_req_header(<<"user-agent">>, Context) of
-        undefined -> false;
-        UserAgent -> is_crawler_ua(UserAgent)
+    case z_context:get(is_crawler, Context) of
+        IsCrawler when is_boolean(IsCrawler) -> IsCrawler;
+        _ -> is_crawler(cowmachine_req:get_req_header(<<"user-agent">>, Context))
     end;
 is_crawler(UA) when is_list(UA)  ->
     is_crawler_ua(z_convert:to_binary(UA));

@@ -15,6 +15,7 @@
 Action module which provides postback handlers for the “status” view of the admin:
 
 *   Rebuild search index
+*   Delete generated previews (preserving medium preview originals)
 *   Flush cache
 *   Renumber categories
 ").
@@ -47,6 +48,26 @@ event(#postback{message={admin_tasks, [{task, <<"flush">>}]}}, Context) ->
        ?__(<<"Caches have been flushed.">>, Context),
        Context);
 
+%% @doc Queue migration of owned originals and preview originals into CAFS.
+event(#postback{message={admin_tasks, [{task, <<"migrate_to_cafs">>}]}}, Context) ->
+    case m_media:migrate_to_cafs(Context) of
+        ok -> z_render:growl(?__(<<"Media deduplication has been queued.">>, Context), Context);
+        {error, eacces} ->
+            z_render:growl_error(?__(<<"You don’t have permission to perform this action."/utf8>>, Context), Context);
+        {error, _} ->
+            z_render:growl_error(?__(<<"Could not queue media deduplication. Check the logs.">>, Context), Context)
+    end;
+
+%% @doc Queue removal of resized previews, including remote variants.
+event(#postback{message={admin_tasks, [{task, <<"delete_generated_previews">>}]}}, Context) ->
+    case m_media:delete_generated_previews(Context) of
+        ok -> z_render:growl(?__(<<"Generated preview cleanup has been queued. Preview originals are kept.">>, Context), Context);
+        {error, eacces} ->
+            z_render:growl_error(?__(<<"You don’t have permission to perform this action."/utf8>>, Context), Context);
+        {error, _} ->
+            z_render:growl_error(?__(<<"Could not queue generated preview cleanup. Check the logs.">>, Context), Context)
+    end;
+
 %% @doc Reset templates.
 event(#postback{message={admin_tasks, [{task, <<"templates_reset">>}]}}, Context) ->
     do(fun() -> z_template:reset(Context) end,
@@ -76,6 +97,16 @@ event(#postback{message={admin_tasks, [{task, <<"renumber_categories">>}]}}, Con
     do(fun() -> m_category:renumber(Context) end,
        ?__(<<"The category tree is rebuilding. This can take a long time."/utf8>>, Context),
        Context);
+
+%% @doc Close connections from peers with excessive concurrent sockets (node-wide).
+event(#postback{message={admin_tasks, [{task, <<"close_sockets">>}]}}, Context) ->
+    case z_acl:is_admin(Context) of
+        true ->
+            _ = m_admin_status:close_sockets(251, Context),
+            z_render:growl(?__("Excess connections have been closed.", Context), Context);
+        false ->
+            z_render:growl_error(?__("Only system administrators can close node connections.", Context), Context)
+    end;
 
 %% @doc Reload the site configuration.
 event(#postback{message={admin_tasks, [{task, <<"reload_config">>}]}}, Context) ->

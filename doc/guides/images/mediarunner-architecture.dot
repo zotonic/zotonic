@@ -1,0 +1,20 @@
+digraph documentation {
+graph [bgcolor="white", pad="0.25", nodesep="0.35", ranksep="0.5", fontname="Helvetica", fontsize=16, dpi=150];
+node [shape=box, style="rounded,filled", fillcolor="#eef5fb", color="#51718c", fontname="Helvetica", fontsize=13, margin="0.18,0.12"];
+edge [color="#526574", fontname="Helvetica", fontsize=11, arrowsize=0.7];
+rankdir=TB;
+site [label="Website / client\nMedia pipeline and access rules"];
+store [label="Site media storage\nCAFS + optional filestore", fillcolor="#eef7ee"];
+queue [label="Dedicated runner\nAuthenticated API + persistent queue"];
+job [label="Processing job*\nPrivate working directory", fillcolor="#fff4df"];
+cache [label="Runner cache\nConsumer-scoped inputs and results", fillcolor="#eef7ee"];
+{rank=same; site; queue;}
+{rank=same; store; cache;}
+site -> store [label="read inputs /\nstore outputs", dir=both, minlen=2];
+site -> queue [label="HTTPS controls\nand callbacks", dir=both, constraint=false];
+queue -> job [label="schedule"];
+job -> cache [label="copy inputs /\npublish results", dir=both];
+store -> cache [label="authenticated\nstreaming transfers", dir=both, constraint=false];
+note [shape=plain, fillcolor="white", label="* Verify sandbox support\non the runner host."];
+cache -> note [style=invis];
+}

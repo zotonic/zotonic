@@ -24,16 +24,7 @@
                                 <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
-                                {% for id, item in item.items %}
-                                    {% if item.separator %}
-                                        <li class="divider"></li>
-                                    {% else %}
-                                        <li><a href="{{ item.url }}">
-                                                {% if item.icon %}<i class="glyphicon glyphicon-{{ item.icon }}"></i>{% endif %}
-                                                {{ item.label|escape_check }}</a>
-                                        </li>
-                                    {% endif %}
-                                {% endfor %}
+                                {% include "_admin_menu_items.tpl" items=item.items %}
                             </ul>
                         </li>
                     {% else %}

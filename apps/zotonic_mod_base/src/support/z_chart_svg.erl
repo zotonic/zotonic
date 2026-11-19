@@ -22,7 +22,7 @@
     zotonic_keywords => ["reference", "backend_developer", "html", "render", "performance"]
 }).
 -moduledoc(<<
-    "Render a small, single-series chart as inline SVG.\n\n",
+    "Render a bounded chart, including multi-series line charts as inline SVG.\n\n",
     "The renderer does not fetch data, load external resources, emit scripts, or\n",
     "accept arbitrary SVG/CSS. All text is escaped and all dimensions, colors, and\n",
     "data sizes are bounded before rendering.\n"
@@ -74,17 +74,28 @@
 ]).
 
 -type chart_type() :: pie | donut | horizontal_bar | vertical_bar | line.
--type data_point() :: {binary(), number(), binary() | undefined}.
--type colored_data_point() :: {binary(), number(), binary()}.
+-type data_point() :: {binary(), number() | undefined, binary() | undefined}.
+-type colored_data_point() :: {binary(), number() | undefined, binary()}.
 
 -spec render(Params, Context) -> {ok, binary()} | {error, badarg}
     when
         Params :: proplists:proplist(),
         Context :: z:context().
 render(Params, Context) when is_list(Params) ->
+    case {normalize_type(proplists:get_value(type, Params, pie)), proplists:get_value(series, Params)} of
+        {{ok, line}, [_ | _] = Series} -> render_series(Series, Params, Context);
+        _ -> render_single(Params, Context)
+    end;
+render(_, _) -> {error, badarg}.
+
+render_single(Params, Context) when is_list(Params) ->
     case normalize_type(proplists:get_value(type, Params, pie)) of
         {ok, Type} ->
-            Data0 = normalize_params_data(Params, Context),
+            Normalized = normalize_params_data(Params, Context),
+            Data0 = case Type of
+                line -> Normalized;
+                _ -> [P || {_, V, _} = P <- Normalized, is_number(V)]
+            end,
             LabelMinPercent = normalize_percentage(proplists:get_value(label_min_percent, Params)),
             MaxPieValues = normalize_max_pie_values(proplists:get_value(max_pie_values, Params)),
             {Data1, OtherValue} = compact_pie_data(Type, Data0, LabelMinPercent, MaxPieValues),
@@ -137,9 +148,7 @@ render(Params, Context) when is_list(Params) ->
             {ok, iolist_to_binary(Figure)};
         error ->
             {error, badarg}
-    end;
-render(_Params, _Context) ->
-    {error, badarg}.
+    end.
 
 -spec normalize_type(term()) -> {ok, chart_type()} | error.
 normalize_type(pie) -> {ok, pie};
@@ -266,6 +275,8 @@ normalize_row_color(Color) ->
         error -> undefined
     end.
 
+normalize_number(null) -> {ok, undefined};
+normalize_number(undefined) -> {ok, undefined};
 normalize_number(Value) when is_integer(Value),
         Value >= -?MAX_VALUE,
         Value =< ?MAX_VALUE ->
@@ -580,8 +591,12 @@ render_svg(
         Context) ->
     TitleId = <<Id/binary, "-title">>,
     DescId = <<Id/binary, "-description">>,
+    PointCount = case Data of
+        [#{data := _} | _] -> lists:sum([length(maps:get(data,S)) || S <- Data]);
+        _ -> length(Data)
+    end,
     Description = iolist_to_binary([
-        ?__("Data points", Context), <<": ">>, integer_to_binary(length(Data))
+        ?__("Data points", Context), <<": ">>, integer_to_binary(PointCount)
     ]),
     DescribedBy = case AriaDescribedBy of
         undefined -> DescId;
@@ -1029,10 +1044,64 @@ render_vertical_rows([{Label, Value, Color} | Rest], Index, SlotWidth, Left, Bot
     [Bar, LabelElement | render_vertical_rows(
         Rest, Index + 1, SlotWidth, Left, Bottom, PlotHeight, ZeroY, Minimum, Span)].
 
+%% Series share one positional time axis and one value scale. Bound both axes
+%% of the input; the first series is painted last so its emphasis stays visible.
+render_series(Input, Params, Context) ->
+    Colors = chart_colors(Params, Context),
+    Series = normalize_series(Input, Colors, Context, 0),
+    Width = normalize_dimension(proplists:get_value(width, Params), ?DEFAULT_WIDTH),
+    Height = normalize_dimension(proplists:get_value(height, Params), ?DEFAULT_HEIGHT),
+    Id = normalize_id(proplists:get_value(id, Params)),
+    Title = normalize_title(proplists:get_value(title, Params), Context),
+    Svg = render_svg(line, Series, Width, Height, Id, Title,
+        normalize_reference(proplists:get_value(aria_describedby, Params)), false, Context),
+    Legend = case z_convert:to_bool(proplists:get_value(legend, Params, true)) of
+        false -> <<>>;
+        _ -> render_legend([{maps:get(label,S),0,maps:get(color,S)} || S <- Series], Context)
+    end,
+    Tables = case z_convert:to_bool(proplists:get_value(hide_table, Params, false)) of
+        true -> [];
+        false -> [render_table(line, maps:get(data,S), maps:get(label,S), Params, Context) || S <- Series]
+    end,
+    Class = normalize_class(proplists:get_value(class, Params)),
+    {ok, iolist_to_binary(z_tags:render_tag(<<"figure">>, [
+        {<<"id">>, Id}, {<<"class">>, <<"z-chart ",Class/binary>>},
+        {<<"data-chart-type">>, <<"line">>}
+    ], [Svg, Legend, Tables]))}.
+
+normalize_series(_, _Colors, _Context, 101) -> [];
+normalize_series([], _Colors, _Context, _Index) -> [];
+normalize_series([S | Rest], Colors, Context, Index) when is_map(S) ->
+    Color = case normalize_row_color(series_value(color,S,undefined)) of
+        undefined -> color(Index,101,Colors);
+        C -> C
+    end,
+    Width = case series_value(width,S,2) of
+        W when is_number(W), W >= 0.5, W =< 8 -> W;
+        _ -> 2
+    end,
+    Data = [{L,V,Color} || {L,V,_} <- normalize_data(series_value(data,S,[]),Context)],
+    [#{label=>normalize_text(series_value(label,S,<<>>),?MAX_LABEL_LENGTH,Context),
+       color=>Color,width=>Width,data=>Data}
+        | normalize_series(Rest,Colors,Context,Index+1)];
+normalize_series([_ | Rest], Colors, Context, Index) ->
+    normalize_series(Rest,Colors,Context,Index+1);
+normalize_series(_, _Colors, _Context, _Index) -> [].
+
+series_value(Key, Map, Default) ->
+    maps:get(Key, Map, maps:get(atom_to_binary(Key,utf8),Map,Default)).
+
 render_line([], Width, Height) ->
     render_no_data(Width, Height, undefined);
-render_line([{_FirstLabel, _FirstValue, LineColor} | _] = Data, Width, Height) ->
-    Values = [Value || {_Label, Value, _Color} <- Data],
+render_line([#{data := _} | _] = Series, Width, Height) ->
+    render_line_series(Series, Width, Height, false);
+render_line([{_, _, Color} | _] = Data, Width, Height) ->
+    render_line_series([#{data=>Data,color=>Color,width=>2,label=><<>>}], Width, Height, true).
+
+render_line_series(Series, Width, Height, Markers) ->
+    Values = [V || S <- Series, {_,V,_} <- maps:get(data,S)],
+    Data = maps:get(data, hd(lists:sort(fun(A,B) ->
+        length(maps:get(data,A)) > length(maps:get(data,B)) end, Series))),
     {Minimum, Maximum, TickStep, Ticks} = nice_value_scale(Values),
     Left = 44,
     Top = 10,
@@ -1046,9 +1115,6 @@ render_line([{_FirstLabel, _FirstValue, LineColor} | _] = Data, Width, Height) -
         _ -> PlotWidth / (Count - 1)
     end,
     Points = line_points(Data, 0, Step, Left, Bottom, PlotHeight, Minimum, Span, []),
-    PolylinePoints = iolist_to_binary(lists:join($\s, [
-        [coordinate(X), $,, coordinate(Y)] || {_Label, _Value, X, Y} <- Points
-    ])),
     LabelPoints = line_label_points(Points),
     Grid = render_line_grid(
         Ticks,
@@ -1073,30 +1139,68 @@ render_line([{_FirstLabel, _FirstValue, LineColor} | _] = Data, Width, Height) -
             {<<"stroke">>, <<"#777777">>}, {<<"stroke-width">>, 1}
         ], <<>>)
     ],
-    Polyline = z_tags:render_tag(
-        <<"polyline">>,
-        [
-            {<<"points">>, PolylinePoints},
-            {<<"fill">>, <<"none">>},
-            {<<"stroke">>, LineColor},
-            {<<"stroke-width">>, 2},
-            {<<"stroke-linejoin">>, <<"round">>}
-        ],
-        <<>>),
-    [
-        Grid,
-        Axis,
-        Polyline,
-        render_line_markers(Points, LineColor),
-        render_line_labels(LabelPoints, Bottom, Left, Width - 8)
-    ].
+    Lines = [begin
+        Ps = line_points(maps:get(data,S),0,Step,Left,Bottom,PlotHeight,Minimum,Span,[]),
+        Color = maps:get(color,S),
+        z_tags:render_tag(<<"g">>, [{<<"stroke-width">>,maps:get(width,S)},
+            {<<"class">>,<<"z-chart-line-series">>}], [
+            z_tags:render_tag(<<"title">>,[],escape(maps:get(label,S))),
+            render_line_segments(Ps,Color,[]),
+            render_line_gaps(Ps,Color,undefined,false),
+            case Markers of true -> render_line_markers(Ps,Color); false -> [] end
+        ])
+    end || S <- lists:reverse(Series)],
+    [Grid, Axis, Lines, render_line_labels(LabelPoints, Bottom, Left, Width - 8)].
+
 
 line_points([], _Index, _Step, _Left, _Bottom, _PlotHeight, _Minimum, _Span, Acc) ->
     lists:reverse(Acc);
+line_points([{Label, undefined, _Color} | Rest], Index, Step, Left, Bottom, PlotHeight, Minimum, Span, Acc) ->
+    X = Left + Index * Step,
+    line_points(Rest, Index + 1, Step, Left, Bottom, PlotHeight, Minimum, Span,
+        [{Label, undefined, X, Bottom} | Acc]);
 line_points([{Label, Value, _Color} | Rest], Index, Step, Left, Bottom, PlotHeight, Minimum, Span, Acc) ->
     X = Left + Index * Step,
     Y = Bottom - (Value - Minimum) / Span * PlotHeight,
     line_points(Rest, Index + 1, Step, Left, Bottom, PlotHeight, Minimum, Span, [{Label, Value, X, Y} | Acc]).
+
+%% Missing samples retain their x-position and split solid line segments.
+%% A separate dotted bridge connects known endpoints without inventing samples.
+render_line_segments([], Color, Acc) ->
+    line_segment(lists:reverse(Acc), Color);
+render_line_segments([{_, undefined, _, _} | Rest], Color, Acc) ->
+    [line_segment(lists:reverse(Acc), Color), render_line_segments(Rest, Color, [])];
+render_line_segments([Point | Rest], Color, Acc) ->
+    render_line_segments(Rest, Color, [Point | Acc]).
+
+%% Only bridge gaps with a known value on both sides; never extrapolate.
+render_line_gaps([], _Color, _Previous, _HasGap) -> [];
+render_line_gaps([{_, undefined, _, _} | Rest], Color, Previous, _HasGap) ->
+    render_line_gaps(Rest, Color, Previous, true);
+render_line_gaps([Point | Rest], Color, undefined, _HasGap) ->
+    render_line_gaps(Rest, Color, Point, false);
+render_line_gaps([Point | Rest], Color, Previous, true) ->
+    [line_segment([Previous, Point], Color, [
+        {<<"class">>, <<"z-chart-line-gap">>},
+        {<<"stroke-dasharray">>, <<"1 5">>},
+        {<<"stroke-linecap">>, <<"round">>}
+    ]), render_line_gaps(Rest, Color, Point, false)];
+render_line_gaps([Point | Rest], Color, _Previous, false) ->
+    render_line_gaps(Rest, Color, Point, false).
+
+line_segment([], _Color) -> <<>>;
+line_segment(Points, Color) ->
+    line_segment(Points, Color, []).
+
+line_segment(Points, Color, Attributes) ->
+    Coordinates = iolist_to_binary(lists:join($\s, [
+        [coordinate(X), $,, coordinate(Y)] || {_, _, X, Y} <- Points
+    ])),
+    z_tags:render_tag(<<"polyline">>, [
+        {<<"points">>, Coordinates}, {<<"fill">>, <<"none">>},
+        {<<"stroke">>, Color},
+        {<<"stroke-linejoin">>, <<"round">>}
+    ] ++ Attributes, <<>>).
 
 render_line_markers(Points, Color) ->
     [
@@ -1109,7 +1213,7 @@ render_line_markers(Points, Color) ->
                 {<<"fill">>, Color}
             ],
             z_tags:render_tag(<<"title">>, [], escape(tooltip(Label, Value, undefined))))
-        || {Label, Value, X, Y} <- Points
+        || {Label, Value, X, Y} <- Points, is_number(Value)
     ].
 
 render_line_grid(Ticks, TickStep, Points, Left, Right, Top, Bottom, PlotHeight, Minimum, Span) ->
@@ -1305,7 +1409,8 @@ render_no_data_1(Width, Height, Text) ->
         escape(Text)).
 
 value_range(Values) ->
-    {erlang:min(0, lists:min(Values)), erlang:max(0, lists:max(Values))}.
+    Numbers = [0 | [V || V <- Values, is_number(V)]],
+    {lists:min(Numbers), lists:max(Numbers)}.
 
 nonzero_span(Span) when Span == 0 -> 1;
 nonzero_span(Span) -> Span.
@@ -1499,6 +1604,7 @@ coordinate(Value) when is_integer(Value) ->
 coordinate(Value) when is_float(Value) ->
     float_to_binary(Value, [{decimals, 3}, compact]).
 
+format_number(undefined) -> <<"—"/utf8>>;
 format_number(Value) when is_integer(Value) ->
     integer_to_binary(Value);
 format_number(Value) when is_float(Value) ->

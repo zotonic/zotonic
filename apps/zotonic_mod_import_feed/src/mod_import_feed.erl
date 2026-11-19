@@ -298,7 +298,7 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
         #menu_item{
             id = admin_import_feed,
-            parent = admin_content,
+            parent = admin_import_group,
             label = ?__("Import feeds", Context),
             url = {admin_import_feed, []},
             visiblecheck = {acl, use, mod_import_feed}

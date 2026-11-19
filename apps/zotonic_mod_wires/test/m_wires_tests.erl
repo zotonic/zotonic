@@ -24,24 +24,31 @@
 
 widget_test_() ->
     {setup, fun() ->
-        meck:new(m_config, [no_link]),
-        meck:expect(m_config, get_boolean, fun(mod_wires, widget_autoload, true, C) ->
-            z_context:get(enabled, C, true)
+        meck:new(m_config, [passthrough, no_link]),
+        meck:expect(m_config, get_boolean, fun
+            (mod_wires, widget_autoload, true, #context{site=wires_widget_test} = C) ->
+                z_context:get(enabled, C, true);
+            (Module, Key, Default, C) -> meck:passthrough([Module, Key, Default, C])
         end),
-        meck:new(z_module_indexer, [no_link]),
+        meck:new(z_module_indexer, [passthrough, no_link]),
         meck:expect(z_module_indexer, find, fun
-            (lib, <<"js/modules/z.example.js">>, _) -> {ok, found};
-            (lib, _, _) -> {error, enoent}
+            (lib, <<"js/modules/z.example.js">>, #context{site=wires_widget_test}) -> {ok, found};
+            (lib, _, #context{site=wires_widget_test}) -> {error, enoent};
+            (Type, Name, C) -> meck:passthrough([Type, Name, C])
         end),
-        meck:new(z_lib_include, [no_link]),
-        meck:expect(z_lib_include, assets, fun([File], [], _) -> [#{file => File}] end)
+        meck:new(z_lib_include, [passthrough, no_link]),
+        meck:expect(z_lib_include, assets, fun
+            ([File], [], #context{site=wires_widget_test}) -> [#{file => File}];
+            (Files, Options, C) -> meck:passthrough([Files, Options, C])
+        end)
     end, fun(_) -> meck:unload([m_config, z_module_indexer, z_lib_include]) end, [
+        ?_assert(erlang:function_exported(z_module_indexer, find_all, 3)),
         ?_assertEqual({ok, {[#{file => <<"js/modules/z.example.js">>}], []}},
-            m_wires:m_get([<<"widget">>, <<"example">>], undefined, #context{})),
+            m_wires:m_get([<<"widget">>, <<"example">>], undefined, #context{site=wires_widget_test})),
         ?_assertEqual({ok, {[#{file => <<"js/modules/z.example.js">>}], [<<"url">>]}},
-            m_wires:m_get([<<"widget">>, <<"example">>, <<"url">>], undefined, #context{})),
+            m_wires:m_get([<<"widget">>, <<"example">>, <<"url">>], undefined, #context{site=wires_widget_test})),
         ?_assertEqual({error, disabled}, m_wires:m_get([<<"widget">>, <<"example">>],
-            undefined, z_context:set(enabled, false, #context{}))),
-        ?_assertEqual({error, badarg}, m_wires:m_get([<<"widget">>, <<"../example">>], undefined, #context{})),
-        ?_assertEqual({error, enoent}, m_wires:m_get([<<"widget">>, <<"missing">>], undefined, #context{}))
+            undefined, z_context:set(enabled, false, #context{site=wires_widget_test}))),
+        ?_assertEqual({error, badarg}, m_wires:m_get([<<"widget">>, <<"../example">>], undefined, #context{site=wires_widget_test})),
+        ?_assertEqual({error, enoent}, m_wires:m_get([<<"widget">>, <<"missing">>], undefined, #context{site=wires_widget_test}))
     ]}.

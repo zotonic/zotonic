@@ -451,6 +451,8 @@ is_allowed_admin_subscribe([<<"$SYS">>, <<"site">>, Site | _], Context) ->
             % sys topics.
             Site =:= z_convert:to_binary(Host)
     end;
+is_allowed_admin_subscribe([<<"$SYS">>, <<"status">>, <<"code-update">>], _Context) ->
+    true;
 is_allowed_admin_subscribe([<<"$SYS">>, <<"erlang">> | _], _Context) ->
     % and to zotonic node wide erlang topics
     true;
@@ -483,6 +485,9 @@ is_allowed_acl(Action, Topic, Packet, Context) ->
     end.
 
 
+% Status topics opt in individually; do not expose future system status topics.
+is_allowed(subscribe, [<<"$SYS">>, <<"status">>, <<"code-update">>], Context) ->
+    z_acl:is_allowed(use, mod_site_update, Context);
 is_allowed(_Action,   [ <<"test">> | _ ], _Context) -> true;
 is_allowed(_Action,   [ <<"public">> | _ ], _Context) -> true;
 is_allowed(_Action,   [ <<"reply">>, <<"call-", _/binary>>, _ ], _Context) -> true;

@@ -45,6 +45,7 @@
     insert_task/4,
     insert_task/5,
     insert_task_after/6,
+    insert_task_after_transaction/6,
     get_task/1,
     get_task/2,
     get_task/3,
@@ -304,6 +305,19 @@ insert_task_after(Delay, Module, Function, UniqueKey, ArgsFun, Context) ->
     gen_server:call(
         Context#context.pivot_server,
         {insert_task_after, Delay, Module, Function, UniqueKey, ArgsFun}).
+
+%% @doc Queue a task using the caller's database transaction. Use when publishing
+%% data and its follow-up work must commit together. The regular pivot poller will
+%% discover the task after commit; no call to the pivot server is made.
+-spec insert_task_after_transaction(Delay, Module, Function, Key, Args, Context) ->
+    {ok, integer()} | {error, term()} when
+    Delay :: non_neg_integer(), Module :: module(), Function :: atom(),
+    Key :: binary(), Args :: list(), Context :: z:context().
+insert_task_after_transaction(Delay, Module, Function, Key, Args, Context) ->
+    case m_site:environment(Context) of
+        backup -> {error, backup};
+        _ -> do_insert_task_after(Delay, Module, Function, Key, Args, Context)
+    end.
 
 -spec get_task( z:context() ) -> {ok, [ map() ]} | {error, term()}.
 get_task(Context) ->

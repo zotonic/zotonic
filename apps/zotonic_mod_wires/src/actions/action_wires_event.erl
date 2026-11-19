@@ -89,8 +89,9 @@ script(interval, _TriggerId, _Trigger, PostbackMsgJS, _PickledPostback, ActionsJ
     Interval = proplists:get_value(interval, Args, 250),
     {[
         <<"setTimeout(function() { ">>,
-            z_utils:js_escape(PostbackMsgJS),
-            z_utils:js_escape(ActionsJS),
+            %% This is a function body, not a JavaScript string literal.
+            PostbackMsgJS,
+            ActionsJS,
         <<" }, ">>,
         io_lib:format("~p", [Interval]), <<");\n">>
     ], Context};

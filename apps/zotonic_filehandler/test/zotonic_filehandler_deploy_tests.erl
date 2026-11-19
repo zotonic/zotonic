@@ -99,11 +99,11 @@ git(Args, Dir) ->
     {ok, _} = exec:run("git " ++ Args, [sync, stdout, stderr, {cd, Dir}]),
     ok.
 
-%% Trace the calling process to verify the full-build lease is released before
+%% Trace the calling process to verify the deployment lease is released before
 %% either refresh starts. The tracer acknowledges delivery before assertions.
 checked_deploy(Checkout) ->
     Tracer = spawn_link(fun() -> collect_refresh_trace([]) end),
-    MFAs = [{zotonic_filehandler_update, build, 1}, {z, flush, 0}, {z, reindex, 0}],
+    MFAs = [{zotonic_filehandler_update, deploy, 1}, {z, flush, 0}, {z, reindex, 0}],
     lists:foreach(fun(MFA) -> erlang:trace_pattern(MFA, [{'_', [], [{return_trace}]}], [local]) end, MFAs),
     erlang:trace(self(), true, [call, {tracer, Tracer}]),
     try
@@ -126,7 +126,7 @@ checked_deploy(Checkout) ->
 
 collect_refresh_trace(Events) ->
     receive
-        {trace, _, return_from, {zotonic_filehandler_update, build, 1}, _} ->
+        {trace, _, return_from, {zotonic_filehandler_update, deploy, 1}, _} ->
             collect_refresh_trace([released | Events]);
         {trace, _, call, {z, Function, []}} when Function =:= flush; Function =:= reindex ->
             collect_refresh_trace([Function | Events]);

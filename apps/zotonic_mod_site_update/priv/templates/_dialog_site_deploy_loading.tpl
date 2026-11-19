@@ -7,6 +7,7 @@
         </p>
     </div>
     <div class="modal-footer">
+    {% include "_site_deploy_status.tpl" %}
         {% button class="btn btn-default" text=_"Cancel" action={dialog_close} %}
         <button type="button" class="btn btn-primary" disabled>{_ Deploy _}</button>
     </div>

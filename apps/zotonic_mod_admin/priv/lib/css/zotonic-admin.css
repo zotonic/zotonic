@@ -511,6 +511,15 @@ label .z-btn-help {
   vertical-align: text-bottom;
 }
 
+@media (min-width: 992px) {
+  .admin-section-heading {
+    display: flex;
+    align-items: center;
+  }
+  .admin-section-heading h3 {
+    margin: 0;
+  }
+}
 .admin-header {
   margin-bottom: 24px;
   *zoom: 1;
@@ -565,6 +574,10 @@ pre:empty {
   position: sticky;
   bottom: 0;
   background-color: var(--z-admin-sticky-bg);
+}
+
+.admin-system-navigation {
+  margin-bottom: 16px;
 }
 
 .text-muted {
@@ -2307,9 +2320,15 @@ ul.tree-list.connections-list li.menu-item-alert {
 .widget .widget-content {
   position: relative;
   color: var(--z-admin-widget-text);
-  padding: 15px 15px 0 15px;
+  padding: 15px 15px;
   border-radius: 0 0 10px 10px;
   border-top: none;
+}
+.widget .widget-content > :last-child {
+  margin-bottom: 0;
+}
+.widget .widget-content > .form-group:last-child > :last-child {
+  margin-bottom: 0;
 }
 .widget .widget-content.widget-content-full {
   padding: 0;
@@ -2334,9 +2353,7 @@ ul.tree-list.connections-list li.menu-item-alert {
 }
 .widget .widget-content .widget-content {
   padding-top: 0;
-}
-.widget .widget-content .widget-content > :last-child {
-  margin-bottom: 0;
+  padding-bottom: 0;
 }
 .widget .widget-content + .widget-content > .tab-pane {
   padding-top: 0;
@@ -2772,14 +2789,6 @@ li h3.widget-header {
 }
 .admin-edit-preview .admin-edit-preview-status {
   padding: 0 10px;
-}
-.admin-edit-preview .admin-edit-preview-dirty {
-  padding: 4px 8px;
-  border: 1px solid var(--bs-warning-border-subtle, #e6c76a);
-  border-radius: 3px;
-  background: var(--bs-warning-bg-subtle, #fff3cd);
-  color: var(--bs-warning-text-emphasis, #664d03);
-  font-weight: 600;
 }
 .admin-edit-preview .admin-edit-preview-dirty[hidden] {
   display: none;

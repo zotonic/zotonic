@@ -3,8 +3,15 @@
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-busy_pool_test() ->
-    Modules = [z_db_pool, z_sidejob, m_filestore, filestore_config],
+%% Keep backend mocks away from the running testsandbox's maintenance workers.
+filestore_test_() ->
+    z_test_support:isolated([
+        fun busy_pool/0,
+        {timeout, 15, fun batch_sidejob/0}
+    ]).
+
+busy_pool() ->
+    Modules = [z_db_pool, z_sidejob, m_filestore, m_cafs, filestore_config],
     lists:foreach(fun(M) -> meck:new(M, [passthrough, no_link]) end, Modules),
     meck:expect(filestore_config, is_read_only, fun(_) -> false end),
     try
@@ -15,27 +22,28 @@ busy_pool_test() ->
         meck:expect(m_filestore, fetch_deleted, fun(_, _, _) -> error(queue_polled) end),
         meck:expect(m_filestore, lookup, fun(_, _) -> error(upload_started) end),
         meck:expect(m_filestore, dequeue, fun(_, _) -> error(queue_entry_removed) end),
+        meck:expect(m_cafs, queue_uploads, fun(_) -> error(cafs_polled) end),
         Context = #context{site = zotonic_site_testsandbox},
         ?assertEqual({error, busy}, mod_filestore:next_batch(10, Context)),
         ?assertEqual({error, busy}, filestore_uploader:upload_job(
             1, <<"archive/test.jpg">>, {error, enoent}, #{}, Context)),
         ?assertEqual([], meck:history(m_filestore)),
+        ?assertEqual(0, meck:num_calls(m_cafs, queue_uploads, '_')),
         % The next tick resumes queue polling after foreground load drops.
         meck:expect(z_db_pool, is_low_load, fun(_) -> true end),
         meck:expect(filestore_config, is_upload_enabled, fun(_) -> true end),
         meck:expect(filestore_config, delete_interval, fun(_) -> <<"false">> end),
         meck:expect(m_filestore, fetch_queue, fun(_, _) -> {ok, []} end),
         meck:expect(m_filestore, fetch_move_to_local, fun(_, _) -> {ok, []} end),
+        meck:expect(m_cafs, queue_uploads, fun(_) -> ok end),
         ?assertEqual(ok, mod_filestore:next_batch(10, Context)),
+        ?assertEqual(1, meck:num_calls(m_cafs, queue_uploads, '_')),
         ?assertEqual(1, meck:num_calls(m_filestore, fetch_queue, '_')),
         ?assertEqual(1, meck:num_calls(m_filestore, fetch_move_to_local, '_')),
         lists:foreach(fun(M) -> ?assert(meck:validate(M)) end, Modules)
     after
         lists:foreach(fun meck:unload/1, Modules)
     end.
-
-batch_sidejob_test_() ->
-    {timeout, 15, fun batch_sidejob/0}.
 
 batch_sidejob() ->
     {ok, _} = application:ensure_all_started(sidejob),
@@ -48,7 +56,7 @@ batch_sidejob() ->
         {'EXIT', _} -> z_sidejob:init();
         _ -> ok
     end,
-    Modules = [z_db_pool, m_filestore, filestore_config],
+    Modules = [z_db_pool, m_filestore, m_cafs, filestore_config],
     lists:foreach(fun(M) -> meck:new(M, [passthrough, no_link]) end, Modules),
     meck:expect(filestore_config, is_read_only, fun(_) -> false end),
     Parent = self(),
@@ -61,6 +69,7 @@ batch_sidejob() ->
         meck:expect(filestore_config, is_upload_enabled, fun(_) -> true end),
         meck:expect(filestore_config, delete_interval, fun(_) -> <<"false">> end),
         meck:expect(m_filestore, fetch_move_to_local, fun(_, _) -> {ok, []} end),
+        meck:expect(m_cafs, queue_uploads, fun(_) -> ok end),
         meck:expect(m_filestore, fetch_queue, fun(_, Context) ->
             Parent ! {batch_started, z_context:site(Context), self()},
             receive
@@ -90,7 +99,9 @@ batch_sidejob() ->
         ?assertNotEqual(Worker1, Worker3),
         ?assertEqual(normal, finish_batch(Worker3, finish)),
         ?assertEqual(normal, finish_batch(Worker2, finish)),
-        ?assertMatch({ok, _}, gen_server:call(Server1, batch_size))
+        ?assertMatch({ok, _}, gen_server:call(Server1, batch_size)),
+        ?assertEqual(3, meck:num_calls(m_cafs, queue_uploads, '_')),
+        ?assert(meck:validate(m_cafs))
     after
         gen_server:stop(Server1),
         gen_server:stop(Server2),

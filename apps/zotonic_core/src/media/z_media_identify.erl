@@ -80,9 +80,13 @@ identify(File, OriginalFilename, Context) ->
 
 identify(File, MediumFilename, OriginalFilename, Context) ->
     F = fun() ->
-        case m_media:identify(MediumFilename, Context) of
-            {ok, _Props} = Result -> Result;
-            {error, _Reason} -> identify_file(File, OriginalFilename, Context)
+        case m_cafs:is_enabled(Context) of
+            false -> identify_file(File, OriginalFilename, Context);
+            true ->
+                case m_media:identify(MediumFilename, Context) of
+                    {ok, _Props} = Result -> Result;
+                    {error, _Reason} -> identify_file(File, OriginalFilename, Context)
+                end
         end
     end,
     z_depcache:memo(F, {media_identify, MediumFilename}, ?DAY, [media_identify], Context).
@@ -603,6 +607,8 @@ guess_mime(File) ->
     case z_string:to_lower( filename:extension( File ) ) of
         <<".jsonld">> -> <<"application/ld+json">>;
         <<".bert">> -> <<"application/x-bert">>;
+        % JFIF is JPEG, but is missing from the extension-based MIME database.
+        <<".jfif">> -> <<"image/jpeg">>;
         % Fonts have since 2017 their own mime types- https://tools.ietf.org/html/rfc8081#section-4.4.5
         <<".woff">> -> <<"font/woff">>;
         <<".woff2">> -> <<"font/woff2">>;

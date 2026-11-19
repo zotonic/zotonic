@@ -52,6 +52,7 @@ Accepted Events
 
 This module handles the following notifier callbacks:
 
+- `observe_media_preview_revision`: Contribute normalized edit settings to preview retention checks.
 - `observe_media_preview_options`: Expand the image modifications that influence the generated preview image using `m_image_edit:get_settings`.
 - `observe_media_upload_rsc_props`: Ensure `medium_edit_settings` is present/initialized on media upload.
 - `observe_rsc_update`: Sanitize crop/rotation and related image-edit properties on resource updates.
@@ -73,7 +74,8 @@ Delegate callbacks:
 
     observe_media_upload_rsc_props/3,
     observe_rsc_update/3,
-    observe_media_preview_options/3
+    observe_media_preview_options/3,
+    observe_media_preview_revision/3
 ]).
 
 event(#submit{ message = {edit_form, Args} }, Context) ->
@@ -122,6 +124,12 @@ observe_rsc_update(#rsc_update{}, {ok, #{ <<"medium_edit_settings">> := _ } = Pr
 observe_rsc_update(_, Acc, _Context) ->
     Acc.
 
+
+%% @doc Supply normalized edits, including legacy crop-center settings, for
+%% preview retirement. The core does not depend on this optional module.
+observe_media_preview_revision(#media_preview_revision{id=Id}, Revisions, Context) ->
+    {ok, Settings} = m_image_edit:get_settings(Id, Context),
+    [{?MODULE, Settings} | Revisions].
 
 %% @doc Expand the image modifications that influence the generated preview image.
 %% The order of the operations is important. As they are added in front of the

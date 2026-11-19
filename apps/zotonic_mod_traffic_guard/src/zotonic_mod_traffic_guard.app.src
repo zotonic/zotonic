@@ -1,0 +1,7 @@
+{application, zotonic_mod_traffic_guard, [
+    {description, "Observe and throttle excessive content requests."},
+    {vsn, {file, "../../VERSION"}},
+    {registered, []},
+    {applications, [kernel, stdlib, zotonic_core]},
+    {env, []}, {modules, []}, {licenses, ["Apache-2.0"]}
+]}.

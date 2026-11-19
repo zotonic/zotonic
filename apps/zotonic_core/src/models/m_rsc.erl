@@ -305,7 +305,7 @@ Available Model API Paths
                        | {is_import, boolean()}
                        | {tz, string()|binary()}
                        | {default_tz, string()|binary()}
-                       | {update_reason, update | media_processing}
+                       | {update_reason, update | media_processing | menu}
                        | {expected, list({binary()|atom(), term()})}.
 
 % Range of resource id values in PostgreSQL.

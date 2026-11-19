@@ -276,6 +276,7 @@ postgres(Db) ->
         language_policies(Context),
         recovery_regressions(Context),
         history_pagination(Context),
+        recipient_pagination(Context),
         delivery(Context),
         worker(Context),
         lifecycle(Context),
@@ -284,7 +285,8 @@ postgres(Db) ->
         access(Context),
         retention(Context),
         subscription_counts_and_retention(Context),
-        recipient_filters(Context)
+        recipient_filters(Context),
+        email_lookups(Context)
     after
         epgsql:squery(C, "rollback"),
         epgsql:close(C),
@@ -704,7 +706,7 @@ queue_ack() ->
     try
         {atomic, ok} = mnesia:create_table(email_queue, [
             {disc_copies, [node()]},
-            {attributes, [id, retry_on, retry, recipient, email, created, sent, pickled_context]}
+            {attributes, [id, retry_on, retry, recipient, email, created, sent, pickled_context, last_error]}
         ]),
         ok = mnesia:wait_for_tables([email_queue], 5000),
         Email = #email{to = <<"nobody@example.com">>, queue = true},
@@ -807,6 +809,59 @@ recovery_regressions(Ctx) ->
         <<"sending">>, z_db:q1("select status from mailinglist_run where id=$1", [Waiting], Ctx)
     ),
     z_db:q("delete from mailinglist_run where id=$1", [Waiting], Ctx).
+
+recipient_pagination(Ctx) ->
+    Run = new_run([{send_mode, <<"all">>}], Ctx),
+    z_db:q(
+        "insert into mailinglist_run_recipient(run_id,email,language,status)
+         select $1, 'person-' || n || '@Example.com', 'en',
+                case when n <= 200 then 'sent' else 'failed' end
+         from generate_series(1,201) n",
+        [Run], Ctx
+    ),
+    Fetch = fun(Payload) ->
+        {ok, {Result, []}} = m_mailinglist_run:m_get(
+            [<<"recipients_page">>, Run], #{payload => Payload}, Ctx
+        ),
+        Result
+    end,
+    First = Fetch(#{}),
+    Second = Fetch(#{<<"page">> => 2}),
+    Last = Fetch(#{<<"page">> => 3}),
+    ?assertEqual(201, maps:get(<<"total">>, First)),
+    ?assertEqual(3, maps:get(<<"pages">>, First)),
+    ?assertEqual(100, length(maps:get(<<"result">>, First))),
+    ?assertEqual(100, length(maps:get(<<"result">>, Second))),
+    ?assertEqual(1, length(maps:get(<<"result">>, Last))),
+    Ids = [maps:get(<<"id">>, R) || P <- [First, Second, Last],
+                                  R <- maps:get(<<"result">>, P)],
+    ?assertEqual(201, length(lists:usort(Ids))),
+    ?assertEqual(lists:sort(Ids), Ids),
+    ?assertEqual(First, Fetch(#{<<"page">> => <<"invalid">>})),
+    ?assertEqual(First, Fetch(#{<<"page">> => -1})),
+    ?assertEqual(Last, Fetch(#{<<"page">> => <<"999">>})),
+    ?assertEqual(First, Fetch(#{<<"email">> => <<"  @EXAMPLE.COM  ">>})),
+    Sent = Fetch(#{<<"status">> => <<"sent">>, <<"email">> => <<"person-">>, <<"page">> => 3}),
+    ?assertEqual(200, maps:get(<<"total">>, Sent)),
+    ?assertEqual(2, maps:get(<<"page">>, Sent)),
+    ?assertEqual(2, maps:get(<<"pages">>, Sent)),
+    lists:foreach(fun(Email) ->
+        ?assertMatch(#{<<"result">> := [], <<"total">> := 0,
+                       <<"page">> := 1, <<"pages">> := 1},
+                     Fetch(#{<<"email">> => Email, <<"page">> => 2}))
+    end, [<<"missing">>, <<"%">>, <<"_">>, <<"' OR true --">>]),
+    meck:new(z_acl, [passthrough, no_link]),
+    try
+        meck:expect(z_acl, is_allowed, fun(_, _, _) -> false end),
+        ?assertEqual({error, eacces}, m_mailinglist_run:m_get(
+            [<<"recipients_page">>, Run], undefined, Ctx
+        ))
+    after
+        meck:unload(z_acl)
+    end,
+    z_db:q("update mailinglist_run set details_expired=now() where id=$1", [Run], Ctx),
+    ?assertMatch(#{<<"result">> := [], <<"total">> := 0}, Fetch(#{})),
+    z_db:q("delete from mailinglist_run where id=$1", [Run], Ctx).
 
 history_pagination(Ctx) ->
     %% One hidden run must not remove the link to the remaining accessible run.
@@ -1218,3 +1273,193 @@ recipient_filters(Context) ->
         Emails(Search([{qstatus, <<"enabled">>}, {qlanguage, <<"en">>}]))),
     ?assertEqual([], Search([{qlanguage, <<"en' OR true --">>}])),
     ?assertEqual(Search([]), Search([{qsort, <<"invalid">>}, {qstatus, <<"invalid">>}, {qlanguage, <<"all">>}])).
+
+
+%% Exact-email administrative lookups must include disabled/direct subscriptions
+%% and resource edges without requiring an identity, while respecting ACLs.
+email_lookups(Ctx) ->
+    z_db:q("alter table email_status add column recent_error timestamptz,
+        add column recent_error_ct integer default 0, add column error_is_final boolean default false", Ctx),
+    z_db:q("insert into email_status(email,is_valid,is_blocked) values ('lookup@example.org',false,true)", Ctx),
+    z_db:q("insert into rsc(id) values (5),(6),(10),(11),(12),(13),(14),(15),(16)", Ctx),
+    %% 14 and 15 have email identities but no subscriptions; 16 is invisible.
+    z_db:q("create table edge(subject_id int, object_id int, predicate_id int)", Ctx),
+    z_db:q("insert into edge values (10,5,901),(11,5,902),(12,5,901),(13,5,901),(10,6,901),(10,5,999)", Ctx),
+    z_db:q("insert into mailinglist_recipient(mailinglist_id,email,confirm_key,is_enabled) values
+        (2,'lookup@example.org','lookup-on',true),
+        (3,'lookup@example.org','lookup-off',false),
+        (6,'lookup@example.org','lookup-hidden',true)", Ctx),
+    meck:expect(m_rsc, rid, fun
+        (subscriberof, _) -> 901;
+        (exsubscriberof, _) -> 902;
+        (mailinglist_test, _) -> 3;
+        (I, _) -> I
+    end),
+    meck:expect(m_rsc, p_no_acl, fun
+        (20, <<"email_raw">>, _) -> <<"editor@example.org">>;
+        (21, <<"email_raw">>, _) -> <<"status-editor@example.org">>;
+        (22, <<"email_raw">>, _) -> <<"resource-editor@example.org">>;
+        (12, <<"email_raw">>, _) -> <<"secondary-only@example.org">>;
+        (Id, <<"email_raw">>, _) when Id >= 10, Id =< 16 -> <<"LOOKUP@example.org">>;
+        (Id, <<"is_mailing_opt_out">>, _) when Id =:= 11; Id =:= 14 -> true;
+        (_, _, _) -> undefined
+    end),
+    %% Model boundary fixture: p/3 hides properties denied by the ACL, while
+    %% p_no_acl/3 above deliberately still contains the private email.
+    meck:expect(m_rsc, p, fun(Id, Property, Context) ->
+        AclProperty = case Property of <<"email_raw">> -> <<"email">>; _ -> Property end,
+        case z_acl:rsc_visible(Id, Context) andalso z_acl:rsc_prop_visible(Id, AclProperty, Context) of
+            true -> m_rsc:p_no_acl(Id, Property, Context);
+            false -> undefined
+        end
+    end),
+    ExtraModules = [z_acl, z_depcache, m_identity],
+    lists:foreach(fun(M) -> meck:new(M, [passthrough, no_link]) end, ExtraModules),
+    try
+        meck:expect(z_depcache, memo, fun(Fun, _, _, _) -> Fun() end),
+        meck:expect(m_identity, lookup_by_type_and_key_multi, fun
+            (email, <<"lookup@example.org">>, _) ->
+                [[{rsc_id, Id}] || Id <- [10,12,14,15,16]];
+            (email, _, _) -> []
+        end),
+        meck:expect(z_acl, rsc_visible, fun(Id, _) -> Id =/= 13 andalso Id =/= 16 end),
+        meck:expect(z_acl, rsc_editable, fun(Id, _) -> Id =/= 6 end),
+        {ok, {Lookup, []}} = m_mailinglist:m_get(
+            [<<"email_subscriptions">>, <<" LOOKUP@example.org ">>], undefined, Ctx),
+        ?assertMatch(#{<<"email">> := <<"lookup@example.org">>,
+                       <<"email_status">> := #{<<"is_valid">> := false,
+                           <<"is_ok_to_send">> := false, <<"is_blocked">> := true}}, Lookup),
+        ?assertEqual([
+            #{<<"rsc_id">> => 10, <<"is_opt_out">> => false},
+            #{<<"rsc_id">> => 11, <<"is_opt_out">> => true},
+            #{<<"rsc_id">> => 14, <<"is_opt_out">> => true},
+            #{<<"rsc_id">> => 15, <<"is_opt_out">> => false}
+        ], maps:get(<<"resources">>, Lookup)),
+        %% A resource subscribed to multiple lists appears only once above them.
+        z_db:q("insert into edge values (10,2,901)", Ctx),
+        {ok, {MultipleLists, []}} = m_mailinglist:m_get(
+            [<<"email_subscriptions">>, <<"lookup@example.org">>], undefined, Ctx),
+        ?assertEqual(maps:get(<<"resources">>, Lookup), maps:get(<<"resources">>, MultipleLists)),
+        z_db:q("delete from edge where subject_id=10 and object_id=2", Ctx),
+        Subs = maps:get(<<"subscriptions">>, Lookup),
+        ?assertEqual(4, length(Subs)),
+        ?assertEqual([false, true], lists:sort([maps:get(<<"is_enabled">>, R) || R <- Subs,
+            maps:is_key(<<"recipient_id">>, R)])),
+        ?assertEqual([10,11], lists:sort([Id || #{<<"rsc_id">> := Id} <- Subs])),
+        [Unsubscribed] = [R || #{<<"rsc_id">> := 11} = R <- Subs],
+        ?assertMatch(#{<<"is_enabled">> := false, <<"is_opt_out">> := true}, Unsubscribed),
+        ?assertEqual({error, badarg}, m_mailinglist:m_get([<<"email_subscriptions">>, <<>>], undefined, Ctx)),
+        {ok, {NoSubs, []}} = m_mailinglist:m_get([<<"email_subscriptions">>, <<"lookup+other@example.org">>], undefined, Ctx),
+        ?assertEqual([], maps:get(<<"subscriptions">>, NoSubs)),
+        ?assertEqual([], maps:get(<<"resources">>, NoSubs)),
+        email_history_lookup(Ctx),
+        email_lookup_permissions(Ctx),
+        meck:expect(z_acl, is_allowed, fun(_, _, _) -> false end),
+        ?assertEqual({error, eacces}, m_mailinglist:m_get([<<"email_subscriptions">>, <<"lookup@example.org">>], undefined, Ctx)),
+        ?assertEqual({error, eacces}, m_mailinglist_run:m_get([<<"email_history">>, <<"lookup@example.org">>], undefined, Ctx))
+    after
+        lists:foreach(fun meck:unload/1, ExtraModules)
+    end.
+
+email_history_lookup(Ctx) ->
+    %% Hidden newest result must not hide navigation to the remaining matches.
+    z_db:q("with runs as (
+        insert into mailinglist_run(page_id,mailinglist_id,status,created)
+        select case when n=201 then 13 else 1 end,2,'completed',now()+n*interval '1 second'
+        from generate_series(1,201) n returning id,created
+    ) insert into mailinglist_run_recipient(run_id,email,language,status,reason,modified)
+        select id,'lookup@example.org','en','bounced','550 An RBL has blocked the sender IP',created from runs", Ctx),
+    Fetch = fun(Offset) ->
+        {ok, {Result, []}} = m_mailinglist_run:m_get([<<"email_history">>, <<" LOOKUP@example.org ">>],
+            #{payload => #{<<"offset">> => Offset}}, Ctx),
+        Result
+    end,
+    First = Fetch(0),
+    ?assertEqual(199, length(maps:get(<<"results">>, First))),
+    ?assertEqual(200, maps:get(<<"next_offset">>, First)),
+    Second = Fetch(200),
+    ?assertEqual(1, length(maps:get(<<"results">>, Second))),
+    ?assertEqual(undefined, maps:get(<<"next_offset">>, Second)),
+    [Row] = maps:get(<<"results">>, Second),
+    ?assertMatch(#{<<"status">> := <<"bounced">>, <<"reason">> := <<"550 An RBL has blocked the sender IP">>}, Row),
+    ?assertEqual(First, Fetch(<<"invalid">>)),
+    ?assertEqual({error, badarg}, m_mailinglist_run:m_get([<<"email_history">>, <<"not-an-email">>], undefined, Ctx)),
+    {ok, {Other, []}} = m_mailinglist_run:m_get([<<"email_history">>, <<"lookup+other@example.org">>], undefined, Ctx),
+    ?assertEqual([], maps:get(<<"results">>, Other)),
+    Id = maps:get(<<"id">>, Row),
+    z_db:q("update mailinglist_run set details_expired=now() where id=$1", [Id], Ctx),
+    ?assertEqual(First#{<<"next_offset">> => undefined}, Fetch(0)),
+    z_db:q("update mailinglist_run_recipient set modified=now()-interval '4 months' where email='lookup@example.org'", Ctx),
+    ?assertEqual([], maps:get(<<"results">>, Fetch(0))).
+
+
+email_lookup_permissions(AdminCtx) ->
+    %% These users are explicitly non-admin and do not inherit the fixture's
+    %% admin ACL. Module access, list editing and property visibility differ.
+    Editor = AdminCtx#context{user_id=20, acl=undefined},
+    StatusEditor = Editor#context{user_id=21},
+    ResourceEditor = Editor#context{user_id=22},
+    meck:expect(z_acl, is_admin, fun
+        (#context{acl=admin}) -> true;
+        (#context{user_id=1}) -> true;
+        (_) -> false
+    end),
+    meck:expect(z_acl, is_allowed, fun
+        (use, mod_mailinglist, _) -> true;
+        (use, mod_email_status, #context{user_id=21}) -> true;
+        (_, _, _) -> false
+    end),
+    meck:expect(z_acl, rsc_editable, fun
+        (10, #context{user_id=22}) -> true;
+        (Id, _) -> lists:member(Id, [2,3,5])
+    end),
+    meck:expect(z_acl, rsc_prop_visible, fun
+        (10, <<"email">>, #context{user_id=22}) -> true;
+        (Id, <<"email">>, _) when Id =:= 10; Id =:= 15 -> false;
+        (_, _, _) -> true
+    end),
+    lists:foreach(fun(Context) -> ?assertNot(z_acl:is_admin(Context)) end,
+        [Editor, StatusEditor, ResourceEditor]),
+    Lookup = fun(Email, Context) ->
+        {ok, {Result, []}} = m_mailinglist:m_get([<<"email_subscriptions">>, Email], undefined, Context),
+        Result
+    end,
+    Private = Lookup(<<"lookup@example.org">>, Editor),
+    %% Resource 10 is visible and its list editable, but its email is private.
+    ?assert(z_acl:rsc_visible(10, Editor)),
+    ?assert(z_acl:rsc_editable(5, Editor)),
+    ?assertNot(z_acl:rsc_prop_visible(10, <<"email">>, Editor)),
+    ?assertEqual([11], [Id || #{<<"rsc_id">> := Id} <- maps:get(<<"subscriptions">>, Private)]),
+    ?assertEqual([
+        #{<<"rsc_id">> => 11, <<"is_opt_out">> => true},
+        #{<<"rsc_id">> => 14, <<"is_opt_out">> => true}
+    ], maps:get(<<"resources">>, Private)),
+    ?assertEqual(undefined, maps:get(<<"email_status">>, Private)),
+    ?assertNot(maps:is_key(<<"is_blocked">>, Private)),
+    ?assertNot(maps:is_key(<<"is_ok_to_send">>, Private)),
+    ?assertNot(maps:is_key(<<"is_valid">>, Private)),
+    ?assertEqual({error, eacces}, m_email_status:m_get([<<"lookup@example.org">>], undefined, Editor)),
+    %% A denied summary must not read status data, including unknown addresses.
+    lists:foreach(fun(Email) ->
+        Calls = meck:num_calls(z_db, q, '_'),
+        ?assertEqual({error, eacces}, m_email_status:summary(Email, Editor)),
+        ?assertEqual({error, eacces}, m_email_status:m_get([<<"summary">>, Email], undefined, Editor)),
+        ?assertEqual(Calls, meck:num_calls(z_db, q, '_'))
+    end, [<<"lookup@example.org">>, <<"unrelated@example.org">>]),
+    Unknown = Lookup(<<"unrelated@example.org">>, Editor),
+    ?assertEqual([], maps:get(<<"subscriptions">>, Unknown)),
+    ?assertEqual(undefined, maps:get(<<"email_status">>, Unknown)),
+    %% Email-status permission does not grant access to private resource emails.
+    WithStatus = Lookup(<<"lookup@example.org">>, StatusEditor),
+    ?assertEqual([11], [Id || #{<<"rsc_id">> := Id} <- maps:get(<<"subscriptions">>, WithStatus)]),
+    ?assertMatch(#{<<"is_blocked">> := true, <<"is_ok_to_send">> := false}, maps:get(<<"email_status">>, WithStatus)),
+    {ok, {Summary, []}} = m_email_status:m_get([<<"summary">>, <<" LOOKUP@example.org ">>], undefined, StatusEditor),
+    ?assertEqual(maps:get(<<"email_status">>, WithStatus), Summary),
+    %% Existing authorization for one's own email and an editable email identity
+    %% remains available without global email-status permission.
+    Own = Lookup(<<"editor@example.org">>, Editor),
+    ?assertMatch(#{<<"is_valid">> := true, <<"is_ok_to_send">> := true, <<"is_blocked">> := false},
+        maps:get(<<"email_status">>, Own)),
+    Editable = Lookup(<<"lookup@example.org">>, ResourceEditor),
+    ?assertEqual([10,11], lists:sort([Id || #{<<"rsc_id">> := Id} <- maps:get(<<"subscriptions">>, Editable)])),
+    ?assertMatch(#{<<"is_blocked">> := true}, maps:get(<<"email_status">>, Editable)).

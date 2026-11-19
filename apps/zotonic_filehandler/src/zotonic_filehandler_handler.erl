@@ -29,7 +29,8 @@
     reload_module/1,
     ignore_dir/2,
     ignore_action/2,
-    update_barrier/0
+    update_barrier/0,
+    update_barrier/1
 ]).
 
 -export([
@@ -53,16 +54,22 @@
 -record(state, {
         pending = #{} :: map(),
         ignore_dir = #{} :: #{ [ binary() ] := boolean() },
-        ignore_action = #{} :: #{ term() := boolean() }
+        ignore_action = #{} :: #{ term() := boolean() },
+        is_deployment = false :: boolean()
     }).
 
 
 %% @doc Wait for already executing file actions before modifying the working tree.
 update_barrier() ->
+    update_barrier(update).
+
+%% Keep deployment asset suppression through failures and the recovery build.
+-spec update_barrier(update | build | deploy) -> ok.
+update_barrier(Kind) ->
     case whereis(?MODULE) of
         Pid when Pid =:= self() -> ok;
         undefined -> ok;
-        _ -> gen_server:call(?MODULE, update_barrier, infinity)
+        _ -> gen_server:call(?MODULE, {update_barrier, Kind}, infinity)
     end.
 
 -spec handle_changes( map() ) -> ok.
@@ -113,6 +120,10 @@ init([]) ->
 
 handle_call(update_barrier, _From, State) ->
     {reply, ok, State};
+handle_call({update_barrier, deploy}, _From, State) ->
+    {reply, ok, State#state{is_deployment = true}};
+handle_call({update_barrier, _Kind}, _From, State) ->
+    {reply, ok, State};
 handle_call({filewatcher_changes, Es}, _From, State) ->
     case zotonic_filehandler_update:is_pending() of
         true ->
@@ -154,6 +165,7 @@ perform_changes(Es, State) ->
     Actions1 = lists:filter(
         fun(Act) ->
             not maps:is_key(Act, State#state.ignore_action)
+                andalso not (State#state.is_deployment andalso is_asset_build(Act))
         end,
         Actions),
     Result = perform(Actions1),
@@ -207,7 +219,7 @@ handle_info(replay_changes, #state{pending = Pending} = State) ->
         true -> {noreply, State};
         false ->
             {_Result, State1} = perform_changes(Pending, State#state{pending = #{}}),
-            {noreply, State1}
+            {noreply, State1#state{is_deployment = false}}
     end;
 handle_info(_Msg, State) ->
     {noreply, State}.
@@ -222,6 +234,13 @@ terminate(_Reason, _State) ->
 
 normalize_dir(Dir) ->
     lists:reverse( filename:split( z_convert:to_binary(Dir) ) ).
+
+%% Deployments consume committed priv/lib output, but still notify indexes and
+%% caches about changed files. Ordinary development keeps asset compilation.
+is_asset_build({zotonic_filehandler_mappers, Function, _}) ->
+    lists:member(Function, [run_build, compile_sass, compile_less, compile_coffee]);
+is_asset_build(_) ->
+    false.
 
 is_ignored_dir(Filename, IgnoredDirs) ->
     Fileparts = normalize_dir( filename:dirname(Filename) ),

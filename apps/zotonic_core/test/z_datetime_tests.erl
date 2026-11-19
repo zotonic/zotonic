@@ -183,3 +183,69 @@ bulk_arithmetic_input_shapes_test() ->
     ?assertEqual({{0,2,29},{0,0,0}}, z_datetime:prev_month({0,3,31},1)),
     ?assertEqual({{-1,12,31},{0,0,0}}, z_datetime:prev_month({0,1,31},1)),
     ?assertEqual({{0,1,31},{0,0,0}}, z_datetime:next_month({-1,12,31},1)).
+
+
+timestamp_conversion_test() ->
+    lists:foreach(fun({Seconds, DateTime}) ->
+        ?assertEqual(DateTime, z_datetime:timestamp_to_datetime(Seconds)),
+        ?assertEqual(DateTime, z_datetime:to_datetime(Seconds)),
+        ?assertEqual(Seconds, z_datetime:datetime_to_timestamp(DateTime))
+    end, [
+        {-1, {{1969,12,31},{23,59,59}}},
+        {0, {{1970,1,1},{0,0,0}}},
+        {951782400, {{2000,2,29},{0,0,0}}},
+        {2147483648, {{2038,1,19},{3,14,8}}}
+    ]).
+
+
+bce_timestamp_test() ->
+    ?assertEqual({{-1,12,31},{23,59,59}}, z_datetime:timestamp_to_datetime(-62167219201)),
+    ?assertEqual(-62167219201, z_datetime:datetime_to_timestamp({{-1,12,31},{23,59,59}})),
+    %% Independent oracle: shifting 400 years preserves month/day and adds
+    %% exactly 146097 days. Exercise leap centuries and the validation bound.
+    lists:foreach(fun(Y) ->
+        lists:foreach(fun({M,D}) ->
+            DT = {{Y,M,D},{12,34,56}},
+            case z_datetime:undefined_if_invalid_date(DT) of
+                undefined -> ok;
+                DT ->
+                    Seconds = z_datetime:datetime_to_timestamp(DT),
+                    ?assertEqual(DT, z_datetime:timestamp_to_datetime(Seconds)),
+                    ?assertEqual(DT, z_datetime:to_datetime(Seconds)),
+                    ?assertEqual(146097*86400,
+                        z_datetime:datetime_to_timestamp({{Y+400,M,D},{12,34,56}})-Seconds)
+            end
+        end, [{1,1},{2,28},{2,29},{3,1},{12,31}])
+    end, [-4713,-4712,-401,-400,-399,-100,-4,-1,0,1]),
+    Boundary = {{0,1,1},{0,0,0}},
+    ?assertEqual({{-1,12,31},{23,59,59}}, z_datetime:prev_second(Boundary,1)),
+    ?assertEqual(Boundary, z_datetime:next_second({{-1,12,31},{23,59,59}},1)).
+
+bce_calendar_test() ->
+    ?assertEqual(366,z_datetime:days_in_year(-400)),
+    ?assertEqual(365,z_datetime:days_in_year(-100)),
+    ?assertEqual(366,z_datetime:days_in_year(-4)),
+    lists:foreach(fun(Y) ->
+        DT = {{Y,3,1},{12,0,0}},
+        {Start,End} = z_datetime:week_boundaries(DT),
+        ?assert(Start =< DT), ?assert(End >= DT),
+        ?assertEqual(7*86400-1,
+            z_datetime:datetime_to_timestamp(End)-z_datetime:datetime_to_timestamp(Start)),
+        ?assertEqual(Start,z_datetime:week_start(1,DT))
+    end, [-4713,-400,-100,-1,0]).
+
+
+bce_utc_test() ->
+    lists:foreach(fun(DT) ->
+        ?assertEqual(DT,z_datetime:to_local(DT,<<"UTC">>)),
+        ?assertEqual(DT,z_datetime:to_utc(DT,<<"UTC">>)),
+        ?assertEqual(DT,z_datetime:to_utc(DT,<<"GMT">>))
+    end, [{{-400,2,29},{23,59,59}},{{0,2,29},{0,0,0}},{{-4713,1,1},{12,0,0}}]).
+
+bce_timezone_test() ->
+    {ok,_} = application:ensure_all_started(qdate),
+    lists:foreach(fun(DT) ->
+        Local = z_datetime:to_local(DT, <<"Europe/Amsterdam">>),
+        ?assertNotEqual(undefined, Local),
+        ?assertEqual(DT, z_datetime:to_utc(Local, <<"Europe/Amsterdam">>))
+    end, [{{-400,2,29},{23,30,0}}, {{-1,12,31},{23,30,0}}, {{0,1,1},{0,0,0}}]).

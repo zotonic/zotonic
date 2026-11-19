@@ -471,12 +471,12 @@ observe_tick_24h(tick_24h, Context) ->
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
      [
      #menu_item{id=admin_oauth2_apps,
-                parent=admin_auth,
+                parent=admin_integrations_group,
                 label=?__("OAuth2 Applications", Context),
                 url={admin_oauth2_apps, []},
                 visiblecheck={acl, use, mod_admin_config}},
      #menu_item{id=admin_oauth2_consumers,
-                parent=admin_auth,
+                parent=admin_integrations_group,
                 label=?__("OAuth2 Clients", Context),
                 url={admin_oauth2_consumers, []}}
     | Acc ].

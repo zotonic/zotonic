@@ -176,7 +176,7 @@
 
 
         <div class="widget sticky-bottom">
-            <div class="widget-content" style="padding: 10px">
+            <div class="widget-content">
                 <button class="btn btn-primary" type="submit">{_ Save SEO settings _}</button>
             </div>
         </div>

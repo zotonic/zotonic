@@ -1,8 +1,8 @@
 # Zotonic Site Data and APIs
 
 Use the least invasive interface that exposes the required data. Prefer public,
-read-only HTTP model calls for a remote site and direct model calls for a local
-running node. Use SQL only when the model layer cannot answer the inspection
+read-only model calls over HTTP or the authenticated browser MQTT bridge for a
+remote site, and direct model calls for a local running node. Use SQL only when the model layer cannot answer the inspection
 question.
 
 ## Inspect a Running Site over HTTP
@@ -61,6 +61,96 @@ Do not print, commit, or persist bearer tokens. HTTP `POST` and `DELETE` model
 calls can mutate the site; only issue them when the user requested that change.
 In browser JavaScript, the equivalent server-model topic is
 `bridge/origin/model/<model>/<get|post|delete>/<model-path...>`.
+
+## Call Models over MQTT from the Browser
+
+With browser access to the site, use Cotonic's authenticated origin bridge:
+
+```text
+bridge/origin/model/<model>/<get|post|delete>/<model-path...>
+```
+
+Use the model name without the Erlang `m_` prefix. For example,
+`m_rsc:m_get([<<"1234">>, <<"title">>], Msg, Context)` corresponds to
+`bridge/origin/model/rsc/get/1234/title`. The server broker sees
+`model/rsc/get/1234/title`; `bridge/origin` is the browser's routing prefix.
+Browser-local `model/...` topics are not interchangeable with server model topics.
+
+On a non-production site with administrator access and the development tools,
+discover model names with `await z_development_tools.models({prefix: "rsc"})`
+and read their API docs with `await z_development_tools.modelDocumentation("rsc")`.
+The returned methods are exported callbacks, not authorization; static GET-path
+hints are incomplete. Missing documentation does not imply an unsupported API.
+Use the model's documented contract before constructing a call.
+
+Wait for Cotonic initialization, call the topic, and check the response envelope:
+
+```javascript
+async function modelCall(model, verb, path, payload = {}) {
+    await cotonic.ready;
+    const response = await cotonic.broker.call(
+        `bridge/origin/model/${model}/${verb}/${path}`,
+        payload,
+        {timeout: 15000}
+    );
+    const envelope = response.payload;
+    if (envelope.status !== "ok") {
+        const error = new Error(
+            typeof envelope.error === "string"
+                ? envelope.error
+                : JSON.stringify(envelope.error)
+        );
+        error.code = envelope.error;
+        throw error;
+    }
+    return envelope.result;
+}
+
+const title = await modelCall("rsc", "get", "1234/title");
+const resource = await modelCall("rsc_export", "get", "1234");
+const page = await modelCall("search", "get", "paged", {
+    cat: "article", page: 1, pagelen: 20
+});
+```
+
+Pass arguments as the payload object, not as a query string appended to the
+MQTT topic. They arrive as `Msg.payload`; a model may additionally map them to
+query arguments. Read its actual `m_get/3`, `m_post/3`, or `m_delete/3` interface
+before assuming supported paths or fields. Put paths containing `/` (such as
+URLs or template filenames) in payload fields when the model accepts them,
+rather than accidentally splitting one argument into multiple topic segments.
+
+`cotonic.broker.call()` manages the reply subscription and MQTT `response_topic`.
+It resolves to a broker message, not directly to the model value. A resolved
+promise can still contain `{status: "error", error: ...}`; distinguish that from
+a timeout/transport rejection. Use `publish()` only when no result is needed:
+a publish acknowledgement does not establish that the model operation succeeded.
+Requests without a response topic do not receive model responses.
+
+For an authorized mutation, the same helper supports `post` and `delete`:
+
+```javascript
+// Stop an existing development capture when that is part of the task.
+await modelCall("development_capture", "post", `stop/${capture.id}`, {});
+```
+
+A verb describes how the model callback is selected; inspect the model contract
+for its actual effects. Do not blindly retry writes after a timeout: the server
+may have completed them. QoS does not establish exactly-once application behavior.
+
+Calls use the browser bridge's authenticated user and the model's normal ACLs.
+They do not bypass permissions or grant admin access. General model APIs can be
+available on production; the development tools/capture APIs specifically require
+admin access on development, test, or acceptance sites. Use the open site's own
+browser context; do not pass an HTTP Authorization header as an MQTT payload.
+If only an OAuth2 token is available, authenticated HTTP is the straightforward
+alternative unless an appropriate MQTT client session is already established.
+
+For development inspection, prefer `window.z_development_tools` and
+`window.z_development_capture` when present; they wrap these model calls. Use
+this generic pattern for other models or supported operations without wrappers.
+Return results through browser tooling instead of logging sensitive data or
+feeding diagnostic results back into an active console capture.
 
 ## Inspect a Site from the Erlang Shell
 

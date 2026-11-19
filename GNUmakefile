@@ -2,17 +2,23 @@ ERL       ?= erl
 ERLC      ?= $(ERL)c
 APP       := zotonic
 
-# Erlang Rebar downloading
-# see: https://groups.google.com/forum/?fromgroups=#!topic/erlang-programming/U0JJ3SeUv5Y
+# Prefer the checkout's rebar3. An explicit download also selects it for this run.
 REBAR := ./rebar3
-REBAR_URL := https://s3.amazonaws.com/rebar3/rebar3
-REBAR_ETAG := rebar_etag
+ifeq ($(wildcard ./rebar3),)
+ifeq ($(filter rebar3 ./rebar3,$(MAKECMDGOALS)),)
+REBAR := $(or $(shell command -v rebar3),./rebar3)
+endif
+endif
+
+REBAR_URL := https://github.com/erlang/rebar3/releases/download/3.27.3/rebar3
+REBAR_SHA256 := f1d87d78decfc56b87d971c75ee6355698ec0c49fadd57f2c056043b7ca291b5
+REBAR_STAMP := ./.rebar3-$(REBAR_SHA256)
 REBAR_OPTS ?=
 
-ifneq (${https_proxy},)
-PROXY_HOSTNAME=$(shell echo ${https_proxy} | awk -F ":" '{print $$2}' | cut -c 3-)
-PROXY_PORT=$(shell echo ${https_proxy} | awk -F ":" '{print $$3}')
-SET_HTTPS_PROXY=ok = httpc:set_options([{https_proxy, {{"${PROXY_HOSTNAME}", ${PROXY_PORT}}, []}}]),
+ifdef https_proxy
+PROXY_HOSTNAME := $(shell echo ${https_proxy} | awk -F ":" '{print $$2}' | cut -c 3-)
+PROXY_PORT := $(shell echo ${https_proxy} | awk -F ":" '{print $$3}')
+PROXY_ARGS := --proxy "$(PROXY_HOSTNAME)" "$(PROXY_PORT)"
 endif
 
 .PHONY: all upgrade-deps compile-core compile dev test update-cotonic update
@@ -21,11 +27,14 @@ endif
 all: compile-core compile
 	@echo "Zotonic" `bin/zotonic -v` "was successfully compiled"
 
-$(REBAR): $(REBAR_ETAG)
-	$(ERL) -noshell -s inets -s ssl \
-	  -eval 'file:delete("$(REBAR)"), $(SET_HTTPS_PROXY) {ok, saved_to_file} = httpc:request(get, {"$(REBAR_URL)", []}, [{ssl, [ {verify, verify_none} ]}], [{stream, "$(REBAR)"}])' \
-	  -s init stop
-	chmod +x $(REBAR)
+$(REBAR_STAMP):
+	rm -f ./.rebar3-*
+	touch $@
+	rm -f ./rebar3
+
+# Run `make rebar3` to download the pinned version, even when PATH has rebar3.
+./rebar3: $(REBAR_STAMP)
+	./tools/download.escript "$(REBAR_URL)" "./rebar3" --sha256 "$(REBAR_SHA256)" --executable $(PROXY_ARGS)
 
 # Use Rebar to get, update and compile dependencies
 .PHONY: upgrade-deps compile-zotonic compile test
@@ -64,10 +73,10 @@ update-cotonic:
 .PHONY: xref dialyzer
 
 xref: $(REBAR)
-	./rebar3 xref
+	$(REBAR) xref
 
 dialyzer: $(REBAR)
-	./rebar3 dialyzer
+	$(REBAR) dialyzer
 
 # Generate documentation
 .PHONY: edocs
@@ -75,21 +84,6 @@ dialyzer: $(REBAR)
 edocs: $(REBAR)
 	@echo Building reference edoc documentation...
 	@ZOTONIC=`pwd` bin/generate_edoc.escript
-
-# Get ETAG from rebar3 amazon cloud and update etag file if different.
-
-# First use if it does not exist at all
-# used by "make compile" dependencies
-$(REBAR_ETAG):
-	$(ERL) -noshell -s inets -s ssl \
-		-eval '$(SET_HTTPS_PROXY) case httpc:request(head, {"$(REBAR_URL)", []}, [{ssl, [ {verify, verify_none} ]},{timeout, 2000}], []) of {ok, {_, Headers,_}} -> Etag = proplists:get_value("etag", Headers), Bin = list_to_binary(Etag), case file:read_file("$(REBAR_ETAG)") of {ok, Bin} -> io:fwrite("ETag update not needed~n"); {ok, _OldEtag} -> file:write_file("$(REBAR_ETAG)", Bin); {error, enoent} -> file:write_file("$(REBAR_ETAG)", Bin); _ -> ok end,   io:fwrite("Etag: ~s~n",[Etag]); Error -> io:fwrite("Failed to get rebar3 etag: ~p~n",[Error]) end' \
-		-s init stop
-
-.PHONY: pull
-pull:
-	$(ERL) -noshell -s inets -s ssl \
-		-eval '$(SET_HTTPS_PROXY) case httpc:request(head, {"$(REBAR_URL)", []}, [{ssl, [ {verify, verify_none} ]},{timeout, 2000}], []) of {ok, {_, Headers,_}} -> Etag = proplists:get_value("etag", Headers), Bin = list_to_binary(Etag), case file:read_file("$(REBAR_ETAG)") of {ok, Bin} -> io:fwrite("ETag update not needed~n"); {ok, _OldEtag} -> file:write_file("$(REBAR_ETAG)", Bin); {error, enoent} -> file:write_file("$(REBAR_ETAG)", Bin); _ -> ok end,   io:fwrite("Etag: ~s~n",[Etag]); Error -> io:fwrite("Failed to get rebar3 etag: ~p~n",[Error]) end' \
-		-s init stop
 
 # Cleaning
 .PHONY: clean_logs
@@ -108,4 +102,5 @@ clean: clean_logs $(REBAR)
 .PHONY: dist-clean
 dist-clean: clean
 	$(REBAR) $(REBAR_OPTS) clean -a
+	rm -f ./.rebar3-*
 	rm -f ./rebar3

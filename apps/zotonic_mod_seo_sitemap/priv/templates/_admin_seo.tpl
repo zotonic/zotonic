@@ -22,5 +22,6 @@
             {% with `x-default` as z_language %}
                 <tt>{% url sitemap_xml absolute_url %}</tt>
             {% endwith %}
+        </p>
     </div>
 </div>
