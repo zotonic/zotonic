@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-16 23:27\n"
+"PO-Revision-Date: 2026-11-19 15:33\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -13293,7 +13293,7 @@ msgstr "Déjà dans la file d'attente : {count};"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:9
 msgid "Any page can be sent as a mailing. You can send a mailing from any edit page. On this page you can add or remove mailing lists and their recipients."
-msgstr "Toute page peut être envoyée par courrier. Vous pouvez envoyer un courrier à partir de n'importe quelle page d'édition. Sur cette page, vous pouvez ajouter ou supprimer des listes de diffusion et leurs destinataires."
+msgstr "Toute page peut être envoyée par e-mail. Vous pouvez envoyer un e-mail à partir de n’importe quelle page d’édition. Sur cette page, vous pouvez ajouter ou supprimer des listes de diffusion et leurs destinataires."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_cancel_confirm.tpl:1
 msgid "Are you sure you want to cancel the mailing to “{list}”?"
@@ -13317,7 +13317,7 @@ msgstr "En attente de confirmation : {count};"
 
 #: zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:13
 msgid "Before you will receive any further mail you need to confirm your subscription."
-msgstr "Avant de recevoir tout autre courrier, vous devez confirmer votre abonnement."
+msgstr "Avant de recevoir d’autres e-mails, vous devez confirmer votre abonnement."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_cancel_confirm.tpl:5
 msgid "Cancel mailing"
@@ -13567,11 +13567,11 @@ msgstr "Activé"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:37
 msgid "Enter a valid email address to look up mailing results."
-msgstr "Saisissez une adresse e-mail valide pour consulter les résultats de la recherche."
+msgstr "Saisissez une adresse e-mail valide pour consulter les résultats des envois."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:86
 msgid "Enter a valid email address to look up subscriptions."
-msgstr "Saisissez une adresse e-mail valide pour consulter vos abonnements."
+msgstr "Saisissez une adresse e-mail valide pour consulter les abonnements."
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:278
 msgid "Enter a valid future mailing date and time."
@@ -13612,7 +13612,7 @@ msgstr "Langue de secours :"
 
 #: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:12
 msgid "Find mailings by email address"
-msgstr "Rechercher des courriers par adresse e-mail"
+msgstr "Rechercher des envois d’e-mails par adresse e-mail"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:24
 msgid "Find recent mailings to this address"
@@ -13642,7 +13642,7 @@ msgstr "Suivez les envois en cours et consultez les résultats précédents. Pou
 
 #: zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:13
 msgid "From now on you will receive mail from our mailing list."
-msgstr "A partir de maintenant, vous recevrez un courrier de notre liste de diffusion."
+msgstr "À partir de maintenant, vous recevrez les e-mails de notre liste de diffusion."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:2
 msgid "Future phases have no actual timestamp yet."
@@ -13684,11 +13684,11 @@ msgstr "Si leur langue préférée n'est pas disponible ou n'est pas définie, u
 
 #: zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:24
 msgid "If you don’t want to receive any mail then please ignore this message."
-msgstr "Si vous ne souhaitez pas recevoir de courrier, veuillez ignorer ce message."
+msgstr "Si vous ne souhaitez pas recevoir d’e-mails, veuillez ignorer ce message."
 
 #: zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:16
 msgid "If you don’t want to receive any more mail then <a href=\"{url}\">click here to unsubscribe</a>."
-msgstr "Si vous ne souhaitez plus recevoir de courrier, alors <a href=\"{url}\">cliquez ici pour vous désabonner</a>."
+msgstr "Si vous ne souhaitez plus recevoir d’e-mails, <a href=\"{url}\">cliquez ici pour vous désabonner</a>."
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:50
 msgid "If you opt-out then it is still possible to subscribe to mailing lists using an e-mail address (instead of your account)."
@@ -13849,7 +13849,7 @@ msgstr "Correspondance avec les langues préférées uniquement"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:55
 msgid "Matching resources"
-msgstr "Ressources associées"
+msgstr "Ressources correspondantes"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:35
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:56
@@ -13911,7 +13911,7 @@ msgstr "Aucune copie enregistrée n'est disponible. Il se peut qu'il n'y ait pas
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:42
 msgid "No tracked mailings yet. History before run tracking was enabled is not available here."
-msgstr "Aucun envoi suivi pour le moment. L'historique antérieur à l'activation du suivi n'est pas disponible ici."
+msgstr "Aucun envoi d’e-mails enregistré pour le moment. L’historique antérieur à l’activation de l’enregistrement des envois n’est pas disponible ici."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:49
 msgid "Nobody received this mailing. Check the recipient below for the reasons, then change the language or recipient selection."
@@ -13933,7 +13933,7 @@ msgstr "Inutile — aucun destinataire sélectionné"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:73
 msgid "Not opted out of mailings"
-msgstr "N'a pas demandé à ne plus recevoir d'envois par courrier"
+msgstr "Réception des envois d’e-mails non refusée"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:9
 msgid "Not sent — stopped"
@@ -14015,7 +14015,7 @@ msgstr "Ne recevoir aucun envoi des listes de diffusion associées à mon compte
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:71
 msgid "Opted out of mailings"
-msgstr "Je ne souhaite plus recevoir de courriers"
+msgstr "Réception des envois d’e-mails refusée"
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:23
 msgid "Our excuses for the inconvenience."
@@ -14140,7 +14140,7 @@ msgstr "En savoir plus sur le web"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:2
 msgid "Recent mailing results"
-msgstr "Résultats récents des envois postaux"
+msgstr "Résultats récents des envois d’e-mails"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist.tpl:4
 msgid "Recent mailings"
@@ -14168,7 +14168,7 @@ msgstr "L'historique des destinataires a expiré. Lancez un nouvel envoi et sél
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:38
 msgid "Recipient pages"
-msgstr "Pages destinataires"
+msgstr "Pages des destinataires"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:20
@@ -14826,7 +14826,7 @@ msgstr "Cette page n'est pas disponible dans leur langue."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:45
 msgid "This resource has opted out of mailings."
-msgstr "Cette ressource s'est désabonnée des envois par courrier."
+msgstr "Cette ressource a refusé de recevoir les envois d’e-mails."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:24
 msgid "This rough total includes all query matches. Duplicate recipients are not removed yet."
@@ -14981,7 +14981,7 @@ msgstr "Qui doit recevoir le message dans la langue sélectionnée pour l'e-mail
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:76
 msgid "Who should receive this mailing?"
-msgstr "À qui ce courrier doit-il être adressé ?"
+msgstr "Qui doit recevoir cet envoi par e-mail ?"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:80
 msgid "Why some recipients are not selected"
@@ -15070,7 +15070,7 @@ msgstr "Vous pouvez essayer de vous ré-abonner à une de nos listes de diffusio
 
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:21
 msgid "You do not have permission to view the email status."
-msgstr "Vous n'êtes pas autorisé(e) à consulter le statut de cet e-mail."
+msgstr "Vous n’avez pas l’autorisation de consulter l’état de cette adresse e-mail."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:2
 msgid "You received this mail because someone wanted to send you this information. We did not store your e-mail address and will not send you any other mail because of this mail."
@@ -15124,7 +15124,7 @@ msgstr "activé"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:10
 #: zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:13
 msgid "if you don't want to receive any further mail from this list."
-msgstr "si vous ne souhaitez plus recevoir de courrier de cette liste."
+msgstr "si vous ne souhaitez plus recevoir d’e-mails de cette liste."
 
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:9
 msgid "mailing list"
