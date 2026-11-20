@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-20 21:15\n"
+"PO-Revision-Date: 2026-11-20 22:19\n"
 "Last-Translator: \n"
 "Language-Team: Czech\n"
 "MIME-Version: 1.0\n"
@@ -6930,15 +6930,15 @@ msgstr "Počet e-mailových událostí za minutu"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:42
 msgid "Email events per {n} days"
-msgstr "Počet událostí zaslaných e-mailem za {n} dnů"
+msgstr "Počet e-mailových událostí za {n} dnů"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:36
 msgid "Email events per {n} hours"
-msgstr "E-mailové upozornění na události podle {n} hodin"
+msgstr "Počet e-mailových událostí za {n} h"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:30
 msgid "Email events per {n} minutes"
-msgstr "E-mailové oznámení o událostech podle zápisu z jednání {n}"
+msgstr "Počet e-mailových událostí za {n} min"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:9
 msgid "Email outcome — sent, retry, failed or bounced"
@@ -6991,7 +6991,7 @@ msgstr "Počet událostí za {n} dnů"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:56
 msgid "Events per {n} hours"
-msgstr "Počet událostí za {n} hodin"
+msgstr "Počet událostí za {n} h"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:50
 msgid "Events per {n} minutes"
@@ -7201,7 +7201,7 @@ msgstr "Počet požadavků na jednu položku obsahu za vybrané období"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:20
 msgid "Requests per day"
-msgstr "Počet žádostí za den"
+msgstr "Počet požadavků za den"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:14
 msgid "Requests per hour"
@@ -7217,7 +7217,7 @@ msgstr "Počet požadavků za {n} dnů"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:16
 msgid "Requests per {n} hours"
-msgstr "Počet požadavků za {n} hodin"
+msgstr "Počet požadavků za {n} h"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:10
 msgid "Requests per {n} minutes"
