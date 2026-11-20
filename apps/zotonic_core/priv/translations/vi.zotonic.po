@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-19 15:34\n"
+"PO-Revision-Date: 2026-11-20 21:16\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
 "MIME-Version: 1.0\n"
@@ -518,7 +518,7 @@ msgstr "Coi tác giả tài nguyên là chủ sở hữu."
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4
 #: zotonic_mod_admin/src/mod_admin.erl:516
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:70
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 msgid "Content"
 msgstr "Nội dung"
@@ -2877,6 +2877,8 @@ msgid "Open Modules list"
 msgstr "Mở danh sách các mô-đun"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:37
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:39
 msgid "Open in new tab"
 msgstr "Mở trong tab mới"
 
@@ -6670,7 +6672,7 @@ msgstr "Các bộ đếm hoạt động sẽ không khả dụng cho đến khi 
 msgid "Add analytics measurement"
 msgstr "Thêm chỉ số phân tích"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:44
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:58
 msgid "All breakdown values"
 msgstr "Tất cả các giá trị phân tích"
 
@@ -6725,7 +6727,7 @@ msgstr "Các chỉ số phân tích"
 msgid "Analytics status"
 msgstr "Tình trạng phân tích"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:35
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:49
 msgid "Bars show the lower bound. Counts are ranges, ordered by their lower bound. Overlapping ranges may change order. Content outside the retained candidates has at most"
 msgstr "Các thanh biểu diễn giới hạn dưới. Số lượng là các khoảng, được sắp xếp theo giới hạn dưới của chúng. Các khoảng chồng chéo có thể làm thay đổi thứ tự. Nội dung nằm ngoài các ứng viên được giữ lại có tối đa"
 
@@ -6738,7 +6740,7 @@ msgstr "Lịch sử có giới hạn"
 msgid "Break down by"
 msgstr "Phân tích theo"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:45
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:59
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "Breakdown"
 msgstr "Phân tích chi tiết"
@@ -6845,6 +6847,30 @@ msgstr "Mỗi nhóm dành riêng 3.578 khung thời gian. Các bảng phân tíc
 msgid "Each stored time interval holds the counts for all groups in one analytics measurement. Storage slots for older intervals are reused, so history stays bounded instead of growing with every visit. Only aggregate counts are stored, not individual events."
 msgstr "Mỗi khoảng thời gian được lưu trữ chứa số liệu thống kê của tất cả các nhóm trong một chỉ số phân tích. Các ô lưu trữ dành cho các khoảng thời gian cũ hơn sẽ được tái sử dụng, do đó dữ liệu lịch sử vẫn được giới hạn thay vì tăng lên theo mỗi lượt truy cập. Chỉ các số liệu tổng hợp mới được lưu trữ, chứ không phải các sự kiện riêng lẻ."
 
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:40
+msgid "Email events per day"
+msgstr "Số sự kiện qua email mỗi ngày"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:34
+msgid "Email events per hour"
+msgstr "Số sự kiện email mỗi giờ"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:28
+msgid "Email events per minute"
+msgstr "Số sự kiện email mỗi phút"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:42
+msgid "Email events per {n} days"
+msgstr "Các sự kiện qua email theo từng {n} ngày"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:36
+msgid "Email events per {n} hours"
+msgstr "Các sự kiện qua email theo giờ theo tiêu chuẩn {n}"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:30
+msgid "Email events per {n} minutes"
+msgstr "Các sự kiện qua email theo biên bản cuộc họp tại {n}"
+
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:9
 msgid "Email outcome — sent, retry, failed or bounced"
 msgstr "Kết quả gửi email — đã gửi, đang thử lại, thất bại hoặc bị trả lại"
@@ -6866,7 +6892,7 @@ msgstr "Bộ đệm sự kiện"
 msgid "Event processing"
 msgstr "Xử lý sự kiện"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:45
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:59
 msgid "Events"
 msgstr "Sự kiện"
 
@@ -6877,6 +6903,30 @@ msgstr "Các sự kiện được gộp lại thành các bộ đếm trong bộ
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:23
 msgid "Events must satisfy both filters to be counted. New analytics measurements start without historical data."
 msgstr "Các sự kiện phải đáp ứng cả hai bộ lọc thì mới được tính. Các chỉ số phân tích mới sẽ bắt đầu mà không có dữ liệu lịch sử."
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:60
+msgid "Events per day"
+msgstr "Số sự kiện mỗi ngày"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:54
+msgid "Events per hour"
+msgstr "Số sự kiện mỗi giờ"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:48
+msgid "Events per minute"
+msgstr "Số sự kiện mỗi phút"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:62
+msgid "Events per {n} days"
+msgstr "Số sự kiện trong {n} ngày"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:56
+msgid "Events per {n} hours"
+msgstr "Số sự kiện trong mỗi giờ theo đơn vị {n}"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:50
+msgid "Events per {n} minutes"
+msgstr "Số sự kiện trên mỗi phút theo đơn vị {n}"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:18
 msgid "Fixed filter"
@@ -6896,7 +6946,7 @@ msgstr "Khoảng trống là những khoảng thời gian không được ghi nh
 msgid "Group limit"
 msgstr "Giới hạn nhóm"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
 msgid "Guard lines count page attempts from other and unknown traffic. Throttled requests are not page views; do not add these lines to the total."
 msgstr "Các dòng Guard tính số lần truy cập trang từ lưu lượng truy cập khác và lưu lượng truy cập không xác định. Các yêu cầu bị giới hạn không được tính là lượt xem trang; không tính các dòng này vào tổng số."
 
@@ -6916,7 +6966,7 @@ msgstr "Mã trạng thái HTTP — ví dụ: 200, 404 hoặc 500"
 msgid "History detail and retention"
 msgstr "Chi tiết và thời gian lưu trữ lịch sử"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:50
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:64
 msgid "Includes incomplete or unrecorded intervals"
 msgstr "Bao gồm các quãng chưa hoàn chỉnh hoặc chưa được ghi lại"
 
@@ -6944,7 +6994,7 @@ msgstr "Sáu giờ qua"
 msgid "Maximum number of analytics measurements"
 msgstr "Số lượng phép đo phân tích tối đa"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:28
 msgid "Most popular content in this period"
 msgstr "Nội dung được yêu thích nhất trong giai đoạn này"
 
@@ -6996,11 +7046,11 @@ msgstr "Không có sự cố (tổng cộng)"
 msgid "No filter — include all values"
 msgstr "Không lọc — bao gồm tất cả các giá trị"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:33
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:47
 msgid "No leading content identified in this period."
 msgstr "Không phát hiện nội dung nổi bật nào trong giai đoạn này."
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:41
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:55
 msgid "No recorded events yet."
 msgstr "Chưa có sự kiện nào được ghi lại."
 
@@ -7052,11 +7102,11 @@ msgstr "Tạm dừng"
 msgid "Period"
 msgstr "Kỳ"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
 msgid "Rank"
 msgstr "Xếp hạng"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:28
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:29
 msgid "Ranked by recorded requests in the selected moving period. The window advances in steps of"
 msgstr "Xếp hạng theo số lượng yêu cầu được ghi nhận trong khoảng thời gian di chuyển đã chọn. Khoảng thời gian này được điều chỉnh theo từng bước"
 
@@ -7072,9 +7122,37 @@ msgstr "Loại yêu cầu — trang, API hoặc loại xử lý tùy chỉnh"
 msgid "Request types found in this site's dispatch rules:"
 msgstr "Các loại yêu cầu có trong quy tắc phân phối của trang web này:"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
 msgid "Requests"
 msgstr "Yêu cầu"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:4
+msgid "Requests per content item over the selected period"
+msgstr "Số lượt yêu cầu trên mỗi mục nội dung trong khoảng thời gian đã chọn"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:20
+msgid "Requests per day"
+msgstr "Số yêu cầu mỗi ngày"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:14
+msgid "Requests per hour"
+msgstr "Số yêu cầu mỗi giờ"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:8
+msgid "Requests per minute"
+msgstr "Số yêu cầu mỗi phút"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:22
+msgid "Requests per {n} days"
+msgstr "Số lượng yêu cầu trong {n} ngày"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:16
+msgid "Requests per {n} hours"
+msgstr "Số yêu cầu trên mỗi giờ theo tiêu chuẩn {n}"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:10
+msgid "Requests per {n} minutes"
+msgstr "Số yêu cầu trên mỗi {n} phút"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:22
 msgid "Reserved capacity"
@@ -7211,11 +7289,11 @@ msgstr "sự kiện"
 msgid "group/time slots"
 msgstr "nhóm/khung giờ"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:35
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:49
 msgid "requests."
 msgstr "yêu cầu."
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:28
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:29
 msgid "seconds."
 msgstr "giây."
 
