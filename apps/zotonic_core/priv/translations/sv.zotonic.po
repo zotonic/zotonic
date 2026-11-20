@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-20 21:15\n"
+"PO-Revision-Date: 2026-11-20 22:19\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -6872,27 +6872,27 @@ msgstr "Varje lagrat tidsintervall innehåller antalet händelser för alla grup
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:40
 msgid "Email events per day"
-msgstr "Antal e-postmeddelanden per dag"
+msgstr "E-posthändelser per dag"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:34
 msgid "Email events per hour"
-msgstr "Antal e-postmeddelanden per timme"
+msgstr "E-posthändelser per timme"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:28
 msgid "Email events per minute"
-msgstr "Antal e-postmeddelanden per minut"
+msgstr "E-posthändelser per minut"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:42
 msgid "Email events per {n} days"
-msgstr "E-postmeddelanden om evenemang per {n} dagar"
+msgstr "E-posthändelser per {n} dagar"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:36
 msgid "Email events per {n} hours"
-msgstr "E-postmeddelanden om evenemang per {n} timmar"
+msgstr "E-posthändelser per {n} timmar"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:30
 msgid "Email events per {n} minutes"
-msgstr "E-postmeddelanden om evenemang enligt protokollet från {n}"
+msgstr "E-posthändelser per {n} minuter"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:9
 msgid "Email outcome — sent, retry, failed or bounced"
@@ -6933,23 +6933,23 @@ msgstr "Antal händelser per dag"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:54
 msgid "Events per hour"
-msgstr ""
+msgstr "Händelser per timme"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:48
 msgid "Events per minute"
-msgstr ""
+msgstr "Händelser per minut"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:62
 msgid "Events per {n} days"
-msgstr ""
+msgstr "Händelser per {n} dagar"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:56
 msgid "Events per {n} hours"
-msgstr ""
+msgstr "Händelser per {n} timmar"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:50
 msgid "Events per {n} minutes"
-msgstr ""
+msgstr "Händelser per {n} minuter"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:18
 msgid "Fixed filter"
@@ -7151,31 +7151,31 @@ msgstr "Förfrågningar"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:4
 msgid "Requests per content item over the selected period"
-msgstr ""
+msgstr "Antal förfrågningar per innehållsobjekt under den valda perioden"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:20
 msgid "Requests per day"
-msgstr ""
+msgstr "Antal förfrågningar per dag"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:14
 msgid "Requests per hour"
-msgstr ""
+msgstr "Förfrågningar per timme"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:8
 msgid "Requests per minute"
-msgstr ""
+msgstr "Förfrågningar per minut"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:22
 msgid "Requests per {n} days"
-msgstr ""
+msgstr "Antal förfrågningar per {n} dagar"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:16
 msgid "Requests per {n} hours"
-msgstr ""
+msgstr "Antal förfrågningar per {n} timmar"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:10
 msgid "Requests per {n} minutes"
-msgstr ""
+msgstr "Antal förfrågningar per {n} minuter"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:22
 msgid "Reserved capacity"
