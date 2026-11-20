@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-20 21:15\n"
+"PO-Revision-Date: 2026-11-20 22:19\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -6872,27 +6872,27 @@ msgstr "Depolanan her zaman aralığı, tek bir analiz ölçümündeki tüm grup
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:40
 msgid "Email events per day"
-msgstr "Günde gönderilen e-posta etkinlikleri"
+msgstr "Günde e-posta olay sayısı"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:34
 msgid "Email events per hour"
-msgstr "Saat başına e-posta olayları"
+msgstr "Saatte e-posta olay sayısı"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:28
 msgid "Email events per minute"
-msgstr "Dakikadaki e-posta olay sayısı"
+msgstr "Dakikada e-posta olay sayısı"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:42
 msgid "Email events per {n} days"
-msgstr "{n} gün başına e-posta etkinlikleri"
+msgstr "{n} günde e-posta olay sayısı"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:36
 msgid "Email events per {n} hours"
-msgstr "{n} saatlerine göre e-posta etkinlikleri"
+msgstr "{n} saatte e-posta olay sayısı"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:30
 msgid "Email events per {n} minutes"
-msgstr "{n} 'daki tutanaklara göre e-posta yoluyla gönderilen etkinlikler"
+msgstr "{n} dakikada e-posta olay sayısı"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:9
 msgid "Email outcome — sent, retry, failed or bounced"
@@ -6929,27 +6929,27 @@ msgstr "Olayların sayılabilmesi için her iki filtreyi de karşılaması gerek
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:60
 msgid "Events per day"
-msgstr "Günlük etkinlik sayısı"
+msgstr "Günlük olay sayısı"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:54
 msgid "Events per hour"
-msgstr ""
+msgstr "Saat başına olay sayısı"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:48
 msgid "Events per minute"
-msgstr ""
+msgstr "Dakikadaki olay sayısı"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:62
 msgid "Events per {n} days"
-msgstr ""
+msgstr "{n} gün başına olay sayısı"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:56
 msgid "Events per {n} hours"
-msgstr ""
+msgstr "{n} saat başına olay sayısı"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:50
 msgid "Events per {n} minutes"
-msgstr ""
+msgstr "{n} dakikadaki olay sayısı"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:18
 msgid "Fixed filter"
@@ -7151,31 +7151,31 @@ msgstr "İstekler"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:4
 msgid "Requests per content item over the selected period"
-msgstr ""
+msgstr "Seçilen dönemdeki içerik öğesi başına istek sayısı"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:20
 msgid "Requests per day"
-msgstr ""
+msgstr "Günlük istek sayısı"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:14
 msgid "Requests per hour"
-msgstr ""
+msgstr "Saat başına istek sayısı"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:8
 msgid "Requests per minute"
-msgstr ""
+msgstr "Dakika başına istek sayısı"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:22
 msgid "Requests per {n} days"
-msgstr ""
+msgstr "{n} gün başına istek sayısı"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:16
 msgid "Requests per {n} hours"
-msgstr ""
+msgstr "{n} saat başına gelen talepler"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:10
 msgid "Requests per {n} minutes"
-msgstr ""
+msgstr "{n} dakika başına istek sayısı"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:22
 msgid "Reserved capacity"
