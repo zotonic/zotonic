@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-20 21:16\n"
+"PO-Revision-Date: 2026-11-20 22:20\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
 "MIME-Version: 1.0\n"
@@ -6849,7 +6849,7 @@ msgstr "Mỗi khoảng thời gian được lưu trữ chứa số liệu thốn
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:40
 msgid "Email events per day"
-msgstr "Số sự kiện qua email mỗi ngày"
+msgstr "Số sự kiện email mỗi ngày"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:34
 msgid "Email events per hour"
@@ -6861,15 +6861,15 @@ msgstr "Số sự kiện email mỗi phút"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:42
 msgid "Email events per {n} days"
-msgstr "Các sự kiện qua email theo từng {n} ngày"
+msgstr "Số sự kiện email mỗi {n} ngày"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:36
 msgid "Email events per {n} hours"
-msgstr "Các sự kiện qua email theo giờ theo tiêu chuẩn {n}"
+msgstr "Số sự kiện email mỗi {n} giờ"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:30
 msgid "Email events per {n} minutes"
-msgstr "Các sự kiện qua email theo biên bản cuộc họp tại {n}"
+msgstr "Số sự kiện email mỗi {n} phút"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:9
 msgid "Email outcome — sent, retry, failed or bounced"
@@ -6922,11 +6922,11 @@ msgstr "Số sự kiện trong {n} ngày"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:56
 msgid "Events per {n} hours"
-msgstr "Số sự kiện trong mỗi giờ theo đơn vị {n}"
+msgstr "Số sự kiện mỗi {n} giờ"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:50
 msgid "Events per {n} minutes"
-msgstr "Số sự kiện trên mỗi phút theo đơn vị {n}"
+msgstr "Số sự kiện mỗi {n} phút"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:18
 msgid "Fixed filter"
@@ -7148,7 +7148,7 @@ msgstr "Số lượng yêu cầu trong {n} ngày"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:16
 msgid "Requests per {n} hours"
-msgstr "Số yêu cầu trên mỗi giờ theo tiêu chuẩn {n}"
+msgstr "Số yêu cầu mỗi {n} giờ"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:10
 msgid "Requests per {n} minutes"
