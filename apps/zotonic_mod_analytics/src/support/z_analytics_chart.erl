@@ -25,7 +25,8 @@
 %% The display interval includes the aggregation used to cap charts at 240 points.
 -spec interval(Resolution, Slots) -> Seconds
     when Resolution :: pos_integer(), Slots :: pos_integer(), Seconds :: pos_integer().
-interval(Resolution, Slots) ->
+interval(Resolution, Slots)
+    when is_integer(Resolution), Resolution > 0, is_integer(Slots), Slots > 0 ->
     Resolution * max(1, (Slots + 239) div 240).
 
 %% Explicit groups keep both lines present even before their first event.

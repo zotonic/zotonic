@@ -32,7 +32,16 @@
             <tbody>{% for g in panel.report.groups|slice:[1,20] %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td>{% if g.rsc_id %}<a href="{% url admin_edit_rsc id=g.rsc_id %}">{{ g.label|escape }}</a>{% else %}{{ g.label|escape }}{% endif %}</td>
+                    <td>
+                        {% if g.rsc_id %}
+                            <a href="{% url admin_edit_rsc id=g.rsc_id %}" target="_blank" rel="noopener" title="{_ Open in new tab _}">
+                                {{ g.label|escape }} <span class="fa fa-external-link" aria-hidden="true"></span>
+                                <span class="sr-only">{_ Open in new tab _}</span>
+                            </a>
+                        {% else %}
+                            {{ g.label|escape }}
+                        {% endif %}
+                    </td>
                     <td>{{ g.count }}{% if g.upper != g.count %}–{{ g.upper }}{% endif %}</td>
                 </tr>
             {% empty %}<tr><td colspan="3">{_ No leading content identified in this period. _}</td></tr>{% endfor %}</tbody>
