@@ -19,8 +19,14 @@
 
 -module(z_analytics_chart).
 -moduledoc("Build total and breakdown series on a shared time axis, preserving missing intervals.").
--export([series/8,guard_series/6]).
+-export([series/8,guard_series/6,interval/2]).
 -include_lib("zotonic_core/include/zotonic.hrl").
+
+%% The display interval includes the aggregation used to cap charts at 240 points.
+-spec interval(Resolution, Slots) -> Seconds
+    when Resolution :: pos_integer(), Slots :: pos_integer(), Seconds :: pos_integer().
+interval(Resolution, Slots) ->
+    Resolution * max(1, (Slots + 239) div 240).
 
 %% Explicit groups keep both lines present even before their first event.
 guard_series(Rows,Start,End,R,N,Context) ->
@@ -32,7 +38,7 @@ guard_series(Rows,Start,End,R,N,Context) ->
 
 series(Rows,Start,End,R,N,Groups,Col,Context) ->
     Index=maps:from_list([{maps:get(start,X),X}||X<-Rows]),
-    Step=max(1,(N+239) div 240),
+    Step=interval(R,N) div R,
     Points=[point(T,min(End,T+R*Step),R,Index)||T<-lists:seq(Start,End-1,R*Step)],
     Labels=[time_label(maps:get(start,P),R,Context) || P <- Points],
     Total=#{label=>?__("Total",Context),color=><<"#00a6e8">>,width=>3,

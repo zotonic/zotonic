@@ -10,6 +10,7 @@
     {% if c.description %}<p class="text-muted">{{ c.description|escape }}</p>{% endif %}
     {% if not panel.available %}<p class="text-warning">{_ This event schema is unavailable. _}</p>{% endif %}
     {% for key, values in c.filters %}<p class="text-muted">{{ key|escape }}: {{ values|join:", "|escape }}</p>{% endfor %}
+    {% include "_admin_analytics_chart_unit.tpl" %}
     <div class="analytics-trend">
         {% if panel.report.popular %}
             {% chart type="horizontal_bar" title=c.name data=panel.report.chart width=680 height=190 hide_table %}
@@ -29,7 +30,11 @@
         <table class="table table-condensed">
             <thead><tr><th>{_ Rank _}</th><th>{_ Content _}</th><th>{_ Requests _}</th></tr></thead>
             <tbody>{% for g in panel.report.groups|slice:[1,20] %}
-                <tr><td>{{ forloop.counter }}</td><td>{{ g.label|escape }}</td><td>{{ g.count }}{% if g.upper != g.count %}–{{ g.upper }}{% endif %}</td></tr>
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{% if g.rsc_id %}<a href="{% url admin_edit_rsc id=g.rsc_id %}">{{ g.label|escape }}</a>{% else %}{{ g.label|escape }}{% endif %}</td>
+                    <td>{{ g.count }}{% if g.upper != g.count %}–{{ g.upper }}{% endif %}</td>
+                </tr>
             {% empty %}<tr><td colspan="3">{_ No leading content identified in this period. _}</td></tr>{% endfor %}</tbody>
         </table>
         {% if panel.report.error %}<p class="text-muted">{_ Bars show the lower bound. Counts are ranges, ordered by their lower bound. Overlapping ranges may change order. Content outside the retained candidates has at most _} {{ panel.report.error }} {_ requests. _}</p>{% endif %}

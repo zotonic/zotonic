@@ -292,7 +292,8 @@ report_base(Col,Period,Context) ->
     end,#{},Rows),
     {Groups,Total,Error}=case Popular of
         true ->
-            Ranked=[G#{label=>label(maps:get(key,G),Col,Context)}
+            Ranked=[G#{label=>label(maps:get(key,G),Col,Context),
+                rsc_id=>popular_resource_id(maps:get(key,G),Context)}
                 || G <- lists:sublist(z_analytics_frequency:ranked(Counts0),20)],
             {Ranked,z_analytics_frequency:total(Counts0),z_analytics_frequency:error(Counts0)};
         false ->
@@ -307,9 +308,29 @@ report_base(Col,Period,Context) ->
         true -> [#{label=>maps:get(label,G),value=>maps:get(count,G)} || G <- Groups];
         false -> z_analytics_chart:series(Rows,Start,End,R,N,Groups,Col,Context)
     end,
-    #{chart=>Chart,groups=>lists:sublist(Groups,100),popular=>Popular,error=>Error,
+    Interval=z_analytics_chart:interval(R,N),
+    {IntervalUnit,IntervalCount}=case Interval of
+        I when I rem 86400 =:= 0 -> {day,I div 86400};
+        I when I rem 3600 =:= 0 -> {hour,I div 3600};
+        I -> {minute,I div 60}
+    end,
+    #{chart=>Chart,chart_interval_unit=>IntervalUnit,chart_interval_count=>IntervalCount,
+      groups=>lists:sublist(Groups,100),popular=>Popular,error=>Error,
       total=>Total,resolution=>R,from=>Start,until=>Now,
       incomplete=>length(Rows)<N orelse lists:any(fun(X)->not maps:get(complete,X) end,Rows)}.
+
+%% Only expose edit-link targets for resources visible to the reporting user.
+popular_resource_id(<<"v:",Id/binary>>,Context) ->
+    case to_id(Id) of
+        N when is_integer(N), N > 0 ->
+            case m_rsc:is_visible(N,Context) of
+                true -> N;
+                false -> undefined
+            end;
+        _ -> undefined
+    end;
+popular_resource_id(_,_) ->
+    undefined.
 
 label(<<"$total">>,_,_) -> <<"Total">>;
 label(<<"$other">>,_,_) -> <<"Other (overflow)">>;
