@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-20 21:15\n"
+"PO-Revision-Date: 2026-11-20 22:19\n"
 "Last-Translator: \n"
 "Language-Team: Romanian\n"
 "MIME-Version: 1.0\n"
@@ -6897,27 +6897,27 @@ msgstr "Fiecare interval de timp stocat conține valorile agregate pentru toate 
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:40
 msgid "Email events per day"
-msgstr "Numărul de evenimente pe zi prin e-mail"
+msgstr "Evenimente de e-mail pe zi"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:34
 msgid "Email events per hour"
-msgstr "Numărul de e-mailuri pe oră"
+msgstr "Evenimente de e-mail pe oră"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:28
 msgid "Email events per minute"
-msgstr "Numărul de e-mailuri pe minut"
+msgstr "Evenimente de e-mail pe minut"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:42
 msgid "Email events per {n} days"
-msgstr "Evenimente prin e-mail la fiecare {n} zile"
+msgstr "Evenimente de e-mail pe {n} zile"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:36
 msgid "Email events per {n} hours"
-msgstr "Evenimente prin e-mail în funcție de programul de lucru al {n}"
+msgstr "Evenimente de e-mail pe {n} ore"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:30
 msgid "Email events per {n} minutes"
-msgstr "Evenimente prin e-mail conform procesului-verbal al ședinței de la {n}"
+msgstr "Evenimente de e-mail pe {n} minute"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:9
 msgid "Email outcome — sent, retry, failed or bounced"
@@ -6970,11 +6970,11 @@ msgstr "Evenimente pe {n} zile"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:56
 msgid "Events per {n} hours"
-msgstr "Evenimente pe oră, conform site-ului {n}"
+msgstr "Evenimente pe {n} ore"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:50
 msgid "Events per {n} minutes"
-msgstr "Evenimente pe minut, conform site-ului {n}"
+msgstr "Evenimente pe {n} minute"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:18
 msgid "Fixed filter"
@@ -7196,11 +7196,11 @@ msgstr "Solicitări pe {n} zile"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:16
 msgid "Requests per {n} hours"
-msgstr "Solicitări pe oră, conform {n}"
+msgstr "Solicitări pe {n} ore"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:10
 msgid "Requests per {n} minutes"
-msgstr "Solicitări pe minut la adresa {n}"
+msgstr "Solicitări pe {n} minute"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:22
 msgid "Reserved capacity"
