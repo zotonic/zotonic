@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-20 21:16\n"
+"PO-Revision-Date: 2026-11-20 22:20\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "MIME-Version: 1.0\n"
@@ -6851,7 +6851,7 @@ msgstr "저장된 각 시간 구간에는 하나의 분석 측정 항목에 속�
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:40
 msgid "Email events per day"
-msgstr "하루당 이메일 알림 횟수"
+msgstr "하루당 이메일 이벤트 수"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:34
 msgid "Email events per hour"
@@ -6863,15 +6863,15 @@ msgstr "분당 이메일 이벤트 수"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:42
 msgid "Email events per {n} days"
-msgstr "{n} 일마다 이메일로 이벤트 알림 보내기"
+msgstr "{n}일당 이메일 이벤트 수"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:36
 msgid "Email events per {n} hours"
-msgstr "{n} 시간당 이메일 알림"
+msgstr "{n}시간당 이메일 이벤트 수"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:30
 msgid "Email events per {n} minutes"
-msgstr "{n} 회의록에 따른 이메일 알림"
+msgstr "{n}분당 이메일 이벤트 수"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:9
 msgid "Email outcome — sent, retry, failed or bounced"
