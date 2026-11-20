@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-20 21:15\n"
+"PO-Revision-Date: 2026-11-20 22:19\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -6915,7 +6915,7 @@ msgstr "Кожен збережений часовий інтервал міст
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:40
 msgid "Email events per day"
-msgstr "Кількість повідомлень електронної пошти на день"
+msgstr "Кількість подій електронної пошти на день"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:34
 msgid "Email events per hour"
@@ -6927,15 +6927,15 @@ msgstr "Кількість подій електронної пошти за х�
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:42
 msgid "Email events per {n} days"
-msgstr "Надсилати повідомлення про події на електронну пошту кожні {n} днів"
+msgstr "Кількість подій електронної пошти за {n} дн."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:36
 msgid "Email events per {n} hours"
-msgstr "Надсилати повідомлення про події на електронну адресу {n} за  годин"
+msgstr "Кількість подій електронної пошти за {n} год"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:30
 msgid "Email events per {n} minutes"
-msgstr "Повідомлення про події на електронну пошту через протоколи засідань на сайті {n}"
+msgstr "Кількість подій електронної пошти за {n} хв"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:9
 msgid "Email outcome — sent, retry, failed or bounced"
@@ -6976,23 +6976,23 @@ msgstr "Кількість подій на день"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:54
 msgid "Events per hour"
-msgstr ""
+msgstr "Кількість подій на годину"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:48
 msgid "Events per minute"
-msgstr ""
+msgstr "Кількість подій за хвилину"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:62
 msgid "Events per {n} days"
-msgstr ""
+msgstr "Кількість подій за {n} дн."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:56
 msgid "Events per {n} hours"
-msgstr ""
+msgstr "Кількість подій за {n} год"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:50
 msgid "Events per {n} minutes"
-msgstr ""
+msgstr "Кількість подій за {n} хвилин"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:18
 msgid "Fixed filter"
@@ -7194,31 +7194,31 @@ msgstr "Запити"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:4
 msgid "Requests per content item over the selected period"
-msgstr ""
+msgstr "Кількість запитів на один елемент контенту за вибраний період"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:20
 msgid "Requests per day"
-msgstr ""
+msgstr "Кількість запитів на день"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:14
 msgid "Requests per hour"
-msgstr ""
+msgstr "Кількість запитів на годину"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:8
 msgid "Requests per minute"
-msgstr ""
+msgstr "Запити за хвилину"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:22
 msgid "Requests per {n} days"
-msgstr ""
+msgstr "Кількість запитів за {n} дн."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:16
 msgid "Requests per {n} hours"
-msgstr ""
+msgstr "Кількість запитів за {n} год"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:10
 msgid "Requests per {n} minutes"
-msgstr ""
+msgstr "Кількість запитів за {n} хв"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:22
 msgid "Reserved capacity"
