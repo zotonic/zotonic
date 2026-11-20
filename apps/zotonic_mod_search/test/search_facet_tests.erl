@@ -81,6 +81,7 @@ empty_fulltext_facet() ->
             meck:new(z_module_manager, [no_link]),
             meck:expect(z_module_manager, active_not_running, fun(_) -> [] end),
             meck:new(z_db, [no_link]),
+            meck:expect(z_db, table_exists, fun(search_facet, _) -> true end),
             meck:expect(z_db, columns, fun(search_facet, _) ->
                 {ok, {Columns, _}} = search_facet:facet_table(#context{}),
                 Columns
