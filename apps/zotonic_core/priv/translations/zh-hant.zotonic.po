@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-20 21:15\n"
+"PO-Revision-Date: 2026-11-20 22:19\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -6851,7 +6851,7 @@ msgstr "每個儲存的時間區間都包含某項分析指標中所有群組的
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:40
 msgid "Email events per day"
-msgstr "每日電子郵件活動數量"
+msgstr "每日電子郵件事件數"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:34
 msgid "Email events per hour"
@@ -6863,15 +6863,15 @@ msgstr "每分鐘的電子郵件事件數"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:42
 msgid "Email events per {n} days"
-msgstr "每 {n} 天透過電子郵件發送活動通知"
+msgstr "每 {n} 天的電子郵件事件數"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:36
 msgid "Email events per {n} hours"
-msgstr "根據 {n} 所列的時段，透過電子郵件發送活動通知"
+msgstr "每 {n} 小時的電子郵件事件數"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:30
 msgid "Email events per {n} minutes"
-msgstr "根據《 {n} 》會議紀錄發送活動電子郵件"
+msgstr "每 {n} 分鐘的電子郵件事件數"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:9
 msgid "Email outcome — sent, retry, failed or bounced"
@@ -6908,27 +6908,27 @@ msgstr "事件必須同時符合這兩項篩選條件，才會被計入。新的
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:60
 msgid "Events per day"
-msgstr "每日活動場次"
+msgstr "每日事件數"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:54
 msgid "Events per hour"
-msgstr ""
+msgstr "每小時的事件數"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:48
 msgid "Events per minute"
-msgstr ""
+msgstr "每分鐘事件數"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:62
 msgid "Events per {n} days"
-msgstr ""
+msgstr "每 {n} 天的事件數"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:56
 msgid "Events per {n} hours"
-msgstr ""
+msgstr "每 {n} 小時的事件數"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:50
 msgid "Events per {n} minutes"
-msgstr ""
+msgstr "每 {n} 分鐘的事件數"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:18
 msgid "Fixed filter"
@@ -7130,31 +7130,31 @@ msgstr "請求"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:4
 msgid "Requests per content item over the selected period"
-msgstr ""
+msgstr "所選期間內每項內容的請求次數"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:20
 msgid "Requests per day"
-msgstr ""
+msgstr "每日請求數"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:14
 msgid "Requests per hour"
-msgstr ""
+msgstr "每小時的請求數"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:8
 msgid "Requests per minute"
-msgstr ""
+msgstr "每分鐘的請求數"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:22
 msgid "Requests per {n} days"
-msgstr ""
+msgstr "每 {n} 天的請求數"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:16
 msgid "Requests per {n} hours"
-msgstr ""
+msgstr "每 {n} 小時的請求數"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:10
 msgid "Requests per {n} minutes"
-msgstr ""
+msgstr "每 {n} 分鐘的請求數"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:22
 msgid "Reserved capacity"
