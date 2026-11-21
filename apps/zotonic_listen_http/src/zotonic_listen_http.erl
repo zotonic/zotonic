@@ -399,7 +399,9 @@ ip_to_string(IP) -> inet:ntoa(IP).
 cowboy_options() ->
     #{
         middlewares => [ cowmachine_proxy, z_sites_dispatcher, z_cowmachine_middleware ],
-        stream_handlers => [ cowboy_metrics_h, cowboy_stream_h ],
+        % cowboy_compress_h: compress responses (gzip) for browsers that accept it; a page with 900
+        % member cards goes from 1.2 MB to about 0.15 MB (maxclass, Michiel 2026-11-20)
+        stream_handlers => [ cowboy_metrics_h, cowboy_compress_h, cowboy_stream_h ],
         request_timeout => ?HTTP_REQUEST_TIMEOUT,
         metrics_callback => fun zotonic_listen_http_metrics:metrics_callback/1,
         metrics_resp_headers_filter => fun zotonic_listen_http_metrics:resp_headers_filter/1,
