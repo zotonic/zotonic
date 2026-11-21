@@ -25,69 +25,171 @@
     ]
 }).
 -moduledoc("
-Read-only development inspection. All endpoints require administrator and
-mod_development access and an environment of development, test or acceptance.
-Production is denied, including trusted SSH CLI calls.
+Inspect a running site's dispatch rules, template resolution, source, composition,
+and available model APIs. Combine this model with `model#development_capture`
+when conditional or lazy rendering needs runtime evidence.
 
-GET paths (payload is supplied as query arguments over HTTP):
+For local and remote workflows, see the
+[LLM site development guide](../../../../doc/guides/llm-site-development.md).
 
-* dispatch/list: the site's active dispatch rules.
-* dispatch/trace: {path: /local/path}; traces only this site, never selects a site by hostname.
-* template/lookup: {name: page.tpl, id: optional resource id/name}; resolves the
-  winning template and all candidates for its resolved name, in priority order.
-  With id, uses the actual catinclude resolution rules. Does not render.
-* template/source: same name and optional id as template/lookup, plus optional
-  candidate (zero-based index in the resolved candidates list). Omitting candidate
-  reads the winner. Returns lookup metadata plus source (UTF-8 text), candidate,
-  module, priority and winner_filepath; filepath identifies the selected file.
-  Follow overrules using the next candidate in the list. Each request resolves
-  the list afresh; an absent candidate returns enoent, invalid selectors badarg.
-  Reads only a candidate for that resolved name on this site, never a supplied path. Files larger than 1 MiB return too_large;
-  invalid UTF-8 returns invalid_utf8. No rendering or compilation is performed.
-* template/composition: same name/id/candidate selection as template/source.
-  Returns selected metadata, inheritance (type none/extends/overrules, with a
-  resolved target or error), local block names, and literal include metadata
-  (template, line, column, method, is_catinclude). analysis is static;
-  blocks_scope is local, includes_scope is literal_references. Compiles the
-  selected indexed file if needed, without rendering or evaluating inheritance
-  arguments. Does not recursively expand parents or resolve dynamic includes,
-  include conditions, or category selections at include call sites. Missing
-  parents appear as inheritance.error; compilation errors fail the request.
-* templates: {prefix: optional, offset: 0, limit: 50}; indexed template names
-  and winning source locations; limit is capped at 200.
-* modules: active modules and their priorities.
-* models: {prefix: optional, offset: 0, limit: 50}; paginated core and active-site
-  models, effective Erlang module, source location and exported get/post/delete
-  methods. Limit 1-200. Methods indicate callbacks, not permission to call them.
-* model/documentation: {name: model name without m_}; returns Markdown module/API
-  documentation, availability, methods, HTTP/MQTT topic patterns and static GET
-  path hints. Documentation comes from BEAM docs with the existing source fallback.
-  Missing documentation is explicitly reported; hints are incomplete (especially
-  delegated/dynamic paths and POST/DELETE). A path segment any is a placeholder.
-  No model callbacks are executed to discover data or schemas. Unknown/inactive
-  models return enoent; arbitrary Erlang module names and paths are not accepted.
+## Access
 
-Use /api/model/development_tools/get/<path> or
-bridge/origin/model/development_tools/get/<path>. Results contain only JSON
-values; Erlang tuples in dispatch metadata are represented as arrays.
-Template names must be relative indexed names, not filesystem paths.
+All endpoints require an administrator with `use mod_development` permission
+and a site environment of `development`, `test`, or `acceptance`. Production
+is denied, including trusted CLI calls. Read-only administrators can use these
+inspection endpoints.
 
-Authorized non-production pages expose window.z_development_tools:
-`await z_development_tools.dispatch()` lists rules;
-`dispatchTrace(path)` traces a local path, defaulting to location.pathname;
-`template(name, id)` resolves a template with optional resource category selection;
-`templateSource(name, id, {candidate})` reads its source using the same resolution;
-omit candidate for the winner, or select a zero-based override candidate;
-`templateComposition(name, id, {candidate})` inspects static composition;
-`templates({prefix, offset, limit})` lists templates; `modules()` lists modules;
-`models({prefix, offset, limit})` discovers models; `modelDocumentation(name)`
-reads their public API documentation and static path hints.
-All return promises with the model result, rejecting errors with an error.code.
-Inspection needs neither a capture attachment nor a visible debug button.
+Inspection does not render pages, edit source, or deploy changes. Template
+composition may compile an indexed template to obtain its metadata.
 
-The CLI equivalent is bin/zotonic inspect SITE OPERATION [ARGUMENTS].
-Supported operations: dispatch, dispatch-trace PATH, template NAME [RESOURCE],
-templates [PREFIX], modules. These CLI operations do not compile, render or deploy code.
+## Browser quick start
+
+Authorized pages with the development head assets expose
+`window.z_development_tools`. Inspection requires neither a capture attachment
+nor a visible debug button.
+
+```javascript
+const tools = window.z_development_tools;
+const route = await tools.dispatchTrace();
+const template = await tools.template('page.tpl', 'article_resource_name');
+const source = await tools.templateSource('page.tpl', 'article_resource_name');
+const composition = await tools.templateComposition('page.tpl', 'article_resource_name');
+```
+
+All methods return promises containing the model result. Model errors reject
+with `error.code`; transport failures also reject.
+
+| JavaScript method | Result |
+| --- | --- |
+| `dispatch()` | Active dispatch rules. |
+| `dispatchTrace(path?)` | Dispatch trace for a local path; defaults to `location.pathname`. |
+| `template(name, id?)` | Winning template and indexed override candidates. |
+| `templateSource(name, id?, {candidate}?)` | Selected candidate's metadata and UTF-8 source. |
+| `templateComposition(name, id?, {candidate}?)` | Selected candidate's inheritance, local blocks, and literal includes. |
+| `templates({prefix, offset, limit}?)` | Paginated indexed template names and winning locations. |
+| `modules()` | Active modules and priorities. |
+| `models({prefix, offset, limit}?)` | Paginated available models and exported callback methods. |
+| `modelDocumentation(name)` | Model documentation, availability, transport patterns, and incomplete GET-path hints. |
+
+## Template selection and source
+
+Use relative indexed template names, never filesystem paths. The optional `id`
+is a resource ID or name and applies the same category selection as `catinclude`.
+Lookup returns the resolved `name`, winning `filepath`, and `candidates` in module
+priority order. Lower numeric priorities win.
+
+Source and composition accept a zero-based `candidate` position from that list.
+Omit it for the winner; pass `undefined` for the resource when selecting a candidate
+without category lookup:
+
+```javascript
+const current = await tools.templateSource('page.tpl');
+const next = current.candidates.find(c => c.candidate === current.candidate + 1);
+if (next) {
+    const parent = await tools.templateSource(current.name, undefined, {
+        candidate: next.candidate
+    });
+}
+```
+
+Use the next candidate to follow `{% overrules %}`. Each request resolves the
+index afresh. Source results include `source`, `candidate`, `module`, `priority`,
+and `winner_filepath`; `filepath` identifies the file actually read. Source
+reading performs no rendering or compilation and is limited to 1 MiB of UTF-8.
+
+## Static composition
+
+Composition uses compiler metadata and may compile the selected file. It does
+not render templates or evaluate runtime inheritance arguments.
+
+| Field | Meaning |
+| --- | --- |
+| `inheritance` | `type` is `none`, `extends`, or `overrules`; a resolved parent is in `target`, or lookup failure in `error`. |
+| `blocks` | Names defined in this file, not inherited or effective blocks. |
+| `includes` | Literal references with `template`, `line`, `column`, `method`, and `is_catinclude`. |
+| `analysis` | `static`. |
+| `blocks_scope` | `local`. |
+| `includes_scope` | `literal_references`. |
+
+Include methods are `normal`, `optional`, or `all`. Dynamic include names,
+conditional choices, and resource category selection at include call sites are
+not resolved. Follow parent targets and include names with further lookups;
+track visited files to avoid cycles. A missing parent is reported in
+`inheritance.error`; compilation errors fail the request.
+
+## Discover model APIs
+
+```javascript
+const models = await tools.models({prefix: 'rsc', offset: 0, limit: 50});
+const api = await tools.modelDocumentation('rsc');
+```
+
+Model names omit `m_`. Discovery includes core and active-site models, honoring
+the site's effective resolution and core-model precedence. Entries identify
+`name`, `erlang_module`, owning `module`, `filepath` when available, load
+availability, and exported `get`, `post`, or `delete` callback methods.
+
+Documentation comes from BEAM metadata with a source fallback. The result
+includes Markdown `documentation`, `documentation_available`, `methods`,
+`mqtt_topic`, `http_url`, and `path_hints`. No model callbacks are invoked to
+probe supported arguments or schemas.
+
+`path_hints_complete` is always false. Hints can omit delegated or dynamic GET
+paths and do not describe POST/DELETE schemas. A segment named `any` is a
+placeholder. Exported callbacks and path hints do not grant permission to call
+them. Unknown or inactive model names cannot be used to inspect arbitrary Erlang
+modules or files.
+
+## HTTP and MQTT reference
+
+All operations use GET. HTTP paths start with
+`/api/model/development_tools/get/`; supply arguments as query fields. Browser
+MQTT topics start with `bridge/origin/model/development_tools/get/`; supply
+arguments as the payload object.
+
+| Path | Arguments |
+| --- | --- |
+| `dispatch/list` | None. |
+| `dispatch/trace` | `path`: local absolute URL path, including any language prefix. |
+| `template/lookup` | `name`, optional resource `id`. |
+| `template/source` | `name`, optional `id` and `candidate`. |
+| `template/composition` | Same selection as source. |
+| `templates` | Optional `prefix`, `offset`, `limit`. |
+| `modules` | None. |
+| `models` | Optional `prefix`, `offset`, `limit`. |
+| `model/documentation` | `name` without `m_`. |
+
+Pagination defaults to an empty prefix, offset 0, and limit 50. Limits range
+from 1 to 200; offsets must be nonnegative. Dispatch tracing stays within the
+selected site and does not render its controller. Erlang tuples in dispatch
+results become JSON arrays.
+
+HTTP JSON and MQTT response payloads use `{status: \"ok\", result: ...}` or
+`{status: \"error\", error: ...}`. Common errors are:
+
+| Error | Meaning |
+| --- | --- |
+| `eacces` | Missing administrator/module access or unsupported environment. |
+| `badarg` | Invalid path, template name, selector, or pagination. |
+| `enoent` | Missing resource, template, candidate, source file, or model. |
+| `too_large` | Template source exceeds 1 MiB. |
+| `invalid_utf8` | Template source is not valid UTF-8. |
+| `unavailable` | A discovered model implementation cannot be loaded. |
+
+## CLI
+
+Run from the server checkout, locally or through SSH:
+
+```sh
+bin/zotonic inspect mysite dispatch
+bin/zotonic inspect mysite dispatch-trace /nl/news/example
+bin/zotonic inspect mysite template page.tpl article_resource_name
+bin/zotonic inspect mysite templates _article
+bin/zotonic inspect mysite modules
+```
+
+These CLI operations do not compile or render templates. Source, composition,
+and model documentation are available through JavaScript, HTTP, and MQTT.
 ").
 -behaviour(zotonic_model).
 -export([m_get/3, allowed/1, cli/2]).

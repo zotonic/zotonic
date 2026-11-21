@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-09 12:30\n"
+"PO-Revision-Date: 2026-11-19 15:33\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -405,8 +405,9 @@ msgstr "Är du säker på att du vill återställa alla ACL-regler till deras nu
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:26
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:85
 #: zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:59
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:60
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:11
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:24
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:229
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:237
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70
@@ -419,6 +420,7 @@ msgstr "Är du säker på att du vill återställa alla ACL-regler till deras nu
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:173
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:185
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:45
 #: zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:116
 #: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:43
@@ -534,7 +536,7 @@ msgstr "Anse resursförfattare vara ägare."
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4
 #: zotonic_mod_admin/src/mod_admin.erl:516
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:70
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:26
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 msgid "Content"
 msgstr "Innehåll"
@@ -606,6 +608,7 @@ msgstr "Kunde inte flytta till samarbetsgruppen."
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125
 #: zotonic_mod_survey/src/mod_survey.erl:427
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:12
 msgid "Delete"
@@ -630,6 +633,9 @@ msgid "Deleting..."
 msgstr "Tar bort..."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:33
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:14
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:42
 msgid "Deny"
 msgstr "Neka"
 
@@ -895,6 +901,7 @@ msgstr "Återställda regler"
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:75
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
 #: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:95
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:46
 #: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:44
 msgid "Save"
 msgstr "Spara"
@@ -1543,6 +1550,7 @@ msgid "City"
 msgstr "Stad"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_connection.tpl:34
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:26
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:37
 msgid "Clear"
 msgstr "Rensa"
@@ -1980,6 +1988,7 @@ msgstr "E-postadress"
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:131
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:117
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:119
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:46
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:44
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:14
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:16
@@ -2180,9 +2189,9 @@ msgstr "Filerna hanteras i bakgrunden av importmodulen för e-postlistemottagare
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:46
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:183
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:46
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:41
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:44
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:74
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:59
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:71
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:60
 msgid "Filter"
 msgstr "Filtrera"
@@ -3177,6 +3186,7 @@ msgstr "Sidor som länkar till"
 #: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:51
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:69
 msgid "Refresh"
 msgstr "Uppdatera"
 
@@ -3643,7 +3653,7 @@ msgstr "Delstat eller provins"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:11
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:57
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:22
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:34
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:17
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:19
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:21
@@ -4116,6 +4126,7 @@ msgstr "Opublicerad"
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:15
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:31
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:68
 #: zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:13
 #: zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
 #: zotonic_mod_seo/src/support/seo_jsonld_webpage.erl:276
@@ -4718,6 +4729,7 @@ msgstr "Konfig"
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:24
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:32
 #: zotonic_mod_admin_config/src/mod_admin_config.erl:96
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:14
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:79
 msgid "Configuration"
 msgstr "Konfiguration"
@@ -5145,7 +5157,7 @@ msgstr "Giltig till"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:20
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:21
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:37
-#: zotonic_mod_base/src/support/z_chart_svg.erl:1390
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1457
 #: zotonic_mod_development/priv/templates/_development_dispatch_options.tpl:2
 msgid "Value"
 msgstr "Värde"
@@ -5205,7 +5217,7 @@ msgstr "Dölj menyn"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:6
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:75
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:65
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:37
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:49
 #: zotonic_mod_translation/priv/templates/_dialog_new_rsc_extra.tpl:2
 #: zotonic_mod_translation/priv/templates/_translation_language_status.tpl:46
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:41
@@ -5292,6 +5304,7 @@ msgstr "Är du säker på att du vill radera detta inlägg?"
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:99
 #: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:36
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:159
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:11
 msgid "Blocked"
 msgstr "Blockerad"
 
@@ -5886,6 +5899,9 @@ msgstr "Rankade par"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:104
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:135
+#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:5
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:59
+#: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:8
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:61
 msgid "Reset"
 msgstr "Återställ"
@@ -6583,6 +6599,44 @@ msgstr "Systemanvändning"
 msgid "This page shows (real-time) system statistics like memory use and requests."
 msgstr "Den här sidan visar (realtids) systemstatistik som minnesanvändning och förfrågningar."
 
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:12
+msgid "API catalog"
+msgstr "API-katalog"
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:24
+msgid "Browse public resources"
+msgstr "Bläddra bland offentliga resurser"
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:3
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:7
+msgid "Data and API"
+msgstr "Data och API"
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:8
+msgid "Explore this site's public information using ordinary links and HTTP GET requests. Public content does not require an account or API key."
+msgstr "Utforska webbplatsens offentliga information med hjälp av vanliga länkar och HTTP GET-förfrågningar. För att komma åt det offentliga innehållet krävs varken ett konto eller en API-nyckel."
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:29
+msgid "JSON responses contain status and result fields. Concise reads return localized text and report language fallback. Follow next_url until next is false; filtered pages can be empty. Resource exports provide page URLs by language, including x-default. Cite the human page URL in the appropriate language."
+msgstr "JSON-svar innehåller fälten status och result. Kompakta läsningar returnerar lokaliserad text och anger vilket språk som används som reserv. Följ next_url tills next är false; filtrerade sidor kan vara tomma. Resursutdrag tillhandahåller sid-URL:er per språk, inklusive x-default. Ange URL:en till den allmänna sidan på lämpligt språk."
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:11
+msgid "OpenAPI description"
+msgstr "OpenAPI-beskrivning"
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:28
+msgid "Replace {id} with an ID or unique name obtained from search results or a page's alternate link. Use small pages and follow pagination to explore further."
+msgstr "Ersätt {id} med ett ID eller ett unikt namn som du hittar i sökresultaten eller i en sidas alternativa länk. Använd sidor med få resultat och följ sidindelningen för att utforska vidare."
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:15
+#: zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:2
+msgid "Sitemap"
+msgstr "Webbplatskarta"
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:30
+msgid "The agent endpoints always use anonymous permissions. Existing compatibility APIs apply the caller's permissions. They return only accessible information and keep their existing indexing headers. Content and media may have their own licenses; preserve attribution and follow the stated terms."
+msgstr "Agenternas slutpunkter använder alltid anonyma behörigheter. Befintliga kompatibilitets-API:er tillämpar anroparens behörigheter. De returnerar endast information som är tillgänglig och behåller sina befintliga indexeringsrubriker. Innehåll och media kan ha egna licenser; behåll källhänvisningen och följ de angivna villkoren."
+
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:60
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:29
 msgid "1 day"
@@ -6639,7 +6693,7 @@ msgstr "Aktivitetsmätarna är inte tillgängliga förrän analysen återupptas.
 msgid "Add analytics measurement"
 msgstr "Lägg till analysmätning"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:39
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:44
 msgid "All breakdown values"
 msgstr "Alla uppdelade värden"
 
@@ -6655,13 +6709,13 @@ msgstr "Tillåtna värden (separerade med kommatecken)"
 msgid "Allowed values:"
 msgstr "Tillåtna värden:"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:267
+#: zotonic_mod_analytics/src/mod_analytics.erl:348
 msgid "An equivalent analytics measurement already exists."
 msgstr "Det finns redan ett motsvarande analysmått."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
-#: zotonic_mod_analytics/src/mod_analytics.erl:196
+#: zotonic_mod_analytics/src/mod_analytics.erl:277
 msgid "Analytics configuration"
 msgstr "Konfiguration av analysverktyg"
 
@@ -6694,7 +6748,7 @@ msgstr "Analysmått"
 msgid "Analytics status"
 msgstr "Analysstatus"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:35
 msgid "Bars show the lower bound. Counts are ranges, ordered by their lower bound. Overlapping ranges may change order. Content outside the retained candidates has at most"
 msgstr "Staplarna visar den nedre gränsen. Antalet är intervall, ordnade efter sin nedre gräns. Överlappande intervall kan ändra ordningen. Innehållet utanför de kvarvarande kandidaterna har högst"
 
@@ -6707,7 +6761,7 @@ msgstr "Begränsad historik"
 msgid "Break down by"
 msgstr "Fördelning efter"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:40
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:45
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "Breakdown"
 msgstr "Uppdelning"
@@ -6732,11 +6786,11 @@ msgstr "Klassificerade förfrågningar – sidor, API:er och andra typer av för
 msgid "Configure analytics measurements"
 msgstr "Konfigurera analysmätningar"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:235
+#: zotonic_mod_analytics/src/mod_analytics.erl:316
 msgid "Could not delete the analytics measurement."
 msgstr "Det gick inte att ta bort analysmätningen."
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:268
+#: zotonic_mod_analytics/src/mod_analytics.erl:349
 msgid "Could not save. Check the event, breakdown and filter values."
 msgstr "Det gick inte att spara. Kontrollera värdena för händelse, uppdelning och filter."
 
@@ -6790,7 +6844,7 @@ msgstr "Enhet – telefon, surfplatta, stationär dator eller okänd"
 msgid "Display order"
 msgstr "Visningsordning"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:241
+#: zotonic_mod_analytics/src/mod_analytics.erl:322
 msgid "Display order saved."
 msgstr "Visningsordningen har sparats."
 
@@ -6835,7 +6889,7 @@ msgstr "Händelsebuffert"
 msgid "Event processing"
 msgstr "Händelsehantering"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:40
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:45
 msgid "Events"
 msgstr "Händelser"
 
@@ -6856,14 +6910,18 @@ msgid "Fixed filters"
 msgstr "Fasta filter"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:25
-msgid "Gaps are unrecorded intervals. Partial intervals may undercount activity. Request counts include automation, exclude editor activity and do not measure unique visitors."
-msgstr "Luckor är intervall som inte har registrerats. Ofullständiga intervall kan leda till att aktiviteten underskattas. Antalet förfrågningar inkluderar automatiserade förfrågningar, exkluderar redigeringsaktivitet och mäter inte unika besökare."
+msgid "Gaps are unrecorded intervals. Partial intervals may undercount activity. Page-request totals, device breakdowns and popular content exclude detected crawlers and agents unless explicitly selected. API and traffic-classification measurements include them unless filtered out. Counts exclude editor activity and do not measure unique visitors."
+msgstr "Luckor är intervall som inte har registrerats. Ofullständiga intervall kan leda till att aktiviteten underskattas. Totala siffror för sidförfrågningar, fördelning per enhet och populärt innehåll exkluderar upptäckta sökrobotar och agenter, såvida dessa inte uttryckligen har valts ut. Mätningar av API och trafikklassificering inkluderar dem, såvida de inte filtreras bort. Räkningarna exkluderar redaktörsaktivitet och mäter inte unika besökare."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:13
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:15
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "Group limit"
 msgstr "Gruppbegränsning"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
+msgid "Guard lines count page attempts from other and unknown traffic. Throttled requests are not page views; do not add these lines to the total."
+msgstr "Vaktraderna räknar sidförsök från annan och okänd trafik. Begränsade förfrågningar räknas inte som sidvisningar; lägg inte till dessa rader i summan."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:8
 msgid "HTTP method — GET, POST, HEAD and others"
@@ -6881,7 +6939,7 @@ msgstr "HTTP-statuskod – t.ex. 200, 404 eller 500"
 msgid "History detail and retention"
 msgstr "Historikuppgifter och lagringstid"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:45
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:50
 msgid "Includes incomplete or unrecorded intervals"
 msgstr "Inkluderar ofullständiga eller oregistrerade intervall"
 
@@ -6909,7 +6967,7 @@ msgstr "De senaste sex timmarna"
 msgid "Maximum number of analytics measurements"
 msgstr "Maximalt antal analysmätningar"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
 msgid "Most popular content in this period"
 msgstr "Det mest populära innehållet under denna period"
 
@@ -6935,6 +6993,8 @@ msgstr "Det senast sparade intervallet"
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:210
 #: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:55
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:88
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:51
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:54
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:33
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:55
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
@@ -6959,11 +7019,11 @@ msgstr "Ingen uppdelning (totalt)"
 msgid "No filter — include all values"
 msgstr "Inget filter – inkludera alla värden"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:29
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:33
 msgid "No leading content identified in this period."
 msgstr "Inget framstående innehåll har identifierats under denna period."
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:36
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:41
 msgid "No recorded events yet."
 msgstr "Inga händelser har registrerats ännu."
 
@@ -7015,11 +7075,11 @@ msgstr "Paus"
 msgid "Period"
 msgstr "Period"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:26
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
 msgid "Rank"
 msgstr "Rankning"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:28
 msgid "Ranked by recorded requests in the selected moving period. The window advances in steps of"
 msgstr "Rankad efter antalet registrerade förfrågningar under den valda tidsperioden. Fönstret flyttas fram i steg om"
 
@@ -7035,7 +7095,7 @@ msgstr "Begäranstyp – sida, API eller en anpassad begäranstyp"
 msgid "Request types found in this site's dispatch rules:"
 msgstr "Typer av förfrågningar som förekommer i webbplatsens hanteringsregler:"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:26
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
 msgid "Requests"
 msgstr "Förfrågningar"
 
@@ -7065,7 +7125,7 @@ msgstr "Kort beskrivning"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
-#: zotonic_mod_analytics/src/mod_analytics.erl:188
+#: zotonic_mod_analytics/src/mod_analytics.erl:269
 msgid "Site Analytics"
 msgstr "Webbplatsanalys"
 
@@ -7117,11 +7177,11 @@ msgstr "Lagrade intervall / kapacitet"
 msgid "Stored time intervals"
 msgstr "Lagrade tidsintervall"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:243
+#: zotonic_mod_analytics/src/mod_analytics.erl:324
 msgid "The analytics measurements changed. Reloading their current display order."
 msgstr "Analysvärdena har ändrats. Den aktuella visningsordningen laddas om."
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:266
+#: zotonic_mod_analytics/src/mod_analytics.erl:347
 msgid "This analytics measurement exceeds the storage budget."
 msgstr "Denna analysmätning överskrider lagringsbudgeten."
 
@@ -7174,11 +7234,11 @@ msgstr "händelser"
 msgid "group/time slots"
 msgstr "grupp/tidsluckor"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:35
 msgid "requests."
 msgstr "förfrågningar."
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:28
 msgid "seconds."
 msgstr "sekunder."
 
@@ -8753,12 +8813,12 @@ msgstr "Uppgifter om webbläsarnas marknadsandelar"
 msgid "CSV"
 msgstr "CSV"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:446
-#: zotonic_mod_base/src/support/z_chart_svg.erl:448
+#: zotonic_mod_base/src/support/z_chart_svg.erl:451
+#: zotonic_mod_base/src/support/z_chart_svg.erl:453
 msgid "Chart"
 msgstr "Diagram"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:1380
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1447
 msgid "Chart legend"
 msgstr "Diagramförklaring"
 
@@ -8792,7 +8852,7 @@ msgstr "Ansluter..."
 msgid "Connection Test"
 msgstr "Anslutningstest"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:590
+#: zotonic_mod_base/src/support/z_chart_svg.erl:599
 msgid "Data points"
 msgstr "Datapunkter"
 
@@ -8906,7 +8966,7 @@ msgstr "Juli"
 msgid "June"
 msgstr "Juni"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:1386
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1453
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:41
 msgid "Label"
 msgstr "Etikett"
@@ -8973,7 +9033,7 @@ msgstr "Nettoförändring"
 msgid "No"
 msgstr "Nej"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:1330
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1397
 msgid "No data"
 msgstr "Inga uppgifter"
 
@@ -9012,7 +9072,7 @@ msgstr "Oktober"
 msgid "On this page you can test the connection of your browser to our server and to the internet in general."
 msgstr "På denna sida kan du testa anslutningen av din webbläsare till vår server och till internet i allmänhet."
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:353
+#: zotonic_mod_base/src/support/z_chart_svg.erl:358
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:134
 msgid "Other"
 msgstr "Övrig"
@@ -9336,6 +9396,7 @@ msgstr "Obs! Kommentarer modereras"
 
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:20
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:29
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:4
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:199
 msgid "Page"
@@ -9640,11 +9701,11 @@ msgstr "Den nya platsen kan vara en lokal sökväg eller en fullständig URL. L�
 msgid "You are not allowed to change this."
 msgstr "Du får inte ändra detta."
 
-#: zotonic_mod_development/src/mod_development.erl:699
+#: zotonic_mod_development/src/mod_development.erl:718
 msgid "<i>Function name does not exist.</i>"
 msgstr "<i>Funktionsnamnet finns inte.</i>"
 
-#: zotonic_mod_development/src/mod_development.erl:702
+#: zotonic_mod_development/src/mod_development.erl:721
 msgid "<i>Module not found.</i>"
 msgstr "<i>Modulen hittades inte.</i>"
 
@@ -9658,6 +9719,7 @@ msgid "A graph of all templates, and by whom they are included, is generated and
 msgstr "En graf över alla mallar och vilka mallar som inkluderar dem skapas och uppdateras automatiskt."
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:9
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:83
 msgid "Action"
 msgstr "Handling"
 
@@ -9686,6 +9748,10 @@ msgstr "Tillåt att den flytande knappen för mallspårning visas på webbplatse
 msgid "Always hide the floating template trace button."
 msgstr "Dölj alltid den flytande spårningsknappen för mallar."
 
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:50
+msgid "Attach capture"
+msgstr "Anslut inspelning"
+
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:18
 msgid "Automatic detection on the Zotonic machine"
 msgstr "Automatisk detektering på Zotonic-maskinen"
@@ -9711,8 +9777,8 @@ msgstr "Beräkna och visualisera en beroendegraf över alla mallar."
 msgid "Check debug points in the template source to see debug data here."
 msgstr "Markera felsökningspunkter i mallens källkod för att se felsökningsdata här."
 
-#: zotonic_mod_development/src/mod_development.erl:507
-#: zotonic_mod_development/src/mod_development.erl:522
+#: zotonic_mod_development/src/mod_development.erl:526
+#: zotonic_mod_development/src/mod_development.erl:541
 msgid "Checking all templates..."
 msgstr "Kontrollerar alla mallar..."
 
@@ -9784,7 +9850,7 @@ msgstr "Det gick inte att ladda eller spara redigeringsinställningarna."
 msgid "Could not load templates"
 msgstr "Det gick inte att ladda mallar"
 
-#: zotonic_mod_development/src/mod_development.erl:498
+#: zotonic_mod_development/src/mod_development.erl:517
 msgid "Could not open the directory on this computer."
 msgstr "Det gick inte att öppna mappen på den här datorn."
 
@@ -9848,7 +9914,7 @@ msgid "Detecting editors…"
 msgstr "Identifierar kodredigerare…"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:7
-#: zotonic_mod_development/src/mod_development.erl:1368
+#: zotonic_mod_development/src/mod_development.erl:1403
 msgid "Development"
 msgstr "Utveckling"
 
@@ -9968,11 +10034,11 @@ msgstr "Aktiverad spårning av databasfrågor"
 msgid "Enter the module and function you want to trace. If no function is given, all functions in the module will be traced. Enter how many calls to trace before stopping."
 msgstr "Ange den modul och funktion som du vill spåra. Om ingen funktion anges kommer alla funktioner i modulen att spåras. Ange hur många anrop som ska spåras innan du stoppar."
 
-#: zotonic_mod_development/src/mod_development.erl:671
+#: zotonic_mod_development/src/mod_development.erl:690
 msgid "Error changing the console logs."
 msgstr "Fel vid ändring av konsolloggarna."
 
-#: zotonic_mod_development/src/mod_development.erl:765
+#: zotonic_mod_development/src/mod_development.erl:784
 msgid "Error parsing template."
 msgstr "Fel vid tolkning av mall."
 
@@ -9997,6 +10063,8 @@ msgid "Final dispatch"
 msgstr "Slutlig routning"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:181
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:25
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:15
 msgid "Find"
 msgstr "Hitta"
 
@@ -10030,7 +10098,7 @@ msgstr "Spårning av funktionsanrop"
 msgid "Function call tracing has been disabled. Use the following to enable function call tracing:"
 msgstr "Spårning av funktionsanrop har inaktiverats. Använd följande för att aktivera spårning av funktionsanrop:"
 
-#: zotonic_mod_development/src/mod_development.erl:705
+#: zotonic_mod_development/src/mod_development.erl:724
 msgid "Function tracing has been disabled in the Zotonic config."
 msgstr "Funktionsspårning har inaktiverats i Zotonic-konfigurationen."
 
@@ -10175,18 +10243,18 @@ msgstr "Ingen matchande routningsregel hittades"
 msgid "No matching templates found."
 msgstr "Inga matchande mallar hittades."
 
-#: zotonic_mod_development/src/mod_development.erl:669
+#: zotonic_mod_development/src/mod_development.erl:688
 msgid "No permission to access the console logs."
 msgstr "Ingen behörighet att komma åt konsolloggarna."
 
-#: zotonic_mod_development/src/mod_development.erl:512
-#: zotonic_mod_development/src/mod_development.erl:527
-#: zotonic_mod_development/src/mod_development.erl:542
-#: zotonic_mod_development/src/mod_development.erl:550
-#: zotonic_mod_development/src/mod_development.erl:577
-#: zotonic_mod_development/src/mod_development.erl:619
-#: zotonic_mod_development/src/mod_development.erl:636
-#: zotonic_mod_development/src/mod_development.erl:653
+#: zotonic_mod_development/src/mod_development.erl:531
+#: zotonic_mod_development/src/mod_development.erl:546
+#: zotonic_mod_development/src/mod_development.erl:561
+#: zotonic_mod_development/src/mod_development.erl:569
+#: zotonic_mod_development/src/mod_development.erl:596
+#: zotonic_mod_development/src/mod_development.erl:638
+#: zotonic_mod_development/src/mod_development.erl:655
+#: zotonic_mod_development/src/mod_development.erl:672
 msgid "No permission to use mod_development."
 msgstr "Ingen behörighet att använda mod_development."
 
@@ -10195,7 +10263,7 @@ msgstr "Ingen behörighet att använda mod_development."
 msgid "No references found."
 msgstr "Inga referenser hittades."
 
-#: zotonic_mod_development/src/mod_development.erl:631
+#: zotonic_mod_development/src/mod_development.erl:650
 msgid "No template found in the context."
 msgstr "Ingen mall hittades i sammanhanget."
 
@@ -10220,7 +10288,7 @@ msgstr "Hittades inte"
 msgid "Observers"
 msgstr "Observatörer"
 
-#: zotonic_mod_development/src/mod_development.erl:708
+#: zotonic_mod_development/src/mod_development.erl:727
 msgid "Only the admin user can set traces."
 msgstr "Endast användaren admin kan aktivera spårning."
 
@@ -10358,19 +10426,19 @@ msgstr "Starta spårning"
 msgid "Start matching dispatch rules"
 msgstr "Börja matcha routningsregler"
 
-#: zotonic_mod_development/src/mod_development.erl:665
+#: zotonic_mod_development/src/mod_development.erl:684
 msgid "Started logging to the console of your browser tab."
 msgstr "Började logga till konsolen på webbläsarfliken."
 
-#: zotonic_mod_development/src/mod_development.erl:539
+#: zotonic_mod_development/src/mod_development.erl:558
 msgid "Started tracing all template inclusions."
 msgstr "Spårning av alla mallinkluderingar har startats."
 
-#: zotonic_mod_development/src/mod_development.erl:614
+#: zotonic_mod_development/src/mod_development.erl:633
 msgid "Started tracing template inclusions by rendering the page."
 msgstr "Började spåra mallinkluderingar genom att rendera sidan."
 
-#: zotonic_mod_development/src/mod_development.erl:536
+#: zotonic_mod_development/src/mod_development.erl:555
 msgid "Started tracing template inclusions for your session."
 msgstr "Spårning av mallinkluderingar för din session har startats."
 
@@ -10380,11 +10448,15 @@ msgstr "Spårning av mallinkluderingar för din session har startats."
 msgid "Stop"
 msgstr "Sluta"
 
-#: zotonic_mod_development/src/mod_development.erl:667
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:51
+msgid "Stop capture"
+msgstr "Avbryt inspelningen"
+
+#: zotonic_mod_development/src/mod_development.erl:686
 msgid "Stopped logging to the console of all browser tabs."
 msgstr "Slutade logga till konsolen för alla webbläsarflikar."
 
-#: zotonic_mod_development/src/mod_development.erl:548
+#: zotonic_mod_development/src/mod_development.erl:567
 msgid "Stopped tracing template inclusions for all sessions."
 msgstr "Spårning av mallinkluderingar för alla sessioner har stoppats."
 
@@ -10423,7 +10495,7 @@ msgstr "Mall"
 msgid "Template debugging"
 msgstr "Mallfelsökning"
 
-#: zotonic_mod_development/src/mod_development.erl:768
+#: zotonic_mod_development/src/mod_development.erl:787
 msgid "Template file not found."
 msgstr "Mallfilen hittades inte."
 
@@ -10443,7 +10515,7 @@ msgstr "Mallsökväg"
 msgid "Test with this template"
 msgstr "Testa med den här mallen"
 
-#: zotonic_mod_development/src/mod_development.erl:616
+#: zotonic_mod_development/src/mod_development.erl:635
 msgid "The path must be a local URL."
 msgstr "Sökvägen måste vara en lokal URL."
 
@@ -10499,8 +10571,9 @@ msgstr "Spåra alla databasfrågor för den aktuella sessionen"
 msgid "Trace function calls"
 msgstr "Spåra funktionsanrop"
 
-#: zotonic_mod_development/priv/templates/_html_head_development.tpl:38
-#: zotonic_mod_development/priv/templates/_html_head_development.tpl:39
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:44
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:45
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:49
 msgid "Trace templates"
 msgstr "Spåra mallar"
 
@@ -10536,7 +10609,7 @@ msgstr "URI-mönster"
 msgid "Uncheck to debug only your current session."
 msgstr "Avmarkera om du bara vill felsöka din aktuella session."
 
-#: zotonic_mod_development/src/mod_development.erl:650
+#: zotonic_mod_development/src/mod_development.erl:669
 msgid "Updated template debug points."
 msgstr "Uppdaterade felsökningspunkter för mallar."
 
@@ -10845,6 +10918,7 @@ msgstr "Slå ihop celler"
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:43
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:51
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_fields.tpl:37
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:23
 msgid "Note"
 msgstr "Anteckning"
 
@@ -11644,6 +11718,8 @@ msgstr "Endast administratörskontot (användare 1) kan markera filer som oåter
 
 #: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:54
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:85
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:45
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:48
 msgid "Previous"
 msgstr "Tidigare"
 
@@ -12180,6 +12256,7 @@ msgid "Dependent media"
 msgstr "Beroende medier"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:14
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:10
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:12
 #: zotonic_mod_site_update/priv/templates/_site_deploy_commit.tpl:9
 #: zotonic_mod_translation/priv/templates/_translation_language_status.tpl:43
@@ -12925,6 +13002,7 @@ msgid "Email log"
 msgstr "E-postlogg"
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:39
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:8
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_status_flag.tpl:10
 msgid "Email status"
 msgstr "E-poststatus"
@@ -13177,12 +13255,12 @@ msgstr "Lade till mottagaren."
 msgid "After the page is published"
 msgstr "Efter att sidan har publicerats"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:39
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:51
 #: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail.tpl:19
 msgid "All languages"
 msgstr "Alla språk"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:49
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:61
 msgid "All lists"
 msgstr "Alla listor"
 
@@ -13204,8 +13282,8 @@ msgstr "Alla mottagare av e-postlistan. Du kan ladda upp eller ladda ner listan,
 msgid "All recipients, using that language"
 msgstr "Alla mottagare som använder det språket"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:29
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:24
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:27
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:36
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:45
 msgid "All statuses"
 msgstr "Alla statusar"
@@ -13382,6 +13460,10 @@ msgstr "E-postlistan har tagits bort."
 msgid "Delivery history is preserved. Sending again may result in recipients receiving the same content twice. Older mailings from before run tracking are not used for duplicate detection."
 msgstr "Leveranshistoriken bevaras. Om du skickar meddelandet på nytt kan det leda till att mottagarna får samma innehåll två gånger. Äldre utskick från tiden innan spårning infördes används inte för att upptäcka dubbletter."
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:15
+msgid "Delivery problems have been recorded; sending is still allowed."
+msgstr "Leveransproblem har konstaterats; det är fortfarande tillåtet att skicka försändelser."
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:26
 msgid "Disabled email subscriptions are automatically deleted after three months."
 msgstr "Inaktiverade e-postprenumerationer raderas automatiskt efter tre månader."
@@ -13446,6 +13528,10 @@ msgstr "Kan ta emot utskick"
 msgid "Eligible recipients will be counted in the review step."
 msgstr "De mottagare som uppfyller kraven kommer att räknas med i granskningsfasen."
 
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:39
+msgid "Email address"
+msgstr "E-postadress"
+
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:62
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:54
 msgid "Email language"
@@ -13458,6 +13544,10 @@ msgstr "E-postspråket är den språkversion av utskicket som valts för avsänd
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:5
 msgid "Email subscriptions"
 msgstr "E-postprenumerationer"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:40
+msgid "Email-only subscription"
+msgstr "Prenumeration enbart via e-post"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:9
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_summary.tpl:10
@@ -13475,6 +13565,14 @@ msgstr "E-postmeddelanden som väntar på att skickas: {count}."
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:47
 msgid "Enabled"
 msgstr "Aktiverad"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:37
+msgid "Enter a valid email address to look up mailing results."
+msgstr "Ange en giltig e-postadress för att se utskicksresultaten."
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:86
+msgid "Enter a valid email address to look up subscriptions."
+msgstr "Ange en giltig e-postadress för att söka efter prenumerationer."
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:278
 msgid "Enter a valid future mailing date and time."
@@ -13513,12 +13611,29 @@ msgstr "Fallback-språk"
 msgid "Fallback language:"
 msgstr "Reservspråk:"
 
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:12
+msgid "Find mailings by email address"
+msgstr "Sök efter utskick efter e-postadress"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:24
+msgid "Find recent mailings to this address"
+msgstr "Hitta de senaste utskicken till den här adressen"
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22
+msgid "Find subscriptions by email address"
+msgstr "Hitta prenumerationer via e-postadress"
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:10
 msgid "Finished — some emails could not be sent"
 msgstr "Klart — vissa e-postmeddelanden kunde inte skickas"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:44
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:47
+msgid "First"
+msgstr "Första"
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:14
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:42
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:33
 msgid "First page"
 msgstr "Första sidan"
 
@@ -13592,7 +13707,7 @@ msgstr "Inkludera endast mottagare vars språkinställning stämmer överens med
 msgid "Include recipients whose preference matches this language and recipients without a language preference."
 msgstr "Inkludera mottagare vars språkinställning stämmer överens med detta språk samt mottagare utan språkinställning."
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:25
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:23
 msgid "Individual delivery results, shown 100 recipients at a time."
 msgstr "Individuella leveransresultat, visas 100 mottagare åt gången."
 
@@ -13615,6 +13730,15 @@ msgstr "Språk när ingen preferens är känd:"
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:19
 msgid "Language:"
 msgstr "Språk:"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:52
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:55
+msgid "Last"
+msgstr "Sist"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:6
+msgid "Last updated"
+msgstr "Senast uppdaterad"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:2
 msgid "Mailing"
@@ -13640,8 +13764,10 @@ msgstr "E-posthistorik för denna sida"
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:5
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:14
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:8
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:5
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:47
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:27
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:59
 msgid "Mailing list"
 msgstr "E-postlista"
 
@@ -13702,7 +13828,7 @@ msgstr "Utskick"
 msgid "Mailings are sent to:"
 msgstr "Utskick skickas till:"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:13
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:25
 msgid "Mailings of page: <strong>{title}</strong>"
 msgstr "Utskick från sidan: <strong>{title}</strong>"
 
@@ -13722,6 +13848,10 @@ msgstr "Matchas via fråga"
 msgid "Matching preferred languages only"
 msgstr "Endast matchning av önskade språk"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:55
+msgid "Matching resources"
+msgstr "Matchande resurser"
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:35
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:56
 msgid "Needs attention"
@@ -13735,11 +13865,8 @@ msgstr "Ny e-postlista"
 msgid "Newest"
 msgstr "Senaste"
 
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:38
-msgid "Next 100 recipients"
-msgstr "De kommande 100 mottagarna"
-
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:11
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:30
 msgid "Next page"
 msgstr "Nästa sida"
 
@@ -13750,6 +13877,10 @@ msgstr "Det finns ingen e-postadress."
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:65
 msgid "No emails submitted"
 msgstr "Inga e-postmeddelanden har skickats in"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:49
+msgid "No explicit subscriptions found for this email address."
+msgstr "Inga uttryckliga prenumerationer hittades för den här e-postadressen."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:50
 msgid "No mailing lists found."
@@ -13763,11 +13894,15 @@ msgstr "Inga utskick än."
 msgid "No mailings yet. Send a mailing from a page’s edit screen to see its progress here."
 msgstr "Inga utskick ännu. Skicka ett utskick från redigeringssidan för en sida för att se hur det fortskrider här."
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:25
+msgid "No recent mailing results found for this email address."
+msgstr "Inga aktuella utskicksresultat hittades för den här e-postadressen."
+
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:72
 msgid "No recipients found."
 msgstr "Inga mottagare hittades."
 
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:27
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:29
 msgid "No recipients match this filter."
 msgstr "Inga mottagare uppfyller detta filter."
 
@@ -13777,7 +13912,7 @@ msgstr "Det finns inga sparade kopior. Äldre utskick och utskick utan valda mot
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:42
 msgid "No tracked mailings yet. History before run tracking was enabled is not available here."
-msgstr "Inga spårbara försändelser ännu. Historiken från tiden innan spårning aktiverades finns inte tillgänglig här."
+msgstr "Det finns ännu inga registrerade e-postutskick. Historiken från tiden innan registrering av utskick aktiverades är inte tillgänglig här."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:49
 msgid "Nobody received this mailing. Check the recipient below for the reasons, then change the language or recipient selection."
@@ -13796,6 +13931,10 @@ msgstr "Ej slutfört"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:50
 msgid "Not needed — no recipients selected"
 msgstr "Behövs inte – inga mottagare har valts ut"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:73
+msgid "Not opted out of mailings"
+msgstr "Har inte avregistrerat sig från utskick"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:9
 msgid "Not sent — stopped"
@@ -13853,6 +13992,10 @@ msgstr "Endast testadressen tar emot det här e-postmeddelandet. Dina inställni
 msgid "Open a preview in a new tab before continuing:"
 msgstr "Öppna en förhandsvisning i en ny flik innan du fortsätter:"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:20
+msgid "Open email log in a new window"
+msgstr "Öppna e-postloggen i ett nytt fönster"
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:80
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:143
 #: zotonic_mod_translation/priv/templates/_translation_tree_skipped.tpl:9
@@ -13871,6 +14014,10 @@ msgstr "Välj bort"
 msgid "Opt-out of all mailing lists coupled to my account"
 msgstr "Välj bort alla e-postlistor kopplade till mitt konto"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:71
+msgid "Opted out of mailings"
+msgstr "Har valt att inte få utskick"
+
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:23
 msgid "Our excuses for the inconvenience."
 msgstr "Våra ursäkter för besväret."
@@ -13879,6 +14026,10 @@ msgstr "Våra ursäkter för besväret."
 msgid "Overview"
 msgstr "Översikt"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:40
+msgid "Page {page} of {pages} ({total} recipients)"
+msgstr "Sida {page} av {pages} ({total} mottagare)"
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:53
 msgid "Pages that have the 'subscriberof' edge to the mailinglist."
 msgstr "Sidor som har 'subscriberof'-kanten på e-postlistan."
@@ -13886,6 +14037,10 @@ msgstr "Sidor som har 'subscriberof'-kanten på e-postlistan."
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:54
 msgid "Pages that match the recipients search query below."
 msgstr "Sidor som matchar mottagarnas sökfråga nedan."
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:42
+msgid "Part of the email address"
+msgstr "En del av e-postadressen"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:121
 msgid "People who have not received this page in this language"
@@ -13954,6 +14109,10 @@ msgstr "Förhandsgranska utskick"
 msgid "Previous deliveries"
 msgstr "Tidigare leveranser"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:38
+msgid "Primary email address"
+msgstr "Primär e-postadress"
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:149
 msgid "Progress"
@@ -13967,6 +14126,10 @@ msgstr "Publikationens början"
 msgid "Query, for example:"
 msgstr "Fråga, till exempel:"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:53
+msgid "Query-based subscriptions are not included. Disabled email-only subscriptions are retained for three months."
+msgstr "Prenumerationer baserade på sökfrågor ingår inte. Inaktiverade prenumerationer som endast omfattar e-post sparas i tre månader."
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:3
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:3
 msgid "Queued"
@@ -13975,6 +14138,10 @@ msgstr "I kö"
 #: zotonic_mod_mailinglist/priv/templates/mailing_page.collection.tpl:28
 msgid "Read more on the web"
 msgstr "Läs mer på webben"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:2
+msgid "Recent mailing results"
+msgstr "Senaste utskicksresultat"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist.tpl:4
 msgid "Recent mailings"
@@ -14000,17 +14167,21 @@ msgstr "Mottagarnas historik har gått ut. Gå tillbaka och välj alla mottagare
 msgid "Recipient history has expired. Start a new mailing and explicitly select all recipients; some people may receive this page again."
 msgstr "Mottagarhistoriken har gått ut. Starta ett nytt utskick och markera uttryckligen alla mottagare; vissa personer kan komma att få denna sida igen."
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:38
+msgid "Recipient pages"
+msgstr "Mottagarsidor"
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:20
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:25
 msgid "Recipient preference"
 msgstr "Mottagarens önskemål"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:22
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:20
 msgid "Recipient results"
 msgstr "Resultat för mottagare"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:27
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:25
 msgid "Recipient status"
 msgstr "Mottagarstatus"
 
@@ -14033,7 +14204,7 @@ msgstr "Mottagare som uppfyller detta språkkrav, samt de som inte har angett n�
 msgid "Recipients search query"
 msgstr "Sökfråga för mottagare"
 
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:28
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:30
 msgid "Recipients will appear when preparation starts."
 msgstr "Mottagarna visas när förberedelserna inleds."
 
@@ -14052,6 +14223,7 @@ msgid "Removed subscription."
 msgstr "Borttagen prenumeration."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:97
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:9
 msgid "Result"
 msgstr "Resultat"
 
@@ -14304,6 +14476,14 @@ msgstr "Avsändarnamn för e-post (valfritt)"
 msgid "Sender:"
 msgstr "Avsändare:"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:17
+msgid "Sending is allowed."
+msgstr "Det är tillåtet att skicka."
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:13
+msgid "Sending is suppressed after delivery failures."
+msgstr "Utsändningen avbryts efter misslyckade leveranser."
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:12
 msgid "Sending needs attention"
 msgstr "Sändningen kräver uppmärksamhet"
@@ -14348,13 +14528,21 @@ msgstr "Skickat: <strong>{count}</strong>"
 msgid "Sent: {count};"
 msgstr "Skickat: {count};"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:14
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:16
+msgid "Show all mailings"
+msgstr "Visa alla utskick"
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:26
 msgid "Show all pages"
 msgstr "Visa alla sidor"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:57
 msgid "Show all recipients"
 msgstr "Visa alla mottagare"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:35
+msgid "Showing up to 200 recipient results per page from the last three months, including failed and skipped deliveries. Expired details and mailings from before run tracking are unavailable. Sent means accepted by the mail server; later bounces can still change the result."
+msgstr "Upp till 200 mottagaresultat per sida från de senaste tre månaderna visas, inklusive misslyckade och utelämnade leveranser. Uppgifter som har gått ut samt utskick från tiden före spårningsfunktionen infördes är inte tillgängliga. ”Skickat” innebär att meddelandet har accepterats av e-postservern; senare returer kan fortfarande påverka resultatet."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:18
 msgid "Showing up to 200 runs per page, with active runs first. Sent means accepted by the mail server; later bounces can still change the results."
@@ -14445,10 +14633,18 @@ msgstr "Avbrutet; e-postmeddelanden som redan står i kö bearbetas fortfarande"
 msgid "Subscribe to"
 msgstr "Prenumerera på"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:44
+msgid "Subscribed"
+msgstr "Prenumererar"
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:47
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:99
 msgid "Subscribed with"
 msgstr "Prenumererar med"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:28
+msgid "Subscriber"
+msgstr "Prenumerant"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:6
 msgid "Subscriber Edges"
@@ -14462,6 +14658,14 @@ msgstr "Prenumeranter, läggs till via prenumerationsformuläret."
 msgid "Subscription email: <b>{email}</b>"
 msgstr "E-postadress för prenumeration: <b>{email}</b>"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:29
+msgid "Subscription status"
+msgstr "Prenumerationsstatus"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:4
+msgid "Subscriptions"
+msgstr "Prenumerationer"
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:33
 msgid "Target mailing list"
 msgstr "Målsändlista"
@@ -14474,6 +14678,7 @@ msgstr "Tekniska detaljer"
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:8
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:3
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:8
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:18
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:16
 msgid "Test email"
 msgstr "Testmejl"
@@ -14608,7 +14813,7 @@ msgstr "Detta är en \"privat\", externt hanterad lista. Mottagarna får inte n�
 msgid "This is a resend of an earlier mailing."
 msgstr "Detta är ett nytt utskick av ett tidigare mejl."
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:53
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:57
 msgid "This mailing is unavailable or you do not have permission to view it."
 msgstr "Det här utskicket är inte tillgängligt eller så har du inte behörighet att visa det."
 
@@ -14619,6 +14824,10 @@ msgstr "Det här utskicket är inte tillgängligt."
 #: zotonic_mod_mailinglist/priv/templates/_mailing_skip_reason.tpl:2
 msgid "This page is not available in their language."
 msgstr "Denna sida finns inte på deras språk."
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:45
+msgid "This resource has opted out of mailings."
+msgstr "Denna resurs har valt att inte ta emot utskick."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:24
 msgid "This rough total includes all query matches. Duplicate recipients are not removed yet."
@@ -14660,6 +14869,10 @@ msgstr "Avsluta prenumerationen på"
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:3
 msgid "Unsubscribe from mailing list"
 msgstr "Avsluta prenumerationen på e-postlistan"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:44
+msgid "Unsubscribed"
+msgstr "Avregistrerad"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:106
 msgid "Unsubscribed recipients, blocked or invalid addresses, and recipients excluded by your delivery-history selection will not receive an email."
@@ -14712,6 +14925,10 @@ msgstr "Visa e-posthistorik"
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:41
 msgid "View original mailing"
 msgstr "Visa det ursprungliga utskicket"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:3
+msgid "View subscriptions and email status"
+msgstr "Visa prenumerationer och e-poststatus"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:152
 msgid "View test result"
@@ -14851,6 +15068,10 @@ msgstr "Du kan välja bort alla nuvarande och framtida utskick med ditt konto p�
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:28
 msgid "You can try to re-subscribe to one of our mailing lists in the side column."
 msgstr "Du kan försöka prenumerera på en av våra e-postlistor i sidokolumnen."
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:21
+msgid "You do not have permission to view the email status."
+msgstr "Du har inte behörighet att se e-poststatusen."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:2
 msgid "You received this mail because someone wanted to send you this information. We did not store your e-mail address and will not send you any other mail because of this mail."
@@ -15341,6 +15562,7 @@ msgid "Create connections with content on {local}."
 msgstr "Skapa anslutningar med innehåll på {local}."
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:106
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:2
 msgid "Day"
 msgstr "Dag"
 
@@ -15438,6 +15660,8 @@ msgid "For every combination of a user and a label there can only be a single ac
 msgstr "För varje kombination av en användare och en etikett kan det bara finnas en enda åtkomsttoken. Befintliga åtkomsttokens med denna etikett kommer att ersättas."
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:110
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:5
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:58
 msgid "Forever"
 msgstr "Evigt"
 
@@ -15708,6 +15932,7 @@ msgid "Valid redirect URLs, one per line"
 msgstr "Giltiga omdirigeringsadresser, en per rad"
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:107
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:3
 msgid "Week"
 msgstr "Vecka"
 
@@ -16127,10 +16352,6 @@ msgstr "Bygg om webbplatskarta"
 msgid "Rebuilding the sitemap in the background."
 msgstr "Ombyggnaden av webbplatskartan i bakgrunden."
 
-#: zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:2
-msgid "Sitemap"
-msgstr "Webbplatskarta"
-
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:7
 msgid "Sitemap settings"
 msgstr "Inställningar för webbplatskarta"
@@ -16412,11 +16633,15 @@ msgstr "Du måste godkänna villkoren för att kunna registrera dig."
 msgid "Your signup code"
 msgstr "Din registreringskod"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:276
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:6
+msgid "A deployment is running. Try again when it finishes."
+msgstr "En distribution pågår. Försök igen när den är klar."
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:320
 msgid "Another deployment is in progress. Please try again when it finishes."
 msgstr "En annan driftsättning pågår. Försök igen när den är klar."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:176
+#: zotonic_mod_site_update/src/mod_site_update.erl:187
 msgid "Building Zotonic in the background..."
 msgstr "Bygga Zotonic i bakgrunden ..."
 
@@ -16424,12 +16649,16 @@ msgstr "Bygga Zotonic i bakgrunden ..."
 msgid "Could not fetch the remote change log. Check the remote connection and try again."
 msgstr "Det gick inte att hämta ändringsloggen från fjärrservern. Kontrollera fjärranslutningen och försök igen."
 
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:8
+msgid "Could not list local changes. Check the repository and server log."
+msgstr "Det gick inte att lista lokala ändringar. Kontrollera arkivet och serverloggen."
+
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:9
 msgid "Current commit"
 msgstr "Aktuell commit"
 
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:61
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:63
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:62
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:64
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:12
 msgid "Deploy"
 msgstr "Driftsätt"
@@ -16444,25 +16673,25 @@ msgstr "Driftsätt den senaste versionen"
 msgid "Deploy latest Zotonic"
 msgstr "Driftsätt den senaste versionen av Zotonic"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:229
+#: zotonic_mod_site_update/src/mod_site_update.erl:240
 msgid "Deploy latest version"
 msgstr "Driftsätt den senaste versionen"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:263
+#: zotonic_mod_site_update/src/mod_site_update.erl:274
 msgid "Deploying the latest version..."
 msgstr "Driftsätter den senaste versionen..."
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:2
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:5
-#: zotonic_mod_site_update/src/mod_site_update.erl:140
+#: zotonic_mod_site_update/src/mod_site_update.erl:146
 msgid "Deployment"
 msgstr "Driftsättning"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:274
+#: zotonic_mod_site_update/src/mod_site_update.erl:318
 msgid "Deployment completed."
 msgstr "Driftsättningen är klar."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:278
+#: zotonic_mod_site_update/src/mod_site_update.erl:322
 msgid "Deployment failed. Check the server log for details."
 msgstr "Driftsättningen misslyckades. Kontrollera serverloggen för mer information."
 
@@ -16478,13 +16707,21 @@ msgstr "Driftsättningen uppdaterar hela Git-repositoryt, inklusive alla andra m
 msgid "Fetching remote changes…"
 msgstr "Hämtar ändringar från fjärrservern…"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:174
+#: zotonic_mod_site_update/src/mod_site_update.erl:185
 msgid "Finished rebuilding Zotonic."
 msgstr "Ombyggnaden av Zotonic är klar."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:32
 msgid "Incoming changes"
 msgstr "Inkommande ändringar"
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:2
+msgid "Local changes for {name}."
+msgstr "Lokala ändringar för {name}."
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:303
+msgid "Local changes reset. You can deploy again."
+msgstr "Lokala ändringar har återställts. Du kan nu distribuera igen."
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:14
 msgid "Modules list"
@@ -16502,6 +16739,18 @@ msgstr "Bygg om Zotonic"
 msgid "Recompile changed Erlang files in the background"
 msgstr "Kompilera om ändrade Erlang-filer i bakgrunden"
 
+#: zotonic_mod_site_update/src/mod_site_update.erl:289
+msgid "Reset local changes"
+msgstr "Återställ lokala ändringar"
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:309
+msgid "Reset or rebuild failed. Check the server log before retrying."
+msgstr "Återställningen eller ombyggnaden misslyckades. Kontrollera serverloggen innan du försöker igen."
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:300
+msgid "Resetting local changes and rebuilding..."
+msgstr "Återställer lokala ändringar och bygger om..."
+
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
 msgid "Review and deploy the latest version of this site."
 msgstr "Granska och driftsätt den senaste versionen av den här webbplatsen."
@@ -16518,7 +16767,7 @@ msgstr "Granska inkommande ändringar och driftsätt modulens Git-repository."
 msgid "Review incoming changes and deploy this site's code. Compilation and activation are coordinated across all sites on this node."
 msgstr "Granska inkommande ändringar och driftsätt webbplatsens kod. Kompilering och aktivering samordnas för alla webbplatser på denna nod."
 
-#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:6
+#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:7
 msgid "Review incoming changes before deploying the latest version."
 msgstr "Granska inkommande ändringar innan du driftsätter den senaste versionen."
 
@@ -16539,13 +16788,17 @@ msgstr "Driftsättning av webbplatsen"
 msgid "Site update API token"
 msgstr "API-token för webbplatsuppdatering"
 
-#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:10
+#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:11
 msgid "Site update is not available as the site does not use a known version control system, like git."
 msgstr "Webbplatsuppdatering är inte tillgänglig eftersom webbplatsen inte använder ett känt versionskontrollsystem, som git."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:178
+#: zotonic_mod_site_update/src/mod_site_update.erl:189
 msgid "Sorry this can only be run from the Zotonic status site"
 msgstr "Tyvärr kan detta bara köras från Zotonic-statuswebbplatsen"
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:20
+msgid "The code is then rebuilt before deployment is enabled again. If this repository contains other sites or modules, their local changes are also discarded."
+msgstr "Koden byggs sedan om innan distributionen aktiveras igen. Om detta arkiv innehåller andra webbplatser eller moduler raderas även deras lokala ändringar."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:28
 msgid "The deployment preview is unavailable. Check the repository and server log, then try again."
@@ -16563,9 +16816,17 @@ msgstr "Den lokala grenen kan inte uppdateras till fjärrversionen med fast-forw
 msgid "There are no incoming changes."
 msgstr "Det finns inga inkommande ändringar."
 
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:15
+msgid "There are no local changes. You can still rebuild to recover from a failed deployment."
+msgstr "Det finns inga lokala ändringar. Du kan fortfarande bygga om för att återställa efter en misslyckad distribution."
+
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:22
 msgid "This branch has no upstream configured. Configure its remote tracking branch before deploying."
 msgstr "Den här grenen har ingen upstream konfigurerad. Konfigurera dess fjärrspårningsgren före driftsättningen."
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:18
+msgid "This permanently discards all uncommitted changes in the entire repository, including staged changes, and deletes untracked files and directories. Ignored files, local commits and nested repositories are preserved."
+msgstr "Detta raderar permanent alla ändringar som inte har bekräftats i hela arkivet, inklusive ändringar som har lagts till i staging-området, och tar bort filer och kataloger som inte spåras. Ignorerade filer, lokala bekräftelser och inbäddade arkiv bevaras."
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
 msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
@@ -16579,13 +16840,19 @@ msgstr "För att driftsätta uppdateringar av enskilda moduler öppnar du"
 msgid "To run the webhook update, configure your service to POST to the following URL:"
 msgstr "För att köra webbhook-uppdateringen, konfigurera din tjänst till POST till följande URL:"
 
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:26
+msgid "Undo all local changes and rebuild"
+msgstr "Ångra alla lokala ändringar och bygg om"
+
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:16
 msgid "View system status"
 msgstr "Visa systemstatus"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:20
-#: zotonic_mod_site_update/src/mod_site_update.erl:233
-#: zotonic_mod_site_update/src/mod_site_update.erl:268
+#: zotonic_mod_site_update/src/mod_site_update.erl:244
+#: zotonic_mod_site_update/src/mod_site_update.erl:279
+#: zotonic_mod_site_update/src/mod_site_update.erl:292
+#: zotonic_mod_site_update/src/mod_site_update.erl:312
 msgid "You are not allowed to deploy this code."
 msgstr "Du har inte behörighet att driftsätta den här koden."
 
@@ -18207,6 +18474,171 @@ msgstr "text"
 msgid "{points} of {max} points"
 msgstr "{points} av {max} poäng"
 
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:34
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:53
+msgid "Add IP entries"
+msgstr "Lägg till IP-poster"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:23
+msgid "Add to allow list"
+msgstr "Lägg till i tillåtelselistan"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:13
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:42
+msgid "Allow"
+msgstr "Tillåt"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:17
+msgid "Allow entries take precedence. Blocks follow observe/enforce/off mode and only affect guarded routes."
+msgstr "Poster i tillåtelselistan har företräde. Blockeringar följer läget observe/enforce/off och påverkar endast skyddade rutter."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:106
+msgid "Block IP"
+msgstr "Blockera IP-adress"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:103
+msgid "Block duration"
+msgstr "Blockeringstid"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:86
+msgid "Block for"
+msgstr "Blockera i"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:18
+msgid "Current mode:"
+msgstr "Aktuellt läge:"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:72
+msgid "Current node only, including would-throttle decisions in observe mode. Up to 200 entries. Blocking generates a note from the displayed reason and rejection count."
+msgstr "Endast aktuell nod, inklusive förfrågningar som skulle begränsas i läget observe. Upp till 200 poster. Blockering skapar en anteckning utifrån det visade skälet och antalet avvisade förfrågningar."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:68
+msgid "Currently throttled IP addresses"
+msgstr "IP-adresser som för närvarande är begränsade"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:51
+msgid "Delete IP entry"
+msgstr "Ta bort IP-post"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:48
+msgid "Delete IP entry?"
+msgstr "Ta bort IP-posten?"
+
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_delete_confirm.tpl:1
+msgid "Delete this IP entry?"
+msgstr "Ska denna IP-post raderas?"
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:71
+msgid "Each list can contain at most 256 entries."
+msgstr "Varje lista kan innehålla högst 256 poster."
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:57
+msgid "Edit IP entry"
+msgstr "Redigera IP-post"
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:72
+msgid "Enter valid IP addresses, a note and a future expiry date or duration. No changes were saved."
+msgstr "Ange giltiga IP-adresser, en anteckning och ett framtida utgångsdatum eller en giltighetstid. Inga ändringar har sparats."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:38
+msgid "Expiry dates are UTC. Expired entries stop applying immediately and are removed automatically. Global entries are managed in zotonic.config."
+msgstr "Giltighetstiderna anges i UTC. Poster som har löpt ut upphör att gälla omedelbart och tas bort automatiskt. Globala poster hanteras i zotonic.config."
+
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:1
+msgid "Hour"
+msgstr "Timme"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:81
+msgid "IP address"
+msgstr "IP-adress"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:18
+msgid "IP addresses"
+msgstr "IP-adresser"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:32
+msgid "IP entries"
+msgstr "IP-poster"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:11
+msgid "List"
+msgstr "Lista"
+
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:4
+msgid "Month (30 days)"
+msgstr "Månad (30 dagar)"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:61
+msgid "No IP entries."
+msgstr "Inga IP-poster."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:114
+msgid "No currently throttled IP addresses."
+msgstr "Det finns för närvarande inga IP-adresser som är begränsade."
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:40
+msgid "Or until (UTC)"
+msgstr "Eller fram till (UTC)"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:82
+msgid "Reason"
+msgstr "Motivering"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:84
+msgid "Rejections"
+msgstr "Avslag"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:85
+msgid "Retry in seconds"
+msgstr "Nytt försök om (sekunder)"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:46
+msgid "Save IP entries"
+msgstr "Spara IP-poster"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:9
+msgid "Separate IPv4 or IPv6 addresses with spaces, commas or newlines. Re-adding an address to the same list updates its note and expiry."
+msgstr "Separera IPv4- eller IPv6-adresser med mellanslag, kommatecken eller radbrytningar. Om du lägger till en adress igen i samma lista uppdateras anteckningen och giltighetstiden för den."
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:70
+msgid "This IP is no longer throttled. Refresh the page."
+msgstr "Denna IP-adress är inte längre begränsad. Uppdatera sidan."
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:58
+msgid "This entry is no longer available. Refresh the page."
+msgstr "Den här posten är inte längre tillgänglig. Uppdatera sidan."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:3
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:10
+#: zotonic_mod_traffic_guard/src/mod_traffic_guard.erl:168
+msgid "Traffic guard"
+msgstr "Trafikskydd"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:74
+msgid "Traffic guard is temporarily unavailable."
+msgstr "Trafikskyddet är tillfälligt otillgängligt."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:58
+msgid "Until (UTC):"
+msgstr "Fram till (UTC):"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:29
+msgid "Until (UTC; empty means forever)"
+msgstr "Till (UTC; tomt fält betyder för alltid)"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:34
+msgid "Valid for"
+msgstr "Gäller för"
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:69
+msgid "You are not allowed to change these entries."
+msgstr "Du får inte ändra dessa uppgifter."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:21
+msgid "Your current IP address:"
+msgstr "Din nuvarande IP-adress:"
+
 #: zotonic_mod_translation/priv/templates/_translation_edit_text.tpl:9
 msgid "(empty)"
 msgstr "(tom)"
@@ -18880,7 +19312,7 @@ msgstr "De automatiska uppdateringarna kunde inte slutföras. Kontrollera de tek
 msgid "Choose a known failed hostname or enter an exact hostname, without a scheme, port, or path."
 msgstr "Välj ett värdnamn som du vet inte fungerar eller ange ett exakt värdnamn, utan protokoll, port eller sökväg."
 
-#: zotonic_mod_websub/src/mod_websub.erl:285
+#: zotonic_mod_websub/src/mod_websub.erl:298
 msgid "Could not change the automatic update subscription."
 msgstr "Det gick inte att ändra prenumerationen på automatiska uppdateringar."
 
@@ -19081,7 +19513,7 @@ msgstr "Vi prenumererar"
 #: zotonic_mod_websub/priv/templates/_admin_edit_sidebar_websub.tpl:4
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:3
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:7
-#: zotonic_mod_websub/src/mod_websub.erl:257
+#: zotonic_mod_websub/src/mod_websub.erl:270
 msgid "WebSub subscriptions"
 msgstr "WebSub-prenumerationer"
 

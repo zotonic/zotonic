@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-09 12:30\n"
+"PO-Revision-Date: 2026-11-19 15:33\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -441,8 +441,9 @@ msgstr "Вы уверены, что хотите восстановить тек
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:26
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:85
 #: zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:59
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:60
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:11
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:24
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:229
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:237
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70
@@ -455,6 +456,7 @@ msgstr "Вы уверены, что хотите восстановить тек
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:173
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:185
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:45
 #: zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:116
 #: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:43
@@ -570,7 +572,7 @@ msgstr "Считайте авторов ресурсов владельцами.
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4
 #: zotonic_mod_admin/src/mod_admin.erl:516
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:70
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:26
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 msgid "Content"
 msgstr "Контент"
@@ -642,6 +644,7 @@ msgstr "Не удалось переместить в группу сотруд�
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125
 #: zotonic_mod_survey/src/mod_survey.erl:427
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:12
 msgid "Delete"
@@ -666,6 +669,9 @@ msgid "Deleting..."
 msgstr "Удаление..."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:33
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:14
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:42
 msgid "Deny"
 msgstr "Запретить"
 
@@ -931,6 +937,7 @@ msgstr "Правила возвращены"
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:75
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
 #: zotonic_mod_survey/priv/templates/_survey_result_view.tpl:95
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:46
 #: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:44
 msgid "Save"
 msgstr "Сохранить"
@@ -1587,6 +1594,7 @@ msgid "City"
 msgstr "Город"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_connection.tpl:34
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:26
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:37
 msgid "Clear"
 msgstr "Очистить"
@@ -2024,6 +2032,7 @@ msgstr "Адрес e-mail"
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:131
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:117
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:119
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:46
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:44
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:14
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:16
@@ -2224,9 +2233,9 @@ msgstr "Обработка файлов происходит в фоновом �
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:46
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:183
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:46
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:41
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:44
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:74
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:59
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:71
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:60
 msgid "Filter"
 msgstr "Фильтровать"
@@ -3221,6 +3230,7 @@ msgstr "Страницы, ссылающиеся на"
 #: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:51
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:69
 msgid "Refresh"
 msgstr "Обновить"
 
@@ -3687,7 +3697,7 @@ msgstr "Штат или провинция"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:11
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:57
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:22
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:34
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:17
 #: zotonic_mod_survey/priv/templates/_dialog_survey_results_download.tpl:19
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:21
@@ -4160,6 +4170,7 @@ msgstr "Неопубликовано"
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:15
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:31
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:68
 #: zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:13
 #: zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
 #: zotonic_mod_seo/src/support/seo_jsonld_webpage.erl:276
@@ -4762,6 +4773,7 @@ msgstr "Параметры"
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:24
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:32
 #: zotonic_mod_admin_config/src/mod_admin_config.erl:96
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:14
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:79
 msgid "Configuration"
 msgstr "Конфигурация"
@@ -5189,7 +5201,7 @@ msgstr "Действителен до"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:20
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:21
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:37
-#: zotonic_mod_base/src/support/z_chart_svg.erl:1390
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1457
 #: zotonic_mod_development/priv/templates/_development_dispatch_options.tpl:2
 msgid "Value"
 msgstr "Значение"
@@ -5249,7 +5261,7 @@ msgstr "Скрыть меню"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:6
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:75
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:65
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:37
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:49
 #: zotonic_mod_translation/priv/templates/_dialog_new_rsc_extra.tpl:2
 #: zotonic_mod_translation/priv/templates/_translation_language_status.tpl:46
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:41
@@ -5336,6 +5348,7 @@ msgstr "Вы уверены, что хотите удалить эту запи�
 #: zotonic_mod_email_status/priv/templates/_email_status_view.tpl:99
 #: zotonic_mod_logging/priv/templates/admin_log_csp.tpl:36
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:159
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:11
 msgid "Blocked"
 msgstr "Заблокировано"
 
@@ -5930,6 +5943,9 @@ msgstr "Ранжированные пары"
 
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:104
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:135
+#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:5
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:59
+#: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:8
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:61
 msgid "Reset"
 msgstr "Сбросить"
@@ -6626,6 +6642,44 @@ msgstr "Использование системы"
 msgid "This page shows (real-time) system statistics like memory use and requests."
 msgstr "На этой странице отображается (в реальном времени) системная статистика, такая как использование памяти и запросы."
 
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:12
+msgid "API catalog"
+msgstr "Каталог API"
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:24
+msgid "Browse public resources"
+msgstr "Просмотреть общедоступные ресурсы"
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:3
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:7
+msgid "Data and API"
+msgstr "Данные и API"
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:8
+msgid "Explore this site's public information using ordinary links and HTTP GET requests. Public content does not require an account or API key."
+msgstr "Ознакомьтесь с общедоступной информацией на этом сайте с помощью обычных ссылок и HTTP-запросов GET. Для доступа к общедоступному контенту не требуется учетная запись или ключ API."
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:29
+msgid "JSON responses contain status and result fields. Concise reads return localized text and report language fallback. Follow next_url until next is false; filtered pages can be empty. Resource exports provide page URLs by language, including x-default. Cite the human page URL in the appropriate language."
+msgstr "Ответы в формате JSON содержат поля «status» и «result». Краткие запросы возвращают локализованный текст и сообщают об использовании резервного языка. Переходите по ссылке «next_url», пока значение «next» не станет «false»; отфильтрованные страницы могут быть пустыми. Экспорт ресурсов предоставляет URL-адреса страниц по языкам, включая «x-default». Указывайте URL-адрес страницы для пользователей на соответствующем языке."
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:11
+msgid "OpenAPI description"
+msgstr "Описание OpenAPI"
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:28
+msgid "Replace {id} with an ID or unique name obtained from search results or a page's alternate link. Use small pages and follow pagination to explore further."
+msgstr "Замените {id} на идентификатор или уникальное имя, полученное из результатов поиска или альтернативной ссылки на страницу. Для дальнейшего просмотра используйте страницы с небольшим количеством результатов и следуйте пагинации."
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:15
+#: zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:2
+msgid "Sitemap"
+msgstr "Карта сайта"
+
+#: zotonic_mod_agent_discovery/priv/templates/agent_api_help.tpl:30
+msgid "The agent endpoints always use anonymous permissions. Existing compatibility APIs apply the caller's permissions. They return only accessible information and keep their existing indexing headers. Content and media may have their own licenses; preserve attribution and follow the stated terms."
+msgstr "Конечные точки агента всегда используют анонимные права доступа. Существующие API совместимости применяют права доступа вызывающего пользователя. Они возвращают только доступную информацию и сохраняют существующие заголовки индексации. Контент и мультимедиа могут иметь собственные лицензии; необходимо сохранять указание авторства и соблюдать указанные условия."
+
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_status.tpl:60
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:29
 msgid "1 day"
@@ -6682,7 +6736,7 @@ msgstr "Счетчики активности будут недоступны д
 msgid "Add analytics measurement"
 msgstr "Добавить аналитическое измерение"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:39
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:44
 msgid "All breakdown values"
 msgstr "Все значения разбивки"
 
@@ -6698,13 +6752,13 @@ msgstr "Допустимые значения (разделенные запят
 msgid "Allowed values:"
 msgstr "Допустимые значения:"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:267
+#: zotonic_mod_analytics/src/mod_analytics.erl:348
 msgid "An equivalent analytics measurement already exists."
 msgstr "Аналогичный аналитический показатель уже существует."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
-#: zotonic_mod_analytics/src/mod_analytics.erl:196
+#: zotonic_mod_analytics/src/mod_analytics.erl:277
 msgid "Analytics configuration"
 msgstr "Настройка аналитики"
 
@@ -6737,7 +6791,7 @@ msgstr "Аналитические показатели"
 msgid "Analytics status"
 msgstr "Статус аналитики"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:35
 msgid "Bars show the lower bound. Counts are ranges, ordered by their lower bound. Overlapping ranges may change order. Content outside the retained candidates has at most"
 msgstr "Столбцы отображают нижнюю границу. Количества представляют собой диапазоны, упорядоченные по их нижней границе. Пересекающиеся диапазоны могут изменить порядок. Содержимое, не входящее в список сохраненных кандидатов, имеет не более"
 
@@ -6750,7 +6804,7 @@ msgstr "Ограниченная история"
 msgid "Break down by"
 msgstr "Разбивка по"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:40
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:45
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "Breakdown"
 msgstr "Разбивка"
@@ -6775,11 +6829,11 @@ msgstr "Запросы с классификацией — страницы, API
 msgid "Configure analytics measurements"
 msgstr "Настроить аналитические показатели"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:235
+#: zotonic_mod_analytics/src/mod_analytics.erl:316
 msgid "Could not delete the analytics measurement."
 msgstr "Не удалось удалить показатель аналитики."
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:268
+#: zotonic_mod_analytics/src/mod_analytics.erl:349
 msgid "Could not save. Check the event, breakdown and filter values."
 msgstr "Не удалось сохранить. Проверьте значения события, разбивки и фильтра."
 
@@ -6833,7 +6887,7 @@ msgstr "Устройство — телефон, планшет, настоль�
 msgid "Display order"
 msgstr "Порядок отображения"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:241
+#: zotonic_mod_analytics/src/mod_analytics.erl:322
 msgid "Display order saved."
 msgstr "Порядок отображения сохранен."
 
@@ -6878,7 +6932,7 @@ msgstr "Буфер событий"
 msgid "Event processing"
 msgstr "Обработка событий"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:40
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:45
 msgid "Events"
 msgstr "События"
 
@@ -6899,14 +6953,18 @@ msgid "Fixed filters"
 msgstr "Стационарные фильтры"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:25
-msgid "Gaps are unrecorded intervals. Partial intervals may undercount activity. Request counts include automation, exclude editor activity and do not measure unique visitors."
-msgstr "Пробелы — это интервалы, по которым отсутствуют данные. Неполные интервалы могут привести к занижению показателей активности. В статистике запросов учитываются данные автоматизации, не учитывается активность редакторов и не измеряется количество уникальных посетителей."
+msgid "Gaps are unrecorded intervals. Partial intervals may undercount activity. Page-request totals, device breakdowns and popular content exclude detected crawlers and agents unless explicitly selected. API and traffic-classification measurements include them unless filtered out. Counts exclude editor activity and do not measure unique visitors."
+msgstr "Пробелы — это интервалы, по которым отсутствуют записи. Неполные интервалы могут привести к занижению показателей активности. В итоговых данных по запросам страниц, разбивке по устройствам и популярному контенту не учитываются обнаруженные сканеры и агенты, если они не выбраны явно. В показателях API и классификации трафика они учитываются, если не отфильтрованы. Подсчеты не включают активность редакторов и не учитывают уникальных посетителей."
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:13
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:15
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "Group limit"
 msgstr "Лимит для группы"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
+msgid "Guard lines count page attempts from other and unknown traffic. Throttled requests are not page views; do not add these lines to the total."
+msgstr "Строки «Guard» учитывают попытки просмотра страниц из другого и неизвестного трафика. Замедленные запросы не считаются просмотрами страниц; не включайте эти строки в общее количество."
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:8
 msgid "HTTP method — GET, POST, HEAD and others"
@@ -6924,7 +6982,7 @@ msgstr "Код статуса HTTP — например, 200, 404 или 500"
 msgid "History detail and retention"
 msgstr "Подробная информация об истории и хранение данных"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:45
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:50
 msgid "Includes incomplete or unrecorded intervals"
 msgstr "Включает неполные или незафиксированные интервалы"
 
@@ -6952,7 +7010,7 @@ msgstr "Последние шесть часов"
 msgid "Maximum number of analytics measurements"
 msgstr "Максимальное количество аналитических измерений"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
 msgid "Most popular content in this period"
 msgstr "Самые популярные материалы за этот период"
 
@@ -6978,6 +7036,8 @@ msgstr "Самый последний сохраненный интервал"
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:210
 #: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:55
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:88
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:51
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:54
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step1.tpl:33
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:55
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
@@ -7002,11 +7062,11 @@ msgstr "Без разбивки (всего)"
 msgid "No filter — include all values"
 msgstr "Без фильтра — включить все значения"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:29
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:33
 msgid "No leading content identified in this period."
 msgstr "За этот период не было выявлено никаких ключевых материалов."
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:36
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:41
 msgid "No recorded events yet."
 msgstr "Пока нет зарегистрированных событий."
 
@@ -7058,11 +7118,11 @@ msgstr "Пауза"
 msgid "Period"
 msgstr "Период"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:26
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
 msgid "Rank"
 msgstr "Ранг"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:28
 msgid "Ranked by recorded requests in the selected moving period. The window advances in steps of"
 msgstr "Ранжировано по количеству зарегистрированных запросов за выбранный скользящий период. Окно сдвигается с шагом"
 
@@ -7078,7 +7138,7 @@ msgstr "Тип запроса — страница, API или пользова�
 msgid "Request types found in this site's dispatch rules:"
 msgstr "Типы запросов, встречающиеся в правилах распределения запросов данного сайта:"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:26
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
 msgid "Requests"
 msgstr "Запросы"
 
@@ -7108,7 +7168,7 @@ msgstr "Краткое описание"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
-#: zotonic_mod_analytics/src/mod_analytics.erl:188
+#: zotonic_mod_analytics/src/mod_analytics.erl:269
 msgid "Site Analytics"
 msgstr "Аналитика сайта"
 
@@ -7160,11 +7220,11 @@ msgstr "Сохранённые интервалы / вместимость"
 msgid "Stored time intervals"
 msgstr "Записанные временные интервалы"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:243
+#: zotonic_mod_analytics/src/mod_analytics.erl:324
 msgid "The analytics measurements changed. Reloading their current display order."
 msgstr "Показатели аналитики изменились. Происходит перезагрузка текущего порядка отображения."
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:266
+#: zotonic_mod_analytics/src/mod_analytics.erl:347
 msgid "This analytics measurement exceeds the storage budget."
 msgstr "Этот аналитический показатель превышает лимит хранения данных."
 
@@ -7217,11 +7277,11 @@ msgstr "события"
 msgid "group/time slots"
 msgstr "группа/временные интервалы"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:35
 msgid "requests."
 msgstr "запросы."
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:28
 msgid "seconds."
 msgstr "секунд."
 
@@ -8794,12 +8854,12 @@ msgstr "Данные о доле рынка браузеров"
 msgid "CSV"
 msgstr "CSV"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:446
-#: zotonic_mod_base/src/support/z_chart_svg.erl:448
+#: zotonic_mod_base/src/support/z_chart_svg.erl:451
+#: zotonic_mod_base/src/support/z_chart_svg.erl:453
 msgid "Chart"
 msgstr "График"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:1380
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1447
 msgid "Chart legend"
 msgstr "Пояснение к графику"
 
@@ -8833,7 +8893,7 @@ msgstr "Подключение ..."
 msgid "Connection Test"
 msgstr "Тест подключения"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:590
+#: zotonic_mod_base/src/support/z_chart_svg.erl:599
 msgid "Data points"
 msgstr "Точки данных"
 
@@ -8947,7 +9007,7 @@ msgstr "Июля"
 msgid "June"
 msgstr "Июня"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:1386
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1453
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:41
 msgid "Label"
 msgstr "Метка"
@@ -9014,7 +9074,7 @@ msgstr "Чистое изменение"
 msgid "No"
 msgstr "Нет"
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:1330
+#: zotonic_mod_base/src/support/z_chart_svg.erl:1397
 msgid "No data"
 msgstr "Данных нет"
 
@@ -9053,7 +9113,7 @@ msgstr "Октября"
 msgid "On this page you can test the connection of your browser to our server and to the internet in general."
 msgstr "На этой странице Вы можете проверить подключение Вашего браузера к нашему серверу и Интернету в целом."
 
-#: zotonic_mod_base/src/support/z_chart_svg.erl:353
+#: zotonic_mod_base/src/support/z_chart_svg.erl:358
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:134
 msgid "Other"
 msgstr "Прочее"
@@ -9377,6 +9437,7 @@ msgstr "Примечание: Комментарии модерируются"
 
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:20
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:29
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:4
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:199
 msgid "Page"
@@ -9681,11 +9742,11 @@ msgstr "Новое местоположение может быть локаль
 msgid "You are not allowed to change this."
 msgstr "Вы не имеете права это менять."
 
-#: zotonic_mod_development/src/mod_development.erl:699
+#: zotonic_mod_development/src/mod_development.erl:718
 msgid "<i>Function name does not exist.</i>"
 msgstr "<i>Имя функции не существует.</i>"
 
-#: zotonic_mod_development/src/mod_development.erl:702
+#: zotonic_mod_development/src/mod_development.erl:721
 msgid "<i>Module not found.</i>"
 msgstr "<i>Модуль не найден.</i>"
 
@@ -9699,6 +9760,7 @@ msgid "A graph of all templates, and by whom they are included, is generated and
 msgstr "Граф всех шаблонов и связей их включения другими шаблонами создаётся и обновляется автоматически."
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:9
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:83
 msgid "Action"
 msgstr "Действие"
 
@@ -9727,6 +9789,10 @@ msgstr "Разрешить плавающую кнопку трассировк�
 msgid "Always hide the floating template trace button."
 msgstr "Всегда скрывайте плавающую кнопку трассировки шаблона."
 
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:50
+msgid "Attach capture"
+msgstr "Подключить запись диагностики"
+
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:18
 msgid "Automatic detection on the Zotonic machine"
 msgstr "Автоматическое обнаружение на машине Zotonic"
@@ -9752,8 +9818,8 @@ msgstr "Вычислите и визуализируйте граф зависи
 msgid "Check debug points in the template source to see debug data here."
 msgstr "Отметьте точки отладки в исходном коде шаблона, чтобы увидеть здесь отладочные данные."
 
-#: zotonic_mod_development/src/mod_development.erl:507
-#: zotonic_mod_development/src/mod_development.erl:522
+#: zotonic_mod_development/src/mod_development.erl:526
+#: zotonic_mod_development/src/mod_development.erl:541
 msgid "Checking all templates..."
 msgstr "Проверка всех шаблонов..."
 
@@ -9825,7 +9891,7 @@ msgstr "Не удалось загрузить или сохранить нас�
 msgid "Could not load templates"
 msgstr "Не удалось загрузить шаблоны"
 
-#: zotonic_mod_development/src/mod_development.erl:498
+#: zotonic_mod_development/src/mod_development.erl:517
 msgid "Could not open the directory on this computer."
 msgstr "Не удалось открыть каталог на этом компьютере."
 
@@ -9889,7 +9955,7 @@ msgid "Detecting editors…"
 msgstr "Поиск редакторов…"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:7
-#: zotonic_mod_development/src/mod_development.erl:1368
+#: zotonic_mod_development/src/mod_development.erl:1403
 msgid "Development"
 msgstr "Разработка"
 
@@ -10009,11 +10075,11 @@ msgstr "Включена трассировка запросов к базе д�
 msgid "Enter the module and function you want to trace. If no function is given, all functions in the module will be traced. Enter how many calls to trace before stopping."
 msgstr "Введите модуль и функцию, которую Вы хотите отслеживать. Если функция не указана, будут отслеживаться все функции модуля. Укажите количество вызовов, после которого отслеживание остановится."
 
-#: zotonic_mod_development/src/mod_development.erl:671
+#: zotonic_mod_development/src/mod_development.erl:690
 msgid "Error changing the console logs."
 msgstr "Ошибка изменения журналов консоли."
 
-#: zotonic_mod_development/src/mod_development.erl:765
+#: zotonic_mod_development/src/mod_development.erl:784
 msgid "Error parsing template."
 msgstr "Ошибка при разборе шаблона."
 
@@ -10038,6 +10104,8 @@ msgid "Final dispatch"
 msgstr "Окончательная диспетчеризация"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:181
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:25
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:15
 msgid "Find"
 msgstr "Найти"
 
@@ -10071,7 +10139,7 @@ msgstr "Трассировка вызовов функций"
 msgid "Function call tracing has been disabled. Use the following to enable function call tracing:"
 msgstr "Отслеживание функциональных вызовов было отключено. Чтобы включить отслеживание вызовов функций, выполните следующие действия:"
 
-#: zotonic_mod_development/src/mod_development.erl:705
+#: zotonic_mod_development/src/mod_development.erl:724
 msgid "Function tracing has been disabled in the Zotonic config."
 msgstr "Отслеживание функций было отключено в конфигурации Zotonic."
 
@@ -10216,18 +10284,18 @@ msgstr "Не найдено подходящего правила диспетч
 msgid "No matching templates found."
 msgstr "Соответствующих шаблонов не найдено."
 
-#: zotonic_mod_development/src/mod_development.erl:669
+#: zotonic_mod_development/src/mod_development.erl:688
 msgid "No permission to access the console logs."
 msgstr "Нет разрешения на доступ к журналам консоли."
 
-#: zotonic_mod_development/src/mod_development.erl:512
-#: zotonic_mod_development/src/mod_development.erl:527
-#: zotonic_mod_development/src/mod_development.erl:542
-#: zotonic_mod_development/src/mod_development.erl:550
-#: zotonic_mod_development/src/mod_development.erl:577
-#: zotonic_mod_development/src/mod_development.erl:619
-#: zotonic_mod_development/src/mod_development.erl:636
-#: zotonic_mod_development/src/mod_development.erl:653
+#: zotonic_mod_development/src/mod_development.erl:531
+#: zotonic_mod_development/src/mod_development.erl:546
+#: zotonic_mod_development/src/mod_development.erl:561
+#: zotonic_mod_development/src/mod_development.erl:569
+#: zotonic_mod_development/src/mod_development.erl:596
+#: zotonic_mod_development/src/mod_development.erl:638
+#: zotonic_mod_development/src/mod_development.erl:655
+#: zotonic_mod_development/src/mod_development.erl:672
 msgid "No permission to use mod_development."
 msgstr "Нет разрешения на использование mod_development."
 
@@ -10236,7 +10304,7 @@ msgstr "Нет разрешения на использование mod_developm
 msgid "No references found."
 msgstr "Ссылок не найдено."
 
-#: zotonic_mod_development/src/mod_development.erl:631
+#: zotonic_mod_development/src/mod_development.erl:650
 msgid "No template found in the context."
 msgstr "В контексте не найден шаблон."
 
@@ -10261,7 +10329,7 @@ msgstr "Не найден"
 msgid "Observers"
 msgstr "Наблюдатели"
 
-#: zotonic_mod_development/src/mod_development.erl:708
+#: zotonic_mod_development/src/mod_development.erl:727
 msgid "Only the admin user can set traces."
 msgstr "Только пользователь admin может устанавливать трассы."
 
@@ -10399,19 +10467,19 @@ msgstr "Начать отслеживание"
 msgid "Start matching dispatch rules"
 msgstr "Начать сопоставление правил диспетчеризации"
 
-#: zotonic_mod_development/src/mod_development.erl:665
+#: zotonic_mod_development/src/mod_development.erl:684
 msgid "Started logging to the console of your browser tab."
 msgstr "Начата запись журналов в консоль вкладки Вашего браузера."
 
-#: zotonic_mod_development/src/mod_development.erl:539
+#: zotonic_mod_development/src/mod_development.erl:558
 msgid "Started tracing all template inclusions."
 msgstr "Начал отслеживать все включения шаблона."
 
-#: zotonic_mod_development/src/mod_development.erl:614
+#: zotonic_mod_development/src/mod_development.erl:633
 msgid "Started tracing template inclusions by rendering the page."
 msgstr "Начато отслеживание включений шаблонов при отрисовке страницы."
 
-#: zotonic_mod_development/src/mod_development.erl:536
+#: zotonic_mod_development/src/mod_development.erl:555
 msgid "Started tracing template inclusions for your session."
 msgstr "Начато отслеживание включений шаблонов для Вашего сеанса."
 
@@ -10421,11 +10489,15 @@ msgstr "Начато отслеживание включений шаблоно�
 msgid "Stop"
 msgstr "Остановить"
 
-#: zotonic_mod_development/src/mod_development.erl:667
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:51
+msgid "Stop capture"
+msgstr "Остановить захват"
+
+#: zotonic_mod_development/src/mod_development.erl:686
 msgid "Stopped logging to the console of all browser tabs."
 msgstr "Запись журналов в консоли всех вкладок браузера остановлена."
 
-#: zotonic_mod_development/src/mod_development.erl:548
+#: zotonic_mod_development/src/mod_development.erl:567
 msgid "Stopped tracing template inclusions for all sessions."
 msgstr "Остановлено отслеживание включений шаблонов для всех сеансов."
 
@@ -10464,7 +10536,7 @@ msgstr "Шаблон"
 msgid "Template debugging"
 msgstr "Отладка шаблона"
 
-#: zotonic_mod_development/src/mod_development.erl:768
+#: zotonic_mod_development/src/mod_development.erl:787
 msgid "Template file not found."
 msgstr "Файл шаблона не найден."
 
@@ -10484,7 +10556,7 @@ msgstr "Путь к шаблону"
 msgid "Test with this template"
 msgstr "Протестируйте с помощью этого шаблона"
 
-#: zotonic_mod_development/src/mod_development.erl:616
+#: zotonic_mod_development/src/mod_development.erl:635
 msgid "The path must be a local URL."
 msgstr "Путь должен быть локальным URL."
 
@@ -10540,8 +10612,9 @@ msgstr "Отслеживать все запросы к БД для текуще
 msgid "Trace function calls"
 msgstr "Отслеживание вызовов функций"
 
-#: zotonic_mod_development/priv/templates/_html_head_development.tpl:38
-#: zotonic_mod_development/priv/templates/_html_head_development.tpl:39
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:44
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:45
+#: zotonic_mod_development/priv/templates/_html_head_development.tpl:49
 msgid "Trace templates"
 msgstr "Отслеживать шаблоны"
 
@@ -10577,7 +10650,7 @@ msgstr "Шаблон URI"
 msgid "Uncheck to debug only your current session."
 msgstr "Снимите флажок, чтобы отлаживать только текущую сессию."
 
-#: zotonic_mod_development/src/mod_development.erl:650
+#: zotonic_mod_development/src/mod_development.erl:669
 msgid "Updated template debug points."
 msgstr "Обновлены точки отладки шаблонов."
 
@@ -10886,6 +10959,7 @@ msgstr "Объединить ячейки"
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:43
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_edit.tpl:51
 #: zotonic_mod_survey/priv/templates/_survey_answer_status_fields.tpl:37
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:23
 msgid "Note"
 msgstr "Примечание"
 
@@ -11685,6 +11759,8 @@ msgstr "Только учетная запись администратора (�
 
 #: zotonic_mod_filestore/priv/templates/_filestore_prolonged_errors.tpl:54
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:85
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:45
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:48
 msgid "Previous"
 msgstr "Предыдущий"
 
@@ -12221,6 +12297,7 @@ msgid "Dependent media"
 msgstr "Зависимые медиафайлы"
 
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_log.tpl:14
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:10
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:12
 #: zotonic_mod_site_update/priv/templates/_site_deploy_commit.tpl:9
 #: zotonic_mod_translation/priv/templates/_translation_language_status.tpl:43
@@ -12966,6 +13043,7 @@ msgid "Email log"
 msgstr "Журнал e-mail"
 
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:39
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:8
 #: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_status_flag.tpl:10
 msgid "Email status"
 msgstr "Статус электронной почты"
@@ -13218,12 +13296,12 @@ msgstr "Получатель добавлен."
 msgid "After the page is published"
 msgstr "После публикации страницы"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:39
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:51
 #: zotonic_mod_translation/priv/templates/_dialog_language_edit_detail.tpl:19
 msgid "All languages"
 msgstr "Все языки"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:49
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:61
 msgid "All lists"
 msgstr "Все списки"
 
@@ -13245,8 +13323,8 @@ msgstr "Все получатели списка рассылки. Вы може
 msgid "All recipients, using that language"
 msgstr "Все получатели, для которых используется этот язык"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:29
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:24
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:27
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:36
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:45
 msgid "All statuses"
 msgstr "Все статусы"
@@ -13423,6 +13501,10 @@ msgstr "Удален список рассылки."
 msgid "Delivery history is preserved. Sending again may result in recipients receiving the same content twice. Older mailings from before run tracking are not used for duplicate detection."
 msgstr "История доставки сохраняется. Повторная отправка может привести к тому, что получатели получат одно и то же содержание дважды. Старые рассылки, отправленные до введения отслеживания, не используются для выявления дубликатов."
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:15
+msgid "Delivery problems have been recorded; sending is still allowed."
+msgstr "Зафиксированы проблемы с доставкой; отправка по-прежнему разрешена."
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:26
 msgid "Disabled email subscriptions are automatically deleted after three months."
 msgstr "Отключенные подписки на рассылку по электронной почте автоматически удаляются по истечении трёх месяцев."
@@ -13487,6 +13569,10 @@ msgstr "Может получать рассылку"
 msgid "Eligible recipients will be counted in the review step."
 msgstr "Количество подходящих получателей будет подсчитано на этапе проверки."
 
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:39
+msgid "Email address"
+msgstr "Адрес электронной почты"
+
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:62
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:54
 msgid "Email language"
@@ -13499,6 +13585,10 @@ msgstr "Язык электронного письма — это языкова
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:5
 msgid "Email subscriptions"
 msgstr "Подписка по электронной почте"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:40
+msgid "Email-only subscription"
+msgstr "Подписка только по электронной почте"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_counts.tpl:9
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_summary.tpl:10
@@ -13516,6 +13606,14 @@ msgstr "Письма, ожидающие отправки: {count}."
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:47
 msgid "Enabled"
 msgstr "Включен"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:37
+msgid "Enter a valid email address to look up mailing results."
+msgstr "Введите действительный адрес электронной почты, чтобы просмотреть результаты рассылки."
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:86
+msgid "Enter a valid email address to look up subscriptions."
+msgstr "Введите действительный адрес электронной почты, чтобы проверить подписки."
 
 #: zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:278
 msgid "Enter a valid future mailing date and time."
@@ -13554,12 +13652,29 @@ msgstr "Резервный язык"
 msgid "Fallback language:"
 msgstr "Резервный язык:"
 
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:12
+msgid "Find mailings by email address"
+msgstr "Найти рассылки по адресу электронной почты"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:24
+msgid "Find recent mailings to this address"
+msgstr "Найти последние письма, отправленные на этот адрес"
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:22
+msgid "Find subscriptions by email address"
+msgstr "Найти подписки по адресу электронной почты"
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:10
 msgid "Finished — some emails could not be sent"
 msgstr "Завершено — некоторые письма не удалось отправить"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:44
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:47
+msgid "First"
+msgstr "Первая"
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:14
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:42
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:33
 msgid "First page"
 msgstr "Первая страница"
 
@@ -13633,7 +13748,7 @@ msgstr "Включить только тех получателей, чьи яз
 msgid "Include recipients whose preference matches this language and recipients without a language preference."
 msgstr "Включить получателей, чьи языковые настройки соответствуют данному языку, а также получателей, не указавших языковые настройки."
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:25
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:23
 msgid "Individual delivery results, shown 100 recipients at a time."
 msgstr "Результаты рассылки по отдельным адресам, отображаются по 100 получателей за раз."
 
@@ -13656,6 +13771,15 @@ msgstr "Язык, если предпочтения не указаны:"
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:19
 msgid "Language:"
 msgstr "Язык:"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:52
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:55
+msgid "Last"
+msgstr "Последняя"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:6
+msgid "Last updated"
+msgstr "Последнее обновление"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:2
 msgid "Mailing"
@@ -13681,8 +13805,10 @@ msgstr "История рассылок для этой страницы"
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:5
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:14
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:8
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:5
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:47
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:27
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:59
 msgid "Mailing list"
 msgstr "Список рассылки"
 
@@ -13743,7 +13869,7 @@ msgstr "Рассылки"
 msgid "Mailings are sent to:"
 msgstr "Почта отправляется:"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:13
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:25
 msgid "Mailings of page: <strong>{title}</strong>"
 msgstr "Рассылки со страницы: <strong>{title}</strong>"
 
@@ -13763,6 +13889,10 @@ msgstr "Соответствует через Запрос"
 msgid "Matching preferred languages only"
 msgstr "Только по предпочтительным языкам"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:55
+msgid "Matching resources"
+msgstr "Соответствующие ресурсы"
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:35
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:56
 msgid "Needs attention"
@@ -13776,11 +13906,8 @@ msgstr "Новый список рассылки"
 msgid "Newest"
 msgstr "Последние"
 
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:38
-msgid "Next 100 recipients"
-msgstr "Следующие 100 получателей"
-
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:11
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:30
 msgid "Next page"
 msgstr "Следующая страница"
 
@@ -13791,6 +13918,10 @@ msgstr "Адрес электронной почты отсутствует."
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:65
 msgid "No emails submitted"
 msgstr "Писем не отправлено"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:49
+msgid "No explicit subscriptions found for this email address."
+msgstr "Для этого адреса электронной почты не найдено никаких явных подписок."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_overview.tpl:50
 msgid "No mailing lists found."
@@ -13804,11 +13935,15 @@ msgstr "Пока нет рассылок."
 msgid "No mailings yet. Send a mailing from a page’s edit screen to see its progress here."
 msgstr "Пока нет рассылок. Отправьте рассылку с экрана редактирования страницы, чтобы отследить её статус здесь."
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:25
+msgid "No recent mailing results found for this email address."
+msgstr "Результаты рассылок по этому адресу электронной почты за последнее время не найдены."
+
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:72
 msgid "No recipients found."
 msgstr "Получателей не найдено."
 
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:27
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:29
 msgid "No recipients match this filter."
 msgstr "По данному фильтру не найдено ни одного получателя."
 
@@ -13818,7 +13953,7 @@ msgstr "Сохраненных копий нет. В случае старых �
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:42
 msgid "No tracked mailings yet. History before run tracking was enabled is not available here."
-msgstr "Пока нет отправлений с отслеживанием. История отправлений, сделанных до включения функции отслеживания, здесь недоступна."
+msgstr "Пока нет рассылок с записью хода отправки. История до включения регистрации отправки рассылок здесь недоступна."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:49
 msgid "Nobody received this mailing. Check the recipient below for the reasons, then change the language or recipient selection."
@@ -13837,6 +13972,10 @@ msgstr "Не завершено"
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:50
 msgid "Not needed — no recipients selected"
 msgstr "Не требуется — получатели не выбраны"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:73
+msgid "Not opted out of mailings"
+msgstr "Не отказался от рассылки"
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:9
 msgid "Not sent — stopped"
@@ -13894,6 +14033,10 @@ msgstr "Это письмо получает только тестовый ад�
 msgid "Open a preview in a new tab before continuing:"
 msgstr "Прежде чем продолжить, откройте предварительный просмотр в новой вкладке:"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:20
+msgid "Open email log in a new window"
+msgstr "Открыть журнал электронной почты в новом окне"
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:80
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:143
 #: zotonic_mod_translation/priv/templates/_translation_tree_skipped.tpl:9
@@ -13912,6 +14055,10 @@ msgstr "Отказ от рассылок"
 msgid "Opt-out of all mailing lists coupled to my account"
 msgstr "Отказ от всех списков рассылки, связанных с моей учетной записью"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:71
+msgid "Opted out of mailings"
+msgstr "Отписался от рассылки"
+
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:23
 msgid "Our excuses for the inconvenience."
 msgstr "Наши извинения за неудобства."
@@ -13920,6 +14067,10 @@ msgstr "Наши извинения за неудобства."
 msgid "Overview"
 msgstr "Обзор"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:40
+msgid "Page {page} of {pages} ({total} recipients)"
+msgstr "Страница {page} из {pages} (получателей: {total})"
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:53
 msgid "Pages that have the 'subscriberof' edge to the mailinglist."
 msgstr "Страницы, связанные со списком рассылки связью 'subscriberof'."
@@ -13927,6 +14078,10 @@ msgstr "Страницы, связанные со списком рассылк�
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:54
 msgid "Pages that match the recipients search query below."
 msgstr "Страницы, соответствующие поисковому запросу получателей ниже."
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:42
+msgid "Part of the email address"
+msgstr "Часть адреса электронной почты"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:121
 msgid "People who have not received this page in this language"
@@ -13995,6 +14150,10 @@ msgstr "Просмотр рассылки"
 msgid "Previous deliveries"
 msgstr "Предыдущие доставки"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:38
+msgid "Primary email address"
+msgstr "Основной адрес электронной почты"
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:149
 msgid "Progress"
@@ -14008,6 +14167,10 @@ msgstr "Начало публикации"
 msgid "Query, for example:"
 msgstr "Запрос, например:"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:53
+msgid "Query-based subscriptions are not included. Disabled email-only subscriptions are retained for three months."
+msgstr "Подписки на основе запросов не учитываются. Отключенные подписки, предусматривающие только рассылку по электронной почте, сохраняются в течение трёх месяцев."
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:3
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:3
 msgid "Queued"
@@ -14016,6 +14179,10 @@ msgstr "В очереди"
 #: zotonic_mod_mailinglist/priv/templates/mailing_page.collection.tpl:28
 msgid "Read more on the web"
 msgstr "Узнать больше в сети"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:2
+msgid "Recent mailing results"
+msgstr "Результаты последних рассылок"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist.tpl:4
 msgid "Recent mailings"
@@ -14041,17 +14208,21 @@ msgstr "Срок действия истории получателей исте
 msgid "Recipient history has expired. Start a new mailing and explicitly select all recipients; some people may receive this page again."
 msgstr "Срок хранения истории получателей истек. Начните новую рассылку и явно выберите всех получателей; некоторые люди могут получить эту страницу повторно."
 
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:38
+msgid "Recipient pages"
+msgstr "Страницы получателей"
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:14
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:20
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:25
 msgid "Recipient preference"
 msgstr "Предпочтения получателя"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:22
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:20
 msgid "Recipient results"
 msgstr "Результаты получателей"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:27
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:25
 msgid "Recipient status"
 msgstr "Статус получателя"
 
@@ -14074,7 +14245,7 @@ msgstr "Получатели, для которых указан данный я
 msgid "Recipients search query"
 msgstr "Запрос поиска получателей"
 
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:28
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:30
 msgid "Recipients will appear when preparation starts."
 msgstr "Получатели появятся, когда начнётся подготовка."
 
@@ -14093,6 +14264,7 @@ msgid "Removed subscription."
 msgstr "Удалена подписка."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:97
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:9
 msgid "Result"
 msgstr "Результат"
 
@@ -14345,6 +14517,14 @@ msgstr "Имя отправителя для электронной почты (
 msgid "Sender:"
 msgstr "Отправитель:"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:17
+msgid "Sending is allowed."
+msgstr "Отправка разрешена."
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:13
+msgid "Sending is suppressed after delivery failures."
+msgstr "После сбоев при доставке отправка блокируется."
+
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:12
 msgid "Sending needs attention"
 msgstr "Отправке следует уделить внимание"
@@ -14389,13 +14569,21 @@ msgstr "Отправлено: <strong>{count}</strong>"
 msgid "Sent: {count};"
 msgstr "Отправлено: {count};"
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:14
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:16
+msgid "Show all mailings"
+msgstr "Показать все рассылки"
+
+#: zotonic_mod_mailinglist/priv/templates/admin_mailings.tpl:26
 msgid "Show all pages"
 msgstr "Показать все страницы"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:57
 msgid "Show all recipients"
 msgstr "Показать всех получателей"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:35
+msgid "Showing up to 200 recipient results per page from the last three months, including failed and skipped deliveries. Expired details and mailings from before run tracking are unavailable. Sent means accepted by the mail server; later bounces can still change the result."
+msgstr "На странице отображается до 200 результатов по получателям за последние три месяца, включая неудачные и пропущенные доставки. Данные, срок действия которых истек, а также рассылки, отправленные до введения системы отслеживания, недоступны. Статус «Отправлено» означает, что письмо было принято почтовым сервером; позднее поступление уведомлений об отказе может изменить этот результат."
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailings_runs.tpl:18
 msgid "Showing up to 200 runs per page, with active runs first. Sent means accepted by the mail server; later bounces can still change the results."
@@ -14486,10 +14674,18 @@ msgstr "Остановлено; письма, уже стоящие в очер�
 msgid "Subscribe to"
 msgstr "Подписаться на"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:44
+msgid "Subscribed"
+msgstr "Подписано"
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:47
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:99
 msgid "Subscribed with"
 msgstr "Адрес подписки:"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:28
+msgid "Subscriber"
+msgstr "Подписчик"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailinglist_recipient_counts.tpl:6
 msgid "Subscriber Edges"
@@ -14503,6 +14699,14 @@ msgstr "Абоненты, добавленные через форму подп�
 msgid "Subscription email: <b>{email}</b>"
 msgstr "Электронная почта для подписки: <b>{email}</b>"
 
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:29
+msgid "Subscription status"
+msgstr "Статус подписки"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:4
+msgid "Subscriptions"
+msgstr "Подписки"
+
 #: zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:33
 msgid "Target mailing list"
 msgstr "Целевой список рассылки"
@@ -14515,6 +14719,7 @@ msgstr "Технические сведения"
 #: zotonic_mod_mailinglist/priv/templates/_admin_dashboard_mailinglist_runs.tpl:8
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:3
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_review.tpl:8
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:18
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:16
 msgid "Test email"
 msgstr "Тестовое письмо"
@@ -14649,7 +14854,7 @@ msgstr "Это \"личный\", управляемый извне список.
 msgid "This is a resend of an earlier mailing."
 msgstr "Это повторная рассылка предыдущего письма."
 
-#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:53
+#: zotonic_mod_mailinglist/priv/templates/admin_mailing_run.tpl:57
 msgid "This mailing is unavailable or you do not have permission to view it."
 msgstr "Эта рассылка недоступна или у Вас нет прав на её просмотр."
 
@@ -14660,6 +14865,10 @@ msgstr "Эта рассылка недоступна."
 #: zotonic_mod_mailinglist/priv/templates/_mailing_skip_reason.tpl:2
 msgid "This page is not available in their language."
 msgstr "Эта страница недоступна на их языке."
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:45
+msgid "This resource has opted out of mailings."
+msgstr "Этот ресурс отказался от получения рассылок."
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:24
 msgid "This rough total includes all query matches. Duplicate recipients are not removed yet."
@@ -14701,6 +14910,10 @@ msgstr "Отписаться от"
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:3
 msgid "Unsubscribe from mailing list"
 msgstr "Отписаться от рассылки"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:44
+msgid "Unsubscribed"
+msgstr "Подписка отменена"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:106
 msgid "Unsubscribed recipients, blocked or invalid addresses, and recipients excluded by your delivery-history selection will not receive an email."
@@ -14753,6 +14966,10 @@ msgstr "Просмотреть историю рассылок"
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_run.tpl:41
 msgid "View original mailing"
 msgstr "Просмотреть исходное письмо"
+
+#: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:3
+msgid "View subscriptions and email status"
+msgstr "Просмотр подписок и статуса электронной почты"
 
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:152
 msgid "View test result"
@@ -14892,6 +15109,10 @@ msgstr "Вы можете отказаться от всех текущих и �
 #: zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:28
 msgid "You can try to re-subscribe to one of our mailing lists in the side column."
 msgstr "Вы можете попробовать переподписаться на один из наших списков рассылки в боковом столбце."
+
+#: zotonic_mod_mailinglist/priv/templates/_mailinglist_email_lookup.tpl:21
+msgid "You do not have permission to view the email status."
+msgstr "У Вас нет прав на просмотр статуса этого адреса электронной почты."
 
 #: zotonic_mod_mailinglist/priv/templates/_mailing_footer.tpl:2
 msgid "You received this mail because someone wanted to send you this information. We did not store your e-mail address and will not send you any other mail because of this mail."
@@ -15381,6 +15602,7 @@ msgid "Create connections with content on {local}."
 msgstr "Создавайте связи с контентом на {local}."
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:106
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:2
 msgid "Day"
 msgstr "День"
 
@@ -15478,6 +15700,8 @@ msgid "For every combination of a user and a label there can only be a single ac
 msgstr "Для каждой комбинации пользователя и метки может быть только один токен доступа. Существующие токены доступа с этой меткой будут заменены."
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:110
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:5
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:58
 msgid "Forever"
 msgstr "Навсегда"
 
@@ -15748,6 +15972,7 @@ msgid "Valid redirect URLs, one per line"
 msgstr "Действительные URL-адреса перенаправления, по одному в каждой строке."
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:107
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:3
 msgid "Week"
 msgstr "Неделя"
 
@@ -16167,10 +16392,6 @@ msgstr "Восстановить карту сайта"
 msgid "Rebuilding the sitemap in the background."
 msgstr "Восстановление карты сайта в фоновом режиме."
 
-#: zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:2
-msgid "Sitemap"
-msgstr "Карта сайта"
-
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:7
 msgid "Sitemap settings"
 msgstr "Настройки карты сайта"
@@ -16452,11 +16673,15 @@ msgstr "Чтобы зарегистрироваться, Вы должны со�
 msgid "Your signup code"
 msgstr "Ваш регистрационный код"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:276
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:6
+msgid "A deployment is running. Try again when it finishes."
+msgstr "В настоящее время выполняется развертывание. Повторите попытку после его завершения."
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:320
 msgid "Another deployment is in progress. Please try again when it finishes."
 msgstr "В настоящее время выполняется очередное развертывание. Пожалуйста, повторите попытку после его завершения."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:176
+#: zotonic_mod_site_update/src/mod_site_update.erl:187
 msgid "Building Zotonic in the background..."
 msgstr "Создание Zotonic в фоновом режиме ..."
 
@@ -16464,12 +16689,16 @@ msgstr "Создание Zotonic в фоновом режиме ..."
 msgid "Could not fetch the remote change log. Check the remote connection and try again."
 msgstr "Не удалось получить журнал изменений удаленного репозитория. Проверьте подключение к удаленному репозиторию и повторите попытку."
 
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:8
+msgid "Could not list local changes. Check the repository and server log."
+msgstr "Не удалось составить список локальных изменений. Проверьте репозиторий и журнал сервера."
+
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:9
 msgid "Current commit"
 msgstr "Текущий коммит"
 
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:61
-#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:63
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:62
+#: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:64
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy_loading.tpl:12
 msgid "Deploy"
 msgstr "Развернуть"
@@ -16484,25 +16713,25 @@ msgstr "Развернуть последнюю версию"
 msgid "Deploy latest Zotonic"
 msgstr "Развернуть последнюю версию Zotonic"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:229
+#: zotonic_mod_site_update/src/mod_site_update.erl:240
 msgid "Deploy latest version"
 msgstr "Развернуть последнюю версию"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:263
+#: zotonic_mod_site_update/src/mod_site_update.erl:274
 msgid "Deploying the latest version..."
 msgstr "Развертывание последней версии..."
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:2
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:5
-#: zotonic_mod_site_update/src/mod_site_update.erl:140
+#: zotonic_mod_site_update/src/mod_site_update.erl:146
 msgid "Deployment"
 msgstr "Развертывание"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:274
+#: zotonic_mod_site_update/src/mod_site_update.erl:318
 msgid "Deployment completed."
 msgstr "Развертывание завершено."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:278
+#: zotonic_mod_site_update/src/mod_site_update.erl:322
 msgid "Deployment failed. Check the server log for details."
 msgstr "Развертывание завершилось с ошибкой. Подробности см. в журнале сервера."
 
@@ -16518,13 +16747,21 @@ msgstr "В процессе развертывания обновляется в
 msgid "Fetching remote changes…"
 msgstr "Получение изменений из удалённого репозитория…"
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:174
+#: zotonic_mod_site_update/src/mod_site_update.erl:185
 msgid "Finished rebuilding Zotonic."
 msgstr "Пересборка Zotonic завершена."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:32
 msgid "Incoming changes"
 msgstr "Входящие изменения"
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:2
+msgid "Local changes for {name}."
+msgstr "Локальные изменения для {name}."
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:303
+msgid "Local changes reset. You can deploy again."
+msgstr "Локальные изменения сброшены. Можно выполнить развертывание заново."
 
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:14
 msgid "Modules list"
@@ -16542,6 +16779,18 @@ msgstr "Пересобрать Zotonic"
 msgid "Recompile changed Erlang files in the background"
 msgstr "Перекомпилировать измененные файлы Erlang в фоновом режиме"
 
+#: zotonic_mod_site_update/src/mod_site_update.erl:289
+msgid "Reset local changes"
+msgstr "Сбросить локальные изменения"
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:309
+msgid "Reset or rebuild failed. Check the server log before retrying."
+msgstr "Сброс или восстановление не удалось. Перед повторной попыткой проверьте журнал сервера."
+
+#: zotonic_mod_site_update/src/mod_site_update.erl:300
+msgid "Resetting local changes and rebuilding..."
+msgstr "Сброс локальных изменений и повторная сборка..."
+
 #: zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
 msgid "Review and deploy the latest version of this site."
 msgstr "Проверьте и разверните последнюю версию этого сайта."
@@ -16558,7 +16807,7 @@ msgstr "Просмотрите входящие изменения и разве
 msgid "Review incoming changes and deploy this site's code. Compilation and activation are coordinated across all sites on this node."
 msgstr "Просмотрите вносимые изменения и разверните код этого сайта. Компиляция и активация координируются для всех сайтов на этом узле."
 
-#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:6
+#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:7
 msgid "Review incoming changes before deploying the latest version."
 msgstr "Перед развертыванием последней версии просмотрите входящие изменения."
 
@@ -16579,13 +16828,17 @@ msgstr "Развертывание сайта"
 msgid "Site update API token"
 msgstr "Токен API обновления сайта"
 
-#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:10
+#: zotonic_mod_site_update/priv/templates/_admin_deployment_tools.tpl:11
 msgid "Site update is not available as the site does not use a known version control system, like git."
 msgstr "Обновление сайта недоступно, так как сайт не использует известную систему контроля версий, например git."
 
-#: zotonic_mod_site_update/src/mod_site_update.erl:178
+#: zotonic_mod_site_update/src/mod_site_update.erl:189
 msgid "Sorry this can only be run from the Zotonic status site"
 msgstr "Извините, это можно запустить только с сайта статуса Zotonic"
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:20
+msgid "The code is then rebuilt before deployment is enabled again. If this repository contains other sites or modules, their local changes are also discarded."
+msgstr "Затем код перекомпилируется, после чего развертывание снова включается. Если этот репозиторий содержит другие сайты или модули, их локальные изменения также отбрасываются."
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:28
 msgid "The deployment preview is unavailable. Check the repository and server log, then try again."
@@ -16603,9 +16856,17 @@ msgstr "Локальную ветку нельзя обновить до уда�
 msgid "There are no incoming changes."
 msgstr "Входящих изменений нет."
 
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:15
+msgid "There are no local changes. You can still rebuild to recover from a failed deployment."
+msgstr "Локальных изменений нет. Вы по-прежнему можете выполнить пересборку, чтобы восстановить систему после неудачного развертывания."
+
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:22
 msgid "This branch has no upstream configured. Configure its remote tracking branch before deploying."
 msgstr "Для этой ветки не настроен upstream. Перед развертыванием настройте отслеживаемую удалённую ветку."
+
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:18
+msgid "This permanently discards all uncommitted changes in the entire repository, including staged changes, and deletes untracked files and directories. Ignored files, local commits and nested repositories are preserved."
+msgstr "Эта команда окончательно удаляет все нефиксированные изменения во всем репозитории, включая подготовленные к фиксации изменения, а также удаляет неотслеживаемые файлы и каталоги. Игнорируемые файлы, локальные фиксации и вложенные репозитории сохраняются."
 
 #: zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:13
 msgid "This token is used to secure the webhook API call for updating this website on a code push to Github (or similar services like BitBucket)."
@@ -16619,13 +16880,19 @@ msgstr "Чтобы развернуть обновления отдельных 
 msgid "To run the webhook update, configure your service to POST to the following URL:"
 msgstr "Чтобы запустить обновление веб-перехватчика, настройте службу на POST по следующему URL-адресу:"
 
+#: zotonic_mod_site_update/priv/templates/_dialog_site_reset.tpl:26
+msgid "Undo all local changes and rebuild"
+msgstr "Отменить все локальные изменения и выполнить перекомпиляцию"
+
 #: zotonic_mod_site_update/priv/templates/admin_deployment.tpl:16
 msgid "View system status"
 msgstr "Просмотреть состояние системы"
 
 #: zotonic_mod_site_update/priv/templates/_dialog_site_deploy.tpl:20
-#: zotonic_mod_site_update/src/mod_site_update.erl:233
-#: zotonic_mod_site_update/src/mod_site_update.erl:268
+#: zotonic_mod_site_update/src/mod_site_update.erl:244
+#: zotonic_mod_site_update/src/mod_site_update.erl:279
+#: zotonic_mod_site_update/src/mod_site_update.erl:292
+#: zotonic_mod_site_update/src/mod_site_update.erl:312
 msgid "You are not allowed to deploy this code."
 msgstr "У Вас нет прав на развертывание этого кода."
 
@@ -17343,7 +17610,7 @@ msgstr "Длинный ответ"
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:202
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:203
 msgid "Mail results to"
-msgstr "Отправлять результаты по почте на"
+msgstr "Отправлять результаты по электронной почте на"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:36
 msgid "Mailinglist"
@@ -18247,6 +18514,171 @@ msgstr "текст"
 msgid "{points} of {max} points"
 msgstr "{points} из {max} баллов"
 
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:34
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:53
+msgid "Add IP entries"
+msgstr "Добавить записи IP-адресов"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:23
+msgid "Add to allow list"
+msgstr "Добавить в список разрешенных"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:13
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:42
+msgid "Allow"
+msgstr "Разрешить"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:17
+msgid "Allow entries take precedence. Blocks follow observe/enforce/off mode and only affect guarded routes."
+msgstr "Записи в списке разрешённых адресов имеют приоритет. Блокировки зависят от режима observe/enforce/off и действуют только на защищённых маршрутах."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:106
+msgid "Block IP"
+msgstr "Заблокировать IP-адрес"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:103
+msgid "Block duration"
+msgstr "Длительность блокировки"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:86
+msgid "Block for"
+msgstr "Заблокировать на"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:18
+msgid "Current mode:"
+msgstr "Текущий режим:"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:72
+msgid "Current node only, including would-throttle decisions in observe mode. Up to 200 entries. Blocking generates a note from the displayed reason and rejection count."
+msgstr "Только текущий узел, включая запросы, которые были бы ограничены в режиме observe. До 200 записей. При блокировке создаётся примечание на основе отображаемой причины и числа отклонённых запросов."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:68
+msgid "Currently throttled IP addresses"
+msgstr "IP-адреса, доступ к которым в настоящее время ограничен"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:51
+msgid "Delete IP entry"
+msgstr "Удалить запись об IP-адресе"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:48
+msgid "Delete IP entry?"
+msgstr "Удалить запись об IP-адресе?"
+
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_delete_confirm.tpl:1
+msgid "Delete this IP entry?"
+msgstr "Удалить эту запись об IP-адресе?"
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:71
+msgid "Each list can contain at most 256 entries."
+msgstr "Каждый список может содержать не более 256 записей."
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:57
+msgid "Edit IP entry"
+msgstr "Изменить запись IP-адреса"
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:72
+msgid "Enter valid IP addresses, a note and a future expiry date or duration. No changes were saved."
+msgstr "Введите допустимые IP-адреса, примечание и будущую дату окончания действия или срок действия. Изменения не сохранены."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:38
+msgid "Expiry dates are UTC. Expired entries stop applying immediately and are removed automatically. Global entries are managed in zotonic.config."
+msgstr "Сроки действия указаны в формате UTC. Завершившиеся записи немедленно перестают действовать и удаляются автоматически. Управление глобальными записями осуществляется в файле zotonic.config."
+
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:1
+msgid "Hour"
+msgstr "Час"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:81
+msgid "IP address"
+msgstr "IP-адрес"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:18
+msgid "IP addresses"
+msgstr "IP-адреса"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:32
+msgid "IP entries"
+msgstr "Записи IP"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:11
+msgid "List"
+msgstr "Список"
+
+#: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:4
+msgid "Month (30 days)"
+msgstr "Месяц (30 дней)"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:61
+msgid "No IP entries."
+msgstr "Записей по IP-адресам нет."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:114
+msgid "No currently throttled IP addresses."
+msgstr "В настоящее время нет IP-адресов, доступ к которым ограничен."
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:40
+msgid "Or until (UTC)"
+msgstr "Или до (UTC)"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:82
+msgid "Reason"
+msgstr "Причина"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:84
+msgid "Rejections"
+msgstr "Отказы"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:85
+msgid "Retry in seconds"
+msgstr "Повторная попытка через (секунды)"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:46
+msgid "Save IP entries"
+msgstr "Сохранить записи IP-адресов"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:9
+msgid "Separate IPv4 or IPv6 addresses with spaces, commas or newlines. Re-adding an address to the same list updates its note and expiry."
+msgstr "Разделите адреса IPv4 или IPv6 пробелами, запятыми или символами новой строки. Повторное добавление адреса в тот же список приводит к обновлению примечания и срока действия."
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:70
+msgid "This IP is no longer throttled. Refresh the page."
+msgstr "Ограничение для этого IP-адреса снято. Обновите страницу."
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:58
+msgid "This entry is no longer available. Refresh the page."
+msgstr "Эта запись больше недоступна. Обновите страницу."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:3
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:10
+#: zotonic_mod_traffic_guard/src/mod_traffic_guard.erl:168
+msgid "Traffic guard"
+msgstr "Защита трафика"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:74
+msgid "Traffic guard is temporarily unavailable."
+msgstr "Защита трафика временно недоступна."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:58
+msgid "Until (UTC):"
+msgstr "До (UTC):"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:29
+msgid "Until (UTC; empty means forever)"
+msgstr "До (UTC; пустое поле означает «бесконечно»)"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:34
+msgid "Valid for"
+msgstr "Действительно в течение"
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:69
+msgid "You are not allowed to change these entries."
+msgstr "Вам запрещено изменять эти записи."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:21
+msgid "Your current IP address:"
+msgstr "Ваш текущий IP-адрес:"
+
 #: zotonic_mod_translation/priv/templates/_translation_edit_text.tpl:9
 msgid "(empty)"
 msgstr "(пусто)"
@@ -18920,7 +19352,7 @@ msgstr "Автоматическое обновление не удалось з
 msgid "Choose a known failed hostname or enter an exact hostname, without a scheme, port, or path."
 msgstr "Выберите известное неработающее имя хоста или введите точное имя хоста без указания схемы, порта или пути."
 
-#: zotonic_mod_websub/src/mod_websub.erl:285
+#: zotonic_mod_websub/src/mod_websub.erl:298
 msgid "Could not change the automatic update subscription."
 msgstr "Не удалось изменить подписку на автоматическое обновление."
 
@@ -19121,7 +19553,7 @@ msgstr "Мы подписываемся"
 #: zotonic_mod_websub/priv/templates/_admin_edit_sidebar_websub.tpl:4
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:3
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:7
-#: zotonic_mod_websub/src/mod_websub.erl:257
+#: zotonic_mod_websub/src/mod_websub.erl:270
 msgid "WebSub subscriptions"
 msgstr "Подписки WebSub"
 

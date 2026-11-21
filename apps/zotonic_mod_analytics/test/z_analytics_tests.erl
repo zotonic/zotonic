@@ -144,3 +144,55 @@ crawler_measurement_policy_test() ->
     ?assert(z_analytics:matches(#{event=><<"request">>,dimension=><<"traffic">>,filters=>#{}},Bot)),
     ?assert(z_analytics:matches(#{event=><<"api_request">>,dimension=><<>>,filters=>#{}},Bot)),
     ?assertNot(z_analytics:matches(#{event=><<"api_request">>,dimension=><<>>,filters=>#{<<"traffic">>=>[<<"other">>]}},Bot)).
+
+agent_traffic_test() ->
+    lists:foreach(fun(UA) ->
+        ?assertEqual(<<"agent">>, z_analytics_request:traffic(UA, false)),
+        ?assertEqual(<<"agent">>, z_analytics_request:traffic(UA, true))
+    end, [<<"ChatGPT-User/1.0">>, <<"Mozilla/5.0 (compatible; Claude-User/1.0)">>,
+          <<"CLAUDE-USER">>]),
+    lists:foreach(fun(UA) ->
+        ?assertEqual(<<"crawler">>, z_analytics_request:traffic(UA, false))
+    end, [<<"GPTBot/1.0">>, <<"OAI-SearchBot/1.0">>, <<"ClaudeBot/1.0">>,
+          <<"Claude-SearchBot/1.0">>]),
+    lists:foreach(fun(UA) ->
+        ?assertEqual(<<"other">>, z_analytics_request:traffic(UA, false))
+    end, [<<"Mozilla/5.0">>, <<"curl/8.0">>, <<"FakeChatGPT-User/1.0">>,
+          <<"Claude-User-Fake/1.0">>, <<"https://example.test/ChatGPT-User">>]),
+    ?assertEqual(<<"crawler">>, z_analytics_request:traffic(<<"SomeBot">>, true)),
+    ?assertEqual(<<"unknown">>, z_analytics_request:traffic(<<>>, false)),
+    ?assertEqual(<<"unknown">>, z_analytics_request:traffic(undefined, false)),
+    ?assertEqual(<<"unknown">>, z_analytics_request:traffic(binary:copy(<<"x">>,2049), false)).
+
+agent_measurement_policy_test() ->
+    lists:foreach(fun(Traffic) ->
+        Props = #{<<"traffic">> => Traffic},
+        lists:foreach(fun(Dimension) ->
+            Col = #{event => <<"page_request">>, dimension => Dimension, filters => #{}},
+            ?assertNot(z_analytics:matches(Col, Props)),
+            ?assert(z_analytics:matches(Col#{filters => #{<<"traffic">> => [Traffic]}}, Props)),
+            ?assertNot(z_analytics:matches(Col#{filters => #{<<"traffic">> => [<<"other">>]}}, Props))
+        end, [<<>>, <<"device">>, <<"page">>]),
+        ?assert(z_analytics:matches(#{event => <<"page_request">>, dimension => <<"traffic">>, filters => #{}}, Props)),
+        ?assert(z_analytics:matches(#{event => <<"request">>, dimension => <<>>, filters => #{}}, Props))
+    end, [<<"agent">>, <<"crawler">>]).
+
+agent_dispatch_analytics_test() ->
+    File = filename:join(code:priv_dir(zotonic_mod_agent_discovery), "dispatch/dispatch"),
+    {ok, [Rules]} = file:consult(File),
+    ?assertEqual(9, length(Rules)),
+    lists:foreach(fun({Name, _, Controller, Options}) ->
+        Type = atom_to_binary(Name, utf8),
+        ?assertEqual(Type, z_analytics_request:dispatch_type(proplists:get_value(analytics, Options), Controller)),
+        lists:foreach(fun(Traffic) ->
+            Props = #{<<"type">> => Type, <<"traffic">> => Traffic},
+            lists:foreach(fun(Status) ->
+                {<<"request">>, Event} = z_analytics_request:typed_event(#{
+                    method => <<"GET">>, resp_status => Status,
+                    metrics => #{analytics_request => Props}}),
+                ?assertEqual(Type, maps:get(<<"type">>, Event)),
+                ?assertEqual(Traffic, maps:get(<<"traffic">>, Event)),
+                ?assertEqual(integer_to_binary(Status), maps:get(<<"http_status">>, Event))
+            end, [200, 404, 500])
+        end, [<<"agent">>, <<"other">>])
+    end, Rules).

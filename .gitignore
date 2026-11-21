@@ -82,5 +82,6 @@ apps/zotonic_launcher/bin/zotonic-completion.bash
 .env
 
 llm-input/
+setttings.local.json
 
 /apps/zotonic_core/priv/bin/zotonic-sandbox

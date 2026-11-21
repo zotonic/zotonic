@@ -915,13 +915,18 @@
 %% @doc An edge has been inserted.
 %% Note that the Context for this notification does not have the user who
 %% created the edge.
+%% Only emitted for edges present when the edge log batch is read.
+%% The sequence, creator and creation time are taken from that edge.
 %% Type: notify
 %% Return: return value is ignored
 -record(edge_insert, {
     subject_id :: m_rsc:resource(),
     predicate :: atom(),
     object_id :: m_rsc:resource(),
-    edge_id :: pos_integer()
+    edge_id :: pos_integer(),
+    seq :: integer(),
+    creator_id :: m_rsc:resource_id() | undefined,
+    created :: calendar:datetime()
 }).
 
 %% @doc An edge has been deleted
@@ -939,13 +944,18 @@
 %% @doc An edge has been updated
 %% Note that the Context for this notification does not have the user who
 %% updated the edge.
+%% Only emitted for edges present when the edge log batch is read.
+%% The sequence, creator and creation time are taken from that edge.
 %% Type: notify
 %% Return: return value is ignored
 -record(edge_update, {
     subject_id :: m_rsc:resource(),
     predicate :: atom(),
     object_id :: m_rsc:resource(),
-    edge_id :: pos_integer()
+    edge_id :: pos_integer(),
+    seq :: integer(),
+    creator_id :: m_rsc:resource_id() | undefined,
+    created :: calendar:datetime()
 }).
 
 %% @doc Site configuration parameter was changed
@@ -1445,7 +1455,7 @@
 %% Type: foldl
 %% Return: updated ``z:context()``
 -record(middleware, {
-    on :: request | welformed | handled
+    on :: guard | request | welformed | handled
 }).
 
 

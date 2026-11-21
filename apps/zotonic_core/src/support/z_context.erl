@@ -72,6 +72,7 @@
     output/2,
 
     ensure_qs/1,
+    ensure_request_context/1,
 
     set_q/3,
     set_q/2,
@@ -608,24 +609,29 @@ output(MixedHtml, Context) ->
 %% @doc Ensure that we have parsed the query string, fetch body if necessary. Throws
 %% a `{stop_request, StatusCode}' exception if there are errors in the request body
 %% or too many query arguments.
-ensure_qs(#context{ props = Props } = Context) ->
-    case maps:find('q', Props) of
-        {ok, _Qs} ->
-            Context;
-        error ->
-            Query = cowmachine_req:req_qs(Context),
-            PathInfo = cowmachine_req:path_info(Context),
-            PathArgs = [ {z_convert:to_binary(T), V} || {T,V} <- maps:to_list( PathInfo ) ],
-            QPropsUrl = Props#{ q => PathArgs++Query },
-            ContextQs = Context#context{ props = QPropsUrl },
-            % Auth user via cookie - set language
-            ContextReq = z_notifier:foldl(#request_context{ phase = init }, ContextQs, ContextQs),
-            ContextReq2 = z_notifier:foldl(#request_context{ phase = refresh }, ContextReq, ContextReq),
-            % Parse the POST body (if any)
-            {Body, ContextParsed} = parse_post_body(ContextReq2),
-            QPropsAll = (ContextParsed#context.props)#{ q => PathArgs++Body++Query },
-            ContextParsed#context{ props = QPropsAll }
+ensure_qs(Context) ->
+    Ctx = ensure_request_context(Context),
+    case maps:find(q_body_pending, Ctx#context.props) of
+        error -> Ctx;
+        {ok, {PathArgs, Query}} ->
+            {Body, Parsed} = parse_post_body(Ctx),
+            Props = maps:remove(q_body_pending, Parsed#context.props),
+            Parsed#context{props = Props#{q => PathArgs ++ Body ++ Query}}
     end.
+
+%% @doc Initialize query/path arguments and request authentication, without
+%% reading a request body. Early guards use this to reject expensive bodies before
+%% controller callbacks. ensure_qs/1 completes body parsing once if admitted.
+-spec ensure_request_context(Context) -> z:context() when Context :: z:context().
+ensure_request_context(#context{props = #{q := _}} = Context) -> Context;
+ensure_request_context(#context{props = Props} = Context) ->
+    Query = cowmachine_req:req_qs(Context),
+    PathInfo = cowmachine_req:path_info(Context),
+    PathArgs = [{z_convert:to_binary(T),V} || {T,V} <- maps:to_list(PathInfo)],
+    Ctx = Context#context{props = Props#{q => PathArgs ++ Query}},
+    Ctx1 = z_notifier:foldl(#request_context{phase = init}, Ctx, Ctx),
+    Ctx2 = z_notifier:foldl(#request_context{phase = refresh}, Ctx1, Ctx1),
+    Ctx2#context{props = (Ctx2#context.props)#{q_body_pending => {PathArgs, Query}}}.
 
 
 %% @doc Return the cowmachine request data of the context

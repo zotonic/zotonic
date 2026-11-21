@@ -23,15 +23,32 @@
     zotonic_keywords => ["reference", "backend_developer", "module", "development_and_debugging", "configure", "monitor"]
 }).
 -moduledoc("
-Presents various tools for development.
-
-After the development module is enabled a menu item System &gt; Development is added in the admin.
-
-On the development page it is possible to set debugging options, trace template compilation, and test dispatch rules.
+Inspect and debug running Zotonic sites. Enable this module to add
+**System > Development** to the admin, with template and dispatch inspection,
+tracing, source-editor integration, and development settings.
 
 ![The Development page with settings, source editor, template and dispatch debugging, introspection, and function call tracing.](../priv/doc/admin-development.jpg)
 
-## Debug Options
+## Choose a tool
+
+| Task | Tool |
+| --- | --- |
+| Adjust development settings or inspect the site interactively | System > Development. |
+| Inspect dispatch rules, indexed templates, source, composition, and model APIs | `model#development_tools`, through JavaScript, HTTP, MQTT, or the inspection CLI. |
+| Capture templates and console output while interacting with an open page | `model#development_capture`, through the browser API or floating trace button. |
+| Configure template editor completion and go-to-definition | Language server integration below. |
+| Control existing admin diagnostics and source-editor launches | `model#development`. |
+
+For local and remote agent workflows, see the
+[LLM site development guide](../../../doc/guides/llm-site-development.md).
+
+The inspection and capture APIs require administrator/module access and a
+`development`, `test`, or `acceptance` environment. They are unavailable on
+production even if the human trace button is enabled there. Read-only admins
+can inspect and read captures; capture mutations require write access.
+These restrictions are separate from the legacy recompile API setting below.
+
+## Debug options
 
 The settings column contains these development options:
 
@@ -69,11 +86,12 @@ The settings column contains these development options:
   tracing for requests in your session. This checkbox requires
   `mod_server_storage`. Turn it off after investigating.
 
-- **Enable API to recompile and build Zotonic.** Enable the development APIs,
+- **Enable API to recompile and build Zotonic.** Enable the legacy build/cache APIs,
   including `/api/model/development/get/recompile` for compilation and
   `/api/model/development/get/flush` for flushing caches. These APIs do not
   require authentication when enabled; use this option only on trusted
-  development installations.
+  development installations. The authenticated inspection and capture APIs do
+  not require this option.
 
 - **Show server log in the browser console.** Start forwarding server logs to
   the current browser tab's developer console. Stopping it stops console logging
@@ -272,22 +290,20 @@ limits and verification instructions.
 
 ## Template debugging
 
-The template selection mechanism is quite complicated. It takes into account all modules, their priority, the user-agent
-class (desktop, tablet, phone or text) and optionally the category of a resource.
+Template selection depends on the active modules, their priorities, and
+optionally a resource's category. Use template inspection to find the selected
+file and its override candidates instead of guessing from a filename.
 
-With this debugging tool you can optionally select a category, and fill in the name of the template. Per user-agent
-class the selected template will be shown.
-
-
-
-The second debug option is a page with a live display of all templates being compiled. With this it is possible to get
-greater insight in the template selection and compilation.
-
-
+The compilation display shows templates being compiled. The floating trace
+button opens the render trace for the current browser session. Use the capture
+API when an agent needs to start/stop a capture and retrieve its graph and
+console output programmatically.
 
 ## Dispatch rule debugging
 
-With this it is possible to see for a request path which dispatch rules are matched and/or how it is rewritten.
+Enter a request path to see which dispatch rules match and how the path is
+rewritten. Include any language prefix from the actual URL. Dispatch inspection
+does not render the selected controller.
 
 
 ## Function call tracing
@@ -295,14 +311,18 @@ With this it is possible to see for a request path which dispatch rules are matc
 The function tracing tool allows you to trace calls to a specific function in a module. You can specify the module name,
 function name and the number of calls to trace. The output will be sent to the page that started the trace, via MQTT.
 
-Function tracing can be enabled or disabled in the zotonic.config file. Per default it is enabled for the
+Function tracing can be enabled or disabled in the zotonic.config file. By default it is enabled for the
 development and test environments. You can enable it runtime using:
 
-    bin/zotonic setconfig zotonic function_tracing_enabled true
+```sh
+bin/zotonic setconfig zotonic function_tracing_enabled true
+```
 
 Or disable it with:
 
-    bin/zotonic setconfig zotonic function_tracing_enabled false
+```sh
+bin/zotonic setconfig zotonic function_tracing_enabled false
+```
 
 In dispatch rules it is possible to protect certain requests from being traced. This is done by adding the
 dispatch rule option `sensitive`. This option is set for the authentication requests. On development
@@ -311,9 +331,7 @@ environments this dispatch option is ignored.
 
 ## Automatic recompilation
 
-::: note
-The system can only scan for changed files if either `inotify-tools` or `fswatch` is installed.
-:::
+File watching requires either `inotify-tools` or `fswatch` to be installed.
 
 The core Zotonic system starts either `inotify-tools` or `fswatch`, depending on which one is available. You have to
 install one of these to enable auto-compile and auto-load of changed files.
@@ -339,7 +357,7 @@ On Linux this feature depends on the inotifywait tool, which is part of the `ino
 notifications, it uses `notify-send`:
 
 
-```erlang
+```sh
 sudo apt-get install inotify-tools libnotify-bin
 ```
 
@@ -348,12 +366,11 @@ sudo apt-get install inotify-tools libnotify-bin
 On macOS we use the external programs `fswatch` and `terminal-notifier`:
 
 
-```erlang
-sudo brew install fswatch
-sudo brew install terminal-notifier
+```sh
+brew install fswatch terminal-notifier
 ```
 
-## Accepted Events
+## Accepted events
 
 This module handles the following notifier callbacks:
 

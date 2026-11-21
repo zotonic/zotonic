@@ -8,6 +8,18 @@
         <p>{_ Follow active mailings and inspect previous results. To send a page, use Send mailing on its edit page. _}</p>
         <a href="{% url admin_mailinglist %}" class="btn btn-default">{_ Manage mailing lists _}</a>
     </div>
+    <form method="get" action="{% url admin_mailings %}" class="form-inline well">
+        <label>{_ Find mailings by email address _}
+            <input type="email" name="email" class="form-control" value="{{ q.email|escape }}" required>
+        </label>
+        <button type="submit" class="btn btn-default">{_ Find _}</button>
+        {% if q.email %}<a href="{% url admin_mailings %}" class="btn btn-default">{_ Show all mailings _}</a>{% endif %}
+    </form>
+    {% if q.email %}
+        {% live topic="bridge/origin/model/mailinglist/event/+/runs"
+                throttle=3000 template="_mailing_email_history.tpl" email=q.email offset=q.offset
+        %}
+    {% else %}
     {% if m.rsc[q.page_id].id as filtered_page %}
         <p>
             {% trans "Mailings of page: <strong>{title}</strong>" title=m.rsc[filtered_page].title|escape %}
@@ -67,4 +79,5 @@
             filter_list=q.list_id
             filter_offset=q.offset
     %}
+    {% endif %}
 {% endblock %}

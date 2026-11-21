@@ -14,8 +14,6 @@
                 template="_admin_mailing_run.tpl"
                 throttle=3000
                 run_id=run.id
-                recipient_status=q.recipient_status
-                after=q.after
         %}
         <section class="widget mailing-run-section" aria-labelledby="mailing-recipients-title">
             <div class="widget-header">
@@ -38,6 +36,11 @@
                             {% endfor %}
                         </select>
                     </label>
+                    <label>{_ Email address _}
+                        <input type="search" name="recipient_email" class="form-control"
+                               value="{{ q.recipient_email|escape }}"
+                               placeholder="{_ Part of the email address _}">
+                    </label>
                     <button type="submit" class="btn btn-default">{_ Filter _}</button>
                 </form>
                 {% live topic=["bridge","origin","model","mailinglist","event",run.page_id,"runs"]
@@ -45,7 +48,8 @@
                         throttle=3000
                         run_id=run.id
                         recipient_status=q.recipient_status
-                        after=q.after
+                        recipient_email=q.recipient_email
+                        recipient_page=q.recipient_page
                 %}
             </div>
         </section>

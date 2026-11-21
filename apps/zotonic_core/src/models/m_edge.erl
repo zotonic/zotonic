@@ -132,6 +132,25 @@ Available Model API Paths
 | `delete` | `/s/...` | Delete edge(s) using subject-oriented path order `(object, predicate, subject)`; this maps to stored triple `(subject, predicate, object)`. |
 | `delete` | `/edge/+edge` | Delete a single edge by edge id `+edge` (invalid id returns `enoent`). No further lookups. |
 
+The `o`, `s`, `o_props` and `s_props` paths accept optional payload/query
+parameters `offset` and `limit`. With neither parameter, their existing full-list
+behavior is unchanged. With either parameter, offset defaults to 0 and limit to
+20; limit must be 1–100 and offset plus limit cannot exceed 10000. Values can be
+integers or decimal strings. The predicate is required, and further path lookups
+remain supported. For example:
+
+```text
+/api/model/edge/get/o/123/author?offset=20&limit=10
+/api/model/edge/get/s_props/123/subject?limit=20
+```
+
+Pagination retains the existing tuple/property-list result shape, `seq, id`
+ordering and caller ACL semantics. SQL selects only the requested subset without
+loading or caching the full list. It does not return totals or continuation
+metadata. Concurrent edits can shift offsets. Sequence ordering may still require
+sorting many edges; `get_page/6` is the Erlang helper for indexed candidate reads
+with endpoint ordering, endpoint/predicate visibility filtering and lookahead.
+
 `/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 
 
@@ -212,6 +231,7 @@ cotonic.broker.call(
     m_delete/3,
 
     get_graph/3,
+    get_page/6,
     get/2,
     get_triple/2,
     get_id/4,
@@ -276,24 +296,11 @@ cotonic.broker.call(
 
 %% @doc Fetch all object/edge ids for a subject/predicate
 -spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
-m_get([ <<"o">>, Id, Pred | Rest ], _Msg, Context) ->
+m_get([ Method, Id, Pred | Rest ], Msg, Context)
+        when Method =:= <<"o">>; Method =:= <<"s">>;
+             Method =:= <<"o_props">>; Method =:= <<"s_props">> ->
     case z_acl:rsc_visible(Id, Context) of
-        true -> {ok, {object_edge_ids(Id, Pred, Context), Rest}};
-        false -> {error, eacces}
-    end;
-m_get([ <<"o_props">>, Id, Pred | Rest ], _Msg, Context) ->
-    case z_acl:rsc_visible(Id, Context) of
-        true -> {ok, {object_edge_props(Id, Pred, Context), Rest}};
-        false -> {error, eacces}
-    end;
-m_get([ <<"s">>, Id, Pred | Rest ], _Msg, Context) ->
-    case z_acl:rsc_visible(Id, Context) of
-        true -> {ok, {subject_edge_ids(Id, Pred, Context), Rest}};
-        false -> {error, eacces}
-    end;
-m_get([ <<"s_props">>, Id, Pred | Rest ], _Msg, Context) ->
-    case z_acl:rsc_visible(Id, Context) of
-        true -> {ok, {subject_edge_props(Id, Pred, Context), Rest}};
+        true -> edge_get(Method, Id, Pred, Rest, Msg, Context);
         false -> {error, eacces}
     end;
 m_get([ <<"edges">>, Id | Rest ], _Msg, Context) ->
@@ -341,6 +348,103 @@ m_get([Id], _Msg, Context) ->
     end;
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
+
+%% Preserve the existing list result and editorial ordering. Pagination is
+%% optional, and is applied by SQL rather than slicing a cached adjacency list.
+edge_get(Method, Id, Pred, Rest, Msg, Context) ->
+    case edge_options(Msg) of
+        none ->
+            Rows = case Method of
+                <<"o">> -> object_edge_ids(Id, Pred, Context);
+                <<"s">> -> subject_edge_ids(Id, Pred, Context);
+                <<"o_props">> -> object_edge_props(Id, Pred, Context);
+                <<"s_props">> -> subject_edge_props(Id, Pred, Context)
+            end,
+            {ok, {Rows, Rest}};
+        {ok, Offset, Limit} ->
+            Rows = edge_subset(Method, Id, Pred, Offset, Limit, Context),
+            {ok, {Rows, Rest}};
+        {error, _} = Error -> Error
+    end.
+
+edge_options(#{payload := Args}) when is_map(Args) ->
+    case maps:is_key(<<"offset">>, Args) orelse maps:is_key(<<"limit">>, Args) of
+        false -> none;
+        true ->
+            try
+                Offset = page_integer(maps:get(<<"offset">>, Args, 0)),
+                Limit = page_integer(maps:get(<<"limit">>, Args, 20)),
+                true = Offset >= 0 andalso Limit > 0 andalso Limit =< 100
+                    andalso Offset + Limit =< 10000,
+                {ok, Offset, Limit}
+            catch _:_ -> {error, badarg} end
+    end;
+edge_options(_) -> none.
+
+edge_subset(Method, Ref, Predicate, Offset, Limit, Context) ->
+    case {m_rsc:rid(Ref, Context), m_predicate:name_to_id(Predicate, Context)} of
+        {undefined, _} -> [];
+        {_, {error, _}} -> [];
+        {Id, {ok, PredId}} ->
+            {Root, Endpoint} = case Method of
+                <<"o", _/binary>> -> {"subject_id", "object_id"};
+                <<"s", _/binary>> -> {"object_id", "subject_id"}
+            end,
+            Where = [" from edge where ", Root,
+                " = $1 and predicate_id = $2 order by seq, id limit $3 offset $4"],
+            Params = [Id, PredId, Limit, Offset],
+            case Method of
+                <<"o_props">> -> z_db:assoc(["select *", Where], Params, Context);
+                <<"s_props">> -> z_db:assoc(["select *", Where], Params, Context);
+                _ -> z_db:q(["select ", Endpoint, ", id", Where], Params, Context)
+            end
+    end.
+
+page_integer(N) when is_integer(N) -> N;
+page_integer(B) when is_binary(B), byte_size(B) =< 5 -> binary_to_integer(B).
+
+%% Select candidates in the database before applying per-resource visibility.
+%% The two unique edge indexes cover filtering AND order, including incoming
+%% subject edges to high-degree keywords. Do not use seq for incoming pages.
+-spec get_page(Direction, Id, Predicate, Offset, Limit, Context) -> Result when
+    Direction :: in | out,
+    Id :: m_rsc:resource(), Predicate :: m_rsc:resource() | undefined,
+    Offset :: non_neg_integer(), Limit :: pos_integer(), Context :: z:context(),
+    Result :: {ok, map()} | {error, term()}.
+get_page(Direction, Ref, Predicate, Offset, Limit, Context)
+        when (Direction =:= in orelse Direction =:= out),
+             is_integer(Offset), Offset >= 0, is_integer(Limit), Limit > 0,
+             Limit =< 100, Offset + Limit =< 10000 ->
+    Id = m_rsc:rid(Ref, Context),
+    P = m_rsc:rid(Predicate, Context),
+    case Id =/= undefined andalso z_acl:rsc_visible(Id, Context)
+        andalso (Predicate =:= undefined orelse
+            (P =/= undefined andalso z_acl:rsc_visible(P, Context)))
+    of
+        false -> {error, eacces};
+        true ->
+            {Where, Endpoint} = case Direction of
+                out -> {"subject_id", "object_id"};
+                in -> {"object_id", "subject_id"}
+            end,
+            {Filter, Params} = case Predicate of
+                undefined -> {[], [Id, Limit + 1, Offset]};
+                _ -> {" and predicate_id = $4", [Id, Limit + 1, Offset, P]}
+            end,
+            Sql = ["select ", Endpoint, " as endpoint_id, predicate_id from edge where ",
+                Where, " = $1", Filter, " order by predicate_id, ", Endpoint,
+                " limit $2 offset $3"],
+            case z_db:qmap(Sql, Params, [{keys, atom}, {timeout, 3000}], Context) of
+                {ok, Rows} ->
+                    Items = [Row || #{endpoint_id := E, predicate_id := Pred} = Row
+                        <- lists:sublist(Rows, Limit),
+                        z_acl:rsc_visible(Pred, Context), z_acl:rsc_visible(E, Context)],
+                    {ok, #{items => Items, has_more => length(Rows) > Limit}};
+                Error -> Error
+            end
+    end;
+get_page(_, _, _, _, _, _) ->
+    {error, badarg}.
 
 -spec m_post( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:post_return().
 m_post([<<"o">> | Path ], #{ payload := Payload }, Context) ->

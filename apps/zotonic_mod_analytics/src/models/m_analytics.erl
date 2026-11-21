@@ -93,7 +93,7 @@ a custom controller's page; normal public-page eligibility checks still apply.
 -export([m_get/3,m_post/3,record_event/3,record_event/4,mark_page/2,
     create/3,set_state/3,purge/2,reorder/2,overview/2,configuration/1,dashboard/3,registry/1]).
 %% Trusted internal persistence API. Public model paths use the ACL-checked APIs above.
--export([store_install/1,store_collectors/1,store_create/3,store_state/3,
+-export([store_ensure_page_guard/1,is_page_guard/1,is_default_page/1,store_upgrade_traffic_groups/1,store_install/1,store_collectors/1,store_create/3,store_state/3,
     store_purge/2,store_reorder/2,store_flush/5,store_rows/5,store_usage/1,store_info/2]).
 -include_lib("zotonic_core/include/zotonic.hrl").
 
@@ -169,7 +169,8 @@ overview(Period,Context) ->
             Collectors=store_collectors(Context),
             Panels=[#{collector=>Col,available=>z_analytics:available(Col,Reg),
                       report=>report(Col,Period,Context)} || Col <- Collectors,
-                      maps:get(state,Col) =/= <<"paused">>],
+                      maps:get(state,Col) =/= <<"paused">>,
+                      not (is_page_guard(Col) andalso lists:any(fun(X) -> is_default_page(X) andalso maps:get(state,X) =/= <<"paused">> end,Collectors))],
             #{panels=>Panels,period=>Period}
     end.
 
@@ -262,6 +263,23 @@ dashboard(Id0,Period,Context) ->
     end.
 report(undefined,_,_) -> #{};
 report(Col,Period,Context) ->
+    Report = report_base(Col,Period,Context),
+    case is_default_page(Col) of
+        false -> Report;
+        true ->
+            Sources = [X || X <- store_collectors(Context), is_page_guard(X)],
+            case Sources of
+                [Source|_] ->
+                    {R,N} = period(Period),
+                    Start = maps:get(from,Report), End = Start + R*N,
+                    Rows = store_rows(maps:get(id,Source),R,Start,End,Context),
+                    Series = z_analytics_chart:guard_series(Rows,Start,End,R,N,Context),
+                    Report#{chart => maps:get(chart,Report) ++ Series, guard_comparison => true};
+                [] -> Report
+            end
+    end.
+
+report_base(Col,Period,Context) ->
     {R,N}=period(Period), Now=erlang:system_time(second), End=z_analytics:bucket(Now,R)+R,
     Start=End-R*N, Rows=store_rows(maps:get(id,Col),R,Start,End,Context),
     Popular=z_analytics_frequency:enabled(Col),
@@ -274,7 +292,8 @@ report(Col,Period,Context) ->
     end,#{},Rows),
     {Groups,Total,Error}=case Popular of
         true ->
-            Ranked=[G#{label=>label(maps:get(key,G),Col,Context)}
+            Ranked=[G#{label=>label(maps:get(key,G),Col,Context),
+                rsc_id=>popular_resource_id(maps:get(key,G),Context)}
                 || G <- lists:sublist(z_analytics_frequency:ranked(Counts0),20)],
             {Ranked,z_analytics_frequency:total(Counts0),z_analytics_frequency:error(Counts0)};
         false ->
@@ -289,9 +308,29 @@ report(Col,Period,Context) ->
         true -> [#{label=>maps:get(label,G),value=>maps:get(count,G)} || G <- Groups];
         false -> z_analytics_chart:series(Rows,Start,End,R,N,Groups,Col,Context)
     end,
-    #{chart=>Chart,groups=>lists:sublist(Groups,100),popular=>Popular,error=>Error,
+    Interval=z_analytics_chart:interval(R,N),
+    {IntervalUnit,IntervalCount}=case Interval of
+        I when I rem 86400 =:= 0 -> {day,I div 86400};
+        I when I rem 3600 =:= 0 -> {hour,I div 3600};
+        I -> {minute,I div 60}
+    end,
+    #{chart=>Chart,chart_interval_unit=>IntervalUnit,chart_interval_count=>IntervalCount,
+      groups=>lists:sublist(Groups,100),popular=>Popular,error=>Error,
       total=>Total,resolution=>R,from=>Start,until=>Now,
       incomplete=>length(Rows)<N orelse lists:any(fun(X)->not maps:get(complete,X) end,Rows)}.
+
+%% Only expose edit-link targets for resources visible to the reporting user.
+popular_resource_id(<<"v:",Id/binary>>,Context) ->
+    case to_id(Id) of
+        N when is_integer(N), N > 0 ->
+            case m_rsc:is_visible(N,Context) of
+                true -> N;
+                false -> undefined
+            end;
+        _ -> undefined
+    end;
+popular_resource_id(_,_) ->
+    undefined.
 
 label(<<"$total">>,_,_) -> <<"Total">>;
 label(<<"$other">>,_,_) -> <<"Other (overflow)">>;
@@ -401,6 +440,92 @@ store_create(D, State, Context) when State =:= <<"draft">>; State =:= <<"active"
     end,Context);
 store_create(_,_,_) -> {error, invalid_state}.
 
+%% A companion recording preserves normal page-view history while counting early
+%% rejections independently. Bit 0 prevents re-creating an administrator deletion.
+-spec store_ensure_page_guard(Context) -> ok | {error, term()} | {rollback, term()}
+    when Context :: z:context().
+store_ensure_page_guard(Context) ->
+    %% Activation can precede the analytics worker registry refresh.
+    Registry = z_analytics:registry(Context),
+    case maps:is_key(<<"mod_traffic_guard:request">>,Registry) of
+        false -> ok;
+        true ->
+            z_db:transaction(fun(Tx) ->
+                lock(Tx),
+                Marker = z_db:q1("select marker from analytics_budget where id=1",Tx),
+                Cs = store_collectors(Tx),
+                case Marker band 1 =/= 0 orelse not lists:any(fun is_default_page/1,Cs) of
+                    true -> ok;
+                    false ->
+                        Result = case lists:any(fun is_page_guard/1,Cs) of
+                            true -> ok;
+                            false ->
+                                {ok,D} = z_analytics:definition(#{
+                                    <<"name">> => <<"Page requests: traffic guard">>,
+                                    <<"description">> => <<"Companion graphs for the normal Page requests view.">>,
+                                    <<"event">> => <<"mod_traffic_guard:request">>,
+                                    <<"dimension">> => <<"guard_action">>, <<"groups">> => 3,
+                                    <<"filters">> => page_guard_filters()},Registry),
+                                case store_create(D,<<"active">>,Tx) of
+                                    {ok,_} -> ok;
+                                    {error,{exists,_}} -> ok;
+                                    Error -> Error
+                                end
+                        end,
+                        case Result of
+                            ok -> z_db:q("update analytics_budget set marker=marker | 1 where id=1",Tx), ok;
+                            Error1 -> Error1
+                        end
+                end
+            end,Context)
+    end.
+
+page_guard_filters() ->
+    #{<<"type">> => [<<"page">>], <<"traffic">> => [<<"other">>,<<"unknown">>],
+      <<"guard_action">> => [<<"throttle">>,<<"would_throttle">>]}.
+
+-spec is_page_guard(Collector) -> boolean() when Collector :: map().
+is_page_guard(#{event := <<"mod_traffic_guard:request">>, dimension := <<"guard_action">>,
+        groups := G, filters := Filters}) -> G >= 3 andalso Filters =:= page_guard_filters();
+is_page_guard(_) -> false.
+
+-spec is_default_page(Collector) -> boolean() when Collector :: map().
+is_default_page(#{event := <<"page_request">>, dimension := <<>>, filters := Filters}) ->
+    Filters =:= #{} orelse Filters =:= #{<<"traffic">> => [<<"other">>,<<"unknown">>]};
+is_default_page(_) -> false.
+
+%% Expand existing built-in traffic recordings without rewriting their buckets.
+%% Serialize budget reservations with creation, deletion and batch persistence.
+-spec store_upgrade_traffic_groups(Context) -> ok | {rollback, term()}
+    when Context :: z:context().
+store_upgrade_traffic_groups(Context) ->
+    z_db:transaction(fun(Tx) ->
+        lock(Tx),
+        Cs = store_collectors(Tx),
+        Budget = config(row_budget, 1000000, Tx),
+        Reserved = lists:sum([3578 * maps:get(groups, C) || C <- Cs]),
+        lists:foldl(fun
+            (#{id := Id, event := Event, dimension := <<"traffic">>, groups := G} = C, Used)
+                    when G < 5,
+                         (Event =:= <<"page_request">> orelse Event =:= <<"api_request">>
+                          orelse Event =:= <<"request">>) ->
+                Extra = 3578 * (5 - G),
+                case Used + Extra =< Budget of
+                    true ->
+                        D = maps:without([id, state, started], C#{groups => 5}),
+                        1 = z_db:q("update analytics_collector set definition=$2 where id=$1",
+                            [Id, z_analytics:encode(D)], Tx),
+                        Used + Extra;
+                    false ->
+                        ?LOG_WARNING(#{text => <<"Traffic recording upgrade skipped: analytics row budget exhausted">>,
+                            in => mod_analytics, collector_id => Id, extra_rows => Extra}),
+                        Used
+                end;
+            (_, Used) -> Used
+        end, Reserved, Cs),
+        ok
+    end, Context).
+
 %% Validate a complete permutation under the same lock used for create/purge.
 %% Stale pages must not silently lose a newly created recording from the order.
 -spec store_reorder(Ids, Context) -> ok | {error, term()} | {rollback, term()}
@@ -459,12 +584,14 @@ store_flush(Epoch, Seq, Batch, Cs, Context) ->
                 ByCollector = maps:fold(fun({Id,T},Counts,A) ->
                     maps:update_with(Id,fun(D)->D#{T=>Counts} end,#{T=>Counts},A)
                 end,#{},maps:get(deltas,Batch)),
-                Existing = maps:from_list([{Id,true} || {Id} <-
-                    flush_q("select id from analytics_collector",Tx)]),
+                %% A queued batch can predate a group-limit upgrade. Use the current
+                %% limit so its rollups cannot fold newly admitted groups into overflow.
+                Existing = maps:from_list([{Id,maps:get(groups,z_analytics:decode(Definition))}
+                    || {Id,Definition} <- flush_q("select id,definition from analytics_collector",Tx)]),
                 lists:foreach(fun(#{id:=Id}=Col) ->
-                    case maps:is_key(Id,Existing) of
-                        true -> flush_collector(Col,Batch#{deltas=>maps:get(Id,ByCollector,#{})},Now,Tx);
-                        false -> ok
+                    case maps:find(Id,Existing) of
+                        {ok,G} -> flush_collector(Col#{groups=>G},Batch#{deltas=>maps:get(Id,ByCollector,#{})},Now,Tx);
+                        error -> ok
                     end
                 end,Cs),
                 ok

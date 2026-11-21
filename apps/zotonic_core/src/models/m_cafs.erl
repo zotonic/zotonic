@@ -31,13 +31,18 @@ Site-local content-addressable file storage (CAFS) for originals, explicit previ
 such as video posters, and generated image variants. Identical bytes share one
 SHA-256 object, while resources keep their own logical filenames and permissions.
 
-## Interface and permissions
+## When to use this API
 
 This is an internal Erlang API used by `m_media`, file resolution, filestore, and
 background processing. It has no template, HTTP model, or MQTT model paths.
 Functions do not enforce resource ACLs: callers must authorize the resource and
 operation before resolving or changing storage. Knowing a hash never grants access.
 Use `m_media` for ordinary uploads, replacement, duplication, and deletion.
+
+## Getting started
+
+The core installer creates and upgrades the schema; no CAFS module needs activation.
+Remote storage requires the usual `mod_filestore` configuration.
 
 For example, after authorizing access to a medium's logical filename:
 
@@ -57,18 +62,21 @@ filename to the callback. It returns the callback result or a storage error.
 The callback runs in a monitored worker; its filename is valid only during the
 callback and must not be modified or retained for later use.
 
-## Storage and attachment
+## Site configuration
 
-Objects live at `archive/cafs/sha256/ab/cd/<hash>`, relative to the site's files
-directory. Hashes are 64 lowercase hexadecimal bytes; the directory components
-are their first four characters. The path has no filename extension. `path/1`
-constructs this relative path; `path_hash/1` validates and extracts its hash.
-Filestore uses the same physical key and can move the bytes to remote storage.
+| `m_config` key | Default | Meaning |
+| --- | --- | --- |
+| `site.cafs_preview_retention_days` | `90` | Obsolete-preview grace period, in days. Integers from 1 to 3650 are accepted; other values use the default. |
+| `site.cafs_renderer_version` | `1` | Additional generation-version value used by image preview resolution. Change it after rendering changes not represented by the operations or renderer identity. |
 
-`filename_cafs` maps logical filenames to objects in `cafs`. These mappings are
-independent of physical storage: cloning a mapped filename requires no file read
-or remote download. Existing files are promoted only when their bytes are already
-available for an operation; installation never downloads or hashes all old files.
+After changing the renderer version, call `z_file_sup:refresh/0` to invalidate
+running file entries. These are per-site `m_config` settings, not system settings.
+They are listed in the admin configuration catalog by `mod_base`, under the `site`
+namespace. For example, to set a 180-day preview grace period:
+
+```erlang
+m_config:set_value(site, cafs_preview_retention_days, 180, Context).
+```
 
 Database-free sites (`dbdatabase = none`) do not use CAFS. `is_enabled/1` checks
 configuration, not pool availability, so a database outage never enables a legacy
@@ -76,60 +84,29 @@ storage fallback. On these sites, `lookup/2` returns `{error, enoent}`,
 `stage_file/2` returns `{error, nodb}`, and installation/maintenance are no-ops.
 Library previews use the local preview directory without provenance tracking or GC.
 
+## Storing and sharing files
+
 `stage_file/2` hashes and atomically publishes a local file, returning
 `{ok, #{hash => Hash, token => Token}}`. Do this outside the resource transaction.
 The token holds a one-day staging pin. `attach/3` attaches a unique logical filename
 and consumes that pin; use the resource transaction's context to commit the medium
 and mapping together. `stage_medium/2` and `attach_medium/2` perform this handoff
 for owned originals and posters. `stage_medium/2` returns `{ok, Staged}` or a
-controlled error and releases partial staging pins on failure. `release/2` releases remaining staging pins from
-a list of `{Filename, Stage}` pairs, including after failure.
+controlled error, releasing partial staging pins on failure. Use `release/2` to
+release remaining staging pins from a list of `{Filename, Stage}` pairs, including
+after failure.
 
-`stage_medium/3` accepts the logical filename of a fresh private archive copy
-created by the upload routine. Only that original uses a single hash pass over
-its staging copy; the medium digest reuses this hash. The default staging APIs,
-legacy migration, extracted previews and observer-supplied replacement filenames
-hash both source and copy to detect changes while copying. Publication always
-uses the hash of the staged bytes, with an atomic rename on the CAFS filesystem.
+Use `clone_filename/3` to share an existing logical filename mapping without
+reading or downloading its bytes.
 
 Attachment can return `{error, expired}` for an expired staging token or
 `{error, deleting}` while dispatched physical deletion is pending. Staging an
 identical file can cancel an undispatched deletion using the filestore row fence;
 it never revives an object that an in-flight remote delete could remove. Pending
 collection and failed deletion are rescheduled so they do not starve other objects.
-A filename already mapped
-to different bytes is a conflict. `clone_filename/3` shares an existing mapping;
-`promote/3` maps an available legacy file and returns `{ok, Hash}`. It adopts an
-existing remote registry entry before allowing a canonical upload, and queues
-retryable cleanup of redundant legacy paths. `stage_original/2` and
-`attach_original/3` provide that same handoff for maintenance migration: newly
-staged originals are not uploadable until remote adoption has been checked.
-Busy or unavailable backends defer adoption and cleanup; they do not trigger a
-second upload. Remote retirement follows the backend retention policy. Cleanup
-is queued in the publication transaction and defers local unlinking while legacy
-readers remain. With local retention disabled, the backend queues adopted objects
-for local offloading without another upload; active pins and readers defer it.
+A filename already mapped to different bytes is a conflict.
 
-Requests for owned non-CAFS originals schedule background promotion through
-`z_media_cafs_migrate`. Local bytes or the completed, locked download cache are
-used without starting another download or delaying the response for hashing.
-Attachment rechecks the medium under its row lock and records the original digest;
-replaced/deleted media and unowned files are not attached. Failed or overloaded
-attempts leave the legacy file usable, and successful attempts queue durable cleanup.
-
-## Shared previews and retention
-
-On a miss for a revision-bearing URL, a current source, mediaclass and edit
-revision may reuse the legacy URL for the exact same rendering operations. Only
-`editrev` is removed; dimensions, operation order, class checksum and output
-extension stay unchanged, and the legacy signature is reconstructed. Existing
-local or remote preview bytes are promoted without running the resizer when the
-source hash is available. Unknown remote originals are not downloaded for this.
-Background cleanup adopts the remote preview and removes redundant legacy copies;
-new local outputs are uploaded only after remote absence is confirmed. Registered
-current URLs resolve directly to their CAFS output without legacy path probes or
-usage writes, while checking the current source, edits, class and renderer version.
-
+## Generating image variants
 
 `derivative/5` keys generation by source hash, ordered effective operations, and
 renderer version. Its zero-argument generator returns a staged output from
@@ -148,6 +125,13 @@ expires them. Expired usages also delete their exact legacy preview paths, with
 retry on failure. Rendering identity includes the actual metadata snapshot used
 by the converter, excluding resource IDs.
 
+## Keeping files available
+
+`pin/3` creates a durable processing reference owned by a caller-supplied token;
+the caller must balance it with `unpin/3`, including cancellation and failure.
+`with_path_pin/3` scopes a renewable pin to a callback for CAFS physical paths.
+`track/2` and `readers/2` manage file-entry cache subscriptions, not retention pins.
+
 Medium deletion retains filename mappings for the existing five-week recovery
 period. `retire_filename/2` is a cleanup operation called after that period, not a
 replacement for deleting a resource. `maintenance/1` performs bounded reconciliation,
@@ -155,33 +139,64 @@ preview retirement, upload queuing, and collection. Other filenames, derivatives
 and pins preserve shared bytes. Remote deletion honors filestore retention and
 keeps a tombstone until deletion is confirmed.
 
-`pin/3` creates a durable processing reference owned by a caller-supplied token;
-the caller must balance it with `unpin/3`, including cancellation and failure.
-`with_path_pin/3` scopes a renewable pin to a callback for CAFS physical paths.
-`track/2` and `readers/2` manage file-entry cache subscriptions, not retention pins.
-
-## Site configuration
-
-The core installer creates and upgrades the schema; no CAFS module needs activation.
-Remote storage requires the usual `mod_filestore` configuration.
-
-| `m_config` key | Default | Meaning |
-| --- | --- | --- |
-| `site.cafs_preview_retention_days` | `90` | Obsolete-preview grace period, in days. Integers from 1 to 3650 are accepted; other values use the default. |
-| `site.cafs_renderer_version` | `1` | Additional generation-version value used by image preview resolution. Change it after rendering changes not represented by the operations or renderer identity. |
-
-After changing the renderer version, call `z_file_sup:refresh/0` to invalidate
-running file entries. These are per-site `m_config` settings, not system settings.
-They are listed in the admin configuration catalog by `mod_base`, under the `site`
-namespace. For example, to set a 180-day preview grace period:
-
-```erlang
-m_config:set_value(site, cafs_preview_retention_days, 180, Context).
-```
-
 `queue_all/1` marks every ready CAFS object for upload, including generated variants
 and durable task inputs. `queue_uploads/1` submits a bounded batch to filestore.
 Neither function discovers or downloads legacy files.
+
+## Legacy file migration
+
+`promote/3` maps an available legacy file and returns `{ok, Hash}`. It adopts an
+existing remote registry entry before allowing a canonical upload, and queues
+retryable cleanup of redundant legacy paths. `stage_original/2` and
+`attach_original/3` provide that same handoff for maintenance migration: newly
+staged originals are not uploadable until remote adoption has been checked.
+Busy or unavailable backends defer adoption and cleanup; they do not trigger a
+second upload. Remote retirement follows the backend retention policy. Cleanup
+is queued in the publication transaction and defers local unlinking while legacy
+readers remain. With local retention disabled, the backend queues adopted objects
+for local offloading without another upload; active pins and readers defer it.
+
+Requests for owned non-CAFS originals schedule background promotion through
+`z_media_cafs_migrate`. Local bytes or the completed, locked download cache are
+used without starting another download or delaying the response for hashing.
+Attachment rechecks the medium under its row lock and records the original digest;
+replaced/deleted media and unowned files are not attached. Failed or overloaded
+attempts leave the legacy file usable, and successful attempts queue durable cleanup.
+
+### Reusing legacy previews
+
+On a miss for a revision-bearing URL, a current source, mediaclass and edit
+revision may reuse the legacy URL for the exact same rendering operations. Only
+`editrev` is removed; dimensions, operation order, class checksum and output
+extension stay unchanged, and the legacy signature is reconstructed. Existing
+local or remote preview bytes are promoted without running the resizer when the
+source hash is available. Unknown remote originals are not downloaded for this.
+Background cleanup adopts the remote preview and removes redundant legacy copies;
+new local outputs are uploaded only after remote absence is confirmed. Registered
+current URLs resolve directly to their CAFS output without legacy path probes or
+usage writes, while checking the current source, edits, class and renderer version.
+
+## Storage implementation
+
+Objects live at `archive/cafs/sha256/ab/cd/<hash>`, relative to the site's files
+directory. Hashes are 64 lowercase hexadecimal bytes; the directory components
+are their first four characters. The path has no filename extension. `path/1`
+constructs this relative path; `path_hash/1` validates and extracts its hash.
+Filestore uses the same physical key and can move the bytes to remote storage.
+
+`filename_cafs` maps logical filenames to objects in `cafs`. These mappings are
+independent of physical storage: cloning a mapped filename requires no file read
+or remote download. Existing files are promoted only when their bytes are already
+available for an operation; installation never downloads or hashes all old files.
+
+### Publishing staged bytes
+
+`stage_medium/3` accepts the logical filename of a fresh private archive copy
+created by the upload routine. Only that original uses a single hash pass over
+its staging copy; the medium digest reuses this hash. The default staging APIs,
+legacy migration, extracted previews and observer-supplied replacement filenames
+hash both source and copy to detect changes while copying. Publication always
+uses the hash of the staged bytes, with an atomic rename on the CAFS filesystem.
 """).
 
 -export([delete_uploaded_file/2, is_enabled/1, install/1, schema/0, stage_file/2, stage_original/2, stage_remote/4, attach/3, attach_original/3, lookup/2,

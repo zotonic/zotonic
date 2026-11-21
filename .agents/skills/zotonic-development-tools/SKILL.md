@@ -8,6 +8,10 @@ description: Inspect and validate running Zotonic sites via CLI, HTTP, and MQTT,
 Use the running site's indexes and traces to identify the code actually used by
 that site. Source filenames alone do not establish which module override wins.
 
+See the [LLM site development guide](../../../doc/guides/llm-site-development.md)
+for setup and complete local and remote workflows using SSH, HTTP, MQTT, and
+the browser APIs.
+
 ## Access and environment
 
 Choose the interface available for the site:

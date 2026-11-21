@@ -19,7 +19,7 @@
 
 -module(z_analytics_request).
 -moduledoc("Request policy and privacy boundary. Only coarse approved dimensions leave this module.").
--export([mark/1, allowed/1, dimensions/1, request_event/1, typed_event/1, dispatch_types/1, dispatch_type/2]).
+-export([mark/1, allowed/1, dimensions/1, request_event/1, typed_event/1, dispatch_types/1, dispatch_type/2, traffic/2]).
 
 -spec mark(Context) -> z:context() when Context :: z:context().
 mark(Context) ->
@@ -77,7 +77,7 @@ dispatch_types(Context) ->
 mark_request(Type,Context) ->
     case allowed(Context) of
         true ->
-            D = (maps:with([<<"language">>, <<"country">>, <<"traffic">>], dimensions(Context)))#{
+            D = (maps:with([<<"language">>, <<"country">>, <<"traffic">>, <<"crawl_behavior">>, <<"guard_action">>, <<"guard_reason">>], dimensions(Context)))#{
                 <<"has_page_id">>=>has_page_id(page_id(Context))},
             Metrics = #{analytics_request=>D#{<<"type">>=>Type}},
             case Type of
@@ -91,7 +91,7 @@ mark_page(Context) ->
         Key = page_id(Context),
         CT = z_context:get_resp_header(<<"content-type">>,Context),
         IsHtml = is_binary(CT) andalso binary:match(CT,<<"text/html">>) =:= {0,9},
-        case allowed(Context) andalso IsHtml andalso public(Key,Context) of
+        case page_allowed(Key,Context) andalso IsHtml andalso public(Key,Context) of
             true ->
                 D0 = (dimensions(Context))#{<<"has_page_id">>=>has_page_id(Key)},
                 D = case Key of
@@ -99,7 +99,7 @@ mark_page(Context) ->
                     _ -> D0#{<<"page">>=>z_convert:to_binary(Key)}
                 end,
                 z_context:set_req_metrics(#{analytics=>D,
-                    analytics_request=>(maps:with([<<"language">>,<<"country">>,<<"traffic">>,<<"has_page_id">>],D))#{<<"type">>=><<"page">>}},Context);
+                    analytics_request=>(maps:with([<<"language">>,<<"country">>,<<"traffic">>,<<"has_page_id">>,<<"crawl_behavior">>,<<"guard_action">>,<<"guard_reason">>],D))#{<<"type">>=><<"page">>}},Context);
             false -> ok
         end.
 
@@ -172,26 +172,64 @@ public(_,_) ->
 
 -spec allowed(Context) -> boolean() when Context :: z:context().
 allowed(Context) ->
+    not z_acl:is_allowed(use,mod_admin,Context) andalso consent_allowed(Context).
+
+%% Resource editors also include frontend editors without admin access. Do not
+%% exclude an admin's visit to a resource they cannot edit.
+page_allowed(Id,Context) when is_integer(Id) ->
+    not z_acl:rsc_editable(Id,Context) andalso consent_allowed(Context);
+page_allowed(undefined,Context) ->
+    allowed(Context);
+page_allowed(_,_) ->
+    false.
+
+consent_allowed(Context) ->
     not z_convert:to_bool(z_context:get(analytics_exclude,Context))
-        andalso not z_acl:is_allowed(use,mod_admin,Context)
         andalso (not m_config:get_boolean(mod_analytics,require_consent,Context)
             orelse z_context:get(analytics_consent,Context) =:= true).
 
 -spec dimensions(Context) -> map() when Context :: z:context().
 dimensions(Context) ->
     UA = case m_req:get(user_agent,Context) of B when is_binary(B), byte_size(B)=<2048 -> string:lowercase(B); _ -> <<>> end,
-    Traffic = case {z_user_agent:is_crawler(Context), UA} of
-        {true, _} -> <<"crawler">>;
-        {false, <<>>} -> <<"unknown">>;
-        {false, _} -> <<"other">>
-    end,
-    #{
+    Traffic = traffic(UA, z_user_agent:is_crawler(Context)),
+    (guard_signals(Context))#{
         <<"language">>=>z_convert:to_binary(z_context:language(Context)),
         <<"device">>=>device(UA),
         <<"traffic">>=>Traffic,
         <<"country">>=>country(Context),
         <<"referrer">>=>referrer(cowmachine_req:get_req_header(<<"referer">>,Context),m_req:get(host,Context))
     }.
+
+%% Guard context is server-owned; never copy client/session identifiers.
+guard_signals(Context) ->
+    case z_context:get(traffic_guard_result, Context) of
+        #{crawl_behavior := B, guard_action := A, guard_reason := R} ->
+            #{<<"crawl_behavior">> => B, <<"guard_action">> => A, <<"guard_reason">> => R};
+        _ -> #{}
+    end.
+
+%% Declared product tokens are not verified identities. Match token boundaries,
+%% not arbitrary substrings; normal browser automation remains unrecognized.
+-spec traffic(UserAgent, IsCrawler) -> binary() when
+    UserAgent :: term(),
+    IsCrawler :: boolean().
+traffic(UA, IsCrawler) when is_binary(UA), byte_size(UA) > 0, byte_size(UA) =< 2048 ->
+    Tokens = string:lowercase(UA),
+    case product_token(Tokens, <<"chatgpt-user|claude-user">>) of
+        true -> <<"agent">>;
+        false ->
+            case IsCrawler orelse product_token(Tokens,
+                    <<"gptbot|oai-searchbot|claudebot|claude-searchbot">>) of
+                true -> <<"crawler">>;
+                false -> <<"other">>
+            end
+    end;
+traffic(_, true) -> <<"crawler">>;
+traffic(_, false) -> <<"unknown">>.
+
+product_token(UA, Products) ->
+    re:run(UA, <<"(?:^|[\\s;(])(?:", Products/binary, ")(?:/|[\\s;)]|$)">>,
+        [{capture, none}]) =:= match.
 
 device(<<>>) ->
     <<"unknown">>;

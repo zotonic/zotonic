@@ -36,19 +36,25 @@ decode(B) when is_binary(B) -> binary_to_term(B, [safe]).
 
 -spec registry(Context) -> map() when Context :: z:context().
 registry(Context) ->
+    Guard = #{
+        <<"crawl_behavior">> => [<<"normal">>, <<"excessive">>, <<"unknown">>],
+        <<"guard_action">> => [<<"allow">>, <<"would_throttle">>, <<"throttle">>],
+        <<"guard_reason">> => [<<"none">>, <<"request_rate">>,
+            <<"state_capacity">>, <<"unavailable">>, <<"ip_allow">>, <<"ip_block">>]
+    },
     Builtin = #{name => <<"page_request">>, version => 1,
         title => <<"Public page requests">>,
-        dimensions => #{
+        dimensions => Guard#{
             <<"page">> => text, <<"language">> => text, <<"referrer">> => text,
             <<"has_page_id">> => [<<"true">>,<<"false">>],
             <<"country">> => text,
             <<"device">> => [<<"phone">>, <<"tablet">>, <<"desktop">>, <<"unknown">>],
-            <<"traffic">> => [<<"crawler">>, <<"other">>, <<"unknown">>]}},
+            <<"traffic">> => [<<"crawler">>, <<"agent">>, <<"other">>, <<"unknown">>]}},
     Api = #{
         name => <<"api_request">>,
         version => 1,
         title => <<"HTTP API requests">>,
-        dimensions => #{
+        dimensions => Guard#{
             <<"method">> => [
                 <<"GET">>,<<"HEAD">>,<<"POST">>,<<"PUT">>,<<"PATCH">>,
                 <<"DELETE">>,<<"OPTIONS">>,<<"OTHER">>
@@ -57,7 +63,7 @@ registry(Context) ->
             <<"http_status">> => http_status,
             <<"status">> => [<<"1xx">>,<<"2xx">>,<<"3xx">>,<<"4xx">>,<<"5xx">>],
             <<"language">> => text, <<"country">> => text,
-            <<"traffic">> => [<<"crawler">>,<<"other">>,<<"unknown">>]
+            <<"traffic">> => [<<"crawler">>,<<"agent">>,<<"other">>,<<"unknown">>]
         }
     },
     Request = Api#{
@@ -161,7 +167,9 @@ definition(_, _) ->
 
 -spec properties(Properties, Schema) -> {ok, map()} | {error, invalid_properties}
     when Properties :: term(), Schema :: map().
-properties(P, #{dimensions := Ds}) when is_map(P), map_size(P) =< 8 ->
+%% Built-in HTTP events have up to eleven fields with crawl-guard signals.
+%% Keep a fixed ceiling as well as validating every field against its schema.
+properties(P, #{dimensions := Ds}) when is_map(P), map_size(P) =< 16 ->
     case lists:all(
             fun({K,V}) -> maps:is_key(K,Ds) andalso value_type(V,maps:get(K,Ds)) end,
             maps:to_list(P))
@@ -179,12 +187,15 @@ value_type(V, text) -> valid_value(V);
 value_type(V, Values) when is_list(Values) -> lists:member(V,Values).
 
 -spec matches(Collector, Properties) -> boolean() when Collector :: map(), Properties :: map().
-%% Keep crawler events available to traffic classification and API measurements.
+%% Keep automated traffic available to classification and API measurements.
 %% Apply this at ingestion so existing page/device/content measurements follow
 %% the same policy as newly created ones, without rewriting their history.
-matches(#{event := <<"page_request">>, dimension := Dimension}, #{<<"traffic">> := <<"crawler">>})
-        when Dimension =:= <<>>; Dimension =:= <<"device">>; Dimension =:= <<"page">> ->
-    false;
+matches(#{event := <<"page_request">>, dimension := Dimension, filters := Filters},
+        #{<<"traffic">> := Traffic} = Properties)
+        when (Traffic =:= <<"crawler">> orelse Traffic =:= <<"agent">>),
+             (Dimension =:= <<>> orelse Dimension =:= <<"device">> orelse Dimension =:= <<"page">>) ->
+    %% An explicit traffic filter opts in to automated page/content measurements.
+    maps:is_key(<<"traffic">>, Filters) andalso matches(#{filters => Filters}, Properties);
 matches(#{filters := Filters}, Properties) ->
     maps:fold(
         fun(K,Vs,Match) -> Match andalso lists:member(maps:get(K,Properties,<<"unknown">>),Vs) end,

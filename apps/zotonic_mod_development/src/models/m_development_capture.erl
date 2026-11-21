@@ -25,88 +25,188 @@
     ]
 }).
 -moduledoc("
-Admin-only capture API. GET list, status/:id, trace/:id, console/:id;
-POST attach {path}, start/:id, stop/:id, poll/:id {entries: [text]}.
-All operations require development, test or acceptance environment.
-POST operations also require write access; read-only administrators can fetch captures.
-Poll is bound to the attaching browser session. All results expire after ten minutes.
-SSH uses cli/3 over the trusted Erlang distribution connection.
+Capture template rendering and browser console output from an open page without
+losing its current state. Use this model with `model#development_tools` to inspect
+how a page is built and verify conditional or lazy rendering.
 
-In an authorized page's browser console, call
-`await window.z_development_capture.list()` to discover available site captures
-without attaching or changing local state, including with read-only admin access.
-It returns an array of capture summaries, or an empty array when none exist. Call
-`await window.z_development_capture.attach()` to start or reuse a capture and
-obtain its id. `attach(captureId)` reconnects an existing capture after a session-bound
-empty poll validates write access and ownership. Stopped captures are started before
-saving the ID. Failures preserve the current attachment; no replacement is created.
-Switching IDs discards pending local logs; flush first to retain them. Reconnecting
-the same ID preserves its buffer. `status()` returns current server state or null when unattached
-or expired; `stop()` flushes buffered console entries and stops the capture.
-`trace()` returns {capture, nodes, edges}; `console()` reads captured browser
-logs and returns {entries, truncated} without clearing stored entries. Both
-return null when unattached or expired and remain usable after stopping until
-expiry. These methods return promises and reject on permission or transport errors.
-`status()`, `trace()` and `console()` use GET only, including for read-only admins.
-Each accepts an optional capture ID to inspect an existing capture without attaching
-or changing sessionStorage or local capture state. Explicit missing IDs return null.
-`start(captureId)` and `stop(captureId)` control existing captures using POST and
-require writable admin access. They return status or null for missing captures,
-without changing sessionStorage or flushing browser logs. Use `stop()` without
-an ID to flush this page's buffer first. `start` always requires an ID.
-`flush()` submits this page's pending console logs without stopping its capture.
-It checks write access before posting, returns status (or null when unattached or
-expired), and does not submit to stopped captures. Read-only admins receive eacces.
-Use `await flush()` before `console()` to read up-to-date logs from this page.
-`detach()` clears this page's attachment, stored ID and pending logs and restores
-console.log without stopping the server capture. It returns null and makes no
-server request, so it works offline and for read-only admins. Late replies and
-queued local commands cannot reattach the page. Already-sent requests may complete.
-Pending browser logs are submitted by writable polling, `flush()` or `stop()`, not by reads.
-Capture status includes `write_allowed`; read-only clients do not collect or submit logs.
-The floating debug button uses the same functions. From the server checkout run:
+For local and remote workflows, see the
+[LLM site development guide](../../../../doc/guides/llm-site-development.md).
+
+## Access and setup
+
+Enable `module#mod_development` on the site. All data and mutation endpoints
+require an administrator with `use mod_development` permission and a site
+environment of `development`, `test`, or `acceptance`. Production is denied,
+including trusted CLI calls. The `console_allowed` capability probe returns a
+boolean rather than an access error.
+
+Read-only administrators can list captures and read their status, traces, and
+logs. Attaching, starting, stopping, and submitting logs require write access.
+Attaching to an existing capture and submitting logs also require the browser
+session that created it. Session IDs are never returned.
+
+The browser API is `window.z_development_capture`. Its script is included on
+authorized pages when the floating template trace button is enabled. Use the
+normal development head assets; the button and JavaScript use the same API.
+
+## Capture an open page
+
+Run this in the intended page's browser console or browser execution tool:
+
+```javascript
+const capture = await window.z_development_capture.attach();
+// Interact with the page: scroll, open a panel, or trigger a lazy component.
+await window.z_development_capture.flush();
+const trace = await window.z_development_capture.trace();
+const logs = await window.z_development_capture.console();
+await window.z_development_capture.stop();
+```
+
+`trace` contains `{capture, nodes, edges}`. `logs` contains
+`{entries, truncated}`; each entry has `seq`, `text`, and `received_at`.
+Read results through the execution tool's return value rather than logging them
+back into the capture. Reads do not submit or clear browser logs.
+
+## JavaScript reference
+
+All methods return promises. Permission and transport failures reject; model
+errors expose `error.code`. An optional ID defaults to the page's attachment.
+
+| Method | Behavior |
+| --- | --- |
+| `list()` | GET all available capture summaries; returns `[]` when none exist. |
+| `status(captureId?)` | GET a capture summary. |
+| `trace(captureId?)` | GET the accumulated template graph. |
+| `console(captureId?)` | GET stored console entries without flushing pending logs. |
+| `attach()` | Reuse the page's attachment or create one; start it if stopped. |
+| `attach(captureId)` | Validate write access and session ownership, then reconnect and start if stopped. |
+| `start(captureId)` | Start an existing capture; an ID is required. |
+| `stop()` | Flush this page's pending logs, then stop its capture. |
+| `stop(captureId)` | Stop an existing capture without flushing this page's logs. |
+| `flush()` | Submit this page's pending logs without starting or stopping its capture. |
+| `detach()` | Clear the local attachment and pending logs, restore `console.log`, and leave the server capture running. |
+
+Status and evidence reads return `null` when the capture is missing or expired,
+or when no page attachment exists. Explicit-ID start/stop also return `null`
+for a missing capture. Explicit-ID reads and start/stop do not change the local
+attachment or sessionStorage, including on errors.
+
+`attach(captureId)` rejects missing, expired, or foreign-session IDs; it never
+creates a replacement. Validation and start must succeed before the ID is saved.
+Switching IDs discards the previous browser buffer; call `flush()` first to retain
+it. Reconnecting the same ID preserves that buffer.
+
+`flush()` returns status, or `null` when unattached or expired. It does not submit
+to a stopped capture. `detach()` returns `null`, makes no network request, and
+works offline and with read-only access. Queued local commands and late replies
+cannot reattach a detached page; already-sent server requests may still complete.
+Do not automatically retry mutations after a timeout.
+
+## Ownership and capture summaries
+
+List and status results contain these fields:
+
+| Field | Meaning |
+| --- | --- |
+| `id` | Capture ID used by every interface. |
+| `path` | Page path recorded at attachment; tracing is session-scoped, not restricted to this path. |
+| `state` | `active` or `stopped`. |
+| `expires` | Absolute expiry time, in Unix seconds. |
+| `truncated` | A graph or server console limit has been reached. |
+| `trace_scope` | `session`. Other tabs in the session may contribute renders. |
+| `is_owner` | Whether this request has the browser session that created the capture. False without a session. |
+| `write_allowed` | Whether the caller may mutate captures; independent of ownership. |
+| `console_allowed` | Whether the caller may access console diagnostics. |
+
+To find a capture this browser can reconnect to:
+
+```javascript
+const captures = await window.z_development_capture.list();
+const owned = captures.find(c => c.is_owner && c.write_allowed);
+if (owned) {
+    await window.z_development_capture.attach(owned.id);
+}
+```
+
+Read-only owners cannot attach or submit logs. Writable non-owners can start or
+stop captures by ID but cannot attach or submit browser logs. Server checks are
+authoritative; the flags help clients select the right operation.
+
+The browser requires `is_owner === true` before wrapping `console.log` or
+submitting logs. Local attach/flush/stop and background polling refresh status
+first. Lost or missing ownership restores normal console output and discards
+pending logs. Local mutations reject with `eacces`; background polling uses GET
+only. Use `detach()` to clear a stale local attachment.
+
+## HTTP and MQTT endpoints
+
+HTTP uses `/api/model/development_capture/<method>/<path>`. Browser MQTT calls
+use `bridge/origin/model/development_capture/<method>/<path>`; a direct server
+MQTT client uses `model/development_capture/<method>/<path>`.
+
+| Method | Path | Payload | Result |
+| --- | --- | --- | --- |
+| GET | `console_allowed` | None | Capability boolean. |
+| GET | `list` | None | Array of capture summaries. |
+| GET | `status/ID` | None | Capture summary. |
+| GET | `trace/ID` | None | `{capture, nodes, edges}`. |
+| GET | `console/ID` | None | `{entries, truncated}`. |
+| POST | `attach` | `{path: \"/example\"}` | New, stopped capture bound to the caller's browser session. |
+| POST | `start/ID` | None | Active capture summary; existing evidence is retained. |
+| POST | `stop/ID` | None | Stopped capture summary. |
+| POST | `poll/ID` | `{entries: [\"message\"]}` | Submit logs to an active capture and return status; requires the owning session. |
+
+HTTP JSON and MQTT response payloads use `{status: \"ok\", result: ...}` or
+`{status: \"error\", error: ...}`. Raw model endpoints return `enoent` for missing
+or expired captures; JavaScript methods translate it to `null` where described
+above. `eacces` denotes denied access; invalid arguments or a foreign-session
+poll can return `badarg`.
+
+An OAuth2 administrator token can inspect existing captures and, with write
+access, start/stop them. A token without the owning browser session cannot
+attach to that capture or submit its console logs. The browser normally handles
+attachment and polling; CLI/API control alone does not collect browser output.
+
+## CLI and SSH
+
+Run from the server's Zotonic checkout as its normal server user:
 
 ```sh
 bin/zotonic capture mysite list
+bin/zotonic capture mysite status CAPTURE_ID
 bin/zotonic capture mysite start CAPTURE_ID
 bin/zotonic capture mysite trace CAPTURE_ID
 bin/zotonic capture mysite console CAPTURE_ID
 bin/zotonic capture mysite stop CAPTURE_ID
 ```
 
-HTTP clients use the existing authenticated model API, for example
-GET /api/model/development_capture/get/trace/CAPTURE_ID and
-POST /api/model/development_capture/post/stop/CAPTURE_ID.
-MQTT uses model/development_capture/get|post/... with the same paths.
-Start is idempotent and retains evidence; attach a new capture for a fresh graph.
-An attachment starts stopped; the debug button attaches and then starts it.
-The browser polls every second; console collection starts when it observes active
-state and only covers subsequent console.log calls. Logs are best effort, text
-snapshots, capped at 500 entries and 4096 bytes per entry (50 per upload).
-No cookies or browser session ids are returned.
-List and status summaries include `is_owner`, comparing the capture's session
-with the current request's browser session without exposing either session ID.
-It is false when the request has no session. `write_allowed` is independent:
-read-only owners cannot attach or submit logs. Attach still validates ownership.
-The JavaScript API requires is_owner=true to wrap console.log or submit logs.
-Local attach/flush/stop and background polling refresh status before submitting;
-lost or missing ownership discards buffered logs and disables console collection.
-Local mutations then reject with eacces; explicit-ID reads and admin start/stop
-remain available. Use detach() to clear the stale local attachment.
-The HTTP API requires normal administrator authentication; the SSH command uses trusted node RPC authority.
-All capture access is denied in production, including over SSH.
+For remote access, run the same commands through SSH:
 
-Captures survive page reload via sessionStorage. The initial page render is
-only traced if capture was already active before loading it. Template traces
-are session-scoped, so other tabs may contribute. Console entries come from the
-attached page; duplicated tabs may inherit sessionStorage and should attach a
-fresh capture. Existing human template tracing remains independent. A capture
-expires ten minutes after attachment, including its graph and console entries.
-The graph is capped at approximately 1000 nodes / 5000 edges. The truncated
-flag reports graph or server log limits. Browser buffers are best effort and
-can drop entries on overflow, disconnect, navigation or stopping over SSH.
-Captures do not provide screenshots, historic browser console entries, DOM
-snapshots or browser action execution in this first version.
+```sh
+ssh site-host 'cd /srv/zotonic && bin/zotonic capture mysite list'
+```
+
+CLI commands use trusted Erlang node RPC and still enforce the environment
+restriction. They return JSON `{ok: true, result: ...}` or
+`{ok: false, error: ...}`, with a nonzero exit status for failures.
+
+## Lifetime and limits
+
+- A capture expires ten minutes after creation. Polling and restarting do not
+  extend it. Stopping retains evidence until expiry.
+- At most 16 captures exist per site. Attach a fresh capture for a fresh graph;
+  starting an existing one is idempotent and retains evidence.
+- The graph is capped at approximately 1,000 nodes and 5,000 edges. Console
+  history retains the latest 500 entries, up to 4,096 bytes each and 50 per upload.
+- Browser console collection covers subsequent `console.log` calls only. It is
+  best effort: overflow, navigation, disconnection, or remote stopping can lose logs.
+- The browser polls every second. Attachment survives reload via sessionStorage;
+  renders before attachment cannot be reconstructed. Attach before reloading to
+  trace the initial render. Duplicated tabs may inherit the stored attachment.
+- This API provides template traces and console text, not screenshots, DOM
+  snapshots, historical console output, or browser action execution.
+
+Existing human template tracing remains independent of capture sessions.
 ").
 -behaviour(zotonic_model).
 -export([m_get/3, m_post/3, cli/3, console_allowed/1]).

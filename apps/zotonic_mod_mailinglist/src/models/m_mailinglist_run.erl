@@ -37,6 +37,8 @@ Available Model API Paths
 | `get` | `/` | List accessible runs, optionally filtered by a payload map. |
 | `get` | `/history/...` | Return accessible runs and a next-page offset, using the same payload filters as the root path. |
 | `get` | `/run/+run_id/...` | Return a run with aggregate statistics, language results and saved-content metadata. |
+| `get` | `/email_history/+email` | Exact-email recipient results updated within three months, excluding expired details. Payload accepts offset; returns email, results and next_offset. Uses the same run access checks as other history. |
+| `get` | `/recipients_page/+run_id` | Return recipient results with email/status filters and page counts. |
 | `get` | `/recipients/+run_id/...` | Return up to 100 recipient results, optionally filtered and paged using the payload. |
 | `get` | `/page/+page_id/...` | List accessible runs for a page. Resource names and ids are accepted. |
 | `get` | `/list/+list_id/...` | List accessible runs for a mailinglist. Resource names and ids are accepted. |
@@ -100,6 +102,13 @@ Saved HTML is read through `content/3` and the saved-content controller, not an 
 
 Recipient results
 -----------------
+
+The `/recipients_page/+run_id` payload accepts `status`, `email` and `page` with
+binary keys. `email` matches any literal part of the address, case-insensitively;
+surrounding whitespace is ignored. Results are ordered by id, 100 rows per page.
+The returned map contains `result`, `total`, `page` and `pages`. Page numbers are
+clamped to the available range; empty results have page 1 of 1. Expired details
+return no rows. Both filters apply to the rows and the total count.
 
 The `/recipients/+run_id` payload accepts `status` and `after` with binary keys.
 `status` can be `pending`, `submitting`, `queued`, `retrying`, `sent`, `failed`,
@@ -167,6 +176,22 @@ and use any remaining path segments for further lookups.
 ]).
 
 -spec m_get(list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
+m_get([<<"email_history">>, Email | Rest], Msg, Context) when is_binary(Email) ->
+    case z_acl:is_allowed(use, mod_mailinglist, Context) of
+        false -> {error, eacces};
+        true ->
+            Normalized = m_identity:normalize_key(email, z_string:trim(Email)),
+            case z_email_utils:is_email(Normalized) of
+                false -> {error, badarg};
+                true ->
+                    Payload = case Msg of
+                        #{payload := P} when is_map(P) -> P;
+                        _ -> #{}
+                    end,
+                    Offset = min(1000000, to_id(maps:get(<<"offset">>, Payload, 0))),
+                    {ok, {email_history(Normalized, Offset, Context), Rest}}
+            end
+    end;
 m_get([<<"run">>, Id | Rest], _Msg, Context) ->
     case get(to_id(Id), Context) of
         {ok, Run} ->
@@ -221,7 +246,9 @@ m_get([<<"run">>, Id | Rest], _Msg, Context) ->
         _ ->
             {error, eacces}
     end;
-m_get([<<"recipients">>, Id | Rest], Msg, Context) ->
+m_get([Recipients, Id | Rest], Msg, Context)
+    when Recipients =:= <<"recipients">>; Recipients =:= <<"recipients_page">>
+->
     case get(to_id(Id), Context) of
         {ok, Run} ->
             case allowed(Run, Context) of
@@ -231,20 +258,11 @@ m_get([<<"recipients">>, Id | Rest], Msg, Context) ->
                             #{payload := P} when is_map(P) -> P;
                             _ -> #{}
                         end,
-                    State = maps:get(<<"status">>, Payload, <<>>),
-                    After = max(0, to_id(maps:get(<<"after">>, Payload, 0))),
-                    {ok, Rows} = z_db:qmap(
-                        "select id, email, language, status, reason, modified
-                         from mailinglist_run_recipient
-                         where run_id=$1
-                           and id > $2
-                           and exists(select 1 from mailinglist_run where id=$1 and details_expired is null)
-                           and ($3 = '' or status=$3)
-                         order by id limit 100",
-                        [to_id(Id), After, valid_status(State)],
-                        Context
-                    ),
-                    {ok, {Rows, Rest}};
+                    Result = case Recipients of
+                        <<"recipients">> -> recipient_rows(to_id(Id), Payload, Context);
+                        <<"recipients_page">> -> recipient_page(to_id(Id), Payload, Context)
+                    end,
+                    {ok, {Result, Rest}};
                 false ->
                     {error, eacces}
             end;
@@ -275,6 +293,75 @@ m_get([], _Msg, Context) ->
     {ok, {list(all, Context), []}};
 m_get(_, _, _) ->
     {error, unknown_path}.
+
+%% The extra row determines navigation before ACL filtering, so an inaccessible
+%% mailing cannot hide later results. Retention limits this to recent details.
+-spec email_history(Email, Offset, Context) -> map() when
+    Email :: binary(), Offset :: non_neg_integer(), Context :: z:context().
+email_history(Email, Offset, Context) ->
+    {ok, Rows} = z_db:qmap(
+        "select r.id, r.page_id, r.mailinglist_id, r.sender_id, r.is_test,
+                r.created, rr.modified, rr.status, rr.reason, rr.language
+         from mailinglist_run_recipient rr
+         join mailinglist_run r on r.id=rr.run_id
+         where rr.email=$1 and r.details_expired is null
+           and rr.modified >= now()-interval '3 months'
+         order by rr.modified desc, r.id desc, rr.id desc limit 201 offset $2",
+        [Email, Offset], Context
+    ),
+    #{
+        <<"email">> => Email,
+        <<"results">> => [R || R <- lists:sublist(Rows, 200), allowed(R, Context)],
+        <<"next_offset">> => case length(Rows) > 200 of true -> Offset + 200; false -> undefined end
+    }.
+
+%% Keep the cursor-based API available for existing clients.
+recipient_rows(Id, Payload, Context) ->
+    State = maps:get(<<"status">>, Payload, <<>>),
+    After = max(0, to_id(maps:get(<<"after">>, Payload, 0))),
+    {ok, Rows} = z_db:qmap(
+        "select id, email, language, status, reason, modified
+         from mailinglist_run_recipient
+         where run_id=$1
+           and id > $2
+           and exists(select 1 from mailinglist_run where id=$1 and details_expired is null)
+           and ($3 = '' or status=$3)
+         order by id limit 100",
+        [Id, After, valid_status(State)],
+        Context
+    ),
+    Rows.
+
+%% Count using the same filters as the rows, and clamp stale/out-of-range pages.
+%% strpos treats %, _ and backslashes as literal parts of an email address.
+-spec recipient_page(Id, Payload, Context) -> map() when
+    Id :: integer(), Payload :: map(), Context :: z:context().
+recipient_page(Id, Payload, Context) ->
+    Email = case maps:get(<<"email">>, Payload, <<>>) of
+        B when is_binary(B) -> z_string:trim(B);
+        _ -> <<>>
+    end,
+    Args = [Id, valid_status(maps:get(<<"status">>, Payload, <<>>)), Email],
+    Where = " from mailinglist_run_recipient
+              where run_id=$1
+                and exists(select 1 from mailinglist_run where id=$1 and details_expired is null)
+                and ($2 = '' or status=$2)
+                and ($3 = '' or strpos(lower(email), lower($3)) > 0)",
+    Total = z_db:q1("select count(*)" ++ Where, Args, Context),
+    Pages = max(1, (Total + 99) div 100),
+    Page = min(Pages, max(1, to_id(maps:get(<<"page">>, Payload, 1)))),
+    {ok, Rows} = z_db:qmap(
+        "select id, email, language, status, reason, modified" ++ Where ++
+        " order by id limit 100 offset $4",
+        Args ++ [(Page - 1) * 100],
+        Context
+    ),
+    #{
+        <<"result">> => Rows,
+        <<"total">> => Total,
+        <<"page">> => Page,
+        <<"pages">> => Pages
+    }.
 
 to_id(I) when is_integer(I), I >= 0 -> I;
 to_id(B) when is_binary(B), byte_size(B) < 20 ->
@@ -950,11 +1037,8 @@ detail(missing_context) ->
     <<"The scheduled sender context is missing. Create a new mailing.">>;
 detail(invalid_context) ->
     <<"The scheduled sender context is invalid. Create a new mailing.">>;
-detail(undefined) ->
-    undefined;
-detail(B) when is_binary(B) -> B;
-detail(T) ->
-    iolist_to_binary(io_lib:format("~p", [T])).
+detail(Detail) ->
+    z_mailinglist_delivery_detail:format(Detail).
 
 -spec stats(Id, Context) -> map() when Id :: integer(), Context :: z:context().
 stats(Id, Context) ->

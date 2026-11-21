@@ -36,8 +36,11 @@ Display mailing history and the delivery status of an individual mailing run.
 
 The presence of the `run_id` request argument selects the detail template.
 The history page accepts `status`, `language`, `page_id`, `list_id`, and `offset`
-filters. The detail page shows delivery progress and recipient results, with
-`recipient_status` and `after` arguments for filtering and pagination.
+filters. An `email` argument instead selects recent recipient results for that
+exact address, with `offset` pagination. The detail page shows delivery progress
+and recipient results, with
+`recipient_status`, `recipient_email` and `recipient_page` arguments for filtering
+and pagination. Changing the filters starts again at the first page.
 The templates use `model#mailinglist_run` and live updates to display run data.
 
 ## Access and response handling
