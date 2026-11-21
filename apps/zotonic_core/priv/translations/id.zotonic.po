@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-19 15:34\n"
+"PO-Revision-Date: 2026-11-20 22:19\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -518,7 +518,7 @@ msgstr "Pertimbangkan penulis sumber daya sebagai pemilik."
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4
 #: zotonic_mod_admin/src/mod_admin.erl:516
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:70
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 msgid "Content"
 msgstr "Konten"
@@ -2877,6 +2877,8 @@ msgid "Open Modules list"
 msgstr "Buka daftar modul"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:37
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:39
 msgid "Open in new tab"
 msgstr "Buka di tab baru"
 
@@ -6672,7 +6674,7 @@ msgstr "Penghitung aktivitas tidak tersedia sampai analisis kembali berjalan."
 msgid "Add analytics measurement"
 msgstr "Tambahkan pengukuran analitik"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:44
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:58
 msgid "All breakdown values"
 msgstr "Semua nilai rincian"
 
@@ -6727,7 +6729,7 @@ msgstr "Pengukuran analitik"
 msgid "Analytics status"
 msgstr "Status analitik"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:35
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:49
 msgid "Bars show the lower bound. Counts are ranges, ordered by their lower bound. Overlapping ranges may change order. Content outside the retained candidates has at most"
 msgstr "Batang-batang tersebut menunjukkan batas bawah. Jumlahnya berupa rentang, yang diurutkan berdasarkan batas bawahnya. Rentang yang tumpang tindih dapat mengubah urutannya. Konten di luar kandidat yang dipertahankan memiliki paling banyak"
 
@@ -6740,7 +6742,7 @@ msgstr "Sejarah yang terbatas"
 msgid "Break down by"
 msgstr "Rincian berdasarkan"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:45
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:59
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "Breakdown"
 msgstr "Rincian"
@@ -6847,6 +6849,30 @@ msgstr "Setiap kelompok mengalokasikan 3.578 slot waktu. Rincian per halaman men
 msgid "Each stored time interval holds the counts for all groups in one analytics measurement. Storage slots for older intervals are reused, so history stays bounded instead of growing with every visit. Only aggregate counts are stored, not individual events."
 msgstr "Setiap interval waktu yang disimpan berisi jumlah data untuk semua kelompok dalam satu pengukuran analitik. Slot penyimpanan untuk interval yang lebih lama digunakan kembali, sehingga riwayat tetap terbatas dan tidak terus bertambah setiap kali ada kunjungan. Hanya jumlah agregat yang disimpan, bukan peristiwa individual."
 
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:40
+msgid "Email events per day"
+msgstr "Jumlah peristiwa email per hari"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:34
+msgid "Email events per hour"
+msgstr "Jumlah peristiwa email per jam"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:28
+msgid "Email events per minute"
+msgstr "Jumlah peristiwa email per menit"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:42
+msgid "Email events per {n} days"
+msgstr "Jumlah peristiwa email per {n} hari"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:36
+msgid "Email events per {n} hours"
+msgstr "Jumlah peristiwa email per {n} jam"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:30
+msgid "Email events per {n} minutes"
+msgstr "Jumlah peristiwa email per {n} menit"
+
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:9
 msgid "Email outcome — sent, retry, failed or bounced"
 msgstr "Status email — terkirim, dicoba ulang, gagal, atau ditolak"
@@ -6868,7 +6894,7 @@ msgstr "Buffer peristiwa"
 msgid "Event processing"
 msgstr "Pemrosesan peristiwa"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:45
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:59
 msgid "Events"
 msgstr "Peristiwa"
 
@@ -6879,6 +6905,30 @@ msgstr "Peristiwa-peristiwa digabungkan menjadi penghitung di memori sebelum dis
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:23
 msgid "Events must satisfy both filters to be counted. New analytics measurements start without historical data."
 msgstr "Peristiwa harus memenuhi kedua filter tersebut agar dapat dihitung. Pengukuran analitik baru dimulai tanpa data historis."
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:60
+msgid "Events per day"
+msgstr "Jumlah peristiwa per hari"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:54
+msgid "Events per hour"
+msgstr "Jumlah kejadian per jam"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:48
+msgid "Events per minute"
+msgstr "Jumlah peristiwa per menit"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:62
+msgid "Events per {n} days"
+msgstr "Jumlah peristiwa per {n} hari"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:56
+msgid "Events per {n} hours"
+msgstr "Jumlah kejadian per {n} jam"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:50
+msgid "Events per {n} minutes"
+msgstr "Jumlah peristiwa per {n} menit"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:18
 msgid "Fixed filter"
@@ -6898,7 +6948,7 @@ msgstr "Kesenjangan adalah interval yang tidak tercatat. Interval parsial mungki
 msgid "Group limit"
 msgstr "Batas jumlah anggota grup"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
 msgid "Guard lines count page attempts from other and unknown traffic. Throttled requests are not page views; do not add these lines to the total."
 msgstr "Baris penjaga menghitung upaya akses halaman dari lalu lintas lain dan yang tidak dikenal. Permintaan yang dibatasi tidak termasuk dalam tampilan halaman; jangan tambahkan baris-baris ini ke total."
 
@@ -6918,7 +6968,7 @@ msgstr "Kode status HTTP — misalnya 200, 404, atau 500"
 msgid "History detail and retention"
 msgstr "Rincian dan penyimpanan riwayat"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:50
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:64
 msgid "Includes incomplete or unrecorded intervals"
 msgstr "Termasuk interval yang tidak lengkap atau tidak tercatat"
 
@@ -6946,7 +6996,7 @@ msgstr "Enam jam terakhir"
 msgid "Maximum number of analytics measurements"
 msgstr "Jumlah maksimum pengukuran analitik"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:28
 msgid "Most popular content in this period"
 msgstr "Konten terpopuler pada periode ini"
 
@@ -6998,11 +7048,11 @@ msgstr "Tidak ada kerusakan (total)"
 msgid "No filter — include all values"
 msgstr "Tanpa filter — sertakan semua nilai"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:33
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:47
 msgid "No leading content identified in this period."
 msgstr "Tidak ditemukan konten unggulan pada periode ini."
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:41
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:55
 msgid "No recorded events yet."
 msgstr "Belum ada peristiwa yang tercatat."
 
@@ -7054,11 +7104,11 @@ msgstr "Jeda"
 msgid "Period"
 msgstr "Periode"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
 msgid "Rank"
 msgstr "Peringkat"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:28
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:29
 msgid "Ranked by recorded requests in the selected moving period. The window advances in steps of"
 msgstr "Diurutkan berdasarkan jumlah permintaan yang tercatat dalam periode pergerakan yang dipilih. Jendela ini bergerak maju dengan selisih"
 
@@ -7074,9 +7124,37 @@ msgstr "Jenis permintaan — halaman, API, atau jenis pengiriman khusus"
 msgid "Request types found in this site's dispatch rules:"
 msgstr "Jenis permintaan yang terdapat dalam aturan pengiriman situs ini:"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
 msgid "Requests"
 msgstr "Permintaan"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:4
+msgid "Requests per content item over the selected period"
+msgstr "Jumlah permintaan per item konten selama periode yang dipilih"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:20
+msgid "Requests per day"
+msgstr "Jumlah permintaan per hari"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:14
+msgid "Requests per hour"
+msgstr "Permintaan per jam"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:8
+msgid "Requests per minute"
+msgstr "Permintaan per menit"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:22
+msgid "Requests per {n} days"
+msgstr "Jumlah permintaan per {n} hari"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:16
+msgid "Requests per {n} hours"
+msgstr "Jumlah permintaan per {n} jam"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:10
+msgid "Requests per {n} minutes"
+msgstr "Permintaan per {n} menit"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:22
 msgid "Reserved capacity"
@@ -7213,11 +7291,11 @@ msgstr "peristiwa"
 msgid "group/time slots"
 msgstr "kelompok/slot waktu"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:35
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:49
 msgid "requests."
 msgstr "permintaan."
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:28
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:29
 msgid "seconds."
 msgstr "detik."
 

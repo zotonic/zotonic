@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-19 15:34\n"
+"PO-Revision-Date: 2026-11-20 22:20\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "MIME-Version: 1.0\n"
@@ -518,7 +518,7 @@ msgstr "자료 작성자를 소유자로 간주하십시오."
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4
 #: zotonic_mod_admin/src/mod_admin.erl:516
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:70
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 msgid "Content"
 msgstr "콘텐츠"
@@ -2877,6 +2877,8 @@ msgid "Open Modules list"
 msgstr "모듈 목록 열기"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:37
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:39
 msgid "Open in new tab"
 msgstr "새 탭에서 열기"
 
@@ -6672,7 +6674,7 @@ msgstr "분석 기능이 재개될 때까지 활동 카운터는 사용할 수 �
 msgid "Add analytics measurement"
 msgstr "분석 측정 항목 추가"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:44
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:58
 msgid "All breakdown values"
 msgstr "모든 세부 항목 값"
 
@@ -6727,7 +6729,7 @@ msgstr "분석 지표"
 msgid "Analytics status"
 msgstr "분석 현황"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:35
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:49
 msgid "Bars show the lower bound. Counts are ranges, ordered by their lower bound. Overlapping ranges may change order. Content outside the retained candidates has at most"
 msgstr "막대는 하한을 나타냅니다. 개수는 범위이며, 하한 순으로 정렬되어 있습니다. 범위가 겹치는 경우 순서가 바뀔 수 있습니다. 유지된 후보 집합 외부의 내용은 최대"
 
@@ -6740,7 +6742,7 @@ msgstr "제한된 역사"
 msgid "Break down by"
 msgstr "분류 기준:"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:45
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:59
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "Breakdown"
 msgstr "내역"
@@ -6847,6 +6849,30 @@ msgstr "각 그룹은 3,578개의 시간대를 배정받습니다. 페이지별 
 msgid "Each stored time interval holds the counts for all groups in one analytics measurement. Storage slots for older intervals are reused, so history stays bounded instead of growing with every visit. Only aggregate counts are stored, not individual events."
 msgstr "저장된 각 시간 구간에는 하나의 분석 측정 항목에 속한 모든 그룹의 카운트 값이 포함됩니다. 오래된 구간의 저장 공간은 재사용되므로, 방문 횟수가 늘어날 때마다 기록이 무한정 늘어나는 대신 일정 범위 내에서 유지됩니다. 개별 이벤트가 아닌 집계된 카운트 값만 저장됩니다."
 
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:40
+msgid "Email events per day"
+msgstr "하루당 이메일 이벤트 수"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:34
+msgid "Email events per hour"
+msgstr "시간당 이메일 이벤트 수"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:28
+msgid "Email events per minute"
+msgstr "분당 이메일 이벤트 수"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:42
+msgid "Email events per {n} days"
+msgstr "{n}일당 이메일 이벤트 수"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:36
+msgid "Email events per {n} hours"
+msgstr "{n}시간당 이메일 이벤트 수"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:30
+msgid "Email events per {n} minutes"
+msgstr "{n}분당 이메일 이벤트 수"
+
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:9
 msgid "Email outcome — sent, retry, failed or bounced"
 msgstr "이메일 처리 결과 — 발송됨, 재시도, 실패 또는 반송됨"
@@ -6868,7 +6894,7 @@ msgstr "이벤트 버퍼"
 msgid "Event processing"
 msgstr "이벤트 처리"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:45
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:59
 msgid "Events"
 msgstr "이벤트"
 
@@ -6879,6 +6905,30 @@ msgstr "이벤트는 저장되기 전에 메모리 내에서 카운터로 합산
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:23
 msgid "Events must satisfy both filters to be counted. New analytics measurements start without historical data."
 msgstr "이벤트가 집계되려면 두 필터 조건을 모두 충족해야 합니다. 새로운 분석 지표는 과거 데이터 없이 시작됩니다."
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:60
+msgid "Events per day"
+msgstr "하루당 이벤트 수"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:54
+msgid "Events per hour"
+msgstr "시간당 발생 횟수"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:48
+msgid "Events per minute"
+msgstr "분당 이벤트 수"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:62
+msgid "Events per {n} days"
+msgstr "{n} 일 동안 발생한 이벤트 수"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:56
+msgid "Events per {n} hours"
+msgstr "{n} 시간당 발생 횟수"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:50
+msgid "Events per {n} minutes"
+msgstr "{n} 분당 발생 횟수"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:18
 msgid "Fixed filter"
@@ -6898,7 +6948,7 @@ msgstr "‘공백’은 기록되지 않은 구간을 의미합니다. 부분 �
 msgid "Group limit"
 msgstr "그룹 인원 제한"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
 msgid "Guard lines count page attempts from other and unknown traffic. Throttled requests are not page views; do not add these lines to the total."
 msgstr "가드 라인은 외부 및 출처를 알 수 없는 트래픽에서 발생한 페이지 접속 시도를 집계합니다. 속도 제한이 적용된 요청은 페이지 조회수로 간주되지 않으므로, 이러한 항목을 총계에 포함하지 마십시오."
 
@@ -6918,7 +6968,7 @@ msgstr "HTTP 상태 코드 — 예: 200, 404 또는 500"
 msgid "History detail and retention"
 msgstr "이력 상세 정보 및 보존"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:50
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:64
 msgid "Includes incomplete or unrecorded intervals"
 msgstr "불완전하거나 기록되지 않은 간격이 포함됩니다"
 
@@ -6946,7 +6996,7 @@ msgstr "지난 6시간"
 msgid "Maximum number of analytics measurements"
 msgstr "분석 측정 항목의 최대 개수"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:28
 msgid "Most popular content in this period"
 msgstr "이 기간 동안 가장 인기 있는 콘텐츠"
 
@@ -6998,11 +7048,11 @@ msgstr "분류 없음 (합계)"
 msgid "No filter — include all values"
 msgstr "필터 적용하지 않음 — 모든 값 포함"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:33
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:47
 msgid "No leading content identified in this period."
 msgstr "이 기간 동안 주요 콘텐츠가 확인되지 않았습니다."
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:41
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:55
 msgid "No recorded events yet."
 msgstr "아직 기록된 이벤트가 없습니다."
 
@@ -7054,11 +7104,11 @@ msgstr "일시 정지"
 msgid "Period"
 msgstr "기간"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
 msgid "Rank"
 msgstr "순위"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:28
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:29
 msgid "Ranked by recorded requests in the selected moving period. The window advances in steps of"
 msgstr "선택한 이동 기간 동안 기록된 요청 수를 기준으로 순위를 매깁니다. 이 기간은 다음 단계별로 진행됩니다."
 
@@ -7074,9 +7124,37 @@ msgstr "요청 유형 — 페이지, API 또는 사용자 정의 디스패치 �
 msgid "Request types found in this site's dispatch rules:"
 msgstr "이 사이트의 디스패치 규칙에서 발견되는 요청 유형:"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
 msgid "Requests"
 msgstr "요청 사항"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:4
+msgid "Requests per content item over the selected period"
+msgstr "선택한 기간 동안 콘텐츠 항목별 요청 수"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:20
+msgid "Requests per day"
+msgstr "일일 요청 건수"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:14
+msgid "Requests per hour"
+msgstr "시간당 요청 수"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:8
+msgid "Requests per minute"
+msgstr "분당 요청 수"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:22
+msgid "Requests per {n} days"
+msgstr "{n} 일당 요청 수"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:16
+msgid "Requests per {n} hours"
+msgstr "{n} 시간당 요청 수"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:10
+msgid "Requests per {n} minutes"
+msgstr "{n} 분당 요청 수"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:22
 msgid "Reserved capacity"
@@ -7213,11 +7291,11 @@ msgstr "이벤트"
 msgid "group/time slots"
 msgstr "그룹/시간대"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:35
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:49
 msgid "requests."
 msgstr "요청."
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:28
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:29
 msgid "seconds."
 msgstr "초."
 
