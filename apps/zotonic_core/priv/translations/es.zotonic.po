@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-19 15:33\n"
+"PO-Revision-Date: 2026-11-20 22:18\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -536,7 +536,7 @@ msgstr "Considera a los autores de recursos como propietarios."
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4
 #: zotonic_mod_admin/src/mod_admin.erl:516
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:70
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 msgid "Content"
 msgstr "Contenido"
@@ -2899,6 +2899,8 @@ msgid "Open Modules list"
 msgstr "Abrir la lista de módulos"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:37
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:39
 msgid "Open in new tab"
 msgstr "Abrir en una pestaña nueva"
 
@@ -6694,7 +6696,7 @@ msgstr "Los contadores de actividad no estarán disponibles hasta que se reanude
 msgid "Add analytics measurement"
 msgstr "Añadir una medición analítica"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:44
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:58
 msgid "All breakdown values"
 msgstr "Todos los valores desglosados"
 
@@ -6749,7 +6751,7 @@ msgstr "Métricas de análisis"
 msgid "Analytics status"
 msgstr "Estado de los análisis"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:35
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:49
 msgid "Bars show the lower bound. Counts are ranges, ordered by their lower bound. Overlapping ranges may change order. Content outside the retained candidates has at most"
 msgstr "Las barras indican el límite inferior. Los recuentos son intervalos, ordenados por su límite inferior. Los intervalos que se solapan pueden cambiar el orden. El contenido que no forma parte de los candidatos retenidos tiene como máximo"
 
@@ -6762,7 +6764,7 @@ msgstr "Historia limitada"
 msgid "Break down by"
 msgstr "Desglose por"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:45
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:59
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "Breakdown"
 msgstr "Desglose"
@@ -6869,6 +6871,30 @@ msgstr "Cada grupo reserva 3.578 franjas horarias. En los desgloses por página 
 msgid "Each stored time interval holds the counts for all groups in one analytics measurement. Storage slots for older intervals are reused, so history stays bounded instead of growing with every visit. Only aggregate counts are stored, not individual events."
 msgstr "Cada intervalo de tiempo almacenado contiene los recuentos de todos los grupos en una medida analítica. Las posiciones de almacenamiento de los intervalos más antiguos se reutilizan, por lo que el historial se mantiene limitado en lugar de crecer con cada visita. Solo se almacenan los recuentos agregados, no los eventos individuales."
 
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:40
+msgid "Email events per day"
+msgstr "Eventos de correo electrónico por día"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:34
+msgid "Email events per hour"
+msgstr "Eventos de correo electrónico por hora"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:28
+msgid "Email events per minute"
+msgstr "Eventos de correo electrónico por minuto"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:42
+msgid "Email events per {n} days"
+msgstr "Eventos de correo electrónico por {n} días"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:36
+msgid "Email events per {n} hours"
+msgstr "Eventos de correo electrónico por {n} horas"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:30
+msgid "Email events per {n} minutes"
+msgstr "Eventos de correo electrónico por {n} minutos"
+
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:9
 msgid "Email outcome — sent, retry, failed or bounced"
 msgstr "Estado del correo electrónico: enviado, reintentado, fallido o devuelto"
@@ -6890,7 +6916,7 @@ msgstr "Búfer de eventos"
 msgid "Event processing"
 msgstr "Procesamiento de eventos"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:45
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:59
 msgid "Events"
 msgstr "Eventos"
 
@@ -6901,6 +6927,30 @@ msgstr "Los eventos se agrupan en contadores en memoria antes de guardarse, norm
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:23
 msgid "Events must satisfy both filters to be counted. New analytics measurements start without historical data."
 msgstr "Los eventos deben cumplir ambos filtros para que se tengan en cuenta. Las nuevas métricas de análisis comienzan sin datos históricos."
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:60
+msgid "Events per day"
+msgstr "Eventos por día"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:54
+msgid "Events per hour"
+msgstr "Eventos por hora"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:48
+msgid "Events per minute"
+msgstr "Eventos por minuto"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:62
+msgid "Events per {n} days"
+msgstr "Eventos por {n} días"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:56
+msgid "Events per {n} hours"
+msgstr "Eventos por {n} horas"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:50
+msgid "Events per {n} minutes"
+msgstr "Eventos por {n} minutos"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:18
 msgid "Fixed filter"
@@ -6920,7 +6970,7 @@ msgstr "Las lagunas son intervalos no registrados. Los intervalos parciales pued
 msgid "Group limit"
 msgstr "Límite por grupo"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
 msgid "Guard lines count page attempts from other and unknown traffic. Throttled requests are not page views; do not add these lines to the total."
 msgstr "Las líneas de protección contabilizan los intentos de acceso a la página procedentes de tráfico externo y desconocido. Las solicitudes limitadas no se consideran visitas a la página; no sumes estas líneas al total."
 
@@ -6940,7 +6990,7 @@ msgstr "Código de estado HTTP — p. ej., 200, 404 o 500"
 msgid "History detail and retention"
 msgstr "Detalles y conservación del historial"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:50
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:64
 msgid "Includes incomplete or unrecorded intervals"
 msgstr "Incluye intervalos incompletos o no registrados"
 
@@ -6968,7 +7018,7 @@ msgstr "Últimas seis horas"
 msgid "Maximum number of analytics measurements"
 msgstr "Número máximo de mediciones analíticas"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:28
 msgid "Most popular content in this period"
 msgstr "Contenidos más populares de este periodo"
 
@@ -7020,11 +7070,11 @@ msgstr "Sin desglose (total)"
 msgid "No filter — include all values"
 msgstr "Sin filtro: incluir todos los valores"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:33
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:47
 msgid "No leading content identified in this period."
 msgstr "No se ha identificado ningún contenido destacado en este periodo."
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:41
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:55
 msgid "No recorded events yet."
 msgstr "Aún no hay eventos registrados."
 
@@ -7076,11 +7126,11 @@ msgstr "Pausa"
 msgid "Period"
 msgstr "Período"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
 msgid "Rank"
 msgstr "Clasificación"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:28
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:29
 msgid "Ranked by recorded requests in the selected moving period. The window advances in steps of"
 msgstr "Clasificado según las solicitudes registradas en el periodo de movimiento seleccionado. La ventana avanza en intervalos de"
 
@@ -7096,9 +7146,37 @@ msgstr "Tipo de solicitud: página, API o un tipo de envío personalizado"
 msgid "Request types found in this site's dispatch rules:"
 msgstr "Tipos de solicitudes que aparecen en las reglas de distribución de este sitio web:"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
 msgid "Requests"
 msgstr "Solicitudes"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:4
+msgid "Requests per content item over the selected period"
+msgstr "Solicitudes por elemento de contenido durante el periodo seleccionado"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:20
+msgid "Requests per day"
+msgstr "Solicitudes diarias"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:14
+msgid "Requests per hour"
+msgstr "Solicitudes por hora"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:8
+msgid "Requests per minute"
+msgstr "Solicitudes por minuto"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:22
+msgid "Requests per {n} days"
+msgstr "Solicitudes por {n} días"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:16
+msgid "Requests per {n} hours"
+msgstr "Solicitudes por {n} horas"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:10
+msgid "Requests per {n} minutes"
+msgstr "Solicitudes por {n} minutos"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:22
 msgid "Reserved capacity"
@@ -7235,11 +7313,11 @@ msgstr "eventos"
 msgid "group/time slots"
 msgstr "grupos/franjas horarias"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:35
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:49
 msgid "requests."
 msgstr "solicitudes."
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:28
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:29
 msgid "seconds."
 msgstr "segundos."
 
