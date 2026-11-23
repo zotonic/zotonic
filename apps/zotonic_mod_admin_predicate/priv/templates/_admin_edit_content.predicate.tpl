@@ -61,6 +61,16 @@
 
     <div class="form-group">
         <label class="checkbox-inline">
+            <input type="checkbox" name="is_dependency_ignored" {% if id.is_dependency_ignored %}checked="checked"{% endif %} value="1">
+            {_ Ignore these connections when cleaning up dependent pages. _}
+        </label>
+        <div class="help-block">
+            {_ Connections using this predicate do not keep their target page alive. A dependent target page can be deleted when it has no other incoming connections. Protected pages are kept. _}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="checkbox-inline">
             <input type="checkbox" name="is_connect_checkbox" {% if id.is_connect_checkbox %}checked="checked"{% endif %} value="1">
             {_ Use a list of checkboxes with titles when adding page connections. _}
         </label>

@@ -29,6 +29,12 @@ together with the referring and the referred page a triple `{subject, predicate,
 Each predicate has a list of valid subject categories and valid object categories. This is used to filter the list of
 predicates in the admin edit page, and also to filter the list of found potential objects when making a connection.
 
+The predicate property `is_dependency_ignored` defaults to false. When true,
+connections using this predicate do not keep their object resource alive during
+`is_dependent` cleanup. Protected resources are still kept. This does not change
+ordinary connection queries. `dependency_ignored/1` returns the cached list of
+predicate IDs with this property enabled.
+
 A full predicate definition can be fetched by name or id with:
 
 
@@ -86,6 +92,7 @@ Available Model API Paths
     objects/2,
     subjects/2,
     all/1,
+    dependency_ignored/1,
     get/2,
     insert/2,
     flush/1,
@@ -431,6 +438,18 @@ all(Context) ->
         [FSetPred(Pred) || Pred <- Preds]
     end,
     z_depcache:memo(F, predicate, ?DAY, Context).
+
+%% @doc Predicates whose incoming edges do not retain dependent resources.
+%% Missing properties default to false. Cache policy, never resource connectivity.
+-spec dependency_ignored(Context) -> [m_rsc:resource_id()] when
+    Context :: z:context().
+dependency_ignored(Context) ->
+    F = fun() ->
+        [ proplists:get_value(id, Props)
+          || {_Name, Props} <- all(Context),
+             z_convert:to_bool(proplists:get_value(is_dependency_ignored, Props, false)) ]
+    end,
+    z_depcache:memo(F, predicate_dependency_ignored, ?DAY, [predicate, category], Context).
 
 %% @doc Insert a new predicate, sets some defaults.
 -spec insert(Title, Context) -> {ok, m_rsc:resource_id()} | {error, term()} when

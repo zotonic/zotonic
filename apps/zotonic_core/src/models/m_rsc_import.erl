@@ -104,7 +104,9 @@ Available Model API Paths
                 | {uri_template, binary()}
                 | {is_forced_update, boolean()}         % Set to true on forced medium imports
                 | {filtermap_rsc, mfa()}
-                | {filtermap_edges, mfa()}.
+                | {filtermap_edges, mfa()}
+                | {import_complete, mfa()}               % Called with LocalId, raw JSON, Options, Context
+                | is_medium_synchronous.                % Wait for media before reporting success
 -type options() :: [ option() ].
 
 -type import_result() :: {ok, {m_rsc:resource_id(), import_map()}}
@@ -1083,6 +1085,7 @@ import_resource(OptLocalId, JSON, RemoteRId, Category, ImportedAcc, Options, Con
     end,
     case z_import_resource:import(Notice, Default, Context) of
         {ok, LocalId, Imported} ->
+            import_complete(LocalId, JSON, Options, Context),
             save_import_options(LocalId, Uri, ok, Options, Context),
             z_notifier:notify(#rsc_import_done{id = LocalId, uri = Uri, options = Options}, Context),
             {ok, {LocalId, (maps:merge(ImportedAcc, Imported))#{Uri => LocalId}}};
@@ -1099,35 +1102,42 @@ import_resource_default(OptLocalId, JSON, RemoteRId, Category, ImportedAcc, Opti
     },
     case update_rsc(OptLocalId, RemoteRId, Rsc2, ImportedAcc1, Options, Context) of
         {ok, LocalId} ->
-            ImportedAcc2 = ImportedAcc1#{
-                Uri => LocalId
-            },
-            _ = maybe_import_medium(LocalId, JSON, Options, Context),
-            ImportedAcc3 = case proplists:get_value(import_edges, Options, 0) of
-                N when is_integer(N), N > 0 ->
-                    PropsForced = proplists:get_value(props_forced, Options, #{}),
-                    EdgeOptions = [
-                        {import_edges, N - 1},
-                        {props_forced, maps:remove(<<"category_id">>, PropsForced)}
-                        | proplists:delete(import_edges,
-                            proplists:delete(props_forced,
-                                proplists:delete(is_subscribe, Options)))
-                    ],
-                    import_edges(LocalId, JSON, ImportedAcc2, EdgeOptions, Context);
+            MediumResult = maybe_import_medium(LocalId, JSON, Options, Context),
+            case {proplists:get_bool(is_medium_synchronous, Options), MediumResult} of
+                {true, {error, _} = MediumError} -> MediumError;
                 _ ->
-                    ImportedAcc2
-            end,
-            {ok, LocalId, ImportedAcc3};
+                    import_resource_edges(LocalId, JSON, ImportedAcc1, Uri, Options, Context)
+            end;
         {error, Reason} = Error ->
-            ?LOG_INFO(#{
-                text => <<"Importing resource returned error">>,
-                in => zotonic_core,
-                result => error,
-                reason => Reason,
-                uri => Uri,
-                rsc_id => OptLocalId
-            }),
+            ?LOG_INFO(#{in => zotonic_core, result => error, reason => Reason,
+                text => <<"Importing resource returned error">>, uri => Uri, rsc_id => OptLocalId}),
             Error
+    end.
+
+import_resource_edges(LocalId, JSON, ImportedAcc1, Uri, Options, Context) ->
+    ImportedAcc2 = ImportedAcc1#{Uri => LocalId},
+    ImportedAcc3 = case proplists:get_value(import_edges, Options, 0) of
+        N when is_integer(N), N > 0 ->
+            PropsForced = proplists:get_value(props_forced, Options, #{}),
+            EdgeOptions = [
+                {import_edges, N - 1},
+                {props_forced, maps:remove(<<"category_id">>, PropsForced)}
+                | proplists:delete(import_edges,
+                    proplists:delete(props_forced,
+                        proplists:delete(is_subscribe, Options)))
+            ],
+            import_edges(LocalId, JSON, ImportedAcc2, EdgeOptions, Context);
+        _ ->
+            ImportedAcc2
+    end,
+    {ok, LocalId, ImportedAcc3}.
+
+%% Trusted option callback; unlike reference maps this runs only after population.
+import_complete(LocalId, JSON, Options, Context) ->
+    case proplists:get_value(import_complete, Options) of
+        undefined -> ok;
+        {M, F, A} ->
+            ok = apply(M, F, A ++ [LocalId, JSON, Options, Context])
     end.
 
 
@@ -1555,7 +1565,7 @@ is_html_prop(K) ->
 
 maybe_import_medium(LocalId, #{ <<"medium">> := Medium, <<"medium_url">> := MediaUrl } = JSON, Options, Context)
     when is_binary(MediaUrl), MediaUrl =/= <<>>, is_map(Medium) ->
-    case proplists:get_bool(is_no_medium_download, Options) of
+    Result = case proplists:get_bool(is_no_medium_download, Options) of
         false ->
             % If medium is outdated (compare with created date in medium record)
             %    - download URL
@@ -1594,16 +1604,18 @@ maybe_import_medium(LocalId, #{ <<"medium">> := Medium, <<"medium_url">> := Medi
                                 <<"medium_edit_settings">> => undefined
                             }
                     end,
-                    % Place this in a task to avoid slowing down the main import task, and to
-                    % be able to retry on failure. Use the local resource id as the task id to
-                    % avoid multiple concurrent tasks for the same resource.
-                    z_pivot_rsc:insert_task(
-                        ?MODULE,
-                        import_medium_task,
-                        LocalId,
-                        [0, calendar:universal_time(), MediaUrl, LocalId, RscProps1, MediaOptions, z_context:pickle(Context)],
-                        Context
-                    );
+                    % Background download is the default. Callers restoring dependent
+                    % relationships can wait for media before finalizing their import.
+                    case proplists:get_bool(is_medium_synchronous, Options) of
+                        true ->
+                            m_media:replace_url(MediaUrl, LocalId, RscProps1, MediaOptions, Context);
+                        false ->
+                            z_pivot_rsc:insert_task(
+                                ?MODULE, import_medium_task, LocalId,
+                                [0, calendar:universal_time(), MediaUrl, LocalId, RscProps1,
+                                 MediaOptions, z_context:pickle(Context)], Context)
+                    end;
+
                 false ->
                     % No need to update medium, as local medium is newer than the imported medium.
                     ok
@@ -1612,8 +1624,11 @@ maybe_import_medium(LocalId, #{ <<"medium">> := Medium, <<"medium_url">> := Medi
             % Configured to skip medium downloads
             ok
     end,
-    {ok, LocalId};
-maybe_import_medium(LocalId, #{ <<"medium">> := Medium }, _Options, Context) when is_map(Medium) ->
+    case Result of
+        {error, _} = Error -> Error;
+        _ -> {ok, LocalId}
+    end;
+maybe_import_medium(LocalId, #{ <<"medium">> := Medium }, Options, Context) when is_map(Medium) ->
     % Overwrite local medium record with the imported medium record
     % [ sanitize any HTML in the medium record ]
     case z_notifier:first(#media_import_medium{ id = LocalId, medium = Medium }, Context) of
@@ -1625,7 +1640,10 @@ maybe_import_medium(LocalId, #{ <<"medium">> := Medium }, _Options, Context) whe
                 in => zotonic_core,
                 rsc_id => LocalId
             }),
-            {ok, LocalId};
+            case proplists:get_bool(is_medium_synchronous, Options) of
+                true -> {error, no_medium_handler};
+                false -> {ok, LocalId}
+            end;
         ok ->
             {ok, LocalId};
         {ok, _} ->
