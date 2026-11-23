@@ -255,7 +255,7 @@ maybe_schedule_dependent_check(Id, Delay, Context) when is_integer(Id) ->
     case m_rsc:p_no_acl(Id, <<"is_dependent">>, Context) of
         true ->
             Key = z_convert:to_binary(Id),
-            case m_edge:has_subjects(Id, Context) of
+            case m_edge:has_dependency_subjects(Id, Context) of
                 true -> ok;
                 false ->
                     case z_pivot_rsc:insert_task_after(Delay, ?MODULE, delete_if_unconnected, Key, [Id], Context) of
@@ -268,15 +268,20 @@ maybe_schedule_dependent_check(Id, Delay, Context) when is_integer(Id) ->
     end.
 
 delete_if_unconnected(Id, Context) ->
-    case z_db:q_row("select r.is_dependent, r.is_protected, e.object_id
+    Ignored = m_predicate:dependency_ignored(Context),
+    case z_db:q1("select r.id
                      from rsc r
-                          left join edge e on e.object_id = r.id
                      where r.is_dependent
+                       and not r.is_protected
                        and r.id = $1
-                     limit 1",
-                    [Id], Context)
+                       and not exists (
+                           select 1 from edge e
+                           where e.object_id = r.id
+                             and not (e.predicate_id = any($2::integer[]))
+                       )",
+                    [Id, Ignored], Context)
     of
-        {true, false, undefined} ->
+        Id ->
             DeleteContext = z_context:set(is_dependent_delete, true, z_acl:sudo(Context)),
             m_rsc:delete(Id, DeleteContext);
         _ -> ok

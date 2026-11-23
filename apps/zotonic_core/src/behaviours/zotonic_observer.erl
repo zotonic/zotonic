@@ -5425,14 +5425,27 @@ updated `z:context()`
 
 `#middleware{}` properties:
 
-*   on: `guard|request|welformed|handled`
+*   on: `guard|rejected|request|welformed|handled`
 
 The `guard` phase runs before controller callbacks, with proxy and cookie metadata
 initialized. It can return a context with `request_guard_response = {Status, Body}`
 (an HTTP 400..599 status and binary body). Response headers set on that context are
-preserved. This sends an early response without the other middleware phases or
-controller rendering. Observers must initialize authentication explicitly if needed
-and emit any telemetry for early responses themselves.
+preserved. Before sending this response, core emits `rejected` synchronously.
+It does not run `request`, `welformed`, `handled`, or controller rendering.
+The returned context from `rejected` is ignored and observer exceptions cannot
+change the rejection response. Observers must return the context for other observers
+and initialize authentication themselves if needed; early requests are not authenticated.
+Keep rejection observers bounded and best-effort: they execute on the request process.
+
+Guards can set `request_guard_result` to a server-owned map containing `source`
+(the producing module atom), `guard_action`, `guard_reason`, and `crawl_behavior`
+(binary classifications). Actions are `allow`, `would_throttle`, or `throttle`;
+crawl behavior is `normal`, `excessive`, or `unknown`. Reasons are producer-defined
+bounded values, not client input. Consumers must select supported sources and fields,
+never forward the entire map or include client identifiers. Guards may keep additional
+internal fields such as `retry_after`. This contract belongs to core, not a consumer.
+For normally handled requests, the result remains available in the `handled` phase.
+Optional telemetry consumers decide whether any enrichment or recording is needed.
 ").
 -callback observe_middleware(#middleware{}, Acc, z:context()) -> Result when
     Acc :: z:context(),

@@ -47,3 +47,8 @@ page_guard_definition_test() ->
     ?assert(m_analytics:is_page_guard(Guard)),
     ?assertNot(m_analytics:is_page_guard(Guard#{groups=>2})),
     ?assertNot(m_analytics:is_page_guard(Guard#{filters=>#{}})).
+
+chart_interval_test() ->
+    ?assertEqual([60,120,900,2700,10800,172800,691200],
+        [z_analytics_chart:interval(R,N) || {R,N} <-
+            [{60,60},{60,360},{900,96},{900,672},{3600,720},{86400,365},{86400,1826}]]).

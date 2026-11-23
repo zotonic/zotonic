@@ -15,7 +15,7 @@
 {% block widget_show_minimized %}false{% endblock %}
 
 {% block widget_content %}
-{% with m.predicate[id] as p %}
+{% with m.predicate.subject_category[id], m.predicate.object_category[id] as subject_categories, object_categories %}
 <fieldset>
     <p>
         {_ This predicate can be used between two pages of the following categories. _}
@@ -32,7 +32,7 @@
                     <div class="checkbox">
                         <label>
                             {{ c.indent }}<input type="checkbox" id="{{ #subject.cat_id }}" name="predicate_subject_list[]"
-                            {% if cat_id|member:p.subject %}checked="checked" {% endif %} value="{{ cat_id }}" />{{ cat_id.title }}
+                            {% if cat_id|member:subject_categories %}checked="checked" {% endif %} value="{{ cat_id }}" />{{ cat_id.title }}
                         </label>
                     </div>
                 {% endwith %}
@@ -47,7 +47,7 @@
                     <div class="checkbox">
                         <label>
                             {{ c.indent }}<input type="checkbox" id="{{ #object.cat_id }}" name="predicate_object_list[]"
-                            {% if cat_id|member:p.object %}checked="checked" {% endif %} value="{{ cat_id }}" />{{ cat_id.title }}<br/>
+                            {% if cat_id|member:object_categories %}checked="checked" {% endif %} value="{{ cat_id }}" />{{ cat_id.title }}<br/>
                         </label>
                     </div>
                 {% endwith %}
@@ -58,6 +58,16 @@
     <hr />
 
     <h4>{_ Options _}</h4>
+
+    <div class="form-group">
+        <label class="checkbox-inline">
+            <input type="checkbox" name="is_dependency_ignored" {% if id.is_dependency_ignored %}checked="checked"{% endif %} value="1">
+            {_ Ignore these connections when cleaning up dependent pages. _}
+        </label>
+        <div class="help-block">
+            {_ Connections using this predicate do not keep their target page alive. A dependent target page can be deleted when it has no other incoming connections. Protected pages are kept. _}
+        </div>
+    </div>
 
     <div class="form-group">
         <label class="checkbox-inline">

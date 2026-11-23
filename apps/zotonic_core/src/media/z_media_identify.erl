@@ -34,6 +34,7 @@
     extension/3,
     guess_mime/1,
     is_mime_vector/1,
+    is_mime_compressible/1,
     is_mime_compressed/1
 ]).
 
@@ -770,3 +771,35 @@ is_mime_compressed(<<"application/x-shockwave-flash">>)          -> true;
 is_mime_compressed(_)                                            -> false.
 
 
+%% @doc Allowlist for HTTP compression and cached gzip file variants.
+%% Accept a Content-Type header (including parameters), not a filename. Unknown,
+%% missing and malformed types are deliberately not compressed. This is not the
+%% inverse of is_mime_compressed/1: an unknown format may already be compressed.
+-spec is_mime_compressible(ContentType) -> boolean() when
+    ContentType :: iodata() | undefined.
+is_mime_compressible(undefined) ->
+    false;
+is_mime_compressible(ContentType) ->
+    try cow_http_hd:parse_content_type(iolist_to_binary(ContentType)) of
+        {Type, Subtype, _Parameters} -> is_compressible_type(Type, Subtype)
+    catch
+        error:_ -> false
+    end.
+
+is_compressible_type(<<"text">>, _) -> true;
+is_compressible_type(<<"application">>, <<"javascript">>) -> true;
+is_compressible_type(<<"application">>, <<"x-javascript">>) -> true;
+is_compressible_type(<<"application">>, <<"ecmascript">>) -> true;
+is_compressible_type(<<"application">>, <<"json">>) -> true;
+is_compressible_type(<<"application">>, <<"xml">>) -> true;
+is_compressible_type(<<"application">>, <<"x-www-form-urlencoded">>) -> true;
+is_compressible_type(<<"application">>, <<"wasm">>) -> true;
+is_compressible_type(<<"application">>, <<"x-bert">>) -> true;
+is_compressible_type(<<"font">>, <<"ttf">>) -> true;
+is_compressible_type(<<"font">>, <<"otf">>) -> true;
+is_compressible_type(_Type, Subtype) ->
+    % Includes SVG, feeds, manifests and vendor-specific JSON/XML formats.
+    case binary:split(Subtype, <<"+">>, [global]) of
+        [_] -> false;
+        Parts -> lists:member(lists:last(Parts), [<<"json">>, <<"xml">>])
+    end.

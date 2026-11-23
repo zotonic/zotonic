@@ -215,8 +215,7 @@ entries(Prefix, Names) -> [#{path => Prefix ++ [Name]} || Name <- Names].
 
 %% @doc Suggest the site's predicate names without evaluating resource arguments or fetching edges.
 predicate_entries(Path, Context) ->
-    Names = [atom_to_binary(Name, utf8) || {Name, _} <- m_predicate:all(Context),
-        is_atom(Name), Name =/= undefined],
+    Names = lists:sort(maps:keys(m_predicate:all(Context))),
     entries(Path, Names).
 
 predicate_position([]) -> true;

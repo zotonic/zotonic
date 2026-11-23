@@ -87,5 +87,10 @@ stop_readers(Path, Context) ->
     Root = z_convert:to_binary(z_path:media_preview(Context)),
     Size = byte_size(Root),
     <<Root:Size/binary, "/", Relative/binary>> = z_convert:to_binary(Path),
-    lists:foreach(fun(Pid) -> catch z_file_entry:stop(Pid) end,
+    lists:foreach(fun(Pid) ->
+        try z_file_entry:stop(Pid)
+        catch
+            _:_ -> ok
+        end
+    end,
         m_cafs:readers(<<"preview/", Relative/binary>>, Context)).

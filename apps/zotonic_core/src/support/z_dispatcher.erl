@@ -29,6 +29,7 @@
 %% z_dispatch exports
 -export([
     dispatcher_args/0,
+    request_type/2,
     url_for/2,
     url_for/3,
     url_for/4,
@@ -64,6 +65,26 @@
 %%====================================================================
 %% API
 %%====================================================================
+
+%% @doc Normalize the analytics dispatch option into a shared request classification.
+%% Standard controller defaults preserve existing sites. Explicit options take
+%% precedence, including false to disable classification (not request admission).
+-spec request_type(Type, Controller) -> RequestType when
+    Type :: term(), Controller :: atom(), RequestType :: binary() | undefined.
+request_type(false, _) -> undefined;
+request_type(undefined, controller_template) -> <<"page">>;
+request_type(undefined, controller_page) -> <<"page">>;
+request_type(undefined, controller_api) -> <<"api">>;
+request_type(undefined, _) -> undefined;
+request_type(Type, _) when Type =:= page; Type =:= api; Type =:= download; Type =:= asset ->
+    atom_to_binary(Type,utf8);
+request_type(Type, _) when is_atom(Type) -> request_type(atom_to_binary(Type,utf8), undefined);
+request_type(Type, _) when is_binary(Type), byte_size(Type) > 0, byte_size(Type) =< 64 ->
+    case re:run(Type, <<"^[a-z][a-z0-9_]*$">>, [{capture,none}]) of
+        match -> Type;
+        nomatch -> undefined
+    end;
+request_type(_, _) -> undefined.
 
 %% @doc A list of dispatch rule arguments that shouldn't be considered with redirects.
 %%      Used by controller_file_id and controller_redirect

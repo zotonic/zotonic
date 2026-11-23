@@ -873,7 +873,7 @@ convert_type_1(ListType, V, Context) when (ListType =:= list orelse ListType =:=
 
 %% list and ids types, filter undefined values
 convert_type_1(list, L, _Context) when is_list(L) ->
-    Values = [B || V <- L, (B = z_string:trim(z_convert:to_binary(V))) =/= <<>>],
+    Values = [B || V <- L, B <- [z_string:trim(z_convert:to_binary(V))], B =/= <<>>],
     empty_to_undefined(lists:uniq(Values));
 convert_type_1(ids, L, Context) when is_list(L) ->
     L1 = [convert_type_1(id, V, Context) || V <- L],

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-19 15:33\n"
+"PO-Revision-Date: 2026-11-20 22:19\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -554,7 +554,7 @@ msgstr "ראה מחברי משאבים כבעלים."
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4
 #: zotonic_mod_admin/src/mod_admin.erl:516
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:70
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 msgid "Content"
 msgstr "תוֹכֶן"
@@ -2921,6 +2921,8 @@ msgid "Open Modules list"
 msgstr "פתח את רשימת המודולים"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:37
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:39
 msgid "Open in new tab"
 msgstr "פתח בכרטיסייה חדשה"
 
@@ -6716,7 +6718,7 @@ msgstr "מדי הפעילות אינם זמינים עד לחידוש פעילו
 msgid "Add analytics measurement"
 msgstr "הוספת מדידה אנליטית"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:44
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:58
 msgid "All breakdown values"
 msgstr "כל ערכי הפירוט"
 
@@ -6771,7 +6773,7 @@ msgstr "מדדי ניתוח נתונים"
 msgid "Analytics status"
 msgstr "סטטוס הניתוחים"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:35
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:49
 msgid "Bars show the lower bound. Counts are ranges, ordered by their lower bound. Overlapping ranges may change order. Content outside the retained candidates has at most"
 msgstr "המוטות מציגים את הגבול התחתון. הספירות הן טווחים, המסודרים לפי הגבול התחתון שלהם. טווחים החופפים זה לזה עשויים לשנות את הסדר. התוכן שמחוץ לרשימת המועמדים שנשמרו כולל לכל היותר"
 
@@ -6784,7 +6786,7 @@ msgstr "היסטוריה מוגבלת"
 msgid "Break down by"
 msgstr "פירוט לפי"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:45
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:59
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "Breakdown"
 msgstr "פירוט"
@@ -6891,6 +6893,30 @@ msgstr "כל קבוצה שומרת לעצמה 3,578 משבצות זמן. בפי�
 msgid "Each stored time interval holds the counts for all groups in one analytics measurement. Storage slots for older intervals are reused, so history stays bounded instead of growing with every visit. Only aggregate counts are stored, not individual events."
 msgstr "כל פרק זמן שנשמר מכיל את נתוני הספירה של כל הקבוצות במדד ניתוח נתונים אחד. משבצות האחסון של פרקי הזמן הישנים יותר משמשות שוב, כך שההיסטוריה נשארת מוגבלת במקום להתרחב עם כל ביקור. נשמרים רק נתוני הספירה המצטברים, ולא אירועים בודדים."
 
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:40
+msgid "Email events per day"
+msgstr "אירועי דוא\"ל ביום"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:34
+msgid "Email events per hour"
+msgstr "אירועי דוא\"ל בשעה"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:28
+msgid "Email events per minute"
+msgstr "אירועי דוא\"ל בדקה"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:42
+msgid "Email events per {n} days"
+msgstr "אירועי דוא\"ל בכל {n} ימים"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:36
+msgid "Email events per {n} hours"
+msgstr "אירועי דוא\"ל בכל {n} שעות"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:30
+msgid "Email events per {n} minutes"
+msgstr "אירועי דוא\"ל בכל {n} דקות"
+
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:9
 msgid "Email outcome — sent, retry, failed or bounced"
 msgstr "תוצאת הדוא\"ל — נשלח, ניסיון חוזר, נכשל או הוחזר"
@@ -6912,7 +6938,7 @@ msgstr "מאגר אירועים"
 msgid "Event processing"
 msgstr "עיבוד אירועים"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:45
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:59
 msgid "Events"
 msgstr "אירועים"
 
@@ -6923,6 +6949,30 @@ msgstr "האירועים מאוגדים למונים בזיכרון לפני ה�
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:23
 msgid "Events must satisfy both filters to be counted. New analytics measurements start without historical data."
 msgstr "על האירועים לעמוד בשני התנאים כדי שייכללו בספירה. מדדי ניתוח חדשים מתחילים ללא נתונים היסטוריים."
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:60
+msgid "Events per day"
+msgstr "אירועים ביום"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:54
+msgid "Events per hour"
+msgstr "אירועים לשעה"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:48
+msgid "Events per minute"
+msgstr "אירועים בדקה"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:62
+msgid "Events per {n} days"
+msgstr "אירועים בכל {n} ימים"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:56
+msgid "Events per {n} hours"
+msgstr "אירועים בכל {n} שעות"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:50
+msgid "Events per {n} minutes"
+msgstr "אירועים בכל {n} דקות"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_recording.tpl:18
 msgid "Fixed filter"
@@ -6942,7 +6992,7 @@ msgstr "פערים הם מרווחי זמן שלא תועדו. מרווחי זמ
 msgid "Group limit"
 msgstr "מגבלת קבוצה"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:23
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:24
 msgid "Guard lines count page attempts from other and unknown traffic. Throttled requests are not page views; do not add these lines to the total."
 msgstr "שורות ה-Guard סופרות ניסיונות גישה לדף שמקורן בתעבורה אחרת או בלתי ידועה. בקשות שעברו הגבלת קצב אינן נחשבות לצפיות בדף; אין להוסיף שורות אלה לסך הכל."
 
@@ -6962,7 +7012,7 @@ msgstr "קוד מצב HTTP — למשל, 200, 404 או 500"
 msgid "History detail and retention"
 msgstr "פרטי ההיסטוריה ושמירת הנתונים"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:50
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:64
 msgid "Includes incomplete or unrecorded intervals"
 msgstr "כולל מרווחים לא שלמים או שלא תועדו"
 
@@ -6990,7 +7040,7 @@ msgstr "שש השעות האחרונות"
 msgid "Maximum number of analytics measurements"
 msgstr "המספר המרבי של מדידות אנליטיות"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:28
 msgid "Most popular content in this period"
 msgstr "התכנים הפופולריים ביותר בתקופה זו"
 
@@ -7042,11 +7092,11 @@ msgstr "אין פירוט (סה\"כ)"
 msgid "No filter — include all values"
 msgstr "ללא סינון — לכלול את כל הערכים"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:33
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:47
 msgid "No leading content identified in this period."
 msgstr "לא זוהה תוכן מוביל בתקופה זו."
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:41
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:55
 msgid "No recorded events yet."
 msgstr "עדיין אין אירועים מתועדים."
 
@@ -7098,11 +7148,11 @@ msgstr "השהיה"
 msgid "Period"
 msgstr "תקופה"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
 msgid "Rank"
 msgstr "דירוג"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:28
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:29
 msgid "Ranked by recorded requests in the selected moving period. The window advances in steps of"
 msgstr "ממוין לפי מספר הבקשות שנרשמו בתקופת הזמן הנבחרת. החלון מתקדם במרווחים של"
 
@@ -7118,9 +7168,37 @@ msgstr "סוג הבקשה — דף, ממשק API או סוג שיגור מותא
 msgid "Request types found in this site's dispatch rules:"
 msgstr "סוגי בקשות המופיעים בכללי השיגור של אתר זה:"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:30
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
 msgid "Requests"
 msgstr "בקשות"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:4
+msgid "Requests per content item over the selected period"
+msgstr "מספר הבקשות לכל פריט תוכן בתקופה הנבחרת"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:20
+msgid "Requests per day"
+msgstr "בקשות ליום"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:14
+msgid "Requests per hour"
+msgstr "בקשות לשעה"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:8
+msgid "Requests per minute"
+msgstr "בקשות לדקה"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:22
+msgid "Requests per {n} days"
+msgstr "בקשות ל- {n} ימים"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:16
+msgid "Requests per {n} hours"
+msgstr "בקשות לכל {n} שעות"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_chart_unit.tpl:10
+msgid "Requests per {n} minutes"
+msgstr "בקשות בכל {n} דקות"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:22
 msgid "Reserved capacity"
@@ -7257,11 +7335,11 @@ msgstr "אירועים"
 msgid "group/time slots"
 msgstr "קבוצה/משבצות זמן"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:35
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:49
 msgid "requests."
 msgstr "בקשות."
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:28
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:29
 msgid "seconds."
 msgstr "שניות."
 
