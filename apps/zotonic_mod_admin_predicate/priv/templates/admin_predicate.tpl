@@ -40,7 +40,7 @@
             <td>
                 <div class="pull-right buttons">
                     {% if m.acl.is_allowed.delete[p.id] %}
-                        {% button class="btn btn-default btn-xs" disabled=p.is_protected text=_"delete" action={dialog_delete_rsc id=p.id} %}
+                        {% button class="btn btn-default btn-xs" disabled=p.id.is_protected text=_"delete" action={dialog_delete_rsc id=p.id} %}
                     {% endif %}
                     {% if m.acl.is_allowed.update[p.id] %}
                         <a href="{% url admin_edit_rsc id=p.id %}" class="btn btn-default btn-xs">{_ edit _}</a>

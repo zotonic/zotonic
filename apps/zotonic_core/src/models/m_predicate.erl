@@ -1,4 +1,4 @@
-%% @author Marc Worrell <marc@worrell.nl>
+%all(% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2026 Marc Worrell
 %% @doc Model for predicates
 %% @end
@@ -35,33 +35,26 @@ connections using this predicate do not keep their object resource alive during
 ordinary connection queries. `dependency_ignored/1` returns the cached list of
 predicate IDs with this property enabled.
 
-A full predicate definition can be fetched by name or id with:
+`all/1` and `m.predicate.all` return a map keyed by binary predicate name.
+Each value contains the binary keys `id`, `name`, `uri`, `title`, `summary` and `reversed`.
+`get/2`, `m.predicate.author` and `m.predicate[104]` return the same minimal
+map for a visible predicate, or `undefined`. Visibility is checked per caller,
+after reading the shared structural cache.
 
-
-```erlang
-{{ m.predicate.author }}
-{{ m.predicate[104] }}
-```
-
-Which both return a property list with information about the predicate. The property list contains all page properties
-and the properties: \"pred\" which is the atomic predicate name, \"subject\" which is a list of valid subject
-categories and \"object\" with is a list of valid object categories.
-
-The following m_predicate model properties are available in templates:
-
-| Property           | Description                                                                      | Example value                                                         |
-| ------------------ | -------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| all                | Return a property list of all predicates. Keys are the atomic predicate name, values are property lists with information about the predicate. The property list contains all page properties and the properties: \"pred\" which is the atomic predicate name, \"subject\" which is a list of valid subject categories and \"object\" with is a list of valid object categories. | `[{about, [{pred,about}, {subject,[104]}, {object,[]}, {id,300}, ...]}]` |
-| object_category  | Used to derive the list of valid object categories for a predicate. Example usage: `m.predicate.object_category.author` Note: Each id is a 1-tuple. | `[{104}, ...]`                                                         |
-| subject_category | Used to derive the list of valid subject categories for a predicate. Example usage: `m.predicate.subject_category.author` Note: Each id is a 1-tuple. | `[{674}, ...]`                                                         |
+The four display properties are read with property permissions for the current
+caller; denied or missing values are `undefined`. Read other resource properties
+via `m.rsc[p.id]`. Use `object_category` and `subject_category` for
+restriction lists (lists of integer category IDs). Model routes reject hidden
+predicates/categories. The `is_used` model route additionally requires edit
+permission because it inspects connections irrespective of their visibility.
 
 Available Model API Paths
 -------------------------
 
 | Method | Path pattern | Description |
 | --- | --- | --- |
-| `get` | `/` | Return full predicate definition list (same as `/all`), keyed by predicate name. No further lookups. |
-| `get` | `/all/...` | Return all predicate definitions with allowed subject/object categories and predicate metadata. |
+| `get` | `/` | Return minimal visible predicate maps (same as `/all`), keyed by binary name. |
+| `get` | `/all/...` | Return minimal visible predicate maps with binary `id`, `name`, `uri`, `title`, `summary` and `reversed` keys. |
 | `get` | `/is_used/+pred/...` | Return whether predicate `+pred` is referenced by at least one row in `edge`. |
 | `get` | `/object_resources/+key/...` | Return visible/published resources allowed as objects for predicate `+key`, bucketed by matching valid object category and title-sorted. |
 | `get` | `/object_category/+key/...` | Return list of valid object category ids for predicate `+key` (empty means unrestricted). |
@@ -71,7 +64,7 @@ Available Model API Paths
 | `get` | `/is_valid_object_category/+predicate/+category/...` | Return whether `+category` is directly valid object category for `+predicate` (`IsSubcats=false`). |
 | `get` | `/is_valid_subject_subcategory/+predicate/+category/...` | Return whether `+category` is valid subject category for `+predicate`, including subject ancestor/subcategory matching (`IsSubcats=true`). |
 | `get` | `/is_valid_subject_category/+predicate/+category/...` | Return whether `+category` is directly valid subject category for `+predicate` (`IsSubcats=false`). |
-| `get` | `/predicate/+key/...` | Return predicate definition for `+key` (id/name), including `pred`, `subject`, and `object` fields; `undefined` if unknown. |
+| `get` | `/predicate/+key/...` | Return predicate definition for `+key` (id/name), including identity and ACL-checked display fields; `undefined` if unknown. |
 | `get` | `/+key/...` | Alias for `/predicate/+key/...`; return predicate definition for `+key` or `undefined`. |
 
 `/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
@@ -108,60 +101,119 @@ Available Model API Paths
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
-m_get([], _Msg, Context) ->
+m_get([], Msg, Context) -> m_get_visible([], Msg, Context);
+m_get([<<"all">> | _] = Path, Msg, Context) -> m_get_visible(Path, Msg, Context);
+m_get(Path, Msg, Context) ->
+    case model_predicate(Path) of
+        undefined -> {error, unknown_path};
+        Pred ->
+            case visible_predicate(m_rsc:rid(Pred, Context), Context) of
+                true -> model_get(Path, Msg, Context);
+                false -> {error, eacces}
+            end
+    end.
+
+model_predicate([Route, Pred | _])
+    when
+        Route =:= <<"predicate">>;
+        Route =:= <<"is_used">>;
+        Route =:= <<"object_resources">>;
+        Route =:= <<"object_category">>;
+        Route =:= <<"subject_category">>;
+        Route =:= <<"is_valid_object_in_category">>;
+        Route =:= <<"is_valid_object_subcategory">>;
+        Route =:= <<"is_valid_object_category">>;
+        Route =:= <<"is_valid_subject_subcategory">>;
+        Route =:= <<"is_valid_subject_category">> -> Pred;
+model_predicate([Pred | _]) -> Pred;
+model_predicate(_) -> undefined.
+
+%% Usage counts reveal private connections; reserve this route for predicate editors.
+model_get([<<"is_used">>, Pred | _] = Path, Msg, Context) ->
+    case z_acl:rsc_editable(m_rsc:rid(Pred, Context), Context) of
+        true -> m_get_visible(Path, Msg, Context);
+        false -> {error, eacces}
+    end;
+model_get([Route, _Pred, Category | _] = Path, Msg, Context)
+    when
+        Route =:= <<"is_valid_object_in_category">>;
+        Route =:= <<"is_valid_object_subcategory">>;
+        Route =:= <<"is_valid_object_category">>;
+        Route =:= <<"is_valid_subject_subcategory">>;
+        Route =:= <<"is_valid_subject_category">> ->
+    CatId = m_rsc:rid(Category, Context),
+    case is_integer(CatId) andalso m_rsc:is_a(CatId, category, Context)
+        andalso z_acl:rsc_visible(CatId, Context) of
+        true -> m_get_visible(Path, Msg, Context);
+        false -> {error, eacces}
+    end;
+model_get(Path, Msg, Context) -> m_get_visible(Path, Msg, Context).
+
+%% Do not return a partial restriction list: [] means unrestricted.
+visible_categories(Ids, Rest, Context) ->
+    case lists:all(fun(Id) -> z_acl:rsc_visible(Id, Context) end, Ids) of
+        true -> {ok, {Ids, Rest}};
+        false -> {error, eacces}
+    end.
+
+m_get_visible([], _Msg, Context) ->
     {ok, {all(Context), []}};
-m_get([ <<"all">> | Rest ], _Msg, Context) ->
+m_get_visible([ <<"all">> | Rest ], _Msg, Context) ->
     {ok, {all(Context), Rest}};
-m_get([ <<"is_used">>, Pred | Rest ], _Msg, Context) ->
+m_get_visible([ <<"is_used">>, Pred | Rest ], _Msg, Context) ->
     {ok, {is_used(Pred, Context), Rest}};
-m_get([ <<"object_resources">>, Key | Rest ], _Msg, Context) ->
+m_get_visible([ <<"object_resources">>, Key | Rest ], _Msg, Context) ->
     case object_resources(Key, Context) of
         {ok, List} -> {ok, {List, Rest}};
         {error, _} = Error -> Error
     end;
-m_get([ <<"object_category">>, Key | Rest ], _Msg, Context) ->
-    {ok, {object_category(Key, Context), Rest}};
-m_get([ <<"subject_category">>, Key | Rest ], _Msg, Context) ->
-    {ok, {subject_category(Key, Context), Rest}};
-m_get([ <<"is_valid_object_in_category">>, Predicate, Category | Rest ], _Msg, Context) ->
+m_get_visible([ <<"object_category">>, Key | Rest ], _Msg, Context) ->
+    visible_categories(object_category(Key, Context), Rest, Context);
+m_get_visible([ <<"subject_category">>, Key | Rest ], _Msg, Context) ->
+    visible_categories(subject_category(Key, Context), Rest, Context);
+m_get_visible([ <<"is_valid_object_in_category">>, Predicate, Category | Rest ], _Msg, Context) ->
     IsValid = is_valid_object_in_category(Predicate, Category, Context),
     {ok, {IsValid, Rest}};
-m_get([ <<"is_valid_object_subcategory">>, Predicate, Category | Rest ], _Msg, Context) ->
+m_get_visible([ <<"is_valid_object_subcategory">>, Predicate, Category | Rest ], _Msg, Context) ->
     IsValid = is_valid_object_category(Predicate, Category, true, Context),
     {ok, {IsValid, Rest}};
-m_get([ <<"is_valid_object_category">>, Predicate, Category | Rest ], _Msg, Context) ->
+m_get_visible([ <<"is_valid_object_category">>, Predicate, Category | Rest ], _Msg, Context) ->
     IsValid = is_valid_object_category(Predicate, Category, false, Context),
     {ok, {IsValid, Rest}};
-m_get([ <<"is_valid_subject_subcategory">>, Predicate, Category | Rest ], _Msg, Context) ->
+m_get_visible([ <<"is_valid_subject_subcategory">>, Predicate, Category | Rest ], _Msg, Context) ->
     IsValid = is_valid_subject_category(Predicate, Category, true, Context),
     {ok, {IsValid, Rest}};
-m_get([ <<"is_valid_subject_category">>, Predicate, Category | Rest ], _Msg, Context) ->
+m_get_visible([ <<"is_valid_subject_category">>, Predicate, Category | Rest ], _Msg, Context) ->
     IsValid = is_valid_subject_category(Predicate, Category, false, Context),
     {ok, {IsValid, Rest}};
-m_get([ <<"predicate">>, Key | Rest ], _Msg, Context) ->
+m_get_visible([ <<"predicate">>, Key | Rest ], _Msg, Context) ->
     {ok, {get(Key, Context), Rest}};
-m_get([ Key | Rest ], _Msg, Context) ->
+m_get_visible([ Key | Rest ], _Msg, Context) ->
     {ok, {get(Key, Context), Rest}};
-m_get(_Vs, _Msg, _Context) ->
+m_get_visible(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 
 %% @doc Fetch a list of all resources matching valid as an object for the given predicates.
 %% The list is bucket-sorted by valid category. All buckets are sorted by title.
--spec object_resources(Predicate, Context) -> {ok, Result} | {error, unknown_predicate} when
+-spec object_resources(Predicate, Context) -> {ok, Result} | {error, unknown_predicate | eacces} when
     Predicate :: m_rsc:resource(),
     Context :: z:context(),
-    Result :: [ #{ category := atom(), resources := list( m_rsc:resource_id() ) } ].
+    Result :: [ #{ binary() => term() } ].
 object_resources(Predicate, Context) ->
-    case is_predicate(Predicate, Context) of
+    case visible_predicate(m_rsc:rid(Predicate, Context), Context) of
         true ->
-            object_resources_1(object_category(Predicate, Context), Context);
+            Cats = object_category(Predicate, Context),
+            case visible_categories(Cats, [], Context) of
+                {ok, _} -> object_resources_1(Cats, Context);
+                {error, _} = Error -> Error
+            end;
         false ->
             {error, unknown_predicate}
     end.
 
 object_resources_1([], _Context) ->
-    {ok, #{}};
+    {ok, []};
 object_resources_1(ValidCats, Context) ->
     Query = #{
         cat => ValidCats,
@@ -176,7 +228,7 @@ object_resources_1(ValidCats, Context) ->
             CatId = proplists:get_value(id, Cat),
             case lists:member(CatId, ValidCats) of
                 true ->
-                    Name = z_convert:to_atom( m_rsc:p(CatId, <<"name">>, Context) ),
+                    Name = m_rsc:p(CatId, <<"name">>, Context),
                     {true, Name};
                 false ->
                     false
@@ -186,7 +238,7 @@ object_resources_1(ValidCats, Context) ->
     ObjCatsRev = lists:reverse(ObjCats),
     Buckets = lists:foldl(
         fun(Id, Acc) ->
-            IsA = lists:reverse(m_rsc:is_a(Id, Context)),
+            IsA = [atom_to_binary(Cat, utf8) || Cat <- lists:reverse(m_rsc:is_a(Id, Context))],
             case first_match(IsA, ObjCatsRev) of
                 undefined ->
                     Acc;
@@ -206,8 +258,8 @@ object_resources_1(ValidCats, Context) ->
                 OIds ->
                     OIds1 = filter_sort:sort(OIds, <<"title">>, Context),
                     {true, #{
-                        category => CatId,
-                        resources => OIds1
+                        <<"category">> => CatId,
+                        <<"resources">> => OIds1
                     }}
             end
         end,
@@ -348,42 +400,18 @@ name_to_id(Name, Context) ->
         _ -> {error, {unknown_predicate, Name}}
     end.
 
-%% @doc Return the definition of the predicate.
--spec get(Predicate, Context) -> proplists:proplist() | undefined when
+%% @doc Minimal visible definition with explicitly allowed, ACL-checked properties.
+-spec get(Predicate, Context) -> map() | undefined when
     Predicate :: atom() | m_rsc:resource_id() | string() | binary(),
     Context :: z:context().
-get(PredId, Context) when is_integer(PredId) ->
-    case id_to_name(PredId, Context) of
-        {error, _} -> undefined;
-        {ok, Name} -> get(Name, Context)
-    end;
-get(Pred, Context) when is_list(Pred) orelse is_binary(Pred) ->
-    Pred1 = z_string:to_lower(Pred),
-    try
-        PredAsAtom = erlang:binary_to_existing_atom(Pred1, utf8),
-        get(PredAsAtom, Context)
-    catch
-        error:badarg ->
-            % The predicate list might not have been read yet - then not all atoms are known.
-            % Reaad all predicates and try again.
-            % TODO: replace all keys with binaries (and a map)
-            All = all(Context),
-            try
-                PredAsAtom1 = erlang:binary_to_existing_atom(Pred1, utf8),
-                proplists:get_value(PredAsAtom1, All)
-            catch
-                error:badarg ->
-                    undefined
-            end
-    end;
-get(Pred, Context) ->
-    case z_depcache:get(predicate, Pred, Context) of
-        {ok, undefined} ->
-            undefined;
-        {ok, Value} ->
-            Value;
-        undefined ->
-            proplists:get_value(Pred, all(Context))
+get(Predicate, Context) ->
+    Id = case Predicate of
+        P when is_binary(P); is_list(P) -> m_rsc:rid(z_string:to_lower(P), Context);
+        P -> m_rsc:rid(P, Context)
+    end,
+    case visible_predicate(Id, Context) of
+        true -> definition(maps:get(Id, catalogue(Context), undefined), Context);
+        false -> undefined
     end.
 
 %% @doc Return the category ids that are valid as objects of the predicate.
@@ -414,40 +442,53 @@ subjects(PredicateId, Context) ->
         [PredicateId], Context),
     [R || {R} <- Subjects].
 
-%% @doc Return the list of all predicates
--spec all(z:context()) -> proplists:proplist().
+%% @doc Visible predicate definitions keyed by binary name.
+-spec all(Context) -> map() when Context :: z:context().
 all(Context) ->
+    maps:from_list([
+        {Name, definition(P, Context)}
+        || {Id, #{<<"name">> := Name} = P} <- maps:to_list(catalogue(Context)),
+           is_binary(Name), z_acl:rsc_visible(Id, Context)
+    ]).
+
+%% Display values are evaluated outside the shared cache: property visibility and
+%% resource observers can depend on the caller's context.
+definition(undefined, _Context) -> undefined;
+definition(#{<<"id">> := Id} = Identity, Context) ->
+    maps:merge(
+        Identity,
+        maps:from_list([
+            {Key, m_rsc:p(Id, Key, Context)}
+            || Key <- [<<"uri">>, <<"title">>, <<"summary">>, <<"reversed">>, <<"is_published">>]
+        ])
+    ).
+
+%% Shared site cache contains structural identity only, never user ACL decisions.
+catalogue(Context) ->
     F = fun() ->
         {L, R} = cat_bounds(Context),
-        Preds = z_db:assoc_props("
-                                select *
-                                from rsc r
-                                    join hierarchy c
-                                    on r.category_id = c.id and c.name = '$category'
-                                where $1 <= c.nr
-                                  and c.nr <= $2
-                                order by r.name", [L, R], Context),
-        FSetPred = fun(Pred) ->
-            Id = proplists:get_value(id, Pred),
-            Atom = case proplists:get_value(name, Pred) of
-                       undefined -> undefined;
-                       B -> list_to_atom(binary_to_list(B))
-                   end,
-            {Atom, [{pred, Atom}, {subject, subjects(Id, Context)}, {object, objects(Id, Context)} | Pred]}
-                   end,
-        [FSetPred(Pred) || Pred <- Preds]
+        Rows = z_db:q("
+            select r.id, r.name
+            from rsc r
+            join hierarchy c
+                on r.category_id = c.id
+                and c.name = '$category'
+            where $1 <= c.nr
+              and c.nr <= $2
+            order by r.name", [L, R], Context),
+        maps:from_list([{Id, #{<<"id">> => Id, <<"name">> => Name}} || {Id, Name} <- Rows])
     end,
-    z_depcache:memo(F, predicate, ?DAY, Context).
+    z_depcache:memo(F, predicate_catalogue, ?DAY, [predicate, category], Context).
 
-%% @doc Predicates whose incoming edges do not retain dependent resources.
-%% Missing properties default to false. Cache policy, never resource connectivity.
--spec dependency_ignored(Context) -> [m_rsc:resource_id()] when
-    Context :: z:context().
+visible_predicate(Id, Context) ->
+    is_integer(Id) andalso is_predicate(Id, Context) andalso z_acl:rsc_visible(Id, Context).
+
+%% @doc Internal policy lookup, intentionally independent of public visibility.
+-spec dependency_ignored(Context) -> [m_rsc:resource_id()] when Context :: z:context().
 dependency_ignored(Context) ->
     F = fun() ->
-        [ proplists:get_value(id, Props)
-          || {_Name, Props} <- all(Context),
-             z_convert:to_bool(proplists:get_value(is_dependency_ignored, Props, false)) ]
+        [Id || Id <- maps:keys(catalogue(Context)),
+            z_convert:to_bool(m_rsc:p_no_acl(Id, <<"is_dependency_ignored">>, Context))]
     end,
     z_depcache:memo(F, predicate_dependency_ignored, ?DAY, [predicate, category], Context).
 

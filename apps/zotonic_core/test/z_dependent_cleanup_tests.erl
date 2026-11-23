@@ -76,10 +76,13 @@ unknown_resource() ->
 
 predicate_defaults_and_cache() ->
     meck:delete(m_predicate, dependency_ignored, 1),
-    meck:expect(z_depcache, memo, fun(_F, predicate, _Age, _Context) ->
-        [{a, [{id, 20}, {is_dependency_ignored, true}]},
-         {b, [{id, 21}, {is_dependency_ignored, false}]},
-         {c, [{id, 22}]}]
+    meck:expect(z_depcache, memo, fun
+        (_F, predicate_catalogue, _, [predicate, category], _) ->
+            #{20 => #{<<"id">> => 20}, 21 => #{<<"id">> => 21}};
+        (F, predicate_dependency_ignored, _, [predicate, category], _) -> F()
     end),
-    meck:expect(z_depcache, memo, fun(F, predicate_dependency_ignored, _, [predicate, category], _) -> F() end),
+    meck:expect(m_rsc, p_no_acl, fun
+        (20, <<"is_dependency_ignored">>, _) -> true;
+        (_, <<"is_dependency_ignored">>, _) -> undefined
+    end),
     ?assertEqual([20], m_predicate:dependency_ignored(#context{})).

@@ -14,7 +14,7 @@
 				{% for name,ps in m.predicate.all %}
 					{% if ps.id /= id %}
 						<option value="{{ ps.id }}">
-							{{ ps.id.title }}
+							{{ ps.title }}
 						</option>
 					{% endif %}
 				{% endfor %}
