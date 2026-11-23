@@ -1,5 +1,6 @@
 -module(m_predicate_tests).
 -include_lib("eunit/include/eunit.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 predicate_test_() ->
     z_test_support:isolated({foreach, fun setup/0, fun cleanup/1, [
@@ -28,9 +29,10 @@ setup() ->
     meck:expect(m_rsc, p, fun
         (_, <<"uri">>, _) -> <<"https://example.test/predicate">>;
         (_, <<"title">>, _) -> <<"Public title">>;
-        (_, <<"summary">>, admin) -> <<"Restricted summary">>;
+        (_, <<"summary">>, #context{user_id = 1}) -> <<"Restricted summary">>;
         (_, <<"summary">>, _) -> undefined;
-        (_, <<"reversed">>, _) -> true
+        (_, <<"reversed">>, _) -> true;
+        (_, <<"is_published">>, _) -> true
     end),
     meck:expect(m_rsc, name_to_id, fun(10, _) -> {ok, 10} end),
     meck:expect(m_rsc, p_no_acl, fun
@@ -38,10 +40,10 @@ setup() ->
         (_, <<"is_dependency_ignored">>, _) -> undefined
     end),
     meck:expect(z_acl, rsc_visible, fun
-        (_, admin) -> true;
+        (_, #context{user_id = 1}) -> true;
         (I, _) -> lists:member(I, [10,30])
     end),
-    meck:expect(z_acl, rsc_editable, fun(_, C) -> C =:= admin end),
+    meck:expect(z_acl, rsc_editable, fun(_, C) -> C#context.user_id =:= 1 end),
     %% Shared cache deliberately returns the same catalogue for every caller.
     meck:expect(z_depcache, memo, fun(F, _, _, _, _) -> F() end),
     meck:expect(z_db, q, fun(Sql, [1,2], _) ->
@@ -56,49 +58,53 @@ cleanup(Mods) -> [meck:unload(M) || M <- Mods].
 minimal_maps() ->
     Expected = #{<<"id">> => 10, <<"name">> => <<"public">>,
         <<"uri">> => <<"https://example.test/predicate">>, <<"title">> => <<"Public title">>,
-        <<"summary">> => undefined, <<"reversed">> => true},
-    ?assertEqual(#{<<"public">> => Expected}, m_predicate:all(anonymous)),
-    ?assertEqual(Expected, m_predicate:get(public, anonymous)),
-    ?assertEqual(m_predicate:get(public, anonymous), m_predicate:get(10, anonymous)).
+        <<"summary">> => undefined, <<"reversed">> => true, <<"is_published">> => true},
+    ?assertEqual(#{<<"public">> => Expected}, m_predicate:all(anonymous_context())),
+    ?assertEqual(Expected, m_predicate:get(public, anonymous_context())),
+    ?assertEqual(m_predicate:get(public, anonymous_context()), m_predicate:get(10, anonymous_context())).
 
 caller_visibility() ->
-    ?assertEqual(2, map_size(m_predicate:all(admin))),
-    ?assertEqual(1, map_size(m_predicate:all(anonymous))),
-    ?assertEqual(undefined, m_predicate:get(20, anonymous)),
-    ?assertMatch(#{<<"id">> := 20}, m_predicate:get(20, admin)).
+    ?assertEqual(2, map_size(m_predicate:all(admin_context()))),
+    ?assertEqual(1, map_size(m_predicate:all(anonymous_context()))),
+    ?assertEqual(undefined, m_predicate:get(20, anonymous_context())),
+    ?assertMatch(#{<<"id">> := 20}, m_predicate:get(20, admin_context())).
 
 guarded_routes() ->
     Routes = [<<"predicate">>, <<"is_used">>, <<"object_resources">>,
         <<"object_category">>, <<"subject_category">>, <<"is_valid_object_in_category">>,
         <<"is_valid_object_category">>, <<"is_valid_object_subcategory">>,
         <<"is_valid_subject_category">>, <<"is_valid_subject_subcategory">>],
-    [?assertEqual({error,eacces},m_predicate:m_get([R,<<"private">>,30],undefined,anonymous)) || R <- Routes],
-    ?assertEqual({error,eacces},m_predicate:m_get([<<"private">>],undefined,anonymous)),
+    [?assertEqual({error,eacces},m_predicate:m_get([R,<<"private">>,30],undefined,anonymous_context())) || R <- Routes],
+    ?assertEqual({error,eacces},m_predicate:m_get([<<"private">>],undefined,anonymous_context())),
     ?assertEqual(0,meck:num_calls(z_db,q,'_')).
 
 usage_requires_edit() ->
-    ?assertEqual({error,eacces},m_predicate:m_get([<<"is_used">>,<<"public">>],undefined,anonymous)),
-    meck:expect(z_db,q1,fun(_, [10], admin) -> 123 end),
-    ?assertEqual({ok,{true,[]}},m_predicate:m_get([<<"is_used">>,<<"public">>],undefined,admin)).
+    ?assertEqual({error,eacces},m_predicate:m_get([<<"is_used">>,<<"public">>],undefined,anonymous_context())),
+    meck:expect(z_db,q1,fun(_, [10], #context{user_id = 1}) -> 123 end),
+    ?assertEqual({ok,{true,[]}},m_predicate:m_get([<<"is_used">>,<<"public">>],undefined,admin_context())).
 
 hidden_categories() ->
     meck:expect(z_db,q,fun(_, [10], _) -> [{30},{40}] end),
-    ?assertEqual({error,eacces},m_predicate:m_get([<<"object_category">>,10],undefined,anonymous)),
-    ?assertEqual({ok,{[30,40],[]}},m_predicate:m_get([<<"object_category">>,10],undefined,admin)).
+    ?assertEqual({error,eacces},m_predicate:m_get([<<"object_category">>,10],undefined,anonymous_context())),
+    ?assertEqual({ok,{[30,40],[]}},m_predicate:m_get([<<"object_category">>,10],undefined,admin_context())).
 
 category_validation() ->
-    ?assertEqual({error,eacces},m_predicate:m_get([<<"is_valid_object_category">>,10,40],undefined,anonymous)),
-    ?assertEqual({error,eacces},m_predicate:m_get([<<"is_valid_object_category">>,10,999],undefined,admin)).
+    ?assertEqual({error,eacces},m_predicate:m_get([<<"is_valid_object_category">>,10,40],undefined,anonymous_context())),
+    ?assertEqual({error,eacces},m_predicate:m_get([<<"is_valid_object_category">>,10,999],undefined,admin_context())).
 
 internal_dependency_policy() ->
-    ?assertEqual([20],m_predicate:dependency_ignored(anonymous)).
+    ?assertEqual([20],m_predicate:dependency_ignored(anonymous_context())).
 
 unknown_name() ->
-    ?assertEqual(undefined,m_predicate:get(<<"nonexistent_predicate_without_an_atom">>,anonymous)).
+    ?assertEqual(undefined,m_predicate:get(<<"nonexistent_predicate_without_an_atom">>,anonymous_context())).
 
 property_visibility() ->
-    Admin = maps:get(<<"public">>, m_predicate:all(admin)),
+    Admin = maps:get(<<"public">>, m_predicate:all(admin_context())),
     ?assertEqual(<<"Restricted summary">>, maps:get(<<"summary">>, Admin)),
-    Public = maps:get(<<"public">>, m_predicate:all(anonymous)),
+    Public = maps:get(<<"public">>, m_predicate:all(anonymous_context())),
     ?assertEqual(undefined, maps:get(<<"summary">>, Public)),
-    ?assertEqual(Public, m_predicate:get(public, anonymous)).
+    ?assertEqual(Public, m_predicate:get(public, anonymous_context())).
+
+%% Use real context records so mocked calls also satisfy the production contracts.
+anonymous_context() -> #context{}.
+admin_context() -> #context{user_id = 1}.
