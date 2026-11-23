@@ -329,8 +329,8 @@ event(#postback_notify{message="do_oembed"}, Context) ->
     case z_string:trim(z_context:get_q("url", Context)) of
         "" ->
             z_context:add_script_page([
-                    "$('#oembed-title').val('""').attr('disabled',true);",
-                    "$('#oembed-summary').val('""').attr('disabled',true);",
+                    "$('#oembed-title').val('').attr('disabled',true);",
+                    "$('#oembed-summary').val('').attr('disabled',true);",
                     "$('#oembed-save').attr('disabled',true);",
                     "$('#oembed-image').closest('.control-group').hide();"
                     ], Context),
@@ -339,8 +339,8 @@ event(#postback_notify{message="do_oembed"}, Context) ->
             case oembed_request(Url, Context) of
                 {error, _} ->
                     z_context:add_script_page([
-                            "$('#oembed-title').val('""').attr('disabled',true);",
-                            "$('#oembed-summary').val('""').attr('disabled',true);",
+                            "$('#oembed-title').val('').attr('disabled',true);",
+                            "$('#oembed-summary').val('').attr('disabled',true);",
                             "$('#oembed-save').attr('disabled', true);",
                             "$('#oembed-image').closest('.control-group').hide();"
                             ], Context),

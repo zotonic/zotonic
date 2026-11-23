@@ -1,6 +1,10 @@
 %% -*- mode: erlang -*-
 [
 
+ {kernel, [
+    {inet_dist_use_interface, {127, 0, 0, 1}}
+ ]},
+
  {exometer_core, [{predefined, [
     {[erlang, memory], {function, erlang, memory, [], value, []}, []},
     {[erlang, system_info], {function, erlang, system_info, ['$dp'], value, [process_count]}, []},
@@ -29,7 +33,8 @@
  ]},
 
  {lager,
-  [{handlers,
+  [{log_root, "priv/log"},
+   {handlers,
     [
       {lager_console_backend,
         [{level, info},
@@ -41,7 +46,7 @@
             message, "\n"]}]},
 
       {lager_file_backend,
-        [{file, "priv/log/error.log"},
+        [{file, "error.log"},
          {level, error},
          {formatter_config,
            [date, " ", time, " [", severity, "] ",
@@ -53,7 +58,7 @@
             " ", message, "\n"]}]},
 
       {lager_file_backend,
-        [{file, "priv/log/console.log"},
+        [{file, "console.log"},
          {level, info},
          {formatter_config,
            [date, " ", time, " [", severity, "] ",
@@ -64,7 +69,7 @@
                       {line, [":", line], ""}], ""},
             " ", message, "\n"]}]}
     ]},
-   {crash_log, "priv/log/crash.log"}
+   {crash_log, "crash.log"}
   ]},
 
 

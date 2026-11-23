@@ -1,0 +1,30 @@
+[Unit]
+Description=Zotonic Web Framework
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+Type=forking
+User=@USER@
+Group=@GROUP@
+WorkingDirectory=@ZOTONIC_DIR@
+
+ExecStart=@ZOTONIC_DIR@/bin/zotonic-service.sh start
+ExecStop=@ZOTONIC_DIR@/bin/zotonic-service.sh stop
+
+# Allow Zotonic enough time to boot / stop cleanly
+TimeoutStartSec=120
+TimeoutStopSec=120
+
+# Ensure heart and child processes are managed correctly
+KillMode=process
+SendSIGKILL=no
+
+# Disable systemd automatic restarts so Erlang's heart supervisor handles crashes
+Restart=no
+
+# Resource limits recommended for Erlang / web workloads
+LimitNOFILE=200000
+
+[Install]
+WantedBy=multi-user.target

@@ -135,7 +135,7 @@ handle_call(unique, _From, #state{} = State) ->
     {reply, Id, State};
 
 handle_call({number, Max}, _From, #state{} = State) ->
-    Number = crypto:rand_uniform(1, Max+1),
+    Number = rand:uniform(Max),
     {reply, Number, State};
 
 handle_call({identifier, Len}, _From, #state{} = State) ->
@@ -198,7 +198,7 @@ random_list(true, Radix, Length) ->
 not_so_random_list(_Radix, 0, Acc) ->
     Acc;
 not_so_random_list(Radix, N, Acc) ->
-    not_so_random_list(Radix, N-1, [ crypto:rand_uniform(0, Radix) | Acc ]).
+    not_so_random_list(Radix, N-1, [ rand:uniform(Radix)-1 | Acc ]).
 
 int2list(_, _, 0, Acc) ->
     Acc;
@@ -213,14 +213,9 @@ radix_bits(N) when N =< 26 -> 5;
 radix_bits(N) when N =< 64 -> 6.
 
 
-%% @doc Return N random bytes. This falls back to the pseudo random version of rand_uniform
-%% if strong_rand_bytes fails.
+%% @doc Return N cryptographically strong random bytes.
+%% Fails with error:low_entropy if the system CSPRNG is unavailable —
+%% which is the correct behavior: callers must not silently get weak bytes.
 -spec rand_bytes(integer()) -> binary().
 rand_bytes(N) when N > 0 ->
-    try
-        crypto:strong_rand_bytes(N)
-    catch
-        error:low_entropy ->
-            lager:info("Crypto is low on entropy"),
-            list_to_binary([ crypto:rand_uniform(0,256) || _X <- lists:seq(1, N) ])
-    end.
+    crypto:strong_rand_bytes(N).

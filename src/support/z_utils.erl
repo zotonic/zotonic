@@ -605,11 +605,7 @@ set_nth(N, V, L) when N >= 1 ->
 
 %% @doc Simple randomize of a list. Not good quality, but good enough for us
 randomize(List) ->
-   D = lists:map(fun(A) ->
-                          {crypto:rand_uniform(0,10000000), A}
-                  end, List),
-    {_, D1} = lists:unzip(lists:keysort(1, D)),
-    D1.
+    rand:shuffle(List).
 
 randomize(N, List) ->
     split(N, randomize(List)).

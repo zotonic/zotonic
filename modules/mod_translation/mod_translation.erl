@@ -290,7 +290,7 @@ event(#postback{message={language_default, Args}}, Context) ->
 
 %% @doc Start rescanning all templates for translation tags.
 event(#postback{message=translation_generate}, Context) ->
-    case z_acl:is_allowed(use, ?MODULE, Context) 
+    case z_acl:is_allowed(use, ?MODULE, Context)
         andalso (      z_acl:is_admin(Context)
                 orelse z_acl:is_allowed(use, mod_development, Context))
     of
@@ -614,7 +614,7 @@ do_choose(Choices, Header) ->
     StarPrio = [P || {P,C} <- Accepted, C =:= "*"],
     AnyOkay = case StarPrio of
                   [] -> no;
-                  [0.0] -> no;
+                  [Float] when is_float(Float) andalso Float == 0.0 -> no;
                   _ -> yes
               end,
     do_choose(AnyOkay, Choices, Accepted).
@@ -629,7 +629,7 @@ do_choose(no, _Choices, []) ->
 do_choose(AnyOkay, Choices, [AccPair|AccRest]) ->
     {Prio, Acc} = AccPair,
     case Prio of
-        0.0 ->
+        Float when is_float(Float) andalso Float == 0.0 ->
             do_choose(AnyOkay, lists:delete(Acc, Choices), AccRest);
         _ ->
             LAcc = string:to_lower(Acc),

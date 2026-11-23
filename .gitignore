@@ -4,6 +4,7 @@ zotonic.tmproj
 erl_crash.dump
 rebar
 rebar3
+.rebar3-*
 
 *~
 

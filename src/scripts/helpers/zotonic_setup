@@ -68,7 +68,7 @@ function find_config {
     filename="$1"
     vsn_minor=$(minor_version)
     vsn_major=$(major_version)
-  
+
     for file in "$HOME/.zotonic/$NODENAME/$filename" "$HOME/.zotonic/$vsn_minor/$filename" "$HOME/.zotonic/$vsn_major/$filename" "$HOME/.zotonic/$filename" \
                 "/etc/zotonic/$NODENAME/$filename" "/etc/zotonic/$vsn_minor/$filename" "/etc/zotonic/$vsn_major/$filename" "/etc/zotonic/$filename"
     do
@@ -118,7 +118,7 @@ export -f get_user_modules_dir
 export ZOTONIC_BIN=${ZOTONIC_BIN:=$ZOTONIC/bin}
 
 # Path to the Erlang VM
-export ERL=${ERL:=erl}
+export ERL=${ERL:=$(command -v erl)}
 
 if make --version 2>&1 | grep "^GNU Make" >& /dev/null
 then

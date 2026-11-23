@@ -27,7 +27,7 @@
     ]).
 
 -include_lib("zotonic.hrl").
--include_lib("z_stdlib/include/z_url_metadata.hrl").
+-include_lib("zotonic_stdlib/include/z_url_metadata.hrl").
 
 
 %% @doc Insert a selected #media_import_props{}
