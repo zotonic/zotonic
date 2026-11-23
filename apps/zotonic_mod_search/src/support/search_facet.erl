@@ -939,22 +939,27 @@ ensure_table(Context) ->
 %% @doc Check if the current table is compatible with the facets in pivot.tpl
 -spec is_table_ok(z:context()) -> boolean().
 is_table_ok(Context) ->
-    DbCols = lists:filter(
-        fun
-            (#column_def{ name = id }) -> false;
-            (#column_def{ name = _ }) -> true
-        end,
-        z_db:columns(search_facet, Context)),
-    case facet_table(Context) of
-        {ok, {TplCols, _}} when length(DbCols) =:= length(TplCols) ->
-            lists:all(
-                fun(#column_def{ name = Name, type = Type, is_array = IsArray }) ->
-                    is_type(DbCols, Name, Type, IsArray)
+    case z_db:table_exists(search_facet, Context) of
+        true ->
+            DbCols = lists:filter(
+                fun
+                    (#column_def{ name = id }) -> false;
+                    (#column_def{ name = _ }) -> true
                 end,
-                TplCols);
-        {ok, _} ->
-            false;
-        {error, _} ->
+                z_db:columns(search_facet, Context)),
+            case facet_table(Context) of
+                {ok, {TplCols, _}} when length(DbCols) =:= length(TplCols) ->
+                    lists:all(
+                        fun(#column_def{ name = Name, type = Type, is_array = IsArray }) ->
+                            is_type(DbCols, Name, Type, IsArray)
+                        end,
+                        TplCols);
+                {ok, _} ->
+                    false;
+                {error, _} ->
+                    false
+            end;
+        false ->
             false
     end.
 
