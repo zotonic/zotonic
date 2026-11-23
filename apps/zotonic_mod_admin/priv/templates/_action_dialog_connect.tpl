@@ -38,7 +38,7 @@ find params:
     language|default:(q.language|escape)|default:z_language,
     actions|default:[],
     tab|default:q.tab|default:(tabs_enabled|first)|default:"find",
-    m.rsc[q.category|default:category].id|default:(m.predicate.object_category[predicate]|first|element:1),
+    m.rsc[q.category|default:category].id|default:(m.predicate.object_category[predicate]|first),
     dependent|if_undefined:m.admin.rsc_dialog_is_dependent,
     m.rsc[q.rsc_id].id|default:subject_id
 

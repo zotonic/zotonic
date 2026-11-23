@@ -254,6 +254,7 @@ cotonic.broker.call(
     subjects/2,
     has_objects/2,
     has_subjects/2,
+    has_dependency_subjects/2,
     object_edge_ids/3,
     subject_edge_ids/3,
     object_edge_props/3,
@@ -1533,6 +1534,22 @@ has_subjects(Object, Context) ->
                     limit 1",
                     [ObjectId],
                     Context))
+    end.
+
+%% @doc Check for incoming edges that retain a dependent resource, without caching.
+-spec has_dependency_subjects(Object, Context) -> boolean() when
+    Object :: m_rsc:resource(),
+    Context :: z:context().
+has_dependency_subjects(Object, Context) ->
+    case m_rsc:rid(Object, Context) of
+        undefined -> false;
+        ObjectId ->
+            is_integer(z_db:q1("
+                select id from edge
+                where object_id = $1
+                  and not (predicate_id = any($2::integer[]))
+                limit 1",
+                [ObjectId, m_predicate:dependency_ignored(Context)], Context))
     end.
 
 %% @doc Return all object ids with the edge id for a predicate/subject_id

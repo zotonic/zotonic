@@ -125,7 +125,7 @@ site_data_test() ->
         [Item] = complete(<<"{{ m.config.mod_example.se">>, false, Context),
         ?assertMatch(#{label := <<"secret">>, documentation := <<"A setting">>}, Item),
         ?assertEqual(nomatch, binary:match(term_to_binary(Item), <<"must not leak">>)),
-        meck:expect(m_predicate, all, fun(_) -> [{has_test_predicate, []}] end),
+        meck:expect(m_predicate, all, fun(_) -> #{<<"has_test_predicate">> => #{}} end),
         ?assertEqual([], complete(<<"{{ m.predicate.has_test">>, false, Context)),
         ?assertNot(meck:called(m_predicate, all, ['_'])),
         ?assertMatch([#{label := <<"has_test_predicate">>}], complete(<<"{{ m.predicate.has_test">>, true, Context)),
@@ -138,7 +138,7 @@ edge_predicates_test() ->
     meck:new(m_predicate, [non_strict]),
     try
         Context = z_context:new(lsp_model_test),
-        meck:expect(m_predicate, all, fun(_) -> [{depiction, []}, {author, []}] end),
+        meck:expect(m_predicate, all, fun(_) -> #{<<"depiction">> => #{}, <<"author">> => #{}} end),
         lists:foreach(fun(Operation) ->
             Prefix = <<"{{ m.edge.", Operation/binary, "[someid].dep">>,
             ?assertEqual([], complete(Prefix, false, Context)),
