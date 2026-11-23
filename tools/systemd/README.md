@@ -24,9 +24,11 @@ These templates allow running Zotonic as a systemd service managed with Erlang's
    USER="zotonic"
    GROUP="zotonic"
    KERL_ACTIVATE="/home/zotonic/kerl/24.3.4/activate"
+   KERL_OTP_PATH="/home/zotonic/kerl/24.3.4"
 
    sed -e "s|@ZOTONIC_DIR@|$ZOTONIC_DIR|g" \
        -e "s|@KERL_ACTIVATE@|$KERL_ACTIVATE|g" \
+       -e "s|@KERL_OTP_PATH@|$KERL_OTP_PATH|g" \
        tools/systemd/zotonic-service.sh.in > "$ZOTONIC_DIR/bin/zotonic-service.sh"
 
    chmod +x "$ZOTONIC_DIR/bin/zotonic-service.sh"
