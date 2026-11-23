@@ -80,6 +80,10 @@ execute(Req, #{ cowmachine_controller := Controller, cowmachine_controller_optio
     GuardContext = guard_context(Context5, Req1, Env),
     case z_context:get(request_guard_response, GuardContext) of
         {Status, Body} when is_integer(Status), Status >= 400, Status =< 599, is_binary(Body) ->
+            %% Rejection observers are informational. Neither a changed context nor
+            %% an observer exception may affect the admission decision or response.
+            try z_notifier:foldl(#middleware{on = rejected}, GuardContext, GuardContext)
+            catch _:_ -> ok end,
             {stop, cowboy_req:reply(Status, #{}, Body, z_context:get_reqdata(GuardContext))};
         _ -> cowmachine:request(cowmachine_req:set_env(Env, GuardContext), Options)
     end.

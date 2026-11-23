@@ -262,3 +262,14 @@ edits, escaping, read-only denial, global-rule merging, cached expiry, cleanup,
 automatic block notes and live HTTP admission in every mode. It restores touched
 configuration and deletes its reserved test entries. Run it only on a development
 site with the module active and no existing rules for its reserved test IPs.
+
+### Request guard integration
+
+Core owns the `request_guard_result` context contract and the `middleware` phases.
+Traffic guard supplies its decision and early response; it does not call analytics.
+Core emits `rejected` before an early response, or `handled` after normal handling.
+Analytics consumes these hooks, checks measurement interest before resolving early
+request identity, and records bounded aggregates. Unresolved identities are excluded.
+The existing `mod_traffic_guard:request` event name is retained for stored measurements;
+its schema is owned by analytics and available when traffic guard is active.
+Dispatch classification is shared through `z_dispatcher:request_type/2`.
