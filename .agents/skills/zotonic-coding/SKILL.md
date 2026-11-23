@@ -51,6 +51,14 @@ description: Use when working in Zotonic projects, especially Erlang modules, Zo
 - Put reusable implementation details in `src/support/`. Support modules should own focused domain logic, parsing/recombination, protocol handling, worker `gen_server`s, and helpers that are not themselves template APIs.
 - Prefer the model as the boundary between Zotonic callers and support processes. Keep process startup, batching, timeouts, and result normalization close to the public model API unless the logic is truly generic.
 
+## Optional Module Integration
+
+- Treat `-mod_depends` as the explicit module dependency contract. When one module does not depend on another, avoid direct calls into that module's models/support code and avoid including its headers for optional integration. Do not add a dependency merely to make optional telemetry work.
+- Prefer existing core notifications, middleware hooks, or documented core context contracts for optional integrations. Producers publish domain facts; consumers own interest checks, enrichment, persistence, and failure handling. Neither module should need the other enabled to perform its primary function.
+- Put genuinely shared request behavior in core instead of having one optional module call another's private implementation. Checking whether an optional module is active does not make direct calls or header includes decoupled.
+- Preserve lifecycle timing and performance: early rejection can bypass normal request hooks and authentication. Keep optional observers bounded, skip expensive work without consumer interest, and ensure telemetry failures or returned contexts cannot alter an admission decision.
+- Verify operation with the optional consumer absent, and test relevant notification timing and failure isolation. Tests for integration between modules belong in integration coverage; producer unit tests should not require the optional consumer.
+
 ## SQL and Persistence
 
 - Normally put SQL and database persistence in models (`src/models/m_*.erl`), including schema installation, queries, writes and transaction handling. Workers, controllers and the main `mod_*.erl` should call model functions instead of owning SQL.

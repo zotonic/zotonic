@@ -302,7 +302,7 @@ located(Sources, State) ->
 %% Add and cache the gzip content-encoded data (for now in memory)
 %% This streams all parts to the linked process, accumulating them in gzip buffer
 content_encoding_gzip(timeout, _, State) ->
-    case is_compressable(State#state.mime) andalso State#state.size < ?MAX_GZIP_SIZE of
+    case z_media_identify:is_mime_compressible(State#state.mime) andalso State#state.size < ?MAX_GZIP_SIZE of
         true ->
             % Start compression in separate process
             State1 = State#state{gzipper = start_link_gzip(State#state.minify, State#state.parts)},
@@ -565,16 +565,6 @@ part_size(#part_file{size=Size}) when is_integer(Size) -> Size;
 part_size(#part_cache{size=Size}) when is_integer(Size) -> Size;
 part_size(#part_data{data=D}) when is_binary(D) -> size(D);
 part_size(_) -> 0.
-
-is_compressable(<<"text/", _/binary>>) -> true;
-is_compressable(<<"application/javascript">>) -> true;
-is_compressable(<<"application/x-javascript">>) -> true;
-is_compressable(<<"application/xhtml+xml">>) -> true;
-is_compressable(<<"application/xml">>) -> true;
-is_compressable(<<"application/json">>) -> true;
-is_compressable(<<"application/ld+json">>) -> true;
-is_compressable(<<"image/svg+xml">>) -> true;
-is_compressable(_Mime) -> false.
 
 start_link_gzip(Minify, Sources) ->
     Self = self(),

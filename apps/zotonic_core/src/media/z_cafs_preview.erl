@@ -115,9 +115,11 @@ legacy_signed_props(Filename, Props, Extension, Context) ->
 
 -spec grace_days(Context) -> pos_integer() when Context :: z:context().
 grace_days(Context) ->
-    case catch z_convert:to_integer(m_config:get_value(site, cafs_preview_retention_days, 90, Context)) of
+    try z_convert:to_integer(m_config:get_value(site, cafs_preview_retention_days, 90, Context)) of
         Days when is_integer(Days), Days >= 1, Days =< 3650 -> Days;
         _ -> 90
+    catch
+        _:_ -> 90
     end.
 
 %% Called only after URL signature validation. Never renew an obsolete deadline
@@ -332,7 +334,12 @@ purge_batch(Before, Context) ->
         lists:foreach(fun
             ({undefined}) -> ok;
             ({Output}) ->
-                lists:foreach(fun(Pid) -> catch z_file_entry:stop(Pid) end,
+                lists:foreach(fun(Pid) ->
+                    try z_file_entry:stop(Pid)
+                    catch
+                        _:_ -> ok
+                    end
+                end,
                     m_cafs:readers(m_cafs:path(Output), Context)),
                 m_cafs:collect_unused(Output, Context)
         end, Outputs)
