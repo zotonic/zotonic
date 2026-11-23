@@ -92,7 +92,27 @@ start(Commands, Accept) ->
         true -> #{<<"accept-encoding">> => <<"gzip">>};
         false -> #{}
     end,
-    cowboy_stream:init(1, #{headers => Headers}, #{
+    % Supply the required cowboy_req:req() fields, even though this chain only
+    % reads headers. A headers-only map violates cowboy_stream:init/3's contract.
+    Req = #{
+        method => <<"GET">>,
+        version => 'HTTP/1.1',
+        scheme => <<"http">>,
+        host => <<"localhost">>,
+        port => 80,
+        path => <<"/">>,
+        qs => <<>>,
+        headers => Headers,
+        peer => {{127, 0, 0, 1}, 12345},
+        sock => {{127, 0, 0, 1}, 80},
+        cert => undefined,
+        ref => ?MODULE,
+        pid => self(),
+        streamid => 1,
+        has_body => false,
+        body_length => 0
+    },
+    cowboy_stream:init(1, Req, #{
         stream_handlers => [zotonic_compress_cleanup_h, cowboy_compress_h,
             zotonic_compress_policy_h, ?MODULE],
         test_commands => Commands
