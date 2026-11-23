@@ -491,3 +491,14 @@ the original order afterwards. The main integration test creates and cleans up o
 `analytics_integration_tests:access_control(Context)` checks controller and model
 access for viewer-only, configuration-only, denied and administrator contexts.
 It uses a scoped test observer and does not change stored ACL rules.
+
+### Request guard integration
+
+Core owns the `request_guard_result` context contract and the `middleware` phases.
+Traffic guard supplies its decision and early response; it does not call analytics.
+Core emits `rejected` before an early response, or `handled` after normal handling.
+Analytics consumes these hooks, checks measurement interest before resolving early
+request identity, and records bounded aggregates. Unresolved identities are excluded.
+The existing `mod_traffic_guard:request` event name is retained for stored measurements;
+its schema is owned by analytics and available when traffic guard is active.
+Dispatch classification is shared through `z_dispatcher:request_type/2`.

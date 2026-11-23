@@ -81,7 +81,16 @@ registry(Context) ->
             <<"outcome">> => [<<"sent">>,<<"retry">>,<<"failed">>,<<"bounced">>]
         }
     },
-    Declarations = z_notifier:foldl(#analytics_events{}, [], Context),
+    GuardEvents = case z_module_manager:active(mod_traffic_guard, Context) of
+        true -> [#{name => <<"mod_traffic_guard:request">>, version => 1,
+            title => <<"Traffic guard decisions">>,
+            dimensions => Guard#{
+                <<"traffic">> => [<<"crawler">>,<<"agent">>,<<"other">>,<<"unknown">>],
+                <<"type">> => [<<"page">>,<<"api">>,<<"other">>]
+            }}];
+        false -> []
+    end,
+    Declarations = z_notifier:foldl(#analytics_events{}, GuardEvents, Context),
     lists:foldl(
         fun register_event/2,
         #{

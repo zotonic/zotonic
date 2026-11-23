@@ -19,7 +19,7 @@
 
 -module(z_analytics_request).
 -moduledoc("Request policy and privacy boundary. Only coarse approved dimensions leave this module.").
--export([mark/1, allowed/1, dimensions/1, request_event/1, typed_event/1, dispatch_types/1, dispatch_type/2, traffic/2]).
+-export([mark/1, allowed/1, dimensions/1, request_event/1, typed_event/1, dispatch_types/1, dispatch_type/2, traffic/2, record_guard/2]).
 
 -spec mark(Context) -> z:context() when Context :: z:context().
 mark(Context) ->
@@ -46,23 +46,9 @@ interested(Type,Context) ->
             _ -> false
         end.
 
-%% Standard controller defaults preserve existing sites. Explicit dispatch options
-%% take precedence, including false to disable a route.
+%% Compatibility API; dispatch classification is shared core functionality.
 -spec dispatch_type(term(), atom()) -> binary() | undefined.
-dispatch_type(false, _) -> undefined;
-dispatch_type(undefined, controller_template) -> <<"page">>;
-dispatch_type(undefined, controller_page) -> <<"page">>;
-dispatch_type(undefined, controller_api) -> <<"api">>;
-dispatch_type(undefined, _) -> undefined;
-dispatch_type(Type, _) when Type =:= page; Type =:= api; Type =:= download; Type =:= asset ->
-    atom_to_binary(Type,utf8);
-dispatch_type(Type, _) when is_atom(Type) -> dispatch_type(atom_to_binary(Type,utf8), undefined);
-dispatch_type(Type, _) when is_binary(Type), byte_size(Type) > 0, byte_size(Type) =< 64 ->
-    case re:run(Type, <<"^[a-z][a-z0-9_]*$">>, [{capture,none}]) of
-        match -> Type;
-        nomatch -> undefined
-    end;
-dispatch_type(_, _) -> undefined.
+dispatch_type(Type,Controller) -> z_dispatcher:request_type(Type,Controller).
 
 -spec dispatch_types(z:context()) -> [binary()].
 dispatch_types(Context) ->
@@ -202,7 +188,7 @@ dimensions(Context) ->
 
 %% Guard context is server-owned; never copy client/session identifiers.
 guard_signals(Context) ->
-    case z_context:get(traffic_guard_result, Context) of
+    case z_context:get(request_guard_result, Context) of
         #{crawl_behavior := B, guard_action := A, guard_reason := R} ->
             #{<<"crawl_behavior">> => B, <<"guard_action">> => A, <<"guard_reason">> => R};
         _ -> #{}
@@ -265,4 +251,48 @@ country(Context) ->
         end
     catch
         _:_ -> <<"unknown">>
+    end.
+
+%% Record evaluated guards once: early rejections or normally handled requests.
+-spec record_guard(Phase, Context) -> ok when
+    Phase :: rejected | handled, Context :: z:context().
+record_guard(Phase,Context) ->
+    case z_context:get(request_guard_result, Context) of
+        #{source := mod_traffic_guard} ->
+            %% Optional best-effort telemetry must never alter admission decisions.
+            try
+                true = z_analytics_worker:interested(<<"mod_traffic_guard:request">>,Context),
+                RecordContext = case Phase of
+                    rejected -> rejection_context(Context);
+                    handled -> Context
+                end,
+                Type = case z_context:get_controller_module(Context) of
+                    controller_page -> <<"page">>;
+                    controller_template -> <<"page">>;
+                    controller_api -> <<"api">>;
+                    controller_agent_content -> <<"api">>;
+                    controller_agent_discovery -> <<"api">>;
+                    Controller ->
+                        case z_analytics_request:dispatch_type(z_context:get(analytics,Context),Controller) of
+                            <<"page">> -> <<"page">>;
+                            _ -> <<"other">>
+                        end
+                end,
+                _ = m_analytics:record_event(<<"mod_traffic_guard:request">>, #{<<"type">> => Type},
+                    z_context:get_reqdata(RecordContext), RecordContext),
+                ok
+            catch _:_ -> ok end;
+        _ -> ok
+    end.
+
+rejection_context(Context) ->
+    try
+        Ctx = case z_context:get_cookie(<<"cotonic-sid">>, Context) of
+            undefined -> Context;
+            Sid -> z_context:set_session_id(Sid, Context)
+        end,
+        z_context:ensure_request_context(Ctx)
+    catch _:_ ->
+        %% An unresolved identity must not be counted as anonymous traffic.
+        z_context:set(analytics_exclude, true, Context)
     end.

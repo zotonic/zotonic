@@ -240,7 +240,12 @@ observe_email_bounced(#email_bounced{},Context) -> smtp_event(<<"bounced">>,Cont
 smtp_event(Outcome,Context) ->
     m_analytics:record_event(<<"smtp">>,#{<<"outcome">>=>Outcome},Context).
 
-observe_middleware(#middleware{on=handled},Context,_Context) -> z_analytics_request:mark(Context);
+observe_middleware(#middleware{on=handled},Context,_Context) ->
+    z_analytics_request:record_guard(handled,Context),
+    z_analytics_request:mark(Context);
+observe_middleware(#middleware{on=rejected},Context,_Context) ->
+    z_analytics_request:record_guard(rejected,Context),
+    Context;
 observe_middleware(_,Context,_) -> Context.
 
 observe_module_activate(#module_activate{module = M},Context)

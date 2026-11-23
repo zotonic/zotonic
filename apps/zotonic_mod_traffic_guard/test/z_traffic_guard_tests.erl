@@ -20,7 +20,6 @@
 -module(z_traffic_guard_tests).
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").
--include_lib("zotonic_mod_analytics/include/analytics.hrl").
 
 settings() -> #{mode => enforce, period => 1000, request_limit => 2,
     request_burst => 2, max_clients => 2}.
@@ -67,12 +66,10 @@ scope_test() ->
 
 signals_test() ->
     Decision = (z_traffic_guard:decision(observe,request_rate,1))#{client => <<"private">>},
-    C = z_context:set(traffic_guard_result,Decision,#context{}),
+    C = z_context:set(request_guard_result,Decision,#context{}),
     Signals = mod_traffic_guard:signals(C),
     ?assertEqual(3,map_size(Signals)),
     ?assertNot(maps:is_key(client,Signals)),
-    [Schema] = mod_traffic_guard:observe_analytics_events(#analytics_events{},[],C),
-    ?assertMatch({ok,_},z_analytics:properties(Signals,Schema)),
     ?assertEqual(#{},mod_traffic_guard:signals(#context{})),
     lists:foreach(fun(Reason) ->
         R = z_traffic_guard:decision(enforce,Reason,0),
@@ -109,18 +106,6 @@ supervision_test() ->
         ?assertMatch([{z_traffic_guard,_,worker,_},{z_traffic_guard_rules,_,worker,_}],supervisor:which_children(Pid)),
         ?assertEqual(<<"allow">>,maps:get(guard_action,z_traffic_guard:check(client,settings(),C)))
     after exit(Pid,shutdown) end.
-
-request_signal_validation_test() ->
-    Props = #{<<"type">>=><<"api">>, <<"method">>=><<"GET">>, <<"status">>=><<"2xx">>,
-        <<"http_status">>=><<"200">>, <<"has_page_id">>=><<"false">>,
-        <<"language">>=><<"en">>, <<"country">>=><<"unknown">>, <<"traffic">>=><<"agent">>,
-        <<"crawl_behavior">>=><<"excessive">>, <<"guard_action">>=><<"would_throttle">>,
-        <<"guard_reason">>=><<"request_rate">>},
-    Schema = #{dimensions=>maps:map(fun(_,_) -> text end,Props)},
-    ?assertEqual({ok,Props},z_analytics:properties(Props,Schema)),
-    ?assertEqual({error,invalid_properties},z_analytics:properties(Props#{<<"ip">>=><<"private">>},Schema)),
-    Large = maps:from_list([{integer_to_binary(I),<<"x">>} || I <- lists:seq(1,17)]),
-    ?assertEqual({error,invalid_properties},z_analytics:properties(Large,#{dimensions=>maps:map(fun(_,_) -> text end,Large)})).
 
 expired_work_test() ->
     State = #{clients=>#{},settings=>undefined},

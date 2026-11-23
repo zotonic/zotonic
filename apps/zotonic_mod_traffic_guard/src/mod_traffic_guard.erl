@@ -155,11 +155,9 @@ rules as a fallback while the shared table loads. Hourly maintenance deletes
 expired database rows. The README contains failure limits, benchmarks and
 regression-test commands.
 ").
--export([start_link/1, init/1, observe_middleware/3, observe_analytics_events/3, observe_m_config_update/2,
+-export([start_link/1, init/1, observe_middleware/3, observe_m_config_update/2,
     eligible/3, eligible/4, signals/1, response/2, observe_admin_menu/3, manage_schema/2, observe_tick_1h/2]).
 -include_lib("zotonic_core/include/zotonic.hrl").
-%% The analytics declaration is optional; no runtime dependency on mod_analytics.
--include_lib("zotonic_mod_analytics/include/analytics.hrl").
 
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
 
@@ -196,17 +194,14 @@ observe_middleware(#middleware{on = guard}, Context, _) ->
                 _ -> guard(Settings, Context)
             end
     end;
-observe_middleware(#middleware{on = handled}, Context, _) ->
-    emit(Context),
-    Context;
 observe_middleware(_, Context, _) -> Context.
 
 -spec eligible(Method, Controller, Option) -> boolean() when
     Method :: binary(), Controller :: atom(), Option :: term().
 eligible(Method,Controller,Option) -> eligible(Method,Controller,Option,undefined).
 
-%% Use the same dispatch classification as analytics, without requiring a
-%% recording or consent: eligibility is decided before the response is rendered.
+%% Use core dispatch classification without requiring analytics. Eligibility is
+%% decided before the response is rendered.
 -spec eligible(Method, Controller, Option, Analytics) -> boolean() when
     Method :: binary(), Controller :: atom(), Option :: term(), Analytics :: term().
 eligible(Method, _, _, _) when Method =/= <<"GET">>, Method =/= <<"HEAD">> -> false;
@@ -215,7 +210,7 @@ eligible(_, _, true, _) -> true;
 eligible(_, Controller, _, Analytics) ->
     lists:member(Controller, [controller_page, controller_template, controller_api,
         controller_agent_content, controller_agent_discovery]) orelse
-        z_analytics_request:dispatch_type(Analytics,Controller) =:= <<"page">>.
+        z_dispatcher:request_type(Analytics,Controller) =:= <<"page">>.
 
 guard(Settings, Context) ->
     Client = m_req:get(peer_ip, Context),
@@ -223,37 +218,12 @@ guard(Settings, Context) ->
         undefined -> z_traffic_guard:decision(maps:get(mode, Settings), unavailable, 0);
         _ -> z_traffic_guard:check(Client, Settings, Context)
     end,
-    Ctx1 = z_context:set(traffic_guard_result, Result, Context),
+    Ctx1 = z_context:set(request_guard_result, Result#{source => ?MODULE}, Context),
     case maps:get(guard_action, Result) of
         <<"throttle">> ->
-            Ctx2 = rejection_context(Ctx1),
-            emit(Ctx2),
-            response(maps:get(retry_after, Result), Ctx2);
+            response(maps:get(retry_after, Result), Ctx1);
         _ -> Ctx1
     end.
-
-%% Admission needs only trusted proxy metadata. Allowed requests initialize
-%% authentication normally in Cowmachine; rejected ones only need it for telemetry.
-rejection_context(Context) ->
-    case analytics_interested(Context) of
-        false -> Context;
-        true ->
-            try
-                Ctx = case z_context:get_cookie(<<"cotonic-sid">>, Context) of
-                    undefined -> Context;
-                    Sid -> z_context:set_session_id(Sid, Context)
-                end,
-                z_context:ensure_request_context(Ctx)
-            catch _:_ ->
-                %% Do not record an unresolved identity as anonymous traffic.
-                z_context:set(analytics_exclude, true, Context)
-            end
-    end.
-
-analytics_interested(Context) ->
-    try z_module_manager:active(mod_analytics, Context) andalso
-        z_analytics_worker:interested(<<"mod_traffic_guard:request">>,Context)
-    catch _:_ -> false end.
 
 -spec response(Retry, Context) -> z:context() when
     Retry :: pos_integer(), Context :: z:context().
@@ -267,44 +237,8 @@ response(Retry, Context) ->
 
 -spec signals(Context) -> map() when Context :: z:context().
 signals(Context) ->
-    case z_context:get(traffic_guard_result, Context) of
+    case z_context:get(request_guard_result, Context) of
         #{crawl_behavior := B, guard_action := A, guard_reason := R} ->
             #{<<"crawl_behavior">> => B, <<"guard_action">> => A, <<"guard_reason">> => R};
         _ -> #{}
     end.
-
-emit(Context) ->
-    case z_context:get(traffic_guard_result, Context) of
-        undefined -> ok;
-        _ ->
-            %% Optional best-effort telemetry must never alter admission decisions.
-            try
-                true = analytics_interested(Context),
-                Type = case z_context:get_controller_module(Context) of
-                    controller_page -> <<"page">>;
-                    controller_template -> <<"page">>;
-                    controller_api -> <<"api">>;
-                    controller_agent_content -> <<"api">>;
-                    controller_agent_discovery -> <<"api">>;
-                    Controller ->
-                        case z_analytics_request:dispatch_type(z_context:get(analytics,Context),Controller) of
-                            <<"page">> -> <<"page">>;
-                            _ -> <<"other">>
-                        end
-                end,
-                m_analytics:record_event(<<"mod_traffic_guard:request">>, #{<<"type">> => Type},
-                    z_context:get_reqdata(Context), Context)
-            catch _:_ -> ok end
-    end.
-
-observe_analytics_events(#analytics_events{}, Acc, _) ->
-    [#{name => <<"mod_traffic_guard:request">>, version => 1,
-       title => <<"Traffic guard decisions">>,
-       dimensions => #{
-           <<"crawl_behavior">> => [<<"normal">>, <<"excessive">>, <<"unknown">>],
-           <<"guard_action">> => [<<"allow">>, <<"would_throttle">>, <<"throttle">>],
-           <<"guard_reason">> => [<<"none">>, <<"request_rate">>,
-               <<"state_capacity">>, <<"unavailable">>, <<"ip_allow">>, <<"ip_block">>],
-           <<"traffic">> => [<<"crawler">>, <<"agent">>, <<"other">>, <<"unknown">>],
-           <<"type">> => [<<"page">>, <<"api">>, <<"other">>]
-       }} | Acc].

@@ -196,3 +196,15 @@ agent_dispatch_analytics_test() ->
             end, [200, 404, 500])
         end, [<<"agent">>, <<"other">>])
     end, Rules).
+
+request_signal_validation_test() ->
+    Props = #{<<"type">>=><<"api">>, <<"method">>=><<"GET">>, <<"status">>=><<"2xx">>,
+        <<"http_status">>=><<"200">>, <<"has_page_id">>=><<"false">>,
+        <<"language">>=><<"en">>, <<"country">>=><<"unknown">>, <<"traffic">>=><<"agent">>,
+        <<"crawl_behavior">>=><<"excessive">>, <<"guard_action">>=><<"would_throttle">>,
+        <<"guard_reason">>=><<"request_rate">>},
+    Schema = #{dimensions=>maps:map(fun(_,_) -> text end,Props)},
+    ?assertEqual({ok,Props},z_analytics:properties(Props,Schema)),
+    ?assertEqual({error,invalid_properties},z_analytics:properties(Props#{<<"ip">>=><<"private">>},Schema)),
+    Large = maps:from_list([{integer_to_binary(I),<<"x">>} || I <- lists:seq(1,17)]),
+    ?assertEqual({error,invalid_properties},z_analytics:properties(Large,#{dimensions=>maps:map(fun(_,_) -> text end,Large)})).
