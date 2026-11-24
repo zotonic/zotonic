@@ -3,12 +3,13 @@
 {% block title %}{_ Edit _}{% if id %}: {{ id.title|default:"-" }}{% elseif tree_id %}: {{ tree_id.title|default:"-" }}{% endif %}{% endblock%}
 
 {% block html_head_extra %}
+    {# Load Bootstrap and its compatibility layer before the admin overrides. #}
+    {% lib "css/admin-bootstrap5.min.css" %}
 	{% lib
 			"css/zp-menuedit.css"
 			"css/z.icons.css"
 			"css/zotonic-admin.css"
 			"css/z.modal.css"
-			"css/admin-bootstrap5.min.css"
 			"css/admin-frontend.css"
             "font-awesome/css/font-awesome.css"
             "css/image-edit.css"
