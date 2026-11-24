@@ -37,6 +37,14 @@ description: Use when working in Zotonic projects, especially Erlang modules, Zo
 - For Zotonic 1.x code, expect request keys, query keys, JSON keys, and most external textual data to be binaries, not strings.
 - For text manipulation, use Unicode-aware `unicode` or `z_string` routines. Do not slice or truncate text with byte-oriented binary operations, as those can split UTF-8 codepoints.
 
+## Erlang Tests and Dialyzer
+
+- Test fixtures and mock return values must satisfy the called functions' specs and success typings. Meck replaces runtime behavior, but Dialyzer still analyzes calls against the real modules; passing placeholder atoms can produce cascading "no local return" warnings even when EUnit passes.
+- For APIs accepting `z:context()`, include `zotonic_core/include/zotonic.hrl` and use real `#context{}` records. For ACL tests, use `#context{}` for anonymous access, `#context{user_id = 1}` for the administrator, and `Admin#context{acl_is_read_only = true}` for read-only administrator access. Prefer real `z_acl` checks for these fixtures. Do not use `acl = admin` for a read-only fixture: sudo bypasses read-only restrictions.
+- Mock external dependencies, not type contracts. When mocking a function with a constrained return type, return a valid value of that type and assert against the same typed fixtures.
+- Malformed-input tests must match the intended API boundary. If a public function deliberately accepts and rejects arbitrary input, its spec should reflect that (for example `term()`); do not widen a production contract or suppress Dialyzer warnings merely to accommodate an invalid fixture.
+- After changing fixtures, compile and run the focused tests. Passing EUnit does not establish Dialyzer cleanliness; run the applicable Dialyzer check when available and report any validation limit accurately.
+
 ## App Structure
 
 - Zotonic is an Erlang umbrella application. Core modules live in `apps`; user modules and sites live in `apps_user`.

@@ -60,7 +60,7 @@ distributed attacks still need proxy-level protection.
    mode at `observe` initially.
 2. Open **System → Traffic guard** to inspect currently limited addresses and
    manage IP exceptions.
-3. Tune settings under `mod_traffic_guard` in **System → Configuration**, then
+3. Use **Settings** on the Traffic guard screen to tune all five site settings, then
    set `mode` to `enforce` when the observed decisions are appropriate.
 
 For example, the default settings allow an initial burst of 30 requests per IP

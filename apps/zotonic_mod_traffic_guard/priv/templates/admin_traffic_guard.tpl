@@ -12,6 +12,9 @@
         <div class="widget traffic-guard-panel">
             <div class="widget-header traffic-guard-panel-heading">
                 <h3>{_ Configuration _}</h3>
+                {% if not read_only %}
+                    {% button text=_"Settings" class="btn btn-default btn-sm" postback="settings" delegate="controller_admin_traffic_guard" %}
+                {% endif %}
             </div>
             <div class="widget-content">
                 <p>{_ Allow entries take precedence. Blocks follow observe/enforce/off mode and only affect guarded routes. _}</p>
