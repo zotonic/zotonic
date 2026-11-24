@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2026 Marc Worrell
-%% @doc Route media commands to a remote runner and await authenticated result callbacks.
+%% @doc Route media commands to a remote runner and await results through authenticated callbacks or polling.
 %% @end
 
 %% Copyright 2026 Marc Worrell
@@ -31,7 +31,8 @@ fallback preserves the caller's local sandbox policy.
     callback/3,
     authorized/2,
     enabled/0,
-    find_executable/1
+    find_executable/1,
+    result_method/2
 ]).
 
 -export([
@@ -132,7 +133,8 @@ compatible_imagemagick(_, _) -> false.
 run_pool([], _Job, _Options, _Deadline, Error) -> Error;
 run_pool(Runners, Job, Options, Deadline, PreviousError) ->
     Callback = callback_url(maps:get(context, Options, undefined)),
-    case z_media_runner_protocol:https_url(Callback) of
+    Method = result_method(z_config:get(media_runner_result_method, auto), Callback),
+    case Method =/= invalid of
         false -> {error, media_runner_configuration};
         true ->
             case erlang:monotonic_time(millisecond) < Deadline of
@@ -144,7 +146,7 @@ run_pool(Runners, Job, Options, Deadline, PreviousError) ->
                         {ok, #{url := Url, token := Token} = Runner} ->
                             Result = try
                                 submit(Url, Token, Callback, Job,
-                                    Options#{media_runner_deadline => Deadline}, Id, Secret)
+                                    Options#{media_runner_deadline => Deadline, media_runner_result_method => Method}, Id, Secret)
                             after
                                 gen_server:call(?MODULE, {remove, Id})
                             end,
@@ -171,18 +173,45 @@ callback_url(Context) ->
     SiteContext = z_context:new(z_context:site(Context)),
     z_dispatcher:url_for(media_runner_callback, [{absolute_url, true}], SiteContext).
 
+%% @doc Select outbound polling for non-public or unresolved canonical hosts.
+%% The resolver includes local hosts files. Explicit callback mode still requires HTTPS.
+-spec result_method(Method, Callback) -> poll | callback | invalid
+    when Method :: atom() | binary() | string(), Callback :: binary() | undefined.
+result_method(Method, Callback) when is_atom(Method); is_list(Method) ->
+    result_method(z_convert:to_binary(Method), Callback);
+result_method(<<"poll">>, _) -> poll;
+result_method(<<"callback">>, Callback) ->
+    case z_media_runner_protocol:https_url(Callback) of
+        true -> callback;
+        false -> invalid
+    end;
+result_method(<<"auto">>, Callback) ->
+    case z_media_runner_protocol:https_url(Callback) of
+        true ->
+            #{host := Host} = uri_string:parse(Callback),
+            case z_ip_address:is_public_name(Host) of
+                true -> callback;
+                false -> poll
+            end;
+        false -> poll
+    end;
+result_method(_, _) -> invalid.
+
 submit(Url, Token, Callback, Job, Options, Id, Secret) ->
     WaitSeconds = max(1, maps:get(media_runner_deadline, Options) - erlang:monotonic_time(millisecond)),
-    Request = Job#{
+    Method = maps:get(media_runner_result_method, Options),
+    Delivery = case Method of
+        poll -> #{<<"result_method">> => <<"poll">>};
+        callback -> #{<<"callback_url">> => Callback, <<"callback_token">> => Secret}
+    end,
+    Request = (maps:merge(Job, Delivery))#{
         <<"id">> => Id,
-        <<"callback_url">> => Callback,
-        <<"callback_token">> => Secret,
         <<"expires">> => erlang:system_time(second) + (WaitSeconds + 999) div 1000
     },
     case submit_request(Url, Token, Request, Options, 2) of
         ok ->
             remember(Url, Token, maps:get(<<"files">>, Job)),
-            case await_result(Id, Url, Token, maps:get(media_runner_deadline, Options), 0) of
+            case await_result(Id, Url, Token, maps:get(media_runner_deadline, Options), Method, 0) of
                 {ok, Result} ->
                     Received = unpack_retry(Result, Options#{
                         media_runner_profile => maps:get(<<"profile">>, Job),
@@ -214,7 +243,7 @@ submit(Url, Token, Callback, Job, Options, Id, Secret) ->
 %% A callback is the fast path. Polling recovers lost callbacks and detects a
 %% failed runner during long renders. Three failed probes allow another attempt;
 %% the old attempt's registration is removed before accepting replacement results.
-await_result(Id, Url, Token, Deadline, Failures) ->
+await_result(Id, Url, Token, Deadline, Method, Failures) ->
     Left = Deadline - erlang:monotonic_time(millisecond),
     case Left =< 0 of
         true -> {error, {media_runner_unavailable, callback_timeout}};
@@ -223,19 +252,31 @@ await_result(Id, Url, Token, Deadline, Failures) ->
                 {media_runner_result, Id, Result} -> {ok, Result}
             %% Leave budget for a status probe even when the operation is
             %% shorter than the normal polling interval.
-            after min(15000, max(100, Left div 2)) ->
+            after result_delay(Method, Left, Failures) ->
                 Reply = deadline_request(
-                    z_media_runner_protocol:control_url(Url, <<"status">>), Token, #{<<"id">> => Id}, Deadline, 5000),
+                    z_media_runner_protocol:control_url(Url, <<"status">>), Token,
+                    #{<<"id">> => Id, <<"wait">> => poll_wait(Method, Left)}, Deadline, poll_timeout(Method)),
                 case Reply of
                     {ok, #{<<"result">> := Result}} when is_map(Result) -> {ok, Result};
                     {ok, #{<<"outcome">> := Status}} when
                         Status =:= <<"queued">>; Status =:= <<"starting">>; Status =:= <<"running">> ->
-                        await_result(Id, Url, Token, Deadline, 0);
+                        await_result(Id, Url, Token, Deadline, Method, 0);
                     _ when Failures >= 2 -> {error, {media_runner_unavailable, status_unavailable}};
-                    _ -> await_result(Id, Url, Token, Deadline, Failures + 1)
+                    _ -> await_result(Id, Url, Token, Deadline, Method, Failures + 1)
                 end
             end
     end.
+
+result_delay(poll, Left, 0) when Left < 2000 -> min(250, Left);
+result_delay(poll, _, 0) -> 0;
+result_delay(poll, Left, _) -> min(1000, Left);
+result_delay(callback, Left, _) -> min(15000, max(100, Left div 2)).
+
+poll_wait(poll, Left) -> max(0, min(25, (Left - 1000) div 1000));
+poll_wait(callback, _) -> 0.
+
+poll_timeout(poll) -> 30000;
+poll_timeout(callback) -> 5000.
 
 unpack_retry(Result, Options, Retries) ->
     case z_media_runner_protocol:unpack(Result, Options) of

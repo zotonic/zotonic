@@ -71,7 +71,20 @@ The hostname can include a port. HTTPS is required, certificates are checked, an
 redirects are refused. Keep the `file` utility installed on the client for local
 MIME detection. Without a configured runner, processing stays local.
 
-The runner must also be able to reach the website's canonical HTTPS callback URL.
+The client setting `media_runner_result_method` defaults to `auto`. It uses
+outbound long polling when the canonical callback hostname resolves to a non-public
+IPv4 or IPv6 address, cannot be resolved, or has no HTTPS callback URL. Resolution
+uses the local resolver, including `/etc/hosts`, so local `.test` sites work without
+inbound Internet access. Public HTTPS sites continue to use callbacks.
+
+Set `{media_runner_result_method, poll}` to force polling, for example for a site
+behind a firewall despite having a public IP. Set it to `callback` to force HTTPS
+callbacks. Polling status requests wait up to 25 seconds and repeat within the
+existing `media_runner_wait_timeout` budget; result downloads and receipts are
+unchanged. Deploy the updated runner before enabling polling clients. Allow at
+least 30 seconds for control requests through the runner's reverse proxy.
+
+In callback mode, the runner must reach the website's canonical HTTPS callback URL.
 Behind a load balancer, route callbacks to the **Zotonic node that submitted the
 job**: the waiting callback registration belongs to that node. Check the site's
 canonical hostname and proxy configuration, rather than relying on the hostname
