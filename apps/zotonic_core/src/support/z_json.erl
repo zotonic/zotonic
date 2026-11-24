@@ -27,10 +27,39 @@
 ]).
 
 %% @doc Encode an Erlang term to JSON. Ensure all '/' characters in the JSON
-%% are escaped for save embedding the generated JSON in HTML text.
+%% are escaped for safe embedding the generated JSON in HTML text. Malformed
+%% UTF-8 is replaced with U+FFFD without changing valid text or stored data.
 -spec encode(binary() | map() | list() | number() | boolean() | null | undefined) -> binary().
 encode(Erlang) ->
-    binary:replace(jsxrecord:encode(Erlang), <<"/">>, <<"\\/">>, [ global ]).
+    Json = try jsxrecord:encode(Erlang)
+    catch
+        error:{invalid_byte, _} -> jsxrecord:encode(repair_utf8(Erlang));
+        error:unexpected_end -> jsxrecord:encode(repair_utf8(Erlang))
+    end,
+    binary:replace(Json, <<"/">>, <<"\\/">>, [ global ]).
+
+%% Keep the normal encoder fast; only walk the term after a UTF-8 error.
+%% Tuples retain their shape so jsxrecord can still encode records and dates.
+repair_utf8(Bin) when is_binary(Bin) ->
+    repair_utf8_binary(Bin, []);
+repair_utf8(Map) when is_map(Map) ->
+    maps:from_list([{repair_utf8(K), repair_utf8(V)} || {K, V} <- maps:to_list(Map)]);
+repair_utf8(List) when is_list(List) ->
+    [repair_utf8(V) || V <- List];
+repair_utf8(Tuple) when is_tuple(Tuple) ->
+    list_to_tuple([repair_utf8(V) || V <- tuple_to_list(Tuple)]);
+repair_utf8(Value) ->
+    Value.
+
+repair_utf8_binary(Bin, Acc) ->
+    case unicode:characters_to_binary(Bin, utf8, utf8) of
+        Valid when is_binary(Valid) ->
+            iolist_to_binary(lists:reverse([Valid | Acc]));
+        {error, Valid, <<_, Rest/binary>>} ->
+            repair_utf8_binary(Rest, [<<16#fffd/utf8>>, Valid | Acc]);
+        {incomplete, Valid, _Rest} ->
+            iolist_to_binary(lists:reverse([<<16#fffd/utf8>>, Valid | Acc]))
+    end.
 
 %% @doc Decode a JSON binary to an Erlang term.
 -spec decode(binary() | undefined) -> term().
