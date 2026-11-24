@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-20 22:19\n"
+"PO-Revision-Date: 2026-11-24 17:04\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "MIME-Version: 1.0\n"
@@ -421,6 +421,7 @@ msgstr "Tem certeza de que deseja restaurar todas as regras de ACL para a versã
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:185
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:45
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:41
 #: zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:116
 #: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:43
@@ -472,8 +473,8 @@ msgstr "Configuração alterada."
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:209
 #: zotonic_mod_admin/priv/templates/_admin_edit_version.tpl:5
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:72
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:74
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:76
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_filter_predicates.tpl:20
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:40
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:79
@@ -608,7 +609,7 @@ msgstr "Não foi possível mover para o grupo de colaboração."
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125
 #: zotonic_mod_survey/src/mod_survey.erl:427
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:50
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:12
 msgid "Delete"
@@ -635,7 +636,7 @@ msgstr "Excluindo..."
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:33
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:14
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:42
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:45
 msgid "Deny"
 msgstr "Negar"
 
@@ -886,7 +887,7 @@ msgstr "Regras revertidas"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:33
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:162
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:141
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:86
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:26
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:105
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:56
@@ -1409,7 +1410,7 @@ msgstr "Tem certeza de que deseja excluir estas {n} páginas?"
 msgid "Are you sure you want to delete this note?"
 msgstr "Tem certeza de que deseja excluir esta anotação?"
 
-#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:63
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:86
 msgid "Are you sure you want to exit the admin interface?"
 msgstr "Tem certeza de que deseja sair da interface de administração?"
 
@@ -1432,6 +1433,10 @@ msgstr "Autenticação"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:142
 msgid "Authentication"
 msgstr "Autenticação"
+
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:76
+msgid "Automatic"
+msgstr "Automático"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:162
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:164
@@ -1613,7 +1618,7 @@ msgstr "Configurado"
 msgid "Confirm delete"
 msgstr "Confirmar exclusão"
 
-#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:63
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:85
 msgid "Confirm logoff"
 msgstr "Confirmar logoff"
 
@@ -1774,6 +1779,10 @@ msgstr "Data de criação, mais recente primeiro"
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:262
 msgid "Creation date, oldest first"
 msgstr "Data de criação, mais antigo primeiro"
+
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:70
+msgid "Dark"
+msgstr "Escuro"
 
 #: zotonic_mod_admin/priv/templates/admin.tpl:4
 #: zotonic_mod_admin/priv/templates/admin.tpl:8
@@ -1988,7 +1997,7 @@ msgstr "Endereço de email"
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:131
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:117
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:119
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:46
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:49
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:44
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:14
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:16
@@ -2461,6 +2470,10 @@ msgstr "Últimas pessoas modificadas"
 msgid "Latest modified texts"
 msgstr "Últimos textos modificados"
 
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:64
+msgid "Light"
+msgstr "Luz"
+
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:43
 msgid "Link selected page"
 msgstr "Criar link para a página selecionada"
@@ -2498,7 +2511,7 @@ msgstr "O fallback local está ativado."
 msgid "Local sandbox"
 msgstr "Ambiente isolado local"
 
-#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:62
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:82
 #: zotonic_site_status/priv/templates/_menu.tpl:5
 #: zotonic_site_status/priv/templates/_navbar.tpl:34
 msgid "Log Off"
@@ -3188,7 +3201,7 @@ msgstr "Referenciadores para"
 #: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:51
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:69
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:72
 msgid "Refresh"
 msgstr "Atualizar"
 
@@ -3346,21 +3359,21 @@ msgstr "O isolamento do sandbox não é compatível com este sistema. Os comando
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:4
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:144
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:90
 msgid "Save &amp; view"
 msgstr "Salvar e visualizar"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:4
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:144
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:90
 msgid "Save and view the page."
 msgstr "Salvar e visualizar a página."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:17
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:141
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:86
 msgid "Save this page."
 msgstr "Salvar esta página."
 
@@ -3415,7 +3428,7 @@ msgstr "Consulta de pesquisa"
 msgid "Search results"
 msgstr "Resultados da pesquisa"
 
-#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:76
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:100
 msgid "Search..."
 msgstr "Procurar..."
 
@@ -3877,6 +3890,10 @@ msgstr "O sistema alocou mais do que o limite especificado de memória disponív
 msgid "The update coordinator restarted. Restart the Zotonic node before deploying again."
 msgstr "O coordenador de atualizações foi reiniciado. Reinicie o nó do Zotonic antes de realizar a implantação novamente."
 
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:59
+msgid "Theme"
+msgstr "Tema"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers_list.tpl:43
 msgid "There are no incoming connections."
 msgstr "Não há conexões de entrada."
@@ -4134,6 +4151,9 @@ msgstr "Não publicado"
 #: zotonic_mod_seo/src/support/seo_jsonld_webpage.erl:276
 #: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:16
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:10
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:6
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:12
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:17
 #: zotonic_mod_translation/priv/templates/_translation_tree_skipped.tpl:7
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:3
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:93
@@ -4240,7 +4260,7 @@ msgstr "Utilize essas operações para reparar dados de instalação, e não par
 msgid "Used"
 msgstr "Usado"
 
-#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:59
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:54
 msgid "User page"
 msgstr "Página do usuário"
 
@@ -5226,8 +5246,8 @@ msgstr "Ocultar o menu"
 msgid "Language"
 msgstr "Idioma"
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:34
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:44
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:36
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:46
 msgid "Loading ..."
 msgstr "Carregando ..."
 
@@ -5243,11 +5263,11 @@ msgstr "Mostrar o menu"
 msgid "The page might have been deleted."
 msgstr "A página pode ter sido excluída."
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:133
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:135
 msgid "There are unsaved changes. Are you sure you want to leave without saving?"
 msgstr "Há alterações não salvas. Tem certeza de que deseja sair sem salvar?"
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:82
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
 msgid "This page"
 msgstr "Esta página"
 
@@ -5255,7 +5275,7 @@ msgstr "Esta página"
 msgid "View this page."
 msgstr "Veja esta página."
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:131
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:133
 msgid "Yes, discard changes"
 msgstr "Sim, descartar alterações"
 
@@ -6287,6 +6307,10 @@ msgstr "Beta"
 msgid "Change the predicate on all existing page connections to:"
 msgstr "Altere o predicado em todas as conexões de página existentes para:"
 
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:68
+msgid "Connections using this predicate do not keep their target page alive. A dependent target page can be deleted when it has no other incoming connections. Protected pages are kept."
+msgstr "As conexões que utilizam esse predicado não mantêm a página de destino ativa. Uma página de destino dependente pode ser excluída quando não houver mais nenhuma conexão recebida. As páginas protegidas são mantidas."
+
 #: zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:88
 msgid "Could not create the predicate."
 msgstr "Não foi possível criar o predicado."
@@ -6303,11 +6327,11 @@ msgstr "A exclusão foi cancelada, existem conexões com este predicado."
 msgid "Delete predicate and update connections"
 msgstr "Excluir o predicado e atualizar as conexões"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:85
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:95
 msgid "Do not find subjects using this predicate’s object titles."
 msgstr "Não encontre sujeitos usando os títulos de objeto deste predicado."
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:95
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:105
 msgid "Do not show on the connections list on the resource edit page."
 msgstr "Não mostrar na lista de conexões da página de edição do recurso."
 
@@ -6351,11 +6375,15 @@ msgstr "Ocultar ou mostrar páginas que não estão no caminho a partir da pági
 msgid "Hide previously added pages and connections."
 msgstr "Ocultar páginas e conexões adicionadas anteriormente."
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:75
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:65
+msgid "Ignore these connections when cleaning up dependent pages."
+msgstr "Ignore essas conexões ao limpar páginas dependentes."
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:85
 msgid "Insert new connections before existing connections."
 msgstr "Insira novas conexões antes das conexões existentes."
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:68
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:78
 msgid "Instead of a search box, this will show a list of all pages in the target categories selected above. At least one category must be selected."
 msgstr "Em vez de uma caixa de pesquisa, será exibida uma lista de todas as páginas nas categorias de destino selecionadas acima. É necessário selecionar pelo menos uma categoria."
 
@@ -6393,7 +6421,7 @@ msgstr "Objeto"
 msgid "Only show connections with the following predicates:"
 msgstr "Mostre apenas as conexões com os seguintes predicados:"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:108
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:118
 msgid "Ontologies define predicates for a defined set of subject and object categories. Sometimes it is more practical to have the predicate’s connection direction reversed from the formal definition. Export and import functions can use this option to swap subject/object relation when exporting or importing data."
 msgstr "As ontologias definem predicados para um conjunto definido de categorias de sujeito e objeto. Às vezes é mais prático inverter a direção de conexão do predicado em relação à definição formal. As funções de exportação e importação podem usar esta opção para trocar a relação sujeito/objeto ao exportar ou importar dados."
 
@@ -6458,7 +6486,7 @@ msgstr "Mostrar todas as conexões de saída"
 msgid "Show graph of all connections"
 msgstr "Mostrar grafo de todas as conexões"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:98
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:108
 msgid "Some predicates are mostly for internal purposes. Check this if you don’t want to show this predicate on the <em>Connected to</em> list."
 msgstr "Alguns predicados são principalmente para fins internos. Marque isto se não quiser mostrar este predicado na lista <em>Conectado a</em>."
 
@@ -6474,7 +6502,7 @@ msgstr "Dê um passo para trás"
 msgid "Subject"
 msgstr "Sujeito"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:105
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:115
 msgid "The direction (from/to) of this predicate is reversed from the normal definition."
 msgstr "A direção (de/para) desse predicado é invertida da definição normal."
 
@@ -6486,7 +6514,7 @@ msgstr "Não há conexões de página com este predicado."
 msgid "There is already a predicate with this name."
 msgstr "Já existe um predicado com este nome."
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:88
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:98
 msgid "This directs the indexers to not include the titles of connected pages with this predicate. Normally titles of connected pages are included, making it possible to eg. find articles by their author’s name."
 msgstr "Isso orienta os indexadores a não incluírem os títulos das páginas conectadas com este predicado. Normalmente esses títulos são incluídos, permitindo, por exemplo, encontrar artigos pelo nome do autor."
 
@@ -6522,11 +6550,11 @@ msgstr "Excesso de conexões"
 msgid "URI"
 msgstr "URI"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:65
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:75
 msgid "Use a list of checkboxes with titles when adding page connections."
 msgstr "Use uma lista de caixas de seleção com títulos ao adicionar conexões de página."
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:78
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:88
 msgid "Usually new connections are inserted after existing connections. Check this to insert new connections before existing connections."
 msgstr "Geralmente novas conexões são inseridas após conexões existentes. Marque isto para inserir novas conexões antes das conexões existentes."
 
@@ -6712,13 +6740,13 @@ msgstr "Valores permitidos (separados por vírgulas)"
 msgid "Allowed values:"
 msgstr "Valores permitidos:"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:348
+#: zotonic_mod_analytics/src/mod_analytics.erl:353
 msgid "An equivalent analytics measurement already exists."
 msgstr "Já existe uma métrica analítica equivalente."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
-#: zotonic_mod_analytics/src/mod_analytics.erl:277
+#: zotonic_mod_analytics/src/mod_analytics.erl:282
 msgid "Analytics configuration"
 msgstr "Configuração do Analytics"
 
@@ -6789,11 +6817,11 @@ msgstr "Solicitações classificadas — páginas, APIs e outros tipos de despac
 msgid "Configure analytics measurements"
 msgstr "Configurar métricas de análise"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:316
+#: zotonic_mod_analytics/src/mod_analytics.erl:321
 msgid "Could not delete the analytics measurement."
 msgstr "Não foi possível excluir a métrica de análise."
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:349
+#: zotonic_mod_analytics/src/mod_analytics.erl:354
 msgid "Could not save. Check the event, breakdown and filter values."
 msgstr "Não foi possível salvar. Verifique os valores do evento, da discriminação e do filtro."
 
@@ -6847,7 +6875,7 @@ msgstr "Dispositivo — celular, tablet, computador de mesa ou desconhecido"
 msgid "Display order"
 msgstr "Ordem de exibição"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:322
+#: zotonic_mod_analytics/src/mod_analytics.erl:327
 msgid "Display order saved."
 msgstr "Ordem de exibição salva."
 
@@ -7050,6 +7078,7 @@ msgstr "Intervalo mais recente armazenado"
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:55
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:206
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:17
 msgid "Next"
 msgstr "Próximo"
 
@@ -7204,7 +7233,7 @@ msgstr "Breve descrição"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
-#: zotonic_mod_analytics/src/mod_analytics.erl:269
+#: zotonic_mod_analytics/src/mod_analytics.erl:274
 msgid "Site Analytics"
 msgstr "Análise do site"
 
@@ -7256,11 +7285,11 @@ msgstr "Intervalos armazenados / capacidade"
 msgid "Stored time intervals"
 msgstr "Intervalos de tempo armazenados"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:324
+#: zotonic_mod_analytics/src/mod_analytics.erl:329
 msgid "The analytics measurements changed. Reloading their current display order."
 msgstr "As métricas de análise foram alteradas. Recarregando a ordem atual de exibição."
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:347
+#: zotonic_mod_analytics/src/mod_analytics.erl:352
 msgid "This analytics measurement exceeds the storage budget."
 msgstr "Essa medição analítica excede o orçamento de armazenamento."
 
@@ -9108,7 +9137,7 @@ msgstr "Variação líquida"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:28
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:35
 #: zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:162
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:164
 msgid "No"
 msgstr "Não"
 
@@ -9371,7 +9400,7 @@ msgstr "Itens de trabalho"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32
 #: zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
 #: zotonic_mod_translation/priv/templates/_translation_status.tpl:26
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:161
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:163
 msgid "Yes"
 msgstr "Sim"
 
@@ -9477,7 +9506,7 @@ msgstr "Nota: Os comentários são moderados"
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:29
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:4
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:199
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:201
 msgid "Page"
 msgstr "Página"
 
@@ -9507,6 +9536,7 @@ msgstr "Salvar configurações do formulário de comentários"
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:4
 #: zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:7
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:7
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:16
 msgid "Settings"
 msgstr "Configurações"
 
@@ -9798,7 +9828,7 @@ msgid "A graph of all templates, and by whom they are included, is generated and
 msgstr "É gerado e atualizado automaticamente um grafo de todos os modelos e dos modelos que os incluem."
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:9
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:83
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:86
 msgid "Action"
 msgstr "Ação"
 
@@ -11799,6 +11829,7 @@ msgstr "Somente a conta de administrador (usuário 1) pode marcar arquivos como 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:85
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:45
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:48
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:12
 msgid "Previous"
 msgstr "Anterior"
 
@@ -12125,7 +12156,7 @@ msgstr "O progresso será relatado no <a href=\"{url}\">registro do administrado
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:27
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:43
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:61
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:63
 msgid "Property"
 msgstr "Propriedade"
 
@@ -15739,7 +15770,7 @@ msgstr "Para cada combinação de usuário e rótulo, só pode haver um único t
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:110
 #: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:5
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:58
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:61
 msgid "Forever"
 msgstr "Para sempre"
 
@@ -17471,7 +17502,7 @@ msgstr "Explicação"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:35
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:11
 #: zotonic_mod_survey/src/questions/survey_q_truefalse.erl:61
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:167
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:169
 msgid "False"
 msgstr "Falso"
 
@@ -18150,7 +18181,7 @@ msgstr "Valor armazenado"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:21
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:43
 #: zotonic_mod_survey/src/questions/survey_q_likert.erl:56
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:156
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:158
 msgid "Strongly Agree"
 msgstr "Concordo plenamente"
 
@@ -18158,7 +18189,7 @@ msgstr "Concordo plenamente"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:11
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:35
 #: zotonic_mod_survey/src/questions/survey_q_likert.erl:60
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:157
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:159
 msgid "Strongly Disagree"
 msgstr "Discordo fortemente"
 
@@ -18356,7 +18387,7 @@ msgstr "Totais"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:32
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:10
 #: zotonic_mod_survey/src/questions/survey_q_truefalse.erl:63
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:166
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:168
 msgid "True"
 msgstr "Verdadeiro"
 
@@ -18552,54 +18583,82 @@ msgstr "texto"
 msgid "{points} of {max} points"
 msgstr "{points} de {max} pontos"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:34
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:53
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:30
+msgid "1–1000 immediately available request credits per IP address. Default: 30."
+msgstr "1–1.000 créditos de solicitação disponíveis imediatamente por endereço IP. Padrão: 30."
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:24
+msgid "1–100000 requests per period. Default: 120. Credits replenish continuously for each IP address."
+msgstr "1–100.000 solicitações por período. Padrão: 120. Os créditos são repostos continuamente para cada endereço IP."
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:18
+msgid "1–3600 seconds. Default: 60."
+msgstr "1–3.600 segundos. Padrão: 60."
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:36
+msgid "1–50000 retained client budgets per site and node. Default: 5000."
+msgstr "1–50.000 orçamentos de clientes retidos por site e nó. Padrão: 5.000."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:37
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:62
 msgid "Add IP entries"
 msgstr "Adicionar entradas de IP"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:23
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:26
 msgid "Add to allow list"
 msgstr "Adicionar à lista de permissões"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:13
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:42
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:45
 msgid "Allow"
 msgstr "Permitir"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:17
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:20
 msgid "Allow entries take precedence. Blocks follow observe/enforce/off mode and only affect guarded routes."
 msgstr "As entradas da lista de permissões têm prioridade. Os bloqueios seguem o modo observe/enforce/off e afetam apenas as rotas protegidas."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:106
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:109
 msgid "Block IP"
 msgstr "Bloquear IP"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:103
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:106
 msgid "Block duration"
 msgstr "Duração do bloqueio"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:86
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:89
 msgid "Block for"
 msgstr "Bloquear por"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:18
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:27
+msgid "Burst allowance"
+msgstr "Margem de tolerância para picos"
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:95
+msgid "Choose a valid mode and enter whole numbers within the indicated ranges. No settings were saved."
+msgstr "Escolha um modo válido e insira números inteiros dentro dos intervalos indicados. Nenhuma configuração foi salva."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:21
 msgid "Current mode:"
 msgstr "Modo atual:"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:72
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:75
 msgid "Current node only, including would-throttle decisions in observe mode. Up to 200 entries. Blocking generates a note from the displayed reason and rejection count."
 msgstr "Apenas o nó atual, incluindo as solicitações que seriam limitadas no modo observe. Até 200 entradas. O bloqueio gera uma observação a partir do motivo exibido e do número de solicitações rejeitadas."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:68
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:71
 msgid "Currently throttled IP addresses"
 msgstr "Endereços IP atualmente limitados"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:51
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:12
+msgid "Default: observe. Use observe mode to tune limits against normal traffic."
+msgstr "Padrão: observar. Use o modo de observação para ajustar os limites com base no tráfego normal."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:54
 msgid "Delete IP entry"
 msgstr "Excluir registro de IP"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:48
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:51
 msgid "Delete IP entry?"
 msgstr "Excluir registro de IP?"
 
@@ -18607,19 +18666,23 @@ msgstr "Excluir registro de IP?"
 msgid "Delete this IP entry?"
 msgstr "Deseja excluir esta entrada de IP?"
 
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:71
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:80
 msgid "Each list can contain at most 256 entries."
 msgstr "Cada lista pode conter, no máximo, 256 itens."
 
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:57
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:66
 msgid "Edit IP entry"
 msgstr "Editar entrada de IP"
 
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:72
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:10
+msgid "Enforce — reject excess requests"
+msgstr "Aplicar — rejeitar solicitações em excesso"
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:81
 msgid "Enter valid IP addresses, a note and a future expiry date or duration. No changes were saved."
 msgstr "Insira endereços IP válidos, uma observação e uma data de validade futura ou um prazo de validade. Nenhuma alteração foi salva."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:38
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:41
 msgid "Expiry dates are UTC. Expired entries stop applying immediately and are removed automatically. Global entries are managed in zotonic.config."
 msgstr "As datas de validade são expressas em UTC. As entradas vencidas deixam de ser aplicadas imediatamente e são removidas automaticamente. As entradas globais são gerenciadas no arquivo zotonic.config."
 
@@ -18627,7 +18690,7 @@ msgstr "As datas de validade são expressas em UTC. As entradas vencidas deixam 
 msgid "Hour"
 msgstr "Hora"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:81
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:84
 msgid "IP address"
 msgstr "Endereço IP"
 
@@ -18635,7 +18698,7 @@ msgstr "Endereço IP"
 msgid "IP addresses"
 msgstr "Endereços IP"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:32
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:35
 msgid "IP entries"
 msgstr "Entradas de IP"
 
@@ -18643,31 +18706,55 @@ msgstr "Entradas de IP"
 msgid "List"
 msgstr "Lista"
 
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:33
+msgid "Maximum tracked clients"
+msgstr "Número máximo de clientes monitorados"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:6
+msgid "Mode"
+msgstr "Modo"
+
 #: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:4
 msgid "Month (30 days)"
 msgstr "Mês (30 dias)"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:61
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:64
 msgid "No IP entries."
 msgstr "Não há registros de IP."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:114
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:117
 msgid "No currently throttled IP addresses."
 msgstr "Não há endereços IP com restrição de tráfego no momento."
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:9
+msgid "Observe — report without blocking"
+msgstr "Observe — comunique sem bloquear"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:8
+msgid "Off — bypass traffic guard"
+msgstr "Desligado — ignorar o guarda de trânsito"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:40
 msgid "Or until (UTC)"
 msgstr "Ou até (UTC)"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:82
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:85
 msgid "Reason"
 msgstr "Motivo"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:84
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:87
 msgid "Rejections"
 msgstr "Rejeições"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:85
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:15
+msgid "Replenishment period (seconds)"
+msgstr "Período de recarga (segundos)"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:21
+msgid "Requests replenished per period"
+msgstr "Pedidos reabastecidos por período"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:88
 msgid "Retry in seconds"
 msgstr "Nova tentativa em (segundos)"
 
@@ -18675,29 +18762,45 @@ msgstr "Nova tentativa em (segundos)"
 msgid "Save IP entries"
 msgstr "Salvar entradas de IP"
 
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:42
+msgid "Save settings"
+msgstr "Salvar configurações"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:38
+msgid "Saving settings resets transient request budgets. IP allow and block entries are managed separately on the Traffic guard screen."
+msgstr "Ao salvar as configurações, os orçamentos de solicitações transitórias são reiniciados. As entradas de permissão e bloqueio de IPs são gerenciadas separadamente na tela “Traffic Guard”."
+
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:9
 msgid "Separate IPv4 or IPv6 addresses with spaces, commas or newlines. Re-adding an address to the same list updates its note and expiry."
 msgstr "Separe os endereços IPv4 ou IPv6 com espaços, vírgulas ou quebras de linha. Ao adicionar novamente um endereço à mesma lista, sua nota e data de validade são atualizadas."
 
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:70
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:97
+msgid "The traffic guard settings could not be saved. Please try again."
+msgstr "Não foi possível salvar as configurações do controle de trânsito. Tente novamente."
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:79
 msgid "This IP is no longer throttled. Refresh the page."
 msgstr "Este endereço IP não está mais limitado. Atualize a página."
 
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:58
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:67
 msgid "This entry is no longer available. Refresh the page."
 msgstr "Esta entrada não está mais disponível. Atualize a página."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:3
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:10
-#: zotonic_mod_traffic_guard/src/mod_traffic_guard.erl:168
+#: zotonic_mod_traffic_guard/src/mod_traffic_guard.erl:166
 msgid "Traffic guard"
 msgstr "Proteção do tráfego"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:74
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:77
 msgid "Traffic guard is temporarily unavailable."
 msgstr "A proteção do tráfego está temporariamente indisponível."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:58
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:41
+msgid "Traffic guard settings"
+msgstr "Configurações do guarda de trânsito"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:61
 msgid "Until (UTC):"
 msgstr "Até (UTC):"
 
@@ -18709,11 +18812,15 @@ msgstr "Até (UTC; se estiver em branco, significa para sempre)"
 msgid "Valid for"
 msgstr "Válido por"
 
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:69
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:78
 msgid "You are not allowed to change these entries."
 msgstr "Não é permitido alterar esses dados."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:21
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:93
+msgid "You are not allowed to change traffic guard settings."
+msgstr "Não é permitido alterar as configurações do guarda de trânsito."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:24
 msgid "Your current IP address:"
 msgstr "Seu endereço IP atual:"
 
@@ -18789,7 +18896,7 @@ msgstr "Sub-idiomas disponíveis"
 msgid "Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>."
 msgstr "Não é possível gerar arquivos de tradução porque <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext não está instalado</a>."
 
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:51
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:53
 msgid "Click to edit."
 msgstr "Clique para editar."
 
@@ -18917,6 +19024,10 @@ msgstr "Se você traduzir textos automaticamente, seus textos serão enviados pa
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:165
 msgid "If you change the stemmer language then you will need to reindex all data."
 msgstr "Se você alterar o idioma usado para reduzir palavras ao radical, precisará reindexar todos os dados."
+
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:5
+msgid "In"
+msgstr "Em"
 
 #: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:37
 msgid "Incomplete translation"
@@ -19210,7 +19321,7 @@ msgstr "Traduzir todas as páginas"
 msgid "Translate from"
 msgstr "Traduzir de"
 
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:50
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:52
 msgid "Translated page texts for every editable language that has a translation in the resource."
 msgstr "Textos de página traduzidos para cada idioma editável que tenha uma tradução no recurso."
 
@@ -19238,6 +19349,10 @@ msgstr "A tradução foi concluída. Atualize a página para continuar editando.
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:7
 msgid "Translation in progress"
 msgstr "Tradução em andamento"
+
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:3
+msgid "Translation navigation"
+msgstr "Navegação na tradução"
 
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:3
 msgid "Translations"
@@ -19286,7 +19401,7 @@ msgstr "Você não tem permissão para editar esta árvore."
 msgid "not enabled"
 msgstr "não habilitado"
 
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:117
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:119
 msgid "page break"
 msgstr "quebra de página"
 
