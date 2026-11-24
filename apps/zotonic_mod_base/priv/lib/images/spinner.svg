@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- The loading dots: spinner.gif (Zotonic) with a transparent background; it replaces spinner.gif (Michiel 2026-11-23): four dots that grow and
+       shrink one after another, 1 second per round. Same colors, places, sizes and timing. -->
+  <circle cx="40" cy="100" r="0" fill="#e15b64">
+    <animate attributeName="r" dur="1s" begin="-0.303s" repeatCount="indefinite" calcMode="spline"
+             values="0;11.7;0;0" keyTimes="0;0.44;0.84;1"
+             keySplines="0.2 0.2 0.6 1;0.4 0 0.8 0.8;0 0 1 1"/>
+  </circle>
+  <circle cx="80" cy="100" r="0" fill="#f8b26a">
+    <animate attributeName="r" dur="1s" begin="-0.182s" repeatCount="indefinite" calcMode="spline"
+             values="0;11.7;0;0" keyTimes="0;0.44;0.84;1"
+             keySplines="0.2 0.2 0.6 1;0.4 0 0.8 0.8;0 0 1 1"/>
+  </circle>
+  <circle cx="120" cy="100" r="0" fill="#abbd81">
+    <animate attributeName="r" dur="1s" begin="-0.061s" repeatCount="indefinite" calcMode="spline"
+             values="0;11.7;0;0" keyTimes="0;0.44;0.84;1"
+             keySplines="0.2 0.2 0.6 1;0.4 0 0.8 0.8;0 0 1 1"/>
+  </circle>
+  <circle cx="160" cy="100" r="0" fill="#81a3bd">
+    <animate attributeName="r" dur="1s" begin="-0.939s" repeatCount="indefinite" calcMode="spline"
+             values="0;11.7;0;0" keyTimes="0;0.44;0.84;1"
+             keySplines="0.2 0.2 0.6 1;0.4 0 0.8 0.8;0 0 1 1"/>
+  </circle>
+</svg>
