@@ -636,7 +636,7 @@ burst_capacity_test_() -> {timeout, 30, fun burst_capacity/0}.
 
 %% Bursts reuse one job ID and upload lease; persistent saturation remains bounded.
 burst_capacity() ->
-    Keys = [media_runners, media_runner_local_fallback, media_runner_wait_timeout],
+    Keys = [media_runner_result_method, media_runners, media_runner_local_fallback, media_runner_wait_timeout],
     Old = [{K, application:get_env(zotonic, K)} || K <- Keys],
     {Pid, Owned} = case z_media_runner:start_link() of
         {ok, Started} -> {Started, true};
@@ -648,6 +648,7 @@ burst_capacity() ->
     try
         application:set_env(zotonic, media_runners,
             [#{hostname => <<"burst.example">>, oauth2_key => <<"burst">>}]),
+        application:set_env(zotonic, media_runner_result_method, callback),
         application:set_env(zotonic, media_runner_local_fallback, false),
         application:set_env(zotonic, media_runner_wait_timeout, 10),
         mock_callback_context(burst_context, burst_site,
@@ -682,7 +683,9 @@ burst_capacity() ->
                         2 -> {ok, #{<<"outcome">> => <<"busy">>}};
                         3 -> {ok, #{<<"outcome">> => <<"upload">>, <<"upload_token">> => <<"lease">>}}
                     end;
-                <<"received">> -> {ok, #{<<"outcome">> => <<"received">>}}
+                <<"received">> ->
+                    ets:insert(Calls, {received, true}),
+                    {ok, #{<<"outcome">> => <<"received">>}}
             end
         end),
         meck:expect(z_media_runner_protocol, upload, fun(_, _, <<"lease">>, _, _, Timeout) ->
@@ -697,6 +700,9 @@ burst_capacity() ->
         ?assertEqual(4, ets:lookup_element(Calls, submit, 2)),
         ?assertEqual(3, ets:lookup_element(Calls, reserve, 2)),
         ?assertEqual(1, ets:lookup_element(Calls, upload, 2)),
+        %% Receipt runs asynchronously; finish it before replacing its mock.
+        await_receipt(Calls, 100),
+        ets:delete(Calls, received),
         %% Capacity can take longer than the former five-second retry window.
         ReadyAt = erlang:monotonic_time(millisecond) + 6000,
         meck:expect(z_media_runner_protocol, request, fun(Url, _, Request) ->
@@ -709,11 +715,14 @@ burst_capacity() ->
                                 maps:get(<<"callback_token">>, Request), Result),
                             {ok, #{<<"outcome">> => <<"accepted">>}}
                     end;
-                <<"received">> -> {ok, #{<<"outcome">> => <<"received">>}}
+                <<"received">> ->
+                    ets:insert(Calls, {received, true}),
+                    {ok, #{<<"outcome">> => <<"received">>}}
             end
         end),
         ?assertEqual({ok, <<"done">>},
             z_media_runner:run(file, <<"printf done">>, #{context => burst_context})),
+        await_receipt(Calls, 100),
         %% A stalled submit/reserve must receive only the remaining job budget.
         application:set_env(zotonic, media_runner_wait_timeout, 2),
         lists:foreach(fun(Operation) ->
@@ -768,7 +777,7 @@ burst_capacity() ->
 pool_failover_test_() -> {timeout, 40, fun pool_failover/0}.
 
 pool_failover() ->
-    Keys = [media_runners, media_runner_local_fallback, media_runner_wait_timeout],
+    Keys = [media_runner_result_method, media_runners, media_runner_local_fallback, media_runner_wait_timeout],
     Old = [{K, application:get_env(zotonic, K)} || K <- Keys],
     {Pid, Owned} = case z_media_runner:start_link() of
         {ok, Started} -> {Started, true};
@@ -782,6 +791,7 @@ pool_failover() ->
             #{hostname => <<"pool-a.example">>, oauth2_key => <<"token-a">>},
             #{<<"hostname">> => <<"pool-b.example">>, <<"oauth2_key">> => <<"token-b">>}
         ]),
+        application:set_env(zotonic, media_runner_result_method, callback),
         application:set_env(zotonic, media_runner_local_fallback, false),
         application:set_env(zotonic, media_runner_wait_timeout, 2),
         {ok, [A, B]} = z_media_runner_pool:runners(),
@@ -870,7 +880,7 @@ pool_pinned_download_retry_test_() -> {timeout, 15, fun pool_pinned_download_ret
 
 pool_pinned_download_retry() ->
     ensure_sidejobs(),
-    Keys = [media_runners, media_runner_local_fallback],
+    Keys = [media_runner_result_method, media_runners, media_runner_local_fallback],
     Old = [{K, application:get_env(zotonic, K)} || K <- Keys],
     {Pid, Owned} = case z_media_runner:start_link() of
         {ok, Started} -> {Started, true};
@@ -884,6 +894,7 @@ pool_pinned_download_retry() ->
         application:set_env(zotonic, media_runners, [
             #{hostname => <<"pinned-", T/binary, ".example">>, oauth2_key => T}
             || T <- [<<"a">>, <<"b">>, <<"c">>, <<"d">>, <<"e">>]]),
+        application:set_env(zotonic, media_runner_result_method, callback),
         application:set_env(zotonic, media_runner_local_fallback, false),
         mock_callback_context(pinned_context, pinned_site,
             <<"https://client.example/callback">>),
@@ -982,4 +993,61 @@ await_receipt(Calls, N) ->
     case ets:lookup(Calls, received) of
         [{received, true}] -> ok;
         [] -> timer:sleep(10), await_receipt(Calls, N-1)
+    end.
+
+result_method_test() ->
+    lists:foreach(fun(Host) ->
+        ?assertEqual(poll, z_media_runner:result_method(auto, <<"https://", Host/binary, "/callback">>))
+    end, [<<"127.0.0.1">>, <<"10.1.2.3">>, <<"192.168.1.1">>, <<"100.64.0.1">>,
+        <<"[::1]">>, <<"[fd00::1]">>, <<"localhost">>]),
+    ?assertEqual(callback, z_media_runner:result_method(auto, <<"https://8.8.8.8/callback">>)),
+    ?assertEqual(poll, z_media_runner:result_method(<<"poll">>, undefined)),
+    ?assertEqual(poll, z_media_runner:result_method(auto, undefined)),
+    ?assertEqual(callback, z_media_runner:result_method("callback", <<"https://localhost/callback">>)),
+    ?assertEqual(invalid, z_media_runner:result_method(callback, <<"http://localhost/callback">>)),
+    ?assertEqual(invalid, z_media_runner:result_method(typo, undefined)).
+
+poll_result_test_() -> {timeout, 10, fun poll_result/0}.
+
+poll_result() ->
+    Keys = [media_runner_result_method, media_runners, media_runner_wait_timeout],
+    Old = [{K, application:get_env(zotonic, K)} || K <- Keys],
+    {Pid, Owned} = case z_media_runner:start_link() of
+        {ok, Started} -> {Started, true};
+        {error, {already_started, Started}} -> {Started, false}
+    end,
+    ok = meck:new(z_media_runner_protocol, [passthrough, no_link]),
+    Calls = ets:new(poll_calls, [public]),
+    try
+        application:set_env(zotonic, media_runner_result_method, poll),
+        application:set_env(zotonic, media_runner_wait_timeout, 60),
+        application:set_env(zotonic, media_runners,
+            [#{hostname => <<"poll.example">>, oauth2_key => <<"poll-token">>}]),
+        Result = #{<<"status">> => <<"ok">>, <<"stdout">> => base64:encode(<<"polled">>), <<"files">> => []},
+        meck:expect(z_media_runner_protocol, request, fun(Url, <<"poll-token">>, Request, Timeout) ->
+            ?assert(Timeout > 0 andalso Timeout =< 30000),
+            case lists:last(binary:split(Url, <<"/">>, [global])) of
+                <<"submit">> ->
+                    ?assertEqual(<<"poll">>, maps:get(<<"result_method">>, Request)),
+                    ?assertNot(maps:is_key(<<"callback_url">>, Request)),
+                    ?assertNot(maps:is_key(<<"callback_token">>, Request)),
+                    {ok, #{<<"outcome">> => <<"accepted">>}};
+                <<"status">> ->
+                    ?assertEqual(25, maps:get(<<"wait">>, Request)),
+                    {ok, #{<<"outcome">> => <<"completed">>, <<"result">> => Result}};
+                <<"received">> ->
+                    ets:insert(Calls, {received, true}),
+                    {ok, #{<<"outcome">> => <<"received">>}}
+            end
+        end),
+        ?assertEqual({ok, <<"polled">>}, z_media_runner:run(file, <<"printf polled">>, #{})),
+        await_receipt(Calls, 100)
+    after
+        ets:delete(Calls),
+        meck:unload(z_media_runner_protocol),
+        case Owned of true -> gen_server:stop(Pid); false -> ok end,
+        lists:foreach(fun
+            ({K, undefined}) -> application:unset_env(zotonic, K);
+            ({K, {ok, V}}) -> application:set_env(zotonic, K, V)
+        end, Old)
     end.

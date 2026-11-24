@@ -28,7 +28,30 @@ inotify_watch_files_test() ->
         file:del_dir_r(Root)
     end.
 
-watcher_arguments_test() ->
+%% CI runs EUnit inside a live Zotonic node. These node-wide mocks remove
+%% exec:run/2 and supervisor callbacks used by background notifications/watchers.
+watcher_arguments_test_() ->
+    case whereis(zotonic_filewatcher_sup) of
+        undefined -> fun watcher_arguments/0;
+        _ -> {timeout, 60, fun isolated_vm/0}
+    end.
+
+isolated_vm() ->
+    Args = ["-noshell", "-pa"] ++ code:get_path() ++ ["-eval",
+        "case eunit:test(zotonic_filewatcher_sup_tests, [verbose]) of ok -> halt(0); _ -> halt(1) end."],
+    Port = open_port({spawn_executable, os:find_executable("erl")},
+        [binary, exit_status, stderr_to_stdout, {args, Args}]),
+    isolated_result(Port, []).
+
+isolated_result(Port, Output) ->
+    receive
+        {Port, {data, Data}} -> isolated_result(Port, [Data | Output]);
+        {Port, {exit_status, Status}} ->
+            io:put_chars(lists:reverse(Output)),
+            ?assertEqual(0, Status)
+    end.
+
+watcher_arguments() ->
     Modules = [exec, zotonic_filewatcher_sup],
     lists:foreach(fun(M) -> meck:new(M, [no_link]) end, Modules),
     Roots = ["/site " ++ integer_to_list(N) || N <- lists:seq(1, 5000)],
