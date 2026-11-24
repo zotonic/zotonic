@@ -35,6 +35,15 @@ process(_,_,_,C) ->
                  {read_only,z_acl:is_read_only(C)},{current_ip,current_ip(C)}],C),C);
         _ -> z_context:output(<<"Access denied">>,C)
     end.
+event(#postback{message=settings}, C) ->
+    case {z_acl:is_read_only(C), m_traffic_guard:settings(C)} of
+        {false, {ok, Settings}} ->
+            z_render:dialog(?__("Traffic guard settings", C),
+                "_dialog_traffic_guard_settings.tpl", [{settings, Settings}], C);
+        _ -> settings_response({error, eacces}, C)
+    end;
+event(#submit{message=save_settings}, C) ->
+    settings_response(m_traffic_guard:save_settings(z_context:get_q_map_noz(C), C), C);
 event(#postback{message=add},C) -> entry_dialog(undefined,undefined,C);
 event(#postback{message=add_current},C) -> entry_dialog(undefined,current_ip(C),C);
 event(#postback{message={edit,Args}},C) -> entry_dialog(proplists:get_value(id,Args),undefined,C);
@@ -77,3 +86,12 @@ current_ip(C) ->
         undefined -> undefined;
         IP -> list_to_binary(inet:ntoa(m_traffic_guard:normalize(IP)))
     end.
+
+settings_response(ok, Context) ->
+    z_render:wire({reload, []}, Context);
+settings_response({error, eacces}, Context) ->
+    z_render:growl_error(?__("You are not allowed to change traffic guard settings.", Context), Context);
+settings_response({error, invalid_settings}, Context) ->
+    z_render:growl_error(?__("Choose a valid mode and enter whole numbers within the indicated ranges. No settings were saved.", Context), Context);
+settings_response({error, _}, Context) ->
+    z_render:growl_error(?__("The traffic guard settings could not be saved. Please try again.", Context), Context).
