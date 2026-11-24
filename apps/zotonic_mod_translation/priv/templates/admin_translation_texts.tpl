@@ -46,6 +46,8 @@
             </a>
         </h1>
 
+        {% include "_translation_navigation.tpl" id=id %}
+
         <p class="help-block">
             {_ Translated page texts for every editable language that has a translation in the resource. _}
             {_ Click to edit. _}

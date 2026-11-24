@@ -8,7 +8,7 @@
             <button id="trans-review-btn-{{ lang_code }}" class="btn btn-xs btn-primary" type="button">
                 {_ Approve translation _}
             </button>
-            <a class="btn btn-xs btn-default" href="{% url admin_translation_texts id=id close=1 %}" target="_showtexts" title="{_ Show all translated texts in a new tab. _}">
+            <a class="btn btn-xs btn-default" href="{% url admin_translation_texts id=id close=1 qargs=%{"in": tree_id|default:q["in"]|default:((id.is_a.menu or id.is_a.collection)|if:id:undefined)} %}" target="_showtexts" title="{_ Show all translated texts in a new tab. _}">
                 {_ Show translations _} <span class="fa fa-external-link"></span>
             </a>
         </p>
