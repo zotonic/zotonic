@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-20 22:19\n"
+"PO-Revision-Date: 2026-11-24 17:04\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -457,6 +457,7 @@ msgstr "Ви впевнені, що хочете відновити всі пр�
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:185
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:45
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:41
 #: zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:116
 #: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:43
@@ -508,8 +509,8 @@ msgstr "Конфігурацію змінено."
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:209
 #: zotonic_mod_admin/priv/templates/_admin_edit_version.tpl:5
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:72
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:74
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:76
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_filter_predicates.tpl:20
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:40
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:79
@@ -644,7 +645,7 @@ msgstr "Не вдалося перемістити до групи співпр�
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125
 #: zotonic_mod_survey/src/mod_survey.erl:427
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:50
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:12
 msgid "Delete"
@@ -671,7 +672,7 @@ msgstr "Видалення..."
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:33
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:14
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:42
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:45
 msgid "Deny"
 msgstr "Заборонити"
 
@@ -922,7 +923,7 @@ msgstr "Повернені правила"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:33
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:162
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:141
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:86
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:26
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:105
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:56
@@ -1453,7 +1454,7 @@ msgstr "Ви впевнені, що хочете видалити ці {n} ст�
 msgid "Are you sure you want to delete this note?"
 msgstr "Ви впевнені, що бажаєте видалити цю нотатку?"
 
-#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:63
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:86
 msgid "Are you sure you want to exit the admin interface?"
 msgstr "Ви впевнені, що хочете вийти з інтерфейсу адміністратора?"
 
@@ -1476,6 +1477,10 @@ msgstr "Авторизація"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:142
 msgid "Authentication"
 msgstr "Аутентифікація"
+
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:76
+msgid "Automatic"
+msgstr "Автоматичний"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:162
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:164
@@ -1657,7 +1662,7 @@ msgstr "Налаштовано"
 msgid "Confirm delete"
 msgstr "Підтвердьте видалення"
 
-#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:63
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:85
 msgid "Confirm logoff"
 msgstr "Підтвердьте вихід"
 
@@ -1818,6 +1823,10 @@ msgstr "Дата створення, спочатку найновіші"
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:262
 msgid "Creation date, oldest first"
 msgstr "Дата створення, спочатку найстаріші"
+
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:70
+msgid "Dark"
+msgstr "Темний"
 
 #: zotonic_mod_admin/priv/templates/admin.tpl:4
 #: zotonic_mod_admin/priv/templates/admin.tpl:8
@@ -2032,7 +2041,7 @@ msgstr "Адреса електронної пошти"
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:131
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:117
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:119
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:46
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:49
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:44
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:14
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:16
@@ -2505,6 +2514,10 @@ msgstr "Останні модифіковані особи"
 msgid "Latest modified texts"
 msgstr "Останні модифіковані тексти"
 
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:64
+msgid "Light"
+msgstr "Світло"
+
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:43
 msgid "Link selected page"
 msgstr "Додати посилання на вибрану сторінку"
@@ -2542,7 +2555,7 @@ msgstr "Увімкнено локальний резервний варіант.
 msgid "Local sandbox"
 msgstr "Локальна пісочниця"
 
-#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:62
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:82
 #: zotonic_site_status/priv/templates/_menu.tpl:5
 #: zotonic_site_status/priv/templates/_navbar.tpl:34
 msgid "Log Off"
@@ -3232,7 +3245,7 @@ msgstr "Сторінки, що посилаються на"
 #: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:51
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:69
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:72
 msgid "Refresh"
 msgstr "Оновити"
 
@@ -3390,21 +3403,21 @@ msgstr "Ізоляція середовища в цій системі не пі
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:4
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:144
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:90
 msgid "Save &amp; view"
 msgstr "Зберегти &amp; переглянути"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:4
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:144
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:90
 msgid "Save and view the page."
 msgstr "Збережіть і перегляньте сторінку."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:17
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:141
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:86
 msgid "Save this page."
 msgstr "Збережіть цю сторінку."
 
@@ -3459,7 +3472,7 @@ msgstr "Пошуковий запит"
 msgid "Search results"
 msgstr "Результати пошуку"
 
-#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:76
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:100
 msgid "Search..."
 msgstr "Шукати..."
 
@@ -3921,6 +3934,10 @@ msgstr "Система виділила більше, ніж указаний п
 msgid "The update coordinator restarted. Restart the Zotonic node before deploying again."
 msgstr "Координатор оновлень перезапустився. Перед повторним розгортанням перезапустіть вузол Zotonic."
 
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:59
+msgid "Theme"
+msgstr "Тема"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers_list.tpl:43
 msgid "There are no incoming connections."
 msgstr "Немає вхідних з'єднань."
@@ -4178,6 +4195,9 @@ msgstr "Неопублікований"
 #: zotonic_mod_seo/src/support/seo_jsonld_webpage.erl:276
 #: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:16
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:10
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:6
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:12
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:17
 #: zotonic_mod_translation/priv/templates/_translation_tree_skipped.tpl:7
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:3
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:93
@@ -4284,7 +4304,7 @@ msgstr "Використовуйте ці операції для відновл
 msgid "Used"
 msgstr "Використовується"
 
-#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:59
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:54
 msgid "User page"
 msgstr "Сторінка користувача"
 
@@ -5270,8 +5290,8 @@ msgstr "Сховати меню"
 msgid "Language"
 msgstr "Мова"
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:34
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:44
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:36
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:46
 msgid "Loading ..."
 msgstr "Завантаження..."
 
@@ -5287,11 +5307,11 @@ msgstr "Показати меню"
 msgid "The page might have been deleted."
 msgstr "Можливо, сторінка була видалена."
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:133
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:135
 msgid "There are unsaved changes. Are you sure you want to leave without saving?"
 msgstr "Є незбережені зміни. Ви впевнені, що хочете вийти, не зберігаючи?"
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:82
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
 msgid "This page"
 msgstr "Ця сторінка"
 
@@ -5299,7 +5319,7 @@ msgstr "Ця сторінка"
 msgid "View this page."
 msgstr "Переглянути цю сторінку."
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:131
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:133
 msgid "Yes, discard changes"
 msgstr "Так, відхилити зміни"
 
@@ -6329,6 +6349,10 @@ msgstr "Бета"
 msgid "Change the predicate on all existing page connections to:"
 msgstr "Змініть предикат для всіх існуючих підключень сторінок на:"
 
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:68
+msgid "Connections using this predicate do not keep their target page alive. A dependent target page can be deleted when it has no other incoming connections. Protected pages are kept."
+msgstr "З'єднання, що використовують цей предикат, не підтримують активність цільової сторінки. Залежна цільова сторінка може бути видалена, якщо до неї не надходять інші з'єднання. Захищені сторінки зберігаються."
+
 #: zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:88
 msgid "Could not create the predicate."
 msgstr "Не вдалося створити предикат."
@@ -6345,11 +6369,11 @@ msgstr "Видалення скасовано: існують зв’язки з
 msgid "Delete predicate and update connections"
 msgstr "Видалити предикат та оновити з’єднання"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:85
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:95
 msgid "Do not find subjects using this predicate’s object titles."
 msgstr "Не знаходьте суб’єкти, використовуючи заголовки об’єктів цього предиката."
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:95
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:105
 msgid "Do not show on the connections list on the resource edit page."
 msgstr "Не показувати у списку підключень на сторінці редагування ресурсу."
 
@@ -6393,11 +6417,15 @@ msgstr "Приховати або показати сторінки, які не
 msgid "Hide previously added pages and connections."
 msgstr "Приховати раніше додані сторінки та з'єднання."
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:75
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:65
+msgid "Ignore these connections when cleaning up dependent pages."
+msgstr "Під час очищення залежних сторінок не враховуйте ці зв’язки."
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:85
 msgid "Insert new connections before existing connections."
 msgstr "Вставте нові з’єднання перед наявними."
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:68
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:78
 msgid "Instead of a search box, this will show a list of all pages in the target categories selected above. At least one category must be selected."
 msgstr "Замість поля пошуку тут відобразиться список усіх сторінок у цільових категоріях, обраних вище. Необхідно вибрати принаймні одну категорію."
 
@@ -6435,7 +6463,7 @@ msgstr "Об'єкт"
 msgid "Only show connections with the following predicates:"
 msgstr "Показуються лише зв'язки з наступними предикатами:"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:108
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:118
 msgid "Ontologies define predicates for a defined set of subject and object categories. Sometimes it is more practical to have the predicate’s connection direction reversed from the formal definition. Export and import functions can use this option to swap subject/object relation when exporting or importing data."
 msgstr "Онтології визначають предикати для визначеного набору категорій суб’єкта та об’єкта. Іноді практичніше мати напрямок зв'язку предиката, протилежний формальному визначенню. Функції експорту та імпорту можуть використовувати цей параметр, щоб поміняти місцями відношення суб’єкт/об’єкт під час експорту чи імпорту даних."
 
@@ -6500,7 +6528,7 @@ msgstr "Показати всі вихідні з'єднання"
 msgid "Show graph of all connections"
 msgstr "Показати граф усіх зв’язків"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:98
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:108
 msgid "Some predicates are mostly for internal purposes. Check this if you don’t want to show this predicate on the <em>Connected to</em> list."
 msgstr "Деякі предикати призначені переважно для внутрішніх цілей. Позначте це, якщо ви не хочете відображати цей предикат у списку <em>Пов’язаний з</em>."
 
@@ -6516,7 +6544,7 @@ msgstr "Повернутися на крок назад"
 msgid "Subject"
 msgstr "Суб’єкт"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:105
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:115
 msgid "The direction (from/to) of this predicate is reversed from the normal definition."
 msgstr "Напрямок (від/до) цього предиката протилежний до звичайного визначення."
 
@@ -6528,7 +6556,7 @@ msgstr "З цим предикатом немає з’єднань сторін
 msgid "There is already a predicate with this name."
 msgstr "Предикат із такою назвою вже існує."
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:88
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:98
 msgid "This directs the indexers to not include the titles of connected pages with this predicate. Normally titles of connected pages are included, making it possible to eg. find articles by their author’s name."
 msgstr "Це вказує індексаторам не включати заголовки пов’язаних сторінок із цим предикатом. Зазвичай заголовки підключених сторінок включені, що дає змогу, наприклад, знайти статті за іменем їх автора."
 
@@ -6564,11 +6592,11 @@ msgstr "Занадто багато зв'язків"
 msgid "URI"
 msgstr "URI"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:65
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:75
 msgid "Use a list of checkboxes with titles when adding page connections."
 msgstr "Використовуйте список прапорців із заголовками, додаючи зв’язки сторінок."
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:78
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:88
 msgid "Usually new connections are inserted after existing connections. Check this to insert new connections before existing connections."
 msgstr "Зазвичай нові з'єднання вставляються після існуючих з'єднань. Поставте цей прапорець, щоб вставити нові з’єднання перед існуючими."
 
@@ -6754,13 +6782,13 @@ msgstr "Допустимі значення (розділені комами)"
 msgid "Allowed values:"
 msgstr "Допустимі значення:"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:348
+#: zotonic_mod_analytics/src/mod_analytics.erl:353
 msgid "An equivalent analytics measurement already exists."
 msgstr "Аналогічний аналітичний показник вже існує."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
-#: zotonic_mod_analytics/src/mod_analytics.erl:277
+#: zotonic_mod_analytics/src/mod_analytics.erl:282
 msgid "Analytics configuration"
 msgstr "Налаштування аналітики"
 
@@ -6831,11 +6859,11 @@ msgstr "Запити з класифікацією — сторінки, API т�
 msgid "Configure analytics measurements"
 msgstr "Налаштувати показники аналітики"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:316
+#: zotonic_mod_analytics/src/mod_analytics.erl:321
 msgid "Could not delete the analytics measurement."
 msgstr "Не вдалося видалити показник аналітики."
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:349
+#: zotonic_mod_analytics/src/mod_analytics.erl:354
 msgid "Could not save. Check the event, breakdown and filter values."
 msgstr "Не вдалося зберегти. Перевірте значення події, розбивки та фільтра."
 
@@ -6889,7 +6917,7 @@ msgstr "Пристрій — телефон, планшет, настільни�
 msgid "Display order"
 msgstr "Порядок відображення"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:322
+#: zotonic_mod_analytics/src/mod_analytics.erl:327
 msgid "Display order saved."
 msgstr "Порядок відображення збережено."
 
@@ -7092,6 +7120,7 @@ msgstr "Найновіший збережений інтервал"
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:55
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:206
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:17
 msgid "Next"
 msgstr "Далі"
 
@@ -7246,7 +7275,7 @@ msgstr "Короткий опис"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
-#: zotonic_mod_analytics/src/mod_analytics.erl:269
+#: zotonic_mod_analytics/src/mod_analytics.erl:274
 msgid "Site Analytics"
 msgstr "Аналітика сайту"
 
@@ -7298,11 +7327,11 @@ msgstr "Збережені інтервали / місткість"
 msgid "Stored time intervals"
 msgstr "Збережені часові інтервали"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:324
+#: zotonic_mod_analytics/src/mod_analytics.erl:329
 msgid "The analytics measurements changed. Reloading their current display order."
 msgstr "Показники аналітики змінилися. Відбувається перезавантаження поточного порядку відображення."
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:347
+#: zotonic_mod_analytics/src/mod_analytics.erl:352
 msgid "This analytics measurement exceeds the storage budget."
 msgstr "Цей показник аналітики перевищує ліміт обсягу зберігання даних."
 
@@ -9148,7 +9177,7 @@ msgstr "Чиста зміна"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:28
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:35
 #: zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:162
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:164
 msgid "No"
 msgstr "Ні"
 
@@ -9411,7 +9440,7 @@ msgstr "Робочі завдання"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32
 #: zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
 #: zotonic_mod_translation/priv/templates/_translation_status.tpl:26
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:161
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:163
 msgid "Yes"
 msgstr "Так"
 
@@ -9517,7 +9546,7 @@ msgstr "Примітка. Коментарі модеруються"
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:29
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:4
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:199
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:201
 msgid "Page"
 msgstr "Сторінка"
 
@@ -9547,6 +9576,7 @@ msgstr "Зберегти налаштування форми коментарі�
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:4
 #: zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:7
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:7
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:16
 msgid "Settings"
 msgstr "Налаштування"
 
@@ -9838,7 +9868,7 @@ msgid "A graph of all templates, and by whom they are included, is generated and
 msgstr "Граф усіх шаблонів і зв’язків їх включення іншими шаблонами створюється та оновлюється автоматично."
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:9
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:83
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:86
 msgid "Action"
 msgstr "Дія"
 
@@ -11839,6 +11869,7 @@ msgstr "Тільки обліковий запис адміністратора 
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:85
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:45
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:48
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:12
 msgid "Previous"
 msgstr "Попередній"
 
@@ -12165,7 +12196,7 @@ msgstr "Прогрес буде повідомлятися в журналі <a 
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:27
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:43
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:61
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:63
 msgid "Property"
 msgstr "Властивість"
 
@@ -15779,7 +15810,7 @@ msgstr "Для кожної комбінації користувача та м�
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:110
 #: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:5
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:58
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:61
 msgid "Forever"
 msgstr "Назавжди"
 
@@ -17511,7 +17542,7 @@ msgstr "Пояснення"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:35
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:11
 #: zotonic_mod_survey/src/questions/survey_q_truefalse.erl:61
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:167
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:169
 msgid "False"
 msgstr "Хибно"
 
@@ -18190,7 +18221,7 @@ msgstr "Збережене значення"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:21
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:43
 #: zotonic_mod_survey/src/questions/survey_q_likert.erl:56
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:156
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:158
 msgid "Strongly Agree"
 msgstr "Абсолютно згодний"
 
@@ -18198,7 +18229,7 @@ msgstr "Абсолютно згодний"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:11
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:35
 #: zotonic_mod_survey/src/questions/survey_q_likert.erl:60
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:157
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:159
 msgid "Strongly Disagree"
 msgstr "Категорично не згоден"
 
@@ -18396,7 +18427,7 @@ msgstr "Підсумки"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:32
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:10
 #: zotonic_mod_survey/src/questions/survey_q_truefalse.erl:63
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:166
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:168
 msgid "True"
 msgstr "Правда"
 
@@ -18592,54 +18623,82 @@ msgstr "текст"
 msgid "{points} of {max} points"
 msgstr "{points} з {max} балів"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:34
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:53
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:30
+msgid "1–1000 immediately available request credits per IP address. Default: 30."
+msgstr "Від 1 до 1000 кредитів на запити, доступних одразу, на кожну IP-адресу. Значення за замовчуванням: 30."
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:24
+msgid "1–100000 requests per period. Default: 120. Credits replenish continuously for each IP address."
+msgstr "1–100 000 запитів за період. Значення за замовчуванням: 120. Кредити поповнюються безперервно для кожної IP-адреси."
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:18
+msgid "1–3600 seconds. Default: 60."
+msgstr "1–3600 секунд. Значення за замовчуванням: 60."
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:36
+msgid "1–50000 retained client budgets per site and node. Default: 5000."
+msgstr "1–50 000 збережених бюджетів клієнтів на кожен сайт і вузол. Значення за замовчуванням: 5000."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:37
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:62
 msgid "Add IP entries"
 msgstr "Додати записи IP-адрес"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:23
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:26
 msgid "Add to allow list"
 msgstr "Додати до списку дозволених"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:13
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:42
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:45
 msgid "Allow"
 msgstr "Дозволити"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:17
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:20
 msgid "Allow entries take precedence. Blocks follow observe/enforce/off mode and only affect guarded routes."
 msgstr "Записи у списку дозволених адрес мають пріоритет. Блокування залежать від режиму observe/enforce/off і діють лише на захищених маршрутах."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:106
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:109
 msgid "Block IP"
 msgstr "Заблокувати IP-адресу"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:103
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:106
 msgid "Block duration"
 msgstr "Тривалість блокування"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:86
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:89
 msgid "Block for"
 msgstr "Заблокувати на"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:18
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:27
+msgid "Burst allowance"
+msgstr "Допустиме значення імпульсного навантаження"
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:95
+msgid "Choose a valid mode and enter whole numbers within the indicated ranges. No settings were saved."
+msgstr "Оберіть допустимий режим і введіть цілі числа в межах вказаних діапазонів. Налаштування не збережено."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:21
 msgid "Current mode:"
 msgstr "Поточний режим:"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:72
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:75
 msgid "Current node only, including would-throttle decisions in observe mode. Up to 200 entries. Blocking generates a note from the displayed reason and rejection count."
 msgstr "Лише поточний вузол, включно із запитами, які були б обмежені в режимі observe. До 200 записів. Під час блокування створюється примітка на основі показаної причини та кількості відхилених запитів."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:68
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:71
 msgid "Currently throttled IP addresses"
 msgstr "IP-адреси, доступ до яких наразі обмежено"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:51
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:12
+msgid "Default: observe. Use observe mode to tune limits against normal traffic."
+msgstr "За замовчуванням: режим спостереження. Використовуйте режим спостереження для налаштування обмежень з урахуванням звичайного трафіку."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:54
 msgid "Delete IP entry"
 msgstr "Видалити запис про IP-адресу"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:48
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:51
 msgid "Delete IP entry?"
 msgstr "Видалити запис про IP-адресу?"
 
@@ -18647,19 +18706,23 @@ msgstr "Видалити запис про IP-адресу?"
 msgid "Delete this IP entry?"
 msgstr "Видалити цей запис про IP-адресу?"
 
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:71
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:80
 msgid "Each list can contain at most 256 entries."
 msgstr "Кожен список може містити не більше 256 записів."
 
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:57
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:66
 msgid "Edit IP entry"
 msgstr "Редагувати запис IP-адреси"
 
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:72
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:10
+msgid "Enforce — reject excess requests"
+msgstr "Застосувати — відхилити зайві запити"
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:81
 msgid "Enter valid IP addresses, a note and a future expiry date or duration. No changes were saved."
 msgstr "Введіть дійсні IP-адреси, примітку та майбутню дату закінчення терміну дії або тривалість. Зміни не збережено."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:38
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:41
 msgid "Expiry dates are UTC. Expired entries stop applying immediately and are removed automatically. Global entries are managed in zotonic.config."
 msgstr "Дати закінчення дії вказано у форматі UTC. Записи, термін дії яких закінчився, негайно перестають діяти та автоматично видаляються. Глобальними записами керують у файлі zotonic.config."
 
@@ -18667,7 +18730,7 @@ msgstr "Дати закінчення дії вказано у форматі UT
 msgid "Hour"
 msgstr "Година"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:81
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:84
 msgid "IP address"
 msgstr "IP-адреса"
 
@@ -18675,7 +18738,7 @@ msgstr "IP-адреса"
 msgid "IP addresses"
 msgstr "IP-адреси"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:32
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:35
 msgid "IP entries"
 msgstr "Записи IP-адрес"
 
@@ -18683,31 +18746,55 @@ msgstr "Записи IP-адрес"
 msgid "List"
 msgstr "Список"
 
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:33
+msgid "Maximum tracked clients"
+msgstr "Максимальна кількість відстежуваних клієнтів"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:6
+msgid "Mode"
+msgstr "Режим"
+
 #: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:4
 msgid "Month (30 days)"
 msgstr "Місяць (30 днів)"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:61
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:64
 msgid "No IP entries."
 msgstr "Записів за IP-адресою немає."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:114
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:117
 msgid "No currently throttled IP addresses."
 msgstr "Наразі немає IP-адрес, доступ до яких обмежено."
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:9
+msgid "Observe — report without blocking"
+msgstr "Спостерігайте — повідомляйте, не перекриваючи прохід"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:8
+msgid "Off — bypass traffic guard"
+msgstr "Вимкнено — обхід дорожнього регулювальника"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:40
 msgid "Or until (UTC)"
 msgstr "Або до (UTC)"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:82
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:85
 msgid "Reason"
 msgstr "Причина"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:84
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:87
 msgid "Rejections"
 msgstr "Відмови"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:85
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:15
+msgid "Replenishment period (seconds)"
+msgstr "Період поповнення (секунди)"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:21
+msgid "Requests replenished per period"
+msgstr "Кількість запитів, опрацьованих за період"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:88
 msgid "Retry in seconds"
 msgstr "Повторна спроба через (секунди)"
 
@@ -18715,29 +18802,45 @@ msgstr "Повторна спроба через (секунди)"
 msgid "Save IP entries"
 msgstr "Зберегти записи IP-адрес"
 
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:42
+msgid "Save settings"
+msgstr "Зберегти налаштування"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:38
+msgid "Saving settings resets transient request budgets. IP allow and block entries are managed separately on the Traffic guard screen."
+msgstr "Збереження налаштувань призводить до скидання тимчасових лімітів запитів. Записи про дозволені та заблоковані IP-адреси управляються окремо на екрані «Traffic Guard»."
+
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:9
 msgid "Separate IPv4 or IPv6 addresses with spaces, commas or newlines. Re-adding an address to the same list updates its note and expiry."
 msgstr "Розділяйте адреси IPv4 або IPv6 пробілами, комами або символами нового рядка. Повторне додавання адреси до того самого списку оновлює відповідну примітку та термін дії."
 
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:70
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:97
+msgid "The traffic guard settings could not be saved. Please try again."
+msgstr "Не вдалося зберегти налаштування системи контролю дорожнього руху. Спробуйте ще раз."
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:79
 msgid "This IP is no longer throttled. Refresh the page."
 msgstr "Ця IP-адреса більше не обмежується. Оновіть сторінку."
 
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:58
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:67
 msgid "This entry is no longer available. Refresh the page."
 msgstr "Цей запис більше недоступний. Оновіть сторінку."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:3
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:10
-#: zotonic_mod_traffic_guard/src/mod_traffic_guard.erl:168
+#: zotonic_mod_traffic_guard/src/mod_traffic_guard.erl:166
 msgid "Traffic guard"
 msgstr "Захист трафіку"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:74
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:77
 msgid "Traffic guard is temporarily unavailable."
 msgstr "Захист трафіку тимчасово недоступний."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:58
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:41
+msgid "Traffic guard settings"
+msgstr "Налаштування регулювання дорожнього руху"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:61
 msgid "Until (UTC):"
 msgstr "До (UTC):"
 
@@ -18749,11 +18852,15 @@ msgstr "До (UTC; порожнє поле означає «назавжди»)"
 msgid "Valid for"
 msgstr "Дійсно протягом"
 
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:69
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:78
 msgid "You are not allowed to change these entries."
 msgstr "Вам заборонено змінювати ці записи."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:21
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:93
+msgid "You are not allowed to change traffic guard settings."
+msgstr "Вам заборонено змінювати налаштування системи регулювання дорожнього руху."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:24
 msgid "Your current IP address:"
 msgstr "Ваша поточна IP-адреса:"
 
@@ -18829,7 +18936,7 @@ msgstr "Доступні підмови"
 msgid "Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>."
 msgstr "Не вдається створити файли перекладу, оскільки <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext не встановлено</a>."
 
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:51
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:53
 msgid "Click to edit."
 msgstr "Натисніть, щоб редагувати."
 
@@ -18957,6 +19064,10 @@ msgstr "Якщо ви автоматично перекладаєте текст
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:165
 msgid "If you change the stemmer language then you will need to reindex all data."
 msgstr "Якщо ви зміните мову стемінгу, потрібно буде переіндексувати всі дані."
+
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:5
+msgid "In"
+msgstr "У"
 
 #: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:37
 msgid "Incomplete translation"
@@ -19250,7 +19361,7 @@ msgstr "Перекласти всі сторінки"
 msgid "Translate from"
 msgstr "Перекласти з"
 
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:50
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:52
 msgid "Translated page texts for every editable language that has a translation in the resource."
 msgstr "Перекладені тексти сторінок для всіх редагованих мов, які мають переклад на ресурсі."
 
@@ -19278,6 +19389,10 @@ msgstr "Переклад завершено. Оновіть сторінку, щ
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:7
 msgid "Translation in progress"
 msgstr "Переклад виконується"
+
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:3
+msgid "Translation navigation"
+msgstr "Навігація по перекладі"
 
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:3
 msgid "Translations"
@@ -19326,7 +19441,7 @@ msgstr "Вам заборонено редагувати це дерево."
 msgid "not enabled"
 msgstr "не ввімкнено"
 
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:117
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:119
 msgid "page break"
 msgstr "розрив сторінки"
 
