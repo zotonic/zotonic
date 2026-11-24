@@ -683,7 +683,9 @@ burst_capacity() ->
                         2 -> {ok, #{<<"outcome">> => <<"busy">>}};
                         3 -> {ok, #{<<"outcome">> => <<"upload">>, <<"upload_token">> => <<"lease">>}}
                     end;
-                <<"received">> -> {ok, #{<<"outcome">> => <<"received">>}}
+                <<"received">> ->
+                    ets:insert(Calls, {received, true}),
+                    {ok, #{<<"outcome">> => <<"received">>}}
             end
         end),
         meck:expect(z_media_runner_protocol, upload, fun(_, _, <<"lease">>, _, _, Timeout) ->
@@ -698,6 +700,9 @@ burst_capacity() ->
         ?assertEqual(4, ets:lookup_element(Calls, submit, 2)),
         ?assertEqual(3, ets:lookup_element(Calls, reserve, 2)),
         ?assertEqual(1, ets:lookup_element(Calls, upload, 2)),
+        %% Receipt runs asynchronously; finish it before replacing its mock.
+        await_receipt(Calls, 100),
+        ets:delete(Calls, received),
         %% Capacity can take longer than the former five-second retry window.
         ReadyAt = erlang:monotonic_time(millisecond) + 6000,
         meck:expect(z_media_runner_protocol, request, fun(Url, _, Request) ->
@@ -710,11 +715,14 @@ burst_capacity() ->
                                 maps:get(<<"callback_token">>, Request), Result),
                             {ok, #{<<"outcome">> => <<"accepted">>}}
                     end;
-                <<"received">> -> {ok, #{<<"outcome">> => <<"received">>}}
+                <<"received">> ->
+                    ets:insert(Calls, {received, true}),
+                    {ok, #{<<"outcome">> => <<"received">>}}
             end
         end),
         ?assertEqual({ok, <<"done">>},
             z_media_runner:run(file, <<"printf done">>, #{context => burst_context})),
+        await_receipt(Calls, 100),
         %% A stalled submit/reserve must receive only the remaining job budget.
         application:set_env(zotonic, media_runner_wait_timeout, 2),
         lists:foreach(fun(Operation) ->
@@ -1004,7 +1012,10 @@ poll_result_test_() -> {timeout, 10, fun poll_result/0}.
 poll_result() ->
     Keys = [media_runner_result_method, media_runners, media_runner_wait_timeout],
     Old = [{K, application:get_env(zotonic, K)} || K <- Keys],
-    {ok, Pid} = z_media_runner:start_link(),
+    {Pid, Owned} = case z_media_runner:start_link() of
+        {ok, Started} -> {Started, true};
+        {error, {already_started, Started}} -> {Started, false}
+    end,
     ok = meck:new(z_media_runner_protocol, [passthrough, no_link]),
     Calls = ets:new(poll_calls, [public]),
     try
@@ -1034,7 +1045,7 @@ poll_result() ->
     after
         ets:delete(Calls),
         meck:unload(z_media_runner_protocol),
-        gen_server:stop(Pid),
+        case Owned of true -> gen_server:stop(Pid); false -> ok end,
         lists:foreach(fun
             ({K, undefined}) -> application:unset_env(zotonic, K);
             ({K, {ok, V}}) -> application:set_env(zotonic, K, V)
