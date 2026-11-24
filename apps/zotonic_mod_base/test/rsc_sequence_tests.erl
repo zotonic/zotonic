@@ -25,6 +25,7 @@ navigation_test_() ->
     z_test_support:isolated(fun navigation/0).
 
 navigation() ->
+    Context = #context{},
     Modules = [m_rsc, m_edge, z_acl],
     lists:foreach(fun(M) -> meck:new(M, [non_strict, no_link]) end, Modules),
     try
@@ -47,17 +48,17 @@ navigation() ->
         end),
         Order = [1, 2, 3, 6, 9, 7, 8],
         lists:foreach(fun({A, B}) ->
-            ?assertEqual(B, filter_next_in:next_in(A, <<"root">>, context)),
-            ?assertEqual(A, filter_prev_in:prev_in(B, 1, context))
+            ?assertEqual(B, filter_next_in:next_in(A, <<"root">>, Context)),
+            ?assertEqual(A, filter_prev_in:prev_in(B, 1, Context))
         end, lists:zip(lists:droplast(Order), tl(Order))),
-        ?assertEqual(undefined, filter_prev_in:prev_in(1, 1, context)),
-        ?assertEqual(undefined, filter_next_in:next_in(8, 1, context)),
-        ?assertEqual(undefined, filter_next_in:next_in(5, 1, context)),
-        ?assertEqual(undefined, filter_next_in:next_in(10, 1, context)),
-        ?assertEqual(undefined, filter_next_in:next_in(99, 1, context)),
-        ?assertEqual(undefined, filter_next_in:next_in(1, 4, context)),
-        ?assertEqual(undefined, filter_next_in:next_in(undefined, 1, context)),
-        ?assertEqual(undefined, filter_next_in:next_in(1, undefined, context))
+        ?assertEqual(undefined, filter_prev_in:prev_in(1, 1, Context)),
+        ?assertEqual(undefined, filter_next_in:next_in(8, 1, Context)),
+        ?assertEqual(undefined, filter_next_in:next_in(5, 1, Context)),
+        ?assertEqual(undefined, filter_next_in:next_in(10, 1, Context)),
+        ?assertEqual(undefined, filter_next_in:next_in(99, 1, Context)),
+        ?assertEqual(undefined, filter_next_in:next_in(1, 4, Context)),
+        ?assertEqual(undefined, filter_next_in:next_in(undefined, 1, Context)),
+        ?assertEqual(undefined, filter_next_in:next_in(1, undefined, Context))
     after
         lists:foreach(fun meck:unload/1, Modules)
     end.
