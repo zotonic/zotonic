@@ -413,6 +413,11 @@ a.label:focus {
 .navbar {
   padding: 0;
 
+  // Keep legacy block-level visibility helpers from making brands full-width.
+  .navbar-brand {
+    float: left;
+  }
+
   > div {
     width: 100%;
   }
@@ -504,6 +509,11 @@ a.label:focus {
   right: 0;
   left: 0;
   z-index: $zindex-fixed;
+}
+
+// Bootstrap 5 supplies the arrow, including dropup/dropstart/dropend directions.
+.dropdown-toggle > .caret {
+  display: none;
 }
 
 .open > .dropdown-menu {

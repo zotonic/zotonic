@@ -12276,6 +12276,9 @@ a.label:focus {
 .navbar {
   padding: 0;
 }
+.navbar .navbar-brand {
+  float: left;
+}
 .navbar > div {
   width: 100%;
 }
@@ -12359,6 +12362,10 @@ a.label:focus {
   right: 0;
   left: 0;
   z-index: 1030;
+}
+
+.dropdown-toggle > .caret {
+  display: none;
 }
 
 .open > .dropdown-menu {
