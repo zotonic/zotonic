@@ -74,7 +74,7 @@ settings(Context) ->
 
 %% @doc Validate all settings before saving; only writable administrators may save.
 -spec save_settings(Values, Context) -> ok | {error, term()} when
-    Values :: map(),
+    Values :: term(),
     Context :: z:context().
 save_settings(Values, Context) ->
     case writable(Context) of
