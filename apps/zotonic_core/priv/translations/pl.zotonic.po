@@ -180,7 +180,7 @@ msgstr[3] "{n} roku"
 
 #: zotonic_core/src/support/z_fetch.erl:230
 msgid "Could not fetch the remote resource URL."
-msgstr "Nie udało się pobrać adresu URL zdalnego zasobu.\n"
+msgstr "Nie udało się pobrać adresu URL zdalnego zasobu."
 
 #: zotonic_core/src/support/z_fetch.erl:216
 msgid "Forbidden to access the remote resource URL."
@@ -9637,7 +9637,7 @@ msgstr "Zatrzymano na stronie:"
 
 #: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:47
 msgid "There are no pages in these content groups."
-msgstr "W tych grupach zawartości nie ma stron.\n"
+msgstr "W tych grupach zawartości nie ma stron."
 
 #: zotonic_mod_content_groups/priv/templates/_admin_edit_sidebar_content_group.tpl:12
 msgid "This page is part of the group:"

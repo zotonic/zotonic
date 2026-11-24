@@ -13,7 +13,7 @@
 %%   * Make the file executable when requested.
 %%   * Use an HTTPS proxy when requested.
 %%
-%% This script uses Erlang/OTP. It does not need 
+%% This script uses Erlang/OTP. It does not need
 %% tools such as curl, wget, sha256sum, or chmod.
 %%
 %% The script stores the downloaded file in memory.

@@ -235,4 +235,3 @@ parse_lines([Line|Rest],Acc) ->
 %% IPv4-mapped IPv6 must not bypass an IPv4 entry.
 normalize({0,0,0,0,0,16#ffff,A,B}) -> {A bsr 8,A band 255,B bsr 8,B band 255};
 normalize(IP) -> IP.
-

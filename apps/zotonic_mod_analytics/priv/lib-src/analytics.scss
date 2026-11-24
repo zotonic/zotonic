@@ -1,7 +1,7 @@
-$analytics-border-color: #dce1e5;
+$analytics-border-color: var(--z-admin-border, #dce1e5);
 $analytics-panel-radius: 8px;
 $analytics-primary: var(--bs-primary, #337ab7);
-$analytics-background: var(--bs-body-bg, #fff);
+$analytics-background: var(--z-admin-surface, var(--bs-body-bg, #fff));
 
 /* Dashboard layout, shared by consumption and configuration pages. */
 .analytics-heading {
@@ -98,7 +98,7 @@ $analytics-background: var(--bs-body-bg, #fff);
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     gap: 12px;
     padding-top: 12px;
-    border-top: 1px solid #e7eaed;
+    border-top: 1px solid var(--z-admin-table-border, #e7eaed);
 
     div {
         display: flex;

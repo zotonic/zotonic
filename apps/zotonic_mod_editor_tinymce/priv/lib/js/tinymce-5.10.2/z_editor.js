@@ -12,7 +12,15 @@ var z_editor = (function ($) {
         instances,
         initEditor,
         addEditor,
-        removeEditor;
+        removeEditor,
+        currentTheme,
+        currentThemePreference,
+        setEditorTheme,
+        syncEditorsTheme,
+        syncEditorsSkin,
+        observeThemeChanges,
+        themeObserver,
+        observedTheme;
 
     function selectEditorConfig($el) {
         const data = $el.metadata('zeditor');         // From z.widgetmanager.js
@@ -45,8 +53,78 @@ var z_editor = (function ($) {
         }
     };
 
+    currentTheme = function() {
+        return document.documentElement.getAttribute('data-bs-theme') === 'dark'
+            ? 'dark'
+            : 'light';
+    };
+
+    currentThemePreference = function() {
+        var theme = document.documentElement.getAttribute('data-zotonic-theme');
+        return theme === 'light' || theme === 'dark' || theme === 'auto'
+            ? theme
+            : currentTheme();
+    };
+
+    setEditorTheme = function(editor) {
+        var doc;
+        try {
+            doc = editor.getDoc && editor.getDoc();
+            if (doc && doc.documentElement) {
+                doc.documentElement.setAttribute('data-bs-theme', currentTheme());
+                doc.documentElement.setAttribute('data-zotonic-theme', currentThemePreference());
+            }
+        } catch (e) {
+            // Ignore editors that are not fully initialized yet.
+        }
+    };
+
+    syncEditorsTheme = function() {
+        var i;
+        if (window.tinymce && tinymce.editors && tinymce.editors.length) {
+            for (i = 0; i < tinymce.editors.length; i += 1) {
+                setEditorTheme(tinymce.editors[i]);
+            }
+        }
+    };
+
+    syncEditorsSkin = function() {
+        var theme = currentTheme();
+        if (theme === observedTheme) {
+            syncEditorsTheme();
+            return;
+        }
+        observedTheme = theme;
+        $('textarea.' + CLASS_EDITOR_INSTALLED).each(function() {
+            var editor,
+                id = this.id,
+                $el = $(this);
+
+            if (id) {
+                editor = tinymce.get(id);
+                if (editor) {
+                    editor.save();
+                    tinymce.remove(editor);
+                    $el.removeClass(CLASS_EDITOR_INSTALLED);
+                    initEditor($el);
+                }
+            }
+        });
+    };
+
+    observeThemeChanges = function() {
+        observedTheme = currentTheme();
+        if (!themeObserver && window.MutationObserver) {
+            themeObserver = new MutationObserver(syncEditorsSkin);
+            themeObserver.observe(document.documentElement, {
+                attributes: true,
+                attributeFilter: ['data-bs-theme', 'data-zotonic-theme']
+            });
+        }
+    };
+
     initEditor = function($el) {
-        var id, options;
+        var id, options, setup, initInstanceCallback;
         id = $el.attr('id');
         if (!id) {
             id = "tiny-" + Math.random().toString(16).slice(2) + "-" + (new Date()).getTime();
@@ -55,14 +133,32 @@ var z_editor = (function ($) {
         options = $.extend({}, selectEditorConfig($el));
         options.selector = '#' + id;
         options.branding = false;
+        if (options.skin === 'oxide' || options.skin === 'oxide-dark') {
+            options.skin = currentTheme() === 'dark' ? 'oxide-dark' : 'oxide';
+        }
         if ($el.attr('dir')) {
             options.directionality = $el.attr('dir');
         }
+        setup = options.setup;
+        options.setup = function(editor) {
+            if (typeof setup === 'function') {
+                setup.call(this, editor);
+            }
+            editor.on('init', function() {
+                setEditorTheme(editor);
+            });
+        };
+        initInstanceCallback = options.init_instance_callback;
         options.init_instance_callback = function (editor) {
+            setEditorTheme(editor);
             editor.on('Change', function (e) {
                 $el.closest('form').trigger('z:editorChange');
             });
+            if (typeof initInstanceCallback === 'function') {
+                initInstanceCallback.call(this, editor);
+            }
         }
+        observeThemeChanges();
         tinymce.init(options);
         $el.addClass(CLASS_EDITOR_INSTALLED);
     };

@@ -27,9 +27,9 @@
 .analytics-panel {
   min-width: 0;
   padding: 24px;
-  border: 1px solid #dce1e5;
+  border: 1px solid var(--z-admin-border, #dce1e5);
   border-radius: 8px;
-  background: var(--bs-body-bg, #fff);
+  background: var(--z-admin-surface, var(--bs-body-bg, #fff));
 }
 
 .analytics-panel-lead {
@@ -83,7 +83,7 @@
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 12px;
   padding-top: 12px;
-  border-top: 1px solid #e7eaed;
+  border-top: 1px solid var(--z-admin-table-border, #e7eaed);
 }
 .analytics-breakdown div {
   display: flex;
@@ -131,7 +131,7 @@
 }
 
 #analytics-recordings .ui-sortable-helper {
-  background: var(--bs-body-bg, #fff);
+  background: var(--z-admin-surface, var(--bs-body-bg, #fff));
 }
 
 @media (max-width: 767px) {
@@ -174,7 +174,7 @@
 .analytics-capacity {
   min-width: 0;
   padding: 20px;
-  border: 1px solid var(--bs-border-color, #dce1e5);
+  border: 1px solid var(--bs-border-color, var(--z-admin-border, #dce1e5));
   border-radius: 8px;
 }
 .analytics-capacity label {
