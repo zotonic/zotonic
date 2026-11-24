@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-20 22:19\n"
+"PO-Revision-Date: 2026-11-24 17:04\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -403,6 +403,7 @@ msgstr "Apakah Anda yakin ingin mengembalikan semua peraturan ACL ke versi yang 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:185
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:45
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:41
 #: zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:116
 #: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:43
@@ -454,8 +455,8 @@ msgstr "Konfigurasi berubah."
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:209
 #: zotonic_mod_admin/priv/templates/_admin_edit_version.tpl:5
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:72
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:74
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:76
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_filter_predicates.tpl:20
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:40
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:79
@@ -590,7 +591,7 @@ msgstr "Tidak dapat memindahkan ke grup kolaborasi."
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125
 #: zotonic_mod_survey/src/mod_survey.erl:427
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:50
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:12
 msgid "Delete"
@@ -617,7 +618,7 @@ msgstr "Menghapus..."
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:33
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:14
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:42
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:45
 msgid "Deny"
 msgstr "Tolak"
 
@@ -868,7 +869,7 @@ msgstr "Aturan telah dikembalikan"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:33
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:162
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:141
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:86
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:26
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:105
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:56
@@ -1387,7 +1388,7 @@ msgstr "Anda yakin ingin menghapus {n} halaman ini?"
 msgid "Are you sure you want to delete this note?"
 msgstr "Yakin ingin menghapus catatan ini?"
 
-#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:63
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:86
 msgid "Are you sure you want to exit the admin interface?"
 msgstr "Apakah Anda yakin ingin keluar dari antarmuka admin?"
 
@@ -1410,6 +1411,10 @@ msgstr "Autentikasi"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:142
 msgid "Authentication"
 msgstr "Autentikasi"
+
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:76
+msgid "Automatic"
+msgstr "Otomatis"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:162
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:164
@@ -1591,7 +1596,7 @@ msgstr "Telah dikonfigurasi"
 msgid "Confirm delete"
 msgstr "Konfirmasi hapus"
 
-#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:63
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:85
 msgid "Confirm logoff"
 msgstr "konfirmasi keluar"
 
@@ -1752,6 +1757,10 @@ msgstr "Tanggal pembuatan, terbaru dulu"
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:262
 msgid "Creation date, oldest first"
 msgstr "Tanggal pembuatan, tertua dulu"
+
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:70
+msgid "Dark"
+msgstr "Gelap"
 
 #: zotonic_mod_admin/priv/templates/admin.tpl:4
 #: zotonic_mod_admin/priv/templates/admin.tpl:8
@@ -1966,7 +1975,7 @@ msgstr "Alamat surel"
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:131
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:117
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:119
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:46
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:49
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:44
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:14
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:16
@@ -2439,6 +2448,10 @@ msgstr "Halaman orang yang terakhir diubah"
 msgid "Latest modified texts"
 msgstr "Teks yang terakhir diubah"
 
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:64
+msgid "Light"
+msgstr "Cahaya"
+
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:43
 msgid "Link selected page"
 msgstr "Tautkan halaman yang dipilih"
@@ -2476,7 +2489,7 @@ msgstr "Fitur fallback lokal telah diaktifkan."
 msgid "Local sandbox"
 msgstr "Sandbox lokal"
 
-#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:62
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:82
 #: zotonic_site_status/priv/templates/_menu.tpl:5
 #: zotonic_site_status/priv/templates/_navbar.tpl:34
 msgid "Log Off"
@@ -3166,7 +3179,7 @@ msgstr "Perujuk untuk"
 #: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:51
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:69
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:72
 msgid "Refresh"
 msgstr "Segarkan"
 
@@ -3324,21 +3337,21 @@ msgstr "Isolasi sandbox tidak didukung pada sistem ini. Perintah media lokal dij
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:4
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:144
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:90
 msgid "Save &amp; view"
 msgstr "Simpan dan lihat"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:4
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:144
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:90
 msgid "Save and view the page."
 msgstr "Simpan dan lihat halamannya."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:17
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:141
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:86
 msgid "Save this page."
 msgstr "Simpan halaman ini."
 
@@ -3393,7 +3406,7 @@ msgstr "Kueri pencarian"
 msgid "Search results"
 msgstr "Hasil Pencarian"
 
-#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:76
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:100
 msgid "Search..."
 msgstr "Cari..."
 
@@ -3855,6 +3868,10 @@ msgstr "Sistem telah mengalokasikan lebih dari ambang batas memori yang tersedia
 msgid "The update coordinator restarted. Restart the Zotonic node before deploying again."
 msgstr "Koordinator pembaruan telah dimulai ulang. Mulai ulang node Zotonic sebelum menerapkan kode kembali."
 
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:59
+msgid "Theme"
+msgstr "Tema"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers_list.tpl:43
 msgid "There are no incoming connections."
 msgstr "Tidak ada koneksi masuk."
@@ -4112,6 +4129,9 @@ msgstr "Tidak diterbitkan"
 #: zotonic_mod_seo/src/support/seo_jsonld_webpage.erl:276
 #: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:16
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:10
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:6
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:12
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:17
 #: zotonic_mod_translation/priv/templates/_translation_tree_skipped.tpl:7
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:3
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:93
@@ -4218,7 +4238,7 @@ msgstr "Gunakan operasi ini untuk memperbaiki data instalasi, bukan untuk pemeli
 msgid "Used"
 msgstr "Digunakan"
 
-#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:59
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:54
 msgid "User page"
 msgstr "Halaman pengguna"
 
@@ -5204,8 +5224,8 @@ msgstr "Sembunyikan menu"
 msgid "Language"
 msgstr "Bahasa"
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:34
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:44
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:36
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:46
 msgid "Loading ..."
 msgstr "Memuat..."
 
@@ -5221,11 +5241,11 @@ msgstr "Tampilkan menu"
 msgid "The page might have been deleted."
 msgstr "Halaman tersebut mungkin telah dihapus."
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:133
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:135
 msgid "There are unsaved changes. Are you sure you want to leave without saving?"
 msgstr "Ada perubahan yang belum disimpan. Apakah Anda yakin ingin keluar tanpa menyimpan?"
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:82
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
 msgid "This page"
 msgstr "Halaman ini"
 
@@ -5233,7 +5253,7 @@ msgstr "Halaman ini"
 msgid "View this page."
 msgstr "Lihat halaman ini."
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:131
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:133
 msgid "Yes, discard changes"
 msgstr "Ya, buang perubahan"
 
@@ -6265,6 +6285,10 @@ msgstr "Beta"
 msgid "Change the predicate on all existing page connections to:"
 msgstr "Ubah predikat pada semua koneksi halaman yang ada menjadi:"
 
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:68
+msgid "Connections using this predicate do not keep their target page alive. A dependent target page can be deleted when it has no other incoming connections. Protected pages are kept."
+msgstr "Koneksi yang menggunakan predikat ini tidak mempertahankan halaman tujuannya tetap aktif. Halaman tujuan yang bergantung dapat dihapus jika tidak ada koneksi masuk lainnya. Halaman yang dilindungi tetap dipertahankan."
+
 #: zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:88
 msgid "Could not create the predicate."
 msgstr "Tidak dapat membuat predikat."
@@ -6281,11 +6305,11 @@ msgstr "Hapus dibatalkan, ada koneksi dengan predikat ini."
 msgid "Delete predicate and update connections"
 msgstr "Hapus predikat dan perbarui koneksi"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:85
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:95
 msgid "Do not find subjects using this predicate’s object titles."
 msgstr "Jangan temukan subjek yang menggunakan judul objek predikat ini."
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:95
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:105
 msgid "Do not show on the connections list on the resource edit page."
 msgstr "Jangan tampilkan di daftar koneksi pada halaman edit sumber daya."
 
@@ -6329,11 +6353,15 @@ msgstr "Menyembunyikan atau menampilkan halaman yang tidak berada di jalur dari 
 msgid "Hide previously added pages and connections."
 msgstr "Sembunyikan halaman dan koneksi yang ditambahkan sebelumnya."
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:75
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:65
+msgid "Ignore these connections when cleaning up dependent pages."
+msgstr "Abaikan tautan-tautan ini saat membersihkan halaman-halaman yang bergantung."
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:85
 msgid "Insert new connections before existing connections."
 msgstr "Sisipkan koneksi baru sebelum koneksi yang ada."
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:68
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:78
 msgid "Instead of a search box, this will show a list of all pages in the target categories selected above. At least one category must be selected."
 msgstr "Sebagai pengganti kotak pencarian, ini akan menampilkan daftar semua halaman dalam kategori tujuan yang dipilih di atas. Setidaknya satu kategori harus dipilih."
 
@@ -6371,7 +6399,7 @@ msgstr "Objek"
 msgid "Only show connections with the following predicates:"
 msgstr "Hanya tampilkan koneksi dengan predikat berikut ini:"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:108
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:118
 msgid "Ontologies define predicates for a defined set of subject and object categories. Sometimes it is more practical to have the predicate’s connection direction reversed from the formal definition. Export and import functions can use this option to swap subject/object relation when exporting or importing data."
 msgstr "Ontologi mendefinisikan predikat untuk sekumpulan kategori subjek dan objek yang ditentukan. Terkadang lebih praktis jika arah hubungan predikat dibalik dari definisi formal. Fungsi ekspor dan impor dapat menggunakan opsi ini untuk menukar relasi subjek/objek saat mengekspor atau mengimpor data."
 
@@ -6436,7 +6464,7 @@ msgstr "Menampilkan semua koneksi keluar"
 msgid "Show graph of all connections"
 msgstr "Menampilkan grafik semua koneksi"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:98
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:108
 msgid "Some predicates are mostly for internal purposes. Check this if you don’t want to show this predicate on the <em>Connected to</em> list."
 msgstr "Beberapa predikat sebagian besar untuk keperluan internal. Centang ini jika Anda tidak ingin menampilkan predikat ini pada daftar <em>Terhubung ke</em>."
 
@@ -6452,7 +6480,7 @@ msgstr "Mundur."
 msgid "Subject"
 msgstr "Subjek"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:105
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:115
 msgid "The direction (from/to) of this predicate is reversed from the normal definition."
 msgstr "Arah (dari/ke) predikat ini dibalik dari definisi normal."
 
@@ -6464,7 +6492,7 @@ msgstr "Tidak ada koneksi halaman dengan predikat ini."
 msgid "There is already a predicate with this name."
 msgstr "Sudah ada predikat dengan nama ini."
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:88
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:98
 msgid "This directs the indexers to not include the titles of connected pages with this predicate. Normally titles of connected pages are included, making it possible to eg. find articles by their author’s name."
 msgstr "Opsi ini mengarahkan pengindeks agar tidak menyertakan judul halaman yang terhubung melalui predikat ini. Biasanya judul halaman yang terhubung disertakan, sehingga artikel dapat ditemukan, misalnya, berdasarkan nama penulisnya."
 
@@ -6500,11 +6528,11 @@ msgstr "Terlalu banyak koneksi"
 msgid "URI"
 msgstr "URI"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:65
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:75
 msgid "Use a list of checkboxes with titles when adding page connections."
 msgstr "Gunakan daftar kotak centang dengan judul saat menambahkan koneksi halaman."
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:78
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:88
 msgid "Usually new connections are inserted after existing connections. Check this to insert new connections before existing connections."
 msgstr "Biasanya koneksi baru disisipkan setelah koneksi yang sudah ada. Centang ini untuk memasukkan koneksi baru sebelum koneksi yang ada."
 
@@ -6690,13 +6718,13 @@ msgstr "Nilai yang diperbolehkan (dipisahkan dengan koma)"
 msgid "Allowed values:"
 msgstr "Nilai yang diperbolehkan:"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:348
+#: zotonic_mod_analytics/src/mod_analytics.erl:353
 msgid "An equivalent analytics measurement already exists."
 msgstr "Pengukuran analitik yang setara sudah ada."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
-#: zotonic_mod_analytics/src/mod_analytics.erl:277
+#: zotonic_mod_analytics/src/mod_analytics.erl:282
 msgid "Analytics configuration"
 msgstr "Konfigurasi analitik"
 
@@ -6767,11 +6795,11 @@ msgstr "Permintaan terklasifikasi — halaman, API, dan jenis pengiriman lainnya
 msgid "Configure analytics measurements"
 msgstr "Mengonfigurasi pengukuran analitik"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:316
+#: zotonic_mod_analytics/src/mod_analytics.erl:321
 msgid "Could not delete the analytics measurement."
 msgstr "Tidak dapat menghapus pengukuran analitik."
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:349
+#: zotonic_mod_analytics/src/mod_analytics.erl:354
 msgid "Could not save. Check the event, breakdown and filter values."
 msgstr "Tidak dapat disimpan. Periksa nilai peristiwa, rincian, dan filter."
 
@@ -6825,7 +6853,7 @@ msgstr "Perangkat — ponsel, tablet, komputer desktop, atau tidak diketahui"
 msgid "Display order"
 msgstr "Urutan tampilan"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:322
+#: zotonic_mod_analytics/src/mod_analytics.erl:327
 msgid "Display order saved."
 msgstr "Urutan tampilan telah disimpan."
 
@@ -7028,6 +7056,7 @@ msgstr "Interval tersimpan terbaru"
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:55
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:206
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:17
 msgid "Next"
 msgstr "Selanjutnya"
 
@@ -7182,7 +7211,7 @@ msgstr "Deskripsi singkat"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
-#: zotonic_mod_analytics/src/mod_analytics.erl:269
+#: zotonic_mod_analytics/src/mod_analytics.erl:274
 msgid "Site Analytics"
 msgstr "Analisis Situs"
 
@@ -7234,11 +7263,11 @@ msgstr "Interval penyimpanan / kapasitas"
 msgid "Stored time intervals"
 msgstr "Interval waktu yang tersimpan"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:324
+#: zotonic_mod_analytics/src/mod_analytics.erl:329
 msgid "The analytics measurements changed. Reloading their current display order."
 msgstr "Pengukuran analitik telah berubah. Sedang memuat ulang urutan tampilan saat ini."
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:347
+#: zotonic_mod_analytics/src/mod_analytics.erl:352
 msgid "This analytics measurement exceeds the storage budget."
 msgstr "Pengukuran analitik ini melebihi anggaran penyimpanan."
 
@@ -9084,7 +9113,7 @@ msgstr "Perubahan bersih"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:28
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:35
 #: zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:162
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:164
 msgid "No"
 msgstr "Tidak"
 
@@ -9347,7 +9376,7 @@ msgstr "Item pekerjaan"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32
 #: zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
 #: zotonic_mod_translation/priv/templates/_translation_status.tpl:26
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:161
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:163
 msgid "Yes"
 msgstr "Ya"
 
@@ -9453,7 +9482,7 @@ msgstr "Catatan: Komentar dimoderasi"
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:29
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:4
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:199
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:201
 msgid "Page"
 msgstr "Halaman"
 
@@ -9483,6 +9512,7 @@ msgstr "Simpan pengaturan Formulir Komentar"
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:4
 #: zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:7
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:7
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:16
 msgid "Settings"
 msgstr "Pengaturan"
 
@@ -9774,7 +9804,7 @@ msgid "A graph of all templates, and by whom they are included, is generated and
 msgstr "Graf semua templat beserta templat yang menyertakannya dibuat dan diperbarui secara otomatis."
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:9
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:83
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:86
 msgid "Action"
 msgstr "Aksi"
 
@@ -11775,6 +11805,7 @@ msgstr "Hanya akun admin (pengguna 1) yang dapat menandai berkas sebagai tidak d
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:85
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:45
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:48
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:12
 msgid "Previous"
 msgstr "Sebelumnya"
 
@@ -12101,7 +12132,7 @@ msgstr "Kemajuan akan dilaporkan dalam <a href=\"{url}\">log admin</a> dan denga
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:27
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:43
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:61
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:63
 msgid "Property"
 msgstr "Properti"
 
@@ -15715,7 +15746,7 @@ msgstr "Untuk setiap kombinasi pengguna dan label, hanya boleh ada satu token ak
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:110
 #: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:5
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:58
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:61
 msgid "Forever"
 msgstr "Selamanya"
 
@@ -17447,7 +17478,7 @@ msgstr "Penjelasan"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:35
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:11
 #: zotonic_mod_survey/src/questions/survey_q_truefalse.erl:61
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:167
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:169
 msgid "False"
 msgstr "Salah"
 
@@ -18126,7 +18157,7 @@ msgstr "Nilai tersimpan"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:21
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:43
 #: zotonic_mod_survey/src/questions/survey_q_likert.erl:56
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:156
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:158
 msgid "Strongly Agree"
 msgstr "Sangat setuju"
 
@@ -18134,7 +18165,7 @@ msgstr "Sangat setuju"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:11
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:35
 #: zotonic_mod_survey/src/questions/survey_q_likert.erl:60
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:157
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:159
 msgid "Strongly Disagree"
 msgstr "Sangat tidak setuju"
 
@@ -18332,7 +18363,7 @@ msgstr "Jumlah"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:32
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:10
 #: zotonic_mod_survey/src/questions/survey_q_truefalse.erl:63
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:166
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:168
 msgid "True"
 msgstr "Benar"
 
@@ -18528,54 +18559,82 @@ msgstr "teks"
 msgid "{points} of {max} points"
 msgstr "{points} dari {max} poin"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:34
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:53
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:30
+msgid "1–1000 immediately available request credits per IP address. Default: 30."
+msgstr "1–1000 kredit permintaan yang langsung tersedia per alamat IP. Nilai default: 30."
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:24
+msgid "1–100000 requests per period. Default: 120. Credits replenish continuously for each IP address."
+msgstr "1–100.000 permintaan per periode. Nilai default: 120. Kredit akan terus terisi ulang untuk setiap alamat IP."
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:18
+msgid "1–3600 seconds. Default: 60."
+msgstr "1–3.600 detik. Nilai default: 60."
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:36
+msgid "1–50000 retained client budgets per site and node. Default: 5000."
+msgstr "1–50.000 anggaran klien yang disimpan per situs dan node. Nilai default: 5.000."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:37
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:62
 msgid "Add IP entries"
 msgstr "Tambahkan entri IP"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:23
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:26
 msgid "Add to allow list"
 msgstr "Tambahkan ke daftar putih"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:13
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:42
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:45
 msgid "Allow"
 msgstr "Izinkan"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:17
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:20
 msgid "Allow entries take precedence. Blocks follow observe/enforce/off mode and only affect guarded routes."
 msgstr "Entri dalam daftar izin diprioritaskan. Pemblokiran mengikuti mode observe/enforce/off dan hanya berlaku untuk rute yang dilindungi."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:106
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:109
 msgid "Block IP"
 msgstr "Blokir IP"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:103
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:106
 msgid "Block duration"
 msgstr "Durasi pemblokiran"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:86
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:89
 msgid "Block for"
 msgstr "Blokir selama"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:18
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:27
+msgid "Burst allowance"
+msgstr "Jumlah maksimum ledakan"
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:95
+msgid "Choose a valid mode and enter whole numbers within the indicated ranges. No settings were saved."
+msgstr "Pilih mode yang valid dan masukkan bilangan bulat dalam rentang yang ditentukan. Tidak ada pengaturan yang disimpan."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:21
 msgid "Current mode:"
 msgstr "Mode saat ini:"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:72
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:75
 msgid "Current node only, including would-throttle decisions in observe mode. Up to 200 entries. Blocking generates a note from the displayed reason and rejection count."
 msgstr "Hanya node saat ini, termasuk permintaan yang akan dibatasi jika keputusan dalam mode observe diterapkan. Maksimal 200 entri. Pemblokiran membuat catatan berdasarkan alasan yang ditampilkan dan jumlah permintaan yang ditolak."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:68
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:71
 msgid "Currently throttled IP addresses"
 msgstr "Alamat IP yang saat ini dibatasi"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:51
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:12
+msgid "Default: observe. Use observe mode to tune limits against normal traffic."
+msgstr "Standar: observe. Gunakan mode observe untuk menyesuaikan batas berdasarkan lalu lintas normal."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:54
 msgid "Delete IP entry"
 msgstr "Hapus entri IP"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:48
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:51
 msgid "Delete IP entry?"
 msgstr "Hapus entri IP?"
 
@@ -18583,19 +18642,23 @@ msgstr "Hapus entri IP?"
 msgid "Delete this IP entry?"
 msgstr "Hapus entri IP ini?"
 
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:71
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:80
 msgid "Each list can contain at most 256 entries."
 msgstr "Setiap daftar dapat berisi paling banyak 256 entri."
 
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:57
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:66
 msgid "Edit IP entry"
 msgstr "Sunting entri IP"
 
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:72
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:10
+msgid "Enforce — reject excess requests"
+msgstr "Terapkan — tolak permintaan yang berlebihan"
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:81
 msgid "Enter valid IP addresses, a note and a future expiry date or duration. No changes were saved."
 msgstr "Masukkan alamat IP yang valid, catatan, serta tanggal kedaluwarsa atau jangka waktu di masa mendatang. Tidak ada perubahan yang disimpan."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:38
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:41
 msgid "Expiry dates are UTC. Expired entries stop applying immediately and are removed automatically. Global entries are managed in zotonic.config."
 msgstr "Tanggal kedaluwarsa dinyatakan dalam UTC. Entri yang telah kedaluwarsa tidak lagi berlaku secara langsung dan akan dihapus secara otomatis. Entri global dikelola di zotonic.config."
 
@@ -18603,7 +18666,7 @@ msgstr "Tanggal kedaluwarsa dinyatakan dalam UTC. Entri yang telah kedaluwarsa t
 msgid "Hour"
 msgstr "Jam"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:81
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:84
 msgid "IP address"
 msgstr "Alamat IP"
 
@@ -18611,7 +18674,7 @@ msgstr "Alamat IP"
 msgid "IP addresses"
 msgstr "Alamat IP"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:32
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:35
 msgid "IP entries"
 msgstr "Entri IP"
 
@@ -18619,31 +18682,55 @@ msgstr "Entri IP"
 msgid "List"
 msgstr "Daftar"
 
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:33
+msgid "Maximum tracked clients"
+msgstr "Jumlah maksimum klien yang dipantau"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:6
+msgid "Mode"
+msgstr "Mode"
+
 #: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:4
 msgid "Month (30 days)"
 msgstr "Bulan (30 hari)"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:61
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:64
 msgid "No IP entries."
 msgstr "Tidak ada entri IP."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:114
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:117
 msgid "No currently throttled IP addresses."
 msgstr "Saat ini tidak ada alamat IP yang dibatasi."
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:9
+msgid "Observe — report without blocking"
+msgstr "Amati — laporkan tanpa menghalangi"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:8
+msgid "Off — bypass traffic guard"
+msgstr "Mati — melewati petugas pengatur lalu lintas"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:40
 msgid "Or until (UTC)"
 msgstr "Atau hingga (UTC)"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:82
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:85
 msgid "Reason"
 msgstr "Alasan"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:84
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:87
 msgid "Rejections"
 msgstr "Penolakan"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:85
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:15
+msgid "Replenishment period (seconds)"
+msgstr "Waktu pengisian ulang (detik)"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:21
+msgid "Requests replenished per period"
+msgstr "Permintaan yang dipenuhi per periode"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:88
 msgid "Retry in seconds"
 msgstr "Waktu hingga percobaan ulang (detik)"
 
@@ -18651,29 +18738,45 @@ msgstr "Waktu hingga percobaan ulang (detik)"
 msgid "Save IP entries"
 msgstr "Simpan entri IP"
 
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:42
+msgid "Save settings"
+msgstr "Simpan pengaturan"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:38
+msgid "Saving settings resets transient request budgets. IP allow and block entries are managed separately on the Traffic guard screen."
+msgstr "Menyimpan pengaturan akan mengatur ulang batas permintaan sementara. Entri daftar izinkan dan blokir IP dikelola secara terpisah di layar Traffic Guard."
+
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:9
 msgid "Separate IPv4 or IPv6 addresses with spaces, commas or newlines. Re-adding an address to the same list updates its note and expiry."
 msgstr "Pisahkan alamat IPv4 atau IPv6 dengan spasi, koma, atau baris baru. Menambahkan kembali alamat ke daftar yang sama akan memperbarui catatan dan tanggal kedaluwarsanya."
 
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:70
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:97
+msgid "The traffic guard settings could not be saved. Please try again."
+msgstr "Pengaturan petugas lalu lintas tidak dapat disimpan. Silakan coba lagi."
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:79
 msgid "This IP is no longer throttled. Refresh the page."
 msgstr "Jumlah permintaan dari alamat IP ini tidak lagi dibatasi. Segarkan halaman."
 
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:58
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:67
 msgid "This entry is no longer available. Refresh the page."
 msgstr "Entri ini tidak lagi tersedia. Silakan segarkan halaman ini."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:3
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:10
-#: zotonic_mod_traffic_guard/src/mod_traffic_guard.erl:168
+#: zotonic_mod_traffic_guard/src/mod_traffic_guard.erl:166
 msgid "Traffic guard"
 msgstr "Perlindungan lalu lintas jaringan"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:74
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:77
 msgid "Traffic guard is temporarily unavailable."
 msgstr "Perlindungan lalu lintas jaringan untuk sementara tidak tersedia."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:58
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:41
+msgid "Traffic guard settings"
+msgstr "Pengaturan petugas pengatur lalu lintas"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:61
 msgid "Until (UTC):"
 msgstr "Sampai (UTC):"
 
@@ -18685,11 +18788,15 @@ msgstr "Sampai (UTC; kosong berarti selamanya)"
 msgid "Valid for"
 msgstr "Berlaku untuk"
 
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:69
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:78
 msgid "You are not allowed to change these entries."
 msgstr "Anda tidak diperbolehkan mengubah entri-entri ini."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:21
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:93
+msgid "You are not allowed to change traffic guard settings."
+msgstr "Anda tidak diperbolehkan mengubah pengaturan petugas pengatur lalu lintas."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:24
 msgid "Your current IP address:"
 msgstr "Alamat IP Anda saat ini:"
 
@@ -18765,7 +18872,7 @@ msgstr "Tersedia sub-bahasa"
 msgid "Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>."
 msgstr "Tidak dapat membuat file terjemahan karena <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\"> gettext tidak terpasang </a>."
 
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:51
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:53
 msgid "Click to edit."
 msgstr "Klik untuk mengedit."
 
@@ -18893,6 +19000,10 @@ msgstr "Jika Anda menerjemahkan teks secara otomatis maka teks Anda akan dikirim
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:165
 msgid "If you change the stemmer language then you will need to reindex all data."
 msgstr "Jika Anda mengubah bahasa stemmer, semua data perlu diindeks ulang."
+
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:5
+msgid "In"
+msgstr "Di"
 
 #: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:37
 msgid "Incomplete translation"
@@ -19186,7 +19297,7 @@ msgstr "Terjemahkan semua halaman"
 msgid "Translate from"
 msgstr "Terjemahkan dari"
 
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:50
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:52
 msgid "Translated page texts for every editable language that has a translation in the resource."
 msgstr "Teks halaman yang diterjemahkan untuk setiap bahasa yang dapat diedit yang memiliki terjemahan dalam sumber daya."
 
@@ -19214,6 +19325,10 @@ msgstr "Penerjemahan telah selesai. Segarkan halaman ini untuk melanjutkan penge
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:7
 msgid "Translation in progress"
 msgstr "Penerjemahan sedang berlangsung"
+
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:3
+msgid "Translation navigation"
+msgstr "Navigasi terjemahan"
 
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:3
 msgid "Translations"
@@ -19262,7 +19377,7 @@ msgstr "Anda tidak diperbolehkan mengedit pohon ini."
 msgid "not enabled"
 msgstr "tidak diaktifkan"
 
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:117
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:119
 msgid "page break"
 msgstr "jeda halaman"
 
