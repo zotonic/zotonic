@@ -10,6 +10,7 @@
 			"css/z.icons.css"
 			"css/zotonic-admin.css"
 			"css/z.modal.css"
+			"css/z.bridge.css"
 			"css/admin-frontend.css"
             "font-awesome/css/font-awesome.css"
             "css/image-edit.css"
