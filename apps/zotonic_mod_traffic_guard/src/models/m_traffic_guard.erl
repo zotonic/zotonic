@@ -20,7 +20,7 @@
 -module(m_traffic_guard).
 -behaviour(zotonic_model).
 -export([m_get/3,m_post/3,m_delete/3,lists/1,put/5,delete/2,throttled/1,block/3,
-    stored/1,install/1,cleanup/1,parse/1,normalize/1,validity/2,global/0]).
+    settings/1,save_settings/2,stored/1,install/1,cleanup/1,parse/1,normalize/1,validity/2,global/0]).
 -include_lib("zotonic_core/include/zotonic.hrl").
 -moduledoc(#{zotonic_keywords => ["reference", "model", "security", "configuration"]}).
 -moduledoc("
@@ -34,6 +34,10 @@ and `validity` (hour/day/week/month/forever or YYYY-MM-DDTHH:MM in UTC). Re-addi
 an IP of the same kind updates its note and expiry. POST `block` accepts `ip` and
 `validity`, and generates a note from current throttling evidence. DELETE `entry/id`
 removes a database entry. All mutations reject read-only credentials.
+
+The admin settings dialog uses `settings/1` and `save_settings/2`. These require
+administrator access; saving also rejects read-only credentials, validates all
+five settings before writing, and resets cached budgets after committing.
 
 At most 256 database entries per kind are allowed. Notes are required, at most
 1000 characters. Global `traffic_guard_allow` and `traffic_guard_block` lists in
@@ -55,6 +59,67 @@ m_post([<<"block">>],#{payload:=P},C) when is_map(P) ->
 m_post(_,_,_) -> {error,unknown_path}.
 m_delete([<<"entry">>,Id],_,C) -> delete(Id,C);
 m_delete(_,_,_) -> {error,unknown_path}.
+
+%% @doc Effective site settings, with the period expressed in seconds for editing.
+-spec settings(Context) -> {ok, map()} | {error, eacces} when
+    Context :: z:context().
+settings(Context) ->
+    case z_acl:is_admin(Context) of
+        false -> {error, eacces};
+        true ->
+            Settings = maps:with([mode, period, request_limit, request_burst, max_clients],
+                z_traffic_guard:settings(Context)),
+            {ok, Settings#{period := maps:get(period, Settings) div 1000}}
+    end.
+
+%% @doc Validate all settings before saving; only writable administrators may save.
+-spec save_settings(Values, Context) -> ok | {error, term()} when
+    Values :: map(),
+    Context :: z:context().
+save_settings(Values, Context) ->
+    case writable(Context) of
+        false -> {error, eacces};
+        true ->
+            case validate_settings(Values) of
+                {ok, Settings} ->
+                    Result = z_db:transaction(fun(Tx) ->
+                        lists:foreach(fun({Key, Value}) ->
+                            case m_config:set_value(mod_traffic_guard, Key, Value, Tx) of
+                                ok -> ok;
+                                {error, Reason} -> throw({rollback, Reason})
+                            end
+                        end, Settings)
+                    end, Context),
+                    case Result of
+                        ok ->
+                            z_depcache:flush(config, Context),
+                            z_traffic_guard:reset(Context),
+                            ok;
+                        {rollback, Reason} -> {error, Reason};
+                        {error, _} = Error -> Error
+                    end;
+                Error -> Error
+            end
+    end.
+
+validate_settings(#{<<"mode">> := Mode} = Values)
+        when Mode =:= <<"off">>; Mode =:= <<"observe">>; Mode =:= <<"enforce">> ->
+    try
+        Numbers = [
+            {Key, setting_integer(maps:get(atom_to_binary(Key, utf8), Values, undefined), Max)}
+            || {Key, Max} <- [{period, 3600}, {request_limit, 100000},
+                              {request_burst, 1000}, {max_clients, 50000}]
+        ],
+        {ok, [{mode, Mode} | Numbers]}
+    catch
+        error:_ -> {error, invalid_settings}
+    end;
+validate_settings(_) -> {error, invalid_settings}.
+
+setting_integer(Value, Max) when is_binary(Value), byte_size(Value) =< 6 ->
+    setting_integer(binary_to_integer(Value), Max);
+setting_integer(Value, Max) when is_integer(Value), Value >= 1, Value =< Max ->
+    Value.
 
 install(C) ->
     z_db:q("create table if not exists traffic_guard_ip (

@@ -20,7 +20,8 @@ identify the client address.
 ## Getting started
 
 Enable **Traffic guard** in the site's Modules screen. Use **System → Configuration**
-with module `mod_traffic_guard`, or the trusted server-side configuration API:
+with module `mod_traffic_guard`, **System → Traffic guard → Settings** to edit all five
+site settings in one dialog, or the trusted server-side configuration API:
 
 ```erlang
 C = z:c(your_site).
