@@ -19,11 +19,12 @@ discovery_test_() ->
         fun unicode_metadata/0,
         fun controller_contract/0,
         fun anonymous_responses/0,
+        fun help_preserves_authentication/0,
         fun model_paths/0
     ]}).
 
 setup() ->
-    Modules = [z_dispatcher, z_context, m_site, m_config, m_rsc, z_acl, z_module_manager],
+    Modules = [z_dispatcher, z_context, m_site, m_config, m_rsc, z_acl, z_module_manager, z_template],
     lists:foreach(fun(M) -> meck:new(M, [passthrough, no_link]) end, Modules),
     meck:expect(z_dispatcher, url_for, fun(Dispatch, Args, none, C) ->
         anonymous(C),
@@ -186,6 +187,24 @@ anonymous_responses() ->
     meck:expect(m_config, get_boolean, fun(seo, noindex, _) -> true end),
     {true, NoIndex} = controller_agent_discovery:service_available(SignedIn),
     ?assertEqual(<<"noindex,nofollow">>, maps:get(<<"x-robots-tag">>, maps:get(resp_headers, NoIndex#context.cowreq))).
+
+help_preserves_authentication() ->
+    meck:expect(z_context, set_nocache_headers, fun(C) -> C end),
+    meck:expect(z_context, set_noindex_header, fun(C) -> C end),
+    meck:expect(z_context, set_resource_headers, fun(undefined, C) -> C end),
+    meck:expect(z_context, output, fun(Html, C) -> {Html, C} end),
+    lists:foreach(fun(Visitor) ->
+        C = z_context:set(document, help, Visitor),
+        meck:expect(z_template, render, fun("agent_api_help.tpl", [{discovery, Info}], RenderContext) ->
+            ?assertEqual(C, RenderContext),
+            ?assertEqual(<<"Example & Museum">>, maps:get(title, Info)),
+            <<"help">>
+        end),
+        {true, Available} = controller_agent_discovery:service_available(C),
+        ?assertEqual(C, Available),
+        ?assertEqual({<<"help">>, C},
+            controller_agent_discovery:process(<<"GET">>, undefined, undefined, Available))
+    end, [context(), z_acl:anondo(context())]).
 
 alternates(Links) -> [L || #{rel := <<"alternate">>} = L <- Links].
 
