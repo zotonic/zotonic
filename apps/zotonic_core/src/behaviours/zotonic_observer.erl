@@ -2318,7 +2318,9 @@ Return:
 %% is the pivot defined in a call to ``z_pivot_rsc:define_custom_pivot/3`` or a table
 %% with created using a SQL command during (eg.) in a module ``manage_schema/2`` call.
 %% The name of the table is ``pivot_<pivotname>``.  The ``props`` is either a property
-%% list or a map with column/value pairs.
+%% list or a map with column/value pairs. Return ``{pivotname, undefined}`` for a
+%% sparse pivot when this resource needs no row; any existing row is deleted.
+%% Bare ``undefined``, ``none``, and ``ok`` leave existing rows unchanged.
 %%
 %% The table MUST have an ``id`` column, with a foreign key constraint to the ``rsc``
 %% table. If you define the pivot table using ``z_pivot_rsc:define_custom_pivot/3`` then
@@ -2332,6 +2334,14 @@ Add custom pivot fields to a resource’s search index (map) Result is a single 
 props}`, where “pivotname” is the pivot defined in a call to `z_pivot_rsc:define_custom_pivot/3` or a table with
 created using a SQL command during (eg.) in a module `manage_schema/2` call. The name of the table is
 `pivot_<pivotname>`. The `props` is either a property list or a map with column/value pairs.
+
+For a sparse custom pivot, return `{pivotname, undefined}` when the resource needs no row in that
+pivot table. This deletes any existing row for the resource and succeeds if no row exists. A later
+`{pivotname, props}` result inserts the row again. Named results can also be returned in a list.
+Returning bare `undefined`, `none`, or `ok` leaves existing custom pivot rows unchanged.
+
+For example, an observer can return `{my_pivot, #{value => Value}}` for matching resources and
+`{my_pivot, undefined}` for resources that no longer match.
 
 The table MUST have an `id` column, with a foreign key constraint to the `rsc` table. If you define the pivot table
 using `z_pivot_rsc:define_custom_pivot/3` then this column and foreign key constraint are automatically added.
@@ -2354,7 +2364,8 @@ Return:
             | undefined,
     Pivot :: {atom(), PivotFields},
     PivotFields :: proplists:proplist()
-                 | map().
+                 | map()
+                 | undefined.
 -callback pid_observe_custom_pivot(pid(), #custom_pivot{}, z:context()) -> Pivots when
     Pivots :: [ Pivot ]
             | Pivot
@@ -2363,7 +2374,8 @@ Return:
             | undefined,
     Pivot :: {atom(), PivotFields},
     PivotFields :: proplists:proplist()
-                 | map().
+                 | map()
+                 | undefined.
 
 -optional_callbacks([ observe_custom_pivot/2, pid_observe_custom_pivot/3 ]).
 

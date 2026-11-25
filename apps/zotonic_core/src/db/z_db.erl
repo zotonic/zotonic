@@ -166,7 +166,8 @@
 
 -type insert_options() :: [ insert_option() ].
 -type insert_option() :: {returning, column_name()}
-                       | {conflict, ignore}.
+                       | {conflict, ignore | update}
+                       | {conflict_target, [column_name()]}.
 
 -export_type([
     sql/0,
@@ -1001,140 +1002,267 @@ insert(Table, Parameters, Context) ->
 %% Unknown columns are serialized in the props or props_json column. If the table has an 'id'
 %% column then the new id is returned. The 'id' column should be the primary key column
 %% and have type 'serial' (or bigserial) if it is not given in the passed parameters.
--spec insert(Table, Parameters, Options, Context) -> {ok, NewId | undefined} | {error, Reason} when
+%% The {returning, Column} option returns that column's decoded value instead of the id.
+%% With {conflict, update}, update supplied non-key columns on a unique conflict.
+%% The conflict_target option is a list of unique-key columns, defaulting to [id].
+%% Property updates require an id column and, on conflict, explicit key values;
+%% they lock the existing row and merge via update/4 within a transaction.
+-spec insert(Table, Parameters, Options, Context) -> {ok, ReturnValue} | {error, Reason} when
     Table :: table_name(),
     Parameters :: props(),
     Options :: insert_options(),
     Context :: z:context(),
-    NewId :: id(),
+    ReturnValue :: term(),
     Reason :: term().
 insert(Table, Parameters, Options, Context) when is_list(Parameters) ->
     insert(Table, z_props:from_props(Parameters), Options, Context);
 insert(Table, Parameters, Options, Context) ->
-    {Schema, Tab, QTab} = quoted_table_name(Table),
+    {Schema, Tab, _QTab} = quoted_table_name(Table),
     Cols = column_names_bin(Schema, Tab, Context),
     BinParams = ensure_binary_keys(Parameters),
     case prepare_cols(Cols, BinParams) of
         {ok, InsertProps} ->
-            HasProps = maps:is_key(<<"props">>, InsertProps),
-            HasPropsJSON = maps:is_key(<<"props_json">>, InsertProps),
-
-            InsertProps1 = if HasPropsJSON ->
-                                  #{<<"props_json">> := PropsJSONCol} = InsertProps,
-                                  case is_map(PropsJSONCol) of
-                                      true ->
-                                          InsertProps#{
-                                            <<"props_json">> => ?DB_PROPS_JSON(filter_empty_props(PropsJSONCol))
-                                           };
-                                      false ->
-                                          InsertProps
-                                  end;
-                              HasProps ->
-                                  #{<<"props">> := PropsCol} = InsertProps,
-                                  case PropsCol of
-                                      #{} ->
-                                          InsertProps#{
-                                            <<"props">> => ?DB_PROPS(filter_empty_props(PropsCol))
-                                           };
-                                      [ {_, _} | _ ] ->
-                                          Props1 = z_props:from_props(PropsCol),
-                                          InsertProps#{
-                                            <<"props">> => ?DB_PROPS(filter_empty_props(Props1))
-                                           };
-                                      _ ->
-                                          InsertProps
-                                  end;
-                              not HasPropsJSON and not HasProps ->
-                                  InsertProps
-                           end,
-
-            %% Build the SQL insert statement
-            {ColNames, ColParams} = lists:unzip( maps:to_list(InsertProps1) ),
-            Sql = iolist_to_binary([
-                "insert into ", QTab, " (\"",
-                    lists:join("\", \"", ColNames),
-                "\") values (",
-                    lists:join(", ", [ [$$ | integer_to_list(N)] || N <- lists:seq(1, length(ColParams)) ]),
-                ")"
-            ]),
-            OnConflict = case proplists:get_value(conflict, Options) of
-                undefined -> <<>>;
-                ignore -> <<" on conflict do nothing">>
-            end,
-            Sql1 = <<Sql/binary, OnConflict/binary>>,
-            HasId = lists:member(<<"id">>, Cols),
-            FinalSql = case proplists:get_value(returning, Options) of
-                undefined when HasId -> <<Sql1/binary, " returning id">>;
-                undefined -> Sql1;
-                RetCol ->
-                    RetCol1 = z_convert:to_binary(RetCol),
-                    case lists:member(RetCol1, Cols) of
+            case insert_conflict_target(Cols, Options) of
+                {ok, Target} ->
+                    case proplists:get_value(conflict, Options) =:= update
+                        andalso (maps:is_key(<<"props">>, InsertProps)
+                            orelse maps:is_key(<<"props_json">>, InsertProps))
+                    of
                         true ->
-                            <<Sql1/binary, " returning \"", RetCol1/binary, "\"">>;
+                            insert_update_props(Table, BinParams, InsertProps, Cols, Target, Options, Context);
                         false ->
-                            ?LOG_ERROR(#{
-                                in => zotonic_core,
-                                text => <<"z_db error in insert: returning column not found">>,
-                                result => error,
-                                reason => badarg,
-                                table => Table,
-                                returning => RetCol,
-                                columns => Cols
-                            }),
-                            badarg
-                    end
-            end,
-            if
-                FinalSql =:= badarg ->
-                    {error, badarg};
-                true ->
-                    F = fun(C) ->
-                         DbDriver = z_context:db_driver(Context),
-                         case equery1(DbDriver, C, FinalSql, ColParams) of
-                             {ok, IdOrCount} ->
-                                {ok, IdOrCount};
-                             {error, noresult} ->
-                                {ok, undefined};
-                             {error, #error{ codename = unique_violation, message = Message }} = Error ->
-                                ?LOG_NOTICE(#{
-                                    in => zotonic_core,
-                                    text => <<"z_db unique_violation in insert">>,
-                                    result => error,
-                                    reason => unique_violation,
-                                    message => Message,
-                                    table => Table,
-                                    parameters => Parameters
-                                }),
-                                Error;
-                             {error, #error{ codename = ErrCode, message = Message }} = Error ->
-                                ?LOG_ERROR(#{
-                                    in => zotonic_core,
-                                    text => <<"z_db error in insert">>,
-                                    result => error,
-                                    reason => ErrCode,
-                                    message => Message,
-                                    table => Table,
-                                    query => FinalSql,
-                                    parameters => Parameters
-                                }),
-                                Error;
-                             {error, Reason} = Error ->
-                                ?LOG_ERROR(#{
-                                    in => zotonic_core,
-                                    text => <<"z_db error in query">>,
-                                    result => error,
-                                    reason => Reason,
-                                    table => Table,
-                                    query => FinalSql,
-                                    parameters => ColParams
-                                }),
-                                Error
-                         end
-                    end,
-                    with_connection(F, Context)
+                            insert_prepared(Table, Parameters, InsertProps, Cols, Target, Options, Context)
+                    end;
+                {error, _} = Error -> Error
             end;
         {error, _} = Error ->
             Error
+    end.
+
+insert_prepared(Table, Parameters, InsertProps, Cols, Target, Options, Context) ->
+    {_Schema, _Tab, QTab} = quoted_table_name(Table),
+    HasProps = maps:is_key(<<"props">>, InsertProps),
+    HasPropsJSON = maps:is_key(<<"props_json">>, InsertProps),
+
+    InsertProps1 = if HasPropsJSON ->
+                          #{<<"props_json">> := PropsJSONCol} = InsertProps,
+                          case is_map(PropsJSONCol) of
+                              true ->
+                                  InsertProps#{
+                                    <<"props_json">> => ?DB_PROPS_JSON(filter_empty_props(PropsJSONCol))
+                                   };
+                              false ->
+                                  InsertProps
+                          end;
+                      HasProps ->
+                          #{<<"props">> := PropsCol} = InsertProps,
+                          case PropsCol of
+                              #{} ->
+                                  InsertProps#{
+                                    <<"props">> => ?DB_PROPS(filter_empty_props(PropsCol))
+                                   };
+                              [ {_, _} | _ ] ->
+                                  Props1 = z_props:from_props(PropsCol),
+                                  InsertProps#{
+                                    <<"props">> => ?DB_PROPS(filter_empty_props(Props1))
+                                   };
+                              _ ->
+                                  InsertProps
+                          end;
+                      not HasPropsJSON and not HasProps ->
+                          InsertProps
+                   end,
+
+    %% Build the SQL insert statement
+    InsertProps2 = map_atom_arrays(InsertProps1),
+    {ColNames, ColParams} = lists:unzip( maps:to_list(InsertProps2) ),
+    Sql = iolist_to_binary([
+        "insert into ", QTab, " (\"",
+            lists:join("\", \"", ColNames),
+        "\") values (",
+            lists:join(", ", [ [$$ | integer_to_list(N)] || N <- lists:seq(1, length(ColParams)) ]),
+        ")"
+    ]),
+    OnConflict = insert_on_conflict(ColNames, Target, Options),
+    Sql1 = <<Sql/binary, OnConflict/binary>>,
+    HasId = lists:member(<<"id">>, Cols),
+    FinalSql = case proplists:get_value(returning, Options) of
+        undefined when HasId -> <<Sql1/binary, " returning id">>;
+        undefined -> Sql1;
+        RetCol ->
+            RetCol1 = z_convert:to_binary(RetCol),
+            case lists:member(RetCol1, Cols) of
+                true ->
+                    <<Sql1/binary, " returning \"", RetCol1/binary, "\"">>;
+                false ->
+                    ?LOG_ERROR(#{
+                        in => zotonic_core,
+                        text => <<"z_db error in insert: returning column not found">>,
+                        result => error,
+                        reason => badarg,
+                        table => Table,
+                        returning => RetCol,
+                        columns => Cols
+                    }),
+                    badarg
+            end
+    end,
+    if
+        FinalSql =:= badarg ->
+            {error, badarg};
+        true ->
+            F = fun(C) ->
+                 DbDriver = z_context:db_driver(Context),
+                 case equery1(DbDriver, C, FinalSql, ColParams) of
+                     {ok, IdOrCount} ->
+                        {ok, IdOrCount};
+                     {error, noresult} ->
+                        {ok, undefined};
+                     {error, #error{ codename = unique_violation, message = Message }} = Error ->
+                        ?LOG_NOTICE(#{
+                            in => zotonic_core,
+                            text => <<"z_db unique_violation in insert">>,
+                            result => error,
+                            reason => unique_violation,
+                            message => Message,
+                            table => Table,
+                            parameters => Parameters
+                        }),
+                        Error;
+                     {error, #error{ codename = ErrCode, message = Message }} = Error ->
+                        ?LOG_ERROR(#{
+                            in => zotonic_core,
+                            text => <<"z_db error in insert">>,
+                            result => error,
+                            reason => ErrCode,
+                            message => Message,
+                            table => Table,
+                            query => FinalSql,
+                            parameters => Parameters
+                        }),
+                        Error;
+                     {error, Reason} = Error ->
+                        ?LOG_ERROR(#{
+                            in => zotonic_core,
+                            text => <<"z_db error in query">>,
+                            result => error,
+                            reason => Reason,
+                            table => Table,
+                            query => FinalSql,
+                            parameters => ColParams
+                        }),
+                        Error
+                 end
+            end,
+            with_connection(F, Context)
+    end.
+
+%% DO UPDATE needs an explicit unique key; DO NOTHING can handle all constraints.
+insert_conflict_target(Cols, Options) ->
+    Default = case proplists:get_value(conflict, Options) of
+        update -> [<<"id">>];
+        _ -> []
+    end,
+    Target = [ z_convert:to_binary(C) || C <- proplists:get_value(conflict_target, Options, Default) ],
+    case lists:all(fun(C) -> lists:member(C, Cols) end, Target)
+        andalso (Target =/= [] orelse proplists:get_value(conflict, Options) =/= update)
+    of
+        true -> {ok, Target};
+        false -> {error, badarg}
+    end.
+
+insert_on_conflict(ColNames, Target, Options) ->
+    TargetSQL = case Target of
+        [] -> [];
+        _ -> [" (", lists:join(", ", [ insert_quote_column(C) || C <- Target ]), ")"]
+    end,
+    case proplists:get_value(conflict, Options) of
+        undefined -> <<>>;
+        ignore -> iolist_to_binary([" on conflict", TargetSQL, " do nothing"]);
+        update ->
+            UpdateCols = ColNames -- [<<"id">> | Target],
+            % A key-only upsert still returns the existing row and locks it.
+            AssignCols = case UpdateCols of
+                [] -> [hd(Target)];
+                _ -> UpdateCols
+            end,
+            Assigns = [
+                [insert_quote_column(C), " = excluded.", insert_quote_column(C)]
+                || C <- AssignCols
+            ],
+            iolist_to_binary([" on conflict", TargetSQL, " do update set ", lists:join(", ", Assigns)])
+    end.
+
+insert_quote_column(Column) ->
+    [$", binary:replace(Column, <<"\"">>, <<"\"\"">>, [global]), $"].
+
+%% Keep insert filtering separate from update merging. A conflicting row is locked
+%% before update/4 reads its properties, including when called in an outer transaction.
+insert_update_props(Table, Parameters, InsertProps, Cols, Target, Options, Context) ->
+    Returning = z_convert:to_binary(proplists:get_value(returning, Options, id)),
+    case lists:member(<<"id">>, Cols) andalso lists:member(Returning, Cols) of
+        false -> {error, badarg};
+        true ->
+            Result = transaction(
+                fun(Ctx) ->
+                    insert_update_props_1(Table, Parameters, InsertProps, Cols, Target, Returning, Ctx)
+                end,
+                Context),
+            case Result of
+                {rollback, {error, _} = Error} -> Error;
+                {rollback, Reason} -> {error, Reason};
+                Other -> Other
+            end
+    end.
+
+insert_update_props_1(Table, Parameters, InsertProps, Cols, Target, Returning, Context) ->
+    Options = [{conflict, ignore}, {returning, id}],
+    case insert_prepared(Table, Parameters, InsertProps, Cols, Target, Options, Context) of
+        {ok, undefined} ->
+            case lists:all(fun(C) -> maps:is_key(C, InsertProps) end, Target) of
+                true -> ok;
+                false -> throw({rollback, {error, badarg}})
+            end,
+            {_Schema, _Tab, QTab} = quoted_table_name(Table),
+            Conditions = [
+                insert_conflict_condition(C, maps:get(C, InsertProps), N)
+                || {C, N} <- lists:zip(Target, lists:seq(1, length(Target)))
+            ],
+            Sql = ["select id from ", QTab, " where ", lists:join(" and ", Conditions), " for update"],
+            case equery(Sql, [ maps:get(C, InsertProps) || C <- Target ], Context) of
+                {ok, _, [{Id}]} ->
+                    Update = maps:without([<<"id">> | Target], Parameters),
+                    case update(Table, Id, Update, Context) of
+                        {ok, 1} -> insert_returning(Table, Id, Returning, Context);
+                        {error, _} = Error -> throw({rollback, Error})
+                    end;
+                {ok, _, []} ->
+                    % The conflicting row was deleted before we could lock it.
+                    insert_update_props_1(Table, Parameters, InsertProps, Cols, Target, Returning, Context);
+                {error, _} = Error -> throw({rollback, Error})
+            end;
+        {ok, Id} -> insert_returning(Table, Id, Returning, Context);
+        {error, _} = Error -> throw({rollback, Error})
+    end.
+
+%% Use ordinary equality for index lookups, retaining support for nullable keys
+%% backed by a UNIQUE NULLS NOT DISTINCT constraint.
+insert_conflict_condition(Column, Value, N) ->
+    Operator = case Value of
+        undefined -> " is not distinct from $";
+        null -> " is not distinct from $";
+        _ -> " = $"
+    end,
+    [insert_quote_column(Column), Operator, integer_to_list(N)].
+
+insert_returning(_Table, Id, <<"id">>, _Context) ->
+    {ok, Id};
+insert_returning(Table, Id, Returning, Context) ->
+    {_Schema, _Tab, QTab} = quoted_table_name(Table),
+    Sql = ["select ", insert_quote_column(Returning), " from ", QTab, " where id = $1"],
+    case equery(Sql, [Id], Context) of
+        {ok, _, [{Value}]} -> {ok, Value};
+        {error, _} = Error -> throw({rollback, Error})
     end.
 
 %% @doc Update a row in a table, merging the properties with any new property values. The table
@@ -1159,7 +1287,7 @@ update(Table, Id, Parameters, Context) when is_map(Parameters) ->
         {ok, UpdateProps} ->
             F = fun(C) ->
                 UpdateProps1 = update_merge_props(DbDriver, C, Table, Cols, Id, UpdateProps, Context),
-                UpdateProps2 = update_map_atom_arrays(UpdateProps1),
+                UpdateProps2 = map_atom_arrays(UpdateProps1),
                 {ColNames, Params} = lists:unzip( maps:to_list(UpdateProps2) ),
                 ColNamesNr = lists:zip(ColNames, lists:seq(2, length(ColNames)+1)),
                 ColAssigns = [
@@ -1321,7 +1449,7 @@ maybe_json_decode(JSON) when is_binary(JSON) ->
         _ -> #{}
     end.
 
-update_map_atom_arrays(Props) ->
+map_atom_arrays(Props) ->
     maps:map(
         fun
             (_K, [ A | _ ] = V) when is_atom(A) ->

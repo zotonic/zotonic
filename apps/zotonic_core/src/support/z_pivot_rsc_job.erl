@@ -358,14 +358,7 @@ pivot_resource_custom(Id, Context) ->
 
 update_custom_pivot(Id, {Module, Columns}, Context) ->
     TableName = "pivot_" ++ z_convert:to_list(Module),
-    Result = case z_db:select(TableName, Id, Context) of
-        {ok, _Row}  ->
-            z_db:update(TableName, Id, Columns, Context);
-        {error, enoent} when is_list(Columns) ->
-            z_db:insert(TableName, [ {id, Id} | Columns ], Context);
-        {error, enoent} when is_map(Columns) ->
-            z_db:insert(TableName, Columns#{ <<"id">> => Id }, Context)
-    end,
+    Result = update_custom_pivot_1(TableName, Id, Columns, Context),
     case Result of
         {ok, _} ->
             ok;
@@ -378,6 +371,50 @@ update_custom_pivot(Id, {Module, Columns}, Context) ->
                 pivot_module => Module,
                 id => Id
             })
+    end.
+
+%% A named undefined result removes the row; a bare undefined observer result
+%% is handled above and leaves all custom pivot rows unchanged.
+update_custom_pivot_1(TableName, Id, undefined, Context) ->
+    z_db:delete(TableName, Id, Context);
+update_custom_pivot_1(TableName, Id, Columns, Context) when is_list(Columns) ->
+    update_custom_pivot_1(TableName, Id, z_props:from_props(Columns), Context);
+update_custom_pivot_1(TableName, Id, Columns, Context) when is_map(Columns) ->
+    % Normalize keys before assigning id: observers cannot override the resource id.
+    Columns1 = maps:from_list([ {z_convert:to_binary(K), V} || {K, V} <- maps:to_list(Columns) ]),
+    Props = Columns1#{ <<"id">> => Id },
+    IsPartial = lists:any(
+        fun
+            (#column_def{name=Name, is_nullable=false, default=undefined}) ->
+                not maps:is_key(z_convert:to_binary(Name), Props);
+            (_) -> false
+        end,
+        z_db:columns(TableName, Context)),
+    case IsPartial of
+        true -> update_custom_pivot_partial(TableName, Id, Props, Context);
+        false -> z_db:insert(TableName, Props, [{conflict, update}], Context)
+    end.
+
+%% An insert-first upsert cannot omit a NOT NULL column without a default,
+%% even if the row exists. Retain partial updates, locking before property merging.
+update_custom_pivot_partial(TableName, Id, Props, Context) ->
+    {_Schema, _Table, QTable} = z_db:quoted_table_name(TableName),
+    Result = z_db:transaction(
+        fun(Ctx) ->
+            R = case z_db:q1(["select id from ", QTable, " where id = $1 for update"], [Id], Ctx) of
+                undefined -> z_db:insert(TableName, Props, [{conflict, update}], Ctx);
+                Id -> z_db:update(TableName, Id, maps:remove(<<"id">>, Props), Ctx)
+            end,
+            case R of
+                {ok, _} -> R;
+                {error, _} = Error -> {rollback, Error}
+            end
+        end,
+        Context),
+    case Result of
+        {rollback, {error, _} = Error} -> Error;
+        {rollback, Reason} -> {error, Reason};
+        Other -> Other
     end.
 
 to_datetime(Text) ->
