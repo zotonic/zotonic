@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-20 22:19\n"
+"PO-Revision-Date: 2026-11-24 17:04\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -421,6 +421,7 @@ msgstr "Är du säker på att du vill återställa alla ACL-regler till deras nu
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:185
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:45
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:41
 #: zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:116
 #: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:43
@@ -472,8 +473,8 @@ msgstr "Ändrad konfiguration."
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:209
 #: zotonic_mod_admin/priv/templates/_admin_edit_version.tpl:5
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:72
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:74
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:76
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_filter_predicates.tpl:20
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:40
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:79
@@ -608,7 +609,7 @@ msgstr "Kunde inte flytta till samarbetsgruppen."
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125
 #: zotonic_mod_survey/src/mod_survey.erl:427
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:50
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:12
 msgid "Delete"
@@ -635,7 +636,7 @@ msgstr "Tar bort..."
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:33
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:14
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:42
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:45
 msgid "Deny"
 msgstr "Neka"
 
@@ -886,7 +887,7 @@ msgstr "Återställda regler"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:33
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:162
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:141
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:86
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:26
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:105
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:56
@@ -1409,7 +1410,7 @@ msgstr "Är du säker på att du vill ta bort dessa {n} sidor?"
 msgid "Are you sure you want to delete this note?"
 msgstr "Är du säker på att du vill ta bort den här anteckningen?"
 
-#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:63
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:86
 msgid "Are you sure you want to exit the admin interface?"
 msgstr "Är du säker på att du vill avsluta admin-gränssnittet?"
 
@@ -1432,6 +1433,10 @@ msgstr "Auth"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:142
 msgid "Authentication"
 msgstr "Autentisering"
+
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:76
+msgid "Automatic"
+msgstr "Automatisk"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:162
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:164
@@ -1613,7 +1618,7 @@ msgstr "Konfigurerad"
 msgid "Confirm delete"
 msgstr "Bekräfta radering"
 
-#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:63
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:85
 msgid "Confirm logoff"
 msgstr "Bekräfta avloggning"
 
@@ -1774,6 +1779,10 @@ msgstr "Skapandedatum, nyaste först"
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:262
 msgid "Creation date, oldest first"
 msgstr "Skapandedatum, äldst först"
+
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:70
+msgid "Dark"
+msgstr "Mörkt"
 
 #: zotonic_mod_admin/priv/templates/admin.tpl:4
 #: zotonic_mod_admin/priv/templates/admin.tpl:8
@@ -1988,7 +1997,7 @@ msgstr "E-postadress"
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:131
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:117
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:119
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:46
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:49
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:44
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:14
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:16
@@ -2461,6 +2470,10 @@ msgstr "Senast modifierade personer"
 msgid "Latest modified texts"
 msgstr "Senaste modifierade texter"
 
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:64
+msgid "Light"
+msgstr "Ljus"
+
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:43
 msgid "Link selected page"
 msgstr "Länka den valda sidan"
@@ -2498,7 +2511,7 @@ msgstr "Lokal reservlösning är aktiverad."
 msgid "Local sandbox"
 msgstr "Lokal sandlåda"
 
-#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:62
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:82
 #: zotonic_site_status/priv/templates/_menu.tpl:5
 #: zotonic_site_status/priv/templates/_navbar.tpl:34
 msgid "Log Off"
@@ -3188,7 +3201,7 @@ msgstr "Sidor som länkar till"
 #: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:51
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:69
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:72
 msgid "Refresh"
 msgstr "Uppdatera"
 
@@ -3346,21 +3359,21 @@ msgstr "Sandbox-isolering stöds inte på det här systemet. Kommandon för loka
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:4
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:144
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:90
 msgid "Save &amp; view"
 msgstr "Spara &amp; visa"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:4
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:144
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:90
 msgid "Save and view the page."
 msgstr "Spara och visa sidan."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:17
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:141
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:86
 msgid "Save this page."
 msgstr "Spara den här sidan."
 
@@ -3415,7 +3428,7 @@ msgstr "Sökfråga"
 msgid "Search results"
 msgstr "Sökresultat"
 
-#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:76
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:100
 msgid "Search..."
 msgstr "Sök..."
 
@@ -3877,6 +3890,10 @@ msgstr "Systemet har allokerat mer än den specificerade tröskeln för tillgän
 msgid "The update coordinator restarted. Restart the Zotonic node before deploying again."
 msgstr "Uppdateringskoordinatorn har startats om. Starta om Zotonic-noden innan du driftsätter igen."
 
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:59
+msgid "Theme"
+msgstr "Tema"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers_list.tpl:43
 msgid "There are no incoming connections."
 msgstr "Det finns inga inkommande anslutningar."
@@ -4134,6 +4151,9 @@ msgstr "Opublicerad"
 #: zotonic_mod_seo/src/support/seo_jsonld_webpage.erl:276
 #: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:16
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:10
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:6
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:12
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:17
 #: zotonic_mod_translation/priv/templates/_translation_tree_skipped.tpl:7
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:3
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:93
@@ -4240,7 +4260,7 @@ msgstr "Använd dessa åtgärder för att reparera installationsdata, inte för 
 msgid "Used"
 msgstr "Använt"
 
-#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:59
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:54
 msgid "User page"
 msgstr "Användarsida"
 
@@ -5226,8 +5246,8 @@ msgstr "Dölj menyn"
 msgid "Language"
 msgstr "Språk"
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:34
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:44
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:36
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:46
 msgid "Loading ..."
 msgstr "Läser in ..."
 
@@ -5243,11 +5263,11 @@ msgstr "Visa menyn"
 msgid "The page might have been deleted."
 msgstr "Sidan kan ha tagits bort."
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:133
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:135
 msgid "There are unsaved changes. Are you sure you want to leave without saving?"
 msgstr "Det finns osparade ändringar. Är du säker på att du vill lämna sidan utan att spara?"
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:82
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
 msgid "This page"
 msgstr "Denna sida"
 
@@ -5255,7 +5275,7 @@ msgstr "Denna sida"
 msgid "View this page."
 msgstr "Visa den här sidan."
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:131
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:133
 msgid "Yes, discard changes"
 msgstr "Ja, kassera ändringar"
 
@@ -6286,6 +6306,10 @@ msgstr "Beta"
 msgid "Change the predicate on all existing page connections to:"
 msgstr "Ändra predikatet för alla befintliga sidanslutningar till:"
 
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:68
+msgid "Connections using this predicate do not keep their target page alive. A dependent target page can be deleted when it has no other incoming connections. Protected pages are kept."
+msgstr "Anslutningar som använder detta predikat håller inte målsidan aktiv. En beroende målsida kan raderas när den inte har några andra inkommande anslutningar. Skyddade sidor behålls."
+
 #: zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:88
 msgid "Could not create the predicate."
 msgstr "Kunde inte skapa predikatet."
@@ -6302,11 +6326,11 @@ msgstr "Radering avbryts, det finns anslutningar med detta predikat."
 msgid "Delete predicate and update connections"
 msgstr "Ta bort predikat och uppdatera anslutningar"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:85
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:95
 msgid "Do not find subjects using this predicate’s object titles."
 msgstr "Använd inte objektens titlar för detta predikat när du söker efter subjekt."
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:95
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:105
 msgid "Do not show on the connections list on the resource edit page."
 msgstr "Visas inte i anslutningslistan på resursredigeringssidan."
 
@@ -6350,11 +6374,15 @@ msgstr "Dölj eller visa sidor som inte ligger på sökvägen från startsidan."
 msgid "Hide previously added pages and connections."
 msgstr "Dölj tidigare tillagda sidor och anslutningar."
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:75
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:65
+msgid "Ignore these connections when cleaning up dependent pages."
+msgstr "Bortse från dessa länkar när du rensar bort beroende sidor."
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:85
 msgid "Insert new connections before existing connections."
 msgstr "Infoga nya anslutningar före befintliga anslutningar."
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:68
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:78
 msgid "Instead of a search box, this will show a list of all pages in the target categories selected above. At least one category must be selected."
 msgstr "I stället för en sökruta visas här en lista över alla sidor i de målkategorier som valts ovan. Minst en kategori måste vara vald."
 
@@ -6392,7 +6420,7 @@ msgstr "Objekt"
 msgid "Only show connections with the following predicates:"
 msgstr "Visa endast anslutningar med följande predikat:"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:108
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:118
 msgid "Ontologies define predicates for a defined set of subject and object categories. Sometimes it is more practical to have the predicate’s connection direction reversed from the formal definition. Export and import functions can use this option to swap subject/object relation when exporting or importing data."
 msgstr "Ontologier definierar predikat för en viss uppsättning subjekt- och objektkategorier. Ibland är det mer praktiskt att vända predikatets kopplingsriktning jämfört med den formella definitionen. Export- och importfunktioner kan använda detta alternativ för att byta plats på subjekt och objekt vid export eller import av data."
 
@@ -6457,7 +6485,7 @@ msgstr "Visa alla utgående anslutningar"
 msgid "Show graph of all connections"
 msgstr "Visa graf över alla anslutningar"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:98
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:108
 msgid "Some predicates are mostly for internal purposes. Check this if you don’t want to show this predicate on the <em>Connected to</em> list."
 msgstr "Vissa predikat är mest för interna ändamål. Markera detta om du inte vill visa detta predikat på listan <em>Ansluten till</em>."
 
@@ -6473,7 +6501,7 @@ msgstr "Gå ett steg tillbaka"
 msgid "Subject"
 msgstr "Subjekt"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:105
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:115
 msgid "The direction (from/to) of this predicate is reversed from the normal definition."
 msgstr "Riktningen (från / till) för detta predikat är omvänd från den normala definitionen."
 
@@ -6485,7 +6513,7 @@ msgstr "Det finns inga sidförbindelser med detta predikat."
 msgid "There is already a predicate with this name."
 msgstr "Det finns redan ett predikat med detta namn."
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:88
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:98
 msgid "This directs the indexers to not include the titles of connected pages with this predicate. Normally titles of connected pages are included, making it possible to eg. find articles by their author’s name."
 msgstr "Detta styr indexerarna att inte inkludera titlarna på anslutna sidor med detta predikat. Normalt ingår titlar på anslutna sidor, vilket gör det möjligt att t.ex. hitta artiklar efter författarens namn."
 
@@ -6521,11 +6549,11 @@ msgstr "För många anslutningar"
 msgid "URI"
 msgstr "URI"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:65
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:75
 msgid "Use a list of checkboxes with titles when adding page connections."
 msgstr "Använd en lista med kryssrutor med titlar när du lägger till sidkopplingar."
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:78
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:88
 msgid "Usually new connections are inserted after existing connections. Check this to insert new connections before existing connections."
 msgstr "Vanligtvis infogas nya anslutningar efter befintliga anslutningar. Markera detta för att infoga nya anslutningar före befintliga anslutningar."
 
@@ -6711,13 +6739,13 @@ msgstr "Tillåtna värden (separerade med kommatecken)"
 msgid "Allowed values:"
 msgstr "Tillåtna värden:"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:348
+#: zotonic_mod_analytics/src/mod_analytics.erl:353
 msgid "An equivalent analytics measurement already exists."
 msgstr "Det finns redan ett motsvarande analysmått."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
-#: zotonic_mod_analytics/src/mod_analytics.erl:277
+#: zotonic_mod_analytics/src/mod_analytics.erl:282
 msgid "Analytics configuration"
 msgstr "Konfiguration av analysverktyg"
 
@@ -6788,11 +6816,11 @@ msgstr "Klassificerade förfrågningar – sidor, API:er och andra typer av för
 msgid "Configure analytics measurements"
 msgstr "Konfigurera analysmätningar"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:316
+#: zotonic_mod_analytics/src/mod_analytics.erl:321
 msgid "Could not delete the analytics measurement."
 msgstr "Det gick inte att ta bort analysmätningen."
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:349
+#: zotonic_mod_analytics/src/mod_analytics.erl:354
 msgid "Could not save. Check the event, breakdown and filter values."
 msgstr "Det gick inte att spara. Kontrollera värdena för händelse, uppdelning och filter."
 
@@ -6846,7 +6874,7 @@ msgstr "Enhet – telefon, surfplatta, stationär dator eller okänd"
 msgid "Display order"
 msgstr "Visningsordning"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:322
+#: zotonic_mod_analytics/src/mod_analytics.erl:327
 msgid "Display order saved."
 msgstr "Visningsordningen har sparats."
 
@@ -7049,6 +7077,7 @@ msgstr "Det senast sparade intervallet"
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:55
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:206
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:17
 msgid "Next"
 msgstr "Nästa"
 
@@ -7203,7 +7232,7 @@ msgstr "Kort beskrivning"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
-#: zotonic_mod_analytics/src/mod_analytics.erl:269
+#: zotonic_mod_analytics/src/mod_analytics.erl:274
 msgid "Site Analytics"
 msgstr "Webbplatsanalys"
 
@@ -7255,11 +7284,11 @@ msgstr "Lagrade intervall / kapacitet"
 msgid "Stored time intervals"
 msgstr "Lagrade tidsintervall"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:324
+#: zotonic_mod_analytics/src/mod_analytics.erl:329
 msgid "The analytics measurements changed. Reloading their current display order."
 msgstr "Analysvärdena har ändrats. Den aktuella visningsordningen laddas om."
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:347
+#: zotonic_mod_analytics/src/mod_analytics.erl:352
 msgid "This analytics measurement exceeds the storage budget."
 msgstr "Denna analysmätning överskrider lagringsbudgeten."
 
@@ -9107,7 +9136,7 @@ msgstr "Nettoförändring"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:28
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:35
 #: zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:162
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:164
 msgid "No"
 msgstr "Nej"
 
@@ -9370,7 +9399,7 @@ msgstr "Arbetsuppgifter"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32
 #: zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
 #: zotonic_mod_translation/priv/templates/_translation_status.tpl:26
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:161
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:163
 msgid "Yes"
 msgstr "Ja"
 
@@ -9476,7 +9505,7 @@ msgstr "Obs! Kommentarer modereras"
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:29
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:4
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:199
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:201
 msgid "Page"
 msgstr "Sida"
 
@@ -9506,6 +9535,7 @@ msgstr "Spara inställningar för kommentarformulär"
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:4
 #: zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:7
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:7
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:16
 msgid "Settings"
 msgstr "Inställningar"
 
@@ -9797,7 +9827,7 @@ msgid "A graph of all templates, and by whom they are included, is generated and
 msgstr "En graf över alla mallar och vilka mallar som inkluderar dem skapas och uppdateras automatiskt."
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:9
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:83
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:86
 msgid "Action"
 msgstr "Handling"
 
@@ -11798,6 +11828,7 @@ msgstr "Endast administratörskontot (användare 1) kan markera filer som oåter
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:85
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:45
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:48
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:12
 msgid "Previous"
 msgstr "Tidigare"
 
@@ -12124,7 +12155,7 @@ msgstr "Framsteg kommer att rapporteras i <a href=\"{url}\">adminloggen</a> och 
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:27
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:43
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:61
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:63
 msgid "Property"
 msgstr "Egenskap"
 
@@ -15739,7 +15770,7 @@ msgstr "För varje kombination av en användare och en etikett kan det bara finn
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:110
 #: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:5
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:58
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:61
 msgid "Forever"
 msgstr "Evigt"
 
@@ -17471,7 +17502,7 @@ msgstr "Förklaring"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:35
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:11
 #: zotonic_mod_survey/src/questions/survey_q_truefalse.erl:61
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:167
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:169
 msgid "False"
 msgstr "Falskt"
 
@@ -18150,7 +18181,7 @@ msgstr "Lagrat värde"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:21
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:43
 #: zotonic_mod_survey/src/questions/survey_q_likert.erl:56
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:156
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:158
 msgid "Strongly Agree"
 msgstr "Håller starkt med"
 
@@ -18158,7 +18189,7 @@ msgstr "Håller starkt med"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:11
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:35
 #: zotonic_mod_survey/src/questions/survey_q_likert.erl:60
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:157
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:159
 msgid "Strongly Disagree"
 msgstr "Instämmer inte alls"
 
@@ -18356,7 +18387,7 @@ msgstr "Totala"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:32
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:10
 #: zotonic_mod_survey/src/questions/survey_q_truefalse.erl:63
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:166
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:168
 msgid "True"
 msgstr "Sant"
 
@@ -18552,54 +18583,82 @@ msgstr "text"
 msgid "{points} of {max} points"
 msgstr "{points} av {max} poäng"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:34
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:53
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:30
+msgid "1–1000 immediately available request credits per IP address. Default: 30."
+msgstr "1–1000 omedelbart tillgängliga förfrågningskrediter per IP-adress. Standardvärde: 30."
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:24
+msgid "1–100000 requests per period. Default: 120. Credits replenish continuously for each IP address."
+msgstr "1–100 000 förfrågningar per period. Standardvärde: 120. Krediter fylls på kontinuerligt för varje IP-adress."
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:18
+msgid "1–3600 seconds. Default: 60."
+msgstr "1–3 600 sekunder. Standardvärde: 60."
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:36
+msgid "1–50000 retained client budgets per site and node. Default: 5000."
+msgstr "1–50 000 lagrade kundbudgetar per webbplats och nod. Standardvärde: 5 000."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:37
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:62
 msgid "Add IP entries"
 msgstr "Lägg till IP-poster"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:23
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:26
 msgid "Add to allow list"
 msgstr "Lägg till i tillåtelselistan"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:13
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:42
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:45
 msgid "Allow"
 msgstr "Tillåt"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:17
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:20
 msgid "Allow entries take precedence. Blocks follow observe/enforce/off mode and only affect guarded routes."
 msgstr "Poster i tillåtelselistan har företräde. Blockeringar följer läget observe/enforce/off och påverkar endast skyddade rutter."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:106
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:109
 msgid "Block IP"
 msgstr "Blockera IP-adress"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:103
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:106
 msgid "Block duration"
 msgstr "Blockeringstid"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:86
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:89
 msgid "Block for"
 msgstr "Blockera i"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:18
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:27
+msgid "Burst allowance"
+msgstr "Tillåten pulsfrekvens"
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:95
+msgid "Choose a valid mode and enter whole numbers within the indicated ranges. No settings were saved."
+msgstr "Välj ett giltigt läge och ange heltal inom de angivna intervallen. Inga inställningar har sparats."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:21
 msgid "Current mode:"
 msgstr "Aktuellt läge:"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:72
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:75
 msgid "Current node only, including would-throttle decisions in observe mode. Up to 200 entries. Blocking generates a note from the displayed reason and rejection count."
 msgstr "Endast aktuell nod, inklusive förfrågningar som skulle begränsas i läget observe. Upp till 200 poster. Blockering skapar en anteckning utifrån det visade skälet och antalet avvisade förfrågningar."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:68
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:71
 msgid "Currently throttled IP addresses"
 msgstr "IP-adresser som för närvarande är begränsade"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:51
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:12
+msgid "Default: observe. Use observe mode to tune limits against normal traffic."
+msgstr "Standard: observera. Använd observeringsläget för att justera gränserna utifrån den normala trafiken."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:54
 msgid "Delete IP entry"
 msgstr "Ta bort IP-post"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:48
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:51
 msgid "Delete IP entry?"
 msgstr "Ta bort IP-posten?"
 
@@ -18607,19 +18666,23 @@ msgstr "Ta bort IP-posten?"
 msgid "Delete this IP entry?"
 msgstr "Ska denna IP-post raderas?"
 
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:71
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:80
 msgid "Each list can contain at most 256 entries."
 msgstr "Varje lista kan innehålla högst 256 poster."
 
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:57
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:66
 msgid "Edit IP entry"
 msgstr "Redigera IP-post"
 
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:72
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:10
+msgid "Enforce — reject excess requests"
+msgstr "Tillämpa — avvisa överflödiga förfrågningar"
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:81
 msgid "Enter valid IP addresses, a note and a future expiry date or duration. No changes were saved."
 msgstr "Ange giltiga IP-adresser, en anteckning och ett framtida utgångsdatum eller en giltighetstid. Inga ändringar har sparats."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:38
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:41
 msgid "Expiry dates are UTC. Expired entries stop applying immediately and are removed automatically. Global entries are managed in zotonic.config."
 msgstr "Giltighetstiderna anges i UTC. Poster som har löpt ut upphör att gälla omedelbart och tas bort automatiskt. Globala poster hanteras i zotonic.config."
 
@@ -18627,7 +18690,7 @@ msgstr "Giltighetstiderna anges i UTC. Poster som har löpt ut upphör att gäll
 msgid "Hour"
 msgstr "Timme"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:81
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:84
 msgid "IP address"
 msgstr "IP-adress"
 
@@ -18635,7 +18698,7 @@ msgstr "IP-adress"
 msgid "IP addresses"
 msgstr "IP-adresser"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:32
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:35
 msgid "IP entries"
 msgstr "IP-poster"
 
@@ -18643,31 +18706,55 @@ msgstr "IP-poster"
 msgid "List"
 msgstr "Lista"
 
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:33
+msgid "Maximum tracked clients"
+msgstr "Maximalt antal spårade klienter"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:6
+msgid "Mode"
+msgstr "Läge"
+
 #: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:4
 msgid "Month (30 days)"
 msgstr "Månad (30 dagar)"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:61
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:64
 msgid "No IP entries."
 msgstr "Inga IP-poster."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:114
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:117
 msgid "No currently throttled IP addresses."
 msgstr "Det finns för närvarande inga IP-adresser som är begränsade."
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:9
+msgid "Observe — report without blocking"
+msgstr "Observera – rapportera utan att blockera"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:8
+msgid "Off — bypass traffic guard"
+msgstr "Av — kringgå trafikvakt"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:40
 msgid "Or until (UTC)"
 msgstr "Eller fram till (UTC)"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:82
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:85
 msgid "Reason"
 msgstr "Motivering"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:84
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:87
 msgid "Rejections"
 msgstr "Avslag"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:85
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:15
+msgid "Replenishment period (seconds)"
+msgstr "Återhämtningstid (sekunder)"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:21
+msgid "Requests replenished per period"
+msgstr "Antal påfyllningsbegäranden per period"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:88
 msgid "Retry in seconds"
 msgstr "Nytt försök om (sekunder)"
 
@@ -18675,29 +18762,45 @@ msgstr "Nytt försök om (sekunder)"
 msgid "Save IP entries"
 msgstr "Spara IP-poster"
 
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:42
+msgid "Save settings"
+msgstr "Spara inställningar"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:38
+msgid "Saving settings resets transient request budgets. IP allow and block entries are managed separately on the Traffic guard screen."
+msgstr "När inställningarna sparas återställs de tillfälliga begärandebudgeterna. Poster för tillåtna och blockerade IP-adresser hanteras separat på skärmen ”Traffic Guard”."
+
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:9
 msgid "Separate IPv4 or IPv6 addresses with spaces, commas or newlines. Re-adding an address to the same list updates its note and expiry."
 msgstr "Separera IPv4- eller IPv6-adresser med mellanslag, kommatecken eller radbrytningar. Om du lägger till en adress igen i samma lista uppdateras anteckningen och giltighetstiden för den."
 
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:70
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:97
+msgid "The traffic guard settings could not be saved. Please try again."
+msgstr "Inställningarna för trafikvakt kunde inte sparas. Försök igen."
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:79
 msgid "This IP is no longer throttled. Refresh the page."
 msgstr "Denna IP-adress är inte längre begränsad. Uppdatera sidan."
 
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:58
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:67
 msgid "This entry is no longer available. Refresh the page."
 msgstr "Den här posten är inte längre tillgänglig. Uppdatera sidan."
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:3
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:10
-#: zotonic_mod_traffic_guard/src/mod_traffic_guard.erl:168
+#: zotonic_mod_traffic_guard/src/mod_traffic_guard.erl:166
 msgid "Traffic guard"
 msgstr "Trafikskydd"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:74
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:77
 msgid "Traffic guard is temporarily unavailable."
 msgstr "Trafikskyddet är tillfälligt otillgängligt."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:58
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:41
+msgid "Traffic guard settings"
+msgstr "Inställningar för trafikvakter"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:61
 msgid "Until (UTC):"
 msgstr "Fram till (UTC):"
 
@@ -18709,11 +18812,15 @@ msgstr "Till (UTC; tomt fält betyder för alltid)"
 msgid "Valid for"
 msgstr "Gäller för"
 
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:69
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:78
 msgid "You are not allowed to change these entries."
 msgstr "Du får inte ändra dessa uppgifter."
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:21
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:93
+msgid "You are not allowed to change traffic guard settings."
+msgstr "Du får inte ändra inställningarna för trafikvakterna."
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:24
 msgid "Your current IP address:"
 msgstr "Din nuvarande IP-adress:"
 
@@ -18789,7 +18896,7 @@ msgstr "Tillgängliga underspråk"
 msgid "Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>."
 msgstr "Det går inte att generera översättningsfiler eftersom <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext inte är installerat</a>."
 
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:51
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:53
 msgid "Click to edit."
 msgstr "Klicka för att redigera."
 
@@ -18917,6 +19024,10 @@ msgstr "Om du automatiskt översätter texter kommer dina texter att skickas til
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:165
 msgid "If you change the stemmer language then you will need to reindex all data."
 msgstr "Om du ändrar språket för ordstamsanalys måste du indexera om alla data."
+
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:5
+msgid "In"
+msgstr "I"
 
 #: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:37
 msgid "Incomplete translation"
@@ -19210,7 +19321,7 @@ msgstr "Översätt alla sidor"
 msgid "Translate from"
 msgstr "Översätt från"
 
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:50
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:52
 msgid "Translated page texts for every editable language that has a translation in the resource."
 msgstr "Översatta sidtexter för varje redigerbart språk som har en översättning i resursen."
 
@@ -19238,6 +19349,10 @@ msgstr "Översättningen är klar. Uppdatera sidan för att fortsätta redigera.
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:7
 msgid "Translation in progress"
 msgstr "Översättning pågår"
+
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:3
+msgid "Translation navigation"
+msgstr "Översättningsnavigering"
 
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:3
 msgid "Translations"
@@ -19286,7 +19401,7 @@ msgstr "Du har inte behörighet att redigera det här trädet."
 msgid "not enabled"
 msgstr "inte aktiverad"
 
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:117
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:119
 msgid "page break"
 msgstr "sidbrytning"
 

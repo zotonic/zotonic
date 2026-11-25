@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-20 22:19\n"
+"PO-Revision-Date: 2026-11-24 17:04\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -403,6 +403,7 @@ msgstr "確定要將所有 ACL 規則還原為目前已發佈的版本嗎？"
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:185
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:45
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:41
 #: zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:116
 #: zotonic_mod_translation/priv/templates/_dialog_translation_edit.tpl:43
@@ -454,8 +455,8 @@ msgstr "已變更組態。"
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:76
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:209
 #: zotonic_mod_admin/priv/templates/_admin_edit_version.tpl:5
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:72
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:74
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:76
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_filter_predicates.tpl:20
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:40
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:79
@@ -590,7 +591,7 @@ msgstr "無法移至協作群組。"
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125
 #: zotonic_mod_survey/src/mod_survey.erl:427
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:47
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:50
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 #: zotonic_mod_translation/priv/templates/_dialog_translation_tree.tpl:12
 msgid "Delete"
@@ -617,7 +618,7 @@ msgstr "正在刪除…"
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:33
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:14
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:42
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:45
 msgid "Deny"
 msgstr "拒絕"
 
@@ -868,7 +869,7 @@ msgstr "已還原規則"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:33
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:162
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:141
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:86
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:26
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:105
 #: zotonic_mod_development/priv/templates/_development_editor_settings.tpl:56
@@ -1387,7 +1388,7 @@ msgstr "你確定要刪除這 {n} 個頁面嗎？"
 msgid "Are you sure you want to delete this note?"
 msgstr "你確定要刪除此備註嗎？"
 
-#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:63
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:86
 msgid "Are you sure you want to exit the admin interface?"
 msgstr "確定要離開管理介面嗎？"
 
@@ -1410,6 +1411,10 @@ msgstr "身分驗證"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:142
 msgid "Authentication"
 msgstr "驗證"
+
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:76
+msgid "Automatic"
+msgstr "自動"
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:162
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:164
@@ -1591,7 +1596,7 @@ msgstr "已設定"
 msgid "Confirm delete"
 msgstr "確認刪除"
 
-#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:63
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:85
 msgid "Confirm logoff"
 msgstr "確認登出"
 
@@ -1752,6 +1757,10 @@ msgstr "建立日期，由新到舊"
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:262
 msgid "Creation date, oldest first"
 msgstr "建立日期，由舊到新"
+
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:70
+msgid "Dark"
+msgstr "黑暗"
 
 #: zotonic_mod_admin/priv/templates/admin.tpl:4
 #: zotonic_mod_admin/priv/templates/admin.tpl:8
@@ -1966,7 +1975,7 @@ msgstr "電子郵件地址"
 #: zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:131
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:117
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:119
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:46
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:49
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:44
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:14
 #: zotonic_mod_wires/priv/templates/_mediaoverlay.tpl:16
@@ -2439,6 +2448,10 @@ msgstr "最近修改的人物頁面"
 msgid "Latest modified texts"
 msgstr "最近修改的文字"
 
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:64
+msgid "Light"
+msgstr "光"
+
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:43
 msgid "Link selected page"
 msgstr "連結至選定的頁面"
@@ -2476,7 +2489,7 @@ msgstr "已啟用本機備用方案。"
 msgid "Local sandbox"
 msgstr "本機沙盒"
 
-#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:62
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:82
 #: zotonic_site_status/priv/templates/_menu.tpl:5
 #: zotonic_site_status/priv/templates/_navbar.tpl:34
 msgid "Log Off"
@@ -3166,7 +3179,7 @@ msgstr "連結至以下頁面的頁面："
 #: zotonic_mod_admin/priv/templates/_admin_status_indexing.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:51
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:69
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:72
 msgid "Refresh"
 msgstr "重新整理"
 
@@ -3324,21 +3337,21 @@ msgstr "此系統不支援沙盒隔離。本機媒體指令將在未隔離的狀
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:4
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:144
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:90
 msgid "Save &amp; view"
 msgstr "儲存並檢視"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:4
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:144
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:90
 msgid "Save and view the page."
 msgstr "儲存並檢視此頁面。"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:17
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:141
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:86
 msgid "Save this page."
 msgstr "儲存此頁面。"
 
@@ -3393,7 +3406,7 @@ msgstr "搜尋查詢"
 msgid "Search results"
 msgstr "搜索結果"
 
-#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:76
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:100
 msgid "Search..."
 msgstr "搜尋..."
 
@@ -3855,6 +3868,10 @@ msgstr "系統分配的可用記憶體超過了底層作業系統所報告的指
 msgid "The update coordinator restarted. Restart the Zotonic node before deploying again."
 msgstr "更新協調器已重新啟動。請在再次部署前重新啟動 Zotonic 節點。"
 
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:59
+msgid "Theme"
+msgstr "主題"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers_list.tpl:43
 msgid "There are no incoming connections."
 msgstr "沒有傳入連線。"
@@ -4112,6 +4129,9 @@ msgstr "未發表"
 #: zotonic_mod_seo/src/support/seo_jsonld_webpage.erl:276
 #: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:16
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:10
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:6
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:12
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:17
 #: zotonic_mod_translation/priv/templates/_translation_tree_skipped.tpl:7
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:3
 #: zotonic_mod_websub/priv/templates/admin_websub.tpl:93
@@ -4218,7 +4238,7 @@ msgstr "請將這些操作用於修復安裝資料，而非用於例行維護。
 msgid "Used"
 msgstr "已使用"
 
-#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:59
+#: zotonic_mod_admin/priv/templates/_admin_menu.tpl:54
 msgid "User page"
 msgstr "使用者頁面"
 
@@ -5204,8 +5224,8 @@ msgstr "隱藏選單"
 msgid "Language"
 msgstr "語言"
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:34
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:44
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:36
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:46
 msgid "Loading ..."
 msgstr "正在載入…"
 
@@ -5221,11 +5241,11 @@ msgstr "顯示選單"
 msgid "The page might have been deleted."
 msgstr "該頁面可能已被刪除。"
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:133
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:135
 msgid "There are unsaved changes. Are you sure you want to leave without saving?"
 msgstr "有尚未儲存的變更。確定要放棄儲存並離開嗎？"
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:82
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:84
 msgid "This page"
 msgstr "本頁"
 
@@ -5233,7 +5253,7 @@ msgstr "本頁"
 msgid "View this page."
 msgstr "檢視此頁面。"
 
-#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:131
+#: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:133
 msgid "Yes, discard changes"
 msgstr "是，放棄變更"
 
@@ -6265,6 +6285,10 @@ msgstr "Beta"
 msgid "Change the predicate on all existing page connections to:"
 msgstr "將所有現有頁面連結的述詞變更為："
 
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:68
+msgid "Connections using this predicate do not keep their target page alive. A dependent target page can be deleted when it has no other incoming connections. Protected pages are kept."
+msgstr "使用此謂詞建立的連線不會使目標頁面保持活躍狀態。當依賴的目標頁面沒有其他傳入連線時，該頁面可能會被刪除。受保護的頁面則會被保留。"
+
 #: zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:88
 msgid "Could not create the predicate."
 msgstr "無法建立述詞。"
@@ -6281,11 +6305,11 @@ msgstr "已取消刪除，仍有連結使用此述詞。"
 msgid "Delete predicate and update connections"
 msgstr "刪除述詞並更新連接"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:85
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:95
 msgid "Do not find subjects using this predicate’s object titles."
 msgstr "搜尋主體頁面時，不使用此述詞的客體頁面標題。"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:95
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:105
 msgid "Do not show on the connections list on the resource edit page."
 msgstr "不顯示在資源編輯頁面的連線清單中。"
 
@@ -6329,11 +6353,15 @@ msgstr "隱藏或顯示不在起始頁路徑上的頁面。"
 msgid "Hide previously added pages and connections."
 msgstr "隱藏先前新增的頁面和連線。"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:75
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:65
+msgid "Ignore these connections when cleaning up dependent pages."
+msgstr "在清理依賴頁面時，請忽略這些連結。"
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:85
 msgid "Insert new connections before existing connections."
 msgstr "在現有連接之前插入新連接。"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:68
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:78
 msgid "Instead of a search box, this will show a list of all pages in the target categories selected above. At least one category must be selected."
 msgstr "此處不會顯示搜尋方塊，而是會列出上述所選目標分類中的所有頁面。必須至少選取一個分類。"
 
@@ -6371,7 +6399,7 @@ msgstr "客體"
 msgid "Only show connections with the following predicates:"
 msgstr "僅顯示具有下列關係類型的連接："
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:108
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:118
 msgid "Ontologies define predicates for a defined set of subject and object categories. Sometimes it is more practical to have the predicate’s connection direction reversed from the formal definition. Export and import functions can use this option to swap subject/object relation when exporting or importing data."
 msgstr "本體為一組指定的主體和客體類別定義謂詞。有時，讓謂詞的連結方向與正式定義相反會更實用。匯入和匯出功能可使用此選項，在匯入或匯出資料時交換主體與客體。"
 
@@ -6436,7 +6464,7 @@ msgstr "顯示所有傳出連線"
 msgid "Show graph of all connections"
 msgstr "顯示所有連線的圖形"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:98
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:108
 msgid "Some predicates are mostly for internal purposes. Check this if you don’t want to show this predicate on the <em>Connected to</em> list."
 msgstr "有些謂詞主要用於內部用途。如果你不想在<em>連接到</em>清單中顯示此謂詞，請勾選此項。"
 
@@ -6452,7 +6480,7 @@ msgstr "退後"
 msgid "Subject"
 msgstr "主體"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:105
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:115
 msgid "The direction (from/to) of this predicate is reversed from the normal definition."
 msgstr "此述詞的方向（從／到）與一般定義相反。"
 
@@ -6464,7 +6492,7 @@ msgstr "沒有使用此述詞的頁面連結。"
 msgid "There is already a predicate with this name."
 msgstr "已有使用此名稱的述詞。"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:88
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:98
 msgid "This directs the indexers to not include the titles of connected pages with this predicate. Normally titles of connected pages are included, making it possible to eg. find articles by their author’s name."
 msgstr "此選項指示索引器不要包含透過此謂詞連結的頁面標題。通常會包含這些標題，讓使用者能依作者名稱等資訊尋找文章。"
 
@@ -6500,11 +6528,11 @@ msgstr "連接太多"
 msgid "URI"
 msgstr "URI"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:65
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:75
 msgid "Use a list of checkboxes with titles when adding page connections."
 msgstr "新增頁面連結時，使用附有標題的核取方塊清單。"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:78
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:88
 msgid "Usually new connections are inserted after existing connections. Check this to insert new connections before existing connections."
 msgstr "通常，新連線會插入到現有連線之後。選取此項目可在現有連線之前插入新連線。"
 
@@ -6690,13 +6718,13 @@ msgstr "允許的值（以逗號分隔）"
 msgid "Allowed values:"
 msgstr "允許的值："
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:348
+#: zotonic_mod_analytics/src/mod_analytics.erl:353
 msgid "An equivalent analytics measurement already exists."
 msgstr "目前已經存在一項等效的分析指標。"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:7
-#: zotonic_mod_analytics/src/mod_analytics.erl:277
+#: zotonic_mod_analytics/src/mod_analytics.erl:282
 msgid "Analytics configuration"
 msgstr "分析設定"
 
@@ -6767,11 +6795,11 @@ msgstr "機密請求 — 頁面、API 及其他分發類型"
 msgid "Configure analytics measurements"
 msgstr "設定分析指標"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:316
+#: zotonic_mod_analytics/src/mod_analytics.erl:321
 msgid "Could not delete the analytics measurement."
 msgstr "無法刪除分析指標。"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:349
+#: zotonic_mod_analytics/src/mod_analytics.erl:354
 msgid "Could not save. Check the event, breakdown and filter values."
 msgstr "無法儲存。請檢查事件、細項及篩選條件的數值。"
 
@@ -6825,7 +6853,7 @@ msgstr "裝置 — 手機、平板電腦、桌上型電腦或未知"
 msgid "Display order"
 msgstr "顯示順序"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:322
+#: zotonic_mod_analytics/src/mod_analytics.erl:327
 msgid "Display order saved."
 msgstr "顯示順序已儲存。"
 
@@ -7028,6 +7056,7 @@ msgstr "最新儲存的區間"
 #: zotonic_mod_signup/priv/templates/_signup_with_email_step2.tpl:55
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:198
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:206
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:17
 msgid "Next"
 msgstr "下一頁"
 
@@ -7182,7 +7211,7 @@ msgstr "簡介"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:2
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:8
-#: zotonic_mod_analytics/src/mod_analytics.erl:269
+#: zotonic_mod_analytics/src/mod_analytics.erl:274
 msgid "Site Analytics"
 msgstr "網站分析"
 
@@ -7234,11 +7263,11 @@ msgstr "已儲存的時間區間／容量"
 msgid "Stored time intervals"
 msgstr "儲存的時間區間"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:324
+#: zotonic_mod_analytics/src/mod_analytics.erl:329
 msgid "The analytics measurements changed. Reloading their current display order."
 msgstr "分析數據已變更。正在重新載入目前的顯示順序。"
 
-#: zotonic_mod_analytics/src/mod_analytics.erl:347
+#: zotonic_mod_analytics/src/mod_analytics.erl:352
 msgid "This analytics measurement exceeds the storage budget."
 msgstr "這項分析指標超出了儲存預算。"
 
@@ -9086,7 +9115,7 @@ msgstr "淨變動"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:28
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:35
 #: zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:162
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:164
 msgid "No"
 msgstr "否"
 
@@ -9349,7 +9378,7 @@ msgstr "工作項目"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32
 #: zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
 #: zotonic_mod_translation/priv/templates/_translation_status.tpl:26
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:161
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:163
 msgid "Yes"
 msgstr "是"
 
@@ -9455,7 +9484,7 @@ msgstr "注意：留言須經審核"
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:29
 #: zotonic_mod_mailinglist/priv/templates/_mailing_email_history.tpl:7
 #: zotonic_mod_mailinglist/priv/templates/_mailing_runs.tpl:4
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:199
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:201
 msgid "Page"
 msgstr "頁面"
 
@@ -9485,6 +9514,7 @@ msgstr "儲存留言表單設定"
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:4
 #: zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:7
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:7
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:16
 msgid "Settings"
 msgstr "設定"
 
@@ -9776,7 +9806,7 @@ msgid "A graph of all templates, and by whom they are included, is generated and
 msgstr "自動產生並更新顯示所有範本及其包含關係的圖形。"
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:9
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:83
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:86
 msgid "Action"
 msgstr "動作"
 
@@ -11777,6 +11807,7 @@ msgstr "只有管理員帳戶（使用者 1）才能將檔案標記為無法恢�
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_edit.tpl:85
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:45
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_recipients.tpl:48
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:12
 msgid "Previous"
 msgstr "前一页"
 
@@ -12103,7 +12134,7 @@ msgstr "進度會記錄在<a href=\"{url}\">管理日誌</a>中，並在管理�
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:27
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:43
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:61
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:63
 msgid "Property"
 msgstr "屬性"
 
@@ -15717,7 +15748,7 @@ msgstr "每個使用者與標籤的組合只能有一個存取權杖。具有此
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:110
 #: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:5
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:58
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:61
 msgid "Forever"
 msgstr "永遠"
 
@@ -17449,7 +17480,7 @@ msgstr "說明"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:35
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:11
 #: zotonic_mod_survey/src/questions/survey_q_truefalse.erl:61
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:167
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:169
 msgid "False"
 msgstr "否"
 
@@ -18128,7 +18159,7 @@ msgstr "儲存值"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:21
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:43
 #: zotonic_mod_survey/src/questions/survey_q_likert.erl:56
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:156
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:158
 msgid "Strongly Agree"
 msgstr "非常同意"
 
@@ -18136,7 +18167,7 @@ msgstr "非常同意"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:11
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:35
 #: zotonic_mod_survey/src/questions/survey_q_likert.erl:60
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:157
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:159
 msgid "Strongly Disagree"
 msgstr "非常不同意"
 
@@ -18334,7 +18365,7 @@ msgstr "總計"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:32
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:10
 #: zotonic_mod_survey/src/questions/survey_q_truefalse.erl:63
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:166
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:168
 msgid "True"
 msgstr "真"
 
@@ -18530,54 +18561,82 @@ msgstr "文字"
 msgid "{points} of {max} points"
 msgstr "{points} 分，滿分 {max} 分"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:34
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:53
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:30
+msgid "1–1000 immediately available request credits per IP address. Default: 30."
+msgstr "每個 IP 位址可立即使用的請求額度為 1 至 1000。預設值：30。"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:24
+msgid "1–100000 requests per period. Default: 120. Credits replenish continuously for each IP address."
+msgstr "每個週期 1–100000 次請求。預設值：120。每個 IP 位址的配額會持續補充。"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:18
+msgid "1–3600 seconds. Default: 60."
+msgstr "1–3600 秒。預設值：60。"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:36
+msgid "1–50000 retained client budgets per site and node. Default: 5000."
+msgstr "每個網站和節點可保留 1 至 50,000 個客戶預算。預設值：5,000。"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:37
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:62
 msgid "Add IP entries"
 msgstr "新增 IP 項目"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:23
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:26
 msgid "Add to allow list"
 msgstr "加入允許清單"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:5
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:13
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:42
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:45
 msgid "Allow"
 msgstr "允許"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:17
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:20
 msgid "Allow entries take precedence. Blocks follow observe/enforce/off mode and only affect guarded routes."
 msgstr "允許清單中的項目優先。封鎖規則遵循 observe/enforce/off 模式，且僅適用於受保護的路由。"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:106
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:109
 msgid "Block IP"
 msgstr "封鎖 IP"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:103
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:106
 msgid "Block duration"
 msgstr "封鎖時間"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:86
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:89
 msgid "Block for"
 msgstr "封鎖時間"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:18
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:27
+msgid "Burst allowance"
+msgstr "突發流量額度"
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:95
+msgid "Choose a valid mode and enter whole numbers within the indicated ranges. No settings were saved."
+msgstr "請選擇一個有效的模式，並在指定範圍內輸入整數。未儲存任何設定。"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:21
 msgid "Current mode:"
 msgstr "當前模式："
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:72
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:75
 msgid "Current node only, including would-throttle decisions in observe mode. Up to 200 entries. Blocking generates a note from the displayed reason and rejection count."
 msgstr "僅限目前節點，包含在 observe 模式下原本會被限流的請求。最多顯示 200 筆記錄。封鎖時會根據顯示的原因和遭拒的請求數產生備註。"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:68
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:71
 msgid "Currently throttled IP addresses"
 msgstr "目前受到流量限制的 IP 位址"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:51
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:12
+msgid "Default: observe. Use observe mode to tune limits against normal traffic."
+msgstr "預設：觀察模式。使用觀察模式，根據正常流量來調整限制值。"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:54
 msgid "Delete IP entry"
 msgstr "刪除 IP 記錄"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:48
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:51
 msgid "Delete IP entry?"
 msgstr "刪除 IP 記錄？"
 
@@ -18585,19 +18644,23 @@ msgstr "刪除 IP 記錄？"
 msgid "Delete this IP entry?"
 msgstr "要刪除此 IP 記錄嗎？"
 
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:71
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:80
 msgid "Each list can contain at most 256 entries."
 msgstr "每個清單最多可包含 256 筆項目。"
 
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:57
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:66
 msgid "Edit IP entry"
 msgstr "編輯 IP 記錄"
 
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:72
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:10
+msgid "Enforce — reject excess requests"
+msgstr "強制執行 — 拒絕多餘的請求"
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:81
 msgid "Enter valid IP addresses, a note and a future expiry date or duration. No changes were saved."
 msgstr "請輸入有效的 IP 位址、備註以及未來的到期日期或有效期限。未儲存任何變更。"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:38
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:41
 msgid "Expiry dates are UTC. Expired entries stop applying immediately and are removed automatically. Global entries are managed in zotonic.config."
 msgstr "有效期限以 UTC 為準。過期的條目將立即停止生效，並自動移除。全域條目在 zotonic.config 中進行管理。"
 
@@ -18605,7 +18668,7 @@ msgstr "有效期限以 UTC 為準。過期的條目將立即停止生效，並�
 msgid "Hour"
 msgstr "小時"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:81
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:84
 msgid "IP address"
 msgstr "IP 位址"
 
@@ -18613,7 +18676,7 @@ msgstr "IP 位址"
 msgid "IP addresses"
 msgstr "IP 位址"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:32
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:35
 msgid "IP entries"
 msgstr "IP 條目"
 
@@ -18621,31 +18684,55 @@ msgstr "IP 條目"
 msgid "List"
 msgstr "清單"
 
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:33
+msgid "Maximum tracked clients"
+msgstr "最多可追蹤的客戶數"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:6
+msgid "Mode"
+msgstr "模式"
+
 #: zotonic_mod_traffic_guard/priv/templates/_traffic_guard_duration.tpl:4
 msgid "Month (30 days)"
 msgstr "月（30 天）"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:61
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:64
 msgid "No IP entries."
 msgstr "沒有 IP 記錄。"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:114
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:117
 msgid "No currently throttled IP addresses."
 msgstr "目前沒有被限流的 IP 位址。"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:9
+msgid "Observe — report without blocking"
+msgstr "觀察——在不阻礙的情況下進行回報"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:8
+msgid "Off — bypass traffic guard"
+msgstr "關閉 — 繞過交通管制員"
 
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:40
 msgid "Or until (UTC)"
 msgstr "或直至（UTC）"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:82
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:85
 msgid "Reason"
 msgstr "理由"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:84
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:87
 msgid "Rejections"
 msgstr "拒絕次數"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:85
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:15
+msgid "Replenishment period (seconds)"
+msgstr "補充週期（秒）"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:21
+msgid "Requests replenished per period"
+msgstr "各期間內已補貨的請求"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:88
 msgid "Retry in seconds"
 msgstr "重試等待時間（秒）"
 
@@ -18653,29 +18740,45 @@ msgstr "重試等待時間（秒）"
 msgid "Save IP entries"
 msgstr "儲存 IP 記錄"
 
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:42
+msgid "Save settings"
+msgstr "儲存設定"
+
+#: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_settings.tpl:38
+msgid "Saving settings resets transient request budgets. IP allow and block entries are managed separately on the Traffic guard screen."
+msgstr "儲存設定後，暫時性請求配額將重置。IP 允許與封鎖項目將在「流量防護」畫面中分別進行管理。"
+
 #: zotonic_mod_traffic_guard/priv/templates/_dialog_traffic_guard_entry.tpl:9
 msgid "Separate IPv4 or IPv6 addresses with spaces, commas or newlines. Re-adding an address to the same list updates its note and expiry."
 msgstr "請使用空格、逗號或換行符將 IPv4 或 IPv6 位址分隔開來。若將同一個位址再次新增至同一清單中，系統會更新該位址的備註與到期日期。"
 
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:70
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:97
+msgid "The traffic guard settings could not be saved. Please try again."
+msgstr "無法儲存交通管制設定。請重新嘗試。"
+
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:79
 msgid "This IP is no longer throttled. Refresh the page."
 msgstr "此 IP 位址已不再受限。請重新整理頁面。"
 
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:58
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:67
 msgid "This entry is no longer available. Refresh the page."
 msgstr "此條目已無法顯示。請重新整理頁面。"
 
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:3
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:10
-#: zotonic_mod_traffic_guard/src/mod_traffic_guard.erl:168
+#: zotonic_mod_traffic_guard/src/mod_traffic_guard.erl:166
 msgid "Traffic guard"
 msgstr "流量防護"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:74
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:77
 msgid "Traffic guard is temporarily unavailable."
 msgstr "流量防護暫時無法使用。"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:58
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:41
+msgid "Traffic guard settings"
+msgstr "交通指揮員的配置"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:61
 msgid "Until (UTC):"
 msgstr "截至（UTC）："
 
@@ -18687,11 +18790,15 @@ msgstr "直至（UTC；若為空則表示永遠）"
 msgid "Valid for"
 msgstr "有效期間"
 
-#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:69
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:78
 msgid "You are not allowed to change these entries."
 msgstr "你無權變更這些項目。"
 
-#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:21
+#: zotonic_mod_traffic_guard/src/controllers/controller_admin_traffic_guard.erl:93
+msgid "You are not allowed to change traffic guard settings."
+msgstr "您不得變更交通指揮員的設定。"
+
+#: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:24
 msgid "Your current IP address:"
 msgstr "你目前的 IP 位址："
 
@@ -18767,7 +18874,7 @@ msgstr "可用的子語言"
 msgid "Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>."
 msgstr "無法產生翻譯檔案，因為<a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">尚未安裝 gettext</a>。"
 
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:51
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:53
 msgid "Click to edit."
 msgstr "點擊以進行編輯。"
 
@@ -18895,6 +19002,10 @@ msgstr "如果你使用自動翻譯，文字將被傳送至遠端翻譯服務。
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:165
 msgid "If you change the stemmer language then you will need to reindex all data."
 msgstr "若變更詞幹擷取語言，就必須重新索引所有資料。"
+
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:5
+msgid "In"
+msgstr "在"
 
 #: zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:37
 msgid "Incomplete translation"
@@ -19188,7 +19299,7 @@ msgstr "翻譯所有頁面"
 msgid "Translate from"
 msgstr "從以下語言翻譯："
 
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:50
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:52
 msgid "Translated page texts for every editable language that has a translation in the resource."
 msgstr "顯示資源中每種已有翻譯且可編輯的語言的頁面譯文。"
 
@@ -19216,6 +19327,10 @@ msgstr "翻譯已完成。請重新載入頁面以繼續編輯。"
 #: zotonic_mod_translation/priv/templates/_translation_tree_init.tpl:7
 msgid "Translation in progress"
 msgstr "翻譯中"
+
+#: zotonic_mod_translation/priv/templates/_translation_navigation.tpl:3
+msgid "Translation navigation"
+msgstr "翻譯導覽"
 
 #: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:3
 msgid "Translations"
@@ -19264,7 +19379,7 @@ msgstr "你無權編輯此樹狀結構。"
 msgid "not enabled"
 msgstr "未啟用"
 
-#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:117
+#: zotonic_mod_translation/priv/templates/admin_translation_texts.tpl:119
 msgid "page break"
 msgstr "分頁符號"
 
