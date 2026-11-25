@@ -1002,16 +1002,17 @@ insert(Table, Parameters, Context) ->
 %% Unknown columns are serialized in the props or props_json column. If the table has an 'id'
 %% column then the new id is returned. The 'id' column should be the primary key column
 %% and have type 'serial' (or bigserial) if it is not given in the passed parameters.
+%% The {returning, Column} option returns that column's decoded value instead of the id.
 %% With {conflict, update}, update supplied non-key columns on a unique conflict.
 %% The conflict_target option is a list of unique-key columns, defaulting to [id].
 %% Property updates require an id column and, on conflict, explicit key values;
 %% they lock the existing row and merge via update/4 within a transaction.
--spec insert(Table, Parameters, Options, Context) -> {ok, NewId | undefined} | {error, Reason} when
+-spec insert(Table, Parameters, Options, Context) -> {ok, ReturnValue} | {error, Reason} when
     Table :: table_name(),
     Parameters :: props(),
     Options :: insert_options(),
     Context :: z:context(),
-    NewId :: id(),
+    ReturnValue :: term(),
     Reason :: term().
 insert(Table, Parameters, Options, Context) when is_list(Parameters) ->
     insert(Table, z_props:from_props(Parameters), Options, Context);
