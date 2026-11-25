@@ -85,33 +85,27 @@ empty_fulltext_facet() ->
             meck:expect(z_db, columns, fun(search_facet, _) ->
                 {ok, {Columns, _}} = search_facet:facet_table(#context{}),
                 Columns
-            end),
-            meck:expect(z_db, q1, fun(_, [42], _) -> 42 end)
+            end)
         end,
         fun(_) -> meck:unload([z_template, z_module_manager, z_db]) end,
         [
-            {atom_to_list(Block) ++ " " ++ atom_to_list(Kind) ++ " " ++ atom_to_list(Mode), fun() ->
+            {atom_to_list(Block) ++ " " ++ atom_to_list(Kind), fun() ->
                 meck:reset(z_db),
-                meck:expect(z_db, q1, fun(_, [42], _) -> ExistingId end),
-                meck:expect(z_db, insert,
-                    fun(search_facet, #{<<"id">> := 42}, [{conflict, ignore}], _) ->
-                        {ok, undefined}
-                    end),
                 meck:expect(z_template, blocks, fun(_, _, _) -> {ok, [Block]} end),
                 meck:expect(z_template, render_block_to_iolist,
                     fun(_, _, _, Context) -> {Output, Context} end),
-                meck:expect(z_db, update, fun(search_facet, 42, Update, _) ->
-                    % Both columns must be explicitly cleared in the DB update.
-                    ?assertEqual(#{<<"f_body">> => undefined, SearchColumn => undefined}, Update),
-                    {ok, 1}
+                meck:expect(z_db, insert, fun(search_facet, Props, [{conflict, update}], _) ->
+                    % Both columns must be explicitly cleared by the upsert.
+                    ?assertEqual(#{<<"id">> => 42, <<"f_body">> => undefined, SearchColumn => undefined}, Props),
+                    {ok, 42}
                 end),
                 ?assertEqual(ok, search_facet:pivot_rsc(42, #context{})),
-                ?assert(meck:called(z_db, update, [search_facet, 42, '_', #context{}])),
-                ?assertEqual(Mode =:= concurrent_insert, meck:called(z_db, insert, '_'))
+                ?assert(meck:called(z_db, insert, [search_facet, '_', [{conflict, update}], #context{}])),
+                ?assertNot(meck:called(z_db, update, '_')),
+                ?assertNot(meck:called(z_db, q1, '_'))
             end}
             || {Block, SearchColumn} <- [{body_ft, <<"ft_body">>}, {body_fts, <<"fts_body">>}],
-               {Kind, Output} <- [{empty, <<>>}, {whitespace, <<" \n\t ">>}],
-               {Mode, ExistingId} <- [{existing, 42}, {concurrent_insert, undefined}]
+               {Kind, Output} <- [{empty, <<>>}, {whitespace, <<" \n\t ">>}]
         ]}.
 
 nested_facet_query() ->

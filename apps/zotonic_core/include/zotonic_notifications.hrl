@@ -585,7 +585,9 @@
 %% is the pivot defined in a call to ``z_pivot_rsc:define_custom_pivot/3`` or a table
 %% with created using a SQL command during (eg.) in a module ``manage_schema/2`` call.
 %% The name of the table is ``pivot_<pivotname>``.  The ``props`` is either a property
-%% list or a map with column/value pairs.
+%% list or a map with column/value pairs. Return ``{pivotname, undefined}`` for a
+%% sparse pivot when this resource needs no row; any existing row is deleted.
+%% Bare ``undefined``, ``none``, and ``ok`` leave existing rows unchanged.
 %%
 %% The table MUST have an ``id`` column, with a foreign key constraint to the ``rsc``
 %% table. If you define the pivot table using ``z_pivot_rsc:define_custom_pivot/3`` then
