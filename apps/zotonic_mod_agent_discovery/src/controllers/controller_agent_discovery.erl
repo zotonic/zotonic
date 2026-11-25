@@ -5,14 +5,15 @@
 -moduledoc("
 Serve public agent discovery documents with GET and HEAD.
 The dispatch option `document` selects `llms`, `catalog`, `openapi` or `help`.
-Rendering uses anonymous permissions, even for authenticated visitors.
+Discovery metadata uses anonymous permissions, even for authenticated visitors.
+The HTML help page retains the visitor's authentication for its site layout.
 Responses are not shared-cacheable; site-wide noindex settings are respected.
 ").
 -export([service_available/1, allowed_methods/1, content_types_provided/1, process/4]).
 
 -spec service_available(Context) -> {boolean(), Context} when Context :: z:context().
 service_available(Context) ->
-    Public = z_acl:anondo(Context),
+    Public = document_context(Context),
     {true, z_context:set_noindex_header(z_context:set_nocache_headers(Public))}.
 
 -spec allowed_methods(Context) -> {[binary()], Context} when Context :: z:context().
@@ -31,7 +32,7 @@ content_types_provided(Context) ->
 -spec process(Method, Accepted, Provided, Context) -> {iodata(), Context} when
     Method :: binary(), Accepted :: term(), Provided :: term(), Context :: z:context().
 process(_Method, _Accepted, _Provided, Context0) ->
-    Context = z_context:set_resource_headers(undefined, z_acl:anondo(Context0)),
+    Context = z_context:set_resource_headers(undefined, document_context(Context0)),
     Info = m_agent_discovery:info(Context),
     case z_context:get(document, Context) of
         llms -> {agent_discovery_document:llms(Info), Context};
@@ -42,4 +43,13 @@ process(_Method, _Accepted, _Provided, Context0) ->
         openapi -> {z_json:encode(agent_discovery_document:openapi(Info)), Context};
         help ->
             z_context:output(z_template:render("agent_api_help.tpl", [{discovery, Info}], Context), Context)
+    end.
+
+%% The site layout initializes browser authentication from this context. Clearing
+%% it for HTML makes a logged-in browser detect a user change and reload forever.
+%% m_agent_discovery:info/1 independently restricts all metadata to public data.
+document_context(Context) ->
+    case z_context:get(document, Context) of
+        help -> Context;
+        _ -> z_acl:anondo(Context)
     end.
