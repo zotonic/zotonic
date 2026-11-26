@@ -91,9 +91,10 @@ body .form-control,
     background-color: var(--z-admin-form-control-bg);
 
     &:focus {
-        border-bottom: 2px solid var(--z-admin-form-label-focus-color);
-        box-shadow: none;
-        -webkit-box-shadow: none;
+        // Draw the second pixel inside the control without changing its height.
+        border-bottom-color: var(--z-admin-form-label-focus-color);
+        box-shadow: inset 0 -1px 0 var(--z-admin-form-label-focus-color);
+        -webkit-box-shadow: inset 0 -1px 0 var(--z-admin-form-label-focus-color);
         background-color: var(--z-admin-form-control-focus-bg);
     }
 }
@@ -101,7 +102,8 @@ body .form-control,
 select.form-control {
     --#{$prefix}form-select-bg-img: #{escape-svg($form-select-indicator)};
 
-    padding-right: $input-padding-x + $form-select-indicator-padding;
+    // Reserve the indicator width plus spacing on both sides of the caret.
+    padding-right: calc(16px + #{$input-padding-x * 2});
     appearance: none;
     background-image: var(--#{$prefix}form-select-bg-img);
     background-repeat: no-repeat;
