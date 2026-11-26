@@ -35,8 +35,8 @@ Losing data is bad for business. This applies to your customers as well if you a
 critical to keep backups of any Zotonic sites you develop.
 
 After enabling mod_backup, it checks hourly for a backup of the site’s data and configuration
-between 03:00 (inclusive) and 06:00 (exclusive) UTC. Failed backups are retried only within
-this window. Queued automatic backups also check the window before starting; running
+between 03:00 (inclusive) and 06:00 (exclusive) in the site’s default timezone.
+Failed backups are retried only within this window. Queued automatic backups also check the window before starting; running
 backups may finish after the window closes. Manual backups can start at any time.
 
 Database dumps have a two-hour timeout. Set `mod_backup.database_backup_timeout` to a
@@ -825,11 +825,13 @@ ensure_job_queue(Name, Options) ->
 
 maybe_daily_dump(IsFullBackup, State) ->
     Context = State#state.context,
-    Now = {Date, Time} = calendar:universal_time(),
-    case is_backup_time(Time) of
+    Now = calendar:universal_time(),
+    Timezone = z_context:tz_config(Context),
+    {Date, _} = z_datetime:to_local(Now, Timezone),
+    case is_backup_time(Now, Timezone) of
         true ->
             Ts = lists:map(
-                fun(#{ timestamp := T }) -> T end,
+                fun(#{ timestamp := T }) -> z_datetime:to_local(T, Timezone) end,
                 list_backup_files(Context)),
             DoStart = case Ts of
                 [] -> true;
@@ -1166,8 +1168,8 @@ do_backup(DT, Name, IsFullBackup, IsAutomatic, Context) ->
                 ?MODULE,
                 fun() ->
                     % A shared queue can postpone execution beyond the nightly window.
-                    {_, Time} = calendar:universal_time(),
-                    case not IsAutomatic orelse is_backup_time(Time) of
+                    Now = calendar:universal_time(),
+                    case not IsAutomatic orelse is_backup_time(Now, z_context:tz_config(Context)) of
                         true -> backup_create:make_backup(DT, Name, IsFullBackup, Context);
                         false -> ok
                     end
@@ -1236,20 +1238,38 @@ name(Context) ->
             ])
     end.
 
-%% @doc Automatic starts and retries are restricted to the UTC nighttime window.
--spec is_backup_time(Time) -> boolean() when
-    Time :: calendar:time().
-is_backup_time(Time) ->
+%% @doc Automatic starts and retries use the nighttime window in the site’s default timezone.
+-spec is_backup_time(Now, Timezone) -> boolean() when
+    Now :: calendar:datetime(),
+    Timezone :: binary().
+is_backup_time(Now, Timezone) ->
+    {_, Time} = z_datetime:to_local(Now, Timezone),
     Time >= {3, 0, 0} andalso Time < {6, 0, 0}.
 
 -ifdef(TEST).
 -include_lib("eunit/include/eunit.hrl").
 
 is_backup_time_test() ->
-    ?assertNot(is_backup_time({2, 59, 59})),
-    ?assert(is_backup_time({3, 0, 0})),
-    ?assert(is_backup_time({5, 59, 59})),
-    ?assertNot(is_backup_time({6, 0, 0})),
-    ?assertNot(is_backup_time({12, 0, 0})),
-    ?assertNot(is_backup_time({23, 59, 59})).
+    Date = {2026, 11, 26},
+    ?assertNot(is_backup_time({Date, {2, 59, 59}}, <<"UTC">>)),
+    ?assert(is_backup_time({Date, {3, 0, 0}}, <<"UTC">>)),
+    ?assert(is_backup_time({Date, {5, 59, 59}}, <<"UTC">>)),
+    ?assertNot(is_backup_time({Date, {6, 0, 0}}, <<"UTC">>)),
+    ?assertNot(is_backup_time({Date, {12, 0, 0}}, <<"UTC">>)),
+    ?assertNot(is_backup_time({Date, {23, 59, 59}}, <<"UTC">>)).
+
+is_backup_time_timezone_test() ->
+    {ok, _} = application:ensure_all_started(qdate),
+    Winter = {2026, 11, 26},
+    Summer = {2026, 7, 26},
+    Timezone = <<"Europe/Amsterdam">>,
+    ?assertNot(is_backup_time({Winter, {1, 59, 59}}, Timezone)),
+    ?assert(is_backup_time({Winter, {2, 0, 0}}, Timezone)),
+    ?assertNot(is_backup_time({Winter, {5, 0, 0}}, Timezone)),
+    ?assertNot(is_backup_time({Summer, {0, 59, 59}}, Timezone)),
+    ?assert(is_backup_time({Summer, {1, 0, 0}}, Timezone)),
+    ?assertNot(is_backup_time({Summer, {4, 0, 0}}, Timezone)),
+    % The local backup window can fall on the previous UTC date.
+    ?assert(is_backup_time({Winter, {18, 0, 0}}, <<"Asia/Tokyo">>)),
+    ?assertNot(is_backup_time({Winter, {21, 0, 0}}, <<"Asia/Tokyo">>)).
 -endif.
