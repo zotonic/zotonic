@@ -34,7 +34,16 @@ Daily backup of database and files
 Losing data is bad for business. This applies to your customers as well if you are building sites for them. It is
 critical to keep backups of any Zotonic sites you develop.
 
-After enabling mod_backup, it will make a backup of the site’s data and configuration every night at 3 AM. It keeps
+After enabling mod_backup, it checks hourly for a backup of the site’s data and configuration
+between 03:00 (inclusive) and 06:00 (exclusive) in the site’s default timezone.
+Failed backups are retried only within this window. Queued automatic backups also check the window before starting; running
+backups may finish after the window closes. Manual backups can start at any time.
+
+Database dumps have a two-hour timeout. Set `mod_backup.database_backup_timeout` to a
+positive number of seconds to override it. This setting also supports the
+`zotonic_mod_backup` application configuration and its configuration lock.
+
+It keeps
 the last 7 daily copies of the data and a weekly backup for the last 4 weeks, so you have always a backup to roll back to.
 
 The backups are stored under `backup` in the files directory of your site. Check in the admin under System > Status to
@@ -189,6 +198,12 @@ This module handles the following notifier callbacks:
             type => integer,
             default => "0",
             description => "How to perform a daily backup. 0 = no backup, 1 = database and file, 2 = only database."
+        },
+        #{
+            key => database_backup_timeout,
+            type => integer,
+            default => 7200,
+            description => "Database dump timeout in seconds. Must be positive; defaults to two hours."
         },
         #{
             key => admin_panel,
@@ -810,11 +825,13 @@ ensure_job_queue(Name, Options) ->
 
 maybe_daily_dump(IsFullBackup, State) ->
     Context = State#state.context,
-    Now = {Date, Time} = calendar:universal_time(),
-    case Time >= {3,0,0} of
+    Now = calendar:universal_time(),
+    Timezone = z_context:tz_config(Context),
+    {Date, _} = z_datetime:to_local(Now, Timezone),
+    case is_backup_time(Now, Timezone) of
         true ->
             Ts = lists:map(
-                fun(#{ timestamp := T }) -> T end,
+                fun(#{ timestamp := T }) -> z_datetime:to_local(T, Timezone) end,
                 list_backup_files(Context)),
             DoStart = case Ts of
                 [] -> true;
@@ -822,7 +839,7 @@ maybe_daily_dump(IsFullBackup, State) ->
             end,
             case DoStart of
                 true ->
-                    Pid = do_backup(Now, name(Context), IsFullBackup, Context),
+                    Pid = do_backup(Now, name(Context), IsFullBackup, true, Context),
                     State#state{
                         backup_pid = Pid,
                         backup_start = Now
@@ -1141,13 +1158,21 @@ try_download_file(Filename, Hash, Context) ->
 
 %% @doc Start a backup and return the pid of the backup process, whilst linking to the process.
 do_backup(DT, Name, IsFullBackup, Context) ->
+    do_backup(DT, Name, IsFullBackup, false, Context).
+
+do_backup(DT, Name, IsFullBackup, IsAutomatic, Context) ->
     z_mqtt:publish(<<"model/backup/event/backup">>, #{ status => <<"started">> }, Context),
     z_proc:spawn_link_md(
         fun() ->
             jobs:run(
                 ?MODULE,
                 fun() ->
-                    backup_create:make_backup(DT, Name, IsFullBackup, Context)
+                    % A shared queue can postpone execution beyond the nightly window.
+                    Now = calendar:universal_time(),
+                    case not IsAutomatic orelse is_backup_time(Now, z_context:tz_config(Context)) of
+                        true -> backup_create:make_backup(DT, Name, IsFullBackup, Context);
+                        false -> ok
+                    end
                 end)
         end).
 
@@ -1212,3 +1237,39 @@ name(Context) ->
                 integer_to_binary(Day)
             ])
     end.
+
+%% @doc Automatic starts and retries use the nighttime window in the site’s default timezone.
+-spec is_backup_time(Now, Timezone) -> boolean() when
+    Now :: calendar:datetime(),
+    Timezone :: binary().
+is_backup_time(Now, Timezone) ->
+    {_, Time} = z_datetime:to_local(Now, Timezone),
+    Time >= {3, 0, 0} andalso Time < {6, 0, 0}.
+
+-ifdef(TEST).
+-include_lib("eunit/include/eunit.hrl").
+
+is_backup_time_test() ->
+    Date = {2026, 11, 26},
+    ?assertNot(is_backup_time({Date, {2, 59, 59}}, <<"UTC">>)),
+    ?assert(is_backup_time({Date, {3, 0, 0}}, <<"UTC">>)),
+    ?assert(is_backup_time({Date, {5, 59, 59}}, <<"UTC">>)),
+    ?assertNot(is_backup_time({Date, {6, 0, 0}}, <<"UTC">>)),
+    ?assertNot(is_backup_time({Date, {12, 0, 0}}, <<"UTC">>)),
+    ?assertNot(is_backup_time({Date, {23, 59, 59}}, <<"UTC">>)).
+
+is_backup_time_timezone_test() ->
+    {ok, _} = application:ensure_all_started(qdate),
+    Winter = {2026, 11, 26},
+    Summer = {2026, 7, 26},
+    Timezone = <<"Europe/Amsterdam">>,
+    ?assertNot(is_backup_time({Winter, {1, 59, 59}}, Timezone)),
+    ?assert(is_backup_time({Winter, {2, 0, 0}}, Timezone)),
+    ?assertNot(is_backup_time({Winter, {5, 0, 0}}, Timezone)),
+    ?assertNot(is_backup_time({Summer, {0, 59, 59}}, Timezone)),
+    ?assert(is_backup_time({Summer, {1, 0, 0}}, Timezone)),
+    ?assertNot(is_backup_time({Summer, {4, 0, 0}}, Timezone)),
+    % The local backup window can fall on the previous UTC date.
+    ?assert(is_backup_time({Winter, {18, 0, 0}}, <<"Asia/Tokyo">>)),
+    ?assertNot(is_backup_time({Winter, {21, 0, 0}}, <<"Asia/Tokyo">>)).
+-endif.
