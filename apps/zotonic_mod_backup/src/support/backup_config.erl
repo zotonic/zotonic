@@ -26,6 +26,7 @@
     allow_manual_backup/1,
     allow_backup_download/1,
     daily_dump/1,
+    database_backup_timeout/1,
     admin_panel/1,
     encrypt_password/1,
     encrypt_backups/1,
@@ -74,6 +75,18 @@ daily_dump(Context) ->
             end;
         <<"2">> -> ?BACKUP_DB;
         _ -> ?BACKUP_NONE
+    end.
+
+%% @doc Database dump timeout in seconds. Invalid values use the two-hour default.
+-spec database_backup_timeout(Context) -> Seconds when
+    Context :: z:context(),
+    Seconds :: pos_integer().
+database_backup_timeout(Context) ->
+    try z_convert:to_integer(get_value(database_backup_timeout, Context)) of
+        Seconds when is_integer(Seconds), Seconds > 0 -> Seconds;
+        _ -> 7200
+    catch
+        error:_ -> 7200
     end.
 
 %% @doc Check if the admin panel for the revisions should be shown. If the site

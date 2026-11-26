@@ -385,7 +385,8 @@ pg_dump(Name, DbDump, Context) ->
                     #{ status => <<"sql_backup_started">> },
                     Context)
             end),
-    Result = case z_exec:run(Command) of
+    Timeout = backup_config:database_backup_timeout(Context) * 1000,
+    Result = case z_exec:run(Command, #{timeout => Timeout}) of
         {ok, <<>>} ->
             DumpFile = filename:join(dir(Context), Filename),
             ok = file:rename(TmpDumpFile, DumpFile),
