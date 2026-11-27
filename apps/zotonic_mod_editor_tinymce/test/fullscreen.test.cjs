@@ -10,12 +10,14 @@ test('fullscreen Save serializes editors, uses the original submitter, and respe
         const {window} = dom;
         const doc = window.document;
         const handlers = new Map();
+        const emit = (name, event) => (handlers.get(name) || []).forEach(fn => fn(event));
         const editor = {
             readonly: false, translate: text => text,
-            execCommand: () => handlers.get('FullscreenStateChanged')({state: false}),
+            execCommand: () => emit('FullscreenStateChanged', {state: false}),
             getElement: () => doc.querySelector('textarea'), getContainer: () => doc.querySelector('#editor'),
             getParam: () => editor.readonly,
-            on: (name, fn) => handlers.set(name, fn), off: name => handlers.delete(name)
+            on: (name, fn) => handlers.set(name, [...(handlers.get(name) || []), fn]),
+            off: (name, fn) => handlers.set(name, (handlers.get(name) || []).filter(listener => listener !== fn))
         };
         let saves = 0;
         window.tinymce = {triggerSave: () => { doc.querySelector('textarea').value = 'Edited'; }};
@@ -27,7 +29,7 @@ test('fullscreen Save serializes editors, uses the original submitter, and respe
         });
         window.eval(source);
         window.z_tinymce_fullscreen(editor);
-        handlers.get('FullscreenStateChanged')({state: true});
+        emit('FullscreenStateChanged', {state: true});
         const save = doc.querySelector('[data-save-action]');
         save.click();
         assert.equal(saves, 1);
@@ -39,15 +41,19 @@ test('fullscreen Save serializes editors, uses the original submitter, and respe
         save.click();
         assert.equal(saves, 2);
         doc.querySelector('#save_stay').disabled = false;
+        await new Promise(resolve => setTimeout(resolve, 0));
+        assert.equal(save.disabled, false);
         editor.readonly = true;
-        handlers.get('SwitchMode')();
+        emit('SwitchMode');
         assert.equal(save.disabled, true);
+        assert.equal(doc.querySelector('[data-save-action=save_view]').disabled, true);
         assert.equal(doc.querySelectorAll('#preview').length, 1);
         assert.equal(doc.querySelectorAll('[data-admin-preview="toggle"]').length, 2);
         doc.querySelector('[data-fullscreen-close]').click();
         assert.equal(doc.querySelector('.z-tinymce-fullscreen-actions'), null);
-        handlers.get('FullscreenStateChanged')({state: true});
-        handlers.get('remove')();
+        emit('FullscreenStateChanged', {state: true});
+        emit('remove');
         assert.equal(doc.querySelector('.z-tinymce-fullscreen-actions'), null);
+        assert.equal(handlers.get('SwitchMode').length, 0);
     } finally { dom.window.close(); }
 });

@@ -651,3 +651,43 @@ for (const change of ['copy', 'delete']) test(`retry follows the surviving uploa
         insertion.dispose();
     } finally { p.close(); }
 });
+
+
+for (const change of ['readonly', 'delete']) test(`pending file insertion is refused after ${change}`, async () => {
+    const p = page('<p>Before</p><p>After</p>');
+    try {
+        const editor = p.api.get('body-en');
+        let insertion;
+        p.window.z_fileuploader = {filesIn: () => true, editorDrop: ({reserve}) => { insertion = reserve(); return true; }};
+        editor.view.posAtCoords = () => ({pos: 3});
+        editor.view.props.handleDrop(editor.view, {dataTransfer: {files: [{}]}});
+        if (change === 'readonly') {
+            p.window.document.querySelector('#body-en').readOnly = true;
+            await new Promise(resolve => setTimeout(resolve, 0));
+        } else {
+            editor.commands.deleteRange({from: 0, to: 8});
+        }
+        const before = editor.getHTML();
+        assert.equal(insertion.insert(301, 0), false);
+        assert.equal(editor.getHTML(), before);
+        insertion.dispose();
+    } finally { p.close(); }
+});
+
+test('fullscreen without a form still provides Close and keeps content', () => {
+    const p = page();
+    try {
+        const doc = p.window.document;
+        const textarea = doc.querySelector('#body-en');
+        p.api.remove(textarea);
+        doc.body.append(textarea);
+        p.api.add(textarea);
+        const editor = p.api.get('body-en');
+        const before = editor.getHTML();
+        doc.querySelector('[data-command="fullscreen"]').click();
+        assert.equal(doc.querySelector('[data-save-action]'), null);
+        doc.querySelector('[data-fullscreen-close]').click();
+        assert.equal(doc.querySelector('.z-tiptap.is-fullscreen'), null);
+        assert.equal(editor.getHTML(), before);
+    } finally { p.close(); }
+});
