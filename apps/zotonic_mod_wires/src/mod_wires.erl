@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2018-2025 Marc Worrell
+%% @copyright 2018-2026 Marc Worrell
 %% @doc Support for wires, actions, and transport.
 %% @end
 
-%% Copyright 2018-2025 Marc Worrell
+%% Copyright 2018-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -30,6 +30,27 @@ Used by `module#mod_admin` and the other administrative modules.
 
 Wires are actions that are directly coupled to user interface elements. These couplings are defined in the templates
 using the `scomp#wire` tag.
+
+Browser readiness
+-----------------
+
+Use `zotonic.ready.then(() => initializePage())` to run code after local Zotonic
+initialization. The promise is available after the standard wires head include.
+It resolves after both `zotonic_startup()` (started by `cotonic.ready`) completes
+and `zotonic.wiresReady` resolves. A startup exception rejects `zotonic.ready`.
+
+The following promises signal individual initialization stages:
+
+- `zotonic.wiresLoaded`: the wired JavaScript file has finished loading.
+- `zotonic.wiresReady`: the collected JavaScript, wires and validators from
+  `{% script %}` have run, followed by standard form initialization and assignment
+  of the default form postback.
+
+Readiness does not wait for a connected or authenticated server bridge, widget
+autoloads, or asynchronous work started by template JavaScript. Without the
+normal `{% script %}` startup (including when using `nostartup`), `wiresReady`
+and therefore `ready` remain pending. Registering a callback after readiness
+still runs it; callbacks run asynchronously through the promise.
 
 Automatic widget loading
 ------------------------

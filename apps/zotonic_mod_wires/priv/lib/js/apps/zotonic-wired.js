@@ -141,9 +141,21 @@ var z_assets = (() => {
 /* Startup
 ---------------------------------------------------------- */
 
-cotonic.ready.then(function () {
-  zotonic_startup();
-});
+cotonic.ready.then(zotonic_startup).then(
+  function () {
+    // Adopting wiresReady also handles page initialization finishing first.
+    if (typeof zotonic.readyResolve === "function") {
+      zotonic.readyResolve(zotonic.wiresReady);
+    }
+  },
+  function (error) {
+    if (typeof zotonic.readyReject === "function") {
+      zotonic.readyReject(error);
+    } else {
+      throw error;
+    }
+  },
+);
 
 // Lazy css loading - set the correct media on load.
 window.addEventListener(

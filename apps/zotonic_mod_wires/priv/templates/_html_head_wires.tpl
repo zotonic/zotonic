@@ -17,6 +17,11 @@
 
     zotonic.wiresLoaded = new Promise( (resolve) => { zotonic.wiresLoadedResolve = resolve; } );
     zotonic.wiresReady = new Promise( (resolve) => { zotonic.wiresReadyResolve = resolve; } );
+    // Resolved by wired startup with wiresReady, so both must complete.
+    zotonic.ready = new Promise( (resolve, reject) => {
+        zotonic.readyResolve = resolve;
+        zotonic.readyReject = reject;
+    } );
 
     function zInitCatchSubmit(event) {
         if (event.target.tagName === 'FORM' && event.target.getAttribute('action') === 'postback') {
