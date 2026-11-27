@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-27 21:20\n"
+"PO-Revision-Date: 2026-11-27 22:39\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -1566,7 +1566,7 @@ msgstr "مهام الخلفية"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:113
 msgid "Bars show disk space in use. Refreshed every 30 minutes."
-msgstr ""
+msgstr "تُظهر الأشرطة مساحة القرص المستخدمة. يتم تحديثها كل 30 دقيقة."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_basics.tpl:4
 msgid "Basic"
@@ -1972,7 +1972,7 @@ msgstr "يعتمد"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:52
 msgid "Detailed memory figures"
-msgstr ""
+msgstr "أرقام تفصيلية عن الذاكرة"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:9
 msgid "Dimensions"
@@ -2006,7 +2006,7 @@ msgstr "اكتشاف وسائل الإعلام"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:110
 msgid "Disk information unavailable."
-msgstr ""
+msgstr "معلومات القرص غير متوفرة."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:95
 msgid "Disks"
@@ -2040,19 +2040,19 @@ msgstr "قم بتنزيل الملفات الوسائطية من الموقع ا
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_media.tpl:23
 msgid "Drag a file anywhere into this panel to replace the current media file."
-msgstr ""
+msgstr "اسحب ملفًا إلى أي مكان داخل هذه اللوحة لاستبدال ملف الوسائط الحالي."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:11
 msgid "Drag a file anywhere into this tab or choose a file below. Then use the Upload file button to upload it."
-msgstr ""
+msgstr "اسحب ملفًا إلى أي مكان داخل هذه العلامة التبويبية أو اختر ملفًا من الأسفل. ثم استخدم زر «تحميل الملف» لتحميله."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:19
 msgid "Drag files anywhere into this panel to upload and attach them to this page."
-msgstr ""
+msgstr "اسحب الملفات إلى أي مكان داخل هذه اللوحة لتحميلها وإرفاقها بهذه الصفحة."
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:114
 msgid "Drag files anywhere onto this page to upload them as new media items."
-msgstr ""
+msgstr "اسحب الملفات إلى أي مكان على هذه الصفحة لتحميلها كعناصر وسائط جديدة."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:11
 msgid "Drag to change position"
@@ -2061,7 +2061,7 @@ msgstr "اسحب لتغيير الموضع"
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:118
 #: zotonic_mod_fileuploader/priv/templates/admin.tpl:10
 msgid "Drop files to add them to Media"
-msgstr ""
+msgstr "اسحب الملفات لإضافتها إلى «الوسائط»"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:33
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:38
@@ -2196,7 +2196,7 @@ msgstr "ذاكرة إرلانغ"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:9
 msgid "Erlang memory in use"
-msgstr ""
+msgstr "ذاكرة إرلانغ المستخدمة"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:18
 msgid "Erlang/OTP"
@@ -2455,7 +2455,7 @@ msgstr "إخفاء الصفحة من عمليات البحث (يعتمد على 
 
 #: zotonic_mod_admin/priv/templates/_admin_status_capacity.tpl:6
 msgid "High usage"
-msgstr ""
+msgstr "استخدام مكثف"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:61
 msgid "Home directory"
@@ -2601,7 +2601,7 @@ msgstr "آخر النصوص المعدلة"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:104
 msgid "Less than 5% free disk space"
-msgstr ""
+msgstr "مساحة القرص الخالية أقل من 5%"
 
 #: zotonic_mod_admin/priv/templates/_admin_menu.tpl:64
 msgid "Light"
@@ -2788,7 +2788,7 @@ msgstr "منفّذات معالجة الوسائط"
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:42
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:43
 msgid "Media title (optional)"
-msgstr ""
+msgstr "عنوان الوسيلة الإعلامية (اختياري)"
 
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:151
 msgid "Media updated."
@@ -2800,7 +2800,7 @@ msgstr "ذاكرة"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:36
 msgid "Memory information unavailable."
-msgstr ""
+msgstr "معلومات الذاكرة غير متوفرة."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:32
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:33
@@ -3033,11 +3033,11 @@ msgstr "ذاكرة نظام التشغيل"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:32
 msgid "OS memory in use"
-msgstr ""
+msgstr "ذاكرة نظام التشغيل قيد الاستخدام"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:25
 msgid "OS memory unavailable"
-msgstr ""
+msgstr "ذاكرة نظام التشغيل غير متوفرة"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:129
 msgid "Ongoing"
@@ -3399,7 +3399,7 @@ msgstr "استبدال الوسيط الحالي"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_media.tpl:17
 #: zotonic_mod_fileuploader/priv/templates/_fileuploader_dropzone.tpl:5
 msgid "Replace the current media file?"
-msgstr ""
+msgstr "هل تريد استبدال ملف الوسائط الحالي؟"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:4
 msgid "Resize Live view"
@@ -3897,7 +3897,7 @@ msgstr "مساحة التبديل"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:44
 msgid "Swap in use"
-msgstr ""
+msgstr "المبادلة قيد الاستخدام"
 
 #: zotonic_mod_admin/src/mod_admin.erl:572
 msgid "System"
@@ -3965,7 +3965,7 @@ msgstr "يشير العنوانان 0.0.0.0 و:: إلى جميع واجهات IP
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:26
 msgid "The bar shows memory not available for allocation. Available memory includes reclaimable memory reported by the operating system."
-msgstr ""
+msgstr "يُظهر الشريط الذاكرة غير المتاحة للتخصيص. وتشمل الذاكرة المتاحة الذاكرة القابلة للاسترداد التي يبلغ عنها نظام التشغيل."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:201
 msgid "The billing address is only visible for people who can edit this page."
@@ -4363,7 +4363,7 @@ msgstr "ارفع ملفات لمعالجتها في الخلفية أو استخ
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:119
 msgid "Upload starts immediately. Each file becomes a new media item."
-msgstr ""
+msgstr "يبدأ التحميل على الفور. ويصبح كل ملف عنصر وسائط جديدًا."
 
 #: zotonic_mod_admin/priv/templates/admin_imports.tpl:9
 msgid "Upload to drop folder"
@@ -4382,7 +4382,7 @@ msgstr "تم الرفع على"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_capacity.tpl:9
 msgid "Usage information unavailable."
-msgstr ""
+msgstr "معلومات الاستخدام غير متوفرة."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:39
 msgid "Use the autocompleter to search the media in this site."
@@ -4538,7 +4538,7 @@ msgstr "لا يسمح لك لتحرير هذه الصفحة."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:7
 msgid "You can add a title to make the file easier to find and share."
-msgstr ""
+msgstr "يمكنك إضافة عنوان لتسهيل العثور على الملف ومشاركته."
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:239
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:166
@@ -4596,11 +4596,11 @@ msgstr "إضافة عنصر وسائط"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:7
 msgid "allocated"
-msgstr ""
+msgstr "المخصصة"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:22
 msgid "available"
-msgstr ""
+msgstr "متوفر"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:14
@@ -4614,7 +4614,7 @@ msgstr "بواسطة"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:102
 msgid "capacity"
-msgstr ""
+msgstr "السعة"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:52
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:53
@@ -4681,7 +4681,7 @@ msgstr "مجاني"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:33
 msgid "free. Used memory can include caches; high usage alone does not indicate memory pressure."
-msgstr ""
+msgstr "مجانية. قد تشمل الذاكرة المستخدمة ذاكرات التخزين المؤقت؛ ولا يشير ارتفاع معدل الاستخدام بحد ذاته إلى وجود ضغط على الذاكرة."
 
 #: zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:15
 msgid "has been disconnected."
@@ -4740,7 +4740,7 @@ msgstr "محتوى النظام"
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:30
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:41
 msgid "total"
-msgstr ""
+msgstr "الإجمالي"
 
 #: zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:3
 msgid "undo"
@@ -4757,7 +4757,7 @@ msgstr "بلا عنوان"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:10
 msgid "unused allocation, available for reuse by Erlang. This is not free host memory."
-msgstr ""
+msgstr "مساحة مخصصة غير مستخدمة، متاحة لإعادة الاستخدام بواسطة لغة إرلانغ. هذه ليست ذاكرة مضيف حرة."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:51
 msgid "uploaded on"
@@ -4767,7 +4767,7 @@ msgstr "تم الرفع في"
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:29
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:41
 msgid "used"
-msgstr ""
+msgstr "مستعملة"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:57
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:136
@@ -7213,7 +7213,7 @@ msgstr "تشمل الفترات غير المكتملة أو غير المسجل
 
 #: zotonic_mod_analytics/src/models/m_analytics.erl:351
 msgid "Invalid resource reference"
-msgstr ""
+msgstr "إشارة غير صالحة إلى المورد"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:7
 msgid "Language — language code, e.g. en or nl"
@@ -7330,11 +7330,11 @@ msgstr "الصفحة — معرّف المورد العام"
 
 #: zotonic_mod_analytics/src/models/m_analytics.erl:338
 msgid "Pages without a resource ID"
-msgstr ""
+msgstr "الصفحات التي لا تحتوي على معرّف المورد"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
 msgid "Pages without a resource ID are grouped by dispatch rule, such as template-only pages. The label “Pages without a resource ID” includes older counts and requests without a known dispatch rule; these cannot be split further. Unavailable content refers to resources that were deleted or that you cannot view. Invalid resource reference means the recorded page value is not a valid resource ID."
-msgstr ""
+msgstr "يتم تجميع الصفحات التي لا تحتوي على معرّف مورد حسب قاعدة التوزيع، مثل الصفحات التي تحتوي على قوالب فقط. تتضمن التسمية «الصفحات التي لا تحتوي على معرّف مورد» الأعداد القديمة والطلبات التي لا توجد لها قاعدة توزيع معروفة؛ ولا يمكن تقسيم هذه الأرقام بشكل إضافي. يشير المحتوى غير المتاح إلى الموارد التي تم حذفها أو التي يتعذر عرضها. ويعني «مرجع المورد غير الصالح» أن قيمة الصفحة المسجلة ليست معرّف مورد صالح."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
 msgid "Past 30 days"
@@ -7508,7 +7508,7 @@ msgstr "حركة المرور — الزاحف، أو أنواع أخرى، أو
 
 #: zotonic_mod_analytics/src/models/m_analytics.erl:349
 msgid "Unavailable content"
-msgstr ""
+msgstr "محتوى غير متوفر"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:8
 msgid "View analytics"
@@ -11274,7 +11274,7 @@ msgstr "من اليمين إلى اليسار"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:61
 msgid "Save & view"
-msgstr ""
+msgstr "حفظ وعرض"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:56
 msgid "Split cell"
@@ -12205,15 +12205,15 @@ msgstr "يمكن لـ Zotonic تخزين الملفات التي تم تحميل
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:12
 msgid "Cancel remaining uploads"
-msgstr ""
+msgstr "إلغاء عمليات التحميل المتبقية"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:13
 msgid "Cancelled"
-msgstr ""
+msgstr "تم إلغاؤه"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:27
 msgid "Choose one file at a time for this upload. No files were uploaded."
-msgstr ""
+msgstr "يرجى اختيار ملف واحد في كل مرة لإجراء عملية التحميل هذه. لم يتم تحميل أي ملفات."
 
 #: zotonic_mod_fileuploader/src/mod_fileuploader.erl:248
 #: zotonic_mod_fileuploader/src/mod_fileuploader.erl:284
@@ -12222,43 +12222,43 @@ msgstr "تعذر التحميل"
 
 #: zotonic_mod_fileuploader/priv/templates/_fileuploader_dropzone.tpl:8
 msgid "Drop files here or choose files."
-msgstr ""
+msgstr "اسقط الملفات هنا أو اختر الملفات."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:8
 msgid "Drop files inside the text where you want to insert them."
-msgstr ""
+msgstr "اسحب الملفات إلى داخل النص في المكان الذي تريد إدراجها فيه."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:28
 msgid "Folders cannot be uploaded. Select the files inside the folder instead."
-msgstr ""
+msgstr "لا يمكن تحميل المجلدات. يرجى اختيار الملفات الموجودة داخل المجلد بدلاً من ذلك."
 
 #: zotonic_mod_fileuploader/src/mod_fileuploader.erl:190
 msgid "Please choose one file only."
-msgstr ""
+msgstr "يرجى اختيار ملف واحد فقط."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:19
 msgid "Processing…"
-msgstr ""
+msgstr "جاري المعالجة…"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:35
 msgid "Ready to upload. Choose Upload file to save your selected file."
-msgstr ""
+msgstr "جاهز للتحميل. اختر «تحميل الملف» لحفظ الملف الذي اخترته."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:24
 msgid "Refresh media list"
-msgstr ""
+msgstr "تحديث قائمة الوسائط"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:14
 msgid "Remaining uploads were cancelled. Files already saved have been kept."
-msgstr ""
+msgstr "تم إلغاء عمليات التحميل المتبقية. أما الملفات التي تم حفظها بالفعل فقد تم الاحتفاظ بها."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:23
 msgid "Retry failed files"
-msgstr ""
+msgstr "إعادة محاولة الملفات التي فشلت في التحميل"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:9
 msgid "Save this page before dropping media into the editor."
-msgstr ""
+msgstr "احفظ هذه الصفحة قبل سحب الملفات الوسائطية وإفلاتها في المحرر."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:20
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:1
@@ -12267,63 +12267,63 @@ msgstr "تم الحفظ"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:22
 msgid "Saved in Media, but could not attach. Use Add media item to connect it."
-msgstr ""
+msgstr "تم حفظه في «الوسائط»، لكن لم يتمكن من إرفاقه. استخدم خيار «إضافة عنصر وسائط» لربطه."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:5
 msgid "Saved in Media, but the insertion position is no longer available. Use Insert media to add it."
-msgstr ""
+msgstr "تم حفظه في «الوسائط»، لكن موضع الإدراج لم يعد متاحًا. استخدم «إدراج وسائط» لإضافته."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:32
 msgid "Some files could not be processed. See the error messages."
-msgstr ""
+msgstr "تعذر معالجة بعض الملفات. يرجى الاطلاع على رسائل الخطأ."
 
 #: zotonic_mod_fileuploader/src/mod_fileuploader.erl:297
 msgid "The file upload is incomplete."
-msgstr ""
+msgstr "تحميل الملف لم يكتمل."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:16
 msgid "This file exceeds the maximum upload size for your account. Choose a smaller file."
-msgstr ""
+msgstr "يتجاوز حجم هذا الملف الحد الأقصى المسموح به للتحميل لحسابك. يرجى اختيار ملف أصغر حجمًا."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:17
 msgid "This file type or size is not allowed for your account."
-msgstr ""
+msgstr "هذا النوع من الملفات أو هذا الحجم غير مسموح به لحسابك."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:7
 msgid "Upload complete. Media has been inserted into your text. Save the page to keep your changes."
-msgstr ""
+msgstr "اكتمل التحميل. تم إدراج الوسائط في النص. احفظ الصفحة للاحتفاظ بالتعديلات التي أجريتها."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:33
 msgid "Upload complete. Your files have been saved."
-msgstr ""
+msgstr "اكتمل التحميل. تم حفظ ملفاتك."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:21
 msgid "Upload failed"
-msgstr ""
+msgstr "فشل التحميل"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:31
 msgid "Upload failed. Please try again."
-msgstr ""
+msgstr "فشل التحميل. يرجى المحاولة مرة أخرى."
 
 #: zotonic_mod_fileuploader/priv/templates/admin.tpl:11
 msgid "Upload starts immediately. Each file becomes a new, published media item."
-msgstr ""
+msgstr "يبدأ التحميل على الفور. ويصبح كل ملف عنصر وسائط جديدًا ومنشورًا."
 
 #: zotonic_mod_fileuploader/src/mod_fileuploader.erl:277
 msgid "Uploaded, but could not connect"
-msgstr ""
+msgstr "تم التحميل، لكن لم يتم الاتصال"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:25
 msgid "Uploading"
-msgstr ""
+msgstr "التحميل"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:34
 msgid "Uploading and processing your files… Please keep this page open."
-msgstr ""
+msgstr "تحميل ملفاتك ومعالجتها… يرجى إبقاء هذه الصفحة مفتوحة."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:6
 msgid "Uploading media to insert into your text… You can continue editing."
-msgstr ""
+msgstr "تحميل ملفات الوسائط لإدراجها في النص… يمكنك متابعة التحرير."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:18
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:1
@@ -12334,23 +12334,23 @@ msgstr "انتظار"
 
 #: zotonic_mod_fileuploader/priv/templates/admin.tpl:12
 msgid "You can find and edit your uploads in Media."
-msgstr ""
+msgstr "يمكنك العثور على الملفات التي قمت بتحميلها وتحريرها في قسم «الوسائط»."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:30
 msgid "{filename} has a file type that is not supported here. Choose a different file."
-msgstr ""
+msgstr "{filename} يحتوي هذا الملف على نوع غير مدعوم هنا. يرجى اختيار ملف آخر."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:29
 msgid "{filename} is empty. Choose a file with content. Folders cannot be uploaded."
-msgstr ""
+msgstr "{filename} المساحة فارغة. يرجى اختيار ملف يحتوي على محتوى. لا يمكن تحميل المجلدات."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:15
 msgid "{filename} is too large. The maximum file size is {size}."
-msgstr ""
+msgstr "{filename} حجمه كبير جدًّا. الحد الأقصى لحجم الملف هو {size}."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:26
 msgid "{saved} of {total} files saved."
-msgstr ""
+msgstr "{saved} تم حفظ ملفات من موقع {total}."
 
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:93
 msgid "Brightness"
@@ -16437,7 +16437,7 @@ msgstr "انسخ عنوان URL إلى الحافظة."
 
 #: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:2
 msgid "Embedded videos"
-msgstr ""
+msgstr "مقاطع الفيديو المضمنة"
 
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media.tpl:4
 msgid "Embedding of media item failed with HTTP code"
