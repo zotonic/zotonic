@@ -31,6 +31,7 @@
                         action={confirm title=_"Delete generated previews" text=_"Delete all generated image sizes? Preview originals are kept. Image requests may be slower while previews regenerate." is_danger action={admin_tasks task='delete_generated_previews'}} %}
                 {% endblock %}
             {% endcompose %}
+            {% all include "_admin_media_maintenance.tpl" %}
         {% endblock %}
     {% endcompose %}
 {% endif %}

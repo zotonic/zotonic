@@ -1,11 +1,15 @@
 {% block upload_form %}
-<div class="tab-pane {% if is_active %}active{% endif %}" id="{{ tab }}-upload">
+<div class="tab-pane {% if is_active %}active{% endif %}" id="{{ tab }}-upload"
+     {% if m.modules.active.mod_fileuploader %}data-fileuploader-input data-fileuploader-single{% endif %}>
     <p>
         {_ Upload a file from your computer. _}
         {% if not id %}
-            {_ You have to specify a description of the file to make it easier to find and share. _}
+            {_ You can add a title to make the file easier to find and share. _}
         {% endif %}
     </p>
+    {% if m.modules.active.mod_fileuploader %}
+        <p class="help-block fileuploader-drag-help">{_ Drag a file anywhere into this tab or choose a file below. Then use the Upload file button to upload it. _}</p>
+    {% endif %}
 
     {% wire id=#form type="submit"
         postback={media_upload
@@ -20,15 +24,9 @@
                     callback=callback}
         delegate=`action_admin_dialog_media_upload`
     %}
-    <form id="{{ #form }}" method="POST" action="postback" class="form">
+    <form id="{{ #form }}" method="POST" action="postback" class="form"
+          {% if m.modules.active.mod_fileuploader %}data-fileuploader-feedback{% endif %}>
         <fieldset>
-            {% if intent != 'update' %}
-                <div class="form-group label-floating">
-                    <input type="text" class="do_autofocus form-control" id="new_media_title" name="new_media_title" value="{{ title|escape }}" placeholder="{_ Media title _}" autofocus>
-                    <label class="control-label" for="new_media_title">{_ Media title _}</label>
-                </div>
-            {% endif %}
-
             <div id="{{ #upload_file_preview }}" style="display: none;">
                 <img src="" class="thumbnail" style="max-height:200px">
             </div>
@@ -36,7 +34,15 @@
             <div class="form-group label-floating">
                 <input type="file" class="form-control" id="{{ #upload_file }}" name="upload_file" placeholder="{_ Media file _}" required {% if accept %}accept="{{ accept }}"{% endif %}>
                 <label class="control-label" for="{{ #upload_file }}">{_ Media file _}</label>
+                <p class="fileuploader-status" role="status" aria-live="polite"></p>
             </div>
+
+            {% if intent != 'update' %}
+                <div class="form-group label-floating">
+                    <input type="text" class="form-control" id="new_media_title" name="new_media_title" value="{{ title|escape }}" placeholder="{_ Media title (optional) _}">
+                    <label class="control-label" for="new_media_title">{_ Media title (optional) _}</label>
+                </div>
+            {% endif %}
 
             {% block rsc_props %}
                 {% if intent != 'update' %}

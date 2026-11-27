@@ -94,7 +94,8 @@ event(#postback{message={media_upload_dialog, Title, Intent, Id, SubjectId, Pred
     z_render:dialog(DTitle, "_action_dialog_media_upload.tpl", Vars, Context);
 
 
-event(#submit{message={media_upload, EventProps}}, Context) ->
+event(#submit{message={media_upload, EventProps}, form=Form}, Context) ->
+    UploadContext = z_context:set(dialog_upload_form, Form, Context),
     case z_context:get_q(<<"upload_file">>, Context) of
         #upload{ filename = OriginalFilename } = Upload ->
             Category = proplists:get_value(category, EventProps),
@@ -128,13 +129,14 @@ event(#submit{message={media_upload, EventProps}}, Context) ->
             Opts = [
                 {preferred_category, Category}
             ],
-            handle_media_upload(Intent, EventProps, Context,
+            handle_media_upload(Intent, EventProps, UploadContext,
                                 %% insert fun
                                 fun(Ctx) -> m_media:insert_file(Upload, Props, Opts, Ctx) end,
                                 %% replace fun
                                 fun(Id, Ctx) -> m_media:replace_file(Upload, Id, Props, Opts, Ctx) end);
         _ ->
-            z_render:growl(?__("Add a new media file", Context), Context)
+            Text = ?__("Add a new media file", Context),
+            z_render:growl(Text, upload_feedback(true, Text, UploadContext))
     end;
 
 event(#submit{message={media_url, EventProps}}, Context) ->
@@ -192,9 +194,10 @@ handle_media_upload(<<"update">>, EventProps, Context, _InsertFun, ReplaceFun) -
             z_render:wire([
                     {growl, [{text, ?__("Media item created.", Context)}]},
                     {dialog_close, []}
-                    | Actions], Context);
+                    | Actions], upload_feedback(false, undefined, Context));
         {error, R} ->
-            z_render:growl_error(error_message(R, Context), Context)
+            Text = error_message(R, Context),
+            z_render:growl_error(Text, upload_feedback(true, Text, Context))
     end;
 handle_media_upload(_Intent, EventProps, Context, InsertFun, _ReplaceFun) ->
     case InsertFun(Context) of
@@ -207,9 +210,27 @@ handle_media_upload(_Intent, EventProps, Context, InsertFun, _ReplaceFun) ->
                     true -> EventProps;
                     false -> [ {redirect, not Stay} | EventProps]
                 end,
-            action_admin_dialog_new_rsc:do_new_page_actions(MediaId, NewEventProps, Context);
+            action_admin_dialog_new_rsc:do_new_page_actions(MediaId, NewEventProps,
+                upload_feedback(false, undefined, Context));
         {error, R} ->
-            z_render:growl_error(error_message(R, Context), Context)
+            Text = error_message(R, Context),
+            z_render:growl_error(Text, upload_feedback(true, Text, Context))
+    end.
+
+%% Emit the result in the postback response before its close/redirect actions.
+%% The signed submit still owns the upload; client identifiers only route feedback.
+upload_feedback(Failed, Error, Context) ->
+    case {z_context:get(dialog_upload_form, Context), z_context:get_q(<<"upload_feedback_attempt">>, Context)} of
+        {Form, Attempt} when is_binary(Form), is_binary(Attempt), byte_size(Attempt) =< 100 ->
+            z_render:wire({publish, [
+                {topic, <<"model/fileuploader/event/dialog-complete">>},
+                {target, Form},
+                {upload_id, Attempt},
+                {failed, Failed},
+                {error, Error}
+            ]}, Context);
+        _ ->
+            Context
     end.
 
 

@@ -866,7 +866,6 @@ function z_transport(delegate, content_type, data, options) {
         });
       }
     });
-    // TODO: fill in failure topic and progress
     data.data.q = data.data.q.concat($(options.post_form).formToArray());
     let msg = {
       files: files,
@@ -877,6 +876,17 @@ function z_transport(delegate, content_type, data, options) {
       failure_topic: "model/alert/post",
       failure_msg: { text: "Error during upload" }
     };
+    // Opt-in feedback keeps the dialog's signed postback and form metadata intact.
+    if (options.post_form.hasAttribute("data-fileuploader-feedback")) {
+      const uploadId = crypto.randomUUID();
+      const feedback = { target: options.post_form.id, upload_id: uploadId };
+      data.data.q.push({ name: "upload_feedback_attempt", value: uploadId });
+      msg.progress_topic = "model/fileuploader/event/admin-progress";
+      msg.progress_msg = feedback;
+      msg.failure_topic = "model/fileuploader/event/dialog-failure";
+      msg.failure_msg = feedback;
+      cotonic.broker.publish("model/fileuploader/event/dialog-start", {...feedback, files});
+    }
     cotonic.broker.publish("model/fileuploader/post/new", msg);
   } else if (
     options.transport == "form" ||

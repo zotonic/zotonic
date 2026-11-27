@@ -1,13 +1,7 @@
 {% if m.acl.use.mod_oembed %}
-{% compose "_admin_maintenance_panel.tpl" title=_"Media maintenance" %}
-{% block tools %}
-
-<div class="form-group">
-    <div>
+{% compose "_admin_maintenance_action.tpl" title=_"Embedded videos" description=_"Attempt to fix embedded videos for which OEmbed embedding has failed previously." %}
+    {% block action %}
         {% button class="btn btn-default" text=_"Fix embedded videos" postback="fix_missing" delegate=`mod_oembed` %}
-        <span class="help-block">{_ Attempt to fix embedded videos for which OEmbed embedding has failed previously. _}</span>
-    </div>
-</div>
-{% endblock %}
+    {% endblock %}
 {% endcompose %}
 {% endif %}

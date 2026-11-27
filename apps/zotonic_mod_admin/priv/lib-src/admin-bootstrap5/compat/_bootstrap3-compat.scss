@@ -67,6 +67,12 @@ $bs3-table-strong-border-width: $border-width * 2 !default;
 
 // -----------------------------------------------------------------------------
 // Buttons
+// Restore Bootstrap 3 toolbar spacing, including wrapped rows.
+// Nested button groups keep their joined buttons.
+.btn-toolbar {
+  gap: 5px;
+}
+
 .btn-default {
   --bs-btn-color: var(--bs3-btn-default-color, #555);
   --bs-btn-bg: var(--bs3-btn-default-bg, var(--bs-tertiary-bg));

@@ -87,7 +87,9 @@ Available Model API Paths
 
 | Method | Path pattern | Description |
 | --- | --- | --- |
+| `get` | `/max_size` | Effective maximum file size in bytes, or undefined when no ACL limit is configured. |
 | `get` | `/status/+name/...` | Return sanitized upload status for `+name`: filename, total size, received bytes, completion flag, missing byte ranges, and absolute upload URL. |
+| `post` | `/validate` | Check filename-derived MIME type and size against the current ACL before hashing or transferring a file. |
 | `post` | `/new` | Start or resume upload `name` for payload `filename` + `size` after media-insert ACL check, then return sanitized upload status metadata. No further lookups. |
 | `post` | `/delete/+name` | Stop and remove the upload worker/session identified by `+name` via `z_fileuploader:stop/1`. No further lookups. |
 | `post` | `/upload/+name/+offset` | Append a binary chunk to upload `+name` at byte offset `+offset` and return updated sanitized upload status (including remaining ranges). No further lookups. |
@@ -107,6 +109,8 @@ Available Model API Paths
 
 %% @doc Fetch the status of an upload
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ <<"max_size">> | Rest ], _Msg, Context) ->
+    {ok, {z_notifier:first(#acl_max_upload_size{}, Context), Rest}};
 m_get([ <<"status">>, Name | Rest ], _Msg, Context) ->
     case status(Name, Context) of
         {ok, Status} ->
@@ -120,6 +124,20 @@ m_get(_Vs, _Msg, _Context) ->
 
 %% @doc Start a file upload or upload a block to a file uploader
 -spec m_post( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:post_return().
+m_post([ <<"validate">> ], #{payload := #{<<"filename">> := Filename, <<"size">> := Size}}, Context)
+        when is_binary(Filename), is_integer(Size), Size > 0 ->
+    MaxSize = z_notifier:first(#acl_max_upload_size{}, Context),
+    case is_integer(MaxSize) andalso Size > MaxSize of
+        true -> {error, file_too_large};
+        false ->
+            Mime = z_media_identify:guess_mime(Filename),
+            case z_acl:is_allowed(insert, #acl_media{mime = Mime, size = Size}, Context) of
+                true -> {ok, true};
+                false -> {error, file_not_allowed}
+            end
+    end;
+m_post([ <<"validate">> ], _Msg, _Context) ->
+    {error, missing_fileinfo};
 m_post([ <<"new">> ], #{ payload := Payload }, Context) when is_map(Payload) ->
     case Payload of
         #{
