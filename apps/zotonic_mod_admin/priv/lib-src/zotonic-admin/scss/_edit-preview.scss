@@ -67,11 +67,26 @@ html body.admin-preview-open {
 
     .navbar-fixed-top, .admin-navbar-fixed-save { right: var(--admin-preview-width, 40vw); }
     .container { max-width: 100%; }
+
+    // Fullscreen belongs to the editor column, not the entire browser window.
+    .tox.tox-tinymce.tox-fullscreen,
+    .mce-container.mce-fullscreen,
+    .z-tiptap.is-fullscreen {
+        right: var(--admin-preview-width, 40vw);
+        width: calc(100% - var(--admin-preview-width, 40vw)) !important;
+    }
 }
 
 @media (max-width: 900px) {
     html body.admin-preview-open { padding-right: 0; }
+    // On phones the preview is a separate view; Close returns to the editor.
     .admin-edit-preview { width: 100%; }
+    body:is(.tox-fullscreen, .mce-fullscreen, .z-tiptap-fullscreen) .admin-edit-preview { z-index: 1202; }
+    html body.admin-preview-open {
+        .tox.tox-tinymce.tox-fullscreen,
+        .mce-container.mce-fullscreen,
+        .z-tiptap.is-fullscreen { right: 0; width: 100% !important; }
+    }
     .admin-edit-preview-resizer { display: none; }
 }
 

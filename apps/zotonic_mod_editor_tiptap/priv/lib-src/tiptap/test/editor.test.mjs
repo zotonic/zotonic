@@ -456,15 +456,18 @@ test('profiles inherit from the nearest ancestor with textarea overrides and nor
     } finally { p.close(); }
 });
 
-test('full window keeps the same instance and exits with Escape', () => {
+test('full window keeps the same instance and exits with Close or Escape', () => {
     const p = page();
     try {
         const editor = p.api.get('body-en');
         p.window.document.querySelector('[data-command="fullscreen"]').click();
         assert.ok(p.window.document.querySelector('.z-tiptap.is-fullscreen'));
-        editor.view.dom.dispatchEvent(new p.window.KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+        p.window.document.querySelector('[data-fullscreen-close]').click();
         assert.equal(p.window.document.querySelector('.z-tiptap.is-fullscreen'), null);
         assert.equal(p.api.get('body-en'), editor);
+        p.window.document.querySelector('[data-command="fullscreen"]').click();
+        editor.view.dom.dispatchEvent(new p.window.KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+        assert.equal(p.window.document.querySelector('.z-tiptap.is-fullscreen'), null);
     } finally { p.close(); }
 });
 
@@ -481,6 +484,11 @@ test('fullscreen save controls delegate to the original form submitters', async 
             form.append(button);
             return button;
         });
+        const preview = doc.createElement('button');
+        preview.type = 'button';
+        preview.id = 'preview-toggle';
+        preview.dataset.adminPreview = 'toggle';
+        form.append(preview);
         const submissions = [];
         form.addEventListener('submit', event => {
             event.preventDefault();
@@ -491,6 +499,8 @@ test('fullscreen save controls delegate to the original form submitters', async 
         p.api.get('body-en').commands.insertContent('Edited');
         assert.equal(doc.querySelector('.z-tiptap-save-actions'), null);
         doc.querySelector('[data-command="fullscreen"]').click();
+        assert.equal(doc.querySelectorAll('#preview-toggle').length, 1);
+        assert.ok(doc.querySelector('.z-tiptap-save-actions [data-admin-preview="toggle"]'));
         const save = doc.querySelector('[data-save-action="save_stay"]');
         const view = doc.querySelector('[data-save-action="save_view"]');
         assert.equal(save.textContent, 'Save');
@@ -578,5 +588,66 @@ test('table controls insert a table, add a row, and remove the table', () => {
         assert.equal(p.window.document.querySelectorAll('.z-tiptap-body tr').length, 4);
         choose('deleteTable');
         assert.equal(p.window.document.querySelectorAll('.z-tiptap-body table').length, 0);
+    } finally { p.close(); }
+});
+
+
+for (const dropPos of [8, 9]) test(`file drop positions follow edits and keep retry order at ${dropPos}`, () => {
+    const p = page('<p>Before</p><p>After</p>');
+    try {
+        const editor = p.api.get('body-en');
+        let insertion;
+        p.window.z_fileuploader = {
+            filesIn: () => true,
+            editorDrop: ({reserve}) => { insertion = reserve(); return true; }
+        };
+        editor.view.posAtCoords = () => ({pos: dropPos});
+        const event = {clientX: 1, clientY: 1, dataTransfer: {files: [{}, {}]}};
+        assert.equal(editor.view.props.handleDrop(editor.view, event), true);
+        editor.commands.insertContentAt(1, 'Prefix ');
+        assert.equal(insertion.insert(202, 1), true);
+        assert.equal(insertion.insert(201, 0), true);
+        const html = editor.getHTML();
+        assert(html.indexOf('Prefix Before') < html.indexOf('data-zmedia-id="201"'));
+        assert(html.indexOf('data-zmedia-id="201"') < html.indexOf('data-zmedia-id="202"'));
+        assert(html.indexOf('data-zmedia-id="202"') < html.indexOf('After'));
+        insertion.dispose();
+    } finally { p.close(); }
+});
+
+test('editor destroyed during an upload refuses insertion', () => {
+    const p = page();
+    const editor = p.api.get('body-en');
+    let insertion;
+    p.window.z_fileuploader = {filesIn: () => true, editorDrop: ({reserve}) => { insertion = reserve(); return true; }};
+    editor.view.posAtCoords = () => ({pos: 2});
+    editor.view.props.handleDrop(editor.view, {dataTransfer: {files: [{}]}});
+    p.api.remove();
+    assert.equal(insertion.insert(203, 0), false);
+    p.close();
+});
+
+for (const change of ['copy', 'delete']) test(`retry follows the surviving upload position after ${change}`, () => {
+    const p = page('<p>Before</p><p>After</p>');
+    try {
+        const editor = p.api.get('body-en');
+        let insertion;
+        p.window.z_fileuploader = {filesIn: () => true, editorDrop: ({reserve}) => { insertion = reserve(); return true; }};
+        editor.view.posAtCoords = () => ({pos: 9});
+        editor.view.props.handleDrop(editor.view, {dataTransfer: {files: [{}, {}, {}]}});
+        insertion.insert(202, 1);
+        insertion.insert(203, 2);
+        let mediaPos;
+        editor.state.doc.descendants((node, pos) => { if (node.attrs.id === '202') mediaPos = pos; });
+        if (change === 'copy') {
+            editor.commands.insertContentAt(editor.state.doc.content.size, editor.state.doc.nodeAt(mediaPos).toJSON());
+        } else {
+            editor.commands.deleteRange({from: mediaPos, to: mediaPos + 1});
+        }
+        assert.equal(insertion.insert(201, 0), true);
+        const ids = [];
+        editor.state.doc.descendants(node => { if (node.type.name === 'zotonicMedia') ids.push(node.attrs.id); });
+        assert.deepEqual(ids, change === 'copy' ? ['201', '202', '203', '202'] : ['201', '203']);
+        insertion.dispose();
     } finally { p.close(); }
 });

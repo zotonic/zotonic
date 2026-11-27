@@ -1,5 +1,12 @@
-{% lib "css/fileuploader-admin.css" "js/z.fileuploader-admin.js" %}
+{% lib "css/fileuploader-admin.css" "js/z.fileuploader-admin.js" "js/z.fileuploader-editor.js" %}
 <div id="fileuploader-messages" hidden
+     data-editor-dependent="{% if m.fileuploader.editor_is_dependent %}true{% else %}false{% endif %}"
+     data-editor-published="{% if m.admin.rsc_dialog_is_published %}true{% else %}false{% endif %}"
+     data-not-inserted="{_ Saved in Media, but the insertion position is no longer available. Use Insert media to add it. _}"
+     data-editor-uploading="{_ Uploading media to insert into your text… You can continue editing. _}"
+     data-editor-finished="{_ Upload complete. Media has been inserted into your text. Save the page to keep your changes. _}"
+     data-editor-no-position="{_ Drop files inside the text where you want to insert them. _}"
+     data-editor-no-page="{_ Save this page before dropping media into the editor. _}"
      data-bytes="{_ bytes _}"
      data-max-size="{{ m.fileuploader.max_size }}"
      data-cancel="{_ Cancel remaining uploads _}"

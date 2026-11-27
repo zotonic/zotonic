@@ -106,20 +106,6 @@ textarea[data-tiptap-installed] {
     margin: 0 3px;
 }
 
-.z-tiptap-save-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-inline-start: auto;
-
-    button {
-        border-color: var(--editor-border);
-        background: var(--editor-surface);
-        padding-inline: 12px;
-        white-space: nowrap;
-    }
-}
-
 .z-tiptap-link-panel {
     display: flex;
     flex-wrap: wrap;

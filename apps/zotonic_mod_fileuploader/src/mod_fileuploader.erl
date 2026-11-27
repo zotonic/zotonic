@@ -93,7 +93,7 @@ Failed files can be retried without re-uploading successful files. A saved file
 whose connection failed is reported separately and is not eligible for upload retry.
 Completion is reported after media processing on
 `model/fileuploader/event/admin-complete` with `target`, `upload_id`, `failed`, and
-`saved` fields. Attempt identifiers prevent delayed events from changing a retry's
+`saved` and `media_id` fields. Attempt identifiers prevent delayed events from changing a retry's
 result. The overview keeps results visible until the user refreshes the list.
 
 The shared Upload dialog opts in with `data-fileuploader-feedback`. Its signed
@@ -111,6 +111,28 @@ Size and input accept restrictions are checked before submitting a selection.
 The worker also calls `m_fileuploader`'s `validate` endpoint before hashing or
 transferring files, so current account MIME and size restrictions are checked
 on the server. These checks do not replace the ACL checks when saving media.
+
+Editor file drops
+-----------------
+
+With `mod_fileuploader` enabled, TinyMCE (4 and 5) and Tiptap send file drops
+through the same sequential upload batches. Progress, cancellation, validation,
+and retry appear below the editor. The adapters reserve a position per file;
+Tiptap maps positions through editing transactions and TinyMCE uses non-serialized
+bookmarks. Retrying an earlier file preserves its place before later uploads.
+Internal text and media drags are handled by the editors as before.
+
+Uploaded media is connected to the edited resource using `depiction`. The normal
+media and edge ACL checks apply. Editor drops require a saved page id.
+The existing `mod_admin.rsc_dialog_is_dependent` configuration is respected when
+explicitly set; when unset, editor drops default to dependent media. No new
+configuration key is required. Publication follows `mod_admin.rsc_dialog_is_published`.
+
+Uploads are saved immediately; inserted text must still be saved using the page's
+Save action. Cancel stops remaining transfers and leaves saved media intact.
+If an editor or insertion position is removed, the saved media is not reuploaded:
+feedback directs the user to Insert media. An attachment failure also never
+causes an already-saved file to be uploaded again.
 
 Accepted Events
 ---------------
@@ -156,8 +178,9 @@ event(#z_msg_v1{ data = Data }, Context) ->
     ExtraData = proplists:get_value(<<"data">>, Data),
     Target = proplists:get_value(<<"target">>, Data, <<"body">>),
     Files = proplists:get_value(<<"fileuploader">>, Data, []),
-    Context0 = z_context:set(fileuploader_saved, false,
-        z_context:set(fileuploader_failed, false, Context)),
+    Context0 = z_context:set(fileuploader_media_id, undefined,
+        z_context:set(fileuploader_saved, false,
+        z_context:set(fileuploader_failed, false, Context))),
     Context1 = case {ExtraData, Files} of
         {#{ <<"is_medium">> := true }, [_, _ | _]} ->
             lists:foreach(fun
@@ -171,7 +194,8 @@ event(#z_msg_v1{ data = Data }, Context) ->
     z_mqtt:publish([<<"~client">>, <<"model">>, <<"fileuploader">>, <<"event">>, <<"admin-complete">>],
         #{ target => Target, failed => Failed,
            upload_id => proplists:get_value(<<"upload_id">>, Data),
-           saved => z_context:get(fileuploader_saved, Context1) }, Context1),
+           saved => z_context:get(fileuploader_saved, Context1),
+           media_id => z_context:get(fileuploader_media_id, Context1) }, Context1),
     Context2 = z_render:wire({unmask, [ {target, Target} ]}, Context1),
     case {maybe_get(<<"refresh">>, ExtraData, false), Failed} of
         {true, false} -> z_render:wire({reload, []}, Context2);
@@ -247,12 +271,13 @@ do_upload({ok, #{ is_complete := true } = Status}, Data, Context) ->
     Context1 = case m_media:insert_file(TmpFile, RscProps1, [], Context) of
         {ok, RscId} ->
             F = z_html:escape(Filename),
-            case maybe_edge(RscId, Data, Context) of
+            SavedContext = z_context:set(fileuploader_media_id, RscId, Context),
+            case maybe_edge(RscId, Data, SavedContext) of
                 {error, _} ->
                     upload_error([ ?__("Uploaded, but could not connect", Context), " ", F ],
-                        z_context:set(fileuploader_saved, true, Context));
+                        z_context:set(fileuploader_saved, true, SavedContext));
                 _ ->
-                    z_render:growl([ ?__("Uploaded", Context), " ", F ], Context)
+                    z_render:growl([ ?__("Uploaded", Context), " ", F ], SavedContext)
             end;
         {error, _} ->
             F = z_html:escape(Filename),

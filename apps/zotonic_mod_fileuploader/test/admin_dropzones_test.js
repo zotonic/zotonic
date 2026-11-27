@@ -73,7 +73,7 @@ async function fixture(options = {}) {
         await new Promise(resolve => setImmediate(resolve));
         return event;
     }
-    return {zone, input, status, publications, masks, unmasks, subscriptions, drop, listeners, classes, nodes, form, title, published, fieldset};
+    return {zone, input, status, publications, masks, unmasks, subscriptions, drop, listeners, classes, nodes, form, title, published, fieldset, uploader: context.window.z_fileuploader};
 }
 const file = (name = 'image.png', type = 'image/png', size = 10) => ({name, type, size});
 
@@ -351,4 +351,60 @@ test('dialog cancellation restores input and metadata without offering a failed-
     let guarded = false;
     f.listeners.beforeunload({preventDefault() { guarded = true; }});
     assert.equal(guarded, false);
+});
+
+
+test('editor batches insert server-confirmed ids once and retry only failed files', async () => {
+    const f = await fixture();
+    const inserted = [];
+    let disposed = 0;
+    f.uploader.editorUpload({zone: f.zone, files: [file('a'), file('b')], options: {subject_id: 12, is_dependent: true},
+        reserve: () => ({insert: (id, index) => { inserted.push([id, index]); return true; }, dispose: () => disposed++})});
+    await new Promise(resolve => setImmediate(resolve));
+    const first = f.publications[0].payload.progress_msg;
+    assert.equal(f.publications[0].payload.ready_msg.data.is_dependent, true);
+    f.subscriptions['model/fileuploader/event/admin-failure']({payload: first});
+    await new Promise(resolve => setImmediate(resolve));
+    const second = f.publications[1].payload.progress_msg;
+    f.subscriptions['model/fileuploader/event/admin-complete']({payload: {...second, failed: false, media_id: 102}});
+    assert.deepEqual(inserted, [[102, 1]]);
+    assert.equal(disposed, 0);
+    f.nodes.find(n => n.tag === 'button' && n.textContent === 'retry').listeners.click();
+    await new Promise(resolve => setImmediate(resolve));
+    const retry = f.publications[2].payload.progress_msg;
+    f.subscriptions['model/fileuploader/event/admin-complete']({payload: {...first, failed: false, media_id: 999}});
+    f.subscriptions['model/fileuploader/event/admin-complete']({payload: {...retry, failed: false, media_id: 101}});
+    assert.deepEqual(inserted, [[102, 1], [101, 0]]);
+    assert.equal(disposed, 1);
+});
+
+test('a saved editor upload is never retried when its insertion position has gone', async () => {
+    const f = await fixture();
+    f.uploader.editorUpload({zone: f.zone, files: [file()], options: {}, reserve: () => ({insert: () => false})});
+    await new Promise(resolve => setImmediate(resolve));
+    f.subscriptions['model/fileuploader/event/admin-complete']({payload: {
+        ...f.publications[0].payload.progress_msg, failed: false, media_id: 103
+    }});
+    assert.equal(f.nodes.find(n => n.dataset.state === 'notInserted').dataset.state, 'notInserted');
+    assert.equal(f.nodes.find(n => n.tag === 'button' && n.textContent === 'retry').hidden, true);
+});
+
+
+test('an invalid new drop position preserves the previous failed upload for retry', async () => {
+    const f = await fixture();
+    let disposed = false;
+    let inserted = false;
+    f.uploader.editorUpload({zone: f.zone, files: [file()], options: {}, reserve: () => ({
+        insert: () => { inserted = !disposed; return inserted; }, dispose: () => { disposed = true; }
+    })});
+    await new Promise(resolve => setImmediate(resolve));
+    f.subscriptions['model/fileuploader/event/admin-failure']({payload: f.publications[0].payload.progress_msg});
+    assert.equal(f.uploader.editorUpload({zone: f.zone, files: [file()], options: {}, reserve: () => null}), false);
+    assert.equal(disposed, false);
+    f.nodes.find(n => n.tag === 'button' && n.textContent === 'retry').listeners.click();
+    await new Promise(resolve => setImmediate(resolve));
+    f.subscriptions['model/fileuploader/event/admin-complete']({payload: {
+        ...f.publications[1].payload.progress_msg, failed: false, media_id: 104
+    }});
+    assert.equal(inserted, true);
 });

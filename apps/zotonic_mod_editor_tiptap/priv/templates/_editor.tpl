@@ -1,6 +1,6 @@
 {# Self-contained editor integration; no mod_editor_tinymce templates or assets. #}
 {% block _editor %}
-{% lib "css/editor-tiptap.css" "css/editor-tiptap-body.css" %}
+{% lib "css/editor-tiptap.css" "css/editor-tiptap-body.css" "css/z.editor-fullscreen.css" %}
 {% all include "_editor_tiptap_head.tpl" %}
 {# Profiles must be available before widgets can initialize the bundled editor. #}
 <script nonce="{{ m.req.csp_nonce }}">
@@ -58,7 +58,8 @@
             apply: "{{ _"Apply changes"|escapejs }}", cancel: "{{ _"Cancel"|escapejs }}",
             required: "{{ _"This field is required."|escapejs }}",
             save: "{{ _"Save"|escapejs }}",
-            saveAndView: "{{ _"Save and View"|escapejs }}"
+            saveAndView: "{{ _"Save & view"|escapejs }}",
+            close: "{{ _"Close"|escapejs }}"
         }
     });
     {% all include tiptap_overrides_tpl|default:"_editor_tiptap_overrides_js.tpl" id=id %}

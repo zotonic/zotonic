@@ -87,6 +87,7 @@ Available Model API Paths
 
 | Method | Path pattern | Description |
 | --- | --- | --- |
+| `get` | `/editor_is_dependent` | Editor drops default to dependent media; an explicit `mod_admin.rsc_dialog_is_dependent` setting overrides this. |
 | `get` | `/max_size` | Effective maximum file size in bytes, or undefined when no ACL limit is configured. |
 | `get` | `/status/+name/...` | Return sanitized upload status for `+name`: filename, total size, received bytes, completion flag, missing byte ranges, and absolute upload URL. |
 | `post` | `/validate` | Check filename-derived MIME type and size against the current ACL before hashing or transferring a file. |
@@ -109,6 +110,14 @@ Available Model API Paths
 
 %% @doc Fetch the status of an upload
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ <<"editor_is_dependent">> | Rest ], _Msg, Context) ->
+    Value = m_config:get_value(mod_admin, rsc_dialog_is_dependent, Context),
+    Dependent = case Value of
+        undefined -> true;
+        <<>> -> true;
+        _ -> z_convert:to_bool(Value)
+    end,
+    {ok, {Dependent, Rest}};
 m_get([ <<"max_size">> | Rest ], _Msg, Context) ->
     {ok, {z_notifier:first(#acl_max_upload_size{}, Context), Rest}};
 m_get([ <<"status">>, Name | Rest ], _Msg, Context) ->

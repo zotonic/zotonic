@@ -6,14 +6,17 @@
 drop_test_() ->
     {foreach, fun setup/0, fun cleanup/1, [
         fun rejects_multiple_replacements/0,
-        fun processes_selection_order/0
+        fun processes_selection_order/0,
+        fun returns_created_media_id/0
     ]}.
 
 setup() ->
-    Modules = [z_fileuploader, z_render, z_mqtt, z_trans],
+    Modules = [z_fileuploader, z_render, z_mqtt, z_trans, m_media],
     lists:foreach(fun(M) -> meck:new(M, [no_link]) end, Modules),
     meck:expect(z_fileuploader, stop, fun(_) -> ok end),
     meck:expect(z_fileuploader, status, fun(_) -> {error, enoent} end),
+    meck:expect(m_media, insert_file, fun(_, _, _, _) -> {ok, 123} end),
+    meck:expect(z_render, growl, fun(_, C) -> C end),
     meck:expect(z_render, growl_error, fun(_, C) -> C end),
     meck:expect(z_render, wire, fun(_, C) -> C end),
     meck:expect(z_mqtt, publish, fun(_, _, _) -> ok end),
@@ -66,3 +69,24 @@ validation_test_() ->
 validate(Size) ->
     m_fileuploader:m_post([<<"validate">>],
         #{payload => #{<<"filename">> => <<"test.txt">>, <<"size">> => Size}}, #context{}).
+
+
+editor_dependent_default_test_() ->
+    {setup,
+        fun() -> meck:new(m_config, [no_link]) end,
+        fun(_) -> meck:unload(m_config) end,
+        fun(_) -> [?_test(begin
+            meck:expect(m_config, get_value, fun(mod_admin, rsc_dialog_is_dependent, _) -> Value end),
+            ?assertEqual({ok, {Expected, []}}, m_fileuploader:m_get([<<"editor_is_dependent">>], undefined, #context{}))
+        end) || {Value, Expected} <- [{undefined,true}, {<<>>,true}, {<<"false">>,false}, {<<"true">>,true}, {false,false}]] end}.
+
+
+returns_created_media_id() ->
+    meck:expect(z_fileuploader, status, fun(_) ->
+        {ok, #{is_complete => true, name => <<"upload">>, filename => <<"test.txt">>, uploaded_file => <<"/tmp/test.txt">>}}
+    end),
+    Result = mod_fileuploader:event(event(#{<<"is_dependent">> => true}, [#{<<"upload">> => <<"upload">>}]), #context{}),
+    ?assertEqual(123, z_context:get(fileuploader_media_id, Result)),
+    ?assertEqual(false, z_context:get(fileuploader_failed, Result)),
+    ?assert(meck:called(m_media, insert_file, [<<"/tmp/test.txt">>,
+        #{<<"is_published">> => true, <<"is_dependent">> => true, <<"original_filename">> => <<"test.txt">>}, [], '_'])).

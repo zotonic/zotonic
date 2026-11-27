@@ -1,0 +1,46 @@
+/* TinyMCE's skin resets descendants, including Bootstrap buttons. Scope these
+ * rules above that reset and give the extra toolbar row an opaque background. */
+:is(.tox, .mce-container, .z-tiptap) .z-editor-fullscreen-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-bottom: 1px solid var(--z-admin-border-color, #ccc);
+    background: var(--bs-body-bg, #fff);
+    color: var(--bs-body-color, #333);
+}
+:is(.tox, .mce-container, .z-tiptap) .z-editor-fullscreen-actions .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-sizing: border-box;
+    padding: 6px 12px;
+    border: 1px solid var(--z-admin-border-color, #ccc);
+    border-radius: 4px;
+    background: var(--bs-tertiary-bg, #f8f9fa);
+    color: var(--bs-body-color, #333);
+    font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.5;
+    cursor: pointer;
+}
+:is(.tox, .mce-container, .z-tiptap) .z-editor-fullscreen-actions .btn-primary {
+    background: var(--bs-primary, #337ab7);
+    border-color: var(--bs-primary, #337ab7);
+    color: #fff;
+}
+:is(.tox, .mce-container, .z-tiptap) .z-editor-fullscreen-actions .btn:hover { filter: brightness(.94); }
+:is(.tox, .mce-container, .z-tiptap) .z-editor-fullscreen-actions .btn:focus-visible {
+    outline: 2px solid var(--bs-primary, #337ab7);
+    outline-offset: 2px;
+}
+:is(.tox, .mce-container, .z-tiptap) .z-editor-fullscreen-actions .btn:disabled { opacity: .65; cursor: default; }
+
+:is(.tox, .mce-container, .z-tiptap) .z-editor-fullscreen-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    margin-inline-start: auto;
+}

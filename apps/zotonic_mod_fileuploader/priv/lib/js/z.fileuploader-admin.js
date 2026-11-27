@@ -110,6 +110,25 @@
         startBatch(batch);
     }
 
+    // Editor adapters reserve their own insertion positions, but share the batch lifecycle.
+    window.z_fileuploader = {
+        clearDragState: reset,
+        editorUpload({zone, files, options, reserve}) {
+            if (pending.has(zone.id) || !files.length) return false;
+            const error = validationError(zone, files);
+            if (error) { report(zone, error, 'error'); return false; }
+            const insertion = reserve();
+            if (!insertion) { report(zone, message('editorNoPosition'), 'error'); return false; }
+            batches.get(zone.id)?.dispose?.();
+            const batch = {zone, options, editor: true, ...insertion,
+                items: files.map((file, index) => ({file, index, state: 'queued', percentage: 0}))};
+            batches.set(zone.id, batch);
+            renderBatch(batch);
+            startBatch(batch);
+            return true;
+        }
+    };
+
     function renderBatch(batch) {
         const status = batch.zone.querySelector('.fileuploader-status');
         if (!status) return;
@@ -196,7 +215,7 @@
         const {zone} = batch;
         pending.set(zone.id, zone);
         zone.setAttribute('aria-busy', 'true');
-        report(zone, message('uploading'), 'uploading');
+        report(zone, message(batch.editor ? 'editorUploading' : 'uploading'), 'uploading');
         nextFile(batch);
     }
 
@@ -208,14 +227,15 @@
             zone.removeAttribute('aria-busy');
             const input = zone.querySelector('input[type="file"]');
             if (input) input.value = '';
-            const failed = batch.items.some(item => ['failed', 'unattached'].includes(item.state));
+            const failed = batch.items.some(item => ['failed', 'unattached', 'notInserted'].includes(item.state));
             const summary = message('summary')
-                .replace('{saved}', batch.items.filter(item => ['saved', 'unattached'].includes(item.state)).length)
+                .replace('{saved}', batch.items.filter(item => ['saved', 'unattached', 'notInserted'].includes(item.state)).length)
                 .replace('{total}', batch.items.length);
             const cancelled = batch.items.some(item => item.state === 'cancelled');
-            report(zone, summary + ' ' + message(failed ? 'processingFailure' : cancelled ? 'cancelledSummary' : 'finished'), failed ? 'error' : cancelled ? 'info' : 'success');
+            report(zone, summary + ' ' + message(failed ? 'processingFailure' : cancelled ? 'cancelledSummary' : batch.editor ? 'editorFinished' : 'finished'), failed ? 'error' : cancelled ? 'info' : 'success');
             // Release successful File objects; retries retain only failed files.
             batch.items.filter(item => item.state !== 'failed').forEach(item => item.file = {name: item.file.name});
+            if (!batch.items.some(item => item.state === 'failed')) batch.dispose?.();
             updateBatch(batch);
             return;
         }
@@ -245,11 +265,16 @@
         }
     }
 
-    function finish(target, failed, uploadId, saved = false, error) {
+    function finish(target, failed, uploadId, saved = false, error, mediaId) {
         const batch = batches.get(target);
         if (!pending.has(target) || !batch || (uploadId && uploadId !== batch.attempt)) return;
         batch.current.error = uploadError(error);
         batch.current.state = failed ? (saved ? 'unattached' : 'failed') : 'saved';
+        if (!failed && batch.editor) {
+            try {
+                if (!Number.isSafeInteger(mediaId) || !batch.insert(mediaId, batch.current.index)) batch.current.state = 'notInserted';
+            } catch (_) { batch.current.state = 'notInserted'; }
+        }
         batch.current.percentage = failed ? batch.current.percentage : 100;
         nextFile(batch);
     }
@@ -320,7 +345,7 @@
             uploaderBusy = msg.payload;
         });
         cotonic.broker.subscribe('model/fileuploader/event/admin-failure', msg => finish(msg.payload.target, true, msg.payload.upload_id, false, msg.payload.error));
-        cotonic.broker.subscribe('model/fileuploader/event/admin-complete', msg => finish(msg.payload.target, msg.payload.failed, msg.payload.upload_id, msg.payload.saved));
+        cotonic.broker.subscribe('model/fileuploader/event/admin-complete', msg => finish(msg.payload.target, msg.payload.failed, msg.payload.upload_id, msg.payload.saved, undefined, msg.payload.media_id));
     });
 
     // Keep direct uploads protected through server-side processing as well.
@@ -363,7 +388,7 @@
         if (containsFiles(event)) dragDepth++;
     });
     document.addEventListener('dragover', event => {
-        if (!containsFiles(event)) return;
+        if (!containsFiles(event) || event.defaultPrevented) return;
         event.preventDefault(); // Never navigate away when files miss a zone.
         const zone = zoneFor(event.target);
         highlighted?.classList.remove('is-dragover', 'dragover');
@@ -376,7 +401,7 @@
         if (containsFiles(event) && --dragDepth <= 0) reset();
     });
     document.addEventListener('drop', event => {
-        if (!containsFiles(event)) return;
+        if (!containsFiles(event) || event.defaultPrevented) return;
         event.preventDefault();
         const zone = zoneFor(event.target);
         reset();
