@@ -57,3 +57,33 @@ test('fullscreen Save serializes editors, uses the original submitter, and respe
         assert.equal(handlers.get('SwitchMode').length, 0);
     } finally { dom.window.close(); }
 });
+
+test('TinyMCE 4 places actions above the menu and resizes its iframe', () => {
+    const dom = new JSDOM('<textarea></textarea><div class="mce-container mce-fullscreen"><div class="mce-container-body"><div class="mce-menubar"></div><div class="mce-toolbar-grp"></div><div id="area"><iframe></iframe></div></div></div>', {runScripts: 'outside-only'});
+    try {
+        const {window} = dom;
+        const doc = window.document;
+        const container = doc.querySelector('.mce-container');
+        const iframe = doc.querySelector('iframe');
+        Object.defineProperty(container, 'clientHeight', {value: 600});
+        Object.defineProperty(iframe, 'clientHeight', {value: 500});
+        let disconnected = false;
+        window.ResizeObserver = class { observe() {} disconnect() { disconnected = true; } };
+        const handlers = new Map();
+        const editor = {
+            translate: text => text,
+            getElement: () => doc.querySelector('textarea'), getContainer: () => container,
+            getContentAreaContainer: () => doc.querySelector('#area'),
+            on: (name, fn) => handlers.set(name, fn), off() {},
+            execCommand: () => handlers.get('FullscreenStateChanged')({state: false})
+        };
+        window.eval(source);
+        window.z_tinymce_fullscreen(editor);
+        handlers.get('FullscreenStateChanged')({state: true});
+        assert(container.firstElementChild.firstElementChild.matches('.z-editor-fullscreen-actions'));
+        assert.equal(iframe.style.height, `${window.innerHeight - 100}px`);
+        doc.querySelector('[data-fullscreen-close]').click();
+        assert.equal(doc.querySelector('.z-editor-fullscreen-actions'), null);
+        assert.equal(disconnected, true);
+    } finally { dom.window.close(); }
+});

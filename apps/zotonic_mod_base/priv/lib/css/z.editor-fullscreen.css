@@ -44,3 +44,6 @@
     gap: 8px;
     margin-inline-start: auto;
 }
+
+/* The legacy skin uses z-index 100, below the admin navigation (1030). */
+.mce-container.mce-fullscreen { z-index: 1040; }

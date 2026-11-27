@@ -136,7 +136,7 @@ body.dragover .fileuploader-page-overlay {
     box-shadow: 0 4px 20px #0003;
     background: var(--z-admin-bg, var(--bs-body-bg, #fff));
 }
-.mce-fullscreen + .fileuploader-editor { z-index: 100; }
+.mce-fullscreen + .fileuploader-editor { z-index: 1040; }
 .z-tiptap.is-fullscreen + .fileuploader-editor { z-index: 1040; }
 :is(.tox-fullscreen, .mce-fullscreen, .z-tiptap.is-fullscreen) + .fileuploader-editor .fileuploader-status { margin-top: 0; }
 :is(.tox-fullscreen, .mce-fullscreen, .z-tiptap.is-fullscreen) + .fileuploader-editor .fileuploader-results { margin-bottom: 0; }

@@ -6,7 +6,8 @@ window.z_tinymce_fullscreen = function(editor) {
         cleanup = () => {};
         if (!state) return;
         const form = editor.getElement().form;
-        const header = editor.getContainer().querySelector('.tox-editor-header, .mce-toolbar-grp');
+        const container = editor.getContainer();
+        const header = container.querySelector('.tox-editor-header') || container.querySelector('.mce-container-body');
         if (!header) return;
         const actions = document.createElement('div');
         actions.className = 'z-tinymce-fullscreen-actions z-editor-fullscreen-actions';
@@ -55,8 +56,23 @@ window.z_tinymce_fullscreen = function(editor) {
             toggle.type = 'button';
             controls.append(toggle);
         }
-        if (actions.childElementCount) header.prepend(actions);
+        header.prepend(actions);
+        // TinyMCE 4 sizes its iframe before firing FullscreenStateChanged.
+        // Recalculate after adding the action row and whenever that row wraps.
+        let resize;
+        if (container.classList.contains('mce-fullscreen')) {
+            const fit = () => {
+                const iframe = editor.getContentAreaContainer().querySelector('iframe');
+                if (iframe) iframe.style.height = Math.max(0, window.innerHeight - (container.clientHeight - iframe.clientHeight)) + 'px';
+            };
+            fit();
+            if (window.ResizeObserver) {
+                resize = new ResizeObserver(fit);
+                resize.observe(actions);
+            }
+        }
         cleanup = () => {
+            resize?.disconnect();
             observers.forEach(dispose => dispose());
             actions.remove();
         };
