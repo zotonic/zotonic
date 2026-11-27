@@ -3,11 +3,11 @@ if (typeof tinyInit !== 'object')
     selector: "textarea",
     mode: "none",
     theme: "modern",
-    plugins: "compat3x advlist code paste table link zlink zmedia autosave directionality autoresize lists",
+    plugins: "compat3x advlist code paste table link zlink zmedia autosave directionality autoresize lists fullscreen",
     menubar: "edit format table tools insert",
     toolbar: [
         "styleselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | ltr rtl | removeformat",
-        "link unlink | zlink zmedia | code"
+        "link unlink | zlink zmedia | code | fullscreen"
     ],
 
     content_css: "/lib/js/tinymce-4.9.3/zotonic.css,/lib/css/tinymce-zotonic~1.css",

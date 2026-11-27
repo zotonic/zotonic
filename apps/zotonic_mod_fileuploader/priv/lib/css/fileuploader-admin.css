@@ -1,0 +1,152 @@
+.fileuploader-dropzone {
+    border: 2px dashed var(--z-admin-border-color, #aaa);
+    border-radius: 4px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+.fileuploader-dropzone label { display: block; }
+.fileuploader-dropzone label span { display: block; margin: 4px 0 8px; }
+/* Pointer precision controls hints only; file drops remain enabled everywhere. */
+.fileuploader-drag-help,
+.fileuploader-dropzone label .fileuploader-drag-help { display: none; }
+@media (any-pointer: fine) {
+    .fileuploader-drag-help,
+    .fileuploader-dropzone label .fileuploader-drag-help { display: block; }
+}
+
+.fileuploader-dropzone.is-dragover,
+.tab-pane[data-fileuploader-input].is-dragover,
+.widget[data-fileuploader].is-dragover {
+    outline: 3px solid var(--z-admin-link-color, #337ab7);
+    outline-offset: 2px;
+    background-color: var(--z-admin-drag-media-bg, #eef5fb);
+}
+.fileuploader-status:empty { display: none; }
+.fileuploader-status {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 12px 0;
+    padding: 12px 16px;
+    border: 1px solid var(--bs-info-border-subtle, #b6dce8);
+    border-radius: 6px;
+    background: var(--bs-info-bg-subtle, #eaf5fa);
+    color: var(--bs-info-text-emphasis, #245269);
+    font-size: 14px;
+    line-height: 1.5;
+}
+.fileuploader-status::before {
+    content: 'ⓘ';
+    flex: 0 0 1.25em;
+    text-align: center;
+    font-weight: bold;
+}
+.fileuploader-status.is-success {
+    border-color: var(--bs-success-border-subtle, #b8d9c2);
+    background: var(--bs-success-bg-subtle, #edf7ef);
+    color: var(--bs-success-text-emphasis, #285b36);
+}
+.fileuploader-status.is-success::before { content: '✓'; }
+.fileuploader-status.is-error {
+    border-color: var(--bs-danger-border-subtle, #e8baba);
+    background: var(--bs-danger-bg-subtle, #fceeee);
+    color: var(--bs-danger-text-emphasis, #8b2929);
+}
+.fileuploader-status.is-error::before { content: '⚠︎'; }
+.fileuploader-status.has-results {
+    margin-bottom: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.fileuploader-results {
+    margin: 0 0 20px;
+    padding: 4px 16px 16px;
+    border: 1px solid var(--z-admin-border-color, #ddd);
+    border-top: 0;
+    border-radius: 0 0 6px 6px;
+    background: var(--bs-body-bg, #fff);
+}
+.fileuploader-result {
+    display: grid;
+    grid-template-columns: 9em minmax(0, 1fr);
+    gap: 6px 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--z-admin-border-color, #ddd);
+}
+.fileuploader-result strong { overflow-wrap: anywhere; }
+.fileuploader-result-state { font-weight: 500; overflow-wrap: anywhere; }
+.fileuploader-result progress { grid-column: 1 / -1; width: 100%; height: 10px; accent-color: var(--z-admin-link-color, #337ab7); }
+.fileuploader-result[data-state="saved"] .fileuploader-result-state { color: var(--bs-success-text-emphasis, #285b36); }
+.fileuploader-result[data-state="failed"] .fileuploader-result-state,
+.fileuploader-result[data-state="notInserted"] .fileuploader-result-state,
+.fileuploader-result[data-state="unattached"] .fileuploader-result-state { color: var(--bs-danger-text-emphasis, #8b2929); }
+.fileuploader-results > button { margin-top: 12px; margin-inline-end: 8px; }
+@media (max-width: 480px) {
+    .fileuploader-result { grid-template-columns: minmax(0, 1fr); }
+}
+.fileuploader-status.is-uploading::before {
+    content: '';
+    box-sizing: border-box;
+    height: 1.25em;
+    margin-top: .125em;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: fileuploader-spin 1s linear infinite;
+}
+@keyframes fileuploader-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+    .fileuploader-status.is-uploading::before { animation: none; }
+}
+
+/* Explain page uploads instead of showing the legacy icon-only overlay. */
+body[data-fileuploader].dragover::after { display: none; }
+.fileuploader-page-overlay { display: none; }
+body.dragover .fileuploader-page-overlay {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    text-align: center;
+    pointer-events: none;
+    background-color: var(--z-admin-drag-overlay-bg);
+    color: var(--z-admin-drag-overlay-color);
+}
+.fileuploader-page-icon { font-size: 96px; line-height: 1; }
+.fileuploader-page-overlay h2 { margin: 16px 0; color: inherit; }
+.fileuploader-page-overlay p { max-width: 40em; font-size: 18px; }
+
+/* Fullscreen editors cover their siblings. Keep batch controls reachable,
+ * at the editor's stacking level so its dialogs still appear above them. */
+.tox-fullscreen + .fileuploader-editor,
+.mce-fullscreen + .fileuploader-editor,
+.z-tiptap.is-fullscreen + .fileuploader-editor {
+    position: fixed;
+    inset-inline-end: 16px;
+    bottom: 16px;
+    width: min(36rem, calc(100vw - 32px));
+    max-height: 35vh;
+    overflow: auto;
+    z-index: 1200;
+    border-radius: 6px;
+    box-shadow: 0 4px 20px #0003;
+    background: var(--z-admin-bg, var(--bs-body-bg, #fff));
+}
+.mce-fullscreen + .fileuploader-editor { z-index: 1040; }
+.z-tiptap.is-fullscreen + .fileuploader-editor { z-index: 1040; }
+:is(.tox-fullscreen, .mce-fullscreen, .z-tiptap.is-fullscreen) + .fileuploader-editor .fileuploader-status { margin-top: 0; }
+:is(.tox-fullscreen, .mce-fullscreen, .z-tiptap.is-fullscreen) + .fileuploader-editor .fileuploader-results { margin-bottom: 0; }
+
+@media (min-width: 901px) {
+    body.admin-preview-open :is(.tox-fullscreen, .mce-fullscreen, .z-tiptap.is-fullscreen) + .fileuploader-editor {
+        inset-inline-end: calc(var(--admin-preview-width, 40vw) + 16px);
+        width: min(36rem, calc(100vw - var(--admin-preview-width, 40vw) - 32px));
+    }
+}
+@media (max-width: 900px) {
+    body.admin-preview-open :is(.tox-fullscreen, .mce-fullscreen, .z-tiptap.is-fullscreen) + .fileuploader-editor { display: none; }
+}

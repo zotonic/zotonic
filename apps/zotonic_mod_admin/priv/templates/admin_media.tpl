@@ -2,6 +2,13 @@
 
 {% block title %}{_ Media _}{% endblock %}
 
+{% block bodyattr %}
+    {% inherit %}
+    {% if m.modules.active.mod_fileuploader %}
+        data-fileuploader="{{ %{ refresh: true, is_published: m.admin.rsc_dialog_is_published }|escape }}"
+    {% endif %}
+{% endblock %}
+
 {% block search_target %}{% url admin_media %}{% endblock %}
 
 {% block content %}
@@ -102,6 +109,16 @@
                 <a class="btn btn-default{% if not q.qargs %} disabled{% endif %}" href="{% url admin_media %}">{_ All media _}</a>
                 {% all include "_admin_extra_buttons.tpl" %}
             </div>
+
+            {% if m.modules.active.mod_fileuploader %}
+                <p class="help-block fileuploader-drag-help">{_ Drag files anywhere onto this page to upload them as new media items. _}</p>
+                <p class="fileuploader-status" role="status" aria-live="polite"></p>
+                <div class="fileuploader-page-overlay">
+                    <span class="fileuploader-page-icon" aria-hidden="true">⇪</span>
+                    <h2>{_ Drop files to add them to Media _}</h2>
+                    <p>{_ Upload starts immediately. Each file becomes a new media item. _}</p>
+                </div>
+            {% endif %}
 
             <div id="filter-panel" class="well" style="display:none">
                 {% include "_admin_overview_filter_panel.tpl"
@@ -209,5 +226,4 @@
 
     {% include "_admin_overview_bulk_actions.tpl" %}
 
-{% all include "_admin_media_maintenance.tpl" %}
 {% endblock %}

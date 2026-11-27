@@ -92,6 +92,14 @@ var z_editor = (function ($) {
         }
         setup = options.setup;
         options.setup = function(editor) {
+            window.z_tinymce_fullscreen(editor);
+            editor.on('drop', event => window.z_fileuploader?.tinyMCEDrop(editor, event));
+            editor.on('dragover', event => {
+                if (window.z_fileuploader?.filesIn(event)) {
+                    window.z_fileuploader.clearDragState();
+                    event.preventDefault();
+                }
+            });
             if (typeof setup === 'function') {
                 setup.call(this, editor);
             }

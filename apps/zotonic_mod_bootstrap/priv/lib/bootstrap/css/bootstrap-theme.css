@@ -11937,6 +11937,10 @@ html {
   --bs-alert-link-color: var(--bs-danger-text-emphasis);
 }
 
+.btn-toolbar {
+  gap: 5px;
+}
+
 .btn-default {
   --bs-btn-color: var(--bs3-btn-default-color, var(--bs-body-color));
   --bs-btn-bg: var(--bs3-btn-default-bg, var(--bs-tertiary-bg));

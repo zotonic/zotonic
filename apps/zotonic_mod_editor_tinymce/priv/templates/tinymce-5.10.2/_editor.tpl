@@ -1,4 +1,6 @@
 {% lib
+    "js/z.editor-tinymce-fullscreen.js"
+    "css/z.editor-fullscreen.css"
     "js/tinymce-5.10.2/tiny-init.js"
     "js/tinymce-5.10.2/z_editor.js"
 %}

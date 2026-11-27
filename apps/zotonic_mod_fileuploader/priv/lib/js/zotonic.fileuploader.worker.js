@@ -31,6 +31,7 @@ const PROGRESS_INTERVAL = 500;      // Every 500msec progress for a request
 
 var model = {
     is_subscribed: false,
+    is_busy: false,
     files: [],              // Files being uploaded
     uploaders: 0,           // Number of uploaders busy uploading a single block from any file
     requests: []            // Upload requests, each with one or more files
@@ -60,8 +61,8 @@ var startUploader = function(fileIndex) {
             return;
         }
         f.offset += UPLOAD_BLOCKSIZE;
-        if (f.offset > f.file_size) {
-            f.offset = f.file_size;
+        if (f.offset > f.file.size) {
+            f.offset = f.file.size;
         }
     } else {
         return;
@@ -74,51 +75,39 @@ var startUploader = function(fileIndex) {
     const url = f.status.upload_url + "?offset=" + offset;
     const xhr = new XMLHttpRequest();
 
+    f.requests.add(xhr);
     xhr.open("post", url);
     xhr.setRequestHeader("Content-Type", "application/octet-stream");
     xhr.setRequestHeader("x-no-cache", "1");
+    const failedBlock = function() {
+        if (f.req.cancelled) return;
+        if (!f.failed.includes(offset)) f.failed.push(offset);
+        f.error_count++;
+    };
     xhr.onreadystatechange = function() {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status >= 200 && xhr.status < 300) {
-                let response = JSON.parse( xhr.responseText );
-                if (response.status == "ok") {
+        if (f.req.cancelled || xhr.readyState !== XMLHttpRequest.DONE) return;
+        // Status zero is handled by the error/abort/timeout events below.
+        if (xhr.status === 0) return;
+        if (xhr.status >= 200 && xhr.status < 300) {
+            try {
+                const response = JSON.parse(xhr.responseText);
+                if (response.status === "ok" && response.result) {
                     f.status = response.result;
                     f.req.uploaded_size += end - offset;
-                } else {
-                    if (f.failed.indexOf(offset) == -1) {
-                        f.failed.push(offset);
-                    }
-                    console.log("Fileuploader status error", response, f);
+                    return;
                 }
-            } else if (xhr.status != 0) {
-                if (f.failed.indexOf(offset) == -1) {
-                    f.failed.push(offset);
-                }
-                f.error_count++;
-                console.log("Fileuploader xhr error", f);
+            } catch (_) {
+                // A proxy or server can return HTML instead of an upload response.
             }
         }
+        failedBlock();
     };
-    // xhr.upload.addEventListener("progress", function (e) {
-    //     let percent_complete = Math.floor( (e.loaded / e.total) * 100 );
-    //     console.log(percent_complete, "%");
-    // });
-    xhr.addEventListener("error", function() {
-        if (f.failed.indexOf(offset) == -1) {
-            f.failed.push(offset);
-        }
-        f.error_count++;
-        console.log("Fileuploader xhr error", offset, f);
-    });
-    xhr.addEventListener("abort", function() {
-        if (f.failed.indexOf(offset) == -1) {
-            f.failed.push(offset);
-        }
-        f.error_count++;
-        console.log("Fileuploader xhr abort", offset, f);
-    });
+    xhr.timeout = 60000;
+    xhr.addEventListener("error", failedBlock);
+    xhr.addEventListener("abort", failedBlock);
+    xhr.addEventListener("timeout", failedBlock);
     xhr.addEventListener("loadend", function() {
-        // console.log("loadend", offset);
+        f.requests.delete(xhr);
         f.uploading = f.uploading.filter(u => u !== offset);
         model.uploaders--;
         self.publish("model/fileuploader/post/next", {});
@@ -150,6 +139,27 @@ model.present = function(data) {
 
         self.subscribe("model/fileuploader/post/delete/+name", function(_msg, bindings) {
             actions.deleteUpload(bindings.name);
+        });
+
+        self.subscribe("model/fileuploader/post/cancel", function(msg) {
+            const {target, upload_id} = msg.payload || {};
+            if (typeof target !== "string" || typeof upload_id !== "string") return;
+            const req = model.requests.find(r => r.progress_msg.target === target
+                && r.progress_msg.upload_id === upload_id);
+            if (req) {
+                req.cancelled = true;
+                model.requests = model.requests.filter(r => r !== req);
+                const files = model.files.filter(f => f.req === req);
+                model.files = model.files.filter(f => f.req !== req);
+                files.forEach(f => {
+                    f.requests.forEach(xhr => xhr.abort());
+                    if (f.status?.name) self.publish("bridge/origin/model/fileuploader/post/delete/" + f.status.name, {});
+                });
+                req.uploads.forEach(f => self.publish("bridge/origin/model/fileuploader/post/delete/" + f.upload, {}));
+                actions.nextUpload();
+            }
+            // A missing request has already been handed to the server for saving.
+            self.publish("model/fileuploader/event/cancelled", {target, upload_id, cancelled: !!req});
         });
 
         self.subscribe("model/fileuploader/post/next", function(_msg) {
@@ -184,8 +194,14 @@ model.present = function(data) {
                 req.wait_count++;
                 req.total_size += f.file.size;
 
-                self.z_media_upload_hash(f.file).catch(() => undefined).then(digest =>
-                    self.call("bridge/origin/model/fileuploader/post/new", {
+                self.call("bridge/origin/model/fileuploader/post/validate", {
+                    filename: f.file.name, size: f.file.size
+                }).then(resp => {
+                    if (req.cancelled) return;
+                    if (resp.payload.status !== "ok") throw resp.payload.error;
+                    return self.z_media_upload_hash(f.file).catch(() => undefined);
+                }).then(digest =>
+                    req.cancelled ? undefined : self.call("bridge/origin/model/fileuploader/post/new", {
                         digest: digest,
                         name: f.upload,
                         filename: f.file.name,
@@ -193,6 +209,12 @@ model.present = function(data) {
                         mime: f.file.type
                     }, { qos: 2 }
                 )).then(function(resp) {
+                    if (req.cancelled) {
+                        if (resp?.payload.status === "ok") {
+                            self.publish("bridge/origin/model/fileuploader/post/delete/" + resp.payload.result.name, {});
+                        }
+                        return;
+                    }
                     const max_error = MAX_ERROR_COUNT + Math.floor((f.file.size / UPLOAD_BLOCKSIZE) * MAX_ERROR_RATE);
                     let upload = {
                         start: Date.now(),
@@ -201,6 +223,7 @@ model.present = function(data) {
                         status: {},
                         offset: 0,
                         uploading: [],
+                        requests: new Set(),
                         failed: [],
                         error_count: 0,
                         max_error: max_error,
@@ -209,7 +232,8 @@ model.present = function(data) {
                     if (resp.payload.status == "ok") {
                         upload.status = resp.payload.result;
                     } else {
-                        upload.error_count = MAX_ERROR_COUNT;
+                        req.error = resp.payload.error;
+                        upload.error_count = max_error;
                         upload.status = undefined;
                     }
                     model.files.push(upload);
@@ -221,8 +245,10 @@ model.present = function(data) {
                     if (data.upload.start_topic) {
                         self.publish(data.upload.start_topic, upload);
                     }
-                }).catch(function() {
+                }).catch(function(error) {
+                    if (req.cancelled) return;
                     req.wait_count--;
+                    req.error = error;
                     req.error_count++;
                     actions.nextUpload();
                 });
@@ -260,11 +286,13 @@ model.present = function(data) {
         const f = model.files[i];
         if (f.req.error_count == 0) {
             fs.push(f);
-        } else if (f.status?.name) {
-            // Tell server to remove this upload
-            self.publish("bridge/origin/model/fileuploader/post/delete/"+f.status.name, {});
-            f.req.upload_count--;
         } else {
+            // Stop sibling transfers and ignore their late callbacks after failure.
+            f.req.cancelled = true;
+            f.requests.forEach(xhr => xhr.abort());
+            if (f.status?.name) {
+                self.publish("bridge/origin/model/fileuploader/post/delete/" + f.status.name, {});
+            }
             f.req.upload_count--;
         }
     }
@@ -304,10 +332,13 @@ model.present = function(data) {
     for (let i = 0; i < model.requests.length; i++) {
         let r = model.requests[i];
         if (r.error_count > 0) {
+            // Pending session replies must be cleaned up, never added to model.files.
+            r.cancelled = true;
+            r.uploads.forEach(f => self.publish("bridge/origin/model/fileuploader/post/delete/" + f.upload, {}));
             // failed - publish message to failure topic
             console.error("fileuploader failed", r);
             if (r.failure_topic) {
-                self.publish(r.failure_topic, r.failure_msg);
+                self.publish(r.failure_topic, {...r.failure_msg, error: r.error});
             }
         } else if (r.upload_count == 0 && r.wait_count == 0) {
             // finished - publish result to ready topic
@@ -356,6 +387,12 @@ model.present = function(data) {
         }
     }
     model.requests = rs;
+
+    const isBusy = model.requests.length > 0;
+    if (isBusy !== model.is_busy) {
+        model.is_busy = isBusy;
+        self.publish('model/fileuploader/event/busy', isBusy, {retain: true});
+    }
 
     // Start upload of next block
     if (state.uploading(model) && !state.full(model)) {

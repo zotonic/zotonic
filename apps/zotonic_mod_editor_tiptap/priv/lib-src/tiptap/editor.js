@@ -76,6 +76,59 @@ function install() {
         window.z_event('zlink', context(record));
     }
 
+    function dropMedia(record, event) {
+        const uploader = window.z_fileuploader;
+        if (!uploader?.filesIn(event)) return false;
+        if (!record.editor.isEditable) {
+            event.preventDefault(); event.stopPropagation(); return true;
+        }
+        return uploader.editorDrop({event, host: record.shell, pageId: context(record).rsc_id,
+            reserve() {
+                const editor = record.editor;
+                const point = editor.view.posAtCoords({left: event.clientX, top: event.clientY});
+                if (!point) return null;
+                const anchors = Array.from(event.dataTransfer.files, () => ({pos: point.pos, valid: true}));
+                let inserting = null;
+                const map = ({transaction}) => anchors.forEach((anchor, index) => {
+                    const mapped = transaction.mapping.mapResult(anchor.pos, inserting !== null && index < inserting ? -1 : 1);
+                    anchor.pos = mapped.pos;
+                    if (inserting === null && mapped.deletedAcross) anchor.valid = false;
+                    if (anchor.mediaPos !== undefined) {
+                        const media = transaction.mapping.mapResult(anchor.mediaPos, 1);
+                        anchor.mediaPos = media.deleted ? undefined : media.pos;
+                    }
+                });
+                const dispose = () => editor.off('transaction', map);
+                editor.on('transaction', map);
+                editor.on('destroy', dispose);
+                return {
+                    insert(id, index) {
+                        const anchor = anchors[index];
+                        if (!live(record) || !editor.isEditable || !anchor.valid) return false;
+                        // Inserting a block inside a paragraph can split that paragraph.
+                        // On retry, prefer the next inserted sibling over the mapped split boundary.
+                        let pos = anchor.pos;
+                        const next = anchors.slice(index + 1).find(item => item.mediaPos !== undefined);
+                        if (next) pos = next.mediaPos;
+                        inserting = index;
+                        try {
+                            const inserted = editor.commands.insertContentAt(pos, {
+                                type: 'zotonicMedia', attrs: {id: String(id), options: {align: 'block', size: 'large'}}
+                            }, {updateSelection: false});
+                            // Track this occurrence, not its resource id: users can copy
+                            // the same media elsewhere while earlier files await retry.
+                            if (inserted) editor.state.doc.descendants((node, nodePos) => {
+                                if (node.type.name === 'zotonicMedia' && node.attrs.id === String(id)) anchor.mediaPos = nodePos;
+                            });
+                            return inserted;
+                        } finally { inserting = null; }
+                    },
+                    dispose() { dispose(); editor.off('destroy', dispose); }
+                };
+            }
+        });
+    }
+
     function selectMedia(record) {
         if (!live(record)) return;
         if (record.editor.state.selection instanceof NodeSelection
@@ -200,15 +253,25 @@ function install() {
 
     function fullscreenSaveActions(record) {
         const form = record.textarea.form;
-        if (!form) return () => {};
         const actions = document.createElement('div');
-        actions.className = 'z-tiptap-save-actions';
+        actions.className = 'z-tiptap-save-actions z-editor-fullscreen-actions';
+        const close = document.createElement('button');
+        close.type = 'button';
+        close.className = 'btn btn-default';
+        close.dataset.fullscreenClose = '';
+        close.textContent = label('close');
+        close.addEventListener('click', () => toggleFullscreen(record));
+        actions.append(close);
+        const controls = document.createElement('div');
+        controls.className = 'z-editor-fullscreen-controls';
+        actions.append(controls);
         const observers = [];
         for (const [id, key] of [['save_stay', 'save'], ['save_view', 'saveAndView']]) {
-            const target = Array.from(form.elements).find(el => el.id === id && el.type === 'submit');
+            const target = Array.from(form?.elements || []).find(el => el.id === id && el.type === 'submit');
             if (!target) continue;
             const button = document.createElement('button');
             button.type = 'button';
+            button.className = id === 'save_stay' ? 'btn btn-primary' : 'btn btn-default';
             button.dataset.saveAction = id;
             button.textContent = label(key);
             button.title = label(key);
@@ -225,9 +288,16 @@ function install() {
             record.editor.on('transaction', update);
             observers.push(() => { observer.disconnect(); record.editor.off('transaction', update); });
             update();
-            actions.append(button);
+            controls.append(button);
         }
-        if (actions.childElementCount) record.toolbar.append(actions);
+        const preview = form?.querySelector('[data-admin-preview="toggle"]');
+        if (preview) {
+            const toggle = preview.cloneNode(true);
+            toggle.removeAttribute('id');
+            toggle.type = 'button';
+            controls.append(toggle);
+        }
+        if (actions.childElementCount) record.shell.prepend(actions);
         return () => {
             observers.forEach(dispose => dispose());
             actions.remove();
@@ -280,6 +350,14 @@ function install() {
                 content: importHTML(textarea.value),
                 editable: !textarea.disabled && !textarea.readOnly,
                 editorProps: {
+                    handleDrop: (_view, event) => dropMedia(record, event),
+                    handleDOMEvents: {
+                        dragover: (_view, event) => {
+                            if (!window.z_fileuploader?.filesIn(event)) return false;
+                            window.z_fileuploader.clearDragState();
+                            event.preventDefault(); event.stopPropagation(); return true;
+                        }
+                    },
                     attributes: {
                         id: `${textarea.id}-editor`,
                         class: 'z-tiptap-body', role: 'textbox', 'aria-multiline': 'true',
