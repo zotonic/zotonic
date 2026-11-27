@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-27 21:21\n"
+"PO-Revision-Date: 2026-11-27 22:40\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -1456,7 +1456,7 @@ msgstr "งานเบื้องหลัง"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:113
 msgid "Bars show disk space in use. Refreshed every 30 minutes."
-msgstr ""
+msgstr "แถบแสดงพื้นที่ดิสก์ที่กำลังถูกใช้งาน อัปเดตทุก 30 นาที"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_basics.tpl:4
 msgid "Basic"
@@ -1862,7 +1862,7 @@ msgstr "ขึ้นอยู่กับ"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:52
 msgid "Detailed memory figures"
-msgstr ""
+msgstr "ข้อมูลรายละเอียดเกี่ยวกับหน่วยความจำ"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:9
 msgid "Dimensions"
@@ -1896,7 +1896,7 @@ msgstr "ค้นพบสื่อ"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:110
 msgid "Disk information unavailable."
-msgstr ""
+msgstr "ไม่มีข้อมูลเกี่ยวกับดิสก์"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:95
 msgid "Disks"
@@ -1930,19 +1930,19 @@ msgstr "ดาวน์โหลดสื่อจากเว็บไซต์
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_media.tpl:23
 msgid "Drag a file anywhere into this panel to replace the current media file."
-msgstr ""
+msgstr "ลากไฟล์มาวางที่ใดก็ได้ในแผงนี้เพื่อแทนที่ไฟล์สื่อปัจจุบัน"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:11
 msgid "Drag a file anywhere into this tab or choose a file below. Then use the Upload file button to upload it."
-msgstr ""
+msgstr "ลากไฟล์มาวางที่ใดก็ได้ในแท็บนี้ หรือเลือกไฟล์จากด้านล่าง แล้วใช้ปุ่ม \"อัปโหลดไฟล์\" เพื่ออัปโหลดไฟล์นั้น"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:19
 msgid "Drag files anywhere into this panel to upload and attach them to this page."
-msgstr ""
+msgstr "ลากไฟล์มาวางที่ใดก็ได้ในแผงนี้เพื่ออัปโหลดและแนบไฟล์ไปยังหน้านี้"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:114
 msgid "Drag files anywhere onto this page to upload them as new media items."
-msgstr ""
+msgstr "ลากไฟล์มาวางที่ใดก็ได้บนหน้านี้เพื่ออัปโหลดเป็นสื่อใหม่"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:11
 msgid "Drag to change position"
@@ -1951,7 +1951,7 @@ msgstr "ลากเพื่อเปลี่ยนตำแหน่ง"
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:118
 #: zotonic_mod_fileuploader/priv/templates/admin.tpl:10
 msgid "Drop files to add them to Media"
-msgstr ""
+msgstr "ลากไฟล์มาวางเพื่อเพิ่มลงใน Media"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:33
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:38
@@ -2086,7 +2086,7 @@ msgstr "หน่วยความจำของ Erlang"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:9
 msgid "Erlang memory in use"
-msgstr ""
+msgstr "หน่วยความจำ Erlang ที่กำลังใช้งานอยู่"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:18
 msgid "Erlang/OTP"
@@ -2345,7 +2345,7 @@ msgstr "ซ่อนหน้าจากการค้นหา (ขึ้น�
 
 #: zotonic_mod_admin/priv/templates/_admin_status_capacity.tpl:6
 msgid "High usage"
-msgstr ""
+msgstr "การใช้งานสูง"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:61
 msgid "Home directory"
@@ -2491,7 +2491,7 @@ msgstr "ข้อความที่แก้ไขล่าสุด"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:104
 msgid "Less than 5% free disk space"
-msgstr ""
+msgstr "พื้นที่ว่างบนดิสก์น้อยกว่า 5%"
 
 #: zotonic_mod_admin/priv/templates/_admin_menu.tpl:64
 msgid "Light"
@@ -2678,7 +2678,7 @@ msgstr "ตัวประมวลผลสื่อ"
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:42
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:43
 msgid "Media title (optional)"
-msgstr ""
+msgstr "ชื่อสื่อ (ไม่บังคับ)"
 
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:151
 msgid "Media updated."
@@ -2690,7 +2690,7 @@ msgstr "หน่วยความจำ"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:36
 msgid "Memory information unavailable."
-msgstr ""
+msgstr "ข้อมูลความจำไม่สามารถเข้าถึงได้"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:32
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:33
@@ -2923,11 +2923,11 @@ msgstr "หน่วยความจำระบบปฏิบัติกา
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:32
 msgid "OS memory in use"
-msgstr ""
+msgstr "หน่วยความจำระบบปฏิบัติการที่กำลังใช้งานอยู่"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:25
 msgid "OS memory unavailable"
-msgstr ""
+msgstr "ไม่มีหน่วยความจำระบบปฏิบัติการ"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:129
 msgid "Ongoing"
@@ -3289,7 +3289,7 @@ msgstr "แทนที่สื่อปัจจุบัน"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_media.tpl:17
 #: zotonic_mod_fileuploader/priv/templates/_fileuploader_dropzone.tpl:5
 msgid "Replace the current media file?"
-msgstr ""
+msgstr "จะแทนที่ไฟล์สื่อปัจจุบันหรือไม่?"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:4
 msgid "Resize Live view"
@@ -3787,7 +3787,7 @@ msgstr "พื้นที่สลับหน่วยความจำ"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:44
 msgid "Swap in use"
-msgstr ""
+msgstr "Swap ที่กำลังใช้งานอยู่"
 
 #: zotonic_mod_admin/src/mod_admin.erl:572
 msgid "System"
@@ -3855,7 +3855,7 @@ msgstr "ที่อยู่ 0.0.0.0 และ :: หมายถึงอิ�
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:26
 msgid "The bar shows memory not available for allocation. Available memory includes reclaimable memory reported by the operating system."
-msgstr ""
+msgstr "แถบนี้แสดงปริมาณหน่วยความจำที่ยังไม่สามารถจัดสรรได้ หน่วยความจำที่มีอยู่รวมถึงหน่วยความจำที่สามารถกู้คืนได้ ซึ่งระบบปฏิบัติการได้รายงานไว้"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:201
 msgid "The billing address is only visible for people who can edit this page."
@@ -4253,7 +4253,7 @@ msgstr "อัปโหลดไฟล์เพื่อดำเนินกา
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:119
 msgid "Upload starts immediately. Each file becomes a new media item."
-msgstr ""
+msgstr "การอัปโหลดจะเริ่มทันที ไฟล์แต่ละไฟล์จะกลายเป็นรายการสื่อใหม่"
 
 #: zotonic_mod_admin/priv/templates/admin_imports.tpl:9
 msgid "Upload to drop folder"
@@ -4272,7 +4272,7 @@ msgstr "อัพโหลดเมื่อ"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_capacity.tpl:9
 msgid "Usage information unavailable."
-msgstr ""
+msgstr "ไม่มีข้อมูลการใช้งาน"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:39
 msgid "Use the autocompleter to search the media in this site."
@@ -4428,7 +4428,7 @@ msgstr "คุณไม่ได้รับอนุญาตให้แก้
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:7
 msgid "You can add a title to make the file easier to find and share."
-msgstr ""
+msgstr "คุณสามารถเพิ่มชื่อไฟล์เพื่อให้ค้นหาและแบ่งปันได้ง่ายขึ้น"
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:239
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:166
@@ -4486,11 +4486,11 @@ msgstr "เพิ่มรายการสื่อ"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:7
 msgid "allocated"
-msgstr ""
+msgstr "จัดสรร"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:22
 msgid "available"
-msgstr ""
+msgstr "มีอยู่"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:14
@@ -4504,7 +4504,7 @@ msgstr "โดย"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:102
 msgid "capacity"
-msgstr ""
+msgstr "ความจุ"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:52
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:53
@@ -4571,7 +4571,7 @@ msgstr "ฟรี"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:33
 msgid "free. Used memory can include caches; high usage alone does not indicate memory pressure."
-msgstr ""
+msgstr "ฟรี. หน่วยความจำที่ใช้แล้วอาจรวมถึงแคช; การใช้หน่วยความจำสูงเพียงอย่างเดียวไม่ได้บ่งชี้ว่าหน่วยความจำกำลังถูกกดดัน"
 
 #: zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:15
 msgid "has been disconnected."
@@ -4630,7 +4630,7 @@ msgstr "เนื้อหาระบบ"
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:30
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:41
 msgid "total"
-msgstr ""
+msgstr "รวม"
 
 #: zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:3
 msgid "undo"
@@ -4647,7 +4647,7 @@ msgstr "ไม่มีชื่อ"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:10
 msgid "unused allocation, available for reuse by Erlang. This is not free host memory."
-msgstr ""
+msgstr "พื้นที่จัดสรรที่ยังไม่ได้ใช้ ซึ่ง Erlang สามารถนำกลับมาใช้ใหม่ได้ นี่ไม่ใช่หน่วยความจำของโฮสต์ที่ว่าง"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:51
 msgid "uploaded on"
@@ -4657,7 +4657,7 @@ msgstr "อัปโหลดเมื่อ"
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:29
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:41
 msgid "used"
-msgstr ""
+msgstr "ใช้แล้ว"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:57
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:136
@@ -7101,7 +7101,7 @@ msgstr "รวมถึงช่วงที่ยังไม่สมบูร
 
 #: zotonic_mod_analytics/src/models/m_analytics.erl:351
 msgid "Invalid resource reference"
-msgstr ""
+msgstr "การอ้างอิงทรัพยากรไม่ถูกต้อง"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:7
 msgid "Language — language code, e.g. en or nl"
@@ -7218,11 +7218,11 @@ msgstr "หน้า — รหัสทรัพยากรสาธารณ�
 
 #: zotonic_mod_analytics/src/models/m_analytics.erl:338
 msgid "Pages without a resource ID"
-msgstr ""
+msgstr "หน้าที่มี ID ทรัพยากร"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
 msgid "Pages without a resource ID are grouped by dispatch rule, such as template-only pages. The label “Pages without a resource ID” includes older counts and requests without a known dispatch rule; these cannot be split further. Unavailable content refers to resources that were deleted or that you cannot view. Invalid resource reference means the recorded page value is not a valid resource ID."
-msgstr ""
+msgstr "หน้าที่มี ID ทรัพยากรไม่ถูกจัดกลุ่มตามกฎการส่ง เช่น หน้าที่มีเพียงเทมเพลตเท่านั้น ป้ายกำกับ “หน้าที่มี ID ทรัพยากรไม่ถูกจัดกลุ่ม” รวมถึงจำนวนและคำขอเก่าที่ไม่มีกฎการส่งที่ทราบได้ ซึ่งไม่สามารถแบ่งแยกได้อีก เนื้อหาที่ไม่สามารถเข้าถึงได้ หมายถึงทรัพยากรที่ถูกลบไปแล้ว หรือที่คุณไม่สามารถดูได้ การอ้างอิงทรัพยากรที่ไม่ถูกต้อง หมายความว่า ค่าหน้าเว็บที่บันทึกไว้ไม่ใช่ ID ทรัพยากรที่ถูกต้อง"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
 msgid "Past 30 days"
@@ -7396,7 +7396,7 @@ msgstr "การเข้าชม — โบตค้นหา, อื่น�
 
 #: zotonic_mod_analytics/src/models/m_analytics.erl:349
 msgid "Unavailable content"
-msgstr ""
+msgstr "เนื้อหาไม่สามารถเข้าถึงได้"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:8
 msgid "View analytics"
@@ -11163,7 +11163,7 @@ msgstr "จากขวาไปซ้าย"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:61
 msgid "Save & view"
-msgstr ""
+msgstr "บันทึกและดู"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:56
 msgid "Split cell"
@@ -12094,15 +12094,15 @@ msgstr "Zotonic สามารถจัดเก็บไฟล์ที่อ�
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:12
 msgid "Cancel remaining uploads"
-msgstr ""
+msgstr "ยกเลิกการอัปโหลดที่เหลือ"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:13
 msgid "Cancelled"
-msgstr ""
+msgstr "ถูกยกเลิก"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:27
 msgid "Choose one file at a time for this upload. No files were uploaded."
-msgstr ""
+msgstr "เลือกไฟล์หนึ่งไฟล์ต่อครั้งสำหรับการอัปโหลดนี้ ยังไม่มีไฟล์ใดถูกอัปโหลด"
 
 #: zotonic_mod_fileuploader/src/mod_fileuploader.erl:248
 #: zotonic_mod_fileuploader/src/mod_fileuploader.erl:284
@@ -12111,43 +12111,43 @@ msgstr "ไม่สามารถอัปโหลด"
 
 #: zotonic_mod_fileuploader/priv/templates/_fileuploader_dropzone.tpl:8
 msgid "Drop files here or choose files."
-msgstr ""
+msgstr "วางไฟล์ที่นี่ หรือเลือกไฟล์"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:8
 msgid "Drop files inside the text where you want to insert them."
-msgstr ""
+msgstr "ลากและวางไฟล์ลงในส่วนข้อความที่คุณต้องการแทรก"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:28
 msgid "Folders cannot be uploaded. Select the files inside the folder instead."
-msgstr ""
+msgstr "ไม่สามารถอัปโหลดโฟลเดอร์ได้ โปรดเลือกไฟล์ภายในโฟลเดอร์แทน"
 
 #: zotonic_mod_fileuploader/src/mod_fileuploader.erl:190
 msgid "Please choose one file only."
-msgstr ""
+msgstr "โปรดเลือกไฟล์เพียงหนึ่งไฟล์เท่านั้น"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:19
 msgid "Processing…"
-msgstr ""
+msgstr "กำลังประมวลผล…"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:35
 msgid "Ready to upload. Choose Upload file to save your selected file."
-msgstr ""
+msgstr "พร้อมที่จะอัปโหลดแล้ว เลือก \"อัปโหลดไฟล์\" เพื่อบันทึกไฟล์ที่คุณเลือก"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:24
 msgid "Refresh media list"
-msgstr ""
+msgstr "อัปเดตรายชื่อสื่อ"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:14
 msgid "Remaining uploads were cancelled. Files already saved have been kept."
-msgstr ""
+msgstr "การอัปโหลดที่เหลือถูกยกเลิกแล้ว ส่วนไฟล์ที่บันทึกไว้แล้วได้ถูกเก็บไว้"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:23
 msgid "Retry failed files"
-msgstr ""
+msgstr "ลองอีกครั้งกับไฟล์ที่ล้มเหลว"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:9
 msgid "Save this page before dropping media into the editor."
-msgstr ""
+msgstr "โปรดบันทึกหน้านี้ก่อนที่จะลากสื่อเข้าสู่ตัวแก้ไข"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:20
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:1
@@ -12156,63 +12156,63 @@ msgstr "บันทึกแล้ว"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:22
 msgid "Saved in Media, but could not attach. Use Add media item to connect it."
-msgstr ""
+msgstr "ถูกบันทึกไว้ในส่วนสื่อ แต่ไม่สามารถแนบได้ ใช้ตัวเลือก “เพิ่มสื่อ” เพื่อแนบมัน"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:5
 msgid "Saved in Media, but the insertion position is no longer available. Use Insert media to add it."
-msgstr ""
+msgstr "ถูกบันทึกไว้ในส่วน Media แต่ตำแหน่งการแทรกไม่ปรากฏอีกต่อไป ให้ใช้ตัวเลือก Insert media เพื่อเพิ่มมันเข้าไป"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:32
 msgid "Some files could not be processed. See the error messages."
-msgstr ""
+msgstr "ไม่สามารถประมวลผลไฟล์บางไฟล์ได้ โปรดดูข้อความข้อผิดพลาด"
 
 #: zotonic_mod_fileuploader/src/mod_fileuploader.erl:297
 msgid "The file upload is incomplete."
-msgstr ""
+msgstr "การอัปโหลดไฟล์ยังไม่เสร็จสิ้น"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:16
 msgid "This file exceeds the maximum upload size for your account. Choose a smaller file."
-msgstr ""
+msgstr "ไฟล์นี้มีขนาดเกินขีดจำกัดการอัปโหลดสูงสุดของบัญชีของคุณ โปรดเลือกไฟล์ที่มีขนาดเล็กกว่า"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:17
 msgid "This file type or size is not allowed for your account."
-msgstr ""
+msgstr "ประเภทหรือขนาดไฟล์นี้ไม่ได้รับอนุญาตสำหรับบัญชีของคุณ"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:7
 msgid "Upload complete. Media has been inserted into your text. Save the page to keep your changes."
-msgstr ""
+msgstr "การอัปโหลดเสร็จสิ้นแล้ว สื่อได้ถูกแทรกเข้าไปในข้อความของคุณแล้ว บันทึกหน้าเพื่อเก็บการเปลี่ยนแปลงของคุณ"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:33
 msgid "Upload complete. Your files have been saved."
-msgstr ""
+msgstr "การอัปโหลดเสร็จสิ้นแล้ว ไฟล์ของคุณได้ถูกบันทึกแล้ว"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:21
 msgid "Upload failed"
-msgstr ""
+msgstr "การอัปโหลดไม่สำเร็จ"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:31
 msgid "Upload failed. Please try again."
-msgstr ""
+msgstr "การอัปโหลดไม่สำเร็จ โปรดลองอีกครั้ง"
 
 #: zotonic_mod_fileuploader/priv/templates/admin.tpl:11
 msgid "Upload starts immediately. Each file becomes a new, published media item."
-msgstr ""
+msgstr "การอัปโหลดจะเริ่มทันที ไฟล์แต่ละไฟล์จะกลายเป็นสื่อใหม่ที่ได้รับการเผยแพร่"
 
 #: zotonic_mod_fileuploader/src/mod_fileuploader.erl:277
 msgid "Uploaded, but could not connect"
-msgstr ""
+msgstr "ได้อัปโหลดแล้ว แต่ไม่สามารถเชื่อมต่อได้"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:25
 msgid "Uploading"
-msgstr ""
+msgstr "กำลังอัปโหลด"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:34
 msgid "Uploading and processing your files… Please keep this page open."
-msgstr ""
+msgstr "การอัปโหลดและประมวลผลไฟล์ของคุณ… โปรดไว้หน้านี้เปิดไว้"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:6
 msgid "Uploading media to insert into your text… You can continue editing."
-msgstr ""
+msgstr "การอัปโหลดสื่อเพื่อแทรกเข้าไปในข้อความของคุณ… คุณสามารถดำเนินการแก้ไขต่อได้"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:18
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:1
@@ -12223,23 +12223,23 @@ msgstr "ที่รอคอย"
 
 #: zotonic_mod_fileuploader/priv/templates/admin.tpl:12
 msgid "You can find and edit your uploads in Media."
-msgstr ""
+msgstr "คุณสามารถค้นหาและแก้ไขไฟล์ที่คุณอัปโหลดได้ในส่วน Media"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:30
 msgid "{filename} has a file type that is not supported here. Choose a different file."
-msgstr ""
+msgstr "{filename} ไฟล์นี้มีประเภทที่ระบบนี้ไม่รองรับ โปรดเลือกไฟล์อื่น"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:29
 msgid "{filename} is empty. Choose a file with content. Folders cannot be uploaded."
-msgstr ""
+msgstr "{filename} ว่างเปล่า โปรดเลือกไฟล์ที่มีเนื้อหา ไม่สามารถอัปโหลดโฟลเดอร์ได้"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:15
 msgid "{filename} is too large. The maximum file size is {size}."
-msgstr ""
+msgstr "{filename} ใหญ่เกินไป ขนาดไฟล์สูงสุดคือ {size}."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:26
 msgid "{saved} of {total} files saved."
-msgstr ""
+msgstr "{saved} ได้บันทึกไฟล์ {total} แล้ว"
 
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:93
 msgid "Brightness"
@@ -16326,7 +16326,7 @@ msgstr "คัดลอก URL ไปยังคลิปบอร์ด"
 
 #: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:2
 msgid "Embedded videos"
-msgstr ""
+msgstr "วิดีโอที่ฝังไว้"
 
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media.tpl:4
 msgid "Embedding of media item failed with HTTP code"
