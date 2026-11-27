@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-27 21:21\n"
+"PO-Revision-Date: 2026-11-27 22:40\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
 "MIME-Version: 1.0\n"
@@ -1456,7 +1456,7 @@ msgstr "Tác vụ nền"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:113
 msgid "Bars show disk space in use. Refreshed every 30 minutes."
-msgstr ""
+msgstr "Các thanh biểu thị dung lượng đĩa đang được sử dụng. Cập nhật mỗi 30 phút."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_basics.tpl:4
 msgid "Basic"
@@ -1862,7 +1862,7 @@ msgstr "Phụ thuộc"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:52
 msgid "Detailed memory figures"
-msgstr ""
+msgstr "Các số liệu chi tiết về bộ nhớ"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:9
 msgid "Dimensions"
@@ -1896,7 +1896,7 @@ msgstr "Tìm nội dung đa phương tiện"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:110
 msgid "Disk information unavailable."
-msgstr ""
+msgstr "Không có thông tin về đĩa."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:95
 msgid "Disks"
@@ -1930,19 +1930,19 @@ msgstr "Tải nội dung đa phương tiện từ website gốc."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_media.tpl:23
 msgid "Drag a file anywhere into this panel to replace the current media file."
-msgstr ""
+msgstr "Kéo một tệp vào bất kỳ vị trí nào trong bảng điều khiển này để thay thế tệp phương tiện hiện tại."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:11
 msgid "Drag a file anywhere into this tab or choose a file below. Then use the Upload file button to upload it."
-msgstr ""
+msgstr "Kéo một tệp vào bất kỳ vị trí nào trong tab này hoặc chọn một tệp ở bên dưới. Sau đó, nhấp vào nút “Tải lên tệp” để tải tệp lên."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:19
 msgid "Drag files anywhere into this panel to upload and attach them to this page."
-msgstr ""
+msgstr "Kéo các tệp vào bất kỳ vị trí nào trong bảng điều khiển này để tải lên và đính kèm chúng vào trang này."
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:114
 msgid "Drag files anywhere onto this page to upload them as new media items."
-msgstr ""
+msgstr "Kéo các tệp từ bất kỳ đâu vào trang này để tải chúng lên dưới dạng các mục phương tiện mới."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:11
 msgid "Drag to change position"
@@ -1951,7 +1951,7 @@ msgstr "Kéo để đổi vị trí"
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:118
 #: zotonic_mod_fileuploader/priv/templates/admin.tpl:10
 msgid "Drop files to add them to Media"
-msgstr ""
+msgstr "Kéo và thả các tệp để thêm chúng vào Thư viện phương tiện"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:33
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:38
@@ -2086,7 +2086,7 @@ msgstr "Bộ nhớ Erlang"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:9
 msgid "Erlang memory in use"
-msgstr ""
+msgstr "Bộ nhớ Erlang đang được sử dụng"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:18
 msgid "Erlang/OTP"
@@ -2345,7 +2345,7 @@ msgstr "Ẩn trang khỏi kết quả tìm kiếm (tùy truy vấn)"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_capacity.tpl:6
 msgid "High usage"
-msgstr ""
+msgstr "Mức sử dụng cao"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:61
 msgid "Home directory"
@@ -2491,7 +2491,7 @@ msgstr "Văn bản được sửa gần đây nhất"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:104
 msgid "Less than 5% free disk space"
-msgstr ""
+msgstr "Dung lượng đĩa trống dưới 5%"
 
 #: zotonic_mod_admin/priv/templates/_admin_menu.tpl:64
 msgid "Light"
@@ -2678,7 +2678,7 @@ msgstr "Bộ thực thi đa phương tiện"
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:42
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:43
 msgid "Media title (optional)"
-msgstr ""
+msgstr "Tên phương tiện truyền thông (không bắt buộc)"
 
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:151
 msgid "Media updated."
@@ -2690,7 +2690,7 @@ msgstr "Bộ nhớ"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:36
 msgid "Memory information unavailable."
-msgstr ""
+msgstr "Không có thông tin về bộ nhớ."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:32
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:33
@@ -2923,11 +2923,11 @@ msgstr "Bộ nhớ hệ điều hành"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:32
 msgid "OS memory in use"
-msgstr ""
+msgstr "Bộ nhớ hệ điều hành đang được sử dụng"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:25
 msgid "OS memory unavailable"
-msgstr ""
+msgstr "Không có bộ nhớ hệ điều hành khả dụng"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:129
 msgid "Ongoing"
@@ -3289,7 +3289,7 @@ msgstr "Thay thế nội dung đa phương tiện hiện tại"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_media.tpl:17
 #: zotonic_mod_fileuploader/priv/templates/_fileuploader_dropzone.tpl:5
 msgid "Replace the current media file?"
-msgstr ""
+msgstr "Có muốn thay thế tệp phương tiện hiện tại không?"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:4
 msgid "Resize Live view"
@@ -3787,7 +3787,7 @@ msgstr "Bộ nhớ hoán đổi"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:44
 msgid "Swap in use"
-msgstr ""
+msgstr "Hoán đổi đang được sử dụng"
 
 #: zotonic_mod_admin/src/mod_admin.erl:572
 msgid "System"
@@ -3855,7 +3855,7 @@ msgstr "Các địa chỉ 0.0.0.0 và :: lần lượt có nghĩa là tất cả
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:26
 msgid "The bar shows memory not available for allocation. Available memory includes reclaimable memory reported by the operating system."
-msgstr ""
+msgstr "Thanh này cho thấy bộ nhớ không khả dụng để phân bổ. Bộ nhớ khả dụng bao gồm cả bộ nhớ có thể thu hồi được mà hệ điều hành báo cáo."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:201
 msgid "The billing address is only visible for people who can edit this page."
@@ -4253,7 +4253,7 @@ msgstr "Tải lên các tệp để xử lý nền hoặc sử dụng công cụ
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:119
 msgid "Upload starts immediately. Each file becomes a new media item."
-msgstr ""
+msgstr "Quá trình tải lên sẽ bắt đầu ngay lập tức. Mỗi tệp sẽ trở thành một mục phương tiện mới."
 
 #: zotonic_mod_admin/priv/templates/admin_imports.tpl:9
 msgid "Upload to drop folder"
@@ -4272,7 +4272,7 @@ msgstr "Ngày tải lên"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_capacity.tpl:9
 msgid "Usage information unavailable."
-msgstr ""
+msgstr "Không có thông tin về cách sử dụng."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:39
 msgid "Use the autocompleter to search the media in this site."
@@ -4428,7 +4428,7 @@ msgstr "Bạn không được phép chỉnh sửa trang này."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:7
 msgid "You can add a title to make the file easier to find and share."
-msgstr ""
+msgstr "Bạn có thể thêm tiêu đề để dễ dàng tìm kiếm và chia sẻ tệp hơn."
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:239
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:166
@@ -4486,11 +4486,11 @@ msgstr "thêm mục đa phương tiện"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:7
 msgid "allocated"
-msgstr ""
+msgstr "được phân bổ"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:22
 msgid "available"
-msgstr ""
+msgstr "có sẵn"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:14
@@ -4504,7 +4504,7 @@ msgstr "bởi"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:102
 msgid "capacity"
-msgstr ""
+msgstr "công suất"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:52
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:53
@@ -4571,7 +4571,7 @@ msgstr "miễn phí"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:33
 msgid "free. Used memory can include caches; high usage alone does not indicate memory pressure."
-msgstr ""
+msgstr "miễn phí. Bộ nhớ đã sử dụng có thể bao gồm bộ nhớ đệm; việc sử dụng nhiều bộ nhớ không tự nó cho thấy tình trạng quá tải bộ nhớ."
 
 #: zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:15
 msgid "has been disconnected."
@@ -4630,7 +4630,7 @@ msgstr "nội dung hệ thống"
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:30
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:41
 msgid "total"
-msgstr ""
+msgstr "tổng cộng"
 
 #: zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:3
 msgid "undo"
@@ -4647,7 +4647,7 @@ msgstr "chưa có tiêu đề"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:10
 msgid "unused allocation, available for reuse by Erlang. This is not free host memory."
-msgstr ""
+msgstr "khu vực bộ nhớ chưa được sử dụng, có thể được Erlang tái sử dụng. Đây không phải là bộ nhớ máy chủ trống."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:51
 msgid "uploaded on"
@@ -4657,7 +4657,7 @@ msgstr "được tải lên vào"
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:29
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:41
 msgid "used"
-msgstr ""
+msgstr "đã qua sử dụng"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:57
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:136
@@ -7099,7 +7099,7 @@ msgstr "Bao gồm các quãng chưa hoàn chỉnh hoặc chưa được ghi lạ
 
 #: zotonic_mod_analytics/src/models/m_analytics.erl:351
 msgid "Invalid resource reference"
-msgstr ""
+msgstr "Tham chiếu tài nguyên không hợp lệ"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:7
 msgid "Language — language code, e.g. en or nl"
@@ -7216,11 +7216,11 @@ msgstr "Trang — Mã định danh tài nguyên công khai"
 
 #: zotonic_mod_analytics/src/models/m_analytics.erl:338
 msgid "Pages without a resource ID"
-msgstr ""
+msgstr "Các trang không có ID tài nguyên"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
 msgid "Pages without a resource ID are grouped by dispatch rule, such as template-only pages. The label “Pages without a resource ID” includes older counts and requests without a known dispatch rule; these cannot be split further. Unavailable content refers to resources that were deleted or that you cannot view. Invalid resource reference means the recorded page value is not a valid resource ID."
-msgstr ""
+msgstr "Các trang không có ID tài nguyên được nhóm theo quy tắc phân phối, chẳng hạn như các trang chỉ chứa mẫu. Nhãn “Các trang không có ID tài nguyên” bao gồm số liệu thống kê cũ và các yêu cầu không có quy tắc phân phối xác định; những dữ liệu này không thể phân tách thêm. Nội dung không khả dụng đề cập đến các tài nguyên đã bị xóa hoặc những tài nguyên mà bạn không thể xem. Tham chiếu tài nguyên không hợp lệ có nghĩa là giá trị trang được ghi lại không phải là ID tài nguyên hợp lệ."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
 msgid "Past 30 days"
@@ -7394,7 +7394,7 @@ msgstr "Lưu lượng truy cập — trình thu thập dữ liệu, loại khác
 
 #: zotonic_mod_analytics/src/models/m_analytics.erl:349
 msgid "Unavailable content"
-msgstr ""
+msgstr "Nội dung không khả dụng"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:8
 msgid "View analytics"
@@ -11157,7 +11157,7 @@ msgstr "Từ phải sang trái"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:61
 msgid "Save & view"
-msgstr ""
+msgstr "Lưu và xem"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:56
 msgid "Split cell"
@@ -12088,15 +12088,15 @@ msgstr "Zotonic có thể lưu các tệp đã tải lên và tệp đã đổi 
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:12
 msgid "Cancel remaining uploads"
-msgstr ""
+msgstr "Hủy các tác vụ tải lên còn lại"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:13
 msgid "Cancelled"
-msgstr ""
+msgstr "Đã hủy"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:27
 msgid "Choose one file at a time for this upload. No files were uploaded."
-msgstr ""
+msgstr "Vui lòng chọn từng tệp một để tải lên. Chưa có tệp nào được tải lên."
 
 #: zotonic_mod_fileuploader/src/mod_fileuploader.erl:248
 #: zotonic_mod_fileuploader/src/mod_fileuploader.erl:284
@@ -12105,43 +12105,43 @@ msgstr "Không thể tải lên"
 
 #: zotonic_mod_fileuploader/priv/templates/_fileuploader_dropzone.tpl:8
 msgid "Drop files here or choose files."
-msgstr ""
+msgstr "Kéo thả tệp vào đây hoặc chọn tệp."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:8
 msgid "Drop files inside the text where you want to insert them."
-msgstr ""
+msgstr "Kéo và thả các tệp vào vị trí trong văn bản mà bạn muốn chèn chúng."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:28
 msgid "Folders cannot be uploaded. Select the files inside the folder instead."
-msgstr ""
+msgstr "Không thể tải lên các thư mục. Thay vào đó, hãy chọn các tệp bên trong thư mục."
 
 #: zotonic_mod_fileuploader/src/mod_fileuploader.erl:190
 msgid "Please choose one file only."
-msgstr ""
+msgstr "Vui lòng chỉ chọn một tệp duy nhất."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:19
 msgid "Processing…"
-msgstr ""
+msgstr "Đang xử lý…"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:35
 msgid "Ready to upload. Choose Upload file to save your selected file."
-msgstr ""
+msgstr "Đã sẵn sàng để tải lên. Chọn “Tải lên tệp” để lưu tệp bạn đã chọn."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:24
 msgid "Refresh media list"
-msgstr ""
+msgstr "Làm mới danh sách phương tiện"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:14
 msgid "Remaining uploads were cancelled. Files already saved have been kept."
-msgstr ""
+msgstr "Các lần tải lên còn lại đã bị hủy. Các tệp đã được lưu trước đó vẫn được giữ nguyên."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:23
 msgid "Retry failed files"
-msgstr ""
+msgstr "Thử lại các tệp không thành công"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:9
 msgid "Save this page before dropping media into the editor."
-msgstr ""
+msgstr "Hãy lưu trang này trước khi chèn phương tiện vào trình soạn thảo."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:20
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:1
@@ -12150,63 +12150,63 @@ msgstr "Đã lưu"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:22
 msgid "Saved in Media, but could not attach. Use Add media item to connect it."
-msgstr ""
+msgstr "Đã lưu trong mục “Tệp đa phương tiện”, nhưng không thể đính kèm. Hãy sử dụng tùy chọn “Thêm tệp đa phương tiện” để đính kèm tệp này."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:5
 msgid "Saved in Media, but the insertion position is no longer available. Use Insert media to add it."
-msgstr ""
+msgstr "Đã lưu trong mục “Phương tiện”, nhưng vị trí chèn không còn khả dụng. Hãy sử dụng tính năng “Chèn phương tiện” để thêm nội dung này."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:32
 msgid "Some files could not be processed. See the error messages."
-msgstr ""
+msgstr "Một số tệp không thể được xử lý. Vui lòng xem các thông báo lỗi."
 
 #: zotonic_mod_fileuploader/src/mod_fileuploader.erl:297
 msgid "The file upload is incomplete."
-msgstr ""
+msgstr "Việc tải lên tệp chưa hoàn tất."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:16
 msgid "This file exceeds the maximum upload size for your account. Choose a smaller file."
-msgstr ""
+msgstr "Tệp này vượt quá giới hạn kích thước tải lên tối đa cho tài khoản của bạn. Vui lòng chọn một tệp có kích thước nhỏ hơn."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:17
 msgid "This file type or size is not allowed for your account."
-msgstr ""
+msgstr "Loại tệp hoặc kích thước này không được phép đối với tài khoản của bạn."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:7
 msgid "Upload complete. Media has been inserted into your text. Save the page to keep your changes."
-msgstr ""
+msgstr "Quá trình tải lên đã hoàn tất. Tệp đa phương tiện đã được chèn vào văn bản của bạn. Hãy lưu trang để giữ lại các thay đổi của bạn."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:33
 msgid "Upload complete. Your files have been saved."
-msgstr ""
+msgstr "Quá trình tải lên đã hoàn tất. Các tệp của bạn đã được lưu."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:21
 msgid "Upload failed"
-msgstr ""
+msgstr "Không tải lên được"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:31
 msgid "Upload failed. Please try again."
-msgstr ""
+msgstr "Không tải lên được. Vui lòng thử lại."
 
 #: zotonic_mod_fileuploader/priv/templates/admin.tpl:11
 msgid "Upload starts immediately. Each file becomes a new, published media item."
-msgstr ""
+msgstr "Quá trình tải lên sẽ bắt đầu ngay lập tức. Mỗi tệp sẽ trở thành một mục phương tiện mới đã được xuất bản."
 
 #: zotonic_mod_fileuploader/src/mod_fileuploader.erl:277
 msgid "Uploaded, but could not connect"
-msgstr ""
+msgstr "Đã tải lên, nhưng không thể kết nối"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:25
 msgid "Uploading"
-msgstr ""
+msgstr "Đang tải lên"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:34
 msgid "Uploading and processing your files… Please keep this page open."
-msgstr ""
+msgstr "Tải lên và xử lý tệp của bạn… Vui lòng giữ trang này mở."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:6
 msgid "Uploading media to insert into your text… You can continue editing."
-msgstr ""
+msgstr "Tải lên tệp đa phương tiện để chèn vào văn bản của bạn… Bạn có thể tiếp tục chỉnh sửa."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:18
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:1
@@ -12217,23 +12217,23 @@ msgstr "Đang chờ"
 
 #: zotonic_mod_fileuploader/priv/templates/admin.tpl:12
 msgid "You can find and edit your uploads in Media."
-msgstr ""
+msgstr "Bạn có thể tìm và chỉnh sửa các tệp đã tải lên của mình trong phần “Tệp đa phương tiện”."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:30
 msgid "{filename} has a file type that is not supported here. Choose a different file."
-msgstr ""
+msgstr "{filename} Tệp này có định dạng không được hỗ trợ tại đây. Vui lòng chọn một tệp khác."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:29
 msgid "{filename} is empty. Choose a file with content. Folders cannot be uploaded."
-msgstr ""
+msgstr "{filename} Trống. Vui lòng chọn một tệp có nội dung. Không thể tải lên thư mục."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:15
 msgid "{filename} is too large. The maximum file size is {size}."
-msgstr ""
+msgstr "{filename} quá lớn. Kích thước tệp tối đa là {size}."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:26
 msgid "{saved} of {total} files saved."
-msgstr ""
+msgstr "{saved} trong số các tệp từ trang {total} đã được lưu."
 
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:93
 msgid "Brightness"
@@ -16311,7 +16311,7 @@ msgstr "Sao chép URL vào bảng nhớ tạm."
 
 #: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:2
 msgid "Embedded videos"
-msgstr ""
+msgstr "Video được nhúng"
 
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media.tpl:4
 msgid "Embedding of media item failed with HTTP code"
