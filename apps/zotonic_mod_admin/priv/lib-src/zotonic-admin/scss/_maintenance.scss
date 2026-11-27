@@ -1,0 +1,42 @@
+.admin-maintenance-action {
+    display: grid;
+    margin: 24px 0 0;
+    gap: 6px;
+    align-items: start;
+
+    &:first-child {
+        margin-top: 0;
+    }
+}
+
+// Widget heading margins exclude these titles; the grid owns their spacing.
+.admin-maintenance-action > .admin-maintenance-title {
+    margin: 0;
+
+    > small {
+        margin-inline-start: .5em;
+        color: var(--z-admin-text-muted);
+        font-size: 75%;
+        font-weight: normal;
+    }
+}
+
+.admin-maintenance-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    .btn {
+        max-width: 100%;
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+}
+
+.admin-maintenance-explanation {
+    min-width: 0;
+
+    > .help-block {
+        margin: 0;
+    }
+}

@@ -23,6 +23,9 @@
     {% if panel.report.guard_comparison %}
         <p class="text-muted">{_ Guard lines count page attempts from other and unknown traffic. Throttled requests are not page views; do not add these lines to the total. _}</p>
     {% endif %}
+    {% if c.dimension == "page" %}
+        <p class="help-block">{_ Pages without a resource ID are grouped by dispatch rule, such as template-only pages. The label “Pages without a resource ID” includes older counts and requests without a known dispatch rule; these cannot be split further. Unavailable content refers to resources that were deleted or that you cannot view. Invalid resource reference means the recorded page value is not a valid resource ID. _}</p>
+    {% endif %}
     {% if panel.report.popular %}
         <details class="analytics-details">
         <summary>{_ Most popular content in this period _}</summary>

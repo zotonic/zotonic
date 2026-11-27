@@ -9,6 +9,11 @@
 .btn {
 	position: relative;
 }
+
+.btn-open-directory > .glyphicon {
+    margin-inline-end: .3em;
+}
+
 .btn > .z-icon {
 	$_size: 18px;
     width: $_size;

@@ -80,14 +80,22 @@ mark_page(Context) ->
         case page_allowed(Key,Context) andalso IsHtml andalso public(Key,Context) of
             true ->
                 D0 = (dimensions(Context))#{<<"has_page_id">>=>has_page_id(Key)},
-                D = case Key of
-                    undefined -> D0;
-                    _ -> D0#{<<"page">>=>z_convert:to_binary(Key)}
-                end,
+                D = page_dimension(Key,D0,Context),
                 z_context:set_req_metrics(#{analytics=>D,
                     analytics_request=>(maps:with([<<"language">>,<<"country">>,<<"traffic">>,<<"has_page_id">>,<<"crawl_behavior">>,<<"guard_action">>,<<"guard_reason">>],D))#{<<"type">>=><<"page">>}},Context);
             false -> ok
         end.
+
+%% Use the matched rule, never the URL or query arguments. The prefix keeps
+%% resource-less routes distinct from numeric resource IDs in existing reports.
+page_dimension(undefined,Dimensions,Context) ->
+    case z_context:get(zotonic_dispatch,Context) of
+        Name when is_atom(Name), Name =/= undefined ->
+            Dimensions#{<<"page">> => <<"dispatch:",(atom_to_binary(Name,utf8))/binary>>};
+        _ -> Dimensions
+    end;
+page_dimension(Id,Dimensions,_Context) ->
+    Dimensions#{<<"page">> => integer_to_binary(Id)}.
 
 %% Use the completed response status, not a provisional controller response.
 %% No API topic/path or request data crosses this boundary.

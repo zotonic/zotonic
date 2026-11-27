@@ -9,14 +9,11 @@
 </div>
 
 <div class="well">
-    <div class="row">
-        <div class="col-md-8">
-            <p class="help-block">{_ Reload the site configuration files. Some changes require a restart. _}</p>
-        </div>
-        <div class="col-md-4 z-button-row">
+    {% compose "_admin_maintenance_action.tpl" title="" description=_"Reload the site configuration files. Some changes require a restart." %}
+        {% block action %}
             {% button class="btn btn-default" text=_"Reload site configuration" action={admin_tasks task='reload_config'} %}
-        </div>
-    </div>
+        {% endblock %}
+    {% endcompose %}
 </div>
 
 <div class="row form-group admin-section-heading">

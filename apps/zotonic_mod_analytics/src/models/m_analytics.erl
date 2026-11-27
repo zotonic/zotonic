@@ -334,14 +334,21 @@ popular_resource_id(_,_) ->
 
 label(<<"$total">>,_,_) -> <<"Total">>;
 label(<<"$other">>,_,_) -> <<"Other (overflow)">>;
+label(<<"v:unknown">>,#{dimension:= <<"page">>},Context) ->
+    ?__("Pages without a resource ID",Context);
+label(<<"v:dispatch:",Name/binary>>,#{dimension:= <<"page">>},Context) ->
+    <<(?__("Dispatch rule",Context))/binary,": ",Name/binary>>;
 label(<<"v:",Id/binary>>,#{dimension:= <<"page">>},Context) ->
     case to_id(Id) of
         N when is_integer(N), N>0 ->
             case m_rsc:is_visible(N,Context) of
-                true -> z_trans:lookup_fallback(m_rsc:p(N,title,Context),Context);
-                false -> <<"Unavailable content">>
+                true ->
+                    %% Labels are plain text; templates and charts escape their output.
+                    Title = z_trans:lookup_fallback(m_rsc:p(N,title,Context),Context),
+                    z_html:unescape(Title);
+                false -> ?__("Unavailable content",Context)
             end;
-        _ -> <<"Unknown content">>
+        _ -> ?__("Invalid resource reference",Context)
     end;
 label(<<"v:",V/binary>>,_,_) -> V;
 label(_,_,_) -> <<"Unknown">>.
