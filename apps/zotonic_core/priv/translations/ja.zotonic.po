@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-24 17:04\n"
+"PO-Revision-Date: 2026-11-27 21:21\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "MIME-Version: 1.0\n"
@@ -267,7 +267,7 @@ msgstr "全て"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:8
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:39
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:61
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:68
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:58
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:84
 msgid "All Categories"
@@ -325,7 +325,7 @@ msgstr "すべてのACLルールを現在公開されているバージョンに
 #: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:9
 #: zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:7
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:76
-#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:73
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:79
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:259
 #: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:50
@@ -463,6 +463,7 @@ msgstr "設定を変更しました。"
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:43
 #: zotonic_mod_development/priv/templates/_development_template_matches.tpl:27
 #: zotonic_mod_editor_tinymce/priv/templates/_admin_configure_module.tpl:30
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:62
 #: zotonic_mod_email_status/priv/templates/_dialog_email_status.tpl:4
 #: zotonic_mod_l10n/priv/templates/_admin_configure_module.tpl:8
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_view.tpl:33
@@ -519,7 +520,7 @@ msgstr "リソースの作成者を所有者とみなしてください。"
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4
 #: zotonic_mod_admin/src/mod_admin.erl:516
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:70
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:34
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 msgid "Content"
 msgstr "コンテンツ"
@@ -565,10 +566,10 @@ msgstr "コラボレーショングループに移動できませんでした。
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:18
 #: zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:21
 #: zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:25
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:118
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:135
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:53
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:8
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:81
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:78
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:30
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:53
 #: zotonic_mod_admin_identity/src/mod_admin_identity.erl:330
@@ -733,7 +734,7 @@ msgstr "同じユーザーグループのメンバー"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:8
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:9
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:42
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:35
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:32
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:28
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:84
@@ -1096,6 +1097,11 @@ msgstr "別のブラウザを使用してください（例えば、現在Firefo
 msgid "view (acl action)"
 msgstr "閲覧（ACLアクション）"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:102
+msgctxt "disk space"
+msgid "free"
+msgstr "無料"
+
 #: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:4
 msgid "<strong>{n}</strong> IP address has more than 250 open sockets."
 msgid_plural "<strong>{n}</strong> IP addresses have more than 250 open sockets."
@@ -1158,7 +1164,7 @@ msgid "About categories"
 msgstr "カテゴリについて"
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:24
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:200
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:217
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:140
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:56
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:97
@@ -1184,7 +1190,7 @@ msgstr "アクセス制御"
 msgid "Active"
 msgstr "アクティブ"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:30
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:37
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:27
 msgid "Active filters"
 msgstr "アクティブフィルター"
@@ -1194,12 +1200,12 @@ msgid "Add a connection"
 msgstr "接続を追加する"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:53
-#: zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:24
+#: zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:34
 msgid "Add a connection:"
 msgstr "接続を追加する:"
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:91
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:137
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:138
 msgid "Add a new media file"
 msgstr "新しいメディアファイルを追加する"
 
@@ -1270,7 +1276,7 @@ msgstr "管理者"
 msgid "Advanced"
 msgstr "詳細設定"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:58
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:59
 msgid "Advanced repair"
 msgstr "高度な修復"
 
@@ -1278,7 +1284,7 @@ msgstr "高度な修復"
 msgid "After the duplication you can edit the new page. The new page will be unpublished."
 msgstr "複製後、新しいページを編集できます。新しいページは非公開になります。"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:44
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:51
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:41
 msgid "All Content"
 msgstr "すべてのコンテンツ"
@@ -1288,14 +1294,14 @@ msgid "All day"
 msgstr "終日"
 
 #: zotonic_mod_admin/priv/templates/_admin_dashboard_buttons.tpl:14
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:102
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:109
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:112
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:83
 msgid "All media"
 msgstr "すべてのメディア"
 
 #: zotonic_mod_admin/priv/templates/_admin_dashboard_buttons.tpl:13
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:101
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:108
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:111
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:82
 msgid "All pages"
@@ -1311,10 +1317,6 @@ msgstr "すべてのサイトのキャッシュを消去しました。"
 msgid "All sites on this node"
 msgstr "このノード上のすべてのサイト"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:7
-msgid "Allocated"
-msgstr "割り当て済み"
-
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:173
 #: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:13
 msgid "Also subscribe to connected resources."
@@ -1329,11 +1331,11 @@ msgstr "予備の電話番号"
 msgid "Always import all resources, including manually deleted resources."
 msgstr "手動で削除したリソースも含め、すべてのリソースを必ずインポートしてください。"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:17
+#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:13
 msgid "Amount"
 msgstr "件数"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:90
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:97
 msgid "And media can also be viewed on their own page."
 msgstr "また、メディアはそれぞれのページで閲覧することもできます。"
 
@@ -1427,7 +1429,7 @@ msgid "Automatically fetch updates from the original website."
 msgstr "元のウェブサイトから自動的に更新情報を取得します。"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:62
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:38
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:63
 msgid "Available"
 msgstr "利用可能"
 
@@ -1452,6 +1454,10 @@ msgstr "戻る"
 msgid "Background work"
 msgstr "バックグラウンド処理"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:113
+msgid "Bars show disk space in use. Refreshed every 30 minutes."
+msgstr "バーは使用中のディスク容量を示しています。30分ごとに更新されます。"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_basics.tpl:4
 msgid "Basic"
 msgstr "基本"
@@ -1472,11 +1478,11 @@ msgstr "ブロック名"
 msgid "Block quote"
 msgstr "引用ブロック"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:36
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:61
 msgid "Buffered"
 msgstr "バッファー"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:37
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:62
 msgid "Cached"
 msgstr "キャッシュ済み"
 
@@ -1638,7 +1644,7 @@ msgstr "接続"
 msgid "Content origin"
 msgstr "コンテンツの出所"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:48
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:49
 msgid "Content repair"
 msgstr "コンテンツの修復"
 
@@ -1712,7 +1718,7 @@ msgstr "カウント"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:86
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:142
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:220
-#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:15
+#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:16
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:110
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:45
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:47
@@ -1772,7 +1778,7 @@ msgstr "ダッシュボード"
 msgid "Data directory"
 msgstr "データディレクトリ"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:61
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:62
 msgid "Datamodel upgrades and reinstalls preserve your existing data. No content or uploaded files will be deleted."
 msgstr "データモデルのアップグレードや再インストールを行っても、既存のデータは保持されます。コンテンツやアップロードされたファイルが削除されることはありません。"
 
@@ -1814,7 +1820,7 @@ msgstr "生成されたプレビューを削除"
 msgid "Delete if no other page is connected to this page."
 msgstr "このページに接続されている他のページがない場合は削除してください。"
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:51
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:57
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:239
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:90
 msgid "Delete if not connected anymore"
@@ -1854,11 +1860,16 @@ msgstr "削除は元に戻せません。"
 msgid "Dependent"
 msgstr "依存"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:52
+msgid "Detailed memory figures"
+msgstr "メモリの詳細な数値"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:9
 msgid "Dimensions"
 msgstr "寸法"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:33
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:47
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:61
 msgid "Disabled"
 msgstr "無効"
@@ -1883,11 +1894,11 @@ msgstr "このノード上のすべてのサイトを合計して、開いてい
 msgid "Discover media"
 msgstr "メディアを発見する"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:76
-msgid "Disk capacity"
-msgstr "ディスク容量"
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:110
+msgid "Disk information unavailable."
+msgstr "ディスク情報が取得できません。"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:69
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:95
 msgid "Disks"
 msgstr "ディスク"
 
@@ -1917,9 +1928,30 @@ msgstr "ダウンロード"
 msgid "Download media from the original website."
 msgstr "メディアは元のウェブサイトからダウンロードしてください。"
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_media.tpl:23
+msgid "Drag a file anywhere into this panel to replace the current media file."
+msgstr "このパネル内の任意の場所にファイルをドラッグすると、現在のメディアファイルが置き換えられます。"
+
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:11
+msgid "Drag a file anywhere into this tab or choose a file below. Then use the Upload file button to upload it."
+msgstr "このタブ内の任意の場所にファイルをドラッグするか、以下のファイルから選択してください。その後、「ファイルをアップロード」ボタンをクリックしてアップロードしてください。"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:19
+msgid "Drag files anywhere into this panel to upload and attach them to this page."
+msgstr "ファイルをこのパネルの任意の場所にドラッグして、アップロードし、このページに添付してください。"
+
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:114
+msgid "Drag files anywhere onto this page to upload them as new media items."
+msgstr "ファイルをこのページの任意の場所にドラッグ＆ドロップすると、新しいメディアアイテムとしてアップロードできます。"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:11
 msgid "Drag to change position"
 msgstr "ドラッグして位置を変更します"
+
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:118
+#: zotonic_mod_fileuploader/priv/templates/admin.tpl:10
+msgid "Drop files to add them to Media"
+msgstr "ファイルを追加するには、メディアにドラッグ＆ドロップしてください"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:33
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:38
@@ -1956,7 +1988,7 @@ msgstr "電子メールアドレス"
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config.tpl:7
 #: zotonic_mod_admin/priv/templates/_rsc_edge.tpl:19
 #: zotonic_mod_admin/priv/templates/admin_edit.tpl:3
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:82
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:79
 #: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:70
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:23
@@ -2027,7 +2059,7 @@ msgstr "ページを埋め込む｜引用、ポップアップ、または別の
 msgid "Embedded Content"
 msgstr "埋め込みコンテンツ"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:50
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:51
 msgid "Embedded-page references"
 msgstr "埋め込みページへの参照"
 
@@ -2052,6 +2084,10 @@ msgstr "Erlangのインストールルート"
 msgid "Erlang memory"
 msgstr "Erlangのメモリ"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:9
+msgid "Erlang memory in use"
+msgstr "Erlangのメモリ使用量"
+
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:18
 msgid "Erlang/OTP"
 msgstr "Erlang/OTP"
@@ -2070,7 +2106,8 @@ msgstr "ページの作成中にエラーが発生しました。"
 msgid "Error importing page from the remote server."
 msgstr "リモートサーバーからページをインポートする際にエラーが発生しました。"
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:236
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:257
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:305
 msgid "Error uploading the file."
 msgstr "ファイルのアップロード中にエラーが発生しました。"
 
@@ -2114,7 +2151,7 @@ msgstr "除外するカテゴリ"
 msgid "Existing pages"
 msgstr "既存のページ"
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:222
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:243
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:210
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:170
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:123
@@ -2170,7 +2207,7 @@ msgstr "ファイル名"
 msgid "Files are handled in the background by mailinglist recipient import and other modules watching the drop folder."
 msgstr "ファイルは、メーリングリストの受信者インポートや、ドロップフォルダを監視しているその他のモジュールによって、バックグラウンドで処理されます。"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:27
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:34
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:24
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_log.tpl:18
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:46
@@ -2183,12 +2220,12 @@ msgstr "ファイルは、メーリングリストの受信者インポートや
 msgid "Filter"
 msgstr "フィルター"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:64
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:71
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:61
 msgid "Filter on category"
 msgstr "カテゴリでフィルタリング"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:47
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:54
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:44
 msgid "Filter on content group"
 msgstr "コンテンツグループでフィルタリング"
@@ -2201,7 +2238,7 @@ msgstr "メディアを探す"
 msgid "Find Page"
 msgstr "ページを検索"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:50
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:51
 msgid "Find embedded page references and rebuild their refers connections. This runs in the background."
 msgstr "埋め込みページへの参照を検索し、その refers 接続を再構築します。この処理はバックグラウンドで実行されます。"
 
@@ -2243,7 +2280,7 @@ msgstr "キャッシュをクリアする"
 msgid "Follow connections and import all (deep copy)."
 msgstr "接続をたどり、すべてをインポートします（ディープコピー）。"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:35
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:60
 msgid "Free"
 msgstr "空き"
 
@@ -2306,17 +2343,21 @@ msgstr "ここでは検索クエリの引数を編集できます。引数は1�
 msgid "Hide page from searches (depends on the search query)"
 msgstr "検索結果からページを非表示にする（検索クエリによって異なります）"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_capacity.tpl:6
+msgid "High usage"
+msgstr "利用頻度が高い"
+
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:61
 msgid "Home directory"
 msgstr "ホームディレクトリ"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:26
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:69
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:16
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:95
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:158
 msgid "Host"
 msgstr "ホスト"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:13
+#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:14
 #: zotonic_mod_authentication/priv/templates/sessions.tpl:48
 #: zotonic_mod_authentication/priv/templates/sessions.tpl:93
 msgid "IP Address"
@@ -2382,11 +2423,11 @@ msgstr "インポート"
 msgid "Indexed by search engines"
 msgstr "検索エンジンにインデックス登録されています"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:63
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:64
 msgid "Individual modules can be reinstalled from the Modules list."
 msgstr "個々のモジュールは、「モジュール」リストから再インストールできます。"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:133
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:150
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:23
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:21
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:145
@@ -2413,7 +2454,7 @@ msgstr "インストールに関する詳細は、システム管理者が確認
 msgid "Integrations"
 msgstr "連携機能"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:77
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:84
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:74
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:41
 msgid "Items per page"
@@ -2447,6 +2488,10 @@ msgstr "最近更新した人物"
 #: zotonic_mod_admin/priv/templates/_admin_dashboard_texts.tpl:2
 msgid "Latest modified texts"
 msgstr "最近更新したテキスト"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:104
+msgid "Less than 5% free disk space"
+msgstr "空きディスク容量が5%未満"
 
 #: zotonic_mod_admin/priv/templates/_admin_menu.tpl:64
 msgid "Light"
@@ -2528,7 +2573,7 @@ msgstr "作成"
 msgid "Make a duplicate of this page."
 msgstr "このページを複製してください。"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:98
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:105
 msgid "Make a new media item"
 msgstr "新しいメディアアイテムを作成する"
 
@@ -2553,7 +2598,7 @@ msgstr "一致する検索テキスト"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:18
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:3
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:86
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:93
 #: zotonic_mod_admin/src/mod_admin.erl:525
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:100
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:103
@@ -2591,22 +2636,21 @@ msgstr "メディアの重複排除がキューに登録されました。"
 msgid "Media details"
 msgstr "メディアの詳細"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:89
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:96
 msgid "Media encompasses all uploaded images, movies and documents. Media can be attached to pages."
 msgstr "メディアには、アップロードされたすべての画像、動画、文書が含まれます。メディアはページに添付できます。"
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:37
-#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:38
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:35
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:36
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:43
 msgid "Media file"
 msgstr "メディアファイル"
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:193
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:195
 msgid "Media item created."
 msgstr "メディアアイテムが作成されました。"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:19
-#: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:2
 msgid "Media maintenance"
 msgstr "メディアのメンテナンス"
 
@@ -2631,18 +2675,22 @@ msgstr "メディア処理"
 msgid "Media runners"
 msgstr "メディアランナー"
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:27
-#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:28
-msgid "Media title"
-msgstr "メディアタイトル"
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:42
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:43
+msgid "Media title (optional)"
+msgstr "メディアのタイトル（任意）"
 
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:151
 msgid "Media updated."
 msgstr "メディア情報が更新されました。"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:43
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:68
 msgid "Memory"
 msgstr "メモリ"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:36
+msgid "Memory information unavailable."
+msgstr "メモリ情報が利用できません。"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:32
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:33
@@ -2682,8 +2730,8 @@ msgstr "更新日（新しい順）"
 msgid "Modification date, oldest first"
 msgstr "変更日（古い順）"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:134
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:38
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:151
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:35
 msgid "Modified"
 msgstr "更新日時"
 
@@ -2749,7 +2797,7 @@ msgstr "請求書の宛名"
 msgid "Need more help?"
 msgstr "もっとサポートが必要ですか？"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:2
+#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:3
 #: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:7
 msgid "Network Connections"
 msgstr "ネットワーク接続"
@@ -2805,7 +2853,7 @@ msgstr "項目なし"
 msgid "No media content."
 msgstr "メディアコンテンツはありません。"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:192
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:209
 msgid "No media found."
 msgstr "メディアが見つかりませんでした。"
 
@@ -2869,9 +2917,17 @@ msgstr "保護されていません"
 msgid "Not running"
 msgstr "実行されていません"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:26
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:16
 msgid "OS memory"
 msgstr "OSメモリ"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:32
+msgid "OS memory in use"
+msgstr "使用中のOSメモリ"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:25
+msgid "OS memory unavailable"
+msgstr "OSメモリが不足しています"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:129
 msgid "Ongoing"
@@ -2885,13 +2941,13 @@ msgstr "ノード接続を切断できるのは、システム管理者のみで
 msgid "Open"
 msgstr "開く"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:63
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:64
 msgid "Open Modules list"
 msgstr "モジュール一覧を開く"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:37
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:39
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:40
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:42
 msgid "Open in new tab"
 msgstr "新しいタブで開く"
 
@@ -2965,18 +3021,6 @@ msgstr "次の関係のページ："
 msgid "Pages overview"
 msgstr "ページ一覧"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:75
-#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:36
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:27
-#: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:8
-msgid "Path"
-msgstr "パス"
-
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:10
-msgid "Percent in use"
-msgstr "使用率"
-
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:6
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:10
 msgid "Personal name"
@@ -3028,7 +3072,7 @@ msgid "Predicate"
 msgstr "述語"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:28
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:131
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:148
 msgid "Preview"
 msgstr "プレビュー"
 
@@ -3081,7 +3125,7 @@ msgid "Publish this page"
 msgstr "このページを公開する"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:50
-#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:63
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:69
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:248
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:47
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:102
@@ -3128,7 +3172,7 @@ msgstr "クエリ"
 msgid "Query results"
 msgstr "クエリ結果"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:41
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:42
 msgid "Queue every page for search indexing. Large sites can take a long time to finish."
 msgstr "すべてのページを検索インデックス登録のキューに追加します。大規模なサイトの場合、処理が完了するまで時間がかかることがあります。"
 
@@ -3144,11 +3188,11 @@ msgstr "Ranchの上限"
 msgid "Rebuild derived data and maintain this site. Queued work can be followed on the Status page."
 msgstr "派生データを再構築し、このサイトを管理します。処理待ちの作業状況は「ステータス」ページで確認できます。"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:51
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:52
 msgid "Rebuild references"
 msgstr "参照の再構築"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:42
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:43
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:169
 msgid "Rebuild search indices"
 msgstr "検索インデックスを再構築する"
@@ -3183,17 +3227,13 @@ msgstr "次のページを参照しているページ："
 msgid "Refresh"
 msgstr "更新"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:94
-msgid "Refreshed every 30 minutes."
-msgstr "30分ごとに更新されます。"
-
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:74
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:75
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:76
 msgid "Reinstall Zotonic datamodel"
 msgstr "Zotonicデータモデルを再インストールしてください。"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:67
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:68
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:69
 msgid "Reinstall site datamodel"
 msgstr "サイトデータモデルを再インストールします"
 
@@ -3246,6 +3286,11 @@ msgstr "置き換える"
 msgid "Replace current medium"
 msgstr "現在のメディアを置き換える"
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_media.tpl:17
+#: zotonic_mod_fileuploader/priv/templates/_fileuploader_dropzone.tpl:5
+msgid "Replace the current media file?"
+msgstr "現在のメディアファイルを置き換えますか？"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:4
 msgid "Resize Live view"
 msgstr "ライブビューのサイズ変更"
@@ -3278,15 +3323,15 @@ msgstr "270度回転"
 msgid "Rotated 90 degrees"
 msgstr "90度回転"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:72
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:73
 msgid "Run the Zotonic core datamodel installation again for this site's database."
 msgstr "このサイトのデータベースに対して、Zotonic コアデータモデルのインストール手順を再度実行してください。"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:75
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:76
 msgid "Run the Zotonic core datamodel installation again for this site's database? Your existing data will be preserved."
 msgstr "このサイトのデータベースに対して、Zotonicのコアデータモデルのインストール処理を再度実行しますか？ 既存のデータは保持されます。"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:65
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:66
 msgid "Run the site's schema installation again. The site will stop and restart."
 msgstr "サイトのスキーマインストールを再度実行してください。サイトは一旦停止し、その後再起動します。"
 
@@ -3368,7 +3413,7 @@ msgid "Scheduled tasks"
 msgstr "スケジュールされたタスク"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:294
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:37
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:38
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user_dialog.tpl:9
 msgid "Search"
 msgstr "検索"
@@ -3381,7 +3426,7 @@ msgstr "検索インデックス作成"
 msgid "Search indexing runs separately from the scheduled task queue."
 msgstr "検索のインデックス作成は、スケジュールされたタスクのキューとは別に実行されます。"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:41
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:42
 msgid "Search indices"
 msgstr "検索インデックス"
 
@@ -3447,11 +3492,11 @@ msgid "Select both a visible page and a valid predicate for each connection."
 msgstr "各接続について、表示可能なページと有効な述語の両方を選択してください。"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:80
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:115
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:132
 msgid "Selected"
 msgstr "選択済み"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:59
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:66
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:56
 msgid "Selected Categories"
 msgstr "選択されたカテゴリ"
@@ -3530,7 +3575,7 @@ msgstr "サイトのキャッシュ"
 msgid "Site config files"
 msgstr "サイト設定ファイル"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:65
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:66
 msgid "Site datamodel"
 msgstr "サイトのデータモデル"
 
@@ -3735,9 +3780,14 @@ msgstr "姓の接頭辞"
 msgid "Suspended"
 msgstr "一時停止中"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:53
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:40
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:78
 msgid "Swap"
 msgstr "スワップ"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:44
+msgid "Swap in use"
+msgstr "使用中のスワップ"
 
 #: zotonic_mod_admin/src/mod_admin.erl:572
 msgid "System"
@@ -3802,6 +3852,10 @@ msgstr "Zotonicデータモデルを再インストールしています。コ�
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:58
 msgid "The addresses 0.0.0.0 and :: mean all local IPv4 and IPv6 interfaces respectively. Configured bindings are shown when a listener is absent."
 msgstr "アドレス0.0.0.0と::は、それぞれローカルのすべてのIPv4インターフェースとIPv6インターフェースを意味します。リスナーが存在しない場合は、設定済みのバインディングが表示されます。"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:26
+msgid "The bar shows memory not available for allocation. Available memory includes reclaimable memory reported by the operating system."
+msgstr "このバーは、割り当てに利用できないメモリを示しています。利用可能なメモリには、オペレーティングシステムによって報告された回収可能なメモリが含まれます。"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:201
 msgid "The billing address is only visible for people who can edit this page."
@@ -3909,7 +3963,7 @@ msgstr "これは元に戻せません。あなたのページは永久に失わ
 msgid "This connection already exists."
 msgstr "この接続は既に存在します。"
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:226
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:247
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:214
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:174
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:127
@@ -3928,14 +3982,14 @@ msgstr "このファイルはサイズが大きすぎるため、ウイルスス
 msgid "This file has not been scanned for viruses."
 msgstr "このファイルはウイルススキャンされていません。"
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:224
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:245
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:212
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:172
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:125
 msgid "This file is infected with a virus."
 msgstr "このファイルはウイルスに感染しています。"
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:228
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:249
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:216
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:176
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:129
@@ -3995,7 +4049,7 @@ msgstr "このページパスは別のページで使用されています。"
 msgid "This resource was created by the module"
 msgstr "このリソースはモジュールによって作成されました"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:68
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:69
 msgid "This runs the site's schema installation again and stops and restarts the site. Your existing data will be preserved. Continue?"
 msgstr "これにより、サイトのスキーマインストールが再度実行され、サイトが停止してから再起動されます。既存のデータは保持されます。続行しますか？"
 
@@ -4019,7 +4073,7 @@ msgstr "ウェブサイトからデータを取得しようとした際にタイ
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:36
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:93
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:132
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:149
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:21
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:9
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:11
@@ -4046,7 +4100,7 @@ msgid "Too many connections, only the first and last are shown."
 msgstr "接続が多すぎるため、最初と最後の接続のみが表示されます。"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:13
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:33
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:58
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:21
 msgid "Total"
 msgstr "合計"
@@ -4145,10 +4199,6 @@ msgstr "無題"
 msgid "Untitled query"
 msgstr "無題のクエリ"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:9
-msgid "Unused"
-msgstr "未使用"
-
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:125
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:37
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:60
@@ -4158,7 +4208,7 @@ msgstr "近日公開"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:82
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:112
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:117
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:134
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:16
 msgid "Update"
 msgstr "アップデート"
@@ -4187,11 +4237,11 @@ msgstr "アップロード"
 msgid "Upload File"
 msgstr "ファイルのアップロード"
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:4
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:5
 msgid "Upload a file from your computer."
 msgstr "お使いのコンピューターからファイルをアップロードしてください。"
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:74
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:80
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:31
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:36
 msgid "Upload file"
@@ -4201,13 +4251,17 @@ msgstr "ファイルをアップロード"
 msgid "Upload files for background processing or use a module's import tool."
 msgstr "バックグラウンド処理用にファイルをアップロードするか、モジュールのインポートツールを使用してください。"
 
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:119
+msgid "Upload starts immediately. Each file becomes a new media item."
+msgstr "アップロードがすぐに開始されます。各ファイルは新しいメディアアイテムとして登録されます。"
+
 #: zotonic_mod_admin/priv/templates/admin_imports.tpl:9
 msgid "Upload to drop folder"
 msgstr "ドロップフォルダにアップロード"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:135
-#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:155
-#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:185
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:152
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:245
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:280
 msgid "Uploaded"
 msgstr "アップロード済み"
 
@@ -4216,10 +4270,9 @@ msgstr "アップロード済み"
 msgid "Uploaded on"
 msgstr "アップロード日"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:77
-#: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:127
-msgid "Usage"
-msgstr "使用状況"
+#: zotonic_mod_admin/priv/templates/_admin_status_capacity.tpl:9
+msgid "Usage information unavailable."
+msgstr "利用状況に関する情報は入手できません。"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:39
 msgid "Use the autocompleter to search the media in this site."
@@ -4229,12 +4282,11 @@ msgstr "オートコンプリート機能を使って、このサイト内のメ
 msgid "Use the title of the base content for the display name of this person."
 msgstr "この人物の表示名には、基本コンテンツのタイトルを使用してください。"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:60
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:61
 msgid "Use these operations to repair installation data, not for routine maintenance."
 msgstr "これらの操作は、インストールデータの修復にのみ使用し、日常的なメンテナンスには使用しないでください。"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:8
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:34
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:59
 msgid "Used"
 msgstr "使用済み"
 
@@ -4374,7 +4426,11 @@ msgstr "このページを削除することはできません。"
 msgid "You are not allowed to edit this page."
 msgstr "このページを編集することはできません。"
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:218
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:7
+msgid "You can add a title to make the file easier to find and share."
+msgstr "ファイルを見つけやすくしたり、共有しやすくしたりするために、タイトルを追加することができます。"
+
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:239
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:166
 msgid "You don't have permission to change this media item."
 msgstr "このメディアアイテムを変更する権限がありません。"
@@ -4389,7 +4445,7 @@ msgstr "このページを作成する権限がありません。"
 msgid "You don't have permission to edit this page."
 msgstr "このページを編集する権限がありません。"
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:220
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:241
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:208
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:168
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:121
@@ -4403,10 +4459,6 @@ msgstr "この種類のファイルをアップロードするための適切な
 msgid "You don’t have permission to perform this action."
 msgstr "この操作を実行する権限がありません。"
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:6
-msgid "You have to specify a description of the file to make it easier to find and share."
-msgstr "ファイルを見つけやすく、共有しやすくするために、ファイルの説明を指定する必要があります。"
-
 #: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:188
 msgid "Your search query is invalid. Please correct it before saving."
 msgstr "検索クエリが無効です。保存する前に修正してください。"
@@ -4415,7 +4467,7 @@ msgstr "検索クエリが無効です。保存する前に修正してくださ
 msgid "Zotonic"
 msgstr "Zotonic"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:72
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:73
 msgid "Zotonic datamodel"
 msgstr "Zotonicのデータモデル"
 
@@ -4423,14 +4475,22 @@ msgstr "Zotonicのデータモデル"
 msgid "Zotonic init files"
 msgstr "Zotonic の初期化ファイル"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:30
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:37
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:27
 msgid "active filters"
 msgstr "アクティブフィルター"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:19
+#: zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:29
 msgid "add media item"
 msgstr "メディアアイテムを追加する"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:7
+msgid "allocated"
+msgstr "割り当てられた"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:22
+msgid "available"
+msgstr "利用可能"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:14
@@ -4442,15 +4502,19 @@ msgstr "メディアアイテムを追加する"
 msgid "by"
 msgstr "ユーザー："
 
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:102
+msgid "capacity"
+msgstr "容量"
+
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:52
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:53
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:130
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:131
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:132
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:165
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:168
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:182
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:185
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:84
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:81
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:32
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:33
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:76
@@ -4468,7 +4532,7 @@ msgstr "ユーザー："
 msgid "d M Y, H:i"
 msgstr "d M Y, H:i"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:172
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:189
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:43
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:39
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:99
@@ -4481,7 +4545,7 @@ msgstr "例えば、変更される可能性があります"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:58
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:137
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:183
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:200
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:40
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:69
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:77
@@ -4500,6 +4564,14 @@ msgstr "このページを編集する"
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:84
 msgid "excluding"
 msgstr "除外"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:45
+msgid "free"
+msgstr "無料"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:33
+msgid "free. Used memory can include caches; high usage alone does not indicate memory pressure."
+msgstr "無料。使用済みメモリにはキャッシュが含まれる場合があります。使用量が高いというだけでは、メモリの負荷が高いことを示すものではありません。"
 
 #: zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:15
 msgid "has been disconnected."
@@ -4554,6 +4626,12 @@ msgstr "すべて表示"
 msgid "system content"
 msgstr "システムコンテンツ"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:23
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:30
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:41
+msgid "total"
+msgstr "合計"
+
 #: zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:3
 msgid "undo"
 msgstr "元に戻す"
@@ -4567,9 +4645,19 @@ msgstr "元に戻す"
 msgid "untitled"
 msgstr "無題"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:10
+msgid "unused allocation, available for reuse by Erlang. This is not free host memory."
+msgstr "未使用の割り当て領域。Erlangによる再利用が可能です。これはホストの空きメモリではありません。"
+
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:51
 msgid "uploaded on"
 msgstr "アップロード日"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:6
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:29
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:41
+msgid "used"
+msgstr "中古"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:57
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:136
@@ -4588,7 +4676,7 @@ msgid "visit site"
 msgstr "サイトにアクセス"
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:25
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:201
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:218
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:141
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:57
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:98
@@ -4726,7 +4814,7 @@ msgid "Config"
 msgstr "設定"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:3
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:24
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:21
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:32
 #: zotonic_mod_admin_config/src/mod_admin_config.erl:96
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:14
@@ -4887,11 +4975,11 @@ msgstr "通常は、マシンの逆引きDNS名に設定されます。"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:13
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:14
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:43
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:36
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:33
 msgid "Key"
 msgstr "キー"
 
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:27
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:24
 msgid "Make a new config setting"
 msgstr "新しい設定を作成する"
 
@@ -4899,7 +4987,7 @@ msgstr "新しい設定を作成する"
 msgid "No configuration keys found."
 msgstr "設定キーが見つかりませんでした。"
 
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:95
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:92
 msgid "No configurations found."
 msgstr "設定が見つかりませんでした。"
 
@@ -4984,11 +5072,11 @@ msgstr "リレーホスト名"
 msgid "Relay port"
 msgstr "リレーポート"
 
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:17
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:14
 msgid "Reload site configuration"
 msgstr "サイト設定を再読み込みする"
 
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:14
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:12
 msgid "Reload the site configuration files. Some changes require a restart."
 msgstr "サイトの設定ファイルを再読み込みしてください。変更内容によっては、再起動が必要になる場合があります。"
 
@@ -5156,7 +5244,7 @@ msgstr "有効期限"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:19
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:20
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:21
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:37
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:34
 #: zotonic_mod_base/src/support/z_chart_svg.erl:1457
 #: zotonic_mod_development/priv/templates/_development_dispatch_options.tpl:2
 msgid "Value"
@@ -5943,6 +6031,10 @@ msgstr "キーワード分析を実行できませんでした。詳細はサー
 msgid "This site does not have a keyword category."
 msgstr "このサイトにはキーワードカテゴリがありません。"
 
+#: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:127
+msgid "Usage"
+msgstr "使用状況"
+
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:179
 msgid "View content using this keyword"
 msgstr "このキーワードを使用しているコンテンツを表示"
@@ -6416,6 +6508,13 @@ msgstr "ページ接続グラフ"
 msgid "Page connections overview"
 msgstr "ページ接続の概要"
 
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:36
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:27
+#: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:8
+msgid "Path"
+msgstr "パス"
+
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:3
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:12
 #: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:226
@@ -6702,7 +6801,7 @@ msgstr "分析機能が再開されるまで、アクティビティカウンタ
 msgid "Add analytics measurement"
 msgstr "分析指標を追加する"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:58
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:61
 msgid "All breakdown values"
 msgstr "すべての内訳値"
 
@@ -6757,7 +6856,7 @@ msgstr "分析指標"
 msgid "Analytics status"
 msgstr "分析状況"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:49
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:52
 msgid "Bars show the lower bound. Counts are ranges, ordered by their lower bound. Overlapping ranges may change order. Content outside the retained candidates has at most"
 msgstr "棒グラフは下限値を示しています。カウント値は範囲であり、下限値の昇順に並べられています。範囲が重なっている場合、順序が変わる可能性があります。保持された候補の範囲外にあるコンテンツは、最大で"
 
@@ -6770,7 +6869,7 @@ msgstr "範囲指定された履歴"
 msgid "Break down by"
 msgstr "内訳（分類別）"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:59
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:62
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "Breakdown"
 msgstr "内訳"
@@ -6922,7 +7021,7 @@ msgstr "イベントバッファ"
 msgid "Event processing"
 msgstr "イベント処理"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:59
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:62
 msgid "Events"
 msgstr "イベント"
 
@@ -6996,9 +7095,13 @@ msgstr "HTTPステータスコード — 例：200、404、500など"
 msgid "History detail and retention"
 msgstr "履歴の詳細と保存期間"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:64
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:67
 msgid "Includes incomplete or unrecorded intervals"
 msgstr "不完全な間隔や記録されていない間隔が含まれます"
+
+#: zotonic_mod_analytics/src/models/m_analytics.erl:351
+msgid "Invalid resource reference"
+msgstr "無効なリソース参照"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:7
 msgid "Language — language code, e.g. en or nl"
@@ -7024,7 +7127,7 @@ msgstr "過去6時間"
 msgid "Maximum number of analytics measurements"
 msgstr "分析測定の最大数"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:28
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
 msgid "Most popular content in this period"
 msgstr "この期間で最も人気があったコンテンツ"
 
@@ -7077,11 +7180,11 @@ msgstr "内訳なし（合計）"
 msgid "No filter — include all values"
 msgstr "フィルタなし — すべての値を含める"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:47
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:50
 msgid "No leading content identified in this period."
 msgstr "この期間に主要なコンテンツは確認されませんでした。"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:55
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:58
 msgid "No recorded events yet."
 msgstr "まだ記録されたイベントはありません。"
 
@@ -7113,6 +7216,14 @@ msgstr "ページリクエスト — 正常に表示された公開HTMLページ
 msgid "Page — public resource ID"
 msgstr "ページ — 公開リソースID"
 
+#: zotonic_mod_analytics/src/models/m_analytics.erl:338
+msgid "Pages without a resource ID"
+msgstr "リソースIDがないページ"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
+msgid "Pages without a resource ID are grouped by dispatch rule, such as template-only pages. The label “Pages without a resource ID” includes older counts and requests without a known dispatch rule; these cannot be split further. Unavailable content refers to resources that were deleted or that you cannot view. Invalid resource reference means the recorded page value is not a valid resource ID."
+msgstr "リソース ID がないページは、テンプレート専用ページなど、ディスパッチルールごとにグループ化されます。「リソース ID がないページ」というラベルには、過去の集計値や、既知のディスパッチルールがないリクエストが含まれており、これらをさらに細分化することはできません。「利用できないコンテンツ」とは、削除されたリソースや、表示できないリソースを指します。 「無効なリソース参照」とは、記録されたページ値が有効なリソースIDではないことを意味します。"
+
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
 msgid "Past 30 days"
 msgstr "過去30日間"
@@ -7133,11 +7244,11 @@ msgstr "一時停止"
 msgid "Period"
 msgstr "期間"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:34
 msgid "Rank"
 msgstr "ランク"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:29
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:32
 msgid "Ranked by recorded requests in the selected moving period. The window advances in steps of"
 msgstr "選択した移動期間内に記録されたリクエスト数に基づいてランク付けされます。この期間の範囲は、"
 
@@ -7153,7 +7264,7 @@ msgstr "リクエストの種類 — ページ、API、またはカスタムデ�
 msgid "Request types found in this site's dispatch rules:"
 msgstr "このサイトのディスパッチルールに見られるリクエストの種類："
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:34
 msgid "Requests"
 msgstr "リクエスト"
 
@@ -7283,6 +7394,10 @@ msgstr "このイベントスキーマは利用できません。"
 msgid "Traffic — crawler, other or unknown"
 msgstr "トラフィック — クローラー、その他、または不明"
 
+#: zotonic_mod_analytics/src/models/m_analytics.erl:349
+msgid "Unavailable content"
+msgstr "利用できないコンテンツ"
+
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:8
 msgid "View analytics"
 msgstr "分析データを表示する"
@@ -7300,6 +7415,7 @@ msgid "analytics measurements"
 msgstr "分析指標"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:20
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:10
 msgid "bytes"
 msgstr "バイト"
 
@@ -7320,11 +7436,11 @@ msgstr "イベント"
 msgid "group/time slots"
 msgstr "グループ／時間帯"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:49
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:52
 msgid "requests."
 msgstr "リクエスト。"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:29
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:32
 msgid "seconds."
 msgstr "秒。"
 
@@ -8373,7 +8489,7 @@ msgstr "データベースとアップロードされたファイルの自動日
 msgid "Back to the edit page"
 msgstr "編集ページに戻る"
 
-#: zotonic_mod_backup/src/mod_backup.erl:323
+#: zotonic_mod_backup/src/mod_backup.erl:338
 msgid "Backup"
 msgstr "バックアップ"
 
@@ -8447,7 +8563,7 @@ msgstr "削除日時"
 
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9
-#: zotonic_mod_backup/src/mod_backup.erl:336
+#: zotonic_mod_backup/src/mod_backup.erl:351
 msgid "Deleted pages"
 msgstr "削除されたページ"
 
@@ -11042,8 +11158,8 @@ msgid "Right to left"
 msgstr "右から左へ"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:61
-msgid "Save and View"
-msgstr "保存して表示する"
+msgid "Save & view"
+msgstr "保存・表示"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:56
 msgid "Split cell"
@@ -11972,10 +12088,154 @@ msgstr "あなたはこれを使用することを許可されていません。
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
 msgstr "Zotonicは、アップロードおよびサイズ変更されたファイルをクラウドに保存できます。ここでは、クラウドサービスの保存場所とアクセスキーを設定できます。"
 
-#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:158
-#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:188
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:12
+msgid "Cancel remaining uploads"
+msgstr "残りのアップロードをキャンセルする"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:13
+msgid "Cancelled"
+msgstr "中止"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:27
+msgid "Choose one file at a time for this upload. No files were uploaded."
+msgstr "このアップロードでは、一度に1つのファイルを選択してください。ファイルはアップロードされませんでした。"
+
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:248
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:284
 msgid "Could not upload"
 msgstr "アップロードできませんでした"
+
+#: zotonic_mod_fileuploader/priv/templates/_fileuploader_dropzone.tpl:8
+msgid "Drop files here or choose files."
+msgstr "ここにファイルをドラッグするか、ファイルを選択してください。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:8
+msgid "Drop files inside the text where you want to insert them."
+msgstr "ファイルを、挿入したいテキスト内のその場所にドラッグ＆ドロップしてください。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:28
+msgid "Folders cannot be uploaded. Select the files inside the folder instead."
+msgstr "フォルダはアップロードできません。代わりに、そのフォルダ内のファイルを選択してください。"
+
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:190
+msgid "Please choose one file only."
+msgstr "ファイルは1つだけお選びください。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:19
+msgid "Processing…"
+msgstr "… の処理中"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:35
+msgid "Ready to upload. Choose Upload file to save your selected file."
+msgstr "アップロードの準備が整いました。「ファイルをアップロード」を選択して、選択したファイルを保存してください。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:24
+msgid "Refresh media list"
+msgstr "メディア一覧を更新する"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:14
+msgid "Remaining uploads were cancelled. Files already saved have been kept."
+msgstr "残りのアップロードはキャンセルされました。すでに保存されたファイルはそのまま残されています。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:23
+msgid "Retry failed files"
+msgstr "失敗したファイルを再試行する"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:9
+msgid "Save this page before dropping media into the editor."
+msgstr "エディタにメディアをドラッグ＆ドロップする前に、このページを保存してください。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:20
+#: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:1
+msgid "Saved"
+msgstr "保存済み"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:22
+msgid "Saved in Media, but could not attach. Use Add media item to connect it."
+msgstr "「メディア」に保存されていますが、添付できませんでした。「メディアアイテムを追加」を使用して接続してください。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:5
+msgid "Saved in Media, but the insertion position is no longer available. Use Insert media to add it."
+msgstr "「メディア」に保存されましたが、挿入位置が利用できなくなっています。「メディアを挿入」を使用して追加してください。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:32
+msgid "Some files could not be processed. See the error messages."
+msgstr "一部のファイルを処理できませんでした。エラーメッセージをご確認ください。"
+
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:297
+msgid "The file upload is incomplete."
+msgstr "ファイルのアップロードが完了していません。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:16
+msgid "This file exceeds the maximum upload size for your account. Choose a smaller file."
+msgstr "このファイルは、お客様のアカウントの最大アップロードサイズを超えています。より小さいファイルを選択してください。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:17
+msgid "This file type or size is not allowed for your account."
+msgstr "お客様のアカウントでは、このファイルの種類またはサイズは使用できません。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:7
+msgid "Upload complete. Media has been inserted into your text. Save the page to keep your changes."
+msgstr "アップロードが完了しました。テキストにメディアが挿入されました。変更内容を保存するには、ページを保存してください。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:33
+msgid "Upload complete. Your files have been saved."
+msgstr "アップロードが完了しました。ファイルが保存されました。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:21
+msgid "Upload failed"
+msgstr "アップロードに失敗しました"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:31
+msgid "Upload failed. Please try again."
+msgstr "アップロードに失敗しました。もう一度お試しください。"
+
+#: zotonic_mod_fileuploader/priv/templates/admin.tpl:11
+msgid "Upload starts immediately. Each file becomes a new, published media item."
+msgstr "アップロードがすぐに開始されます。各ファイルは、公開された新しいメディアアイテムとなります。"
+
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:277
+msgid "Uploaded, but could not connect"
+msgstr "アップロードは完了しましたが、接続できませんでした"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:25
+msgid "Uploading"
+msgstr "アップロード中"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:34
+msgid "Uploading and processing your files… Please keep this page open."
+msgstr "ファイルのアップロードと処理… このページは開いたままにしておいてください。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:6
+msgid "Uploading media to insert into your text… You can continue editing."
+msgstr "テキストに挿入するメディアをアップロードする… 編集を続行できます。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:18
+#: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:1
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_summary.tpl:3
+#: zotonic_site_status/priv/templates/_sites.tpl:14
+msgid "Waiting"
+msgstr "待機中"
+
+#: zotonic_mod_fileuploader/priv/templates/admin.tpl:12
+msgid "You can find and edit your uploads in Media."
+msgstr "「メディア」で、自分がアップロードしたファイルを確認・編集できます。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:30
+msgid "{filename} has a file type that is not supported here. Choose a different file."
+msgstr "{filename} このサイトではサポートされていないファイル形式です。別のファイルを選択してください。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:29
+msgid "{filename} is empty. Choose a file with content. Folders cannot be uploaded."
+msgstr "{filename} 空です。内容のあるファイルを選択してください。フォルダはアップロードできません。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:15
+msgid "{filename} is too large. The maximum file size is {size}."
+msgstr "{filename} 大きすぎます。ファイルの最大サイズは {size} です。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:26
+msgid "{saved} of {total} files saved."
+msgstr "{saved} {total} のファイルが保存されました。"
 
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:93
 msgid "Brightness"
@@ -15030,12 +15290,6 @@ msgstr "ログインしていない訪問者もこのリストを閲覧できま
 msgid "Wait for sending to start"
 msgstr "送信開始をお待ちください"
 
-#: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:1
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_summary.tpl:3
-#: zotonic_site_status/priv/templates/_sites.tpl:14
-msgid "Waiting"
-msgstr "待機中"
-
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:2
 msgid "Waiting for publication"
 msgstr "公開待ち"
@@ -16048,7 +16302,7 @@ msgstr "単一のトークンを取得するため"
 msgid "API Key can be found on"
 msgstr "APIキーは以下で確認できます"
 
-#: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:8
+#: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:2
 msgid "Attempt to fix embedded videos for which OEmbed embedding has failed previously."
 msgstr "以前にOEmbedによる埋め込みに失敗した埋め込み動画を修正しようと試みます。"
 
@@ -16067,11 +16321,15 @@ msgstr "~p 動画の修正を試みています。"
 msgid "Copy the URL to the clipboard."
 msgstr "URLをクリップボードにコピーしてください。"
 
+#: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:2
+msgid "Embedded videos"
+msgstr "埋め込み動画"
+
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media.tpl:4
 msgid "Embedding of media item failed with HTTP code"
 msgstr "メディア項目の埋め込みに失敗しました。HTTPコード："
 
-#: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:7
+#: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:4
 msgid "Fix embedded videos"
 msgstr "埋め込み動画を修正する"
 
@@ -17992,10 +18250,6 @@ msgstr "保存 &amp; メール"
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:162
 msgid "Save your answers without submitting them yet so you can continue later."
 msgstr "回答を送信せずに保存しておけば、後で続きを行うことができます。"
-
-#: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:1
-msgid "Saved"
-msgstr "保存済み"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:78
 msgid "Search for a person"
