@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-27 21:20\n"
+"PO-Revision-Date: 2026-11-27 22:40\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -1456,7 +1456,7 @@ msgstr "后台任务"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:113
 msgid "Bars show disk space in use. Refreshed every 30 minutes."
-msgstr ""
+msgstr "条形图显示已使用的磁盘空间。每30分钟刷新一次。"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_basics.tpl:4
 msgid "Basic"
@@ -1862,7 +1862,7 @@ msgstr "依赖性"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:52
 msgid "Detailed memory figures"
-msgstr ""
+msgstr "详细的内存数据"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:9
 msgid "Dimensions"
@@ -1896,7 +1896,7 @@ msgstr "查找媒体"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:110
 msgid "Disk information unavailable."
-msgstr ""
+msgstr "无法获取磁盘信息。"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:95
 msgid "Disks"
@@ -1930,19 +1930,19 @@ msgstr "从原始网站下载媒体文件。"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_media.tpl:23
 msgid "Drag a file anywhere into this panel to replace the current media file."
-msgstr ""
+msgstr "将文件拖放到此面板的任意位置，即可替换当前的媒体文件。"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:11
 msgid "Drag a file anywhere into this tab or choose a file below. Then use the Upload file button to upload it."
-msgstr ""
+msgstr "将文件拖放到此选项卡的任意位置，或从下方选择一个文件。然后点击“上传文件”按钮进行上传。"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:19
 msgid "Drag files anywhere into this panel to upload and attach them to this page."
-msgstr ""
+msgstr "将文件拖放到此面板的任意位置，即可上传并将其作为附件添加到此页面。"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:114
 msgid "Drag files anywhere onto this page to upload them as new media items."
-msgstr ""
+msgstr "将文件拖放到本页面的任意位置，即可将其上传为新的媒体项目。"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:11
 msgid "Drag to change position"
@@ -1951,7 +1951,7 @@ msgstr "拖动来改变位置"
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:118
 #: zotonic_mod_fileuploader/priv/templates/admin.tpl:10
 msgid "Drop files to add them to Media"
-msgstr ""
+msgstr "将文件拖放到此处以将其添加到“媒体”中"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:33
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:38
@@ -2086,7 +2086,7 @@ msgstr "Erlang 内存"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:9
 msgid "Erlang memory in use"
-msgstr ""
+msgstr "Erlang 正在使用的内存"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:18
 msgid "Erlang/OTP"
@@ -2345,7 +2345,7 @@ msgstr "从搜索中隐藏页面（取决于搜索查询）"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_capacity.tpl:6
 msgid "High usage"
-msgstr ""
+msgstr "使用频率高"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:61
 msgid "Home directory"
@@ -2491,7 +2491,7 @@ msgstr "最近修改文本"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:104
 msgid "Less than 5% free disk space"
-msgstr ""
+msgstr "可用磁盘空间不足 5%"
 
 #: zotonic_mod_admin/priv/templates/_admin_menu.tpl:64
 msgid "Light"
@@ -2678,7 +2678,7 @@ msgstr "媒体处理执行器"
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:42
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:43
 msgid "Media title (optional)"
-msgstr ""
+msgstr "媒体标题（可选）"
 
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:151
 msgid "Media updated."
@@ -2690,7 +2690,7 @@ msgstr "内存"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:36
 msgid "Memory information unavailable."
-msgstr ""
+msgstr "无法获取内存信息。"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:32
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:33
@@ -2923,11 +2923,11 @@ msgstr "操作系统内存"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:32
 msgid "OS memory in use"
-msgstr ""
+msgstr "操作系统已用内存"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:25
 msgid "OS memory unavailable"
-msgstr ""
+msgstr "操作系统内存不足"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:129
 msgid "Ongoing"
@@ -3289,7 +3289,7 @@ msgstr "替换这个媒体条目"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_media.tpl:17
 #: zotonic_mod_fileuploader/priv/templates/_fileuploader_dropzone.tpl:5
 msgid "Replace the current media file?"
-msgstr ""
+msgstr "要替换当前的媒体文件吗？"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:4
 msgid "Resize Live view"
@@ -3787,7 +3787,7 @@ msgstr "交换空间"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:44
 msgid "Swap in use"
-msgstr ""
+msgstr "正在使用的交换空间"
 
 #: zotonic_mod_admin/src/mod_admin.erl:572
 msgid "System"
@@ -3855,7 +3855,7 @@ msgstr "地址 0.0.0.0 和 :: 分别表示所有本地 IPv4 和 IPv6 接口。�
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:26
 msgid "The bar shows memory not available for allocation. Available memory includes reclaimable memory reported by the operating system."
-msgstr ""
+msgstr "该条形图显示没有可用内存可供分配。可用内存包括操作系统报告的可回收内存。"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:201
 msgid "The billing address is only visible for people who can edit this page."
@@ -4253,7 +4253,7 @@ msgstr "上传文件以供后台处理，或使用模块的导入工具。"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:119
 msgid "Upload starts immediately. Each file becomes a new media item."
-msgstr ""
+msgstr "上传将立即开始。每个文件都会成为一个新的媒体项目。"
 
 #: zotonic_mod_admin/priv/templates/admin_imports.tpl:9
 msgid "Upload to drop folder"
@@ -4272,7 +4272,7 @@ msgstr "上传于"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_capacity.tpl:9
 msgid "Usage information unavailable."
-msgstr ""
+msgstr "无法获取使用信息。"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:39
 msgid "Use the autocompleter to search the media in this site."
@@ -4428,7 +4428,7 @@ msgstr "你没有权限编辑此页面。"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:7
 msgid "You can add a title to make the file easier to find and share."
-msgstr ""
+msgstr "您可以添加一个标题，以便更轻松地查找和分享该文件。"
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:239
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:166
@@ -4486,11 +4486,11 @@ msgstr "添加媒体条目"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:7
 msgid "allocated"
-msgstr ""
+msgstr "已分配"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:22
 msgid "available"
-msgstr ""
+msgstr "有货"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:14
@@ -4504,7 +4504,7 @@ msgstr "由"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:102
 msgid "capacity"
-msgstr ""
+msgstr "容量"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:52
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:53
@@ -4571,7 +4571,7 @@ msgstr "免费"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:33
 msgid "free. Used memory can include caches; high usage alone does not indicate memory pressure."
-msgstr ""
+msgstr "空闲。已用内存可能包括缓存；仅凭内存使用率高并不能表明存在内存压力。"
 
 #: zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:15
 msgid "has been disconnected."
@@ -4630,7 +4630,7 @@ msgstr "系统内容"
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:30
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:41
 msgid "total"
-msgstr ""
+msgstr "总计"
 
 #: zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:3
 msgid "undo"
@@ -4647,7 +4647,7 @@ msgstr "未命名"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:10
 msgid "unused allocation, available for reuse by Erlang. This is not free host memory."
-msgstr ""
+msgstr "未使用的内存分配，可供 Erlang 重新使用。这并非空闲的主机内存。"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:51
 msgid "uploaded on"
@@ -4657,7 +4657,7 @@ msgstr "上传时间"
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:29
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:41
 msgid "used"
-msgstr ""
+msgstr "已使用"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:57
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:136
@@ -7101,7 +7101,7 @@ msgstr "包括不完整的或未记录的间隔"
 
 #: zotonic_mod_analytics/src/models/m_analytics.erl:351
 msgid "Invalid resource reference"
-msgstr ""
+msgstr "资源引用无效"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:7
 msgid "Language — language code, e.g. en or nl"
@@ -7218,11 +7218,11 @@ msgstr "页面 — 公共资源 ID"
 
 #: zotonic_mod_analytics/src/models/m_analytics.erl:338
 msgid "Pages without a resource ID"
-msgstr ""
+msgstr "没有资源 ID 的页面"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
 msgid "Pages without a resource ID are grouped by dispatch rule, such as template-only pages. The label “Pages without a resource ID” includes older counts and requests without a known dispatch rule; these cannot be split further. Unavailable content refers to resources that were deleted or that you cannot view. Invalid resource reference means the recorded page value is not a valid resource ID."
-msgstr ""
+msgstr "没有资源 ID 的页面会按分发规则进行分组，例如仅包含模板的页面。“没有资源 ID 的页面”这一标签包含较早的计数数据以及没有已知分发规则的请求；这些数据无法进一步细分。不可用内容指的是已被删除或无法查看的资源。 无效的资源引用是指记录的页面值不是有效的资源 ID。"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
 msgid "Past 30 days"
@@ -7396,7 +7396,7 @@ msgstr "流量——爬虫、其他或未知"
 
 #: zotonic_mod_analytics/src/models/m_analytics.erl:349
 msgid "Unavailable content"
-msgstr ""
+msgstr "内容不可用"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:8
 msgid "View analytics"
@@ -11163,7 +11163,7 @@ msgstr "从右到左"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:61
 msgid "Save & view"
-msgstr ""
+msgstr "保存并查看"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:56
 msgid "Split cell"
@@ -12094,15 +12094,15 @@ msgstr "Zotonic 可以将上传的文件和调整大小后的文件存储在云�
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:12
 msgid "Cancel remaining uploads"
-msgstr ""
+msgstr "取消剩余的上传任务"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:13
 msgid "Cancelled"
-msgstr ""
+msgstr "已取消"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:27
 msgid "Choose one file at a time for this upload. No files were uploaded."
-msgstr ""
+msgstr "本次上传请一次只选择一个文件。尚未上传任何文件。"
 
 #: zotonic_mod_fileuploader/src/mod_fileuploader.erl:248
 #: zotonic_mod_fileuploader/src/mod_fileuploader.erl:284
@@ -12111,43 +12111,43 @@ msgstr "无法上传"
 
 #: zotonic_mod_fileuploader/priv/templates/_fileuploader_dropzone.tpl:8
 msgid "Drop files here or choose files."
-msgstr ""
+msgstr "将文件拖放到此处或选择文件。"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:8
 msgid "Drop files inside the text where you want to insert them."
-msgstr ""
+msgstr "将文件拖放到文本中您希望插入的位置。"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:28
 msgid "Folders cannot be uploaded. Select the files inside the folder instead."
-msgstr ""
+msgstr "无法上传文件夹。请改选文件夹内的文件。"
 
 #: zotonic_mod_fileuploader/src/mod_fileuploader.erl:190
 msgid "Please choose one file only."
-msgstr ""
+msgstr "请仅选择一个文件。"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:19
 msgid "Processing…"
-msgstr ""
+msgstr "正在处理…"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:35
 msgid "Ready to upload. Choose Upload file to save your selected file."
-msgstr ""
+msgstr "已准备好上传。请选择“上传文件”以保存您选定的文件。"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:24
 msgid "Refresh media list"
-msgstr ""
+msgstr "刷新媒体列表"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:14
 msgid "Remaining uploads were cancelled. Files already saved have been kept."
-msgstr ""
+msgstr "剩余的上传已被取消。已保存的文件仍被保留。"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:23
 msgid "Retry failed files"
-msgstr ""
+msgstr "重试失败的文件"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:9
 msgid "Save this page before dropping media into the editor."
-msgstr ""
+msgstr "在将媒体文件拖放到编辑器之前，请先保存此页面。"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:20
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:1
@@ -12156,63 +12156,63 @@ msgstr "已保存"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:22
 msgid "Saved in Media, but could not attach. Use Add media item to connect it."
-msgstr ""
+msgstr "已保存到“媒体”中，但无法作为附件添加。请使用“添加媒体”功能将其添加。"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:5
 msgid "Saved in Media, but the insertion position is no longer available. Use Insert media to add it."
-msgstr ""
+msgstr "已保存到“媒体”中，但插入位置已不存在。请使用“插入媒体”功能将其添加。"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:32
 msgid "Some files could not be processed. See the error messages."
-msgstr ""
+msgstr "某些文件无法处理。请查看错误信息。"
 
 #: zotonic_mod_fileuploader/src/mod_fileuploader.erl:297
 msgid "The file upload is incomplete."
-msgstr ""
+msgstr "文件上传未完成。"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:16
 msgid "This file exceeds the maximum upload size for your account. Choose a smaller file."
-msgstr ""
+msgstr "该文件超出了您账户的最大上传大小限制。请选择一个较小的文件。"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:17
 msgid "This file type or size is not allowed for your account."
-msgstr ""
+msgstr "您的账户不允许上传此文件类型或此大小的文件。"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:7
 msgid "Upload complete. Media has been inserted into your text. Save the page to keep your changes."
-msgstr ""
+msgstr "上传完成。媒体文件已插入到您的文本中。请保存页面以保留您的更改。"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:33
 msgid "Upload complete. Your files have been saved."
-msgstr ""
+msgstr "上传完成。您的文件已保存。"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:21
 msgid "Upload failed"
-msgstr ""
+msgstr "上传失败"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:31
 msgid "Upload failed. Please try again."
-msgstr ""
+msgstr "上传失败。请重试。"
 
 #: zotonic_mod_fileuploader/priv/templates/admin.tpl:11
 msgid "Upload starts immediately. Each file becomes a new, published media item."
-msgstr ""
+msgstr "上传将立即开始。每个文件都会成为一个新的、已发布的媒体项目。"
 
 #: zotonic_mod_fileuploader/src/mod_fileuploader.erl:277
 msgid "Uploaded, but could not connect"
-msgstr ""
+msgstr "已上传，但无法连接"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:25
 msgid "Uploading"
-msgstr ""
+msgstr "正在上传"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:34
 msgid "Uploading and processing your files… Please keep this page open."
-msgstr ""
+msgstr "上传和处理您的文件… 请保持此页面打开。"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:6
 msgid "Uploading media to insert into your text… You can continue editing."
-msgstr ""
+msgstr "上传媒体文件以插入到文本中… 您可以继续编辑。"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:18
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:1
@@ -12223,23 +12223,23 @@ msgstr "等待"
 
 #: zotonic_mod_fileuploader/priv/templates/admin.tpl:12
 msgid "You can find and edit your uploads in Media."
-msgstr ""
+msgstr "您可以在“媒体”中查找和编辑已上传的内容。"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:30
 msgid "{filename} has a file type that is not supported here. Choose a different file."
-msgstr ""
+msgstr "{filename} 该文件的类型在此处不受支持。请选择其他文件。"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:29
 msgid "{filename} is empty. Choose a file with content. Folders cannot be uploaded."
-msgstr ""
+msgstr "{filename} 该文件为空。请选择一个包含内容的文件。无法上传文件夹。"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:15
 msgid "{filename} is too large. The maximum file size is {size}."
-msgstr ""
+msgstr "{filename} 文件太大。最大文件大小为 {size}。"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:26
 msgid "{saved} of {total} files saved."
-msgstr ""
+msgstr "{saved} 已保存 {total} 个文件。"
 
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:93
 msgid "Brightness"
@@ -16326,7 +16326,7 @@ msgstr "将该网址复制到剪贴板。"
 
 #: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:2
 msgid "Embedded videos"
-msgstr ""
+msgstr "嵌入的视频"
 
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media.tpl:4
 msgid "Embedding of media item failed with HTTP code"
