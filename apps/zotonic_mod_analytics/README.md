@@ -283,8 +283,12 @@ resource ID, or `false` for requests without one; omit the filter to include bot
 It is also available as a breakdown. For `controller_template`, only its configured
 resource ID (or explicit `mark_page/2` ID) counts, matching what the controller
 renders. A query-string ID does not attach a resource to an unrelated template.
-Requests without an ID omit the `page` dimension and appear as unknown when
-breaking down by page. Existing aggregate history is not retroactively classified.
+Requests without an ID use `dispatch:<rule_name>` as the `page` dimension,
+displayed as **Dispatch rule: <rule_name>** in page breakdowns. Only the matched
+dispatch rule name is recorded, not the URL or query arguments; `has_page_id`
+remains `false`. If no rule name is available, the `page` dimension is omitted.
+These requests and older unidentified counts appear as **Pages without a resource
+ID**. Existing aggregate history is not retroactively classified.
 
 ### Agent interface analytics
 

@@ -67,7 +67,18 @@ permissions() ->
     end,[page,api]),
     assert_mark(page,false,z_context:set(test_private,true,C)),
     %% An explicit analytics resource overrides the controller's resource.
-    assert_mark(page,false,z_context:set(analytics_page,20,C)).
+    assert_mark(page,false,z_context:set(analytics_page,20,C)),
+    %% Template-only routes retain their dispatch name, without becoming resources.
+    Route = z_context:set([{test_id,undefined},{zotonic_dispatch,test_template}],C),
+    assert_mark(page,true,Route),
+    ?assertMatch(#{analytics := #{<<"page">> := <<"dispatch:test_template">>,
+        <<"has_page_id">> := <<"false">>}},get(metrics)),
+    %% Resource IDs take precedence over the dispatch fallback.
+    assert_mark(page,true,z_context:set(test_id,10,Route)),
+    ?assertMatch(#{analytics := #{<<"page">> := <<"10">>,
+        <<"has_page_id">> := <<"true">>}},get(metrics)),
+    assert_mark(page,true,z_context:set(zotonic_dispatch,undefined,Route)),
+    ?assertNot(maps:is_key(<<"page">>,maps:get(analytics,get(metrics)))).
 
 assert_mark(Type,Expected,C) ->
     erase(metrics),

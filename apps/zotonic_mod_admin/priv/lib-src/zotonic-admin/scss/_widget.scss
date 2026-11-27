@@ -92,7 +92,7 @@
         }
 
         & h1, & h2, & h3, & h4, & h5, & h6 {
-            &:not(.panel-heading &) {
+            &:not(.panel-heading &):not(.admin-maintenance-title) {
                 margin: $baseMargin 0;
 
                 &:first-of-type {
@@ -139,6 +139,14 @@
         font-weight: normal;
         line-height: 16px; // make room for widget-header-tools
         border-radius: $radiusWidget;
+
+        > small {
+            margin-inline-start: .5em;
+            color: var(--z-admin-text-muted);
+            font-size: 70%;
+            font-weight: normal;
+            text-shadow: none;
+        }
 
         .z-btn-remove {
             display: block;

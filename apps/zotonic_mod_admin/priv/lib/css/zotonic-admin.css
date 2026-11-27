@@ -715,6 +715,10 @@ code {
   position: relative;
 }
 
+.btn-open-directory > .glyphicon {
+  margin-inline-end: 0.3em;
+}
+
 .btn > .z-icon {
   width: 18px;
   height: 18px;
@@ -1548,6 +1552,44 @@ img {
   border-radius: 6px;
 }
 
+.admin-maintenance-action {
+  display: grid;
+  margin: 24px 0 0;
+  gap: 6px;
+  align-items: start;
+}
+.admin-maintenance-action:first-child {
+  margin-top: 0;
+}
+
+.admin-maintenance-action > .admin-maintenance-title {
+  margin: 0;
+}
+.admin-maintenance-action > .admin-maintenance-title > small {
+  margin-inline-start: 0.5em;
+  color: var(--z-admin-text-muted);
+  font-size: 75%;
+  font-weight: normal;
+}
+
+.admin-maintenance-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.admin-maintenance-controls .btn {
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.admin-maintenance-explanation {
+  min-width: 0;
+}
+.admin-maintenance-explanation > .help-block {
+  margin: 0;
+}
+
 @media (min-width: 720px) {
   .modal-dialog {
     min-width: 700px;
@@ -1832,6 +1874,67 @@ span.icon_status.icon_status_starting:after {
   box-shadow: inset 0 -7px 7px rgba(100, 100, 100, 0.1), inset 0 7px 7px rgba(255, 255, 255, 0.3);
 }
 
+.admin-capacity-summary {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 0.25rem 1rem;
+  margin-bottom: 0.5rem;
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+
+.admin-capacity {
+  --capacity-color: var(--bs-primary);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+}
+.admin-capacity-alert {
+  --capacity-color: var(--bs-danger);
+}
+.admin-capacity-value {
+  min-width: 4ch;
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+.admin-capacity meter {
+  flex: 1;
+  min-width: 8rem;
+  width: 100%;
+  height: 0.875rem;
+  appearance: none;
+  border: 0;
+  border-radius: 0.25rem;
+  background: var(--z-admin-border);
+}
+.admin-capacity meter::-webkit-meter-bar {
+  height: 0.875rem;
+  border: 0;
+  border-radius: 0.25rem;
+  background: var(--z-admin-border);
+}
+.admin-capacity meter::-webkit-meter-optimum-value {
+  border-radius: 0.25rem;
+  background: var(--capacity-color);
+}
+.admin-capacity meter::-moz-meter-bar {
+  border-radius: 0.25rem;
+  background: var(--capacity-color);
+}
+
+.admin-capacity-details {
+  margin-top: 1rem;
+}
+.admin-capacity-details summary {
+  margin-bottom: 0.5rem;
+}
+
+.admin-capacity-disk {
+  margin-bottom: 1rem;
+}
+
 ul.suggestions-list {
   margin: 0;
   padding: 0;
@@ -1866,6 +1969,13 @@ ul.suggestions-list li a:hover {
 td.clickable,
 tr.clickable td {
   cursor: pointer;
+}
+
+.admin-network-connections th:first-child,
+.admin-network-connections td:first-child {
+  width: 1%;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
 .table > thead > tr > th,
@@ -1939,6 +2049,11 @@ table.do_adminLinkedTable .admin-list-thumb > img {
 .table tbody tr:hover td.clickable,
 .table tbody tr:hover th.clickable {
   background-color: var(--z-admin-surface-hover);
+}
+
+.table tr.unpublished > td,
+.table tr.unpublished > th {
+  color: var(--z-admin-text-light);
 }
 
 table.table tr.unpublished td a.btn-success {
@@ -2361,10 +2476,10 @@ ul.tree-list.connections-list li.menu-item-alert {
 .widget .widget-content:empty {
   display: none;
 }
-.widget .widget-content h1:not(.panel-heading .widget .widget-content h1, .panel-heading .widget .widget-content h2, .panel-heading .widget .widget-content h3, .panel-heading .widget .widget-content h4, .panel-heading .widget .widget-content h5, .panel-heading .widget .widget-content h6), .widget .widget-content h2:not(.panel-heading .widget .widget-content h1, .panel-heading .widget .widget-content h2, .panel-heading .widget .widget-content h3, .panel-heading .widget .widget-content h4, .panel-heading .widget .widget-content h5, .panel-heading .widget .widget-content h6), .widget .widget-content h3:not(.panel-heading .widget .widget-content h1, .panel-heading .widget .widget-content h2, .panel-heading .widget .widget-content h3, .panel-heading .widget .widget-content h4, .panel-heading .widget .widget-content h5, .panel-heading .widget .widget-content h6), .widget .widget-content h4:not(.panel-heading .widget .widget-content h1, .panel-heading .widget .widget-content h2, .panel-heading .widget .widget-content h3, .panel-heading .widget .widget-content h4, .panel-heading .widget .widget-content h5, .panel-heading .widget .widget-content h6), .widget .widget-content h5:not(.panel-heading .widget .widget-content h1, .panel-heading .widget .widget-content h2, .panel-heading .widget .widget-content h3, .panel-heading .widget .widget-content h4, .panel-heading .widget .widget-content h5, .panel-heading .widget .widget-content h6), .widget .widget-content h6:not(.panel-heading .widget .widget-content h1, .panel-heading .widget .widget-content h2, .panel-heading .widget .widget-content h3, .panel-heading .widget .widget-content h4, .panel-heading .widget .widget-content h5, .panel-heading .widget .widget-content h6) {
+.widget .widget-content h1:not(.panel-heading .widget .widget-content h1, .panel-heading .widget .widget-content h2, .panel-heading .widget .widget-content h3, .panel-heading .widget .widget-content h4, .panel-heading .widget .widget-content h5, .panel-heading .widget .widget-content h6):not(.admin-maintenance-title), .widget .widget-content h2:not(.panel-heading .widget .widget-content h1, .panel-heading .widget .widget-content h2, .panel-heading .widget .widget-content h3, .panel-heading .widget .widget-content h4, .panel-heading .widget .widget-content h5, .panel-heading .widget .widget-content h6):not(.admin-maintenance-title), .widget .widget-content h3:not(.panel-heading .widget .widget-content h1, .panel-heading .widget .widget-content h2, .panel-heading .widget .widget-content h3, .panel-heading .widget .widget-content h4, .panel-heading .widget .widget-content h5, .panel-heading .widget .widget-content h6):not(.admin-maintenance-title), .widget .widget-content h4:not(.panel-heading .widget .widget-content h1, .panel-heading .widget .widget-content h2, .panel-heading .widget .widget-content h3, .panel-heading .widget .widget-content h4, .panel-heading .widget .widget-content h5, .panel-heading .widget .widget-content h6):not(.admin-maintenance-title), .widget .widget-content h5:not(.panel-heading .widget .widget-content h1, .panel-heading .widget .widget-content h2, .panel-heading .widget .widget-content h3, .panel-heading .widget .widget-content h4, .panel-heading .widget .widget-content h5, .panel-heading .widget .widget-content h6):not(.admin-maintenance-title), .widget .widget-content h6:not(.panel-heading .widget .widget-content h1, .panel-heading .widget .widget-content h2, .panel-heading .widget .widget-content h3, .panel-heading .widget .widget-content h4, .panel-heading .widget .widget-content h5, .panel-heading .widget .widget-content h6):not(.admin-maintenance-title) {
   margin: 15px 0;
 }
-.widget .widget-content h1:not(.panel-heading .widget .widget-content h1, .panel-heading .widget .widget-content h2, .panel-heading .widget .widget-content h3, .panel-heading .widget .widget-content h4, .panel-heading .widget .widget-content h5, .panel-heading .widget .widget-content h6):first-of-type, .widget .widget-content h2:not(.panel-heading .widget .widget-content h1, .panel-heading .widget .widget-content h2, .panel-heading .widget .widget-content h3, .panel-heading .widget .widget-content h4, .panel-heading .widget .widget-content h5, .panel-heading .widget .widget-content h6):first-of-type, .widget .widget-content h3:not(.panel-heading .widget .widget-content h1, .panel-heading .widget .widget-content h2, .panel-heading .widget .widget-content h3, .panel-heading .widget .widget-content h4, .panel-heading .widget .widget-content h5, .panel-heading .widget .widget-content h6):first-of-type, .widget .widget-content h4:not(.panel-heading .widget .widget-content h1, .panel-heading .widget .widget-content h2, .panel-heading .widget .widget-content h3, .panel-heading .widget .widget-content h4, .panel-heading .widget .widget-content h5, .panel-heading .widget .widget-content h6):first-of-type, .widget .widget-content h5:not(.panel-heading .widget .widget-content h1, .panel-heading .widget .widget-content h2, .panel-heading .widget .widget-content h3, .panel-heading .widget .widget-content h4, .panel-heading .widget .widget-content h5, .panel-heading .widget .widget-content h6):first-of-type, .widget .widget-content h6:not(.panel-heading .widget .widget-content h1, .panel-heading .widget .widget-content h2, .panel-heading .widget .widget-content h3, .panel-heading .widget .widget-content h4, .panel-heading .widget .widget-content h5, .panel-heading .widget .widget-content h6):first-of-type {
+.widget .widget-content h1:not(.panel-heading .widget .widget-content h1, .panel-heading .widget .widget-content h2, .panel-heading .widget .widget-content h3, .panel-heading .widget .widget-content h4, .panel-heading .widget .widget-content h5, .panel-heading .widget .widget-content h6):not(.admin-maintenance-title):first-of-type, .widget .widget-content h2:not(.panel-heading .widget .widget-content h1, .panel-heading .widget .widget-content h2, .panel-heading .widget .widget-content h3, .panel-heading .widget .widget-content h4, .panel-heading .widget .widget-content h5, .panel-heading .widget .widget-content h6):not(.admin-maintenance-title):first-of-type, .widget .widget-content h3:not(.panel-heading .widget .widget-content h1, .panel-heading .widget .widget-content h2, .panel-heading .widget .widget-content h3, .panel-heading .widget .widget-content h4, .panel-heading .widget .widget-content h5, .panel-heading .widget .widget-content h6):not(.admin-maintenance-title):first-of-type, .widget .widget-content h4:not(.panel-heading .widget .widget-content h1, .panel-heading .widget .widget-content h2, .panel-heading .widget .widget-content h3, .panel-heading .widget .widget-content h4, .panel-heading .widget .widget-content h5, .panel-heading .widget .widget-content h6):not(.admin-maintenance-title):first-of-type, .widget .widget-content h5:not(.panel-heading .widget .widget-content h1, .panel-heading .widget .widget-content h2, .panel-heading .widget .widget-content h3, .panel-heading .widget .widget-content h4, .panel-heading .widget .widget-content h5, .panel-heading .widget .widget-content h6):not(.admin-maintenance-title):first-of-type, .widget .widget-content h6:not(.panel-heading .widget .widget-content h1, .panel-heading .widget .widget-content h2, .panel-heading .widget .widget-content h3, .panel-heading .widget .widget-content h4, .panel-heading .widget .widget-content h5, .panel-heading .widget .widget-content h6):not(.admin-maintenance-title):first-of-type {
   margin-top: 0;
 }
 .widget .widget-content > .pull-right {
@@ -2400,6 +2515,13 @@ ul.tree-list.connections-list li.menu-item-alert {
   font-weight: normal;
   line-height: 16px;
   border-radius: 10px;
+}
+.widget .widget-header > small {
+  margin-inline-start: 0.5em;
+  color: var(--z-admin-text-muted);
+  font-size: 70%;
+  font-weight: normal;
+  text-shadow: none;
 }
 .widget .widget-header .z-btn-remove {
   display: block;

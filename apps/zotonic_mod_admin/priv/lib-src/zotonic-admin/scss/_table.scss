@@ -8,6 +8,15 @@ tr.clickable td {
     cursor: pointer;
 }
 
+.admin-network-connections {
+    th:first-child,
+    td:first-child {
+        width: 1%;
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+    }
+}
+
 .table > thead > tr > th,
 .table > tbody > tr > th,
 .table > tfoot > tr > th,
@@ -101,6 +110,12 @@ table.do_adminLinkedTable {
 .table tbody tr:hover td.clickable,
 .table tbody tr:hover th.clickable {
     background-color: var(--z-admin-surface-hover);
+}
+
+// Bootstrap 5 colors cells directly instead of inheriting the row color.
+.table tr.unpublished > td,
+.table tr.unpublished > th {
+    color: var(--z-admin-text-light);
 }
 
 table.table tr.unpublished td a.btn-success {

@@ -1,0 +1,67 @@
+.admin-capacity-summary {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: .25rem 1rem;
+    margin-bottom: .5rem;
+    overflow-wrap: anywhere;
+    font-variant-numeric: tabular-nums;
+}
+
+.admin-capacity {
+    --capacity-color: var(--bs-primary);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem 1rem;
+
+    &-alert {
+        --capacity-color: var(--bs-danger);
+    }
+
+    &-value {
+        min-width: 4ch;
+        text-align: end;
+        font-variant-numeric: tabular-nums;
+    }
+
+    meter {
+        flex: 1;
+        min-width: 8rem;
+        width: 100%;
+        height: .875rem;
+        appearance: none;
+        border: 0;
+        border-radius: .25rem;
+        background: var(--z-admin-border);
+
+        &::-webkit-meter-bar {
+            height: .875rem;
+            border: 0;
+            border-radius: .25rem;
+            background: var(--z-admin-border);
+        }
+
+        &::-webkit-meter-optimum-value {
+            border-radius: .25rem;
+            background: var(--capacity-color);
+        }
+
+        &::-moz-meter-bar {
+            border-radius: .25rem;
+            background: var(--capacity-color);
+        }
+    }
+}
+
+.admin-capacity-details {
+    margin-top: 1rem;
+
+    summary {
+        margin-bottom: .5rem;
+    }
+}
+
+.admin-capacity-disk {
+    margin-bottom: 1rem;
+}

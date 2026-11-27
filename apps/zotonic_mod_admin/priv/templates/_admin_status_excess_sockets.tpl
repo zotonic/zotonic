@@ -8,7 +8,7 @@
                 {% endfor %}
             </ul>
         {% else %}
-            <p>{_ No IP addresses have more than 250 open sockets. _}</p>
+            <p class="text-info"><span class="fa fa-info-circle" aria-hidden="true"></span> {_ No IP addresses have more than 250 open sockets. _}</p>
         {% endif %}
         {% button class="btn btn-default btn-sm" text=_"Refresh" action={update target="admin-excess-sockets" template="_admin_status_excess_sockets.tpl"} %}
         <small class="text-muted">{_ Updated _}: {{ now|date:"H:i:s" }}</small>
