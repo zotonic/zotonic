@@ -65,12 +65,17 @@ purge() ->
     ok = m_filestore:queue(Remote, #{}, C),
     ok = m_filestore:queue(ArchivedPoster, #{}, C),
     Before = z_db:q1("select clock_timestamp()::text", C),
+    ReadOnly = application:get_env(zotonic_mod_filestore, is_read_only),
     try
         %% Read-only and unavailable backends retain the task for retry.
-        ok = m_config:set_value(mod_filestore, is_read_only, true, C),
+        %% Avoid racing background readers repopulating the config cache with
+        %% the temporary read-only value after a database config reset.
+        ok = application:set_env(zotonic_mod_filestore, is_read_only, true),
         ?assertEqual({error, read_only}, m_filestore:purge_previews(Before, C)),
+        ?assertEqual({delay, 600, [Before, 0, remote]},
+            z_media_preview_purge:run(Before, 0, remote, C)),
         ?assertEqual(false, z_db:q1("select is_deleted from filestore where id=$1", [RemoteId], C)),
-        ok = m_config:set_value(mod_filestore, is_read_only, false, C),
+        ok = restore_read_only(ReadOnly),
         ok = run(Before, erlang:system_time(second), cafs, C, 30),
         ?assertNot(filelib:is_regular(Local)),
         ?assert(filelib:is_regular(Protected)),
@@ -90,7 +95,7 @@ purge() ->
         ok = z_notifier:detach(filestore, self(), C),
         ?assertMatch({delay, 600, _}, z_media_preview_purge:run(Before, 0, remote, C))
     after
-        m_config:set_value(mod_filestore, is_read_only, false, C),
+        restore_read_only(ReadOnly),
         z_notifier:detach(filestore, self(), C),
         m_rsc:delete(Id, C),
         lists:foreach(fun file:delete/1, [Output, RemoteOutput, Local, Protected, Private, Symlink]),
@@ -145,3 +150,8 @@ observe_filestore(_, _) -> undefined.
 
 store(Path, C) ->
     m_filestore:store(Path, 1, <<"s3">>, <<"https://example.test/", Path/binary>>, false, C).
+
+restore_read_only(undefined) ->
+    application:unset_env(zotonic_mod_filestore, is_read_only);
+restore_read_only({ok, Value}) ->
+    application:set_env(zotonic_mod_filestore, is_read_only, Value).
