@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-24 17:04\n"
+"PO-Revision-Date: 2026-11-27 21:21\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "MIME-Version: 1.0\n"
@@ -267,7 +267,7 @@ msgstr "모두"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:8
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:39
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:61
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:68
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:58
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:84
 msgid "All Categories"
@@ -325,7 +325,7 @@ msgstr "모든 ACL 규칙을 현재 게시된 버전으로 복원하시겠습니
 #: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:9
 #: zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:7
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:76
-#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:73
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:79
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:259
 #: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:50
@@ -463,6 +463,7 @@ msgstr "설정이 변경되었습니다."
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:43
 #: zotonic_mod_development/priv/templates/_development_template_matches.tpl:27
 #: zotonic_mod_editor_tinymce/priv/templates/_admin_configure_module.tpl:30
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:62
 #: zotonic_mod_email_status/priv/templates/_dialog_email_status.tpl:4
 #: zotonic_mod_l10n/priv/templates/_admin_configure_module.tpl:8
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_view.tpl:33
@@ -519,7 +520,7 @@ msgstr "자료 작성자를 소유자로 간주하십시오."
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4
 #: zotonic_mod_admin/src/mod_admin.erl:516
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:70
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:34
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 msgid "Content"
 msgstr "콘텐츠"
@@ -565,10 +566,10 @@ msgstr "협업 그룹으로 이동할 수 없습니다."
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:18
 #: zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:21
 #: zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:25
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:118
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:135
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:53
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:8
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:81
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:78
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:30
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:53
 #: zotonic_mod_admin_identity/src/mod_admin_identity.erl:330
@@ -733,7 +734,7 @@ msgstr "같은 사용자 그룹의 구성원"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:8
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:9
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:42
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:35
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:32
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:28
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:84
@@ -1096,6 +1097,11 @@ msgstr "다른 브라우저를 사용하십시오(예: 현재 Firefox를 사용 
 msgid "view (acl action)"
 msgstr "보기(ACL 작업)"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:102
+msgctxt "disk space"
+msgid "free"
+msgstr "무료"
+
 #: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:4
 msgid "<strong>{n}</strong> IP address has more than 250 open sockets."
 msgid_plural "<strong>{n}</strong> IP addresses have more than 250 open sockets."
@@ -1158,7 +1164,7 @@ msgid "About categories"
 msgstr "카테고리 소개"
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:24
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:200
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:217
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:140
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:56
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:97
@@ -1184,7 +1190,7 @@ msgstr "접근 제어"
 msgid "Active"
 msgstr "활성"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:30
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:37
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:27
 msgid "Active filters"
 msgstr "활성 필터"
@@ -1194,12 +1200,12 @@ msgid "Add a connection"
 msgstr "연결 추가"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:53
-#: zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:24
+#: zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:34
 msgid "Add a connection:"
 msgstr "연결 추가:"
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:91
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:137
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:138
 msgid "Add a new media file"
 msgstr "새 미디어 파일 추가"
 
@@ -1270,7 +1276,7 @@ msgstr "관리 화면"
 msgid "Advanced"
 msgstr "고급"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:58
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:59
 msgid "Advanced repair"
 msgstr "고급 복구"
 
@@ -1278,7 +1284,7 @@ msgstr "고급 복구"
 msgid "After the duplication you can edit the new page. The new page will be unpublished."
 msgstr "페이지를 복제한 후에는 새 페이지를 편집할 수 있습니다. 새 페이지는 비공개 상태가 됩니다."
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:44
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:51
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:41
 msgid "All Content"
 msgstr "모든 콘텐츠"
@@ -1288,14 +1294,14 @@ msgid "All day"
 msgstr "하루 종일"
 
 #: zotonic_mod_admin/priv/templates/_admin_dashboard_buttons.tpl:14
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:102
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:109
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:112
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:83
 msgid "All media"
 msgstr "모든 미디어"
 
 #: zotonic_mod_admin/priv/templates/_admin_dashboard_buttons.tpl:13
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:101
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:108
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:111
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:82
 msgid "All pages"
@@ -1311,10 +1317,6 @@ msgstr "모든 사이트의 캐시를 비웠습니다."
 msgid "All sites on this node"
 msgstr "이 노드에 속한 모든 사이트"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:7
-msgid "Allocated"
-msgstr "할당됨"
-
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:173
 #: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:13
 msgid "Also subscribe to connected resources."
@@ -1329,11 +1331,11 @@ msgstr "보조 전화번호"
 msgid "Always import all resources, including manually deleted resources."
 msgstr "수동으로 삭제한 리소스를 포함하여 모든 리소스를 항상 가져오십시오."
 
-#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:17
+#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:13
 msgid "Amount"
 msgstr "수량"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:90
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:97
 msgid "And media can also be viewed on their own page."
 msgstr "미디어 콘텐츠는 별도의 페이지에서도 볼 수 있습니다."
 
@@ -1427,7 +1429,7 @@ msgid "Automatically fetch updates from the original website."
 msgstr "원본 웹사이트에서 업데이트를 자동으로 가져옵니다."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:62
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:38
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:63
 msgid "Available"
 msgstr "사용 가능"
 
@@ -1452,6 +1454,10 @@ msgstr "뒤로"
 msgid "Background work"
 msgstr "백그라운드 작업"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:113
+msgid "Bars show disk space in use. Refreshed every 30 minutes."
+msgstr "막대는 사용 중인 디스크 공간을 나타냅니다. 30분마다 새로 고침됩니다."
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_basics.tpl:4
 msgid "Basic"
 msgstr "기본"
@@ -1472,11 +1478,11 @@ msgstr "블록 이름"
 msgid "Block quote"
 msgstr "인용문"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:36
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:61
 msgid "Buffered"
 msgstr "버퍼링됨"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:37
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:62
 msgid "Cached"
 msgstr "캐시됨"
 
@@ -1638,7 +1644,7 @@ msgstr "연결"
 msgid "Content origin"
 msgstr "콘텐츠 출처"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:48
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:49
 msgid "Content repair"
 msgstr "콘텐츠 수정"
 
@@ -1712,7 +1718,7 @@ msgstr "개수"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:86
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:142
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:220
-#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:15
+#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:16
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:110
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:45
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:47
@@ -1772,7 +1778,7 @@ msgstr "대시보드"
 msgid "Data directory"
 msgstr "데이터 디렉터리"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:61
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:62
 msgid "Datamodel upgrades and reinstalls preserve your existing data. No content or uploaded files will be deleted."
 msgstr "데이터 모델 업그레이드 및 재설치 시 기존 데이터는 그대로 유지됩니다. 콘텐츠나 업로드된 파일은 삭제되지 않습니다."
 
@@ -1814,7 +1820,7 @@ msgstr "생성된 미리보기 삭제"
 msgid "Delete if no other page is connected to this page."
 msgstr "다른 페이지가 이 페이지에 연결되어 있지 않으면 삭제합니다."
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:51
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:57
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:239
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:90
 msgid "Delete if not connected anymore"
@@ -1854,11 +1860,16 @@ msgstr "삭제한 내용은 되돌릴 수 없습니다."
 msgid "Dependent"
 msgstr "종속"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:52
+msgid "Detailed memory figures"
+msgstr "상세한 메모리 수치"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:9
 msgid "Dimensions"
 msgstr "치수"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:33
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:47
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:61
 msgid "Disabled"
 msgstr "비활성화됨"
@@ -1883,11 +1894,11 @@ msgstr "이 노드의 모든 사이트에서 열린 소켓이 합계 250개를 �
 msgid "Discover media"
 msgstr "미디어 찾기"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:76
-msgid "Disk capacity"
-msgstr "디스크 용량"
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:110
+msgid "Disk information unavailable."
+msgstr "디스크 정보를 확인할 수 없습니다."
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:69
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:95
 msgid "Disks"
 msgstr "디스크"
 
@@ -1917,9 +1928,30 @@ msgstr "다운로드"
 msgid "Download media from the original website."
 msgstr "원본 웹사이트에서 미디어를 다운로드합니다."
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_media.tpl:23
+msgid "Drag a file anywhere into this panel to replace the current media file."
+msgstr "현재 미디어 파일을 교체하려면 파일을 이 패널 내의 아무 곳이나 드래그하세요."
+
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:11
+msgid "Drag a file anywhere into this tab or choose a file below. Then use the Upload file button to upload it."
+msgstr "파일을 이 탭 내의 아무 곳이나 드래그하거나 아래에서 파일을 선택하세요. 그런 다음 ‘파일 업로드’ 버튼을 사용하여 파일을 업로드하세요."
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:19
+msgid "Drag files anywhere into this panel to upload and attach them to this page."
+msgstr "파일을 이 패널의 아무 곳이나 드래그하여 업로드하고 이 페이지에 첨부하세요."
+
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:114
+msgid "Drag files anywhere onto this page to upload them as new media items."
+msgstr "파일을 이 페이지의 아무 곳이나 드래그하여 새로운 미디어 항목으로 업로드하세요."
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:11
 msgid "Drag to change position"
 msgstr "드래그하여 위치 변경"
+
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:118
+#: zotonic_mod_fileuploader/priv/templates/admin.tpl:10
+msgid "Drop files to add them to Media"
+msgstr "파일을 드래그 앤 드롭하여 미디어에 추가하세요"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:33
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:38
@@ -1956,7 +1988,7 @@ msgstr "이메일 주소"
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config.tpl:7
 #: zotonic_mod_admin/priv/templates/_rsc_edge.tpl:19
 #: zotonic_mod_admin/priv/templates/admin_edit.tpl:3
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:82
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:79
 #: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:70
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:23
@@ -2027,7 +2059,7 @@ msgstr "페이지 삽입 | 인용문, 팝업 또는 다른 페이지 링크"
 msgid "Embedded Content"
 msgstr "임베드 콘텐츠"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:50
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:51
 msgid "Embedded-page references"
 msgstr "내장 페이지 참조"
 
@@ -2052,6 +2084,10 @@ msgstr "Erlang 설치 루트 디렉터리"
 msgid "Erlang memory"
 msgstr "Erlang 메모리"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:9
+msgid "Erlang memory in use"
+msgstr "사용 중인 Erlang 메모리"
+
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:18
 msgid "Erlang/OTP"
 msgstr "Erlang/OTP"
@@ -2070,7 +2106,8 @@ msgstr "페이지를 생성하는 데 오류가 발생했습니다."
 msgid "Error importing page from the remote server."
 msgstr "원격 서버에서 페이지를 가져오는 중 오류가 발생했습니다."
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:236
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:257
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:305
 msgid "Error uploading the file."
 msgstr "파일 업로드 중 오류가 발생했습니다."
 
@@ -2114,7 +2151,7 @@ msgstr "제외 카테고리"
 msgid "Existing pages"
 msgstr "기존 페이지"
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:222
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:243
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:210
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:170
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:123
@@ -2170,7 +2207,7 @@ msgstr "파일 이름"
 msgid "Files are handled in the background by mailinglist recipient import and other modules watching the drop folder."
 msgstr "파일은 메일링리스트 수신자 가져오기 모듈 및 드롭 폴더를 모니터링하는 기타 모듈에 의해 백그라운드에서 처리됩니다."
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:27
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:34
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:24
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_log.tpl:18
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:46
@@ -2183,12 +2220,12 @@ msgstr "파일은 메일링리스트 수신자 가져오기 모듈 및 드롭 �
 msgid "Filter"
 msgstr "필터"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:64
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:71
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:61
 msgid "Filter on category"
 msgstr "카테고리별 필터링"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:47
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:54
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:44
 msgid "Filter on content group"
 msgstr "콘텐츠 그룹에서 필터링"
@@ -2201,7 +2238,7 @@ msgstr "미디어 찾기"
 msgid "Find Page"
 msgstr "페이지 찾기"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:50
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:51
 msgid "Find embedded page references and rebuild their refers connections. This runs in the background."
 msgstr "삽입된 페이지 참조를 찾아 refers 연결을 다시 구축합니다. 이 작업은 백그라운드에서 실행됩니다."
 
@@ -2243,7 +2280,7 @@ msgstr "캐시 비우기"
 msgid "Follow connections and import all (deep copy)."
 msgstr "연결을 따라가서 모두 가져오기(심층 복사)."
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:35
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:60
 msgid "Free"
 msgstr "여유"
 
@@ -2306,17 +2343,21 @@ msgstr "여기에서 검색 쿼리의 인수를 편집할 수 있습니다. 각 
 msgid "Hide page from searches (depends on the search query)"
 msgstr "검색 결과에서 페이지를 숨깁니다(검색어에 따라 다름)."
 
+#: zotonic_mod_admin/priv/templates/_admin_status_capacity.tpl:6
+msgid "High usage"
+msgstr "사용 빈도가 높음"
+
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:61
 msgid "Home directory"
 msgstr "홈 디렉터리"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:26
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:69
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:16
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:95
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:158
 msgid "Host"
 msgstr "호스트"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:13
+#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:14
 #: zotonic_mod_authentication/priv/templates/sessions.tpl:48
 #: zotonic_mod_authentication/priv/templates/sessions.tpl:93
 msgid "IP Address"
@@ -2382,11 +2423,11 @@ msgstr "가져오기"
 msgid "Indexed by search engines"
 msgstr "검색 엔진에 의해 색인화됨"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:63
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:64
 msgid "Individual modules can be reinstalled from the Modules list."
 msgstr "개별 모듈은 ‘모듈’ 목록에서 다시 설치할 수 있습니다."
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:133
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:150
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:23
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:21
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:145
@@ -2413,7 +2454,7 @@ msgstr "설치 관련 세부 정보는 시스템 관리자가 확인할 수 있�
 msgid "Integrations"
 msgstr "연동 기능"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:77
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:84
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:74
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:41
 msgid "Items per page"
@@ -2447,6 +2488,10 @@ msgstr "최근 수정된 인물"
 #: zotonic_mod_admin/priv/templates/_admin_dashboard_texts.tpl:2
 msgid "Latest modified texts"
 msgstr "최근 수정된 텍스트"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:104
+msgid "Less than 5% free disk space"
+msgstr "사용 가능한 디스크 공간이 5% 미만입니다."
 
 #: zotonic_mod_admin/priv/templates/_admin_menu.tpl:64
 msgid "Light"
@@ -2528,7 +2573,7 @@ msgstr "만들기"
 msgid "Make a duplicate of this page."
 msgstr "이 페이지를 복제합니다."
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:98
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:105
 msgid "Make a new media item"
 msgstr "새 미디어 항목 만들기"
 
@@ -2553,7 +2598,7 @@ msgstr "일치하는 검색 텍스트"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:18
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:3
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:86
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:93
 #: zotonic_mod_admin/src/mod_admin.erl:525
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:100
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:103
@@ -2591,22 +2636,21 @@ msgstr "미디어 중복 제거 작업이 대기열에 추가되었습니다."
 msgid "Media details"
 msgstr "미디어 세부 정보"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:89
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:96
 msgid "Media encompasses all uploaded images, movies and documents. Media can be attached to pages."
 msgstr "미디어에는 업로드된 모든 이미지, 동영상 및 문서가 포함됩니다. 미디어는 페이지에 첨부할 수 있습니다."
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:37
-#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:38
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:35
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:36
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:43
 msgid "Media file"
 msgstr "미디어 파일"
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:193
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:195
 msgid "Media item created."
 msgstr "미디어 항목이 생성되었습니다."
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:19
-#: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:2
 msgid "Media maintenance"
 msgstr "미디어 유지보수"
 
@@ -2631,18 +2675,22 @@ msgstr "미디어 처리"
 msgid "Media runners"
 msgstr "미디어 러너"
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:27
-#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:28
-msgid "Media title"
-msgstr "미디어 제목"
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:42
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:43
+msgid "Media title (optional)"
+msgstr "미디어 제목 (선택 사항)"
 
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:151
 msgid "Media updated."
 msgstr "미디어 업데이트 완료."
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:43
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:68
 msgid "Memory"
 msgstr "메모리"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:36
+msgid "Memory information unavailable."
+msgstr "메모리 정보를 확인할 수 없습니다."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:32
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:33
@@ -2682,8 +2730,8 @@ msgstr "수정일자 (최신순)"
 msgid "Modification date, oldest first"
 msgstr "수정일자 (가장 오래된 날짜부터)"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:134
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:38
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:151
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:35
 msgid "Modified"
 msgstr "수정일"
 
@@ -2749,7 +2797,7 @@ msgstr "송장에 기재할 이름"
 msgid "Need more help?"
 msgstr "더 도움이 필요하신가요?"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:2
+#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:3
 #: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:7
 msgid "Network Connections"
 msgstr "네트워크 연결"
@@ -2805,7 +2853,7 @@ msgstr "항목 없음"
 msgid "No media content."
 msgstr "미디어 콘텐츠가 없습니다."
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:192
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:209
 msgid "No media found."
 msgstr "미디어를 찾을 수 없습니다."
 
@@ -2869,9 +2917,17 @@ msgstr "보호되지 않음"
 msgid "Not running"
 msgstr "실행 중이 아님"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:26
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:16
 msgid "OS memory"
 msgstr "OS 메모리"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:32
+msgid "OS memory in use"
+msgstr "사용 중인 OS 메모리"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:25
+msgid "OS memory unavailable"
+msgstr "OS 메모리 부족"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:129
 msgid "Ongoing"
@@ -2885,13 +2941,13 @@ msgstr "노드 연결을 종료할 수 있는 사람은 시스템 관리자뿐�
 msgid "Open"
 msgstr "열기"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:63
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:64
 msgid "Open Modules list"
 msgstr "모듈 목록 열기"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:37
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:39
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:40
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:42
 msgid "Open in new tab"
 msgstr "새 탭에서 열기"
 
@@ -2965,18 +3021,6 @@ msgstr "다음 관계의 페이지:"
 msgid "Pages overview"
 msgstr "페이지 개요"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:75
-#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:36
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:27
-#: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:8
-msgid "Path"
-msgstr "경로"
-
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:10
-msgid "Percent in use"
-msgstr "사용률"
-
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:6
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:10
 msgid "Personal name"
@@ -3028,7 +3072,7 @@ msgid "Predicate"
 msgstr "술어"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:28
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:131
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:148
 msgid "Preview"
 msgstr "미리보기"
 
@@ -3081,7 +3125,7 @@ msgid "Publish this page"
 msgstr "이 페이지 게시"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:50
-#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:63
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:69
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:248
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:47
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:102
@@ -3128,7 +3172,7 @@ msgstr "쿼리"
 msgid "Query results"
 msgstr "검색 결과"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:41
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:42
 msgid "Queue every page for search indexing. Large sites can take a long time to finish."
 msgstr "모든 페이지를 검색 색인화 대기열에 추가합니다. 규모가 큰 사이트의 경우 완료까지 오랜 시간이 걸릴 수 있습니다."
 
@@ -3144,11 +3188,11 @@ msgstr "Ranch 제한"
 msgid "Rebuild derived data and maintain this site. Queued work can be followed on the Status page."
 msgstr "파생 데이터를 재구축하고 이 사이트를 관리합니다. 대기 중인 작업은 ‘상태’ 페이지에서 확인할 수 있습니다."
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:51
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:52
 msgid "Rebuild references"
 msgstr "참조 재구성"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:42
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:43
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:169
 msgid "Rebuild search indices"
 msgstr "검색 인덱스 재구축"
@@ -3183,17 +3227,13 @@ msgstr "다음 페이지를 참조하는 페이지:"
 msgid "Refresh"
 msgstr "새로 고침"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:94
-msgid "Refreshed every 30 minutes."
-msgstr "30분마다 새로 고쳐집니다."
-
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:74
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:75
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:76
 msgid "Reinstall Zotonic datamodel"
 msgstr "Zotonic 데이터 모델 재설치"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:67
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:68
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:69
 msgid "Reinstall site datamodel"
 msgstr "사이트 데이터 모델을 다시 설치합니다."
 
@@ -3246,6 +3286,11 @@ msgstr "대체"
 msgid "Replace current medium"
 msgstr "현재 미디어 대체"
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_media.tpl:17
+#: zotonic_mod_fileuploader/priv/templates/_fileuploader_dropzone.tpl:5
+msgid "Replace the current media file?"
+msgstr "현재 미디어 파일을 교체하시겠습니까?"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:4
 msgid "Resize Live view"
 msgstr "실시간 보기 크기 조절"
@@ -3278,15 +3323,15 @@ msgstr "270도 회전"
 msgid "Rotated 90 degrees"
 msgstr "90도 회전"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:72
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:73
 msgid "Run the Zotonic core datamodel installation again for this site's database."
 msgstr "이 사이트의 데이터베이스에 대해 Zotonic 핵심 데이터 모델 설치를 다시 실행하십시오."
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:75
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:76
 msgid "Run the Zotonic core datamodel installation again for this site's database? Your existing data will be preserved."
 msgstr "이 사이트의 데이터베이스에 대해 Zotonic 핵심 데이터 모델 설치를 다시 실행하시겠습니까? 기존 데이터는 그대로 유지됩니다."
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:65
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:66
 msgid "Run the site's schema installation again. The site will stop and restart."
 msgstr "사이트의 스키마 설치를 다시 실행하십시오. 사이트가 일시 중지된 후 다시 시작됩니다."
 
@@ -3368,7 +3413,7 @@ msgid "Scheduled tasks"
 msgstr "예약된 작업"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:294
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:37
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:38
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user_dialog.tpl:9
 msgid "Search"
 msgstr "검색"
@@ -3381,7 +3426,7 @@ msgstr "검색 색인 생성"
 msgid "Search indexing runs separately from the scheduled task queue."
 msgstr "검색 색인 생성은 예약된 작업 대기열과는 별도로 실행됩니다."
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:41
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:42
 msgid "Search indices"
 msgstr "검색 인덱스"
 
@@ -3447,11 +3492,11 @@ msgid "Select both a visible page and a valid predicate for each connection."
 msgstr "각 연결에 대해 볼 수 있는 페이지와 유효한 술어를 모두 선택하십시오."
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:80
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:115
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:132
 msgid "Selected"
 msgstr "선택된"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:59
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:66
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:56
 msgid "Selected Categories"
 msgstr "선택된 카테고리"
@@ -3530,7 +3575,7 @@ msgstr "사이트 캐시"
 msgid "Site config files"
 msgstr "사이트 구성 파일"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:65
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:66
 msgid "Site datamodel"
 msgstr "사이트 데이터 모델"
 
@@ -3735,9 +3780,14 @@ msgstr "성씨 접두사"
 msgid "Suspended"
 msgstr "정지된"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:53
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:40
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:78
 msgid "Swap"
 msgstr "스왑"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:44
+msgid "Swap in use"
+msgstr "사용 중인 스왑"
 
 #: zotonic_mod_admin/src/mod_admin.erl:572
 msgid "System"
@@ -3802,6 +3852,10 @@ msgstr "Zotonic 데이터 모델을 다시 설치하는 중입니다. 콘솔에�
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:58
 msgid "The addresses 0.0.0.0 and :: mean all local IPv4 and IPv6 interfaces respectively. Configured bindings are shown when a listener is absent."
 msgstr "주소 0.0.0.0과 ::는 각각 모든 로컬 IPv4 및 IPv6 인터페이스를 의미합니다. 리스너가 없는 경우 구성된 바인딩이 표시됩니다."
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:26
+msgid "The bar shows memory not available for allocation. Available memory includes reclaimable memory reported by the operating system."
+msgstr "이 막대는 할당에 사용할 수 없는 메모리를 나타냅니다. 사용 가능한 메모리에는 운영 체제가 보고한 회수 가능한 메모리가 포함됩니다."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:201
 msgid "The billing address is only visible for people who can edit this page."
@@ -3909,7 +3963,7 @@ msgstr "이 작업은 되돌릴 수 없습니다. 페이지는 영원히 사라�
 msgid "This connection already exists."
 msgstr "이 연결은 이미 존재합니다."
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:226
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:247
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:214
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:174
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:127
@@ -3928,14 +3982,14 @@ msgstr "이 파일은 크기가 너무 커서 바이러스 검사를 하지 않�
 msgid "This file has not been scanned for viruses."
 msgstr "이 파일은 바이러스 검사를 거치지 않았습니다."
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:224
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:245
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:212
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:172
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:125
 msgid "This file is infected with a virus."
 msgstr "이 파일은 바이러스에 감염되었습니다."
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:228
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:249
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:216
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:176
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:129
@@ -3995,7 +4049,7 @@ msgstr "이 페이지 경로는 다른 페이지에서 사용 중입니다."
 msgid "This resource was created by the module"
 msgstr "이 리소스를 생성한 모듈:"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:68
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:69
 msgid "This runs the site's schema installation again and stops and restarts the site. Your existing data will be preserved. Continue?"
 msgstr "이 작업을 수행하면 사이트의 스키마 설치가 다시 실행되고, 사이트가 중지된 후 다시 시작됩니다. 기존 데이터는 그대로 유지됩니다. 계속하시겠습니까?"
 
@@ -4019,7 +4073,7 @@ msgstr "웹사이트에서 데이터를 가져오는 동안 시간 초과가 발
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:36
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:93
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:132
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:149
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:21
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:9
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:11
@@ -4046,7 +4100,7 @@ msgid "Too many connections, only the first and last are shown."
 msgstr "연결 수가 너무 많아 첫 번째와 마지막 연결만 표시됩니다."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:13
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:33
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:58
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:21
 msgid "Total"
 msgstr "총"
@@ -4145,10 +4199,6 @@ msgstr "제목 없음"
 msgid "Untitled query"
 msgstr "제목 없는 쿼리"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:9
-msgid "Unused"
-msgstr "미사용"
-
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:125
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:37
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:60
@@ -4158,7 +4208,7 @@ msgstr "다가오는"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:82
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:112
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:117
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:134
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:16
 msgid "Update"
 msgstr "업데이트"
@@ -4187,11 +4237,11 @@ msgstr "업로드"
 msgid "Upload File"
 msgstr "파일 업로드"
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:4
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:5
 msgid "Upload a file from your computer."
 msgstr "컴퓨터에서 파일을 업로드하십시오."
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:74
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:80
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:31
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:36
 msgid "Upload file"
@@ -4201,13 +4251,17 @@ msgstr "파일 업로드"
 msgid "Upload files for background processing or use a module's import tool."
 msgstr "백그라운드 처리를 위해 파일을 업로드하거나 모듈의 가져오기 도구를 사용하십시오."
 
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:119
+msgid "Upload starts immediately. Each file becomes a new media item."
+msgstr "업로드가 즉시 시작됩니다. 각 파일은 새로운 미디어 항목으로 생성됩니다."
+
 #: zotonic_mod_admin/priv/templates/admin_imports.tpl:9
 msgid "Upload to drop folder"
 msgstr "드롭 폴더에 업로드"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:135
-#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:155
-#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:185
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:152
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:245
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:280
 msgid "Uploaded"
 msgstr "업로드됨"
 
@@ -4216,10 +4270,9 @@ msgstr "업로드됨"
 msgid "Uploaded on"
 msgstr "업로드 날짜"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:77
-#: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:127
-msgid "Usage"
-msgstr "사용 현황"
+#: zotonic_mod_admin/priv/templates/_admin_status_capacity.tpl:9
+msgid "Usage information unavailable."
+msgstr "사용 정보가 없습니다."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:39
 msgid "Use the autocompleter to search the media in this site."
@@ -4229,12 +4282,11 @@ msgstr "이 사이트의 미디어를 검색하려면 자동 완성 기능을 �
 msgid "Use the title of the base content for the display name of this person."
 msgstr "이 사람의 표시 이름으로 기본 콘텐츠의 제목을 사용하십시오."
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:60
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:61
 msgid "Use these operations to repair installation data, not for routine maintenance."
 msgstr "이 작업들은 설치 데이터를 복구하는 데 사용해야 하며, 일상적인 유지 관리 용도로는 사용하지 마십시오."
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:8
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:34
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:59
 msgid "Used"
 msgstr "사용된"
 
@@ -4374,7 +4426,11 @@ msgstr "이 페이지는 삭제할 수 없습니다."
 msgid "You are not allowed to edit this page."
 msgstr "이 페이지는 수정할 수 없습니다."
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:218
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:7
+msgid "You can add a title to make the file easier to find and share."
+msgstr "파일을 더 쉽게 찾고 공유할 수 있도록 제목을 추가할 수 있습니다."
+
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:239
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:166
 msgid "You don't have permission to change this media item."
 msgstr "이 미디어 항목을 변경할 권한이 없습니다."
@@ -4389,7 +4445,7 @@ msgstr "이 페이지를 생성할 권한이 없습니다."
 msgid "You don't have permission to edit this page."
 msgstr "이 페이지를 편집할 권한이 없습니다."
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:220
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:241
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:208
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:168
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:121
@@ -4403,10 +4459,6 @@ msgstr "해당 파일 형식을 업로드할 권한이 없습니다."
 msgid "You don’t have permission to perform this action."
 msgstr "이 작업을 수행할 권한이 없습니다."
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:6
-msgid "You have to specify a description of the file to make it easier to find and share."
-msgstr "파일을 더 쉽게 찾고 공유할 수 있도록 파일에 대한 설명을 지정해야 합니다."
-
 #: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:188
 msgid "Your search query is invalid. Please correct it before saving."
 msgstr "검색 쿼리가 올바르지 않습니다. 저장하기 전에 수정하십시오."
@@ -4415,7 +4467,7 @@ msgstr "검색 쿼리가 올바르지 않습니다. 저장하기 전에 수정�
 msgid "Zotonic"
 msgstr "Zotonic"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:72
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:73
 msgid "Zotonic datamodel"
 msgstr "Zotonic 데이터 모델"
 
@@ -4423,14 +4475,22 @@ msgstr "Zotonic 데이터 모델"
 msgid "Zotonic init files"
 msgstr "Zotonic 초기화 파일"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:30
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:37
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:27
 msgid "active filters"
 msgstr "활성 필터"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:19
+#: zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:29
 msgid "add media item"
 msgstr "미디어 항목 추가"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:7
+msgid "allocated"
+msgstr "할당된"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:22
+msgid "available"
+msgstr "이용 가능"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:14
@@ -4442,15 +4502,19 @@ msgstr "미디어 항목 추가"
 msgid "by"
 msgstr "사용자:"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:102
+msgid "capacity"
+msgstr "용량"
+
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:52
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:53
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:130
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:131
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:132
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:165
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:168
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:182
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:185
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:84
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:81
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:32
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:33
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:76
@@ -4468,7 +4532,7 @@ msgstr "사용자:"
 msgid "d M Y, H:i"
 msgstr "d M Y, H:i"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:172
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:189
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:43
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:39
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:99
@@ -4481,7 +4545,7 @@ msgstr "예를 들면 바뀔 수도 있습니다"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:58
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:137
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:183
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:200
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:40
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:69
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:77
@@ -4500,6 +4564,14 @@ msgstr "이 페이지 편집"
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:84
 msgid "excluding"
 msgstr "...을 제외한"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:45
+msgid "free"
+msgstr "무료"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:33
+msgid "free. Used memory can include caches; high usage alone does not indicate memory pressure."
+msgstr "무료. 사용 중인 메모리에는 캐시가 포함될 수 있으며, 사용량이 많다고 해서 반드시 메모리 부하가 발생한다는 의미는 아닙니다."
 
 #: zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:15
 msgid "has been disconnected."
@@ -4554,6 +4626,12 @@ msgstr "모두 표시"
 msgid "system content"
 msgstr "시스템 콘텐츠"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:23
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:30
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:41
+msgid "total"
+msgstr "합계"
+
 #: zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:3
 msgid "undo"
 msgstr "실행 취소"
@@ -4567,9 +4645,19 @@ msgstr "실행 취소"
 msgid "untitled"
 msgstr "제목 없음"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:10
+msgid "unused allocation, available for reuse by Erlang. This is not free host memory."
+msgstr "사용되지 않은 할당 공간으로, Erlang에서 재사용할 수 있습니다. 이는 호스트 메모리의 여유 공간이 아닙니다."
+
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:51
 msgid "uploaded on"
 msgstr "업로드일"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:6
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:29
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:41
+msgid "used"
+msgstr "중고"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:57
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:136
@@ -4588,7 +4676,7 @@ msgid "visit site"
 msgstr "사이트 방문하기"
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:25
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:201
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:218
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:141
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:57
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:98
@@ -4726,7 +4814,7 @@ msgid "Config"
 msgstr "설정"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:3
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:24
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:21
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:32
 #: zotonic_mod_admin_config/src/mod_admin_config.erl:96
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:14
@@ -4887,11 +4975,11 @@ msgstr "일반적으로 해당 시스템의 역방향 DNS 이름으로 설정됩
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:13
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:14
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:43
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:36
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:33
 msgid "Key"
 msgstr "키"
 
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:27
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:24
 msgid "Make a new config setting"
 msgstr "새 설정 만들기"
 
@@ -4899,7 +4987,7 @@ msgstr "새 설정 만들기"
 msgid "No configuration keys found."
 msgstr "구성 키를 찾을 수 없습니다."
 
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:95
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:92
 msgid "No configurations found."
 msgstr "구성 정보를 찾을 수 없습니다."
 
@@ -4984,11 +5072,11 @@ msgstr "릴레이 호스트 이름"
 msgid "Relay port"
 msgstr "릴레이 포트"
 
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:17
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:14
 msgid "Reload site configuration"
 msgstr "사이트 구성 다시 로드"
 
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:14
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:12
 msgid "Reload the site configuration files. Some changes require a restart."
 msgstr "사이트 구성 파일을 다시 불러오세요. 일부 변경 사항은 재시작이 필요합니다."
 
@@ -5156,7 +5244,7 @@ msgstr "유효기간"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:19
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:20
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:21
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:37
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:34
 #: zotonic_mod_base/src/support/z_chart_svg.erl:1457
 #: zotonic_mod_development/priv/templates/_development_dispatch_options.tpl:2
 msgid "Value"
@@ -5943,6 +6031,10 @@ msgstr "키워드 분석을 계산할 수 없습니다. 자세한 내용은 서�
 msgid "This site does not have a keyword category."
 msgstr "이 사이트에는 키워드 카테고리가 없습니다."
 
+#: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:127
+msgid "Usage"
+msgstr "사용 현황"
+
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:179
 msgid "View content using this keyword"
 msgstr "이 키워드를 사용하는 콘텐츠 보기"
@@ -6416,6 +6508,13 @@ msgstr "페이지 연결 그래프"
 msgid "Page connections overview"
 msgstr "페이지 연결 개요"
 
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:36
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:27
+#: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:8
+msgid "Path"
+msgstr "경로"
+
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:3
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:12
 #: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:226
@@ -6702,7 +6801,7 @@ msgstr "분석 기능이 재개될 때까지 활동 카운터는 사용할 수 �
 msgid "Add analytics measurement"
 msgstr "분석 측정 항목 추가"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:58
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:61
 msgid "All breakdown values"
 msgstr "모든 세부 항목 값"
 
@@ -6757,7 +6856,7 @@ msgstr "분석 지표"
 msgid "Analytics status"
 msgstr "분석 현황"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:49
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:52
 msgid "Bars show the lower bound. Counts are ranges, ordered by their lower bound. Overlapping ranges may change order. Content outside the retained candidates has at most"
 msgstr "막대는 하한을 나타냅니다. 개수는 범위이며, 하한 순으로 정렬되어 있습니다. 범위가 겹치는 경우 순서가 바뀔 수 있습니다. 유지된 후보 집합 외부의 내용은 최대"
 
@@ -6770,7 +6869,7 @@ msgstr "제한된 역사"
 msgid "Break down by"
 msgstr "분류 기준:"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:59
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:62
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "Breakdown"
 msgstr "내역"
@@ -6922,7 +7021,7 @@ msgstr "이벤트 버퍼"
 msgid "Event processing"
 msgstr "이벤트 처리"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:59
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:62
 msgid "Events"
 msgstr "이벤트"
 
@@ -6996,9 +7095,13 @@ msgstr "HTTP 상태 코드 — 예: 200, 404 또는 500"
 msgid "History detail and retention"
 msgstr "이력 상세 정보 및 보존"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:64
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:67
 msgid "Includes incomplete or unrecorded intervals"
 msgstr "불완전하거나 기록되지 않은 간격이 포함됩니다"
+
+#: zotonic_mod_analytics/src/models/m_analytics.erl:351
+msgid "Invalid resource reference"
+msgstr "잘못된 리소스 참조"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:7
 msgid "Language — language code, e.g. en or nl"
@@ -7024,7 +7127,7 @@ msgstr "지난 6시간"
 msgid "Maximum number of analytics measurements"
 msgstr "분석 측정 항목의 최대 개수"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:28
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
 msgid "Most popular content in this period"
 msgstr "이 기간 동안 가장 인기 있는 콘텐츠"
 
@@ -7077,11 +7180,11 @@ msgstr "분류 없음 (합계)"
 msgid "No filter — include all values"
 msgstr "필터 적용하지 않음 — 모든 값 포함"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:47
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:50
 msgid "No leading content identified in this period."
 msgstr "이 기간 동안 주요 콘텐츠가 확인되지 않았습니다."
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:55
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:58
 msgid "No recorded events yet."
 msgstr "아직 기록된 이벤트가 없습니다."
 
@@ -7113,6 +7216,14 @@ msgstr "페이지 요청 — 성공적으로 표시된 공개 HTML 페이지"
 msgid "Page — public resource ID"
 msgstr "페이지 — 공개 리소스 ID"
 
+#: zotonic_mod_analytics/src/models/m_analytics.erl:338
+msgid "Pages without a resource ID"
+msgstr "리소스 ID가 없는 페이지"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
+msgid "Pages without a resource ID are grouped by dispatch rule, such as template-only pages. The label “Pages without a resource ID” includes older counts and requests without a known dispatch rule; these cannot be split further. Unavailable content refers to resources that were deleted or that you cannot view. Invalid resource reference means the recorded page value is not a valid resource ID."
+msgstr "리소스 ID가 없는 페이지는 템플릿 전용 페이지와 같이 디스패치 규칙별로 그룹화됩니다. “리소스 ID가 없는 페이지”라는 레이블에는 이전 집계 수치와 알려진 디스패치 규칙이 없는 요청이 포함되며, 이러한 항목은 더 이상 세분화할 수 없습니다. 사용 불가능한 콘텐츠란 삭제되었거나 볼 수 없는 리소스를 의미합니다. '잘못된 리소스 참조'는 기록된 페이지 값이 유효한 리소스 ID가 아님을 의미합니다."
+
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
 msgid "Past 30 days"
 msgstr "지난 30일"
@@ -7133,11 +7244,11 @@ msgstr "일시 정지"
 msgid "Period"
 msgstr "기간"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:34
 msgid "Rank"
 msgstr "순위"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:29
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:32
 msgid "Ranked by recorded requests in the selected moving period. The window advances in steps of"
 msgstr "선택한 이동 기간 동안 기록된 요청 수를 기준으로 순위를 매깁니다. 이 기간은 다음 단계별로 진행됩니다."
 
@@ -7153,7 +7264,7 @@ msgstr "요청 유형 — 페이지, API 또는 사용자 정의 디스패치 �
 msgid "Request types found in this site's dispatch rules:"
 msgstr "이 사이트의 디스패치 규칙에서 발견되는 요청 유형:"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:34
 msgid "Requests"
 msgstr "요청 사항"
 
@@ -7283,6 +7394,10 @@ msgstr "이 이벤트 스키마는 사용할 수 없습니다."
 msgid "Traffic — crawler, other or unknown"
 msgstr "트래픽 — 크롤러, 기타 또는 알 수 없음"
 
+#: zotonic_mod_analytics/src/models/m_analytics.erl:349
+msgid "Unavailable content"
+msgstr "사용할 수 없는 콘텐츠"
+
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:8
 msgid "View analytics"
 msgstr "분석 데이터 보기"
@@ -7300,6 +7415,7 @@ msgid "analytics measurements"
 msgstr "분석 지표"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:20
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:10
 msgid "bytes"
 msgstr "바이트"
 
@@ -7320,11 +7436,11 @@ msgstr "이벤트"
 msgid "group/time slots"
 msgstr "그룹/시간대"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:49
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:52
 msgid "requests."
 msgstr "요청."
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:29
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:32
 msgid "seconds."
 msgstr "초."
 
@@ -8373,7 +8489,7 @@ msgstr "데이터베이스와 업로드된 파일의 자동 일일 백업 기능
 msgid "Back to the edit page"
 msgstr "편집 페이지로 돌아가기"
 
-#: zotonic_mod_backup/src/mod_backup.erl:323
+#: zotonic_mod_backup/src/mod_backup.erl:338
 msgid "Backup"
 msgstr "백업"
 
@@ -8449,7 +8565,7 @@ msgstr "삭제일"
 
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9
-#: zotonic_mod_backup/src/mod_backup.erl:336
+#: zotonic_mod_backup/src/mod_backup.erl:351
 msgid "Deleted pages"
 msgstr "삭제된 페이지"
 
@@ -11045,7 +11161,7 @@ msgid "Right to left"
 msgstr "오른쪽에서 왼쪽으로"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:61
-msgid "Save and View"
+msgid "Save & view"
 msgstr "저장 및 보기"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:56
@@ -11975,10 +12091,154 @@ msgstr "이 기능을 사용할 권한이 없습니다."
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
 msgstr "Zotonic은 업로드 및 크기 조정된 파일을 클라우드에 저장할 수 있습니다. 여기에서 클라우드 서비스의 위치와 액세스 키를 구성할 수 있습니다."
 
-#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:158
-#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:188
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:12
+msgid "Cancel remaining uploads"
+msgstr "나머지 업로드를 취소합니다"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:13
+msgid "Cancelled"
+msgstr "취소됨"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:27
+msgid "Choose one file at a time for this upload. No files were uploaded."
+msgstr "이번 업로드에서는 한 번에 하나의 파일만 선택해 주세요. 업로드된 파일이 없습니다."
+
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:248
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:284
 msgid "Could not upload"
 msgstr "업로드할 수 없습니다"
+
+#: zotonic_mod_fileuploader/priv/templates/_fileuploader_dropzone.tpl:8
+msgid "Drop files here or choose files."
+msgstr "파일을 여기에 드래그하거나 파일을 선택하세요."
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:8
+msgid "Drop files inside the text where you want to insert them."
+msgstr "삽입하고자 하는 텍스트 내의 해당 위치에 파일을 드래그하여 놓으세요."
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:28
+msgid "Folders cannot be uploaded. Select the files inside the folder instead."
+msgstr "폴더는 업로드할 수 없습니다. 대신 폴더 안에 있는 파일을 선택해 주세요."
+
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:190
+msgid "Please choose one file only."
+msgstr "파일은 하나만 선택해 주세요."
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:19
+msgid "Processing…"
+msgstr "… 처리 중"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:35
+msgid "Ready to upload. Choose Upload file to save your selected file."
+msgstr "업로드할 준비가 되었습니다. ‘파일 업로드’를 선택하여 선택한 파일을 저장하세요."
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:24
+msgid "Refresh media list"
+msgstr "미디어 목록 새로 고침"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:14
+msgid "Remaining uploads were cancelled. Files already saved have been kept."
+msgstr "나머지 업로드는 취소되었습니다. 이미 저장된 파일은 그대로 유지되었습니다."
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:23
+msgid "Retry failed files"
+msgstr "실패한 파일 다시 시도하기"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:9
+msgid "Save this page before dropping media into the editor."
+msgstr "에디터에 미디어 파일을 드래그하기 전에 이 페이지를 저장하세요."
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:20
+#: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:1
+msgid "Saved"
+msgstr "저장됨"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:22
+msgid "Saved in Media, but could not attach. Use Add media item to connect it."
+msgstr "‘미디어’에 저장되었지만 첨부할 수 없습니다. ‘미디어 항목 추가’를 사용하여 연결하세요."
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:5
+msgid "Saved in Media, but the insertion position is no longer available. Use Insert media to add it."
+msgstr "'미디어'에 저장되었지만, 삽입 위치를 더 이상 찾을 수 없습니다. '미디어 삽입'을 사용하여 추가하십시오."
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:32
+msgid "Some files could not be processed. See the error messages."
+msgstr "일부 파일을 처리할 수 없었습니다. 오류 메시지를 확인하십시오."
+
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:297
+msgid "The file upload is incomplete."
+msgstr "파일 업로드가 완료되지 않았습니다."
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:16
+msgid "This file exceeds the maximum upload size for your account. Choose a smaller file."
+msgstr "이 파일은 귀하의 계정에서 허용되는 최대 업로드 용량을 초과합니다. 용량이 더 작은 파일을 선택해 주세요."
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:17
+msgid "This file type or size is not allowed for your account."
+msgstr "귀하의 계정에서는 이 파일 형식이나 크기를 사용할 수 없습니다."
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:7
+msgid "Upload complete. Media has been inserted into your text. Save the page to keep your changes."
+msgstr "업로드가 완료되었습니다. 텍스트에 미디어가 삽입되었습니다. 변경 사항을 저장하려면 페이지를 저장하세요."
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:33
+msgid "Upload complete. Your files have been saved."
+msgstr "업로드가 완료되었습니다. 파일이 저장되었습니다."
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:21
+msgid "Upload failed"
+msgstr "업로드에 실패했습니다."
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:31
+msgid "Upload failed. Please try again."
+msgstr "업로드에 실패했습니다. 다시 시도해 주세요."
+
+#: zotonic_mod_fileuploader/priv/templates/admin.tpl:11
+msgid "Upload starts immediately. Each file becomes a new, published media item."
+msgstr "업로드가 즉시 시작됩니다. 각 파일은 새로 게시된 미디어 항목이 됩니다."
+
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:277
+msgid "Uploaded, but could not connect"
+msgstr "업로드되었으나 연결할 수 없습니다"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:25
+msgid "Uploading"
+msgstr "업로드 중"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:34
+msgid "Uploading and processing your files… Please keep this page open."
+msgstr "파일 업로드 및 처리… 이 페이지를 계속 열어 두시기 바랍니다."
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:6
+msgid "Uploading media to insert into your text… You can continue editing."
+msgstr "텍스트에 삽입할 미디어 파일 업로드하기… 편집을 계속할 수 있습니다."
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:18
+#: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:1
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_summary.tpl:3
+#: zotonic_site_status/priv/templates/_sites.tpl:14
+msgid "Waiting"
+msgstr "대기 중"
+
+#: zotonic_mod_fileuploader/priv/templates/admin.tpl:12
+msgid "You can find and edit your uploads in Media."
+msgstr "‘미디어’에서 업로드한 파일을 확인하고 편집할 수 있습니다."
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:30
+msgid "{filename} has a file type that is not supported here. Choose a different file."
+msgstr "{filename} 이곳에서 지원되지 않는 파일 형식입니다. 다른 파일을 선택해 주세요."
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:29
+msgid "{filename} is empty. Choose a file with content. Folders cannot be uploaded."
+msgstr "{filename} 비어 있습니다. 내용이 포함된 파일을 선택하세요. 폴더는 업로드할 수 없습니다."
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:15
+msgid "{filename} is too large. The maximum file size is {size}."
+msgstr "{filename} 크기가 너무 큽니다. 최대 파일 크기는 {size} 입니다."
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:26
+msgid "{saved} of {total} files saved."
+msgstr "{saved} {total} 개의 파일이 저장되었습니다."
 
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:93
 msgid "Brightness"
@@ -15024,12 +15284,6 @@ msgstr "로그인하지 않은 방문자도 이 목록을 볼 수 있습니다. 
 msgid "Wait for sending to start"
 msgstr "전송이 시작될 때까지 기다리십시오"
 
-#: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:1
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_summary.tpl:3
-#: zotonic_site_status/priv/templates/_sites.tpl:14
-msgid "Waiting"
-msgstr "대기 중"
-
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:2
 msgid "Waiting for publication"
 msgstr "게시 대기 중"
@@ -16042,7 +16296,7 @@ msgstr "단일 토큰을 가져오기 위해"
 msgid "API Key can be found on"
 msgstr "API 키는 다음에서 찾을 수 있습니다."
 
-#: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:8
+#: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:2
 msgid "Attempt to fix embedded videos for which OEmbed embedding has failed previously."
 msgstr "이전에 OEmbed 임베딩이 실패했던 임베디드 비디오 문제를 해결하려고 시도합니다."
 
@@ -16061,11 +16315,15 @@ msgstr "~p 동영상 문제를 해결하려고 시도 중입니다."
 msgid "Copy the URL to the clipboard."
 msgstr "URL을 클립보드에 복사합니다."
 
+#: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:2
+msgid "Embedded videos"
+msgstr "삽입된 동영상"
+
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media.tpl:4
 msgid "Embedding of media item failed with HTTP code"
 msgstr "미디어 항목 삽입에 실패했습니다. HTTP 오류 코드"
 
-#: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:7
+#: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:4
 msgid "Fix embedded videos"
 msgstr "내장 동영상 수정"
 
@@ -17986,10 +18244,6 @@ msgstr "저장 &amp; 이메일 보내기"
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:162
 msgid "Save your answers without submitting them yet so you can continue later."
 msgstr "나중에 계속 작성할 수 있도록 답변을 제출하지 않고 저장합니다."
-
-#: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:1
-msgid "Saved"
-msgstr "저장됨"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:78
 msgid "Search for a person"

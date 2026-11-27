@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-24 17:04\n"
+"PO-Revision-Date: 2026-11-27 22:40\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -267,7 +267,7 @@ msgstr "所有"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:8
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:39
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:61
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:68
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:58
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:84
 msgid "All Categories"
@@ -325,7 +325,7 @@ msgstr "確定要將所有 ACL 規則還原為目前已發佈的版本嗎？"
 #: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:9
 #: zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:7
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:76
-#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:73
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:79
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:259
 #: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:50
@@ -463,6 +463,7 @@ msgstr "已變更組態。"
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:43
 #: zotonic_mod_development/priv/templates/_development_template_matches.tpl:27
 #: zotonic_mod_editor_tinymce/priv/templates/_admin_configure_module.tpl:30
+#: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:62
 #: zotonic_mod_email_status/priv/templates/_dialog_email_status.tpl:4
 #: zotonic_mod_l10n/priv/templates/_admin_configure_module.tpl:8
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_view.tpl:33
@@ -519,7 +520,7 @@ msgstr "將資源作者視為所有者。"
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4
 #: zotonic_mod_admin/src/mod_admin.erl:516
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:70
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:34
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:133
 msgid "Content"
 msgstr "內容"
@@ -565,10 +566,10 @@ msgstr "無法移至協作群組。"
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:18
 #: zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:21
 #: zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:25
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:118
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:135
 #: zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:53
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:8
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:81
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:78
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:30
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:53
 #: zotonic_mod_admin_identity/src/mod_admin_identity.erl:330
@@ -733,7 +734,7 @@ msgstr "同一使用者群組的成員"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:8
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:9
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:42
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:35
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:32
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:28
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:84
@@ -1096,6 +1097,11 @@ msgstr "使用其他瀏覽器（例如，目前使用 Firefox 時，改用 Chrom
 msgid "view (acl action)"
 msgstr "檢視"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:102
+msgctxt "disk space"
+msgid "free"
+msgstr "免費"
+
 #: zotonic_mod_admin/priv/templates/_admin_status_excess_sockets.tpl:4
 msgid "<strong>{n}</strong> IP address has more than 250 open sockets."
 msgid_plural "<strong>{n}</strong> IP addresses have more than 250 open sockets."
@@ -1158,7 +1164,7 @@ msgid "About categories"
 msgstr "關於分類"
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:24
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:200
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:217
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:140
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:56
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:97
@@ -1184,7 +1190,7 @@ msgstr "存取控制"
 msgid "Active"
 msgstr "有效"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:30
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:37
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:27
 msgid "Active filters"
 msgstr "已套用的篩選條件"
@@ -1194,12 +1200,12 @@ msgid "Add a connection"
 msgstr "新增連線"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:53
-#: zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:24
+#: zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:34
 msgid "Add a connection:"
 msgstr "新增連結："
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:91
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:137
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:138
 msgid "Add a new media file"
 msgstr "新增媒體檔案"
 
@@ -1270,7 +1276,7 @@ msgstr "管理員"
 msgid "Advanced"
 msgstr "進階"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:58
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:59
 msgid "Advanced repair"
 msgstr "進階修復"
 
@@ -1278,7 +1284,7 @@ msgstr "進階修復"
 msgid "After the duplication you can edit the new page. The new page will be unpublished."
 msgstr "複製後，你可以編輯新頁面。新頁面將處於未發佈狀態。"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:44
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:51
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:41
 msgid "All Content"
 msgstr "所有內容"
@@ -1288,14 +1294,14 @@ msgid "All day"
 msgstr "全天"
 
 #: zotonic_mod_admin/priv/templates/_admin_dashboard_buttons.tpl:14
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:102
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:109
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:112
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:83
 msgid "All media"
 msgstr "所有媒體"
 
 #: zotonic_mod_admin/priv/templates/_admin_dashboard_buttons.tpl:13
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:101
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:108
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:111
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:82
 msgid "All pages"
@@ -1311,10 +1317,6 @@ msgstr "已清空所有網站的快取。"
 msgid "All sites on this node"
 msgstr "此節點上的所有網站"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:7
-msgid "Allocated"
-msgstr "已配置"
-
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:173
 #: zotonic_mod_websub/priv/templates/_rsc_import_subscription_options.tpl:13
 msgid "Also subscribe to connected resources."
@@ -1329,11 +1331,11 @@ msgstr "其他電話"
 msgid "Always import all resources, including manually deleted resources."
 msgstr "請務必匯入所有資源，包括手動刪除的資源。"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:17
+#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:13
 msgid "Amount"
 msgstr "數量"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:90
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:97
 msgid "And media can also be viewed on their own page."
 msgstr "媒體也可以在各自的頁面上檢視。"
 
@@ -1427,7 +1429,7 @@ msgid "Automatically fetch updates from the original website."
 msgstr "自動從原始網站擷取更新內容。"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_media.tpl:62
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:38
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:63
 msgid "Available"
 msgstr "可用的"
 
@@ -1452,6 +1454,10 @@ msgstr "返回"
 msgid "Background work"
 msgstr "背景工作"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:113
+msgid "Bars show disk space in use. Refreshed every 30 minutes."
+msgstr "條形圖顯示已使用的磁碟空間。每 30 分鐘更新一次。"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_basics.tpl:4
 msgid "Basic"
 msgstr "基本"
@@ -1472,11 +1478,11 @@ msgstr "區塊名稱"
 msgid "Block quote"
 msgstr "引用區塊"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:36
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:61
 msgid "Buffered"
 msgstr "緩衝的"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:37
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:62
 msgid "Cached"
 msgstr "快取"
 
@@ -1638,7 +1644,7 @@ msgstr "連接"
 msgid "Content origin"
 msgstr "內容來源"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:48
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:49
 msgid "Content repair"
 msgstr "內容修復"
 
@@ -1712,7 +1718,7 @@ msgstr "數量"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:86
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:142
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:220
-#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:15
+#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:16
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:110
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:45
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:47
@@ -1772,7 +1778,7 @@ msgstr "控制台"
 msgid "Data directory"
 msgstr "資料目錄"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:61
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:62
 msgid "Datamodel upgrades and reinstalls preserve your existing data. No content or uploaded files will be deleted."
 msgstr "資料模型升級與重新安裝會保留現有資料。不會刪除任何內容或已上傳的檔案。"
 
@@ -1814,7 +1820,7 @@ msgstr "刪除已生成的預覽"
 msgid "Delete if no other page is connected to this page."
 msgstr "若沒有其他頁面連結至此頁面，則刪除。"
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:51
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:57
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:239
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:90
 msgid "Delete if not connected anymore"
@@ -1854,11 +1860,16 @@ msgstr "刪除後無法復原。"
 msgid "Dependent"
 msgstr "相依"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:52
+msgid "Detailed memory figures"
+msgstr "詳細的記憶體數據"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:9
 msgid "Dimensions"
 msgstr "尺寸"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:33
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:47
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:61
 msgid "Disabled"
 msgstr "已停用"
@@ -1883,11 +1894,11 @@ msgstr "是否要斷開與本節點所有站點中，擁有超過 250 個開啟�
 msgid "Discover media"
 msgstr "尋找媒體"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:76
-msgid "Disk capacity"
-msgstr "磁碟容量"
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:110
+msgid "Disk information unavailable."
+msgstr "無法取得磁碟資訊。"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:69
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:95
 msgid "Disks"
 msgstr "磁碟"
 
@@ -1917,9 +1928,30 @@ msgstr "下載"
 msgid "Download media from the original website."
 msgstr "請從原始網站下載媒體檔案。"
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_media.tpl:23
+msgid "Drag a file anywhere into this panel to replace the current media file."
+msgstr "將檔案拖曳至此面板的任何位置，即可替換目前的媒體檔案。"
+
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:11
+msgid "Drag a file anywhere into this tab or choose a file below. Then use the Upload file button to upload it."
+msgstr "將檔案拖曳至此分頁的任意位置，或從下方選擇檔案。接著點擊「上傳檔案」按鈕進行上傳。"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:19
+msgid "Drag files anywhere into this panel to upload and attach them to this page."
+msgstr "將檔案拖曳至此面板的任何位置，即可上傳並將其附加至此頁面。"
+
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:114
+msgid "Drag files anywhere onto this page to upload them as new media items."
+msgstr "將檔案拖曳至本頁面的任何位置，即可將其上傳為新的媒體項目。"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:11
 msgid "Drag to change position"
 msgstr "拖曳以變更位置"
+
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:118
+#: zotonic_mod_fileuploader/priv/templates/admin.tpl:10
+msgid "Drop files to add them to Media"
+msgstr "將檔案拖放至此處以新增至「媒體」"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:33
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:38
@@ -1956,7 +1988,7 @@ msgstr "電子郵件地址"
 #: zotonic_mod_admin/priv/templates/_admin_system_info_config.tpl:7
 #: zotonic_mod_admin/priv/templates/_rsc_edge.tpl:19
 #: zotonic_mod_admin/priv/templates/admin_edit.tpl:3
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:82
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:79
 #: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:70
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
 #: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:23
@@ -2027,7 +2059,7 @@ msgstr "嵌入頁面 | 引文、彈出視窗或其他頁面的連結"
 msgid "Embedded Content"
 msgstr "嵌入內容"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:50
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:51
 msgid "Embedded-page references"
 msgstr "內嵌頁面引用"
 
@@ -2052,6 +2084,10 @@ msgstr "Erlang 安裝根目錄"
 msgid "Erlang memory"
 msgstr "Erlang 記憶體"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:9
+msgid "Erlang memory in use"
+msgstr "Erlang 正在使用的記憶體"
+
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:18
 msgid "Erlang/OTP"
 msgstr "Erlang/OTP"
@@ -2070,7 +2106,8 @@ msgstr "建立頁面時發生錯誤。"
 msgid "Error importing page from the remote server."
 msgstr "從遠端伺服器匯入頁面時發生錯誤。"
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:236
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:257
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:305
 msgid "Error uploading the file."
 msgstr "上傳檔案時發生錯誤。"
 
@@ -2114,7 +2151,7 @@ msgstr "排除類別"
 msgid "Existing pages"
 msgstr "現有頁面"
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:222
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:243
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:210
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:170
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:123
@@ -2170,7 +2207,7 @@ msgstr "檔案名稱"
 msgid "Files are handled in the background by mailinglist recipient import and other modules watching the drop folder."
 msgstr "檔案會由「郵件列表收件者匯入」模組及其他監控「drop」資料夾的模組在後台進行處理。"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:27
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:34
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:24
 #: zotonic_mod_import_feed/priv/templates/admin_import_feed_log.tpl:18
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:46
@@ -2183,12 +2220,12 @@ msgstr "檔案會由「郵件列表收件者匯入」模組及其他監控「dro
 msgid "Filter"
 msgstr "篩選"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:64
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:71
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:61
 msgid "Filter on category"
 msgstr "依分類篩選"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:47
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:54
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:44
 msgid "Filter on content group"
 msgstr "依內容群組篩選"
@@ -2201,7 +2238,7 @@ msgstr "查找媒體"
 msgid "Find Page"
 msgstr "尋找頁面"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:50
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:51
 msgid "Find embedded page references and rebuild their refers connections. This runs in the background."
 msgstr "尋找內嵌頁面參照，並重建其 refers 連結。此作業會在背景執行。"
 
@@ -2243,7 +2280,7 @@ msgstr "清除快取"
 msgid "Follow connections and import all (deep copy)."
 msgstr "沿著連接匯入所有內容（深層複製）。"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:35
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:60
 msgid "Free"
 msgstr "空閒"
 
@@ -2306,17 +2343,21 @@ msgstr "你可以在此編輯搜尋查詢的參數，每個參數各占一行。
 msgid "Hide page from searches (depends on the search query)"
 msgstr "在搜尋中隱藏頁面（取決於搜尋查詢）"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_capacity.tpl:6
+msgid "High usage"
+msgstr "使用率很高"
+
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:61
 msgid "Home directory"
 msgstr "主目錄"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:26
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:69
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:16
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:95
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:158
 msgid "Host"
 msgstr "主機"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:13
+#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:14
 #: zotonic_mod_authentication/priv/templates/sessions.tpl:48
 #: zotonic_mod_authentication/priv/templates/sessions.tpl:93
 msgid "IP Address"
@@ -2382,11 +2423,11 @@ msgstr "匯入"
 msgid "Indexed by search engines"
 msgstr "已由搜尋引擎建立索引"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:63
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:64
 msgid "Individual modules can be reinstalled from the Modules list."
 msgstr "可從「模組」清單中重新安裝個別模組。"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:133
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:150
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:23
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:21
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:145
@@ -2413,7 +2454,7 @@ msgstr "系統管理員可查閱安裝詳情。"
 msgid "Integrations"
 msgstr "整合功能"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:77
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:84
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:74
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:41
 msgid "Items per page"
@@ -2447,6 +2488,10 @@ msgstr "最近修改的人物頁面"
 #: zotonic_mod_admin/priv/templates/_admin_dashboard_texts.tpl:2
 msgid "Latest modified texts"
 msgstr "最近修改的文字"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:104
+msgid "Less than 5% free disk space"
+msgstr "可用磁碟空間少於 5%"
 
 #: zotonic_mod_admin/priv/templates/_admin_menu.tpl:64
 msgid "Light"
@@ -2528,7 +2573,7 @@ msgstr "建立"
 msgid "Make a duplicate of this page."
 msgstr "複製此頁面。"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:98
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:105
 msgid "Make a new media item"
 msgstr "建立新的媒體項目"
 
@@ -2553,7 +2598,7 @@ msgstr "符合搜尋文字"
 
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:18
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:3
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:86
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:93
 #: zotonic_mod_admin/src/mod_admin.erl:525
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:100
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:103
@@ -2591,22 +2636,21 @@ msgstr "媒體去重已排入佇列。"
 msgid "Media details"
 msgstr "媒體詳情"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:89
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:96
 msgid "Media encompasses all uploaded images, movies and documents. Media can be attached to pages."
 msgstr "媒體包括所有上傳的圖片、影片和文件。媒體可以附加至頁面。"
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:37
-#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:38
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:35
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:36
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:43
 msgid "Media file"
 msgstr "媒體檔案"
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:193
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:195
 msgid "Media item created."
 msgstr "已建立媒體項目。"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:19
-#: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:2
 msgid "Media maintenance"
 msgstr "媒體維護"
 
@@ -2631,18 +2675,22 @@ msgstr "媒體處理"
 msgid "Media runners"
 msgstr "媒體處理執行器"
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:27
-#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:28
-msgid "Media title"
-msgstr "媒體標題"
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:42
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:43
+msgid "Media title (optional)"
+msgstr "媒體標題（可選）"
 
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:151
 msgid "Media updated."
 msgstr "已更新媒體。"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:43
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:68
 msgid "Memory"
 msgstr "記憶體"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:36
+msgid "Memory information unavailable."
+msgstr "無法取得記憶體資訊。"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:32
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:33
@@ -2682,8 +2730,8 @@ msgstr "修改日期，最新的在前"
 msgid "Modification date, oldest first"
 msgstr "修改日期，最早的在前"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:134
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:38
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:151
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:35
 msgid "Modified"
 msgstr "修改時間"
 
@@ -2749,7 +2797,7 @@ msgstr "發票抬頭"
 msgid "Need more help?"
 msgstr "需要更多幫助嗎？"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:2
+#: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:3
 #: zotonic_mod_admin/priv/templates/_admin_status_connections.tpl:7
 msgid "Network Connections"
 msgstr "網路連線"
@@ -2805,7 +2853,7 @@ msgstr "沒有項目"
 msgid "No media content."
 msgstr "沒有媒體內容。"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:192
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:209
 msgid "No media found."
 msgstr "找不到媒體。"
 
@@ -2869,9 +2917,17 @@ msgstr "不受保護"
 msgid "Not running"
 msgstr "未運行"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:26
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:16
 msgid "OS memory"
 msgstr "作業系統記憶體"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:32
+msgid "OS memory in use"
+msgstr "作業系統已使用記憶體"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:25
+msgid "OS memory unavailable"
+msgstr "作業系統記憶體不足"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:129
 msgid "Ongoing"
@@ -2885,13 +2941,13 @@ msgstr "只有系統管理員才能關閉節點連線。"
 msgid "Open"
 msgstr "開啟"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:63
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:64
 msgid "Open Modules list"
 msgstr "開啟「模組」清單"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:14
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:37
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:39
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:40
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:42
 msgid "Open in new tab"
 msgstr "在新分頁中開啟"
 
@@ -2965,18 +3021,6 @@ msgstr "適用於以下關係的頁面："
 msgid "Pages overview"
 msgstr "頁面總覽"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:75
-#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:36
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:27
-#: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24
-#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:8
-msgid "Path"
-msgstr "路徑"
-
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:10
-msgid "Percent in use"
-msgstr "使用百分比"
-
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:6
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:10
 msgid "Personal name"
@@ -3028,7 +3072,7 @@ msgid "Predicate"
 msgstr "述詞"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:28
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:131
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:148
 msgid "Preview"
 msgstr "預覽"
 
@@ -3081,7 +3125,7 @@ msgid "Publish this page"
 msgstr "發佈此頁面"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:50
-#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:63
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:69
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:248
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:47
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:102
@@ -3128,7 +3172,7 @@ msgstr "查詢"
 msgid "Query results"
 msgstr "查詢結果"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:41
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:42
 msgid "Queue every page for search indexing. Large sites can take a long time to finish."
 msgstr "將每頁加入搜尋索引排程。大型網站可能需要很長時間才能完成。"
 
@@ -3144,11 +3188,11 @@ msgstr "Ranch 限制"
 msgid "Rebuild derived data and maintain this site. Queued work can be followed on the Status page."
 msgstr "重建衍生資料並維護本網站。可於「狀態」頁面追蹤待處理的工作。"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:51
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:52
 msgid "Rebuild references"
 msgstr "重建參照"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:42
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:43
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:169
 msgid "Rebuild search indices"
 msgstr "重建搜尋索引"
@@ -3183,17 +3227,13 @@ msgstr "連結至以下頁面的頁面："
 msgid "Refresh"
 msgstr "重新整理"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:94
-msgid "Refreshed every 30 minutes."
-msgstr "每 30 分鐘重新整理一次。"
-
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:74
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:75
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:76
 msgid "Reinstall Zotonic datamodel"
 msgstr "重新安裝 Zotonic 資料模型"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:67
 #: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:68
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:69
 msgid "Reinstall site datamodel"
 msgstr "重新安裝網站資料模型"
 
@@ -3246,6 +3286,11 @@ msgstr "取代"
 msgid "Replace current medium"
 msgstr "取代目前的媒體項目"
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_media.tpl:17
+#: zotonic_mod_fileuploader/priv/templates/_fileuploader_dropzone.tpl:5
+msgid "Replace the current media file?"
+msgstr "要替換目前的媒體檔案嗎？"
+
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:4
 msgid "Resize Live view"
 msgstr "調整「即時預覽」的尺寸"
@@ -3278,15 +3323,15 @@ msgstr "旋轉了 270 度"
 msgid "Rotated 90 degrees"
 msgstr "旋轉 90 度"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:72
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:73
 msgid "Run the Zotonic core datamodel installation again for this site's database."
 msgstr "請針對此網站的資料庫，再次執行 Zotonic 核心資料模型的安裝程序。"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:75
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:76
 msgid "Run the Zotonic core datamodel installation again for this site's database? Your existing data will be preserved."
 msgstr "要為此網站的資料庫再次執行 Zotonic 核心資料模型安裝嗎？現有資料將保留。"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:65
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:66
 msgid "Run the site's schema installation again. The site will stop and restart."
 msgstr "請再次執行該網站的架構安裝程序。網站將會停止運作並重新啟動。"
 
@@ -3368,7 +3413,7 @@ msgid "Scheduled tasks"
 msgstr "排程任務"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:294
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:37
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:38
 #: zotonic_mod_import_feed/priv/templates/_admin_import_feed_user_dialog.tpl:9
 msgid "Search"
 msgstr "搜尋"
@@ -3381,7 +3426,7 @@ msgstr "建立搜尋索引"
 msgid "Search indexing runs separately from the scheduled task queue."
 msgstr "搜尋索引建立作業會獨立於排程任務佇列之外執行。"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:41
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:42
 msgid "Search indices"
 msgstr "搜尋索引"
 
@@ -3447,11 +3492,11 @@ msgid "Select both a visible page and a valid predicate for each connection."
 msgstr "針對每個連結，同時選取可見的頁面與有效的述詞。"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:80
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:115
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:132
 msgid "Selected"
 msgstr "已選擇"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:59
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:66
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:56
 msgid "Selected Categories"
 msgstr "已選取的分類"
@@ -3530,7 +3575,7 @@ msgstr "網站快取"
 msgid "Site config files"
 msgstr "網站設定檔"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:65
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:66
 msgid "Site datamodel"
 msgstr "網站資料模型"
 
@@ -3735,9 +3780,14 @@ msgstr "姓氏前綴"
 msgid "Suspended"
 msgstr "暫停"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:53
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:40
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:78
 msgid "Swap"
 msgstr "交換空間"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:44
+msgid "Swap in use"
+msgstr "正在使用的交換區"
 
 #: zotonic_mod_admin/src/mod_admin.erl:572
 msgid "System"
@@ -3802,6 +3852,10 @@ msgstr "正在重新安裝 Zotonic 資料模型。觀察控制台的訊息"
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:58
 msgid "The addresses 0.0.0.0 and :: mean all local IPv4 and IPv6 interfaces respectively. Configured bindings are shown when a listener is absent."
 msgstr "位址 0.0.0.0 和 :: 分別代表所有本機 IPv4 和 IPv6 介面。當沒有監聽器時，會顯示已設定的綁定。"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:26
+msgid "The bar shows memory not available for allocation. Available memory includes reclaimable memory reported by the operating system."
+msgstr "該條形圖顯示可用於分配的記憶體不足。可用記憶體包含作業系統回報的可回收記憶體。"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:201
 msgid "The billing address is only visible for people who can edit this page."
@@ -3909,7 +3963,7 @@ msgstr "此操作無法復原。你的頁面將永久遺失。"
 msgid "This connection already exists."
 msgstr "此連結已存在。"
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:226
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:247
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:214
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:174
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:127
@@ -3928,14 +3982,14 @@ msgstr "此檔案過大，未進行病毒掃描。"
 msgid "This file has not been scanned for viruses."
 msgstr "此檔案尚未進行病毒掃描。"
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:224
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:245
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:212
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:172
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:125
 msgid "This file is infected with a virus."
 msgstr "此檔案已感染病毒。"
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:228
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:249
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:216
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:176
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:129
@@ -3995,7 +4049,7 @@ msgstr "此頁面路徑正被另一個頁面使用。"
 msgid "This resource was created by the module"
 msgstr "建立此資源的模組是"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:68
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:69
 msgid "This runs the site's schema installation again and stops and restarts the site. Your existing data will be preserved. Continue?"
 msgstr "這會再次安裝網站的資料庫綱要，並停止及重新啟動網站。現有資料將保留。要繼續嗎？"
 
@@ -4019,7 +4073,7 @@ msgstr "嘗試從網站取得資料時逾時。"
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:36
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:20
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:93
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:132
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:149
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:21
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:9
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:11
@@ -4046,7 +4100,7 @@ msgid "Too many connections, only the first and last are shown."
 msgstr "連接過多，只顯示第一個與最後一個。"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_listeners.tpl:13
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:33
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:58
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:21
 msgid "Total"
 msgstr "總計"
@@ -4145,10 +4199,6 @@ msgstr "未命名"
 msgid "Untitled query"
 msgstr "未命名的查詢"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:9
-msgid "Unused"
-msgstr "未使用"
-
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:125
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:37
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_timeline.tpl:60
@@ -4158,7 +4208,7 @@ msgstr "即將開始"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:82
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:112
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:117
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:134
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:16
 msgid "Update"
 msgstr "更新"
@@ -4187,11 +4237,11 @@ msgstr "上傳"
 msgid "Upload File"
 msgstr "上傳檔案"
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:4
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:5
 msgid "Upload a file from your computer."
 msgstr "從你的電腦上傳檔案。"
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:74
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:80
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:31
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:36
 msgid "Upload file"
@@ -4201,13 +4251,17 @@ msgstr "上傳檔案"
 msgid "Upload files for background processing or use a module's import tool."
 msgstr "上傳檔案以進行背景處理，或使用模組的匯入工具。"
 
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:119
+msgid "Upload starts immediately. Each file becomes a new media item."
+msgstr "上傳將立即開始。每個檔案都會成為一個新的媒體項目。"
+
 #: zotonic_mod_admin/priv/templates/admin_imports.tpl:9
 msgid "Upload to drop folder"
 msgstr "上傳至 drop 資料夾"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:135
-#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:155
-#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:185
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:152
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:245
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:280
 msgid "Uploaded"
 msgstr "上傳時間"
 
@@ -4216,10 +4270,9 @@ msgstr "上傳時間"
 msgid "Uploaded on"
 msgstr "上傳於"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:77
-#: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:127
-msgid "Usage"
-msgstr "使用情況"
+#: zotonic_mod_admin/priv/templates/_admin_status_capacity.tpl:9
+msgid "Usage information unavailable."
+msgstr "無法取得使用資訊。"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:39
 msgid "Use the autocompleter to search the media in this site."
@@ -4229,12 +4282,11 @@ msgstr "使用自動完成搜尋此網站的媒體。"
 msgid "Use the title of the base content for the display name of this person."
 msgstr "使用基本內容的標題作為此人的顯示名稱。"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:60
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:61
 msgid "Use these operations to repair installation data, not for routine maintenance."
 msgstr "請將這些操作用於修復安裝資料，而非用於例行維護。"
 
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:8
-#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:34
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:59
 msgid "Used"
 msgstr "已使用"
 
@@ -4374,7 +4426,11 @@ msgstr "你沒有權限刪除此頁面。"
 msgid "You are not allowed to edit this page."
 msgstr "你沒有權限編輯此頁面。"
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:218
+#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:7
+msgid "You can add a title to make the file easier to find and share."
+msgstr "您可以為檔案加上標題，以便日後更容易找到和分享該檔案。"
+
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:239
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:166
 msgid "You don't have permission to change this media item."
 msgstr "你沒有變更此媒體項目的權限。"
@@ -4389,7 +4445,7 @@ msgstr "你沒有建立此頁面的權限。"
 msgid "You don't have permission to edit this page."
 msgstr "你沒有權限編輯此頁面。"
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:220
+#: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:241
 #: zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:208
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:168
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:121
@@ -4403,10 +4459,6 @@ msgstr "你沒有上傳此類型檔案的權限。"
 msgid "You don’t have permission to perform this action."
 msgstr "你沒有執行此操作的權限。"
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:6
-msgid "You have to specify a description of the file to make it easier to find and share."
-msgstr "請填寫檔案說明，以便尋找及分享。"
-
 #: zotonic_mod_admin/src/controllers/controller_admin_edit.erl:188
 msgid "Your search query is invalid. Please correct it before saving."
 msgstr "你的搜尋查詢無效。請修正後再儲存。"
@@ -4415,7 +4467,7 @@ msgstr "你的搜尋查詢無效。請修正後再儲存。"
 msgid "Zotonic"
 msgstr "Zotonic"
 
-#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:72
+#: zotonic_mod_admin/priv/templates/admin_maintenance.tpl:73
 msgid "Zotonic datamodel"
 msgstr "Zotonic 資料模型"
 
@@ -4423,14 +4475,22 @@ msgstr "Zotonic 資料模型"
 msgid "Zotonic init files"
 msgstr "Zotonic 初始化檔案"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:30
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:37
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:27
 msgid "active filters"
 msgstr "已套用的篩選條件"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:19
+#: zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:29
 msgid "add media item"
 msgstr "新增媒體項目"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:7
+msgid "allocated"
+msgstr "已分配"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:22
+msgid "available"
+msgstr "有貨"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:14
@@ -4442,15 +4502,19 @@ msgstr "新增媒體項目"
 msgid "by"
 msgstr "由"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:102
+msgid "capacity"
+msgstr "容量"
+
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:52
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:53
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:130
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:131
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:132
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:165
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:168
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:182
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:185
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:84
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:81
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:32
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:33
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:76
@@ -4468,7 +4532,7 @@ msgstr "由"
 msgid "d M Y, H:i"
 msgstr "Y M d, H:i"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:172
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:189
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:43
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:39
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:99
@@ -4481,7 +4545,7 @@ msgstr "例如：可能變更"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:58
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:137
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:183
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:200
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:40
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:69
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:77
@@ -4500,6 +4564,14 @@ msgstr "編輯此頁面"
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:84
 msgid "excluding"
 msgstr "除去"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:45
+msgid "free"
+msgstr "免費"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:33
+msgid "free. Used memory can include caches; high usage alone does not indicate memory pressure."
+msgstr "可用。已使用的記憶體可能包含快取；僅憑使用量高，並不能表示存在記憶體壓力。"
 
 #: zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:15
 msgid "has been disconnected."
@@ -4554,6 +4626,12 @@ msgstr "顯示全部"
 msgid "system content"
 msgstr "系統內容"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:23
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:30
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:41
+msgid "total"
+msgstr "總計"
+
 #: zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:3
 msgid "undo"
 msgstr "復原"
@@ -4567,9 +4645,19 @@ msgstr "復原"
 msgid "untitled"
 msgstr "未命名"
 
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:10
+msgid "unused allocation, available for reuse by Erlang. This is not free host memory."
+msgstr "未使用的記憶體區塊，可供 Erlang 重新使用。這並非可自由使用的主機記憶體。"
+
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:51
 msgid "uploaded on"
 msgstr "上傳時間"
+
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:6
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:29
+#: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:41
+msgid "used"
+msgstr "已使用"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:57
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:136
@@ -4588,7 +4676,7 @@ msgid "visit site"
 msgstr "瀏覽網站"
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:25
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:201
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:218
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:141
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:57
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:98
@@ -4726,7 +4814,7 @@ msgid "Config"
 msgstr "設定"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:3
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:24
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:21
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:32
 #: zotonic_mod_admin_config/src/mod_admin_config.erl:96
 #: zotonic_mod_traffic_guard/priv/templates/admin_traffic_guard.tpl:14
@@ -4887,11 +4975,11 @@ msgstr "通常設定為機器的反向 DNS 名稱。"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:13
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:14
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:43
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:36
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:33
 msgid "Key"
 msgstr "鍵"
 
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:27
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:24
 msgid "Make a new config setting"
 msgstr "新增設定項目"
 
@@ -4899,7 +4987,7 @@ msgstr "新增設定項目"
 msgid "No configuration keys found."
 msgstr "找不到設定鍵。"
 
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:95
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:92
 msgid "No configurations found."
 msgstr "找不到設定。"
 
@@ -4984,11 +5072,11 @@ msgstr "轉送主機名稱"
 msgid "Relay port"
 msgstr "轉送連接埠"
 
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:17
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:14
 msgid "Reload site configuration"
 msgstr "重新載入網站設定"
 
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:14
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:12
 msgid "Reload the site configuration files. Some changes require a restart."
 msgstr "重新載入網站設定檔。某些變更需要重新啟動。"
 
@@ -5156,7 +5244,7 @@ msgstr "有效期限"
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:19
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:20
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:21
-#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:37
+#: zotonic_mod_admin_config/priv/templates/admin_config.tpl:34
 #: zotonic_mod_base/src/support/z_chart_svg.erl:1457
 #: zotonic_mod_development/priv/templates/_development_dispatch_options.tpl:2
 msgid "Value"
@@ -5943,6 +6031,10 @@ msgstr "無法計算關鍵字分析結果。請查閱伺服器日誌以了解詳
 msgid "This site does not have a keyword category."
 msgstr "本網站沒有關鍵字分類。"
 
+#: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:127
+msgid "Usage"
+msgstr "使用情況"
+
 #: zotonic_mod_admin_keyword/priv/templates/admin_keyword.tpl:179
 msgid "View content using this keyword"
 msgstr "檢視此關鍵字相關的內容"
@@ -6416,6 +6508,13 @@ msgstr "頁面連結圖"
 msgid "Page connections overview"
 msgstr "頁面連結總覽"
 
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:36
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:27
+#: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24
+#: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:8
+msgid "Path"
+msgstr "路徑"
+
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:3
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:12
 #: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:226
@@ -6702,7 +6801,7 @@ msgstr "在分析功能恢復之前，活動計數器將無法使用。"
 msgid "Add analytics measurement"
 msgstr "新增分析指標"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:58
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:61
 msgid "All breakdown values"
 msgstr "所有細項數值"
 
@@ -6757,7 +6856,7 @@ msgstr "分析指標"
 msgid "Analytics status"
 msgstr "分析狀態"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:49
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:52
 msgid "Bars show the lower bound. Counts are ranges, ordered by their lower bound. Overlapping ranges may change order. Content outside the retained candidates has at most"
 msgstr "條形圖顯示下限。計數值為區間，並按其下限排序。若區間重疊，排序順序可能會改變。保留候選項之外的內容至多有"
 
@@ -6770,7 +6869,7 @@ msgstr "有限的歷史"
 msgid "Break down by"
 msgstr "按以下項目分類："
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:59
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:62
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:17
 msgid "Breakdown"
 msgstr "細項說明"
@@ -6922,7 +7021,7 @@ msgstr "事件緩衝區"
 msgid "Event processing"
 msgstr "事件處理"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:59
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:62
 msgid "Events"
 msgstr "事件"
 
@@ -6996,9 +7095,13 @@ msgstr "HTTP 狀態碼 — 例如 200、404 或 500"
 msgid "History detail and retention"
 msgstr "歷史紀錄的詳細內容與保存"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:64
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:67
 msgid "Includes incomplete or unrecorded intervals"
 msgstr "包含不完整或未記錄的間隔"
+
+#: zotonic_mod_analytics/src/models/m_analytics.erl:351
+msgid "Invalid resource reference"
+msgstr "資源引用無效"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:7
 msgid "Language — language code, e.g. en or nl"
@@ -7024,7 +7127,7 @@ msgstr "過去六小時"
 msgid "Maximum number of analytics measurements"
 msgstr "分析測量項目的最大數量"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:28
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
 msgid "Most popular content in this period"
 msgstr "此期間最受歡迎的內容"
 
@@ -7077,11 +7180,11 @@ msgstr "無細分（總計）"
 msgid "No filter — include all values"
 msgstr "不套用篩選條件 — 包含所有值"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:47
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:50
 msgid "No leading content identified in this period."
 msgstr "此期間未發現任何頭條內容。"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:55
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:58
 msgid "No recorded events yet."
 msgstr "目前尚無任何已記錄的事件。"
 
@@ -7113,6 +7216,14 @@ msgstr "頁面請求 — 成功載入的公開 HTML 頁面"
 msgid "Page — public resource ID"
 msgstr "頁面 — 公共資源識別碼"
 
+#: zotonic_mod_analytics/src/models/m_analytics.erl:338
+msgid "Pages without a resource ID"
+msgstr "沒有資源 ID 的頁面"
+
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
+msgid "Pages without a resource ID are grouped by dispatch rule, such as template-only pages. The label “Pages without a resource ID” includes older counts and requests without a known dispatch rule; these cannot be split further. Unavailable content refers to resources that were deleted or that you cannot view. Invalid resource reference means the recorded page value is not a valid resource ID."
+msgstr "沒有資源 ID 的頁面會根據分發規則進行分組，例如僅含範本的頁面。「沒有資源 ID 的頁面」這個標籤包含較早的統計數據以及沒有已知分發規則的請求；這些數據無法進一步細分。不可用內容指的是已被刪除或無法檢視的資源。 無效的資源參照表示記錄的頁面值並非有效的資源 ID。"
+
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
 msgid "Past 30 days"
 msgstr "過去 30 天"
@@ -7133,11 +7244,11 @@ msgstr "暫停"
 msgid "Period"
 msgstr "時期"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:34
 msgid "Rank"
 msgstr "排名"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:29
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:32
 msgid "Ranked by recorded requests in the selected moving period. The window advances in steps of"
 msgstr "根據所選移動期間內記錄的請求數量進行排序。該時間區間以"
 
@@ -7153,7 +7264,7 @@ msgstr "請求類型 — 頁面、API 或自訂分派類型"
 msgid "Request types found in this site's dispatch rules:"
 msgstr "本網站分派規則中出現的請求類型："
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:31
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:34
 msgid "Requests"
 msgstr "請求"
 
@@ -7283,6 +7394,10 @@ msgstr "此事件結構描述目前無法使用。"
 msgid "Traffic — crawler, other or unknown"
 msgstr "流量 — 爬蟲、其他或未知"
 
+#: zotonic_mod_analytics/src/models/m_analytics.erl:349
+msgid "Unavailable content"
+msgstr "內容無法顯示"
+
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:8
 msgid "View analytics"
 msgstr "檢視分析資料"
@@ -7300,6 +7415,7 @@ msgid "analytics measurements"
 msgstr "分析指標"
 
 #: zotonic_mod_analytics/priv/templates/_dialog_analytics_info.tpl:20
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:10
 msgid "bytes"
 msgstr "位元組"
 
@@ -7320,11 +7436,11 @@ msgstr "事件"
 msgid "group/time slots"
 msgstr "群組／時段"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:49
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:52
 msgid "requests."
 msgstr "請求。"
 
-#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:29
+#: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:32
 msgid "seconds."
 msgstr "秒。"
 
@@ -8373,7 +8489,7 @@ msgstr "可以啟用資料庫和上傳檔案的每日自動備份。備份在晚
 msgid "Back to the edit page"
 msgstr "返回編輯頁面"
 
-#: zotonic_mod_backup/src/mod_backup.erl:323
+#: zotonic_mod_backup/src/mod_backup.erl:338
 msgid "Backup"
 msgstr "備份"
 
@@ -8449,7 +8565,7 @@ msgstr "刪除於"
 
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9
-#: zotonic_mod_backup/src/mod_backup.erl:336
+#: zotonic_mod_backup/src/mod_backup.erl:351
 msgid "Deleted pages"
 msgstr "刪除的頁面"
 
@@ -11046,8 +11162,8 @@ msgid "Right to left"
 msgstr "由右至左"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:61
-msgid "Save and View"
-msgstr "儲存並檢視"
+msgid "Save & view"
+msgstr "儲存與檢視"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:56
 msgid "Split cell"
@@ -11976,10 +12092,154 @@ msgstr "你沒有權限使用此功能。"
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
 msgstr "Zotonic 可以將上傳的檔案和調整大小後的檔案儲存在雲端。你可以在此設定雲端服務的位置與存取金鑰。"
 
-#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:158
-#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:188
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:12
+msgid "Cancel remaining uploads"
+msgstr "取消剩餘的上傳任務"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:13
+msgid "Cancelled"
+msgstr "已取消"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:27
+msgid "Choose one file at a time for this upload. No files were uploaded."
+msgstr "本次上傳請一次僅選擇一個檔案。尚未上傳任何檔案。"
+
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:248
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:284
 msgid "Could not upload"
 msgstr "無法上傳"
+
+#: zotonic_mod_fileuploader/priv/templates/_fileuploader_dropzone.tpl:8
+msgid "Drop files here or choose files."
+msgstr "請將檔案拖放至此處，或選擇檔案。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:8
+msgid "Drop files inside the text where you want to insert them."
+msgstr "請將檔案拖曳至文字中您想要插入的位置。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:28
+msgid "Folders cannot be uploaded. Select the files inside the folder instead."
+msgstr "無法上傳資料夾。請改為選取資料夾內的檔案。"
+
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:190
+msgid "Please choose one file only."
+msgstr "請僅選擇一個檔案。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:19
+msgid "Processing…"
+msgstr "處理中…"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:35
+msgid "Ready to upload. Choose Upload file to save your selected file."
+msgstr "已準備好上傳。請選擇「上傳檔案」以儲存您選取的檔案。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:24
+msgid "Refresh media list"
+msgstr "重新整理媒體清單"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:14
+msgid "Remaining uploads were cancelled. Files already saved have been kept."
+msgstr "其餘的上傳作業已取消。已儲存的檔案則已保留。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:23
+msgid "Retry failed files"
+msgstr "重新嘗試處理失敗的檔案"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:9
+msgid "Save this page before dropping media into the editor."
+msgstr "在將媒體檔案拖放至編輯器之前，請先儲存此頁面。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:20
+#: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:1
+msgid "Saved"
+msgstr "已儲存"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:22
+msgid "Saved in Media, but could not attach. Use Add media item to connect it."
+msgstr "已儲存至「媒體」中，但無法附加。請使用「新增媒體項目」來連結它。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:5
+msgid "Saved in Media, but the insertion position is no longer available. Use Insert media to add it."
+msgstr "已儲存至「媒體」中，但插入位置已不存在。請使用「插入媒體」來新增該媒體。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:32
+msgid "Some files could not be processed. See the error messages."
+msgstr "部分檔案無法處理。請參閱錯誤訊息。"
+
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:297
+msgid "The file upload is incomplete."
+msgstr "檔案上傳尚未完成。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:16
+msgid "This file exceeds the maximum upload size for your account. Choose a smaller file."
+msgstr "此檔案超過您帳戶的最大上傳大小限制。請選擇較小的檔案。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:17
+msgid "This file type or size is not allowed for your account."
+msgstr "您的帳戶不允許上傳此類型的檔案或此大小的檔案。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:7
+msgid "Upload complete. Media has been inserted into your text. Save the page to keep your changes."
+msgstr "上傳完成。媒體已插入您的文字中。請儲存頁面以保留您的變更。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:33
+msgid "Upload complete. Your files have been saved."
+msgstr "上傳完成。您的檔案已儲存。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:21
+msgid "Upload failed"
+msgstr "上傳失敗"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:31
+msgid "Upload failed. Please try again."
+msgstr "上傳失敗。請重試。"
+
+#: zotonic_mod_fileuploader/priv/templates/admin.tpl:11
+msgid "Upload starts immediately. Each file becomes a new, published media item."
+msgstr "上傳將立即開始。每個檔案都會成為一個新的、已發佈的媒體項目。"
+
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:277
+msgid "Uploaded, but could not connect"
+msgstr "已上傳，但無法連線"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:25
+msgid "Uploading"
+msgstr "上傳中"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:34
+msgid "Uploading and processing your files… Please keep this page open."
+msgstr "上傳及處理您的檔案… 請保持此頁面開啟。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:6
+msgid "Uploading media to insert into your text… You can continue editing."
+msgstr "上傳媒體以插入至您的文字中… 您可以繼續編輯。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:18
+#: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:1
+#: zotonic_mod_mailinglist/priv/templates/_mailing_run_summary.tpl:3
+#: zotonic_site_status/priv/templates/_sites.tpl:14
+msgid "Waiting"
+msgstr "等待"
+
+#: zotonic_mod_fileuploader/priv/templates/admin.tpl:12
+msgid "You can find and edit your uploads in Media."
+msgstr "您可以在「媒體」中找到並編輯您上傳的檔案。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:30
+msgid "{filename} has a file type that is not supported here. Choose a different file."
+msgstr "{filename} 此處不支援此檔案類型。請選擇其他檔案。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:29
+msgid "{filename} is empty. Choose a file with content. Folders cannot be uploaded."
+msgstr "{filename} 此檔案為空。請選擇一個含有內容的檔案。無法上傳資料夾。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:15
+msgid "{filename} is too large. The maximum file size is {size}."
+msgstr "{filename} 檔案過大。最大檔案大小為 {size}。"
+
+#: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:26
+msgid "{saved} of {total} files saved."
+msgstr "{saved} 已儲存 {total} 個檔案。"
 
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:93
 msgid "Brightness"
@@ -15034,12 +15294,6 @@ msgstr "未登入的訪客可以瀏覽此清單。測試郵件僅供內部審閱
 msgid "Wait for sending to start"
 msgstr "請等待傳送開始"
 
-#: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:1
-#: zotonic_mod_mailinglist/priv/templates/_mailing_run_summary.tpl:3
-#: zotonic_site_status/priv/templates/_sites.tpl:14
-msgid "Waiting"
-msgstr "等待"
-
 #: zotonic_mod_mailinglist/priv/templates/_mailing_run_status.tpl:2
 msgid "Waiting for publication"
 msgstr "等待發布"
@@ -16051,7 +16305,7 @@ msgstr "用於取得單一權杖"
 msgid "API Key can be found on"
 msgstr "API 金鑰位於"
 
-#: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:8
+#: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:2
 msgid "Attempt to fix embedded videos for which OEmbed embedding has failed previously."
 msgstr "嘗試修復先前透過 OEmbed 嵌入失敗的影片。"
 
@@ -16070,11 +16324,15 @@ msgstr "正在嘗試修復 ~p 部影片。"
 msgid "Copy the URL to the clipboard."
 msgstr "將網址複製到剪貼簿。"
 
+#: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:2
+msgid "Embedded videos"
+msgstr "嵌入式影片"
+
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media.tpl:4
 msgid "Embedding of media item failed with HTTP code"
 msgstr "媒體項目嵌入失敗，HTTP 狀態碼為"
 
-#: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:7
+#: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:4
 msgid "Fix embedded videos"
 msgstr "修復嵌入影片"
 
@@ -17995,10 +18253,6 @@ msgstr "儲存並寄送電子郵件"
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:162
 msgid "Save your answers without submitting them yet so you can continue later."
 msgstr "儲存答案，暫不提交，以便稍後繼續。"
-
-#: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:1
-msgid "Saved"
-msgstr "已儲存"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:78
 msgid "Search for a person"
