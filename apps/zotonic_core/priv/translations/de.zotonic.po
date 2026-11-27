@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-11-27 21:20\n"
+"PO-Revision-Date: 2026-11-27 22:39\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -1478,7 +1478,7 @@ msgstr "Hintergrundaufgaben"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:113
 msgid "Bars show disk space in use. Refreshed every 30 minutes."
-msgstr ""
+msgstr "Die Balken zeigen den belegten Speicherplatz an. Die Anzeige wird alle 30 Minuten aktualisiert."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_basics.tpl:4
 msgid "Basic"
@@ -1884,7 +1884,7 @@ msgstr "Abhängig"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:52
 msgid "Detailed memory figures"
-msgstr ""
+msgstr "Detaillierte Speicherzahlen"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media_metadata.tpl:9
 msgid "Dimensions"
@@ -1918,7 +1918,7 @@ msgstr "Medien entdecken"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:110
 msgid "Disk information unavailable."
-msgstr ""
+msgstr "Es liegen keine Informationen zur Festplatte vor."
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:95
 msgid "Disks"
@@ -1952,19 +1952,19 @@ msgstr "Laden Sie die Medien von der Original-Website herunter."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_media.tpl:23
 msgid "Drag a file anywhere into this panel to replace the current media file."
-msgstr ""
+msgstr "Ziehen Sie eine Datei an eine beliebige Stelle in diesem Bereich, um die aktuelle Mediendatei zu ersetzen."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:11
 msgid "Drag a file anywhere into this tab or choose a file below. Then use the Upload file button to upload it."
-msgstr ""
+msgstr "Ziehen Sie eine Datei an eine beliebige Stelle in diesen Reiter oder wählen Sie unten eine Datei aus. Klicken Sie anschließend auf die Schaltfläche „Datei hochladen“, um sie hochzuladen."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:19
 msgid "Drag files anywhere into this panel to upload and attach them to this page."
-msgstr ""
+msgstr "Ziehen Sie Dateien an eine beliebige Stelle in diesem Bereich, um sie hochzuladen und an diese Seite anzuhängen."
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:114
 msgid "Drag files anywhere onto this page to upload them as new media items."
-msgstr ""
+msgstr "Ziehen Sie Dateien an eine beliebige Stelle auf dieser Seite, um sie als neue Medienelemente hochzuladen."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:11
 msgid "Drag to change position"
@@ -1973,7 +1973,7 @@ msgstr "Ziehen, um die Position zu ändern"
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:118
 #: zotonic_mod_fileuploader/priv/templates/admin.tpl:10
 msgid "Drop files to add them to Media"
-msgstr ""
+msgstr "Zieh die Dateien per Drag & Drop in den Medienordner, um sie hinzuzufügen"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:33
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:38
@@ -2108,7 +2108,7 @@ msgstr "Erlang-Speicher"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:9
 msgid "Erlang memory in use"
-msgstr ""
+msgstr "Von Erlang belegter Speicher"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:18
 msgid "Erlang/OTP"
@@ -2367,7 +2367,7 @@ msgstr "Seite aus Suchen ausblenden (abhängig von der Suchanfrage)"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_capacity.tpl:6
 msgid "High usage"
-msgstr ""
+msgstr "Hohe Nutzung"
 
 #: zotonic_mod_admin/priv/templates/admin_system_info.tpl:61
 msgid "Home directory"
@@ -2513,7 +2513,7 @@ msgstr "Zuletzt bearbeitete Texte"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:104
 msgid "Less than 5% free disk space"
-msgstr ""
+msgstr "Weniger als 5 % freier Speicherplatz"
 
 #: zotonic_mod_admin/priv/templates/_admin_menu.tpl:64
 msgid "Light"
@@ -2700,7 +2700,7 @@ msgstr "Medien-Runner"
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:42
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:43
 msgid "Media title (optional)"
-msgstr ""
+msgstr "Medientitel (optional)"
 
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:151
 msgid "Media updated."
@@ -2712,7 +2712,7 @@ msgstr "Speicher"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:36
 msgid "Memory information unavailable."
-msgstr ""
+msgstr "Speicherinformationen nicht verfügbar."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:32
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:33
@@ -2945,11 +2945,11 @@ msgstr "Betriebssystemspeicher"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:32
 msgid "OS memory in use"
-msgstr ""
+msgstr "Vom Betriebssystem belegter Speicher"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:25
 msgid "OS memory unavailable"
-msgstr ""
+msgstr "OS-Speicher nicht verfügbar"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:129
 msgid "Ongoing"
@@ -3311,7 +3311,7 @@ msgstr "Aktuelles Medium austauschen"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_media.tpl:17
 #: zotonic_mod_fileuploader/priv/templates/_fileuploader_dropzone.tpl:5
 msgid "Replace the current media file?"
-msgstr ""
+msgstr "Die aktuelle Mediendatei ersetzen?"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_preview.tpl:4
 msgid "Resize Live view"
@@ -3809,7 +3809,7 @@ msgstr "Auslagerungsspeicher"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:44
 msgid "Swap in use"
-msgstr ""
+msgstr "Swap in Gebrauch"
 
 #: zotonic_mod_admin/src/mod_admin.erl:572
 msgid "System"
@@ -3877,7 +3877,7 @@ msgstr "Die Adressen 0.0.0.0 und :: stehen für alle lokalen IPv4- bzw. IPv6-Sch
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:26
 msgid "The bar shows memory not available for allocation. Available memory includes reclaimable memory reported by the operating system."
-msgstr ""
+msgstr "Der Balken zeigt den Speicher an, der nicht für die Zuweisung verfügbar ist. Der verfügbare Speicher umfasst auch den vom Betriebssystem gemeldeten wiederverwertbaren Speicher."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:201
 msgid "The billing address is only visible for people who can edit this page."
@@ -4275,7 +4275,7 @@ msgstr "Laden Sie Dateien zur Hintergrundverarbeitung hoch oder nutzen Sie das I
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:119
 msgid "Upload starts immediately. Each file becomes a new media item."
-msgstr ""
+msgstr "Der Upload beginnt sofort. Jede Datei wird zu einem neuen Medienelement."
 
 #: zotonic_mod_admin/priv/templates/admin_imports.tpl:9
 msgid "Upload to drop folder"
@@ -4294,7 +4294,7 @@ msgstr "Hochgeladen am"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_capacity.tpl:9
 msgid "Usage information unavailable."
-msgstr ""
+msgstr "Es liegen keine Nutzungsdaten vor."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_zmedia_choose.tpl:39
 msgid "Use the autocompleter to search the media in this site."
@@ -4450,7 +4450,7 @@ msgstr "Sie sind nicht berechtigt, diese Seite zu bearbeiten."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:7
 msgid "You can add a title to make the file easier to find and share."
-msgstr ""
+msgstr "Sie können einen Titel hinzufügen, damit die Datei leichter zu finden und weiterzugeben ist."
 
 #: zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:239
 #: zotonic_mod_admin/src/support/z_admin_media_discover.erl:166
@@ -4508,11 +4508,11 @@ msgstr "Medienelement hinzufügen"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:7
 msgid "allocated"
-msgstr ""
+msgstr "zugewiesen"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:22
 msgid "available"
-msgstr ""
+msgstr "verfügbar"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:14
@@ -4526,7 +4526,7 @@ msgstr "von"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:102
 msgid "capacity"
-msgstr ""
+msgstr "Kapazität"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:52
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:53
@@ -4593,7 +4593,7 @@ msgstr "kostenlos"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:33
 msgid "free. Used memory can include caches; high usage alone does not indicate memory pressure."
-msgstr ""
+msgstr "frei. Der belegte Speicher kann auch Caches umfassen; eine hohe Auslastung allein deutet nicht auf eine Speicherbelastung hin."
 
 #: zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:15
 msgid "has been disconnected."
@@ -4652,7 +4652,7 @@ msgstr "Systeminhalt"
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:30
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:41
 msgid "total"
-msgstr ""
+msgstr "insgesamt"
 
 #: zotonic_mod_admin/priv/templates/_action_unlink_undo.tpl:3
 msgid "undo"
@@ -4669,7 +4669,7 @@ msgstr "unbenannt"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:10
 msgid "unused allocation, available for reuse by Erlang. This is not free host memory."
-msgstr ""
+msgstr "Nicht genutzter Speicherbereich, der von Erlang wiederverwendet werden kann. Dabei handelt es sich nicht um freien Host-Speicher."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:51
 msgid "uploaded on"
@@ -4679,7 +4679,7 @@ msgstr "hochgeladen am"
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:29
 #: zotonic_mod_admin/priv/templates/_admin_status_resources.tpl:41
 msgid "used"
-msgstr ""
+msgstr "gebraucht"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:57
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:136
@@ -7121,7 +7121,7 @@ msgstr "Beinhaltet unvollständige oder nicht erfasste Intervalle"
 
 #: zotonic_mod_analytics/src/models/m_analytics.erl:351
 msgid "Invalid resource reference"
-msgstr ""
+msgstr "Ungültiger Verweis auf eine Ressource"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_dimension_options.tpl:7
 msgid "Language — language code, e.g. en or nl"
@@ -7238,11 +7238,11 @@ msgstr "Seite – ID der öffentlichen Ressource"
 
 #: zotonic_mod_analytics/src/models/m_analytics.erl:338
 msgid "Pages without a resource ID"
-msgstr ""
+msgstr "Seiten ohne Ressourcen-ID"
 
 #: zotonic_mod_analytics/priv/templates/_admin_analytics_panel.tpl:27
 msgid "Pages without a resource ID are grouped by dispatch rule, such as template-only pages. The label “Pages without a resource ID” includes older counts and requests without a known dispatch rule; these cannot be split further. Unavailable content refers to resources that were deleted or that you cannot view. Invalid resource reference means the recorded page value is not a valid resource ID."
-msgstr ""
+msgstr "Seiten ohne Ressourcen-ID werden nach Auslieferungsregeln gruppiert, beispielsweise Seiten, die ausschließlich aus Vorlagen bestehen. Die Bezeichnung „Seiten ohne Ressourcen-ID“ umfasst ältere Zählwerte und Anfragen ohne bekannte Auslieferungsregel; diese lassen sich nicht weiter aufschlüsseln. Nicht verfügbare Inhalte beziehen sich auf Ressourcen, die gelöscht wurden oder die Sie nicht anzeigen können. Eine ungültige Ressourcenreferenz bedeutet, dass der erfasste Seitenwert keine gültige Ressourcen-ID ist."
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics.tpl:13
 msgid "Past 30 days"
@@ -7416,7 +7416,7 @@ msgstr "Verkehr – Krabbler, Sonstiges oder Unbekanntes"
 
 #: zotonic_mod_analytics/src/models/m_analytics.erl:349
 msgid "Unavailable content"
-msgstr ""
+msgstr "Inhalt nicht verfügbar"
 
 #: zotonic_mod_analytics/priv/templates/admin_analytics_config.tpl:8
 msgid "View analytics"
@@ -11183,7 +11183,7 @@ msgstr "Von rechts nach links"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:61
 msgid "Save & view"
-msgstr ""
+msgstr "Speichern & anzeigen"
 
 #: zotonic_mod_editor_tiptap/priv/templates/_editor.tpl:56
 msgid "Split cell"
@@ -12114,15 +12114,15 @@ msgstr "Zotonic kann hochgeladene und in der Größe veränderte Dateien in der 
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:12
 msgid "Cancel remaining uploads"
-msgstr ""
+msgstr "Verbleibende Uploads abbrechen"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:13
 msgid "Cancelled"
-msgstr ""
+msgstr "Abgesagt"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:27
 msgid "Choose one file at a time for this upload. No files were uploaded."
-msgstr ""
+msgstr "Wählen Sie für diesen Upload jeweils nur eine Datei aus. Es wurden keine Dateien hochgeladen."
 
 #: zotonic_mod_fileuploader/src/mod_fileuploader.erl:248
 #: zotonic_mod_fileuploader/src/mod_fileuploader.erl:284
@@ -12131,43 +12131,43 @@ msgstr "Konnte nicht hochgeladen werden"
 
 #: zotonic_mod_fileuploader/priv/templates/_fileuploader_dropzone.tpl:8
 msgid "Drop files here or choose files."
-msgstr ""
+msgstr "Ziehen Sie die Dateien hierhin oder wählen Sie sie aus."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:8
 msgid "Drop files inside the text where you want to insert them."
-msgstr ""
+msgstr "Ziehen Sie die Dateien an die Stelle im Text, an der Sie sie einfügen möchten."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:28
 msgid "Folders cannot be uploaded. Select the files inside the folder instead."
-msgstr ""
+msgstr "Ordner können nicht hochgeladen werden. Wählen Sie stattdessen die Dateien innerhalb des Ordners aus."
 
 #: zotonic_mod_fileuploader/src/mod_fileuploader.erl:190
 msgid "Please choose one file only."
-msgstr ""
+msgstr "Bitte wählen Sie nur eine Datei aus."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:19
 msgid "Processing…"
-msgstr ""
+msgstr "Verarbeitungs-…"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:35
 msgid "Ready to upload. Choose Upload file to save your selected file."
-msgstr ""
+msgstr "Bereit zum Hochladen. Wählen Sie „Datei hochladen“, um die ausgewählte Datei zu speichern."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:24
 msgid "Refresh media list"
-msgstr ""
+msgstr "Medienliste aktualisieren"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:14
 msgid "Remaining uploads were cancelled. Files already saved have been kept."
-msgstr ""
+msgstr "Die verbleibenden Uploads wurden abgebrochen. Bereits gespeicherte Dateien wurden beibehalten."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:23
 msgid "Retry failed files"
-msgstr ""
+msgstr "Fehlgeschlagene Dateien erneut versuchen"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:9
 msgid "Save this page before dropping media into the editor."
-msgstr ""
+msgstr "Speichern Sie diese Seite, bevor Sie Medien in den Editor einfügen."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:20
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:1
@@ -12176,63 +12176,63 @@ msgstr "Gespeichert"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:22
 msgid "Saved in Media, but could not attach. Use Add media item to connect it."
-msgstr ""
+msgstr "Unter „Medien“ gespeichert, konnte jedoch nicht angehängt werden. Verwenden Sie die Option „Medienelement hinzufügen“, um es zu verknüpfen."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:5
 msgid "Saved in Media, but the insertion position is no longer available. Use Insert media to add it."
-msgstr ""
+msgstr "Unter „Medien“ gespeichert, aber die Einfügeposition ist nicht mehr verfügbar. Fügen Sie das Element über „Medien einfügen“ hinzu."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:32
 msgid "Some files could not be processed. See the error messages."
-msgstr ""
+msgstr "Einige Dateien konnten nicht verarbeitet werden. Siehe die Fehlermeldungen."
 
 #: zotonic_mod_fileuploader/src/mod_fileuploader.erl:297
 msgid "The file upload is incomplete."
-msgstr ""
+msgstr "Der Datei-Upload ist unvollständig."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:16
 msgid "This file exceeds the maximum upload size for your account. Choose a smaller file."
-msgstr ""
+msgstr "Diese Datei überschreitet die maximale Upload-Größe für Ihr Konto. Wählen Sie eine kleinere Datei aus."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:17
 msgid "This file type or size is not allowed for your account."
-msgstr ""
+msgstr "Dieser Dateityp bzw. diese Dateigröße ist für Ihr Konto nicht zulässig."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:7
 msgid "Upload complete. Media has been inserted into your text. Save the page to keep your changes."
-msgstr ""
+msgstr "Der Upload ist abgeschlossen. Die Medien wurden in Ihren Text eingefügt. Speichern Sie die Seite, um Ihre Änderungen zu übernehmen."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:33
 msgid "Upload complete. Your files have been saved."
-msgstr ""
+msgstr "Der Upload ist abgeschlossen. Ihre Dateien wurden gespeichert."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:21
 msgid "Upload failed"
-msgstr ""
+msgstr "Der Upload ist fehlgeschlagen"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:31
 msgid "Upload failed. Please try again."
-msgstr ""
+msgstr "Der Upload ist fehlgeschlagen. Bitte versuche es erneut."
 
 #: zotonic_mod_fileuploader/priv/templates/admin.tpl:11
 msgid "Upload starts immediately. Each file becomes a new, published media item."
-msgstr ""
+msgstr "Der Upload beginnt sofort. Jede Datei wird zu einem neuen, veröffentlichten Medienelement."
 
 #: zotonic_mod_fileuploader/src/mod_fileuploader.erl:277
 msgid "Uploaded, but could not connect"
-msgstr ""
+msgstr "Hochgeladen, aber keine Verbindung hergestellt"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:25
 msgid "Uploading"
-msgstr ""
+msgstr "Hochladen"
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:34
 msgid "Uploading and processing your files… Please keep this page open."
-msgstr ""
+msgstr "Hochladen und Bearbeiten Ihrer Dateien… Bitte lassen Sie diese Seite geöffnet."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:6
 msgid "Uploading media to insert into your text… You can continue editing."
-msgstr ""
+msgstr "Medien hochladen, um sie in Ihren Text einzufügen… Sie können mit der Bearbeitung fortfahren."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:18
 #: zotonic_mod_mailinglist/priv/templates/_mailing_recipient_status.tpl:1
@@ -12243,23 +12243,23 @@ msgstr "Warten"
 
 #: zotonic_mod_fileuploader/priv/templates/admin.tpl:12
 msgid "You can find and edit your uploads in Media."
-msgstr ""
+msgstr "Unter „Medien“ können Sie Ihre hochgeladenen Dateien finden und bearbeiten."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:30
 msgid "{filename} has a file type that is not supported here. Choose a different file."
-msgstr ""
+msgstr "{filename} Der Dateityp wird hier nicht unterstützt. Wählen Sie eine andere Datei aus."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:29
 msgid "{filename} is empty. Choose a file with content. Folders cannot be uploaded."
-msgstr ""
+msgstr "{filename} ist leer. Wählen Sie eine Datei mit Inhalt aus. Ordner können nicht hochgeladen werden."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:15
 msgid "{filename} is too large. The maximum file size is {size}."
-msgstr ""
+msgstr "{filename} ist zu groß. Die maximale Dateigröße beträgt {size}."
 
 #: zotonic_mod_fileuploader/priv/templates/_html_body_admin.tpl:26
 msgid "{saved} of {total} files saved."
-msgstr ""
+msgstr "{saved} von {total} gespeicherte Dateien."
 
 #: zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:93
 msgid "Brightness"
@@ -16346,7 +16346,7 @@ msgstr "Kopieren Sie die URL in die Zwischenablage."
 
 #: zotonic_mod_oembed/priv/templates/_admin_media_maintenance.tpl:2
 msgid "Embedded videos"
-msgstr ""
+msgstr "Eingebettete Videos"
 
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media.tpl:4
 msgid "Embedding of media item failed with HTTP code"
